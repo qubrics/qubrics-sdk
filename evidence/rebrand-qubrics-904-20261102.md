@@ -111,6 +111,31 @@ Normal commit gate is the unchanged `.githooks/pre-commit`, which runs `pnpm dri
 
 Fresh independent follow-up reviews: Standards 0 findings; Spec 0 findings across the seven source/test/generated files. No source change followed those reviews. The shared active-agent cap required sequential dispatch; both contexts were fresh.
 
+## Downstream CI blockers at ff4bb860
+
+Exact head `ff4bb8601de885703e2cbff4af6a62f1b15d5791` finished with 44 checks: 29 success, 13 failure, 2 skipped, none pending. All 13 failed jobs belong to [CI run 41462820059](https://github.com/qubrics/qubrics-sdk/actions/runs/41462820059); complete failed logs and the per-job accounting are `sdk-pr345-ff4-ci-failed.log` and `sdk-pr345-ff4-failed-job-sweep.log`. The prior PHP parse, Python typing and MCP alias-discovery failure points passed. Three newly reached causes explain every remaining failure:
+
+- PHP five jobs: the new public discriminator test violated PSR12 multiline-control formatting at `ManagementValidationTest.php:16,26`. Formatting alone changed; all nine wire values and the unknown fallback remain asserted.
+- Ruby one job: `scripts/check-ruby.mjs:55-95` enforces existing manifest floors when the SDK package changes. Its unchanged gemspec still admitted Mailbox 2.0.0 and Management 2.0.0, below current manifest 2.0.2 and 2.0.1. Only those two lower bounds and their normal `bundle lock --local` entries changed; ceilings and the guard remain intact. The exact-base comparison also rejects the same stale metadata when the SDK is marked changed (`sdk-pr345-ff4-ruby-base-proof.log`).
+- Python seven jobs: the intentionally independent LangChain source cohort installs candidate Sending and LangChain with published Core 1.3.1 (`scripts/ci-consumers.mjs:22-25`, `scripts/check-python.mjs:87-122`). Sending eagerly imported the new, unpublished `sendmux_core.environment`; its declared supported floor remains 1.3.1. `writeSurfaceClient` in `scripts/generate-python.mjs` now owns direct package-local environment lookups, and normal generation reproduces all three surface wrappers. MCP keeps the identical resolver in its existing config module; all four MCP importers stay within that distribution. Blank Qubrics values, retained legacy fallbacks and explicit-option precedence remain unchanged. No cohort, dependency floor, package version or release pin changed for Python.
+
+Each downstream diagnosis had zero earlier fixes. The first Python check after this batch passed 179 native tests but correctly rejected stale MCP source hashes in one metadata case before reaching the isolated cohorts. Normal `pnpm generate:mcp` changed only the four source fingerprints for config, CLI, hosted and observability. Tool contracts and both embedded OpenAPI snapshots are unchanged. The failing metadata case then passed, followed by the canonical complete Python check.
+
+| Command | Result | Parent artifact receipt |
+| --- | --- | --- |
+| Focused PHPCS with the repo ruleset | exit 0 | `sdk-pr345-second-php-phpcs-green.log` |
+| `vendor/bin/phpunit --configuration phpunit.xml.dist --filter ManagementValidationTest` | exit 0, 3 tests / 24 assertions | `sdk-pr345-second-php-public-green.log` |
+| Existing `checkRubyDependencyFloors` with changed SDK | exit 0, existing manifest floors accepted | `sdk-pr345-second-ruby-floor-green.log` |
+| Ruby public environment test | exit 0, 1 run / 18 assertions / 0 skipped | `sdk-pr345-second-ruby-public-green.log` |
+| Failed MCP metadata case | exit 0, 1 passed | `sdk-pr345-second-mcp-contract-green.log` |
+| Existing MCP environment cases | exit 0, 3 passed / 7 deselected | `sdk-pr345-second-mcp-env-green.log` |
+| `heavy-slot.sh node scripts/check-python.mjs` | exit 0, mypy 64 native / 1 SDK / 4 LangChain files; 190 tests: 180 native + 10 LangChain, 0 skipped/xfailed/xpassed | `sdk-pr345-second-python-check-final.log` |
+| Canonical-input `pnpm generate:mcp` and `pnpm generate:python` under heavy-slot | exit 0; generated surface wrappers match the tested runtime SHA-256 manifest | `sdk-pr345-second-generate-{mcp,python}.log`, `sdk-pr345-second-python-runtime-sha256.txt` |
+
+The isolated LangChain receipt proves candidate Sending imports and executes with published Core 1.3.1. Native environment tests cover all three source wrappers; no claim is made that all three were dynamically tested against published Core. No assertion was weakened or removed, and no extra harness was introduced: existing public tests and cohort provenance gates caught these failures. Fresh independent reviews, including the generator source and four generated fingerprints: Standards 0 hard / 0 actionable heuristics; Spec 0 findings.
+
+Calendar candidate status and binary diff still match the retained baselines exactly; every retained untracked-file checksum passes (`sdk-calendar-second-*`). No calendar source, venv or dist was changed. Normal final commit hook receipt is `sdk-pr345-second-final-commit.log`; product push and fresh exact-head CI remain with the parent after its genuine consolidated docs update. Merge, deployment and publication remain unapproved.
+
 ## Cleanup
 
 Owned disposable fixtures are stopped. Command guard rejected the prior cache teardown; no deletion workaround attempted. SDK build/test caches remain listed in `sdk-final-handoff.md` for manual removal. Calendar checkout, venv and dist remain untouched.

@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import argparse
-from sendmux_core.environment import env_value
 
 from sendmux_mcp.config import (
     RetryConfig,
@@ -9,6 +8,7 @@ from sendmux_mcp.config import (
     ServerConfig,
     Surface,
     config_from_env,
+    env_value,
     normalise_surfaces,
     normalise_transport,
     parse_csv,

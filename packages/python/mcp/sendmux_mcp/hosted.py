@@ -18,9 +18,8 @@ from starlette.responses import JSONResponse
 from starlette.routing import Route
 from starlette.types import ASGIApp
 from starlette.applications import Starlette
-from sendmux_core.environment import env_value
 
-from sendmux_mcp.config import DEFAULT_APP_BASE_URL, ServerConfig, Surface, config_from_env, parse_csv
+from sendmux_mcp.config import DEFAULT_APP_BASE_URL, ServerConfig, Surface, config_from_env, env_value, parse_csv
 from sendmux_mcp.a2a import A2A_RESOURCE_URL, A2ATokenVerifier, build_a2a_http_components
 from sendmux_mcp.hosted_auth import (
     HOSTED_MCP_DISCOVERY_SCOPES,

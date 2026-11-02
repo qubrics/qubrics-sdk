@@ -13,17 +13,19 @@ final class ManagementValidationTest extends TestCase
     public function testWebhookDiscriminatorPreservesEveryWireValue(): void
     {
         $payload = new WebhookEventPayload();
-        foreach ([
-            'calendar.changed',
-            'message.bounced',
-            'message.complained',
-            'message.delivered',
-            'message.delivery_delayed',
-            'message.received',
-            'message.received.spam',
-            'message.rejected',
-            'sendmux.test',
-        ] as $type) {
+        foreach (
+            [
+                'calendar.changed',
+                'message.bounced',
+                'message.complained',
+                'message.delivered',
+                'message.delivery_delayed',
+                'message.received',
+                'message.received.spam',
+                'message.rejected',
+                'sendmux.test',
+            ] as $type
+        ) {
             self::assertContains($type, WebhookEventPayload::getTypeAllowableValues());
             self::assertSame($type, $payload->setType($type)->getType());
         }

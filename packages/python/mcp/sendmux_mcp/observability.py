@@ -8,9 +8,10 @@ from dataclasses import dataclass
 from typing import Any, Protocol, cast
 
 from posthog import Posthog
-from sendmux_core.environment import env_value
 from starlette.middleware import Middleware
 from starlette.types import ASGIApp, Receive, Scope, Send
+
+from sendmux_mcp.config import env_value
 
 
 DEFAULT_POSTHOG_HOST = "https://eu.i.posthog.com"

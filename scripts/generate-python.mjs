@@ -360,13 +360,14 @@ function writeSurfaceClient(surface) {
     join(packageDir, "client.py"),
     `from __future__ import annotations
 
+import os
+
 import certifi
 
 from typing import Any, cast
 
 from sendmux_core import AccessToken, RetryOptions, configure_auth
 from sendmux_core.auth import resolve_access_token, validate_auth
-from sendmux_core.environment import env_value
 from sendmux_core.errors import map_api_exception
 from sendmux_core.retry import RetryingRestClient
 
@@ -436,10 +437,10 @@ def create_${surface.name}_client(
     retry_options: RetryOptions | None = None,
 ) -> Sendmux${className}ApiClient:
     if api_key is None and access_token is None:
-        api_key = env_value("SENDMUX_API_KEY")
-        access_token = env_value("SENDMUX_ACCESS_TOKEN")
+        api_key = os.environ.get("QUBRICS_API_KEY", os.environ.get("SENDMUX_API_KEY"))
+        access_token = os.environ.get("QUBRICS_ACCESS_TOKEN", os.environ.get("SENDMUX_ACCESS_TOKEN"))
     validate_auth(api_key=api_key, access_token=access_token, surface="${keySurface}")
-    configuration = Configuration(host=base_url or env_value("SENDMUX_BASE_URL") or DEFAULT_BASE_URL, ssl_ca_cert=certifi.where())
+    configuration = Configuration(host=base_url or os.environ.get("QUBRICS_BASE_URL", os.environ.get("SENDMUX_BASE_URL")) or DEFAULT_BASE_URL, ssl_ca_cert=certifi.where())
     if api_key is not None:
         configure_auth(configuration, api_key=api_key)
     return Sendmux${className}ApiClient(configuration, access_token=access_token, retry_options=retry_options)

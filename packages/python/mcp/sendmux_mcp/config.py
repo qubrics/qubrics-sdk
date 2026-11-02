@@ -1,10 +1,10 @@
 from __future__ import annotations
 
+import os
 from dataclasses import dataclass, field
-from typing import Literal, Mapping, Sequence, cast
+from typing import Literal, Mapping, Sequence, cast, overload
 
 from sendmux_core import validate_api_key
-from sendmux_core.environment import env_value
 
 Surface = Literal["mailbox", "management", "sending"]
 Transport = Literal["stdio", "http", "streamable-http"]
@@ -14,6 +14,18 @@ SURFACES: tuple[Surface, ...] = ("mailbox", "management", "sending")
 
 DEFAULT_APP_BASE_URL = "https://app.sendmux.ai/api/v1"
 DEFAULT_SENDING_BASE_URL = "https://smtp.sendmux.ai/api/v1"
+
+
+@overload
+def env_value(name: str, default: str) -> str: ...
+
+
+@overload
+def env_value(name: str, default: None = None) -> str | None: ...
+
+
+def env_value(name: str, default: str | None = None) -> str | None:
+    return os.environ.get(name.replace("SENDMUX_", "QUBRICS_", 1), os.environ.get(name, default))
 
 
 @dataclass(frozen=True)
