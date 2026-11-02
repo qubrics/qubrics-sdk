@@ -21,32 +21,30 @@ module Sendmux::Sending::Generated
     end
     # Upload bytes to an attachment upload URL
     # Upload the exact binary bytes for a previously-created attachment upload URL. This operation uses the short-lived upload token header returned by POST /emails/attachment-uploads, not a Sendmux API key.
-    # @param x_sendmux_upload_token [String] Short-lived upload token returned by POST /emails/attachment-uploads.
     # @param content_length [Integer] Exact number of bytes in the binary request body.
     # @param upload_id [String] Upload intent ID returned by POST /emails/attachment-uploads.
     # @param body [File]
     # @param [Hash] opts the optional parameters
+    # @option opts [String] :x_qubrics_upload_token Short-lived upload token returned by POST /emails/attachment-uploads. Send this header or X-Sendmux-Upload-Token. If both are sent, their values must match.
+    # @option opts [String] :x_sendmux_upload_token Compatibility alias for X-Qubrics-Upload-Token, retained indefinitely.
     # @return [AttachmentUploadResponse]
-    def sending_complete_attachment_upload(x_sendmux_upload_token, content_length, upload_id, body, opts = {})
-      data, _status_code, _headers = sending_complete_attachment_upload_with_http_info(x_sendmux_upload_token, content_length, upload_id, body, opts)
+    def sending_complete_attachment_upload(content_length, upload_id, body, opts = {})
+      data, _status_code, _headers = sending_complete_attachment_upload_with_http_info(content_length, upload_id, body, opts)
       data
     end
 
     # Upload bytes to an attachment upload URL
     # Upload the exact binary bytes for a previously-created attachment upload URL. This operation uses the short-lived upload token header returned by POST /emails/attachment-uploads, not a Sendmux API key.
-    # @param x_sendmux_upload_token [String] Short-lived upload token returned by POST /emails/attachment-uploads.
     # @param content_length [Integer] Exact number of bytes in the binary request body.
     # @param upload_id [String] Upload intent ID returned by POST /emails/attachment-uploads.
     # @param body [File]
     # @param [Hash] opts the optional parameters
+    # @option opts [String] :x_qubrics_upload_token Short-lived upload token returned by POST /emails/attachment-uploads. Send this header or X-Sendmux-Upload-Token. If both are sent, their values must match.
+    # @option opts [String] :x_sendmux_upload_token Compatibility alias for X-Qubrics-Upload-Token, retained indefinitely.
     # @return [Array<(AttachmentUploadResponse, Integer, Hash)>] AttachmentUploadResponse data, response status code and response headers
-    def sending_complete_attachment_upload_with_http_info(x_sendmux_upload_token, content_length, upload_id, body, opts = {})
+    def sending_complete_attachment_upload_with_http_info(content_length, upload_id, body, opts = {})
       if @api_client.config.debugging
         @api_client.config.logger.debug 'Calling API: AttachmentsApi.sending_complete_attachment_upload ...'
-      end
-      # verify the required parameter 'x_sendmux_upload_token' is set
-      if @api_client.config.client_side_validation && x_sendmux_upload_token.nil?
-        fail ArgumentError, "Missing the required parameter 'x_sendmux_upload_token' when calling AttachmentsApi.sending_complete_attachment_upload"
       end
       # verify the required parameter 'content_length' is set
       if @api_client.config.client_side_validation && content_length.nil?
@@ -84,8 +82,9 @@ module Sendmux::Sending::Generated
       if !content_type.nil?
           header_params['Content-Type'] = content_type
       end
-      header_params[:'X-Sendmux-Upload-Token'] = x_sendmux_upload_token
       header_params[:'Content-Length'] = content_length
+      header_params[:'X-Qubrics-Upload-Token'] = opts[:'x_qubrics_upload_token'] if !opts[:'x_qubrics_upload_token'].nil?
+      header_params[:'X-Sendmux-Upload-Token'] = opts[:'x_sendmux_upload_token'] if !opts[:'x_sendmux_upload_token'].nil?
 
       # form parameters
       form_params = opts[:form_params] || {}
@@ -97,7 +96,7 @@ module Sendmux::Sending::Generated
       return_type = opts[:debug_return_type] || 'AttachmentUploadResponse'
 
       # auth_names
-      auth_names = opts[:debug_auth_names] || []
+      auth_names = opts[:debug_auth_names] || ['UploadTokenSendmux', 'UploadTokenQubrics']
 
       new_options = opts.merge(
         :operation => :"AttachmentsApi.sending_complete_attachment_upload",

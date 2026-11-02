@@ -22,6 +22,60 @@ class ToolSpec:
 
 OPENAPI_MAILBOX_TOOLS: tuple[ToolSpec, ...] = (
     ToolSpec(
+        operation_id="mailboxListCalendars",
+        name="mailbox_list_calendars",
+        title="List Calendars",
+        description="List calendars in the selected mailbox. Requires calendar.read. Use a small limit and continue with the returned cursor.",
+    ),
+    ToolSpec(
+        operation_id="mailboxCreateCalendar",
+        name="mailbox_create_calendar",
+        title="Create Calendar",
+        description="Create a private calendar only when the user asks. Requires calendar.write. This does not send invitations or email reminders.",
+    ),
+    ToolSpec(
+        operation_id="mailboxGetCalendar",
+        name="mailbox_get_calendar",
+        title="Get Calendar",
+        description="Read one calendar in the selected mailbox. Requires calendar.read.",
+    ),
+    ToolSpec(
+        operation_id="mailboxListCalendarEvents",
+        name="mailbox_list_calendar_events",
+        title="List Calendar Events",
+        description="List events in the selected mailbox or look up a caller-held UID. Requires calendar.read. UID search is eventually consistent: an empty immediate lookup leaves an uncertain create unresolved and never authorises repeating it.",
+    ),
+    ToolSpec(
+        operation_id="mailboxCreateCalendarEvent",
+        name="mailbox_create_calendar_event",
+        title="Create Calendar Event",
+        description="Save an event without invitations or email reminders. Requires calendar.write. Retain the required UID before dispatch; after an uncertain result reconcile by UID lookup and never repeat the create after an empty immediate lookup.",
+    ),
+    ToolSpec(
+        operation_id="mailboxGetCalendarEvent",
+        name="mailbox_get_calendar_event",
+        title="Get Calendar Event",
+        description="Read one event before editing or deleting it. Requires calendar.read. Retain its current concurrency token for the next conditional change.",
+    ),
+    ToolSpec(
+        operation_id="mailboxUpdateCalendarEvent",
+        name="mailbox_update_calendar_event",
+        title="Edit Calendar Event",
+        description="Edit an event without sending invitations or email reminders. Requires calendar.write and the reviewed If-Match value. Reload after a conflict before making another change.",
+    ),
+    ToolSpec(
+        operation_id="mailboxDeleteCalendarEvent",
+        name="mailbox_delete_calendar_event",
+        title="Delete Calendar Event",
+        description="Delete an event only when the user asks. Requires calendar.write and the reviewed If-Match value. This does not send cancellation emails; reload after a conflict.",
+    ),
+    ToolSpec(
+        operation_id="mailboxGetCalendarEventChanges",
+        name="mailbox_get_calendar_event_changes",
+        title="Get Calendar Event Changes",
+        description="Read bounded event changes from a retained state. Requires calendar.read. When sync_required is true, perform a full event resync; these coalesced changes are not a complete activity history.",
+    ),
+    ToolSpec(
         operation_id="mailboxListDrafts",
         name="mailbox_list_drafts",
         title="List Saved Drafts",
@@ -479,6 +533,11 @@ TOOL_BY_OPERATION_ID = {
 
 READ_ONLY_OPERATION_IDS = frozenset(
     {
+        "mailboxListCalendars",
+        "mailboxGetCalendar",
+        "mailboxListCalendarEvents",
+        "mailboxGetCalendarEvent",
+        "mailboxGetCalendarEventChanges",
         "mailboxListDrafts",
         "mailboxGetDraft",
         "mailboxGetAttachmentText",
@@ -521,6 +580,7 @@ READ_ONLY_OPERATION_IDS = frozenset(
 
 DESTRUCTIVE_OPERATION_IDS = frozenset(
     {
+        "mailboxDeleteCalendarEvent",
         "mailboxDeleteDraft",
         "mailboxBatchDeleteMessages",
         "managementDeleteMailboxKey",
@@ -529,6 +589,8 @@ DESTRUCTIVE_OPERATION_IDS = frozenset(
 
 IDEMPOTENT_WRITE_OPERATION_IDS = frozenset(
     {
+        "mailboxUpdateCalendarEvent",
+        "mailboxDeleteCalendarEvent",
         "mailboxControlDraftSchedule",
         "mailboxRequestAttachmentText",
         "mailboxUpdateIdentity",

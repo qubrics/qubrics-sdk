@@ -366,6 +366,7 @@ from typing import Any, cast
 
 from sendmux_core import AccessToken, RetryOptions, configure_auth
 from sendmux_core.auth import resolve_access_token, validate_auth
+from sendmux_core.environment import env_value
 from sendmux_core.errors import map_api_exception
 from sendmux_core.retry import RetryingRestClient
 
@@ -399,7 +400,11 @@ class Sendmux${className}ApiClient(ApiClient):
         body: Any,
         request_auth: Any = None,
     ) -> None:
-        if self._access_token is not None and auth_settings and not request_auth:
+        if (
+            self._access_token is not None
+            and any(name not in ("UploadTokenQubrics", "UploadTokenSendmux") for name in auth_settings or ())
+            and not request_auth
+        ):
             request_auth = {
                 "type": "bearer",
                 "in": "header",
@@ -430,8 +435,11 @@ def create_${surface.name}_client(
     base_url: str | None = None,
     retry_options: RetryOptions | None = None,
 ) -> Sendmux${className}ApiClient:
+    if api_key is None and access_token is None:
+        api_key = env_value("SENDMUX_API_KEY")
+        access_token = env_value("SENDMUX_ACCESS_TOKEN")
     validate_auth(api_key=api_key, access_token=access_token, surface="${keySurface}")
-    configuration = Configuration(host=base_url or DEFAULT_BASE_URL, ssl_ca_cert=certifi.where())
+    configuration = Configuration(host=base_url or env_value("SENDMUX_BASE_URL") or DEFAULT_BASE_URL, ssl_ca_cert=certifi.where())
     if api_key is not None:
         configure_auth(configuration, api_key=api_key)
     return Sendmux${className}ApiClient(configuration, access_token=access_token, retry_options=retry_options)

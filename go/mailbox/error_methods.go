@@ -134,6 +134,126 @@ func (r *MailboxCreateAttachmentUploadServiceUnavailable) APIError() *core.APIEr
 	return err
 }
 
+// APIError maps MailboxCreateCalendarBadRequest into the shared typed API error.
+func (r *MailboxCreateCalendarBadRequest) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 400)
+	return err
+}
+
+// APIError maps MailboxCreateCalendarConflict into the shared typed API error.
+func (r *MailboxCreateCalendarConflict) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 409)
+	return err
+}
+
+// APIError maps MailboxCreateCalendarEventBadRequest into the shared typed API error.
+func (r *MailboxCreateCalendarEventBadRequest) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 400)
+	return err
+}
+
+// APIError maps MailboxCreateCalendarEventConflict into the shared typed API error.
+func (r *MailboxCreateCalendarEventConflict) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 409)
+	return err
+}
+
+// APIError maps MailboxCreateCalendarEventForbidden into the shared typed API error.
+func (r *MailboxCreateCalendarEventForbidden) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 403)
+	return err
+}
+
+// APIError maps MailboxCreateCalendarEventInternalServerError into the shared typed API error.
+func (r *MailboxCreateCalendarEventInternalServerError) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 500)
+	return err
+}
+
+// APIError maps MailboxCreateCalendarEventNotFound into the shared typed API error.
+func (r *MailboxCreateCalendarEventNotFound) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 404)
+	return err
+}
+
+// APIError maps MailboxCreateCalendarEventRequestEntityTooLarge into the shared typed API error.
+func (r *MailboxCreateCalendarEventRequestEntityTooLarge) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 413)
+	return err
+}
+
+// APIError maps MailboxCreateCalendarEventServiceUnavailable into the shared typed API error.
+func (r *MailboxCreateCalendarEventServiceUnavailable) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 503)
+	return err
+}
+
+// APIError maps MailboxCreateCalendarEventTooManyRequests into the shared typed API error.
+func (r *MailboxCreateCalendarEventTooManyRequests) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 429)
+	return err
+}
+
+// APIError maps MailboxCreateCalendarEventUnauthorized into the shared typed API error.
+func (r *MailboxCreateCalendarEventUnauthorized) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 401)
+	return err
+}
+
+// APIError maps MailboxCreateCalendarEventUnprocessableEntity into the shared typed API error.
+func (r *MailboxCreateCalendarEventUnprocessableEntity) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 422)
+	return err
+}
+
+// APIError maps MailboxCreateCalendarForbidden into the shared typed API error.
+func (r *MailboxCreateCalendarForbidden) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 403)
+	return err
+}
+
+// APIError maps MailboxCreateCalendarInternalServerError into the shared typed API error.
+func (r *MailboxCreateCalendarInternalServerError) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 500)
+	return err
+}
+
+// APIError maps MailboxCreateCalendarNotFound into the shared typed API error.
+func (r *MailboxCreateCalendarNotFound) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 404)
+	return err
+}
+
+// APIError maps MailboxCreateCalendarRequestEntityTooLarge into the shared typed API error.
+func (r *MailboxCreateCalendarRequestEntityTooLarge) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 413)
+	return err
+}
+
+// APIError maps MailboxCreateCalendarServiceUnavailable into the shared typed API error.
+func (r *MailboxCreateCalendarServiceUnavailable) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 503)
+	return err
+}
+
+// APIError maps MailboxCreateCalendarTooManyRequests into the shared typed API error.
+func (r *MailboxCreateCalendarTooManyRequests) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 429)
+	return err
+}
+
+// APIError maps MailboxCreateCalendarUnauthorized into the shared typed API error.
+func (r *MailboxCreateCalendarUnauthorized) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 401)
+	return err
+}
+
+// APIError maps MailboxCreateCalendarUnprocessableEntity into the shared typed API error.
+func (r *MailboxCreateCalendarUnprocessableEntity) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 422)
+	return err
+}
+
 // APIError maps MailboxCreateDraftBadRequest into the shared typed API error.
 func (r *MailboxCreateDraftBadRequest) APIError() *core.APIError {
 	err, _ := core.APIErrorFromResponse(r, 400)
@@ -208,6 +328,66 @@ func (r *MailboxCreateFolderRequestEntityTooLarge) APIError() *core.APIError {
 
 // APIError maps MailboxCreateFolderUnprocessableEntity into the shared typed API error.
 func (r *MailboxCreateFolderUnprocessableEntity) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 422)
+	return err
+}
+
+// APIError maps MailboxDeleteCalendarEventBadRequest into the shared typed API error.
+func (r *MailboxDeleteCalendarEventBadRequest) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 400)
+	return err
+}
+
+// APIError maps MailboxDeleteCalendarEventConflict into the shared typed API error.
+func (r *MailboxDeleteCalendarEventConflict) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 409)
+	return err
+}
+
+// APIError maps MailboxDeleteCalendarEventForbidden into the shared typed API error.
+func (r *MailboxDeleteCalendarEventForbidden) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 403)
+	return err
+}
+
+// APIError maps MailboxDeleteCalendarEventInternalServerError into the shared typed API error.
+func (r *MailboxDeleteCalendarEventInternalServerError) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 500)
+	return err
+}
+
+// APIError maps MailboxDeleteCalendarEventNotFound into the shared typed API error.
+func (r *MailboxDeleteCalendarEventNotFound) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 404)
+	return err
+}
+
+// APIError maps MailboxDeleteCalendarEventRequestEntityTooLarge into the shared typed API error.
+func (r *MailboxDeleteCalendarEventRequestEntityTooLarge) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 413)
+	return err
+}
+
+// APIError maps MailboxDeleteCalendarEventServiceUnavailable into the shared typed API error.
+func (r *MailboxDeleteCalendarEventServiceUnavailable) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 503)
+	return err
+}
+
+// APIError maps MailboxDeleteCalendarEventTooManyRequests into the shared typed API error.
+func (r *MailboxDeleteCalendarEventTooManyRequests) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 429)
+	return err
+}
+
+// APIError maps MailboxDeleteCalendarEventUnauthorized into the shared typed API error.
+func (r *MailboxDeleteCalendarEventUnauthorized) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 401)
+	return err
+}
+
+// APIError maps MailboxDeleteCalendarEventUnprocessableEntity into the shared typed API error.
+func (r *MailboxDeleteCalendarEventUnprocessableEntity) APIError() *core.APIError {
 	err, _ := core.APIErrorFromResponse(r, 422)
 	return err
 }
@@ -359,6 +539,186 @@ func (r *MailboxGetAttachmentTextTooManyRequests) APIError() *core.APIError {
 // APIError maps MailboxGetAttachmentTextUnauthorized into the shared typed API error.
 func (r *MailboxGetAttachmentTextUnauthorized) APIError() *core.APIError {
 	err, _ := core.APIErrorFromResponse(r, 401)
+	return err
+}
+
+// APIError maps MailboxGetCalendarBadRequest into the shared typed API error.
+func (r *MailboxGetCalendarBadRequest) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 400)
+	return err
+}
+
+// APIError maps MailboxGetCalendarConflict into the shared typed API error.
+func (r *MailboxGetCalendarConflict) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 409)
+	return err
+}
+
+// APIError maps MailboxGetCalendarEventBadRequest into the shared typed API error.
+func (r *MailboxGetCalendarEventBadRequest) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 400)
+	return err
+}
+
+// APIError maps MailboxGetCalendarEventChangesBadRequest into the shared typed API error.
+func (r *MailboxGetCalendarEventChangesBadRequest) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 400)
+	return err
+}
+
+// APIError maps MailboxGetCalendarEventChangesConflict into the shared typed API error.
+func (r *MailboxGetCalendarEventChangesConflict) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 409)
+	return err
+}
+
+// APIError maps MailboxGetCalendarEventChangesForbidden into the shared typed API error.
+func (r *MailboxGetCalendarEventChangesForbidden) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 403)
+	return err
+}
+
+// APIError maps MailboxGetCalendarEventChangesInternalServerError into the shared typed API error.
+func (r *MailboxGetCalendarEventChangesInternalServerError) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 500)
+	return err
+}
+
+// APIError maps MailboxGetCalendarEventChangesNotFound into the shared typed API error.
+func (r *MailboxGetCalendarEventChangesNotFound) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 404)
+	return err
+}
+
+// APIError maps MailboxGetCalendarEventChangesRequestEntityTooLarge into the shared typed API error.
+func (r *MailboxGetCalendarEventChangesRequestEntityTooLarge) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 413)
+	return err
+}
+
+// APIError maps MailboxGetCalendarEventChangesServiceUnavailable into the shared typed API error.
+func (r *MailboxGetCalendarEventChangesServiceUnavailable) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 503)
+	return err
+}
+
+// APIError maps MailboxGetCalendarEventChangesTooManyRequests into the shared typed API error.
+func (r *MailboxGetCalendarEventChangesTooManyRequests) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 429)
+	return err
+}
+
+// APIError maps MailboxGetCalendarEventChangesUnauthorized into the shared typed API error.
+func (r *MailboxGetCalendarEventChangesUnauthorized) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 401)
+	return err
+}
+
+// APIError maps MailboxGetCalendarEventChangesUnprocessableEntity into the shared typed API error.
+func (r *MailboxGetCalendarEventChangesUnprocessableEntity) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 422)
+	return err
+}
+
+// APIError maps MailboxGetCalendarEventConflict into the shared typed API error.
+func (r *MailboxGetCalendarEventConflict) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 409)
+	return err
+}
+
+// APIError maps MailboxGetCalendarEventForbidden into the shared typed API error.
+func (r *MailboxGetCalendarEventForbidden) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 403)
+	return err
+}
+
+// APIError maps MailboxGetCalendarEventInternalServerError into the shared typed API error.
+func (r *MailboxGetCalendarEventInternalServerError) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 500)
+	return err
+}
+
+// APIError maps MailboxGetCalendarEventNotFound into the shared typed API error.
+func (r *MailboxGetCalendarEventNotFound) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 404)
+	return err
+}
+
+// APIError maps MailboxGetCalendarEventRequestEntityTooLarge into the shared typed API error.
+func (r *MailboxGetCalendarEventRequestEntityTooLarge) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 413)
+	return err
+}
+
+// APIError maps MailboxGetCalendarEventServiceUnavailable into the shared typed API error.
+func (r *MailboxGetCalendarEventServiceUnavailable) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 503)
+	return err
+}
+
+// APIError maps MailboxGetCalendarEventTooManyRequests into the shared typed API error.
+func (r *MailboxGetCalendarEventTooManyRequests) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 429)
+	return err
+}
+
+// APIError maps MailboxGetCalendarEventUnauthorized into the shared typed API error.
+func (r *MailboxGetCalendarEventUnauthorized) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 401)
+	return err
+}
+
+// APIError maps MailboxGetCalendarEventUnprocessableEntity into the shared typed API error.
+func (r *MailboxGetCalendarEventUnprocessableEntity) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 422)
+	return err
+}
+
+// APIError maps MailboxGetCalendarForbidden into the shared typed API error.
+func (r *MailboxGetCalendarForbidden) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 403)
+	return err
+}
+
+// APIError maps MailboxGetCalendarInternalServerError into the shared typed API error.
+func (r *MailboxGetCalendarInternalServerError) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 500)
+	return err
+}
+
+// APIError maps MailboxGetCalendarNotFound into the shared typed API error.
+func (r *MailboxGetCalendarNotFound) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 404)
+	return err
+}
+
+// APIError maps MailboxGetCalendarRequestEntityTooLarge into the shared typed API error.
+func (r *MailboxGetCalendarRequestEntityTooLarge) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 413)
+	return err
+}
+
+// APIError maps MailboxGetCalendarServiceUnavailable into the shared typed API error.
+func (r *MailboxGetCalendarServiceUnavailable) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 503)
+	return err
+}
+
+// APIError maps MailboxGetCalendarTooManyRequests into the shared typed API error.
+func (r *MailboxGetCalendarTooManyRequests) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 429)
+	return err
+}
+
+// APIError maps MailboxGetCalendarUnauthorized into the shared typed API error.
+func (r *MailboxGetCalendarUnauthorized) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 401)
+	return err
+}
+
+// APIError maps MailboxGetCalendarUnprocessableEntity into the shared typed API error.
+func (r *MailboxGetCalendarUnprocessableEntity) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 422)
 	return err
 }
 
@@ -581,6 +941,126 @@ func (r *MailboxListBodyBadRequest) APIError() *core.APIError {
 // APIError maps MailboxListBodyNotFound into the shared typed API error.
 func (r *MailboxListBodyNotFound) APIError() *core.APIError {
 	err, _ := core.APIErrorFromResponse(r, 404)
+	return err
+}
+
+// APIError maps MailboxListCalendarEventsBadRequest into the shared typed API error.
+func (r *MailboxListCalendarEventsBadRequest) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 400)
+	return err
+}
+
+// APIError maps MailboxListCalendarEventsConflict into the shared typed API error.
+func (r *MailboxListCalendarEventsConflict) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 409)
+	return err
+}
+
+// APIError maps MailboxListCalendarEventsForbidden into the shared typed API error.
+func (r *MailboxListCalendarEventsForbidden) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 403)
+	return err
+}
+
+// APIError maps MailboxListCalendarEventsInternalServerError into the shared typed API error.
+func (r *MailboxListCalendarEventsInternalServerError) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 500)
+	return err
+}
+
+// APIError maps MailboxListCalendarEventsNotFound into the shared typed API error.
+func (r *MailboxListCalendarEventsNotFound) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 404)
+	return err
+}
+
+// APIError maps MailboxListCalendarEventsRequestEntityTooLarge into the shared typed API error.
+func (r *MailboxListCalendarEventsRequestEntityTooLarge) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 413)
+	return err
+}
+
+// APIError maps MailboxListCalendarEventsServiceUnavailable into the shared typed API error.
+func (r *MailboxListCalendarEventsServiceUnavailable) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 503)
+	return err
+}
+
+// APIError maps MailboxListCalendarEventsTooManyRequests into the shared typed API error.
+func (r *MailboxListCalendarEventsTooManyRequests) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 429)
+	return err
+}
+
+// APIError maps MailboxListCalendarEventsUnauthorized into the shared typed API error.
+func (r *MailboxListCalendarEventsUnauthorized) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 401)
+	return err
+}
+
+// APIError maps MailboxListCalendarEventsUnprocessableEntity into the shared typed API error.
+func (r *MailboxListCalendarEventsUnprocessableEntity) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 422)
+	return err
+}
+
+// APIError maps MailboxListCalendarsBadRequest into the shared typed API error.
+func (r *MailboxListCalendarsBadRequest) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 400)
+	return err
+}
+
+// APIError maps MailboxListCalendarsConflict into the shared typed API error.
+func (r *MailboxListCalendarsConflict) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 409)
+	return err
+}
+
+// APIError maps MailboxListCalendarsForbidden into the shared typed API error.
+func (r *MailboxListCalendarsForbidden) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 403)
+	return err
+}
+
+// APIError maps MailboxListCalendarsInternalServerError into the shared typed API error.
+func (r *MailboxListCalendarsInternalServerError) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 500)
+	return err
+}
+
+// APIError maps MailboxListCalendarsNotFound into the shared typed API error.
+func (r *MailboxListCalendarsNotFound) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 404)
+	return err
+}
+
+// APIError maps MailboxListCalendarsRequestEntityTooLarge into the shared typed API error.
+func (r *MailboxListCalendarsRequestEntityTooLarge) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 413)
+	return err
+}
+
+// APIError maps MailboxListCalendarsServiceUnavailable into the shared typed API error.
+func (r *MailboxListCalendarsServiceUnavailable) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 503)
+	return err
+}
+
+// APIError maps MailboxListCalendarsTooManyRequests into the shared typed API error.
+func (r *MailboxListCalendarsTooManyRequests) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 429)
+	return err
+}
+
+// APIError maps MailboxListCalendarsUnauthorized into the shared typed API error.
+func (r *MailboxListCalendarsUnauthorized) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 401)
+	return err
+}
+
+// APIError maps MailboxListCalendarsUnprocessableEntity into the shared typed API error.
+func (r *MailboxListCalendarsUnprocessableEntity) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 422)
 	return err
 }
 
@@ -893,6 +1373,66 @@ func (r *MailboxStreamEventsTooManyRequests) APIError() *core.APIError {
 // APIError maps MailboxStreamEventsUnauthorized into the shared typed API error.
 func (r *MailboxStreamEventsUnauthorized) APIError() *core.APIError {
 	err, _ := core.APIErrorFromResponse(r, 401)
+	return err
+}
+
+// APIError maps MailboxUpdateCalendarEventBadRequest into the shared typed API error.
+func (r *MailboxUpdateCalendarEventBadRequest) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 400)
+	return err
+}
+
+// APIError maps MailboxUpdateCalendarEventConflict into the shared typed API error.
+func (r *MailboxUpdateCalendarEventConflict) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 409)
+	return err
+}
+
+// APIError maps MailboxUpdateCalendarEventForbidden into the shared typed API error.
+func (r *MailboxUpdateCalendarEventForbidden) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 403)
+	return err
+}
+
+// APIError maps MailboxUpdateCalendarEventInternalServerError into the shared typed API error.
+func (r *MailboxUpdateCalendarEventInternalServerError) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 500)
+	return err
+}
+
+// APIError maps MailboxUpdateCalendarEventNotFound into the shared typed API error.
+func (r *MailboxUpdateCalendarEventNotFound) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 404)
+	return err
+}
+
+// APIError maps MailboxUpdateCalendarEventRequestEntityTooLarge into the shared typed API error.
+func (r *MailboxUpdateCalendarEventRequestEntityTooLarge) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 413)
+	return err
+}
+
+// APIError maps MailboxUpdateCalendarEventServiceUnavailable into the shared typed API error.
+func (r *MailboxUpdateCalendarEventServiceUnavailable) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 503)
+	return err
+}
+
+// APIError maps MailboxUpdateCalendarEventTooManyRequests into the shared typed API error.
+func (r *MailboxUpdateCalendarEventTooManyRequests) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 429)
+	return err
+}
+
+// APIError maps MailboxUpdateCalendarEventUnauthorized into the shared typed API error.
+func (r *MailboxUpdateCalendarEventUnauthorized) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 401)
+	return err
+}
+
+// APIError maps MailboxUpdateCalendarEventUnprocessableEntity into the shared typed API error.
+func (r *MailboxUpdateCalendarEventUnprocessableEntity) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 422)
 	return err
 }
 

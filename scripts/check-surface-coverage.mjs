@@ -405,7 +405,8 @@ function compareCliOperation(operation, cli) {
 }
 
 function commandKeyKindForOperation(operation, surface) {
-  if (Array.isArray(operation.security) && operation.security.length === 0) {
+  if (operation.operationId === "sendingCompleteAttachmentUpload" ||
+      (Array.isArray(operation.security) && operation.security.length === 0)) {
     return "none";
   }
   if (surface === "management") {

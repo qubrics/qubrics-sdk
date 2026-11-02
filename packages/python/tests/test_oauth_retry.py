@@ -16,7 +16,7 @@ import sendmux_core.retry as retry_module
 from sendmux_core import RetryOptions
 from sendmux_mailbox import MailboxAPIApi, create_mailbox_client
 from sendmux_management import ConnectionApi, create_management_client
-from sendmux_sending import MetaApi, create_sending_client
+from sendmux_sending import AttachmentsApi, MetaApi, create_sending_client
 from urllib3.exceptions import ProtocolError
 
 
@@ -53,6 +53,10 @@ def endpoint() -> Iterator[tuple[str, list[dict[str, str]], list[tuple[int, dict
 
         def log_message(self, format: str, *args: Any) -> None:
             pass
+
+        def do_PUT(self) -> None:
+            self.rfile.read(int(self.headers.get("Content-Length", "0")))
+            self.do_GET()
 
     server = ThreadingHTTPServer(("127.0.0.1", 0), Handler)
     thread = Thread(target=lambda: server.serve_forever(poll_interval=0.01))
@@ -95,6 +99,25 @@ def test_provider_renews_between_public_requests(factory: Any, connect: Any, end
     assert [request["Authorization"] for request in requests] == [
         "Bearer access.token-one", "Bearer access.token-two",
     ]
+
+
+@pytest.mark.parametrize("family", ["qubrics", "sendmux"])
+def test_delegated_upload_does_not_read_or_leak_bearer_provider(family: str, endpoint: Any) -> None:
+    url, requests, responses = endpoint
+    responses.append((201, {}, {}))
+
+    def bearer_provider() -> str:
+        raise AssertionError("Delegated upload must not read the bearer credential")
+
+    with create_sending_client(access_token=bearer_provider, base_url=url) as client:
+        response = AttachmentsApi(client).sending_complete_attachment_upload_without_preload_content(
+            content_length=4, upload_id="upl_aaaaaaaaaaaaaaaaaaaaaaaa", body=b"test",
+            **{f"x_{family}_upload_token": "upload-token"},
+        )
+        response.read()
+        response.release_conn()
+    assert requests[0][f"X-{family.capitalize()}-Upload-Token"] == "upload-token"
+    assert "Authorization" not in requests[0]
 
 
 @pytest.mark.parametrize("token", ["", "Bearer token", "token\r\nX-Injected: yes", "token with spaces"])

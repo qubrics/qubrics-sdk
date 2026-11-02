@@ -1,7 +1,7 @@
 {
   "sources": {
-    "openapi-app.json": "dd39d2329fc51098455f499e551ad3e33f14bc9243c793dfa47fc353a57f62ea",
-    "openapi-sending.json": "c1f82f9b8944026571d9e66ae84d4bef90e6c575cc8a57127afcdc6e90aa7b0e"
+    "openapi-app.json": "16439b3c0d9eee73554202cf909af6aade12b6f8d3390ddee922663ba061de1a",
+    "openapi-sending.json": "3138c5f27e3c0ab8475d1ccaf7378815c12e12918c30a90e77e2115642bc3647"
   },
   "operations": [
     {
@@ -53,6 +53,22 @@
       "reason": "No named operation-specific API or certification; manual relative-path JSON calls only."
     },
     {
+      "operationId": "mailboxCreateCalendar",
+      "method": "POST",
+      "path": "/mailbox/calendars",
+      "publicMethods": [],
+      "decision": "raw-json-only",
+      "reason": "Calendar tracer source covers TypeScript, CLI and MCP only; no named Rust method or live certification. Manual relative-path JSON calls only."
+    },
+    {
+      "operationId": "mailboxCreateCalendarEvent",
+      "method": "POST",
+      "path": "/mailbox/calendar-events",
+      "publicMethods": [],
+      "decision": "raw-json-only",
+      "reason": "Calendar tracer source covers TypeScript, CLI and MCP only; no named Rust method or live certification. Manual relative-path JSON calls only."
+    },
+    {
       "operationId": "mailboxCreateDraft",
       "method": "POST",
       "path": "/mailbox/drafts",
@@ -67,6 +83,14 @@
       "publicMethods": [],
       "decision": "raw-json-only",
       "reason": "No named operation-specific API or certification; manual relative-path JSON calls only."
+    },
+    {
+      "operationId": "mailboxDeleteCalendarEvent",
+      "method": "DELETE",
+      "path": "/mailbox/calendar-events/{event_id}",
+      "publicMethods": [],
+      "decision": "raw-json-only",
+      "reason": "Calendar tracer source covers TypeScript, CLI and MCP only; no named Rust method or live certification. Manual relative-path JSON calls only."
     },
     {
       "operationId": "mailboxDeleteDraft",
@@ -107,6 +131,30 @@
       "publicMethods": [],
       "decision": "raw-json-only",
       "reason": "No named operation-specific API or certification; manual relative-path JSON calls only."
+    },
+    {
+      "operationId": "mailboxGetCalendar",
+      "method": "GET",
+      "path": "/mailbox/calendars/{calendar_id}",
+      "publicMethods": [],
+      "decision": "raw-json-only",
+      "reason": "Calendar tracer source covers TypeScript, CLI and MCP only; no named Rust method or live certification. Manual relative-path JSON calls only."
+    },
+    {
+      "operationId": "mailboxGetCalendarEvent",
+      "method": "GET",
+      "path": "/mailbox/calendar-events/{event_id}",
+      "publicMethods": [],
+      "decision": "raw-json-only",
+      "reason": "Calendar tracer source covers TypeScript, CLI and MCP only; no named Rust method or live certification. Manual relative-path JSON calls only."
+    },
+    {
+      "operationId": "mailboxGetCalendarEventChanges",
+      "method": "GET",
+      "path": "/mailbox/calendar-events/changes",
+      "publicMethods": [],
+      "decision": "raw-json-only",
+      "reason": "Calendar tracer source covers TypeScript, CLI and MCP only; no named Rust method or live certification. Manual relative-path JSON calls only."
     },
     {
       "operationId": "mailboxGetChanges",
@@ -249,6 +297,22 @@
       "publicMethods": [],
       "decision": "raw-json-only",
       "reason": "No named operation-specific API or certification; manual relative-path JSON calls only."
+    },
+    {
+      "operationId": "mailboxListCalendarEvents",
+      "method": "GET",
+      "path": "/mailbox/calendar-events",
+      "publicMethods": [],
+      "decision": "raw-json-only",
+      "reason": "Calendar tracer source covers TypeScript, CLI and MCP only; no named Rust method or live certification. Manual relative-path JSON calls only."
+    },
+    {
+      "operationId": "mailboxListCalendars",
+      "method": "GET",
+      "path": "/mailbox/calendars",
+      "publicMethods": [],
+      "decision": "raw-json-only",
+      "reason": "Calendar tracer source covers TypeScript, CLI and MCP only; no named Rust method or live certification. Manual relative-path JSON calls only."
     },
     {
       "operationId": "mailboxListContent",
@@ -401,6 +465,14 @@
       "publicMethods": [],
       "decision": "unsupported-transport",
       "reason": "Event-stream responses are not supported by the JSON transport."
+    },
+    {
+      "operationId": "mailboxUpdateCalendarEvent",
+      "method": "PATCH",
+      "path": "/mailbox/calendar-events/{event_id}",
+      "publicMethods": [],
+      "decision": "raw-json-only",
+      "reason": "Calendar tracer source covers TypeScript, CLI and MCP only; no named Rust method or live certification. Manual relative-path JSON calls only."
     },
     {
       "operationId": "mailboxUpdateDraft",

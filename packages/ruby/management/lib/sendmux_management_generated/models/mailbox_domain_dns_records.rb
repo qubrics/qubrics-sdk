@@ -1,7 +1,7 @@
 =begin
-#Sendmux API
+#Qubrics API
 
-#Programmatic access to your Sendmux email infrastructure.
+#Programmatic access to your Qubrics email infrastructure.
 
 The version of the OpenAPI document: 1.0.0
 
@@ -23,13 +23,13 @@ module Sendmux::Management::Generated
 
     attr_accessor :mail_from
 
-    # MX records the customer must place. All point at Sendmux's inbound mail servers.
+    # MX records the customer must place. All point at Qubrics' inbound mail servers.
     attr_accessor :mx
 
     # SPF TXT record covering Amazon SES sending
     attr_accessor :spf
 
-    # Ownership-proof TXT record (Sendmux-specific)
+    # Ownership-proof TXT record (Qubrics-specific)
     attr_accessor :verification
 
     # Attribute mapping from ruby-style variable name to JSON key.

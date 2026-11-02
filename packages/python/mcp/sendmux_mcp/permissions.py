@@ -12,6 +12,15 @@ PermissionRequirement = tuple[str, ...]
 
 TOOL_PERMISSION_REQUIREMENTS: Mapping[str, PermissionRequirement] = MappingProxyType(
     {
+        "mailbox_list_calendars": ("calendar.read",),
+        "mailbox_create_calendar": ("calendar.write",),
+        "mailbox_get_calendar": ("calendar.read",),
+        "mailbox_list_calendar_events": ("calendar.read",),
+        "mailbox_create_calendar_event": ("calendar.write",),
+        "mailbox_get_calendar_event": ("calendar.read",),
+        "mailbox_update_calendar_event": ("calendar.write",),
+        "mailbox_delete_calendar_event": ("calendar.write",),
+        "mailbox_get_calendar_event_changes": ("calendar.read",),
         "mailbox_list_drafts": ("mailbox.read",),
         "mailbox_get_draft": ("mailbox.read",),
         "mailbox_create_draft": ("mailbox.read", "mailbox.drafts.write"),
@@ -97,7 +106,7 @@ def api_key_has_permission(required: str, granted_permissions: tuple[str, ...]) 
 
 
 def permissions_for_tool(tool_name: str) -> PermissionRequirement:
-    permissions = TOOL_PERMISSION_REQUIREMENTS.get(tool_name)
+    permissions = TOOL_PERMISSION_REQUIREMENTS.get(tool_name.removeprefix("qubrics_"))
     if permissions is None:
         raise ValueError(f"unknown MCP tool: {tool_name}")
     return permissions
@@ -130,7 +139,7 @@ def tool_permission_auth_check(ctx: AuthContext) -> bool:
 
     try:
         required_permissions = permissions_for_tool(component_name)
-        required_surface = TOOL_SURFACES[component_name]
+        required_surface = TOOL_SURFACES[component_name.removeprefix("qubrics_")]
     except ValueError:
         return False
     except KeyError:

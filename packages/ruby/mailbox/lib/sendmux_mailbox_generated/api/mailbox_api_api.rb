@@ -1,7 +1,7 @@
 =begin
-#Sendmux API
+#Qubrics API
 
-#Programmatic access to your Sendmux email infrastructure.
+#Programmatic access to your Qubrics email infrastructure.
 
 The version of the OpenAPI document: 1.0.0
 
@@ -490,6 +490,168 @@ module Sendmux::Mailbox::Generated
       return data, status_code, headers
     end
 
+    # Create a private calendar
+    # @param create_calendar_body [CreateCalendarBody]
+    # @param [Hash] opts the optional parameters
+    # @option opts [String] :idempotency_key
+    # @option opts [String] :mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox.
+    # @return [MailboxCalendarCreatedResponse]
+    def mailbox_create_calendar(create_calendar_body, opts = {})
+      data, _status_code, _headers = mailbox_create_calendar_with_http_info(create_calendar_body, opts)
+      data
+    end
+
+    # Create a private calendar
+    # @param create_calendar_body [CreateCalendarBody]
+    # @param [Hash] opts the optional parameters
+    # @option opts [String] :idempotency_key
+    # @option opts [String] :mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox.
+    # @return [Array<(MailboxCalendarCreatedResponse, Integer, Hash)>] MailboxCalendarCreatedResponse data, response status code and response headers
+    def mailbox_create_calendar_with_http_info(create_calendar_body, opts = {})
+      if @api_client.config.debugging
+        @api_client.config.logger.debug 'Calling API: MailboxAPIApi.mailbox_create_calendar ...'
+      end
+      # verify the required parameter 'create_calendar_body' is set
+      if @api_client.config.client_side_validation && create_calendar_body.nil?
+        fail ArgumentError, "Missing the required parameter 'create_calendar_body' when calling MailboxAPIApi.mailbox_create_calendar"
+      end
+      if @api_client.config.client_side_validation && !opts[:'idempotency_key'].nil? && opts[:'idempotency_key'].to_s.length > 255
+        fail ArgumentError, 'invalid value for "opts[:"idempotency_key"]" when calling MailboxAPIApi.mailbox_create_calendar, the character length must be smaller than or equal to 255.'
+      end
+
+      if @api_client.config.client_side_validation && !opts[:'idempotency_key'].nil? && opts[:'idempotency_key'].to_s.length < 1
+        fail ArgumentError, 'invalid value for "opts[:"idempotency_key"]" when calling MailboxAPIApi.mailbox_create_calendar, the character length must be greater than or equal to 1.'
+      end
+
+      # resource path
+      local_var_path = '/mailbox/calendars'
+
+      # query parameters
+      query_params = opts[:query_params] || {}
+      query_params[:'mailbox_id'] = opts[:'mailbox_id'] if !opts[:'mailbox_id'].nil?
+
+      # header parameters
+      header_params = opts[:header_params] || {}
+      # HTTP header 'Accept' (if needed)
+      header_params['Accept'] = @api_client.select_header_accept(['application/json']) unless header_params['Accept']
+      # HTTP header 'Content-Type'
+      content_type = @api_client.select_header_content_type(['application/json'])
+      if !content_type.nil?
+          header_params['Content-Type'] = content_type
+      end
+      header_params[:'Idempotency-Key'] = opts[:'idempotency_key'] if !opts[:'idempotency_key'].nil?
+
+      # form parameters
+      form_params = opts[:form_params] || {}
+
+      # http body (model)
+      post_body = opts[:debug_body] || @api_client.object_to_http_body(create_calendar_body)
+
+      # return_type
+      return_type = opts[:debug_return_type] || 'MailboxCalendarCreatedResponse'
+
+      # auth_names
+      auth_names = opts[:debug_auth_names] || ['oauth2', 'bearerAuth']
+
+      new_options = opts.merge(
+        :operation => :"MailboxAPIApi.mailbox_create_calendar",
+        :header_params => header_params,
+        :query_params => query_params,
+        :form_params => form_params,
+        :body => post_body,
+        :auth_names => auth_names,
+        :return_type => return_type
+      )
+
+      data, status_code, headers = @api_client.call_api(:POST, local_var_path, new_options)
+      if @api_client.config.debugging
+        @api_client.config.logger.debug "API called: MailboxAPIApi#mailbox_create_calendar\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
+      end
+      return data, status_code, headers
+    end
+
+    # Create a non-sending event
+    # Creates one event without participants, recurrence or alerts. Invitations and scheduling messages are disabled. Retain UID before dispatch. If creation is uncertain, use read-only UID lookup; do not repeat the create.
+    # @param create_calendar_event_body [CreateCalendarEventBody]
+    # @param [Hash] opts the optional parameters
+    # @option opts [String] :idempotency_key
+    # @option opts [String] :mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox.
+    # @return [MailboxCalendarEventCreatedResponse]
+    def mailbox_create_calendar_event(create_calendar_event_body, opts = {})
+      data, _status_code, _headers = mailbox_create_calendar_event_with_http_info(create_calendar_event_body, opts)
+      data
+    end
+
+    # Create a non-sending event
+    # Creates one event without participants, recurrence or alerts. Invitations and scheduling messages are disabled. Retain UID before dispatch. If creation is uncertain, use read-only UID lookup; do not repeat the create.
+    # @param create_calendar_event_body [CreateCalendarEventBody]
+    # @param [Hash] opts the optional parameters
+    # @option opts [String] :idempotency_key
+    # @option opts [String] :mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox.
+    # @return [Array<(MailboxCalendarEventCreatedResponse, Integer, Hash)>] MailboxCalendarEventCreatedResponse data, response status code and response headers
+    def mailbox_create_calendar_event_with_http_info(create_calendar_event_body, opts = {})
+      if @api_client.config.debugging
+        @api_client.config.logger.debug 'Calling API: MailboxAPIApi.mailbox_create_calendar_event ...'
+      end
+      # verify the required parameter 'create_calendar_event_body' is set
+      if @api_client.config.client_side_validation && create_calendar_event_body.nil?
+        fail ArgumentError, "Missing the required parameter 'create_calendar_event_body' when calling MailboxAPIApi.mailbox_create_calendar_event"
+      end
+      if @api_client.config.client_side_validation && !opts[:'idempotency_key'].nil? && opts[:'idempotency_key'].to_s.length > 255
+        fail ArgumentError, 'invalid value for "opts[:"idempotency_key"]" when calling MailboxAPIApi.mailbox_create_calendar_event, the character length must be smaller than or equal to 255.'
+      end
+
+      if @api_client.config.client_side_validation && !opts[:'idempotency_key'].nil? && opts[:'idempotency_key'].to_s.length < 1
+        fail ArgumentError, 'invalid value for "opts[:"idempotency_key"]" when calling MailboxAPIApi.mailbox_create_calendar_event, the character length must be greater than or equal to 1.'
+      end
+
+      # resource path
+      local_var_path = '/mailbox/calendar-events'
+
+      # query parameters
+      query_params = opts[:query_params] || {}
+      query_params[:'mailbox_id'] = opts[:'mailbox_id'] if !opts[:'mailbox_id'].nil?
+
+      # header parameters
+      header_params = opts[:header_params] || {}
+      # HTTP header 'Accept' (if needed)
+      header_params['Accept'] = @api_client.select_header_accept(['application/json']) unless header_params['Accept']
+      # HTTP header 'Content-Type'
+      content_type = @api_client.select_header_content_type(['application/json'])
+      if !content_type.nil?
+          header_params['Content-Type'] = content_type
+      end
+      header_params[:'Idempotency-Key'] = opts[:'idempotency_key'] if !opts[:'idempotency_key'].nil?
+
+      # form parameters
+      form_params = opts[:form_params] || {}
+
+      # http body (model)
+      post_body = opts[:debug_body] || @api_client.object_to_http_body(create_calendar_event_body)
+
+      # return_type
+      return_type = opts[:debug_return_type] || 'MailboxCalendarEventCreatedResponse'
+
+      # auth_names
+      auth_names = opts[:debug_auth_names] || ['oauth2', 'bearerAuth']
+
+      new_options = opts.merge(
+        :operation => :"MailboxAPIApi.mailbox_create_calendar_event",
+        :header_params => header_params,
+        :query_params => query_params,
+        :form_params => form_params,
+        :body => post_body,
+        :auth_names => auth_names,
+        :return_type => return_type
+      )
+
+      data, status_code, headers = @api_client.call_api(:POST, local_var_path, new_options)
+      if @api_client.config.debugging
+        @api_client.config.logger.debug "API called: MailboxAPIApi#mailbox_create_calendar_event\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
+      end
+      return data, status_code, headers
+    end
+
     # Create a saved draft
     # @param create_mailbox_draft [CreateMailboxDraft]
     # @param [Hash] opts the optional parameters
@@ -629,6 +791,94 @@ module Sendmux::Mailbox::Generated
       data, status_code, headers = @api_client.call_api(:POST, local_var_path, new_options)
       if @api_client.config.debugging
         @api_client.config.logger.debug "API called: MailboxAPIApi#mailbox_create_folder\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
+      end
+      return data, status_code, headers
+    end
+
+    # Delete a non-sending event
+    # @param event_id [String]
+    # @param if_match [String]
+    # @param [Hash] opts the optional parameters
+    # @option opts [String] :mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox.
+    # @return [MailboxCalendarEventDeletedResponse]
+    def mailbox_delete_calendar_event(event_id, if_match, opts = {})
+      data, _status_code, _headers = mailbox_delete_calendar_event_with_http_info(event_id, if_match, opts)
+      data
+    end
+
+    # Delete a non-sending event
+    # @param event_id [String]
+    # @param if_match [String]
+    # @param [Hash] opts the optional parameters
+    # @option opts [String] :mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox.
+    # @return [Array<(MailboxCalendarEventDeletedResponse, Integer, Hash)>] MailboxCalendarEventDeletedResponse data, response status code and response headers
+    def mailbox_delete_calendar_event_with_http_info(event_id, if_match, opts = {})
+      if @api_client.config.debugging
+        @api_client.config.logger.debug 'Calling API: MailboxAPIApi.mailbox_delete_calendar_event ...'
+      end
+      # verify the required parameter 'event_id' is set
+      if @api_client.config.client_side_validation && event_id.nil?
+        fail ArgumentError, "Missing the required parameter 'event_id' when calling MailboxAPIApi.mailbox_delete_calendar_event"
+      end
+      if @api_client.config.client_side_validation && event_id.to_s.length > 4096
+        fail ArgumentError, 'invalid value for "event_id" when calling MailboxAPIApi.mailbox_delete_calendar_event, the character length must be smaller than or equal to 4096.'
+      end
+
+      if @api_client.config.client_side_validation && event_id.to_s.length < 1
+        fail ArgumentError, 'invalid value for "event_id" when calling MailboxAPIApi.mailbox_delete_calendar_event, the character length must be greater than or equal to 1.'
+      end
+
+      pattern = Regexp.new(/^[A-Za-z0-9_-]+$/)
+      if @api_client.config.client_side_validation && event_id !~ pattern
+        fail ArgumentError, "invalid value for 'event_id' when calling MailboxAPIApi.mailbox_delete_calendar_event, must conform to the pattern #{pattern}."
+      end
+
+      # verify the required parameter 'if_match' is set
+      if @api_client.config.client_side_validation && if_match.nil?
+        fail ArgumentError, "Missing the required parameter 'if_match' when calling MailboxAPIApi.mailbox_delete_calendar_event"
+      end
+      if @api_client.config.client_side_validation && if_match.to_s.length < 1
+        fail ArgumentError, 'invalid value for "if_match" when calling MailboxAPIApi.mailbox_delete_calendar_event, the character length must be greater than or equal to 1.'
+      end
+
+      # resource path
+      local_var_path = '/mailbox/calendar-events/{event_id}'.sub('{event_id}', CGI.escape(event_id.to_s))
+
+      # query parameters
+      query_params = opts[:query_params] || {}
+      query_params[:'mailbox_id'] = opts[:'mailbox_id'] if !opts[:'mailbox_id'].nil?
+
+      # header parameters
+      header_params = opts[:header_params] || {}
+      # HTTP header 'Accept' (if needed)
+      header_params['Accept'] = @api_client.select_header_accept(['application/json']) unless header_params['Accept']
+      header_params[:'If-Match'] = if_match
+
+      # form parameters
+      form_params = opts[:form_params] || {}
+
+      # http body (model)
+      post_body = opts[:debug_body]
+
+      # return_type
+      return_type = opts[:debug_return_type] || 'MailboxCalendarEventDeletedResponse'
+
+      # auth_names
+      auth_names = opts[:debug_auth_names] || ['oauth2', 'bearerAuth']
+
+      new_options = opts.merge(
+        :operation => :"MailboxAPIApi.mailbox_delete_calendar_event",
+        :header_params => header_params,
+        :query_params => query_params,
+        :form_params => form_params,
+        :body => post_body,
+        :auth_names => auth_names,
+        :return_type => return_type
+      )
+
+      data, status_code, headers = @api_client.call_api(:DELETE, local_var_path, new_options)
+      if @api_client.config.debugging
+        @api_client.config.logger.debug "API called: MailboxAPIApi#mailbox_delete_calendar_event\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
       end
       return data, status_code, headers
     end
@@ -992,6 +1242,253 @@ module Sendmux::Mailbox::Generated
       data, status_code, headers = @api_client.call_api(:GET, local_var_path, new_options)
       if @api_client.config.debugging
         @api_client.config.logger.debug "API called: MailboxAPIApi#mailbox_get_attachment_text\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
+      end
+      return data, status_code, headers
+    end
+
+    # Get a calendar
+    # @param calendar_id [String]
+    # @param [Hash] opts the optional parameters
+    # @option opts [String] :if_none_match
+    # @option opts [String] :mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox.
+    # @return [MailboxCalendarResponse]
+    def mailbox_get_calendar(calendar_id, opts = {})
+      data, _status_code, _headers = mailbox_get_calendar_with_http_info(calendar_id, opts)
+      data
+    end
+
+    # Get a calendar
+    # @param calendar_id [String]
+    # @param [Hash] opts the optional parameters
+    # @option opts [String] :if_none_match
+    # @option opts [String] :mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox.
+    # @return [Array<(MailboxCalendarResponse, Integer, Hash)>] MailboxCalendarResponse data, response status code and response headers
+    def mailbox_get_calendar_with_http_info(calendar_id, opts = {})
+      if @api_client.config.debugging
+        @api_client.config.logger.debug 'Calling API: MailboxAPIApi.mailbox_get_calendar ...'
+      end
+      # verify the required parameter 'calendar_id' is set
+      if @api_client.config.client_side_validation && calendar_id.nil?
+        fail ArgumentError, "Missing the required parameter 'calendar_id' when calling MailboxAPIApi.mailbox_get_calendar"
+      end
+      if @api_client.config.client_side_validation && calendar_id.to_s.length > 4096
+        fail ArgumentError, 'invalid value for "calendar_id" when calling MailboxAPIApi.mailbox_get_calendar, the character length must be smaller than or equal to 4096.'
+      end
+
+      if @api_client.config.client_side_validation && calendar_id.to_s.length < 1
+        fail ArgumentError, 'invalid value for "calendar_id" when calling MailboxAPIApi.mailbox_get_calendar, the character length must be greater than or equal to 1.'
+      end
+
+      pattern = Regexp.new(/^[A-Za-z0-9_-]+$/)
+      if @api_client.config.client_side_validation && calendar_id !~ pattern
+        fail ArgumentError, "invalid value for 'calendar_id' when calling MailboxAPIApi.mailbox_get_calendar, must conform to the pattern #{pattern}."
+      end
+
+      # resource path
+      local_var_path = '/mailbox/calendars/{calendar_id}'.sub('{calendar_id}', CGI.escape(calendar_id.to_s))
+
+      # query parameters
+      query_params = opts[:query_params] || {}
+      query_params[:'mailbox_id'] = opts[:'mailbox_id'] if !opts[:'mailbox_id'].nil?
+
+      # header parameters
+      header_params = opts[:header_params] || {}
+      # HTTP header 'Accept' (if needed)
+      header_params['Accept'] = @api_client.select_header_accept(['application/json']) unless header_params['Accept']
+      header_params[:'If-None-Match'] = opts[:'if_none_match'] if !opts[:'if_none_match'].nil?
+
+      # form parameters
+      form_params = opts[:form_params] || {}
+
+      # http body (model)
+      post_body = opts[:debug_body]
+
+      # return_type
+      return_type = opts[:debug_return_type] || 'MailboxCalendarResponse'
+
+      # auth_names
+      auth_names = opts[:debug_auth_names] || ['oauth2', 'bearerAuth']
+
+      new_options = opts.merge(
+        :operation => :"MailboxAPIApi.mailbox_get_calendar",
+        :header_params => header_params,
+        :query_params => query_params,
+        :form_params => form_params,
+        :body => post_body,
+        :auth_names => auth_names,
+        :return_type => return_type
+      )
+
+      data, status_code, headers = @api_client.call_api(:GET, local_var_path, new_options)
+      if @api_client.config.debugging
+        @api_client.config.logger.debug "API called: MailboxAPIApi#mailbox_get_calendar\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
+      end
+      return data, status_code, headers
+    end
+
+    # Get a calendar event
+    # @param event_id [String]
+    # @param [Hash] opts the optional parameters
+    # @option opts [String] :if_none_match
+    # @option opts [String] :mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox.
+    # @return [MailboxCalendarEventResponse]
+    def mailbox_get_calendar_event(event_id, opts = {})
+      data, _status_code, _headers = mailbox_get_calendar_event_with_http_info(event_id, opts)
+      data
+    end
+
+    # Get a calendar event
+    # @param event_id [String]
+    # @param [Hash] opts the optional parameters
+    # @option opts [String] :if_none_match
+    # @option opts [String] :mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox.
+    # @return [Array<(MailboxCalendarEventResponse, Integer, Hash)>] MailboxCalendarEventResponse data, response status code and response headers
+    def mailbox_get_calendar_event_with_http_info(event_id, opts = {})
+      if @api_client.config.debugging
+        @api_client.config.logger.debug 'Calling API: MailboxAPIApi.mailbox_get_calendar_event ...'
+      end
+      # verify the required parameter 'event_id' is set
+      if @api_client.config.client_side_validation && event_id.nil?
+        fail ArgumentError, "Missing the required parameter 'event_id' when calling MailboxAPIApi.mailbox_get_calendar_event"
+      end
+      if @api_client.config.client_side_validation && event_id.to_s.length > 4096
+        fail ArgumentError, 'invalid value for "event_id" when calling MailboxAPIApi.mailbox_get_calendar_event, the character length must be smaller than or equal to 4096.'
+      end
+
+      if @api_client.config.client_side_validation && event_id.to_s.length < 1
+        fail ArgumentError, 'invalid value for "event_id" when calling MailboxAPIApi.mailbox_get_calendar_event, the character length must be greater than or equal to 1.'
+      end
+
+      pattern = Regexp.new(/^[A-Za-z0-9_-]+$/)
+      if @api_client.config.client_side_validation && event_id !~ pattern
+        fail ArgumentError, "invalid value for 'event_id' when calling MailboxAPIApi.mailbox_get_calendar_event, must conform to the pattern #{pattern}."
+      end
+
+      # resource path
+      local_var_path = '/mailbox/calendar-events/{event_id}'.sub('{event_id}', CGI.escape(event_id.to_s))
+
+      # query parameters
+      query_params = opts[:query_params] || {}
+      query_params[:'mailbox_id'] = opts[:'mailbox_id'] if !opts[:'mailbox_id'].nil?
+
+      # header parameters
+      header_params = opts[:header_params] || {}
+      # HTTP header 'Accept' (if needed)
+      header_params['Accept'] = @api_client.select_header_accept(['application/json']) unless header_params['Accept']
+      header_params[:'If-None-Match'] = opts[:'if_none_match'] if !opts[:'if_none_match'].nil?
+
+      # form parameters
+      form_params = opts[:form_params] || {}
+
+      # http body (model)
+      post_body = opts[:debug_body]
+
+      # return_type
+      return_type = opts[:debug_return_type] || 'MailboxCalendarEventResponse'
+
+      # auth_names
+      auth_names = opts[:debug_auth_names] || ['oauth2', 'bearerAuth']
+
+      new_options = opts.merge(
+        :operation => :"MailboxAPIApi.mailbox_get_calendar_event",
+        :header_params => header_params,
+        :query_params => query_params,
+        :form_params => form_params,
+        :body => post_body,
+        :auth_names => auth_names,
+        :return_type => return_type
+      )
+
+      data, status_code, headers = @api_client.call_api(:GET, local_var_path, new_options)
+      if @api_client.config.debugging
+        @api_client.config.logger.debug "API called: MailboxAPIApi#mailbox_get_calendar_event\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
+      end
+      return data, status_code, headers
+    end
+
+    # Get calendar event changes
+    # Coalesced changes for synchronisation, not a lossless mutation history. Missing or expired state requires a full list refresh; establish a new baseline before listing and then consume changes to cover concurrent edits.
+    # @param [Hash] opts the optional parameters
+    # @option opts [String] :since_state
+    # @option opts [Integer] :limit  (default to 100)
+    # @option opts [String] :mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox.
+    # @return [MailboxCalendarChangesResponse]
+    def mailbox_get_calendar_event_changes(opts = {})
+      data, _status_code, _headers = mailbox_get_calendar_event_changes_with_http_info(opts)
+      data
+    end
+
+    # Get calendar event changes
+    # Coalesced changes for synchronisation, not a lossless mutation history. Missing or expired state requires a full list refresh; establish a new baseline before listing and then consume changes to cover concurrent edits.
+    # @param [Hash] opts the optional parameters
+    # @option opts [String] :since_state
+    # @option opts [Integer] :limit  (default to 100)
+    # @option opts [String] :mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox.
+    # @return [Array<(MailboxCalendarChangesResponse, Integer, Hash)>] MailboxCalendarChangesResponse data, response status code and response headers
+    def mailbox_get_calendar_event_changes_with_http_info(opts = {})
+      if @api_client.config.debugging
+        @api_client.config.logger.debug 'Calling API: MailboxAPIApi.mailbox_get_calendar_event_changes ...'
+      end
+      if @api_client.config.client_side_validation && !opts[:'since_state'].nil? && opts[:'since_state'].to_s.length > 4096
+        fail ArgumentError, 'invalid value for "opts[:"since_state"]" when calling MailboxAPIApi.mailbox_get_calendar_event_changes, the character length must be smaller than or equal to 4096.'
+      end
+
+      if @api_client.config.client_side_validation && !opts[:'since_state'].nil? && opts[:'since_state'].to_s.length < 1
+        fail ArgumentError, 'invalid value for "opts[:"since_state"]" when calling MailboxAPIApi.mailbox_get_calendar_event_changes, the character length must be greater than or equal to 1.'
+      end
+
+      pattern = Regexp.new(/^[A-Za-z0-9_-]+$/)
+      if @api_client.config.client_side_validation && !opts[:'since_state'].nil? && opts[:'since_state'] !~ pattern
+        fail ArgumentError, "invalid value for 'opts[:\"since_state\"]' when calling MailboxAPIApi.mailbox_get_calendar_event_changes, must conform to the pattern #{pattern}."
+      end
+
+      if @api_client.config.client_side_validation && !opts[:'limit'].nil? && opts[:'limit'] > 100
+        fail ArgumentError, 'invalid value for "opts[:"limit"]" when calling MailboxAPIApi.mailbox_get_calendar_event_changes, must be smaller than or equal to 100.'
+      end
+
+      if @api_client.config.client_side_validation && !opts[:'limit'].nil? && opts[:'limit'] < 1
+        fail ArgumentError, 'invalid value for "opts[:"limit"]" when calling MailboxAPIApi.mailbox_get_calendar_event_changes, must be greater than or equal to 1.'
+      end
+
+      # resource path
+      local_var_path = '/mailbox/calendar-events/changes'
+
+      # query parameters
+      query_params = opts[:query_params] || {}
+      query_params[:'since_state'] = opts[:'since_state'] if !opts[:'since_state'].nil?
+      query_params[:'limit'] = opts[:'limit'] if !opts[:'limit'].nil?
+      query_params[:'mailbox_id'] = opts[:'mailbox_id'] if !opts[:'mailbox_id'].nil?
+
+      # header parameters
+      header_params = opts[:header_params] || {}
+      # HTTP header 'Accept' (if needed)
+      header_params['Accept'] = @api_client.select_header_accept(['application/json']) unless header_params['Accept']
+
+      # form parameters
+      form_params = opts[:form_params] || {}
+
+      # http body (model)
+      post_body = opts[:debug_body]
+
+      # return_type
+      return_type = opts[:debug_return_type] || 'MailboxCalendarChangesResponse'
+
+      # auth_names
+      auth_names = opts[:debug_auth_names] || ['oauth2', 'bearerAuth']
+
+      new_options = opts.merge(
+        :operation => :"MailboxAPIApi.mailbox_get_calendar_event_changes",
+        :header_params => header_params,
+        :query_params => query_params,
+        :form_params => form_params,
+        :body => post_body,
+        :auth_names => auth_names,
+        :return_type => return_type
+      )
+
+      data, status_code, headers = @api_client.call_api(:GET, local_var_path, new_options)
+      if @api_client.config.debugging
+        @api_client.config.logger.debug "API called: MailboxAPIApi#mailbox_get_calendar_event_changes\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
       end
       return data, status_code, headers
     end
@@ -2267,6 +2764,205 @@ module Sendmux::Mailbox::Generated
       data, status_code, headers = @api_client.call_api(:GET, local_var_path, new_options)
       if @api_client.config.debugging
         @api_client.config.logger.debug "API called: MailboxAPIApi#mailbox_list_body\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
+      end
+      return data, status_code, headers
+    end
+
+    # List calendar events
+    # UID search is eventually consistent. An empty immediate lookup leaves an uncertain create unresolved and never authorises repeating it.
+    # @param [Hash] opts the optional parameters
+    # @option opts [Integer] :limit  (default to 50)
+    # @option opts [String] :cursor
+    # @option opts [String] :uid
+    # @option opts [String] :calendar_id
+    # @option opts [String] :mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox.
+    # @return [MailboxCalendarEventListResponse]
+    def mailbox_list_calendar_events(opts = {})
+      data, _status_code, _headers = mailbox_list_calendar_events_with_http_info(opts)
+      data
+    end
+
+    # List calendar events
+    # UID search is eventually consistent. An empty immediate lookup leaves an uncertain create unresolved and never authorises repeating it.
+    # @param [Hash] opts the optional parameters
+    # @option opts [Integer] :limit  (default to 50)
+    # @option opts [String] :cursor
+    # @option opts [String] :uid
+    # @option opts [String] :calendar_id
+    # @option opts [String] :mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox.
+    # @return [Array<(MailboxCalendarEventListResponse, Integer, Hash)>] MailboxCalendarEventListResponse data, response status code and response headers
+    def mailbox_list_calendar_events_with_http_info(opts = {})
+      if @api_client.config.debugging
+        @api_client.config.logger.debug 'Calling API: MailboxAPIApi.mailbox_list_calendar_events ...'
+      end
+      if @api_client.config.client_side_validation && !opts[:'limit'].nil? && opts[:'limit'] > 100
+        fail ArgumentError, 'invalid value for "opts[:"limit"]" when calling MailboxAPIApi.mailbox_list_calendar_events, must be smaller than or equal to 100.'
+      end
+
+      if @api_client.config.client_side_validation && !opts[:'limit'].nil? && opts[:'limit'] < 1
+        fail ArgumentError, 'invalid value for "opts[:"limit"]" when calling MailboxAPIApi.mailbox_list_calendar_events, must be greater than or equal to 1.'
+      end
+
+      if @api_client.config.client_side_validation && !opts[:'cursor'].nil? && opts[:'cursor'].to_s.length > 4096
+        fail ArgumentError, 'invalid value for "opts[:"cursor"]" when calling MailboxAPIApi.mailbox_list_calendar_events, the character length must be smaller than or equal to 4096.'
+      end
+
+      if @api_client.config.client_side_validation && !opts[:'cursor'].nil? && opts[:'cursor'].to_s.length < 1
+        fail ArgumentError, 'invalid value for "opts[:"cursor"]" when calling MailboxAPIApi.mailbox_list_calendar_events, the character length must be greater than or equal to 1.'
+      end
+
+      pattern = Regexp.new(/^[A-Za-z0-9_-]+$/)
+      if @api_client.config.client_side_validation && !opts[:'cursor'].nil? && opts[:'cursor'] !~ pattern
+        fail ArgumentError, "invalid value for 'opts[:\"cursor\"]' when calling MailboxAPIApi.mailbox_list_calendar_events, must conform to the pattern #{pattern}."
+      end
+
+      if @api_client.config.client_side_validation && !opts[:'uid'].nil? && opts[:'uid'].to_s.length > 255
+        fail ArgumentError, 'invalid value for "opts[:"uid"]" when calling MailboxAPIApi.mailbox_list_calendar_events, the character length must be smaller than or equal to 255.'
+      end
+
+      if @api_client.config.client_side_validation && !opts[:'uid'].nil? && opts[:'uid'].to_s.length < 1
+        fail ArgumentError, 'invalid value for "opts[:"uid"]" when calling MailboxAPIApi.mailbox_list_calendar_events, the character length must be greater than or equal to 1.'
+      end
+
+      if @api_client.config.client_side_validation && !opts[:'calendar_id'].nil? && opts[:'calendar_id'].to_s.length > 4096
+        fail ArgumentError, 'invalid value for "opts[:"calendar_id"]" when calling MailboxAPIApi.mailbox_list_calendar_events, the character length must be smaller than or equal to 4096.'
+      end
+
+      if @api_client.config.client_side_validation && !opts[:'calendar_id'].nil? && opts[:'calendar_id'].to_s.length < 1
+        fail ArgumentError, 'invalid value for "opts[:"calendar_id"]" when calling MailboxAPIApi.mailbox_list_calendar_events, the character length must be greater than or equal to 1.'
+      end
+
+      pattern = Regexp.new(/^[A-Za-z0-9_-]+$/)
+      if @api_client.config.client_side_validation && !opts[:'calendar_id'].nil? && opts[:'calendar_id'] !~ pattern
+        fail ArgumentError, "invalid value for 'opts[:\"calendar_id\"]' when calling MailboxAPIApi.mailbox_list_calendar_events, must conform to the pattern #{pattern}."
+      end
+
+      # resource path
+      local_var_path = '/mailbox/calendar-events'
+
+      # query parameters
+      query_params = opts[:query_params] || {}
+      query_params[:'limit'] = opts[:'limit'] if !opts[:'limit'].nil?
+      query_params[:'cursor'] = opts[:'cursor'] if !opts[:'cursor'].nil?
+      query_params[:'uid'] = opts[:'uid'] if !opts[:'uid'].nil?
+      query_params[:'calendar_id'] = opts[:'calendar_id'] if !opts[:'calendar_id'].nil?
+      query_params[:'mailbox_id'] = opts[:'mailbox_id'] if !opts[:'mailbox_id'].nil?
+
+      # header parameters
+      header_params = opts[:header_params] || {}
+      # HTTP header 'Accept' (if needed)
+      header_params['Accept'] = @api_client.select_header_accept(['application/json']) unless header_params['Accept']
+
+      # form parameters
+      form_params = opts[:form_params] || {}
+
+      # http body (model)
+      post_body = opts[:debug_body]
+
+      # return_type
+      return_type = opts[:debug_return_type] || 'MailboxCalendarEventListResponse'
+
+      # auth_names
+      auth_names = opts[:debug_auth_names] || ['oauth2', 'bearerAuth']
+
+      new_options = opts.merge(
+        :operation => :"MailboxAPIApi.mailbox_list_calendar_events",
+        :header_params => header_params,
+        :query_params => query_params,
+        :form_params => form_params,
+        :body => post_body,
+        :auth_names => auth_names,
+        :return_type => return_type
+      )
+
+      data, status_code, headers = @api_client.call_api(:GET, local_var_path, new_options)
+      if @api_client.config.debugging
+        @api_client.config.logger.debug "API called: MailboxAPIApi#mailbox_list_calendar_events\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
+      end
+      return data, status_code, headers
+    end
+
+    # List calendars
+    # @param [Hash] opts the optional parameters
+    # @option opts [Integer] :limit  (default to 50)
+    # @option opts [String] :cursor
+    # @option opts [String] :mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox.
+    # @return [MailboxCalendarListResponse]
+    def mailbox_list_calendars(opts = {})
+      data, _status_code, _headers = mailbox_list_calendars_with_http_info(opts)
+      data
+    end
+
+    # List calendars
+    # @param [Hash] opts the optional parameters
+    # @option opts [Integer] :limit  (default to 50)
+    # @option opts [String] :cursor
+    # @option opts [String] :mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox.
+    # @return [Array<(MailboxCalendarListResponse, Integer, Hash)>] MailboxCalendarListResponse data, response status code and response headers
+    def mailbox_list_calendars_with_http_info(opts = {})
+      if @api_client.config.debugging
+        @api_client.config.logger.debug 'Calling API: MailboxAPIApi.mailbox_list_calendars ...'
+      end
+      if @api_client.config.client_side_validation && !opts[:'limit'].nil? && opts[:'limit'] > 100
+        fail ArgumentError, 'invalid value for "opts[:"limit"]" when calling MailboxAPIApi.mailbox_list_calendars, must be smaller than or equal to 100.'
+      end
+
+      if @api_client.config.client_side_validation && !opts[:'limit'].nil? && opts[:'limit'] < 1
+        fail ArgumentError, 'invalid value for "opts[:"limit"]" when calling MailboxAPIApi.mailbox_list_calendars, must be greater than or equal to 1.'
+      end
+
+      if @api_client.config.client_side_validation && !opts[:'cursor'].nil? && opts[:'cursor'].to_s.length > 4096
+        fail ArgumentError, 'invalid value for "opts[:"cursor"]" when calling MailboxAPIApi.mailbox_list_calendars, the character length must be smaller than or equal to 4096.'
+      end
+
+      if @api_client.config.client_side_validation && !opts[:'cursor'].nil? && opts[:'cursor'].to_s.length < 1
+        fail ArgumentError, 'invalid value for "opts[:"cursor"]" when calling MailboxAPIApi.mailbox_list_calendars, the character length must be greater than or equal to 1.'
+      end
+
+      pattern = Regexp.new(/^[A-Za-z0-9_-]+$/)
+      if @api_client.config.client_side_validation && !opts[:'cursor'].nil? && opts[:'cursor'] !~ pattern
+        fail ArgumentError, "invalid value for 'opts[:\"cursor\"]' when calling MailboxAPIApi.mailbox_list_calendars, must conform to the pattern #{pattern}."
+      end
+
+      # resource path
+      local_var_path = '/mailbox/calendars'
+
+      # query parameters
+      query_params = opts[:query_params] || {}
+      query_params[:'limit'] = opts[:'limit'] if !opts[:'limit'].nil?
+      query_params[:'cursor'] = opts[:'cursor'] if !opts[:'cursor'].nil?
+      query_params[:'mailbox_id'] = opts[:'mailbox_id'] if !opts[:'mailbox_id'].nil?
+
+      # header parameters
+      header_params = opts[:header_params] || {}
+      # HTTP header 'Accept' (if needed)
+      header_params['Accept'] = @api_client.select_header_accept(['application/json']) unless header_params['Accept']
+
+      # form parameters
+      form_params = opts[:form_params] || {}
+
+      # http body (model)
+      post_body = opts[:debug_body]
+
+      # return_type
+      return_type = opts[:debug_return_type] || 'MailboxCalendarListResponse'
+
+      # auth_names
+      auth_names = opts[:debug_auth_names] || ['oauth2', 'bearerAuth']
+
+      new_options = opts.merge(
+        :operation => :"MailboxAPIApi.mailbox_list_calendars",
+        :header_params => header_params,
+        :query_params => query_params,
+        :form_params => form_params,
+        :body => post_body,
+        :auth_names => auth_names,
+        :return_type => return_type
+      )
+
+      data, status_code, headers = @api_client.call_api(:GET, local_var_path, new_options)
+      if @api_client.config.debugging
+        @api_client.config.logger.debug "API called: MailboxAPIApi#mailbox_list_calendars\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
       end
       return data, status_code, headers
     end
@@ -3993,6 +4689,105 @@ module Sendmux::Mailbox::Generated
       data, status_code, headers = @api_client.call_api(:GET, local_var_path, new_options)
       if @api_client.config.debugging
         @api_client.config.logger.debug "API called: MailboxAPIApi#mailbox_stream_events\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
+      end
+      return data, status_code, headers
+    end
+
+    # Update a non-sending event
+    # @param event_id [String]
+    # @param if_match [String]
+    # @param patch_calendar_event_body [PatchCalendarEventBody]
+    # @param [Hash] opts the optional parameters
+    # @option opts [String] :mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox.
+    # @return [MailboxCalendarEventUpdatedResponse]
+    def mailbox_update_calendar_event(event_id, if_match, patch_calendar_event_body, opts = {})
+      data, _status_code, _headers = mailbox_update_calendar_event_with_http_info(event_id, if_match, patch_calendar_event_body, opts)
+      data
+    end
+
+    # Update a non-sending event
+    # @param event_id [String]
+    # @param if_match [String]
+    # @param patch_calendar_event_body [PatchCalendarEventBody]
+    # @param [Hash] opts the optional parameters
+    # @option opts [String] :mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox.
+    # @return [Array<(MailboxCalendarEventUpdatedResponse, Integer, Hash)>] MailboxCalendarEventUpdatedResponse data, response status code and response headers
+    def mailbox_update_calendar_event_with_http_info(event_id, if_match, patch_calendar_event_body, opts = {})
+      if @api_client.config.debugging
+        @api_client.config.logger.debug 'Calling API: MailboxAPIApi.mailbox_update_calendar_event ...'
+      end
+      # verify the required parameter 'event_id' is set
+      if @api_client.config.client_side_validation && event_id.nil?
+        fail ArgumentError, "Missing the required parameter 'event_id' when calling MailboxAPIApi.mailbox_update_calendar_event"
+      end
+      if @api_client.config.client_side_validation && event_id.to_s.length > 4096
+        fail ArgumentError, 'invalid value for "event_id" when calling MailboxAPIApi.mailbox_update_calendar_event, the character length must be smaller than or equal to 4096.'
+      end
+
+      if @api_client.config.client_side_validation && event_id.to_s.length < 1
+        fail ArgumentError, 'invalid value for "event_id" when calling MailboxAPIApi.mailbox_update_calendar_event, the character length must be greater than or equal to 1.'
+      end
+
+      pattern = Regexp.new(/^[A-Za-z0-9_-]+$/)
+      if @api_client.config.client_side_validation && event_id !~ pattern
+        fail ArgumentError, "invalid value for 'event_id' when calling MailboxAPIApi.mailbox_update_calendar_event, must conform to the pattern #{pattern}."
+      end
+
+      # verify the required parameter 'if_match' is set
+      if @api_client.config.client_side_validation && if_match.nil?
+        fail ArgumentError, "Missing the required parameter 'if_match' when calling MailboxAPIApi.mailbox_update_calendar_event"
+      end
+      if @api_client.config.client_side_validation && if_match.to_s.length < 1
+        fail ArgumentError, 'invalid value for "if_match" when calling MailboxAPIApi.mailbox_update_calendar_event, the character length must be greater than or equal to 1.'
+      end
+
+      # verify the required parameter 'patch_calendar_event_body' is set
+      if @api_client.config.client_side_validation && patch_calendar_event_body.nil?
+        fail ArgumentError, "Missing the required parameter 'patch_calendar_event_body' when calling MailboxAPIApi.mailbox_update_calendar_event"
+      end
+      # resource path
+      local_var_path = '/mailbox/calendar-events/{event_id}'.sub('{event_id}', CGI.escape(event_id.to_s))
+
+      # query parameters
+      query_params = opts[:query_params] || {}
+      query_params[:'mailbox_id'] = opts[:'mailbox_id'] if !opts[:'mailbox_id'].nil?
+
+      # header parameters
+      header_params = opts[:header_params] || {}
+      # HTTP header 'Accept' (if needed)
+      header_params['Accept'] = @api_client.select_header_accept(['application/json']) unless header_params['Accept']
+      # HTTP header 'Content-Type'
+      content_type = @api_client.select_header_content_type(['application/json'])
+      if !content_type.nil?
+          header_params['Content-Type'] = content_type
+      end
+      header_params[:'If-Match'] = if_match
+
+      # form parameters
+      form_params = opts[:form_params] || {}
+
+      # http body (model)
+      post_body = opts[:debug_body] || @api_client.object_to_http_body(patch_calendar_event_body)
+
+      # return_type
+      return_type = opts[:debug_return_type] || 'MailboxCalendarEventUpdatedResponse'
+
+      # auth_names
+      auth_names = opts[:debug_auth_names] || ['oauth2', 'bearerAuth']
+
+      new_options = opts.merge(
+        :operation => :"MailboxAPIApi.mailbox_update_calendar_event",
+        :header_params => header_params,
+        :query_params => query_params,
+        :form_params => form_params,
+        :body => post_body,
+        :auth_names => auth_names,
+        :return_type => return_type
+      )
+
+      data, status_code, headers = @api_client.call_api(:PATCH, local_var_path, new_options)
+      if @api_client.config.debugging
+        @api_client.config.logger.debug "API called: MailboxAPIApi#mailbox_update_calendar_event\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
       end
       return data, status_code, headers
     end

@@ -501,6 +501,7 @@ import (
 \t"context"
 \t"errors"
 \t"net/http"
+\t"os"
 
 \t"${goModulePath}/core"
 )
@@ -556,6 +557,9 @@ func WithRetryOptions(options core.RetryOptions) SendmuxOption {
 
 // New returns a Sendmux ${surface.description} client authenticated with an API key.
 func New(apiKey string, opts ...SendmuxOption) (*Client, error) {
+\tif apiKey == "" {
+\t\tapiKey = environmentValue("API_KEY", "")
+\t}
 \tif err := core.ValidateAPIKey(apiKey, core.KeySurface${packageTitle(surface.keySurface)}); err != nil {
 \t\treturn nil, err
 \t}
@@ -564,6 +568,9 @@ func New(apiKey string, opts ...SendmuxOption) (*Client, error) {
 
 // NewWithAccessToken returns a client authenticated with an OAuth access token.
 func NewWithAccessToken(token string, opts ...SendmuxOption) (*Client, error) {
+\tif token == "" {
+\t\ttoken = environmentValue("ACCESS_TOKEN", "")
+\t}
 \tif err := core.ValidateAccessToken(token); err != nil {
 \t\treturn nil, err
 \t}
@@ -576,7 +583,7 @@ func NewWithTokenProvider(provider func(context.Context) (string, error), opts .
 \tif provider == nil {
 \t\treturn nil, errors.New("sendmux: token provider is required")
 \t}
-\tconfig := sendmuxClientConfig{baseURL: DefaultBaseURL}
+\tconfig := sendmuxClientConfig{baseURL: environmentValue("BASE_URL", DefaultBaseURL)}
 \tfor _, opt := range opts {
 \t\topt(&config)
 \t}
@@ -585,6 +592,16 @@ func NewWithTokenProvider(provider func(context.Context) (string, error), opts .
 \t\tsecuritySource{provider: provider},
 \t\tWithClient(core.NewHTTPClient(config.httpClient, config.retryOptions)),
 \t)
+}
+
+func environmentValue(suffix, fallback string) string {
+\tif value := os.Getenv("QUBRICS_" + suffix); value != "" {
+\t\treturn value
+\t}
+\tif value := os.Getenv("SENDMUX_" + suffix); value != "" {
+\t\treturn value
+\t}
+\treturn fallback
 }
 
 // OptionalHeader returns a generated optional string header value.
@@ -820,6 +837,7 @@ func (s *Server) invokeConnection(ctx context.Context, params ${operation}Params
 
 function patchSendingAttachmentCompatibility(packageDir) {
   patchSendingBinaryUploadContentLength(packageDir);
+  patchSendingUploadSecurityCompatibility(packageDir);
 
   const schemasPath = join(packageDir, "oas_schemas_gen.go");
   const jsonPath = join(packageDir, "oas_json_gen.go");
@@ -1138,6 +1156,66 @@ func (s *Attachment) UnmarshalJSON(data []byte) error {
 func (s AttachmentEncoding) Validate() error {`,
     "sending Attachment validator compatibility block",
   );
+}
+
+function patchSendingUploadSecurityCompatibility(packageDir) {
+  const securityPath = join(packageDir, "oas_security_gen.go");
+  for (const family of ["Qubrics", "Sendmux"]) {
+    const scheme = `UploadToken${family}`;
+    const header = `X-${family}-Upload-Token`;
+    const twinHeader = `X-${family === "Qubrics" ? "Sendmux" : "Qubrics"}-Upload-Token`;
+    replaceInFile(
+      securityPath,
+      new RegExp(`\\t// Handle${scheme} handles ${scheme} security\\.\\n\\tHandle${scheme}[^\\n]+\\n`),
+      "",
+      `${scheme} optional security handler interface`,
+    );
+    replaceInFile(
+      securityPath,
+      new RegExp(`\\t// ${scheme} provides ${scheme} security value\\.\\n\\t${scheme}[^\\n]+\\n`),
+      "",
+      `${scheme} optional security source interface`,
+    );
+    replaceInFile(
+      securityPath,
+      new RegExp(`rctx, err := s\\.sec\\.Handle${scheme}\\(ctx, operationName, t\\)`),
+      `handler, ok := s.sec.(interface {
+\t\tHandle${scheme}(context.Context, OperationName, ${scheme}) (context.Context, error)
+\t})
+\tif !ok {
+\t\treturn ctx, false, nil
+\t}
+\trctx, err := handler.Handle${scheme}(ctx, operationName, t)`,
+      `${scheme} optional security handler dispatch`,
+    );
+    replaceInFile(
+      securityPath,
+      new RegExp(`t, err := s\\.sec\\.${scheme}\\(ctx, operationName\\)`),
+      `if req.Header.Get("${header}") != "" {
+\t\treturn nil
+\t}
+\tif req.Header.Get("${twinHeader}") != "" {
+\t\treturn ogenerrors.ErrSkipClientSecurity
+\t}
+\tsource, ok := s.sec.(interface {
+\t\t${scheme}(context.Context, OperationName) (${scheme}, error)
+\t})
+\tif !ok {
+\t\treturn ogenerrors.ErrSkipClientSecurity
+\t}
+\tt, err := source.${scheme}(ctx, operationName)`,
+      `${scheme} optional security source dispatch`,
+    );
+    replaceInFile(
+      securityPath,
+      new RegExp(`req\\.Header\\.Set\\("${header}", t\\.APIKey\\)`),
+      `if t.APIKey == "" {
+\t\treturn ogenerrors.ErrSkipClientSecurity
+\t}
+\treq.Header.Set("${header}", t.APIKey)`,
+      `${scheme} empty security source rejection`,
+    );
+  }
 }
 
 function patchSendingBinaryUploadContentLength(packageDir) {

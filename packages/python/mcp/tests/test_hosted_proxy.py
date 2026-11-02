@@ -77,6 +77,29 @@ def test_operation_manifest_resolves_curated_route_to_operation_id() -> None:
     assert route.permissions == ("domain.read",)
 
 
+def test_calendar_manifest_allows_only_canonical_routes_and_scopes() -> None:
+    config = ServerConfig(surfaces=("mailbox",), api_key="smx_mbx_test")
+    spec = prepare_for_fastmcp(load_spec(config), base_url=config.api_base_url)
+    manifest = build_hosted_operation_manifest(spec, "mailbox")
+    for method, path, operation_id, permission in (
+        ("GET", "/mailbox/calendars", "mailboxListCalendars", "calendar.read"),
+        ("POST", "/mailbox/calendars", "mailboxCreateCalendar", "calendar.write"),
+        ("GET", "/mailbox/calendars/owned", "mailboxGetCalendar", "calendar.read"),
+        ("GET", "/mailbox/calendar-events", "mailboxListCalendarEvents", "calendar.read"),
+        ("POST", "/mailbox/calendar-events", "mailboxCreateCalendarEvent", "calendar.write"),
+        ("GET", "/mailbox/calendar-events/owned", "mailboxGetCalendarEvent", "calendar.read"),
+        ("PATCH", "/mailbox/calendar-events/owned", "mailboxUpdateCalendarEvent", "calendar.write"),
+        ("DELETE", "/mailbox/calendar-events/owned", "mailboxDeleteCalendarEvent", "calendar.write"),
+        ("GET", "/mailbox/calendar-events/changes", "mailboxGetCalendarEventChanges", "calendar.read"),
+    ):
+        route = manifest.resolve(method, path)
+        assert route is not None
+        assert route.operation_id == operation_id
+        assert route.permissions == (permission,)
+    assert manifest.resolve("DELETE", "/mailbox/calendars/owned") is None
+    assert manifest.resolve("POST", "/mailbox/calendar-events/owned") is None
+
+
 def test_operation_manifest_allows_custom_upload_backing_route() -> None:
     config = ServerConfig(surfaces=("mailbox",), api_key="smx_mbx_test")
     spec = prepare_for_fastmcp(load_spec(config), base_url=config.api_base_url)

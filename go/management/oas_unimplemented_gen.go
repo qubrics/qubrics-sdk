@@ -135,7 +135,7 @@ func (UnimplementedHandler) ManagementDeactivateProvider(ctx context.Context, pa
 
 // ManagementDeleteDomain implements managementDeleteDomain operation.
 //
-// Removes a domain from our mail platform, Amazon SES, and Sendmux. Blocked if any active mailbox
+// Removes a domain from our mail platform, Amazon SES, and Qubrics. Blocked if any active mailbox
 // still uses the domain — delete those mailboxes first.
 //
 // DELETE /domains/{public_id}
@@ -145,7 +145,7 @@ func (UnimplementedHandler) ManagementDeleteDomain(ctx context.Context, params M
 
 // ManagementDeleteMailbox implements managementDeleteMailbox operation.
 //
-// Removes a mailbox from our mail platform, Amazon SES (for `@myagent.mx` addresses), and Sendmux.
+// Removes a mailbox from our mail platform, Amazon SES (for `@myagent.mx` addresses), and Qubrics.
 // All associated API keys are revoked.
 //
 // DELETE /mailboxes/{public_id}
@@ -577,8 +577,8 @@ func (UnimplementedHandler) ManagementTestProvider(ctx context.Context, params M
 //
 // Publishes a synthetic `sendmux.test` event to this webhook subscription. The subscription must
 // include `"sendmux.test"` in `event_types`, and mailbox filters do not block the test delivery.
-// Returns the generated `event_id` so you can correlate the `X-Sendmux-Event-Id` header on your
-// endpoint.
+// Returns the generated `event_id` so you can correlate the `X-Qubrics-Event-Id` or
+// `X-Sendmux-Event-Id` header on your endpoint.
 // Supply an `Idempotency-Key` header to safely retry on network errors — replays under the same
 // key return the original `event_id` rather than publishing a second test event.
 //

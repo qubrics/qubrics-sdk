@@ -8,6 +8,7 @@ from dataclasses import dataclass
 from typing import Any, Protocol, cast
 
 from posthog import Posthog
+from sendmux_core.environment import env_value
 from starlette.middleware import Middleware
 from starlette.types import ASGIApp, Receive, Scope, Send
 
@@ -179,7 +180,7 @@ def posthog_config_from_env() -> PostHogConfig | None:
         or clean_env_value(os.environ.get("ENVIRONMENT"))
         or clean_env_value(os.environ.get("NODE_ENV"))
         or "unknown",
-        release=clean_env_value(os.environ.get("SENDMUX_MCP_RELEASE")),
+        release=clean_env_value(env_value("SENDMUX_MCP_RELEASE")),
     )
 
 

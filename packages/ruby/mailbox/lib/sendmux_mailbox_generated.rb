@@ -1,7 +1,7 @@
 =begin
-#Sendmux API
+#Qubrics API
 
-#Programmatic access to your Sendmux email infrastructure.
+#Programmatic access to your Qubrics email infrastructure.
 
 The version of the OpenAPI document: 1.0.0
 
@@ -30,6 +30,8 @@ require 'sendmux_mailbox_generated/models/connection_mailboxes_inner'
 require 'sendmux_mailbox_generated/models/connection_response'
 require 'sendmux_mailbox_generated/models/connection_team'
 require 'sendmux_mailbox_generated/models/control_mailbox_draft_schedule'
+require 'sendmux_mailbox_generated/models/create_calendar_body'
+require 'sendmux_mailbox_generated/models/create_calendar_event_body'
 require 'sendmux_mailbox_generated/models/create_mailbox_draft'
 require 'sendmux_mailbox_generated/models/create_mailbox_draft_attachments_inner'
 require 'sendmux_mailbox_generated/models/create_mailbox_draft_bcc_inner'
@@ -60,6 +62,23 @@ require 'sendmux_mailbox_generated/models/mailbox_batch_message_failure'
 require 'sendmux_mailbox_generated/models/mailbox_batch_message_states'
 require 'sendmux_mailbox_generated/models/mailbox_batch_update_messages_result'
 require 'sendmux_mailbox_generated/models/mailbox_batch_update_messages_result_response'
+require 'sendmux_mailbox_generated/models/mailbox_calendar'
+require 'sendmux_mailbox_generated/models/mailbox_calendar_changes'
+require 'sendmux_mailbox_generated/models/mailbox_calendar_changes_response'
+require 'sendmux_mailbox_generated/models/mailbox_calendar_created'
+require 'sendmux_mailbox_generated/models/mailbox_calendar_created_response'
+require 'sendmux_mailbox_generated/models/mailbox_calendar_event'
+require 'sendmux_mailbox_generated/models/mailbox_calendar_event_created'
+require 'sendmux_mailbox_generated/models/mailbox_calendar_event_created_response'
+require 'sendmux_mailbox_generated/models/mailbox_calendar_event_deleted_response'
+require 'sendmux_mailbox_generated/models/mailbox_calendar_event_deleted_response_all_of_data'
+require 'sendmux_mailbox_generated/models/mailbox_calendar_event_list_response'
+require 'sendmux_mailbox_generated/models/mailbox_calendar_event_response'
+require 'sendmux_mailbox_generated/models/mailbox_calendar_event_updated_response'
+require 'sendmux_mailbox_generated/models/mailbox_calendar_event_updated_response_all_of_data'
+require 'sendmux_mailbox_generated/models/mailbox_calendar_event_with_etag'
+require 'sendmux_mailbox_generated/models/mailbox_calendar_list_response'
+require 'sendmux_mailbox_generated/models/mailbox_calendar_response'
 require 'sendmux_mailbox_generated/models/mailbox_changes'
 require 'sendmux_mailbox_generated/models/mailbox_changes_response'
 require 'sendmux_mailbox_generated/models/mailbox_content_headers'
@@ -159,6 +178,7 @@ require 'sendmux_mailbox_generated/models/mailbox_usage'
 require 'sendmux_mailbox_generated/models/mailbox_usage_resource'
 require 'sendmux_mailbox_generated/models/mailbox_usage_response'
 require 'sendmux_mailbox_generated/models/mailbox_usage_states'
+require 'sendmux_mailbox_generated/models/patch_calendar_event_body'
 require 'sendmux_mailbox_generated/models/patch_mailbox_folder_body'
 require 'sendmux_mailbox_generated/models/patch_mailbox_message_body'
 require 'sendmux_mailbox_generated/models/response_meta'

@@ -43,10 +43,11 @@ class AttachmentsApi:
     @validate_call
     def sending_complete_attachment_upload(
         self,
-        x_sendmux_upload_token: Annotated[StrictStr, Field(description="Short-lived upload token returned by POST /emails/attachment-uploads.")],
         content_length: Annotated[int, Field(strict=True, ge=1, description="Exact number of bytes in the binary request body.")],
         upload_id: Annotated[str, Field(strict=True, description="Upload intent ID returned by POST /emails/attachment-uploads.")],
         body: Union[StrictBytes, StrictStr, Tuple[StrictStr, StrictBytes]],
+        x_qubrics_upload_token: Annotated[Optional[StrictStr], Field(description="Short-lived upload token returned by POST /emails/attachment-uploads. Send this header or X-Sendmux-Upload-Token. If both are sent, their values must match.")] = None,
+        x_sendmux_upload_token: Annotated[Optional[StrictStr], Field(description="Compatibility alias for X-Qubrics-Upload-Token, retained indefinitely.")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -64,14 +65,16 @@ class AttachmentsApi:
 
         Upload the exact binary bytes for a previously-created attachment upload URL. This operation uses the short-lived upload token header returned by POST /emails/attachment-uploads, not a Sendmux API key.
 
-        :param x_sendmux_upload_token: Short-lived upload token returned by POST /emails/attachment-uploads. (required)
-        :type x_sendmux_upload_token: str
         :param content_length: Exact number of bytes in the binary request body. (required)
         :type content_length: int
         :param upload_id: Upload intent ID returned by POST /emails/attachment-uploads. (required)
         :type upload_id: str
         :param body: (required)
         :type body: bytes
+        :param x_qubrics_upload_token: Short-lived upload token returned by POST /emails/attachment-uploads. Send this header or X-Sendmux-Upload-Token. If both are sent, their values must match.
+        :type x_qubrics_upload_token: str
+        :param x_sendmux_upload_token: Compatibility alias for X-Qubrics-Upload-Token, retained indefinitely.
+        :type x_sendmux_upload_token: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -95,10 +98,11 @@ class AttachmentsApi:
         """ # noqa: E501
 
         _param = self._sending_complete_attachment_upload_serialize(
-            x_sendmux_upload_token=x_sendmux_upload_token,
             content_length=content_length,
             upload_id=upload_id,
             body=body,
+            x_qubrics_upload_token=x_qubrics_upload_token,
+            x_sendmux_upload_token=x_sendmux_upload_token,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -129,10 +133,11 @@ class AttachmentsApi:
     @validate_call
     def sending_complete_attachment_upload_with_http_info(
         self,
-        x_sendmux_upload_token: Annotated[StrictStr, Field(description="Short-lived upload token returned by POST /emails/attachment-uploads.")],
         content_length: Annotated[int, Field(strict=True, ge=1, description="Exact number of bytes in the binary request body.")],
         upload_id: Annotated[str, Field(strict=True, description="Upload intent ID returned by POST /emails/attachment-uploads.")],
         body: Union[StrictBytes, StrictStr, Tuple[StrictStr, StrictBytes]],
+        x_qubrics_upload_token: Annotated[Optional[StrictStr], Field(description="Short-lived upload token returned by POST /emails/attachment-uploads. Send this header or X-Sendmux-Upload-Token. If both are sent, their values must match.")] = None,
+        x_sendmux_upload_token: Annotated[Optional[StrictStr], Field(description="Compatibility alias for X-Qubrics-Upload-Token, retained indefinitely.")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -150,14 +155,16 @@ class AttachmentsApi:
 
         Upload the exact binary bytes for a previously-created attachment upload URL. This operation uses the short-lived upload token header returned by POST /emails/attachment-uploads, not a Sendmux API key.
 
-        :param x_sendmux_upload_token: Short-lived upload token returned by POST /emails/attachment-uploads. (required)
-        :type x_sendmux_upload_token: str
         :param content_length: Exact number of bytes in the binary request body. (required)
         :type content_length: int
         :param upload_id: Upload intent ID returned by POST /emails/attachment-uploads. (required)
         :type upload_id: str
         :param body: (required)
         :type body: bytes
+        :param x_qubrics_upload_token: Short-lived upload token returned by POST /emails/attachment-uploads. Send this header or X-Sendmux-Upload-Token. If both are sent, their values must match.
+        :type x_qubrics_upload_token: str
+        :param x_sendmux_upload_token: Compatibility alias for X-Qubrics-Upload-Token, retained indefinitely.
+        :type x_sendmux_upload_token: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -181,10 +188,11 @@ class AttachmentsApi:
         """ # noqa: E501
 
         _param = self._sending_complete_attachment_upload_serialize(
-            x_sendmux_upload_token=x_sendmux_upload_token,
             content_length=content_length,
             upload_id=upload_id,
             body=body,
+            x_qubrics_upload_token=x_qubrics_upload_token,
+            x_sendmux_upload_token=x_sendmux_upload_token,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -215,10 +223,11 @@ class AttachmentsApi:
     @validate_call
     def sending_complete_attachment_upload_without_preload_content(
         self,
-        x_sendmux_upload_token: Annotated[StrictStr, Field(description="Short-lived upload token returned by POST /emails/attachment-uploads.")],
         content_length: Annotated[int, Field(strict=True, ge=1, description="Exact number of bytes in the binary request body.")],
         upload_id: Annotated[str, Field(strict=True, description="Upload intent ID returned by POST /emails/attachment-uploads.")],
         body: Union[StrictBytes, StrictStr, Tuple[StrictStr, StrictBytes]],
+        x_qubrics_upload_token: Annotated[Optional[StrictStr], Field(description="Short-lived upload token returned by POST /emails/attachment-uploads. Send this header or X-Sendmux-Upload-Token. If both are sent, their values must match.")] = None,
+        x_sendmux_upload_token: Annotated[Optional[StrictStr], Field(description="Compatibility alias for X-Qubrics-Upload-Token, retained indefinitely.")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -236,14 +245,16 @@ class AttachmentsApi:
 
         Upload the exact binary bytes for a previously-created attachment upload URL. This operation uses the short-lived upload token header returned by POST /emails/attachment-uploads, not a Sendmux API key.
 
-        :param x_sendmux_upload_token: Short-lived upload token returned by POST /emails/attachment-uploads. (required)
-        :type x_sendmux_upload_token: str
         :param content_length: Exact number of bytes in the binary request body. (required)
         :type content_length: int
         :param upload_id: Upload intent ID returned by POST /emails/attachment-uploads. (required)
         :type upload_id: str
         :param body: (required)
         :type body: bytes
+        :param x_qubrics_upload_token: Short-lived upload token returned by POST /emails/attachment-uploads. Send this header or X-Sendmux-Upload-Token. If both are sent, their values must match.
+        :type x_qubrics_upload_token: str
+        :param x_sendmux_upload_token: Compatibility alias for X-Qubrics-Upload-Token, retained indefinitely.
+        :type x_sendmux_upload_token: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -267,10 +278,11 @@ class AttachmentsApi:
         """ # noqa: E501
 
         _param = self._sending_complete_attachment_upload_serialize(
-            x_sendmux_upload_token=x_sendmux_upload_token,
             content_length=content_length,
             upload_id=upload_id,
             body=body,
+            x_qubrics_upload_token=x_qubrics_upload_token,
+            x_sendmux_upload_token=x_sendmux_upload_token,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -296,10 +308,11 @@ class AttachmentsApi:
 
     def _sending_complete_attachment_upload_serialize(
         self,
-        x_sendmux_upload_token,
         content_length,
         upload_id,
         body,
+        x_qubrics_upload_token,
+        x_sendmux_upload_token,
         _request_auth,
         _content_type,
         _headers,
@@ -325,6 +338,8 @@ class AttachmentsApi:
             _path_params['upload_id'] = upload_id
         # process the query parameters
         # process the header parameters
+        if x_qubrics_upload_token is not None:
+            _header_params['X-Qubrics-Upload-Token'] = x_qubrics_upload_token
         if x_sendmux_upload_token is not None:
             _header_params['X-Sendmux-Upload-Token'] = x_sendmux_upload_token
         if content_length is not None:
@@ -367,6 +382,8 @@ class AttachmentsApi:
 
         # authentication setting
         _auth_settings: List[str] = [
+            'UploadTokenSendmux',
+            'UploadTokenQubrics'
         ]
 
         return self.api_client.param_serialize(

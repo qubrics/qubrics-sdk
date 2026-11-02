@@ -18,6 +18,7 @@ from starlette.responses import JSONResponse
 from starlette.routing import Route
 from starlette.types import ASGIApp
 from starlette.applications import Starlette
+from sendmux_core.environment import env_value
 
 from sendmux_mcp.config import DEFAULT_APP_BASE_URL, ServerConfig, Surface, config_from_env, parse_csv
 from sendmux_mcp.a2a import A2A_RESOURCE_URL, A2ATokenVerifier, build_a2a_http_components
@@ -69,17 +70,17 @@ class HostedServerRuntimeConfig:
 
 
 def hosted_runtime_config_from_env() -> HostedServerRuntimeConfig:
-    app_origin = os.environ.get("SENDMUX_MCP_APP_ORIGIN") or origin_from_url(
-        os.environ.get("SENDMUX_APP_BASE_URL", DEFAULT_APP_BASE_URL)
+    app_origin = env_value("SENDMUX_MCP_APP_ORIGIN") or origin_from_url(
+        env_value("SENDMUX_APP_BASE_URL", DEFAULT_APP_BASE_URL)
     )
-    resource_base_url = os.environ.get("SENDMUX_MCP_RESOURCE_BASE_URL", DEFAULT_MCP_RESOURCE_BASE_URL)
-    mcp_path = os.environ.get("SENDMUX_MCP_PATH", DEFAULT_MCP_PATH)
-    issuer = os.environ.get("SENDMUX_MCP_OAUTH_ISSUER", app_origin)
-    authorization_servers = parse_csv(os.environ.get("SENDMUX_MCP_AUTHORIZATION_SERVERS")) or (issuer,)
-    jwks_uri = os.environ.get("SENDMUX_MCP_JWKS_URI", f"{app_origin}/.well-known/jwks.json")
-    proxy_url = os.environ.get("SENDMUX_MCP_PROXY_URL", f"{app_origin}/api/internal/mcp/proxy")
+    resource_base_url = env_value("SENDMUX_MCP_RESOURCE_BASE_URL", DEFAULT_MCP_RESOURCE_BASE_URL)
+    mcp_path = env_value("SENDMUX_MCP_PATH", DEFAULT_MCP_PATH)
+    issuer = env_value("SENDMUX_MCP_OAUTH_ISSUER", app_origin)
+    authorization_servers = parse_csv(env_value("SENDMUX_MCP_AUTHORIZATION_SERVERS")) or (issuer,)
+    jwks_uri = env_value("SENDMUX_MCP_JWKS_URI", f"{app_origin}/.well-known/jwks.json")
+    proxy_url = env_value("SENDMUX_MCP_PROXY_URL", f"{app_origin}/api/internal/mcp/proxy")
     allowed_origins = normalise_hosted_allowed_origins(
-        parse_csv(os.environ.get("SENDMUX_MCP_ALLOWED_ORIGINS")) or default_hosted_allowed_origins(app_origin)
+        parse_csv(env_value("SENDMUX_MCP_ALLOWED_ORIGINS")) or default_hosted_allowed_origins(app_origin)
     )
 
     return HostedServerRuntimeConfig(
@@ -90,10 +91,10 @@ def hosted_runtime_config_from_env() -> HostedServerRuntimeConfig:
         proxy_url=proxy_url,
         internal_bearer_token=os.environ.get("INTERNAL_API_SECRET"),
         mcp_path=mcp_path,
-        host=os.environ.get("SENDMUX_MCP_HOST", "0.0.0.0"),
-        port=int(os.environ.get("SENDMUX_MCP_PORT", "8765")),
+        host=env_value("SENDMUX_MCP_HOST", "0.0.0.0"),
+        port=int(env_value("SENDMUX_MCP_PORT", "8765")),
         stateless_http=True,
-        scopes_supported=parse_csv(os.environ.get("SENDMUX_MCP_SCOPES_SUPPORTED")) or HOSTED_MCP_DISCOVERY_SCOPES,
+        scopes_supported=parse_csv(env_value("SENDMUX_MCP_SCOPES_SUPPORTED")) or HOSTED_MCP_DISCOVERY_SCOPES,
         allowed_origins=allowed_origins,
     )
 

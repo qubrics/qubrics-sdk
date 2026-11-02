@@ -106,6 +106,68 @@ func (s *Server) handleSendingCompleteAttachmentUploadRequest(args [1]string, ar
 			ID:   "sendingCompleteAttachmentUpload",
 		}
 	)
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			sctx, ok, err := s.securityUploadTokenQubrics(ctx, SendingCompleteAttachmentUploadOperation, r)
+			if err != nil {
+				err = &ogenerrors.SecurityError{
+					OperationContext: opErrContext,
+					Security:         "UploadTokenQubrics",
+					Err:              err,
+				}
+				defer recordError("Security:UploadTokenQubrics", err)
+				s.cfg.ErrorHandler(ctx, w, r, err)
+				return
+			}
+			if ok {
+				satisfied[0] |= 1 << 0
+				ctx = sctx
+			}
+		}
+		{
+			sctx, ok, err := s.securityUploadTokenSendmux(ctx, SendingCompleteAttachmentUploadOperation, r)
+			if err != nil {
+				err = &ogenerrors.SecurityError{
+					OperationContext: opErrContext,
+					Security:         "UploadTokenSendmux",
+					Err:              err,
+				}
+				defer recordError("Security:UploadTokenSendmux", err)
+				s.cfg.ErrorHandler(ctx, w, r, err)
+				return
+			}
+			if ok {
+				satisfied[0] |= 1 << 1
+				ctx = sctx
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+				{0b00000010},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			err = &ogenerrors.SecurityError{
+				OperationContext: opErrContext,
+				Err:              ogenerrors.ErrSecurityRequirementIsNotSatisfied,
+			}
+			defer recordError("Security", err)
+			s.cfg.ErrorHandler(ctx, w, r, err)
+			return
+		}
+	}
 	params, err := decodeSendingCompleteAttachmentUploadParams(args, argsEscaped, r)
 	if err != nil {
 		err = &ogenerrors.DecodeParamsError{
@@ -141,6 +203,10 @@ func (s *Server) handleSendingCompleteAttachmentUploadRequest(args [1]string, ar
 			OperationID:      "sendingCompleteAttachmentUpload",
 			Body:             request,
 			Params: middleware.Parameters{
+				{
+					Name: "X-Qubrics-Upload-Token",
+					In:   "header",
+				}: params.XQubricsUploadToken,
 				{
 					Name: "X-Sendmux-Upload-Token",
 					In:   "header",

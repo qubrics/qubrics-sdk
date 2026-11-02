@@ -270,6 +270,17 @@ pub(crate) struct Transport {
     user_agent: HeaderValue,
 }
 
+fn environment_value(suffix: &str) -> Option<String> {
+    std::env::var(format!("QUBRICS_{suffix}"))
+        .ok()
+        .filter(|value| !value.is_empty())
+        .or_else(|| {
+            std::env::var(format!("SENDMUX_{suffix}"))
+                .ok()
+                .filter(|value| !value.is_empty())
+        })
+}
+
 impl Transport {
     pub(crate) fn new(
         api_key: impl Into<String>,
@@ -277,12 +288,22 @@ impl Transport {
         base_url: &str,
     ) -> Result<Self> {
         let api_key = api_key.into();
+        let api_key = if api_key.is_empty() {
+            environment_value("API_KEY").unwrap_or_default()
+        } else {
+            api_key
+        };
         validate_api_key(&api_key, surface)?;
         Self::with_credential(Credential::Static(api_key), base_url)
     }
 
     pub(crate) fn new_with_access_token(token: impl Into<String>, base_url: &str) -> Result<Self> {
         let token = token.into();
+        let token = if token.is_empty() {
+            environment_value("ACCESS_TOKEN").unwrap_or_default()
+        } else {
+            token
+        };
         validate_access_token(&token)?;
         Self::with_credential(Credential::Static(token), base_url)
     }
@@ -301,7 +322,9 @@ impl Transport {
     fn with_credential(credential: Credential, base_url: &str) -> Result<Self> {
         Ok(Self {
             client: Client::new(),
-            base_url: normalize_base_url(base_url)?,
+            base_url: normalize_base_url(
+                &environment_value("BASE_URL").unwrap_or_else(|| base_url.to_owned()),
+            )?,
             credential,
             user_agent: HeaderValue::from_static(concat!(
                 "sendmux-rust/",

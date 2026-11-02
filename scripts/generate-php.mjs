@@ -452,8 +452,10 @@ use Sendmux\\Core\\RetryOptions;
 
 final class ClientFactory
 {
-    public static function configuration(string $apiKey, ?string $baseUrl = null): Configuration
+    public static function configuration(?string $apiKey = null, ?string $baseUrl = null): Configuration
     {
+        $apiKey ??= getenv('QUBRICS_API_KEY') ?: getenv('SENDMUX_API_KEY') ?: '';
+        $baseUrl ??= getenv('QUBRICS_BASE_URL') ?: getenv('SENDMUX_BASE_URL') ?: null;
         $configuration = new Configuration();
         if ($baseUrl !== null && $baseUrl !== '') {
             $configuration->setHost($baseUrl);
@@ -486,7 +488,7 @@ ${methods}
 
 function createApiFactoryMethod(apiClass) {
   return `    public static function create${apiClass}(
-        string $apiKey,
+        ?string $apiKey = null,
         ?string $baseUrl = null,
         ?RetryOptions $retryOptions = null
     ): ${apiClass} {
@@ -502,6 +504,7 @@ function createApiFactoryMethod(apiClass) {
         ?string $baseUrl = null,
         ?RetryOptions $retryOptions = null
     ): ${apiClass} {
+        $baseUrl ??= getenv('QUBRICS_BASE_URL') ?: getenv('SENDMUX_BASE_URL') ?: null;
         $configuration = new Configuration();
         if ($baseUrl !== null && $baseUrl !== '') {
             $configuration->setHost($baseUrl);

@@ -50,6 +50,20 @@ type Handler interface {
 	//
 	// POST /mailbox/attachment-uploads
 	MailboxCreateAttachmentUpload(ctx context.Context, req OptMailboxAttachmentUploadIntentBody, params MailboxCreateAttachmentUploadParams) (MailboxCreateAttachmentUploadRes, error)
+	// MailboxCreateCalendar implements mailboxCreateCalendar operation.
+	//
+	// Create a private calendar.
+	//
+	// POST /mailbox/calendars
+	MailboxCreateCalendar(ctx context.Context, req *CreateCalendarBody, params MailboxCreateCalendarParams) (MailboxCreateCalendarRes, error)
+	// MailboxCreateCalendarEvent implements mailboxCreateCalendarEvent operation.
+	//
+	// Creates one event without participants, recurrence or alerts. Invitations and scheduling messages
+	// are disabled. Retain UID before dispatch. If creation is uncertain, use read-only UID lookup; do
+	// not repeat the create.
+	//
+	// POST /mailbox/calendar-events
+	MailboxCreateCalendarEvent(ctx context.Context, req *CreateCalendarEventBody, params MailboxCreateCalendarEventParams) (MailboxCreateCalendarEventRes, error)
 	// MailboxCreateDraft implements mailboxCreateDraft operation.
 	//
 	// Create a saved draft.
@@ -62,6 +76,12 @@ type Handler interface {
 	//
 	// POST /mailbox/folders
 	MailboxCreateFolder(ctx context.Context, req OptCreateMailboxFolderBody, params MailboxCreateFolderParams) (MailboxCreateFolderRes, error)
+	// MailboxDeleteCalendarEvent implements mailboxDeleteCalendarEvent operation.
+	//
+	// Delete a non-sending event.
+	//
+	// DELETE /mailbox/calendar-events/{event_id}
+	MailboxDeleteCalendarEvent(ctx context.Context, params MailboxDeleteCalendarEventParams) (MailboxDeleteCalendarEventRes, error)
 	// MailboxDeleteDraft implements mailboxDeleteDraft operation.
 	//
 	// Delete a saved draft.
@@ -98,6 +118,26 @@ type Handler interface {
 	//
 	// GET /mailbox/messages/{message_id}/attachments/{attachment_id}/text
 	MailboxGetAttachmentText(ctx context.Context, params MailboxGetAttachmentTextParams) (MailboxGetAttachmentTextRes, error)
+	// MailboxGetCalendar implements mailboxGetCalendar operation.
+	//
+	// Get a calendar.
+	//
+	// GET /mailbox/calendars/{calendar_id}
+	MailboxGetCalendar(ctx context.Context, params MailboxGetCalendarParams) (MailboxGetCalendarRes, error)
+	// MailboxGetCalendarEvent implements mailboxGetCalendarEvent operation.
+	//
+	// Get a calendar event.
+	//
+	// GET /mailbox/calendar-events/{event_id}
+	MailboxGetCalendarEvent(ctx context.Context, params MailboxGetCalendarEventParams) (MailboxGetCalendarEventRes, error)
+	// MailboxGetCalendarEventChanges implements mailboxGetCalendarEventChanges operation.
+	//
+	// Coalesced changes for synchronisation, not a lossless mutation history. Missing or expired state
+	// requires a full list refresh; establish a new baseline before listing and then consume changes to
+	// cover concurrent edits.
+	//
+	// GET /mailbox/calendar-events/changes
+	MailboxGetCalendarEventChanges(ctx context.Context, params MailboxGetCalendarEventChangesParams) (MailboxGetCalendarEventChangesRes, error)
 	// MailboxGetChanges implements mailboxGetChanges operation.
 	//
 	// Returns message changes in the legacy shape when `types` is omitted. Pass a comma-separated
@@ -209,6 +249,19 @@ type Handler interface {
 	//
 	// GET /mailbox/messages/{message_id}/body
 	MailboxListBody(ctx context.Context, params MailboxListBodyParams) (MailboxListBodyRes, error)
+	// MailboxListCalendarEvents implements mailboxListCalendarEvents operation.
+	//
+	// UID search is eventually consistent. An empty immediate lookup leaves an uncertain create
+	// unresolved and never authorises repeating it.
+	//
+	// GET /mailbox/calendar-events
+	MailboxListCalendarEvents(ctx context.Context, params MailboxListCalendarEventsParams) (MailboxListCalendarEventsRes, error)
+	// MailboxListCalendars implements mailboxListCalendars operation.
+	//
+	// List calendars.
+	//
+	// GET /mailbox/calendars
+	MailboxListCalendars(ctx context.Context, params MailboxListCalendarsParams) (MailboxListCalendarsRes, error)
 	// MailboxListContent implements mailboxListContent operation.
 	//
 	// Returns deterministic clean JSON content for one message. Attachment output is metadata only;
@@ -335,6 +388,12 @@ type Handler interface {
 	//
 	// GET /mailbox/events
 	MailboxStreamEvents(ctx context.Context, params MailboxStreamEventsParams) (MailboxStreamEventsRes, error)
+	// MailboxUpdateCalendarEvent implements mailboxUpdateCalendarEvent operation.
+	//
+	// Update a non-sending event.
+	//
+	// PATCH /mailbox/calendar-events/{event_id}
+	MailboxUpdateCalendarEvent(ctx context.Context, req *PatchCalendarEventBody, params MailboxUpdateCalendarEventParams) (MailboxUpdateCalendarEventRes, error)
 	// MailboxUpdateDraft implements mailboxUpdateDraft operation.
 	//
 	// Edit a saved draft.

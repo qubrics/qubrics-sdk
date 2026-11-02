@@ -86,6 +86,60 @@ impl Drop for HttpFixture {
     }
 }
 
+#[tokio::test]
+async fn environment_defaults_prefer_qubrics_and_preserve_explicit_configuration() {
+    let names = [
+        "QUBRICS_API_KEY",
+        "QUBRICS_BASE_URL",
+        "SENDMUX_API_KEY",
+        "SENDMUX_BASE_URL",
+    ];
+    let previous: Vec<_> = names
+        .iter()
+        .map(|name| (*name, std::env::var_os(name)))
+        .collect();
+    let server = HttpFixture::new();
+    std::env::remove_var("QUBRICS_API_KEY");
+    std::env::remove_var("QUBRICS_BASE_URL");
+    std::env::set_var("SENDMUX_API_KEY", "smx_mbx_legacy");
+    std::env::set_var("SENDMUX_BASE_URL", &server.url);
+    SendingClient::new("")
+        .unwrap()
+        .get_connection()
+        .await
+        .unwrap();
+    std::env::set_var("QUBRICS_API_KEY", "smx_mbx_current");
+    std::env::set_var("QUBRICS_BASE_URL", &server.url);
+    std::env::set_var("SENDMUX_BASE_URL", "https://unused.fixture.test/api/v1");
+    SendingClient::new("")
+        .unwrap()
+        .get_connection()
+        .await
+        .unwrap();
+    std::env::set_var("QUBRICS_BASE_URL", "https://unused.fixture.test/api/v1");
+    SendingClient::new("smx_mbx_explicit")
+        .unwrap()
+        .with_base_url(&server.url)
+        .unwrap()
+        .get_connection()
+        .await
+        .unwrap();
+    for (name, value) in previous {
+        match value {
+            Some(value) => std::env::set_var(name, value),
+            None => std::env::remove_var(name),
+        }
+    }
+    assert_eq!(
+        server.authorizations(),
+        [
+            "Bearer smx_mbx_legacy",
+            "Bearer smx_mbx_current",
+            "Bearer smx_mbx_explicit"
+        ]
+    );
+}
+
 macro_rules! oauth_tests {
     ($module:ident, $client:ty) => {
         mod $module {

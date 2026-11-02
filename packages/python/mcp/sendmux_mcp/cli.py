@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import argparse
-import os
+from sendmux_core.environment import env_value
 
 from sendmux_mcp.config import (
     RetryConfig,
@@ -21,7 +21,7 @@ def main(argv: list[str] | None = None) -> int:
     args = parser(prog="sendmux-mcp").parse_args(argv)
     surfaces = surfaces_from_args(args)
     if surfaces is None:
-        raise SystemExit("--surfaces is required when using sendmux-mcp, or set SENDMUX_MCP_SURFACES.")
+        raise SystemExit("--surfaces is required when using sendmux-mcp, or set QUBRICS_MCP_SURFACES (SENDMUX_MCP_SURFACES is also supported).")
     run(config_from_args(surfaces, args))
     return 0
 
@@ -82,7 +82,7 @@ def surfaces_from_args(args: argparse.Namespace) -> tuple[Surface, ...] | None:
         return parse_surfaces(args.surfaces)
     if getattr(args, "surface", None):
         return normalise_surfaces((args.surface,))
-    env_surfaces = parse_surfaces(os.environ.get("SENDMUX_MCP_SURFACES"))
+    env_surfaces = parse_surfaces(env_value("SENDMUX_MCP_SURFACES"))
     if env_surfaces:
         return env_surfaces
     return None

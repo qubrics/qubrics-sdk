@@ -4,7 +4,7 @@ import asyncio
 import base64
 import copy
 import re
-from collections.abc import AsyncIterator
+from collections.abc import AsyncIterator, Sequence
 from contextlib import asynccontextmanager
 from binascii import Error as Base64DecodeError
 from datetime import datetime, timezone
@@ -18,7 +18,9 @@ from fastmcp import FastMCP
 from fastmcp.exceptions import ToolError
 from fastmcp.server.auth import AuthProvider
 from fastmcp.server.middleware import AuthMiddleware, CallNext, Middleware, MiddlewareContext
-from fastmcp.tools.base import ToolResult
+from fastmcp.server.transforms import GetToolNext, Transform
+from fastmcp.tools.base import Tool, ToolResult
+from fastmcp.utilities.versions import VersionSpec
 from jsonschema.exceptions import best_match
 from jsonschema.protocols import Validator
 from jsonschema.validators import validator_for
@@ -67,6 +69,17 @@ CONTENT_RANGE_RE = re.compile(r"^bytes (\d+)-(\d+)/(\d+|\*)$")
 
 JSON_SCHEMA_2020_12 = "https://json-schema.org/draft/2020-12/schema"
 SENDMUX_MCP_VERSION = version("sendmux-mcp")
+
+
+class QubricsToolAliases(Transform):
+    async def list_tools(self, tools: Sequence[Tool]) -> Sequence[Tool]:
+        return [*tools, *(tool.model_copy(update={"name": f"qubrics_{tool.name}"}) for tool in tools)]
+
+    async def get_tool(
+        self, name: str, call_next: GetToolNext, *, version: VersionSpec | None = None,
+    ) -> Tool | None:
+        tool = await call_next(name.removeprefix("qubrics_"), version=version)
+        return tool.model_copy(update={"name": name}) if tool is not None else None
 
 
 class StructuredOutputValidationMiddleware(Middleware):
@@ -267,6 +280,7 @@ def create_surface_server(
         async def health(_request: Request) -> JSONResponse:
             return JSONResponse({"status": "ok", "surfaces": [surface]})
 
+    server.add_transform(QubricsToolAliases())
     return server
 
 

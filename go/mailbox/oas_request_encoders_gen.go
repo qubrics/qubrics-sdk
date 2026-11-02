@@ -105,6 +105,34 @@ func encodeMailboxCreateAttachmentUploadRequest(
 	return nil
 }
 
+func encodeMailboxCreateCalendarRequest(
+	req *CreateCalendarBody,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
+func encodeMailboxCreateCalendarEventRequest(
+	req *CreateCalendarEventBody,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
 func encodeMailboxCreateDraftRequest(
 	req *CreateMailboxDraft,
 	r *http.Request,
@@ -167,6 +195,20 @@ func encodeMailboxSendMessageRequest(
 		if req.Set {
 			req.Encode(e)
 		}
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
+func encodeMailboxUpdateCalendarEventRequest(
+	req *PatchCalendarEventBody,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
 	}
 	encoded := e.Bytes()
 	ht.SetBody(r, bytes.NewReader(encoded), contentType)

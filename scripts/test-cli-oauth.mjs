@@ -48,6 +48,10 @@ async function cli(t, fixture, args, env = {}) {
       SENDMUX_PROFILE: "",
       SENDMUX_ACCESS_TOKEN: token,
       SENDMUX_BASE_URL: fixture.baseUrl,
+      QUBRICS_API_KEY: "",
+      QUBRICS_PROFILE: "",
+      QUBRICS_ACCESS_TOKEN: "",
+      QUBRICS_BASE_URL: "",
       ...env,
     },
     stdio: ["ignore", "pipe", "pipe"],
@@ -64,6 +68,19 @@ async function cli(t, fixture, args, env = {}) {
   const [code] = await closed;
   return { code, stdout, stderr };
 }
+
+test("Qubrics headless credentials and URL take precedence over legacy environment", async (t) => {
+  const state = await fixture(t);
+  const result = await cli(t, state, ["mailbox:get-connection", "--json"], {
+    QUBRICS_ACCESS_TOKEN: token,
+    QUBRICS_BASE_URL: state.baseUrl,
+    SENDMUX_ACCESS_TOKEN: "legacy-token",
+    SENDMUX_BASE_URL: "http://127.0.0.1:1/api/v1",
+  });
+  assert.equal(result.code, 0, result.stderr);
+  assert.deepEqual(state.requests, [{ url: "/api/v1/mailbox/connection", authorization: `Bearer ${token}` }]);
+  assert.deepEqual(JSON.parse(result.stdout), connection);
+});
 
 for (const surface of ["sending", "mailbox", "management"]) {
   test(`${surface}: headless OAuth token works without exposing it`, async (t) => {

@@ -82,7 +82,7 @@ export const managementCreateDomain = <ThrowOnError extends boolean = false>(opt
 /**
  * Delete a mailbox domain
  *
- * Removes a domain from our mail platform, Amazon SES, and Sendmux. Blocked if any active mailbox still uses the domain — delete those mailboxes first.
+ * Removes a domain from our mail platform, Amazon SES, and Qubrics. Blocked if any active mailbox still uses the domain — delete those mailboxes first.
  */
 export const managementDeleteDomain = <ThrowOnError extends boolean = false>(options: Options<ManagementDeleteDomainData, ThrowOnError>) => (options.client ?? client).delete<ManagementDeleteDomainResponses, ManagementDeleteDomainErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }, { scheme: 'bearer', type: 'http' }],
@@ -280,7 +280,7 @@ export const managementCreateMailbox = <ThrowOnError extends boolean = false>(op
 /**
  * Delete a mailbox
  *
- * Removes a mailbox from our mail platform, Amazon SES (for `@myagent.mx` addresses), and Sendmux. All associated API keys are revoked.
+ * Removes a mailbox from our mail platform, Amazon SES (for `@myagent.mx` addresses), and Qubrics. All associated API keys are revoked.
  */
 export const managementDeleteMailbox = <ThrowOnError extends boolean = false>(options: Options<ManagementDeleteMailboxData, ThrowOnError>) => (options.client ?? client).delete<ManagementDeleteMailboxResponses, ManagementDeleteMailboxErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }, { scheme: 'bearer', type: 'http' }],
@@ -707,7 +707,7 @@ export const managementRotateWebhookSecret = <ThrowOnError extends boolean = fal
 /**
  * Send a synthetic test event
  *
- * Publishes a synthetic `sendmux.test` event to this webhook subscription. The subscription must include `"sendmux.test"` in `event_types`, and mailbox filters do not block the test delivery. Returns the generated `event_id` so you can correlate the `X-Sendmux-Event-Id` header on your endpoint.
+ * Publishes a synthetic `sendmux.test` event to this webhook subscription. The subscription must include `"sendmux.test"` in `event_types`, and mailbox filters do not block the test delivery. Returns the generated `event_id` so you can correlate the `X-Qubrics-Event-Id` or `X-Sendmux-Event-Id` header on your endpoint.
  *
  * Supply an `Idempotency-Key` header to safely retry on network errors — replays under the same key return the original `event_id` rather than publishing a second test event.
  */

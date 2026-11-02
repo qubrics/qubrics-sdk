@@ -73,6 +73,26 @@ func (UnimplementedHandler) MailboxCreateAttachmentUpload(ctx context.Context, r
 	return r, ht.ErrNotImplemented
 }
 
+// MailboxCreateCalendar implements mailboxCreateCalendar operation.
+//
+// Create a private calendar.
+//
+// POST /mailbox/calendars
+func (UnimplementedHandler) MailboxCreateCalendar(ctx context.Context, req *CreateCalendarBody, params MailboxCreateCalendarParams) (r MailboxCreateCalendarRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// MailboxCreateCalendarEvent implements mailboxCreateCalendarEvent operation.
+//
+// Creates one event without participants, recurrence or alerts. Invitations and scheduling messages
+// are disabled. Retain UID before dispatch. If creation is uncertain, use read-only UID lookup; do
+// not repeat the create.
+//
+// POST /mailbox/calendar-events
+func (UnimplementedHandler) MailboxCreateCalendarEvent(ctx context.Context, req *CreateCalendarEventBody, params MailboxCreateCalendarEventParams) (r MailboxCreateCalendarEventRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // MailboxCreateDraft implements mailboxCreateDraft operation.
 //
 // Create a saved draft.
@@ -88,6 +108,15 @@ func (UnimplementedHandler) MailboxCreateDraft(ctx context.Context, req *CreateM
 //
 // POST /mailbox/folders
 func (UnimplementedHandler) MailboxCreateFolder(ctx context.Context, req OptCreateMailboxFolderBody, params MailboxCreateFolderParams) (r MailboxCreateFolderRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// MailboxDeleteCalendarEvent implements mailboxDeleteCalendarEvent operation.
+//
+// Delete a non-sending event.
+//
+// DELETE /mailbox/calendar-events/{event_id}
+func (UnimplementedHandler) MailboxDeleteCalendarEvent(ctx context.Context, params MailboxDeleteCalendarEventParams) (r MailboxDeleteCalendarEventRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -140,6 +169,35 @@ func (UnimplementedHandler) MailboxDownloadRawMessage(ctx context.Context, param
 //
 // GET /mailbox/messages/{message_id}/attachments/{attachment_id}/text
 func (UnimplementedHandler) MailboxGetAttachmentText(ctx context.Context, params MailboxGetAttachmentTextParams) (r MailboxGetAttachmentTextRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// MailboxGetCalendar implements mailboxGetCalendar operation.
+//
+// Get a calendar.
+//
+// GET /mailbox/calendars/{calendar_id}
+func (UnimplementedHandler) MailboxGetCalendar(ctx context.Context, params MailboxGetCalendarParams) (r MailboxGetCalendarRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// MailboxGetCalendarEvent implements mailboxGetCalendarEvent operation.
+//
+// Get a calendar event.
+//
+// GET /mailbox/calendar-events/{event_id}
+func (UnimplementedHandler) MailboxGetCalendarEvent(ctx context.Context, params MailboxGetCalendarEventParams) (r MailboxGetCalendarEventRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// MailboxGetCalendarEventChanges implements mailboxGetCalendarEventChanges operation.
+//
+// Coalesced changes for synchronisation, not a lossless mutation history. Missing or expired state
+// requires a full list refresh; establish a new baseline before listing and then consume changes to
+// cover concurrent edits.
+//
+// GET /mailbox/calendar-events/changes
+func (UnimplementedHandler) MailboxGetCalendarEventChanges(ctx context.Context, params MailboxGetCalendarEventChangesParams) (r MailboxGetCalendarEventChangesRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -310,6 +368,25 @@ func (UnimplementedHandler) MailboxGetThreadContent(ctx context.Context, params 
 //
 // GET /mailbox/messages/{message_id}/body
 func (UnimplementedHandler) MailboxListBody(ctx context.Context, params MailboxListBodyParams) (r MailboxListBodyRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// MailboxListCalendarEvents implements mailboxListCalendarEvents operation.
+//
+// UID search is eventually consistent. An empty immediate lookup leaves an uncertain create
+// unresolved and never authorises repeating it.
+//
+// GET /mailbox/calendar-events
+func (UnimplementedHandler) MailboxListCalendarEvents(ctx context.Context, params MailboxListCalendarEventsParams) (r MailboxListCalendarEventsRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// MailboxListCalendars implements mailboxListCalendars operation.
+//
+// List calendars.
+//
+// GET /mailbox/calendars
+func (UnimplementedHandler) MailboxListCalendars(ctx context.Context, params MailboxListCalendarsParams) (r MailboxListCalendarsRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -490,6 +567,15 @@ func (UnimplementedHandler) MailboxSendMessage(ctx context.Context, req OptSendM
 //
 // GET /mailbox/events
 func (UnimplementedHandler) MailboxStreamEvents(ctx context.Context, params MailboxStreamEventsParams) (r MailboxStreamEventsRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// MailboxUpdateCalendarEvent implements mailboxUpdateCalendarEvent operation.
+//
+// Update a non-sending event.
+//
+// PATCH /mailbox/calendar-events/{event_id}
+func (UnimplementedHandler) MailboxUpdateCalendarEvent(ctx context.Context, req *PatchCalendarEventBody, params MailboxUpdateCalendarEventParams) (r MailboxUpdateCalendarEventRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 

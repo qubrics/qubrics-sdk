@@ -25,12 +25,24 @@ type MailboxCreateAttachmentUploadRes interface {
 	mailboxCreateAttachmentUploadRes()
 }
 
+type MailboxCreateCalendarEventRes interface {
+	mailboxCreateCalendarEventRes()
+}
+
+type MailboxCreateCalendarRes interface {
+	mailboxCreateCalendarRes()
+}
+
 type MailboxCreateDraftRes interface {
 	mailboxCreateDraftRes()
 }
 
 type MailboxCreateFolderRes interface {
 	mailboxCreateFolderRes()
+}
+
+type MailboxDeleteCalendarEventRes interface {
+	mailboxDeleteCalendarEventRes()
 }
 
 type MailboxDeleteDraftRes interface {
@@ -51,6 +63,18 @@ type MailboxDownloadRawMessageRes interface {
 
 type MailboxGetAttachmentTextRes interface {
 	mailboxGetAttachmentTextRes()
+}
+
+type MailboxGetCalendarEventChangesRes interface {
+	mailboxGetCalendarEventChangesRes()
+}
+
+type MailboxGetCalendarEventRes interface {
+	mailboxGetCalendarEventRes()
+}
+
+type MailboxGetCalendarRes interface {
+	mailboxGetCalendarRes()
 }
 
 type MailboxGetChangesRes interface {
@@ -121,6 +145,14 @@ type MailboxListBodyRes interface {
 	mailboxListBodyRes()
 }
 
+type MailboxListCalendarEventsRes interface {
+	mailboxListCalendarEventsRes()
+}
+
+type MailboxListCalendarsRes interface {
+	mailboxListCalendarsRes()
+}
+
 type MailboxListContentRes interface {
 	mailboxListContentRes()
 }
@@ -187,6 +219,10 @@ type MailboxSendMessageRes interface {
 
 type MailboxStreamEventsRes interface {
 	mailboxStreamEventsRes()
+}
+
+type MailboxUpdateCalendarEventRes interface {
+	mailboxUpdateCalendarEventRes()
 }
 
 type MailboxUpdateDraftRes interface {

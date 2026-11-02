@@ -2511,3 +2511,53 @@ func (*SendingUploadAttachmentUnauthorized) sendingUploadAttachmentRes() {}
 type SendingUploadAttachmentUnprocessableEntity ErrorResponse
 
 func (*SendingUploadAttachmentUnprocessableEntity) sendingUploadAttachmentRes() {}
+
+type UploadTokenQubrics struct {
+	APIKey string
+	Roles  []string
+}
+
+// GetAPIKey returns the value of APIKey.
+func (s *UploadTokenQubrics) GetAPIKey() string {
+	return s.APIKey
+}
+
+// GetRoles returns the value of Roles.
+func (s *UploadTokenQubrics) GetRoles() []string {
+	return s.Roles
+}
+
+// SetAPIKey sets the value of APIKey.
+func (s *UploadTokenQubrics) SetAPIKey(val string) {
+	s.APIKey = val
+}
+
+// SetRoles sets the value of Roles.
+func (s *UploadTokenQubrics) SetRoles(val []string) {
+	s.Roles = val
+}
+
+type UploadTokenSendmux struct {
+	APIKey string
+	Roles  []string
+}
+
+// GetAPIKey returns the value of APIKey.
+func (s *UploadTokenSendmux) GetAPIKey() string {
+	return s.APIKey
+}
+
+// GetRoles returns the value of Roles.
+func (s *UploadTokenSendmux) GetRoles() []string {
+	return s.Roles
+}
+
+// SetAPIKey sets the value of APIKey.
+func (s *UploadTokenSendmux) SetAPIKey(val string) {
+	s.APIKey = val
+}
+
+// SetRoles sets the value of Roles.
+func (s *UploadTokenSendmux) SetRoles(val []string) {
+	s.Roles = val
+}

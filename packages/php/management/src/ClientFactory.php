@@ -24,8 +24,10 @@ use Sendmux\Core\RetryOptions;
 
 final class ClientFactory
 {
-    public static function configuration(string $apiKey, ?string $baseUrl = null): Configuration
+    public static function configuration(?string $apiKey = null, ?string $baseUrl = null): Configuration
     {
+        $apiKey ??= getenv('QUBRICS_API_KEY') ?: getenv('SENDMUX_API_KEY') ?: '';
+        $baseUrl ??= getenv('QUBRICS_BASE_URL') ?: getenv('SENDMUX_BASE_URL') ?: null;
         $configuration = new Configuration();
         if ($baseUrl !== null && $baseUrl !== '') {
             $configuration->setHost($baseUrl);
@@ -51,7 +53,7 @@ final class ClientFactory
     }
 
     public static function createBillingApi(
-        string $apiKey,
+        ?string $apiKey = null,
         ?string $baseUrl = null,
         ?RetryOptions $retryOptions = null
     ): BillingApi {
@@ -67,6 +69,7 @@ final class ClientFactory
         ?string $baseUrl = null,
         ?RetryOptions $retryOptions = null
     ): BillingApi {
+        $baseUrl ??= getenv('QUBRICS_BASE_URL') ?: getenv('SENDMUX_BASE_URL') ?: null;
         $configuration = new Configuration();
         if ($baseUrl !== null && $baseUrl !== '') {
             $configuration->setHost($baseUrl);
@@ -79,7 +82,7 @@ final class ClientFactory
     }
 
     public static function createConnectionApi(
-        string $apiKey,
+        ?string $apiKey = null,
         ?string $baseUrl = null,
         ?RetryOptions $retryOptions = null
     ): ConnectionApi {
@@ -95,6 +98,7 @@ final class ClientFactory
         ?string $baseUrl = null,
         ?RetryOptions $retryOptions = null
     ): ConnectionApi {
+        $baseUrl ??= getenv('QUBRICS_BASE_URL') ?: getenv('SENDMUX_BASE_URL') ?: null;
         $configuration = new Configuration();
         if ($baseUrl !== null && $baseUrl !== '') {
             $configuration->setHost($baseUrl);
@@ -107,7 +111,7 @@ final class ClientFactory
     }
 
     public static function createDomainFiltersApi(
-        string $apiKey,
+        ?string $apiKey = null,
         ?string $baseUrl = null,
         ?RetryOptions $retryOptions = null
     ): DomainFiltersApi {
@@ -123,6 +127,7 @@ final class ClientFactory
         ?string $baseUrl = null,
         ?RetryOptions $retryOptions = null
     ): DomainFiltersApi {
+        $baseUrl ??= getenv('QUBRICS_BASE_URL') ?: getenv('SENDMUX_BASE_URL') ?: null;
         $configuration = new Configuration();
         if ($baseUrl !== null && $baseUrl !== '') {
             $configuration->setHost($baseUrl);
@@ -135,7 +140,7 @@ final class ClientFactory
     }
 
     public static function createDomainsApi(
-        string $apiKey,
+        ?string $apiKey = null,
         ?string $baseUrl = null,
         ?RetryOptions $retryOptions = null
     ): DomainsApi {
@@ -151,6 +156,7 @@ final class ClientFactory
         ?string $baseUrl = null,
         ?RetryOptions $retryOptions = null
     ): DomainsApi {
+        $baseUrl ??= getenv('QUBRICS_BASE_URL') ?: getenv('SENDMUX_BASE_URL') ?: null;
         $configuration = new Configuration();
         if ($baseUrl !== null && $baseUrl !== '') {
             $configuration->setHost($baseUrl);
@@ -163,7 +169,7 @@ final class ClientFactory
     }
 
     public static function createEmailsApi(
-        string $apiKey,
+        ?string $apiKey = null,
         ?string $baseUrl = null,
         ?RetryOptions $retryOptions = null
     ): EmailsApi {
@@ -179,6 +185,7 @@ final class ClientFactory
         ?string $baseUrl = null,
         ?RetryOptions $retryOptions = null
     ): EmailsApi {
+        $baseUrl ??= getenv('QUBRICS_BASE_URL') ?: getenv('SENDMUX_BASE_URL') ?: null;
         $configuration = new Configuration();
         if ($baseUrl !== null && $baseUrl !== '') {
             $configuration->setHost($baseUrl);
@@ -191,7 +198,7 @@ final class ClientFactory
     }
 
     public static function createInboxesApi(
-        string $apiKey,
+        ?string $apiKey = null,
         ?string $baseUrl = null,
         ?RetryOptions $retryOptions = null
     ): InboxesApi {
@@ -207,6 +214,7 @@ final class ClientFactory
         ?string $baseUrl = null,
         ?RetryOptions $retryOptions = null
     ): InboxesApi {
+        $baseUrl ??= getenv('QUBRICS_BASE_URL') ?: getenv('SENDMUX_BASE_URL') ?: null;
         $configuration = new Configuration();
         if ($baseUrl !== null && $baseUrl !== '') {
             $configuration->setHost($baseUrl);
@@ -219,7 +227,7 @@ final class ClientFactory
     }
 
     public static function createMailboxFiltersApi(
-        string $apiKey,
+        ?string $apiKey = null,
         ?string $baseUrl = null,
         ?RetryOptions $retryOptions = null
     ): MailboxFiltersApi {
@@ -235,6 +243,7 @@ final class ClientFactory
         ?string $baseUrl = null,
         ?RetryOptions $retryOptions = null
     ): MailboxFiltersApi {
+        $baseUrl ??= getenv('QUBRICS_BASE_URL') ?: getenv('SENDMUX_BASE_URL') ?: null;
         $configuration = new Configuration();
         if ($baseUrl !== null && $baseUrl !== '') {
             $configuration->setHost($baseUrl);
@@ -247,7 +256,7 @@ final class ClientFactory
     }
 
     public static function createMailboxesApi(
-        string $apiKey,
+        ?string $apiKey = null,
         ?string $baseUrl = null,
         ?RetryOptions $retryOptions = null
     ): MailboxesApi {
@@ -263,6 +272,7 @@ final class ClientFactory
         ?string $baseUrl = null,
         ?RetryOptions $retryOptions = null
     ): MailboxesApi {
+        $baseUrl ??= getenv('QUBRICS_BASE_URL') ?: getenv('SENDMUX_BASE_URL') ?: null;
         $configuration = new Configuration();
         if ($baseUrl !== null && $baseUrl !== '') {
             $configuration->setHost($baseUrl);
@@ -275,7 +285,7 @@ final class ClientFactory
     }
 
     public static function createSendingAccountsApi(
-        string $apiKey,
+        ?string $apiKey = null,
         ?string $baseUrl = null,
         ?RetryOptions $retryOptions = null
     ): SendingAccountsApi {
@@ -291,6 +301,7 @@ final class ClientFactory
         ?string $baseUrl = null,
         ?RetryOptions $retryOptions = null
     ): SendingAccountsApi {
+        $baseUrl ??= getenv('QUBRICS_BASE_URL') ?: getenv('SENDMUX_BASE_URL') ?: null;
         $configuration = new Configuration();
         if ($baseUrl !== null && $baseUrl !== '') {
             $configuration->setHost($baseUrl);
@@ -303,7 +314,7 @@ final class ClientFactory
     }
 
     public static function createWebhooksApi(
-        string $apiKey,
+        ?string $apiKey = null,
         ?string $baseUrl = null,
         ?RetryOptions $retryOptions = null
     ): WebhooksApi {
@@ -319,6 +330,7 @@ final class ClientFactory
         ?string $baseUrl = null,
         ?RetryOptions $retryOptions = null
     ): WebhooksApi {
+        $baseUrl ??= getenv('QUBRICS_BASE_URL') ?: getenv('SENDMUX_BASE_URL') ?: null;
         $configuration = new Configuration();
         if ($baseUrl !== null && $baseUrl !== '') {
             $configuration->setHost($baseUrl);
