@@ -79,6 +79,9 @@ const customMcpOperations = [
   },
 ];
 const operationRequestFactories = {
+  mailboxCreateCalendarEvent: prepareMailboxCreateCalendarEvent,
+  mailboxUpdateCalendarEvent: prepareOwnedMailboxUpdateCalendarEvent,
+  mailboxDeleteCalendarEvent: prepareOwnedMailboxDeleteCalendarEvent,
   mailboxControlDraftSchedule: prepareOwnedDraftSchedule,
   mailboxCreateDraft: prepareMailboxCreateDraft,
   mailboxDeleteDraft: prepareOwnedDraftDelete,
@@ -1102,6 +1105,96 @@ function defaultQueryFor(operation) {
     query.days = "7";
   }
   return query;
+}
+
+async function prepareMailboxCreateCalendarEvent({ fixtureRuntime }) {
+  fixtureRuntime.requireDedicatedMailbox();
+  const calendars = await fixtureRuntime.runOperation("mailboxListCalendars", { query: { limit: 1 } });
+  const calendarId = requireSelectedValue(calendars, ["data.0.id"], "calendar fixture ID");
+  const uid = randomUUID();
+  let confirmed = false;
+  fixtureRuntime.addTeardown(() => {
+    if (!confirmed) throw new UnmetPrecondition("Calendar event create remains uncertain; do not repeat it");
+  });
+  return {
+    cleanupSelectors: ["data.id"],
+    request: {
+      body: {
+        calendar_id: calendarId,
+        uid,
+        title: fixtureRuntime.resourceLabel("calendar-event"),
+        start: new Date(Date.now() + 86_400_000).toISOString().slice(0, 19),
+        time_zone: "UTC",
+        duration: "PT1M",
+      },
+    },
+    afterResult: async value => {
+      assert.equal(value.data?.uid, uid, "Calendar create UID mismatch");
+      assert.equal(value.data?.mailbox_id, fixtureRuntime.proof.mailboxId, "Calendar create mailbox mismatch");
+      requireSelectedValue(value, ["data.id"], "created calendar event ID");
+      confirmed = true;
+    },
+  };
+}
+
+async function createOwnedMailboxCalendarEvent(fixtureRuntime) {
+  const prepared = await prepareMailboxCreateCalendarEvent({ fixtureRuntime });
+  const created = await fixtureRuntime.runOperation("mailboxCreateCalendarEvent", prepared.request);
+  await prepared.afterResult(created);
+  const event = (await fixtureRuntime.runOperation("mailboxGetCalendarEvent", { path: { event_id: created.data.id } })).data;
+  assert.equal(event.id, created.data.id, "Calendar fixture ID mismatch");
+  assert.equal(event.uid, created.data.uid, "Calendar fixture UID mismatch");
+  assert.equal(event.mailbox_id, fixtureRuntime.proof.mailboxId, "Calendar fixture mailbox mismatch");
+  return event;
+}
+
+async function prepareOwnedMailboxDeleteCalendarEvent({ fixtureRuntime }) {
+  const event = await createOwnedMailboxCalendarEvent(fixtureRuntime);
+  return {
+    request: { path: { event_id: event.id }, headers: { "If-Match": event.etag } },
+    afterResult: async value => {
+      assert.equal(value.data?.deleted, true);
+      assert.equal(value.data?.id, event.id);
+    },
+  };
+}
+
+async function prepareOwnedMailboxUpdateCalendarEvent({ fixtureRuntime }) {
+  const event = await createOwnedMailboxCalendarEvent(fixtureRuntime);
+  const path = { event_id: event.id };
+  const restore = async () => {
+    const current = (await fixtureRuntime.runOperation("mailboxGetCalendarEvent", { path })).data;
+    assert.equal(current.uid, event.uid, "Calendar restore UID mismatch");
+    if (current.title !== event.title) {
+      await fixtureRuntime.runOperation("mailboxUpdateCalendarEvent", { path, body: { title: event.title }, headers: { "If-Match": current.etag } });
+    }
+    const restored = (await fixtureRuntime.runOperation("mailboxGetCalendarEvent", { path })).data;
+    assert.equal(restored.title, event.title, "Calendar title restore readback mismatch");
+  };
+  fixtureRuntime.addRestore("calendarEvent", event.id, { title: event.title }, restore);
+  const title = fixtureRuntime.resourceLabel("updated-calendar-event");
+  return {
+    request: { path, body: { title }, headers: { "If-Match": event.etag } },
+    afterResult: async value => {
+      assert.equal(value.data?.id, event.id);
+      assert.equal(value.data?.updated, true);
+      const updated = (await fixtureRuntime.runOperation("mailboxGetCalendarEvent", { path })).data;
+      assert.equal(updated.uid, event.uid, "Calendar update UID mismatch");
+      assert.equal(updated.mailbox_id, fixtureRuntime.proof.mailboxId, "Calendar update mailbox mismatch");
+      assert.equal(updated.title, title, "Calendar update title readback mismatch");
+      await restore();
+    },
+  };
+}
+
+async function cleanupMailboxCalendarEvent(fixtureRuntime, eventId, uid) {
+  const path = { event_id: eventId };
+  const current = await ignoreCleanupErrors(() => fixtureRuntime.runOperation("mailboxGetCalendarEvent", { path }));
+  if (!current) return;
+  assert.equal(current.data?.uid, uid, "Calendar cleanup UID mismatch");
+  assert.equal(current.data?.mailbox_id, fixtureRuntime.proof.mailboxId, "Calendar cleanup mailbox mismatch");
+  const etag = requireSelectedValue(current, ["data.etag"], "calendar cleanup ETag");
+  await fixtureRuntime.runOperation("mailboxDeleteCalendarEvent", { path, headers: { "If-Match": etag } });
 }
 
 async function prepareMailboxCreateFolder({ fixtureRuntime }) {
@@ -2860,6 +2953,7 @@ function createFixtureRuntime({ credentials, fixtures, operations, runId, sdk, s
         return;
       }
       const resources = {
+        mailboxCreateCalendarEvent: ["data.id", "mailboxDeleteCalendarEvent", "mailboxGetCalendarEvent", "event_id"],
         mailboxCreateDraft: ["data.id", "mailboxDeleteDraft", "mailboxGetDraft", "draftId"],
         mailboxCreateFolder: ["data.id", "mailboxDeleteFolder", "mailboxGetFolder", "folder_id"],
         mailboxSendMessage: ["data.message_id", "mailboxDeleteMessage", "mailboxGetMessage", "message_id"],
@@ -2883,6 +2977,8 @@ function createFixtureRuntime({ credentials, fixtures, operations, runId, sdk, s
         try {
           const receipt = remove === "mailboxDeleteDraft"
             ? await cleanupMailboxDraft(this, id)
+            : remove === "mailboxDeleteCalendarEvent"
+            ? await cleanupMailboxCalendarEvent(this, id, request.body.uid)
             : await ignoreCleanupErrors(() => this.runOperation(remove, { path, ...(remove === "mailboxDeleteMessage" ? { query: { permanent: true } } : {}) }));
           if (remove === "managementDeleteMailboxKey") {
             if (receipt !== undefined) assert.ok(receipt.data?.deleted === true && receipt.data?.id === id, "Invalid exact mailbox key revocation receipt");
