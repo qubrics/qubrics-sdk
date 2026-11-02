@@ -452,16 +452,18 @@ def test_hosted_mailbox_action_tools_expose_mailbox_target(monkeypatch: pytest.M
         tools = await child.list_tools(run_middleware=False)
         tool_names = {tool.name for tool in tools}
         expected_tool_names = {tool.name for tool in MAILBOX_TOOLS}
+        expected_tool_names |= {f"qubrics_{name}" for name in expected_tool_names}
         missing_target: list[str] = []
 
         assert tool_names == expected_tool_names
 
         for tool in tools:
+            original_name = tool.name.removeprefix("qubrics_")
             properties = (tool.parameters or {}).get("properties", {})
-            if tool.name in {"mailbox_list_granted_mailboxes", "mailbox_get_connection"}:
+            if original_name in {"mailbox_list_granted_mailboxes", "mailbox_get_connection"}:
                 assert "mailbox_id" not in properties
                 continue
-            if tool.name.startswith("mailbox_") and "mailbox_id" not in properties:
+            if original_name.startswith("mailbox_") and "mailbox_id" not in properties:
                 missing_target.append(tool.name)
 
         assert missing_target == []

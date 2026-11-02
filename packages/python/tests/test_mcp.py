@@ -238,7 +238,12 @@ def test_toolsets_are_curated_and_key_split() -> None:
         management_names = {tool.name for tool in management_tools}
         sending_names = {tool.name for tool in sending_tools}
 
-        for surface, names in (("mailbox", mailbox_names), ("management", management_names), ("sending", sending_names)):
+        names_by_surface: dict[Surface, set[str]] = {
+            "mailbox": mailbox_names,
+            "management": management_names,
+            "sending": sending_names,
+        }
+        for surface, names in names_by_surface.items():
             originals = {tool.name for tool in TOOLS_BY_SURFACE[surface]}
             expected = EXPECTED_TOOL_NAMES_BY_SURFACE[surface]
             assert names == originals | {f"qubrics_{name}" for name in originals}

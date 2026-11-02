@@ -171,12 +171,6 @@ class {{classname}} {{#parentSchema}}extends {{{parent}}}{{/parentSchema}}{{^par
         return self::$openAPIModelName;
     }
 
-{{#discriminator}}
-{{#discriminator.mappedModels}}
-    public const {{#lambda.uppercase}}{{discriminator.propertyName}}_{{#lambda.snakecase}}{{mappingName}}{{/lambda.snakecase}}{{/lambda.uppercase}} = '{{mappingName}}';
-{{/discriminator.mappedModels}}
-{{/discriminator}}
-{{^discriminator}}
     {{#vars}}
     {{#isEnum}}
     {{#allowableValues}}
@@ -186,7 +180,6 @@ class {{classname}} {{#parentSchema}}extends {{{parent}}}{{/parentSchema}}{{^par
     {{/allowableValues}}
     {{/isEnum}}
     {{/vars}}
-{{/discriminator}}
 
     {{#vars}}
     {{#isEnum}}
@@ -198,15 +191,8 @@ class {{classname}} {{#parentSchema}}extends {{{parent}}}{{/parentSchema}}{{^par
     public static function {{getter}}AllowableValues()
     {
         return [
-{{#discriminator}}
-{{#discriminator.mappedModels}}
-            self::{{#lambda.uppercase}}{{discriminator.propertyName}}_{{#lambda.snakecase}}{{mappingName}}{{/lambda.snakecase}}{{/lambda.uppercase}},{{^-last}}
-{{/-last}}{{/discriminator.mappedModels}}
-{{/discriminator}}
-{{^discriminator}}
             {{#allowableValues}}{{#enumVars}}self::{{enumName}}_{{{name}}},{{^-last}}
             {{/-last}}{{/enumVars}}{{/allowableValues}}
-{{/discriminator}}
         ];
     }
 

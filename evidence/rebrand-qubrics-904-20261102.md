@@ -1,6 +1,6 @@
 # A17 SDK integration contract aliases
 
-Status: source finalisation and full drift verified after the calendar lease release on 2026-11-03; uncommitted, not merged, deployed or published. Base and fetched `origin/main`: `0dd32a2652f3fd7a9a8f7e2ab8976d79f1b1dc99`. Ticket: qubrics/qubrics#904, acceptance A17. SDK root/package README changes remain owned by #897.
+Status: initial source committed at `722fbab2f98248d17b4878dd5149a35a711d5a18`; required CI exposed the bounded follow-up recorded below. Not merged, deployed or published. Base: `0dd32a2652f3fd7a9a8f7e2ab8976d79f1b1dc99`. Ticket: qubrics/qubrics#904, acceptance A17. SDK root/package README changes remain owned by #897.
 
 ## Source and behaviour
 
@@ -89,6 +89,27 @@ Calendar candidate preservation: before/after status SHA256 `6ccf664a24c10d9b85f
 Source freeze: 1,105 tracked/staged paths differ from HEAD, with 124,868 insertions and 41,707 deletions; full status contains 1,121 changed/untracked paths, captured in `sdk-resume-final-status.txt`. Staged and unstaged whitespace checks pass. No root/package README change. No source dependency remains. Root owns review, final commit, push, PR and CI; full build/required CI and publication remain unqualified. Docs#78 retains its MCP pin/snippet until a compatible publication is verified. No full build or unchanged focused green was rerun here.
 
 Root's final reviews of the complete handwritten diff and calendar integration returned Standards 0 hard violations / 0 actionable heuristics, and Spec 0 findings. Root also verified the drift tail and staged/unstaged whitespace checks. The worker's source claims were released after evidence finalisation; root owns the normal commit hook.
+
+## Required CI follow-up on PR #345
+
+Candidate reopened for CI blockers. Exact reviewed head `722fbab2f98248d17b4878dd5149a35a711d5a18` finished with 44 checks: 28 success, 14 failure, 2 skipped, none pending. All 14 failures were in [CI run 41458872537](https://github.com/qubrics/qubrics-sdk/actions/runs/41458872537). The complete `gh run view 41458872537 --repo qubrics/qubrics-sdk --log-failed` receipt is `sdk-pr345-ci-failed.log`; `sdk-pr345-failed-job-sweep.log` accounts for every failed job.
+
+| Failed jobs | Confirmed cause and source correction |
+| --- | --- |
+| Verify, Python language verification, Python 3.10–3.14 (7 jobs) | Shared-test mypy rejected dynamic upload-token keyword dictionaries at test_oauth_retry.py:115 and a general string registry key at test_mcp.py:242. Explicit twin parameters and a `dict[Surface, set[str]]` preserve every assertion and runtime case. |
+| PHP language verification, PHP 8.2–8.5 (5 jobs) | Discriminator mapping snakecase generated slash-containing PHP identifiers at WebhookEventPayload.php:237. Template-only discriminator branches were removed; the existing `allowableValues.enumVars` path supplies valid identifiers and exact dotted wire literals. Normal PHP generation changed only this model. |
+| Ruby language verification (1 job) | The existing source guard still required a positional legacy upload token. It now checks the intentional required-length/body signature plus both optional token headers; length and existing provider no-read assertions remain. |
+| MCP language verification (1 job) | Hosted discovery expected originals only at test_hosted_server.py:457. Expected names now include aliases, and mailbox-target checks run on both original and aliased names. |
+
+Canonical PHP evidence: [official generator 7.22.0 `AbstractPhpCodegen.toEnumVarName`](https://github.com/OpenAPITools/openapi-generator/blob/v7.22.0/modules/openapi-generator/src/main/java/org/openapitools/codegen/languages/AbstractPhpCodegen.java#L854) sanitises identifiers after underscore/uppercase conversion. The real generator `debugModels` probe confirms its existing enum variables include every nine mapped wire values and the configured unknown fallback. Receipts: `sdk-php-official-abstract-codegen.java`, `sdk-php-discriminator-debug-models.log`. No invented lambda, modified mapping key or generated-only patch.
+
+New public regression `ManagementValidationTest::testWebhookDiscriminatorPreservesEveryWireValue` loads the generated model, checks all nine dotted event values survive its public setter/getter, and checks the existing unknown fallback. Red: `ParseError: syntax error, unexpected token "/"` at generated model line 237, exit 2. Green: the whole focused class passes 3 tests / 24 assertions, exit 0. Receipts: `sdk-pr345-php-discriminator-{red,green}.log`. No tests removed or assertions weakened.
+
+Other focused receipts, all exit 0: canonical-input `pnpm generate:php` under heavy-slot (`sdk-pr345-generate-php.log`); mypy on the three changed Python test files, 3 files (`sdk-pr345-python-typing-green.log`); delegated-upload twins, curated discovery and hosted mailbox-target cases, 4 passed (`sdk-pr345-python-focused-green.log`). Ruby runtime source and its earlier public-provider green receipt are unchanged; fresh full CI remains required.
+
+Normal commit gate is the unchanged `.githooks/pre-commit`, which runs `pnpm drift:check` with the same canonical `OPENAPI_INPUT_DIR` under heavy-slot. `sdk-pr345-final-commit.log` records its terminal result. No separate unchanged full drift, local full suite or CI rerun was used. Final two-axis review results are retained in `sdk-pr345-ci-diagnosis.md`. No product/docs push, merge, deploy or publication is authorised for this follow-up worker.
+
+Fresh independent follow-up reviews: Standards 0 findings; Spec 0 findings across the seven source/test/generated files. No source change followed those reviews. The shared active-agent cap required sequential dispatch; both contexts were fresh.
 
 ## Cleanup
 

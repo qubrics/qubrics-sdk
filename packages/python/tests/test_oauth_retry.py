@@ -112,7 +112,8 @@ def test_delegated_upload_does_not_read_or_leak_bearer_provider(family: str, end
     with create_sending_client(access_token=bearer_provider, base_url=url) as client:
         response = AttachmentsApi(client).sending_complete_attachment_upload_without_preload_content(
             content_length=4, upload_id="upl_aaaaaaaaaaaaaaaaaaaaaaaa", body=b"test",
-            **{f"x_{family}_upload_token": "upload-token"},
+            x_qubrics_upload_token="upload-token" if family == "qubrics" else None,
+            x_sendmux_upload_token="upload-token" if family == "sendmux" else None,
         )
         response.read()
         response.release_conn()
