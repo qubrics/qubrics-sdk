@@ -50,11 +50,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Sendmux/sendmux-sdk.git",
+    "url": "git+https://github.com/qubrics/qubrics-sdk.git",
     "directory": "packages/ts/ai-sdk"
   },
   "bugs": {
-    "url": "https://github.com/Sendmux/sendmux-sdk/issues"
+    "url": "https://github.com/qubrics/qubrics-sdk/issues"
   },
   "publishConfig": {
     "access": "public",

@@ -1,0 +1,32 @@
+# A15 GitHub references and approved A17 README handoff
+
+Part of qubrics/qubrics#897. Base: 0dd32a2652f3fd7a9a8f7e2ab8976d79f1b1dc99. Current GitHub consumers, strict repository guards, package repository metadata, generated Ruby homepage source and current installation/support instructions use the canonical Qubrics repository identities. Internal package names and service hosts remain unchanged except the exact separately authorised A17 README patch.
+
+The exact patch was applied verbatim after a successful independent check and confirmed by reverse check:
+`/Users/rj/Desktop/GIT-REPOS/sendmux/.claude/artifacts/rebrand-qubrics-904/sdk-readme-a17.patch`
+SHA256: `ec4d09b802194c50acbdd3c5b27bbda12e0a8033a7fa637f3b6e6374478631fc`.
+No other A17 edits were invented. Runtime counterparts remain owned by #904.
+
+Strict publication reads now target `qubrics/qubrics-sdk`. PHP split publishing accepts only exact canonical SSH/HTTPS package repository origins. Immutable npm attestations retain the exact former producer identity alongside the current identity; the dependency source must match that same identity and exact producer commit. Unrecognised identities, mixed identities and wrong commits remain rejected. Historical provenance and changelog evidence remain intact.
+
+Existing tests at the guard seams were seen red before the fixes:
+- Current Snap release: `Missing producer release tag: ts-cli-v1.2.3`, then `Snap npm provenance does not identify the CLI producer commit`.
+- PHP split remote: `Split origin does not identify the expected package repository`.
+- Current/historical Snap cases and wrong-commit/unknown/mixed rejection cases pass; official release construction test passes after frozen dependency installation resolved missing release-please.
+- PHP split/canary tests: 20 passed, 0 failed/skipped. Existing Snap workflow and Chocolatey package-file checks pass.
+- Build-dependent connections tests could not start in the fresh worktree because `@sendmux/sdk/dist/index.js` was absent; they remain for normal SDK CI after its build. No stale dist copied, no assertion weakened.
+- `git apply --check`, patch application, reverse check and `git diff --check`: exit 0.
+
+Logs and exact commands: control-plane MAIN `.claude/artifacts/rebrand-qubrics-897/sdk-state.md` and referenced logs. Independent Standards/Spec reviews found no functional source defect in the bounded A15/A17 diff.
+
+The original normal commit was blocked by `ogen failed to infer fields discriminator` on the newer current contract. The separate approved prerequisite fixed the API schema origin, PHP generation and missing Calendar lifecycle inputs: docs80 merged `12ef5105`, API917 merged `e0462ea3`, SDK346 merged `276082cb`, all exact-head CI green. This row4 branch rebased onto `276082cb`; the original 69-file patch is preserved, with its already-shipped CI URL hunk leaving 68 remaining files. README handoff reverse check remains exit0. No older-contract substitution or bypass.
+
+Post-merge Release Please run `41571510043` failed `Unexpected publication repository`: main `scripts/publication-guard.mjs:14,231` still requires `Sendmux/sendmux-sdk`, while GitHub identifies the renamed repo as `qubrics/qubrics-sdk`. This existing row4 origin correction targets canonical reads and preserves strict equality. No rerun, release threshold or guard bypass. Merged PRs labelled `autorelease: pending` were empty before qualification; no package version/manifest changes are in this diff. Publication remains gated separately.
+
+No hook bypass, assertion weakening, publication, release tag or deploy performed. Full normal generation/commit hook and final exact-head CI remain required for this branch; API917 production deployment queues after898 and requires its own slot/GO. Rows2/5 stay held902.
+
+After rebasing onto the merged generation prerequisite, focused guard/canary/PHP fixtures passed: 87 tests, no skips, exit0 (`row4-guards-green.log`); existing Snap workflow check exit0 (`row4-snap-green.log`). Final independent Standards/Spec reviews found zero issues. Original handoff patch remains verbatim and reverse-checks exit0.
+
+Ops requested the Ruby generator path for #904's A17 upload-auth guard. Its one-line canonical homepage hunk is committed separately at `a2073b17568512abfdf004c1bd99eadeb541b8a4`, with normal full drift hook exit0; only that lease was released. The first isolated-commit attempt correctly detected the MCP provenance hash derived from other uncommitted `pyproject.toml` edits. Temporarily isolating those edits let the Ruby-only commit qualify against matching inputs; all remaining changes were then restored. The regenerated MCP contract hash accompanies its changed package metadata in the remaining commit. No current-input substitution, provenance bypass or generated-file hand edit.
+
+Polish pass: skipped — exact technical-token corrections and approved verbatim handoff.

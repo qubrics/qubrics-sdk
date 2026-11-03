@@ -1,9 +1,9 @@
 # @sendmux/sdk
 
 [![npm version](https://img.shields.io/npm/v/@sendmux%2Fsdk)](https://www.npmjs.com/package/@sendmux/sdk)
-[![CI](https://github.com/Sendmux/sendmux-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/Sendmux/sendmux-sdk/actions/workflows/ci.yml)
+[![CI](https://github.com/qubrics/qubrics-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/qubrics/qubrics-sdk/actions/workflows/ci.yml)
 [![npm downloads](https://img.shields.io/npm/dm/@sendmux%2Fsdk)](https://www.npmjs.com/package/@sendmux/sdk)
-[![Licence](https://img.shields.io/npm/l/@sendmux%2Fsdk)](https://github.com/Sendmux/sendmux-sdk/blob/main/LICENSE)
+[![Licence](https://img.shields.io/npm/l/@sendmux%2Fsdk)](https://github.com/qubrics/qubrics-sdk/blob/main/LICENSE)
 
 Optional umbrella package for the Sendmux TypeScript SDK.
 
@@ -13,7 +13,7 @@ Optional umbrella package for the Sendmux TypeScript SDK.
 - Management API reference: [sendmux.ai/docs/api/introduction](https://sendmux.ai/docs/api/introduction)
 - Mailbox API reference: [sendmux.ai/docs/mailbox-api/introduction](https://sendmux.ai/docs/mailbox-api/introduction)
 - Sending API reference: [sendmux.ai/docs/sending-api/introduction](https://sendmux.ai/docs/sending-api/introduction)
-- Source repository: [Sendmux/sendmux-sdk](https://github.com/Sendmux/sendmux-sdk)
+- Source repository: [qubrics/qubrics-sdk](https://github.com/qubrics/qubrics-sdk)
 
 ## Requirements
 
@@ -113,8 +113,8 @@ Update `@sendmux/sdk`, any directly installed `@sendmux/management` or
 `@sendmux/mailbox`, the lockfile, and affected annotations, fixtures, or call
 sites together. To roll back, restore those package, lockfile, and call-site
 changes together. The per-surface notes are in the
-[`@sendmux/management`](https://github.com/Sendmux/sendmux-sdk/blob/main/packages/ts/management/README.md#migrate-from-1x-to-20)
-and [`@sendmux/mailbox`](https://github.com/Sendmux/sendmux-sdk/blob/main/packages/ts/mailbox/README.md#migrate-from-1x-to-20)
+[`@sendmux/management`](https://github.com/qubrics/qubrics-sdk/blob/main/packages/ts/management/README.md#migrate-from-1x-to-20)
+and [`@sendmux/mailbox`](https://github.com/qubrics/qubrics-sdk/blob/main/packages/ts/mailbox/README.md#migrate-from-1x-to-20)
 READMEs.
 
 ## OAuth access tokens
@@ -125,7 +125,7 @@ Each surface client also accepts `accessToken`: a bare token string or a synchro
 import { management } from "@sendmux/sdk";
 
 const client = management.createManagementClient({
-  accessToken: () => process.env.SENDMUX_ACCESS_TOKEN!,
+  accessToken: () => process.env.QUBRICS_ACCESS_TOKEN!,
 });
 ```
 
@@ -137,7 +137,7 @@ Use a REST access token with the operation's required scopes and mailbox access.
 import { sending } from "@sendmux/sdk";
 
 const client = sending.createSendingClient({
-  apiKey: process.env.SENDMUX_SENDING_API_KEY!,
+  apiKey: process.env.QUBRICS_SENDING_API_KEY!,
 });
 
 const response = await sending.sendingSendEmail({
@@ -165,8 +165,8 @@ Use the per-surface packages directly when an integration only needs one API sur
 
 ## Support
 
-Open an issue in [Sendmux/sendmux-sdk](https://github.com/Sendmux/sendmux-sdk/issues) with the package name, version, and request ID from any API error.
+Open an issue in [qubrics/qubrics-sdk](https://github.com/qubrics/qubrics-sdk/issues) with the package name, version, and request ID from any API error.
 
 ## Licence
 
-MIT. See the [licence file](https://github.com/Sendmux/sendmux-sdk/blob/main/LICENSE).
+MIT. See the [licence file](https://github.com/qubrics/qubrics-sdk/blob/main/LICENSE).

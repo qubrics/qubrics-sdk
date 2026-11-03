@@ -3,14 +3,14 @@
 [![PyPI version](https://img.shields.io/pypi/v/sendmux-mailbox)](https://pypi.org/project/sendmux-mailbox/)
 [![Python versions](https://img.shields.io/pypi/pyversions/sendmux-mailbox)](https://pypi.org/project/sendmux-mailbox/)
 [![PyPI downloads](https://img.shields.io/pypi/dm/sendmux-mailbox)](https://pypi.org/project/sendmux-mailbox/)
-[![Licence](https://img.shields.io/pypi/l/sendmux-mailbox)](https://github.com/Sendmux/sendmux-sdk/blob/main/LICENSE)
+[![Licence](https://img.shields.io/pypi/l/sendmux-mailbox)](https://github.com/qubrics/qubrics-sdk/blob/main/LICENSE)
 
 Generated Python client for the Sendmux Mailbox API.
 
 ## Documentation
 
 - Mailbox API reference: [sendmux.ai/docs/mailbox-api/introduction](https://sendmux.ai/docs/mailbox-api/introduction)
-- Source repository: [Sendmux/sendmux-sdk](https://github.com/Sendmux/sendmux-sdk)
+- Source repository: [qubrics/qubrics-sdk](https://github.com/qubrics/qubrics-sdk)
 
 ## Requirements
 
@@ -35,7 +35,7 @@ import os
 from sendmux_mailbox import create_mailbox_client
 
 client = create_mailbox_client(
-    access_token=lambda: os.environ["SENDMUX_ACCESS_TOKEN"]
+    access_token=lambda: os.environ["QUBRICS_ACCESS_TOKEN"]
 )
 ```
 
@@ -46,10 +46,10 @@ import os
 
 from sendmux_mailbox import MailboxAPIApi, create_mailbox_client, iter_mailbox_events
 
-client = create_mailbox_client(api_key=os.environ["SENDMUX_MAILBOX_API_KEY"])
+client = create_mailbox_client(api_key=os.environ["QUBRICS_MAILBOX_API_KEY"])
 api = MailboxAPIApi(client)
 
-messages = api.mailbox_list_messages(limit=25)
+messages = api.qubrics_mailbox_list_messages(limit=25)
 
 for message in messages.data:
     print(message.id, message.subject)
@@ -68,8 +68,8 @@ The package exports every generated Mailbox model and API class plus:
 Check the current credential before choosing a mailbox:
 
 ```python
-with create_mailbox_client(api_key=os.environ["SENDMUX_MAILBOX_API_KEY"]) as client:
-    connection = MailboxAPIApi(client).mailbox_get_connection()
+with create_mailbox_client(api_key=os.environ["QUBRICS_MAILBOX_API_KEY"]) as client:
+    connection = MailboxAPIApi(client).qubrics_mailbox_get_connection()
     print(connection.data.label)
 ```
 
@@ -77,7 +77,7 @@ The result includes team and credential details, permissions and authorised mail
 
 ## Attachments
 
-Message and event attachment metadata includes `download_url`, a short-lived presigned URL for that single attachment. Prefer `download_mailbox_attachment()` or `read_mailbox_text_attachment()` when you already have an authenticated client. Plain HTTP clients can fetch `download_url` promptly with no `Authorization` header; if it expires, call `mailbox_get_message()` or list/search messages again to receive fresh metadata.
+Message and event attachment metadata includes `download_url`, a short-lived presigned URL for that single attachment. Prefer `download_mailbox_attachment()` or `read_mailbox_text_attachment()` when you already have an authenticated client. Plain HTTP clients can fetch `download_url` promptly with no `Authorization` header; if it expires, call `qubrics_mailbox_get_message()` or list/search messages again to receive fresh metadata.
 
 Mailbox direct uploads, presigned uploads, and file helpers share the mailbox attachment cap, currently `7,500,000` bytes per attachment. Presigned uploads also pin the exact declared byte length and content type.
 
@@ -87,10 +87,10 @@ import urllib.request
 
 from sendmux_mailbox import MailboxAPIApi, create_mailbox_client, read_mailbox_text_attachment
 
-client = create_mailbox_client(api_key=os.environ["SENDMUX_MAILBOX_API_KEY"])
+client = create_mailbox_client(api_key=os.environ["QUBRICS_MAILBOX_API_KEY"])
 api = MailboxAPIApi(client)
 
-message = api.mailbox_get_message("msg_123")
+message = api.qubrics_mailbox_get_message("msg_123")
 attachment = message.data.attachments[0]
 content = urllib.request.urlopen(attachment.download_url, timeout=30).read()
 text = read_mailbox_text_attachment(
@@ -99,13 +99,13 @@ text = read_mailbox_text_attachment(
     attachment_id=attachment.id,
 )
 
-upload = api.mailbox_upload_attachment(
+upload = api.qubrics_mailbox_upload_attachment(
     body=b"hello\n",
     filename="hello.txt",
     _headers={"Content-Type": "text/plain"},
 )
 
-api.mailbox_send_message(
+api.qubrics_mailbox_send_message(
     send_mailbox_message_body={
         "to": [{"email": "recipient@example.com", "name": None}],
         "subject": "Attachment",
@@ -126,7 +126,7 @@ import os
 
 from sendmux_mailbox import create_mailbox_client, send_mailbox_message_with_files
 
-client = create_mailbox_client(api_key=os.environ["SENDMUX_MAILBOX_API_KEY"])
+client = create_mailbox_client(api_key=os.environ["QUBRICS_MAILBOX_API_KEY"])
 
 send_mailbox_message_with_files(
     client,
@@ -165,16 +165,16 @@ import os
 from sendmux_core import iter_cursor_pages
 from sendmux_mailbox import MailboxAPIApi, create_mailbox_client
 
-client = create_mailbox_client(api_key=os.environ["SENDMUX_MAILBOX_API_KEY"])
+client = create_mailbox_client(api_key=os.environ["QUBRICS_MAILBOX_API_KEY"])
 api = MailboxAPIApi(client)
 
-for message in iter_cursor_pages(lambda cursor: api.mailbox_list_messages(cursor=cursor, limit=50)):
+for message in iter_cursor_pages(lambda cursor: api.qubrics_mailbox_list_messages(cursor=cursor, limit=50)):
     print(message.id)
 ```
 
 ## Migrate from 1.x to 2.0
 
-If you annotate or construct thread-message list results (fixtures, mocks, or wrappers typed with the operation's result model), add the thread identity when upgrading to 2.0. `mailbox_list_thread_messages` returns `MailboxThreadMessageSummaryCursorListResponse` instead of `MailboxMessageSummaryCursorListResponse`: its `meta` is `MailboxThreadMessagesMeta`, whose `thread_id` is required and whose `sync_state` is an optional string. Code that only reads thread-message results keeps working.
+If you annotate or construct thread-message list results (fixtures, mocks, or wrappers typed with the operation's result model), add the thread identity when upgrading to 2.0. `qubrics_mailbox_list_thread_messages` returns `MailboxThreadMessageSummaryCursorListResponse` instead of `MailboxMessageSummaryCursorListResponse`: its `meta` is `MailboxThreadMessagesMeta`, whose `thread_id` is required and whose `sync_state` is an optional string. Code that only reads thread-message results keeps working.
 
 1. Update thread-message annotations and type checks to the thread-specific result model:
 
@@ -202,7 +202,7 @@ If you annotate or construct thread-message list results (fixtures, mocks, or wr
    )
    ```
 
-   Ordinary `mailbox_list_messages` results remain `MailboxMessageSummaryCursorListResponse`: they have no thread identity and their `meta` is `MailboxSyncMeta` with an optional `sync_state`. Identity, submission, quota, and thread list responses likewise carry `MailboxIdentityListMeta` or `MailboxQueryMeta` with optional `identity_state` or `query_state`; no new field is required there.
+   Ordinary `qubrics_mailbox_list_messages` results remain `MailboxMessageSummaryCursorListResponse`: they have no thread identity and their `meta` is `MailboxSyncMeta` with an optional `sync_state`. Identity, submission, quota, and thread list responses likewise carry `MailboxIdentityListMeta` or `MailboxQueryMeta` with optional `identity_state` or `query_state`; no new field is required there.
 
 3. Run your tests and `mypy`. A constructed thread-message result without `thread_id` fails validation with `meta.thread_id  Field required`.
 
@@ -212,8 +212,8 @@ Update `sendmux-mailbox`, its lockfile, and affected annotations or fixtures tog
 
 ## Support
 
-Open an issue in [Sendmux/sendmux-sdk](https://github.com/Sendmux/sendmux-sdk/issues) with the package name, version, and request ID from any API error.
+Open an issue in [qubrics/qubrics-sdk](https://github.com/qubrics/qubrics-sdk/issues) with the package name, version, and request ID from any API error.
 
 ## Licence
 
-MIT. See the [licence file](https://github.com/Sendmux/sendmux-sdk/blob/main/LICENSE).
+MIT. See the [licence file](https://github.com/qubrics/qubrics-sdk/blob/main/LICENSE).

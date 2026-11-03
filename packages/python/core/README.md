@@ -3,14 +3,14 @@
 [![PyPI version](https://img.shields.io/pypi/v/sendmux-core)](https://pypi.org/project/sendmux-core/)
 [![Python versions](https://img.shields.io/pypi/pyversions/sendmux-core)](https://pypi.org/project/sendmux-core/)
 [![PyPI downloads](https://img.shields.io/pypi/dm/sendmux-core)](https://pypi.org/project/sendmux-core/)
-[![Licence](https://img.shields.io/pypi/l/sendmux-core)](https://github.com/Sendmux/sendmux-sdk/blob/main/LICENSE)
+[![Licence](https://img.shields.io/pypi/l/sendmux-core)](https://github.com/qubrics/qubrics-sdk/blob/main/LICENSE)
 
 Shared runtime helpers for the Sendmux Python SDK packages.
 
 ## Documentation
 
 - Sendmux docs: [sendmux.ai/docs](https://sendmux.ai/docs)
-- Source repository: [Sendmux/sendmux-sdk](https://github.com/Sendmux/sendmux-sdk)
+- Source repository: [qubrics/qubrics-sdk](https://github.com/qubrics/qubrics-sdk)
 
 ## Requirements
 
@@ -32,7 +32,7 @@ import os
 
 from sendmux_core import conditional_headers, idempotency_headers, validate_api_key
 
-validate_api_key(os.environ["SENDMUX_MAILBOX_API_KEY"], surface="mailbox")
+validate_api_key(os.environ["QUBRICS_MAILBOX_API_KEY"], surface="mailbox")
 
 headers = {
     **idempotency_headers("idem_123"),
@@ -51,8 +51,8 @@ headers = {
 
 ## Support
 
-Open an issue in [Sendmux/sendmux-sdk](https://github.com/Sendmux/sendmux-sdk/issues) with the package name, version, and request ID from any API error.
+Open an issue in [qubrics/qubrics-sdk](https://github.com/qubrics/qubrics-sdk/issues) with the package name, version, and request ID from any API error.
 
 ## Licence
 
-MIT. See the [licence file](https://github.com/Sendmux/sendmux-sdk/blob/main/LICENSE).
+MIT. See the [licence file](https://github.com/qubrics/qubrics-sdk/blob/main/LICENSE).

@@ -1,16 +1,16 @@
 # @sendmux/core
 
 [![npm version](https://img.shields.io/npm/v/@sendmux%2Fcore)](https://www.npmjs.com/package/@sendmux/core)
-[![CI](https://github.com/Sendmux/sendmux-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/Sendmux/sendmux-sdk/actions/workflows/ci.yml)
+[![CI](https://github.com/qubrics/qubrics-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/qubrics/qubrics-sdk/actions/workflows/ci.yml)
 [![npm downloads](https://img.shields.io/npm/dm/@sendmux%2Fcore)](https://www.npmjs.com/package/@sendmux/core)
-[![Licence](https://img.shields.io/npm/l/@sendmux%2Fcore)](https://github.com/Sendmux/sendmux-sdk/blob/main/LICENSE)
+[![Licence](https://img.shields.io/npm/l/@sendmux%2Fcore)](https://github.com/qubrics/qubrics-sdk/blob/main/LICENSE)
 
 Shared runtime helpers and public types for the Sendmux TypeScript SDK packages.
 
 ## Documentation
 
 - Sendmux docs: [sendmux.ai/docs](https://sendmux.ai/docs)
-- Source repository: [Sendmux/sendmux-sdk](https://github.com/Sendmux/sendmux-sdk)
+- Source repository: [qubrics/qubrics-sdk](https://github.com/qubrics/qubrics-sdk)
 
 ## Requirements
 
@@ -34,7 +34,7 @@ import {
   idempotencyHeaders,
 } from "@sendmux/core";
 
-assertApiKeyKind(process.env.SENDMUX_MAILBOX_API_KEY!, "mailbox");
+assertApiKeyKind(process.env.QUBRICS_MAILBOX_API_KEY!, "mailbox");
 
 const headers = {
   ...idempotencyHeaders("idem_123"),
@@ -52,8 +52,8 @@ const headers = {
 
 ## Support
 
-Open an issue in [Sendmux/sendmux-sdk](https://github.com/Sendmux/sendmux-sdk/issues) with the package name and version.
+Open an issue in [qubrics/qubrics-sdk](https://github.com/qubrics/qubrics-sdk/issues) with the package name and version.
 
 ## Licence
 
-MIT. See the [licence file](https://github.com/Sendmux/sendmux-sdk/blob/main/LICENSE).
+MIT. See the [licence file](https://github.com/qubrics/qubrics-sdk/blob/main/LICENSE).

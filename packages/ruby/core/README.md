@@ -1,16 +1,16 @@
 # sendmux-core
 
 [![Gem Version](https://badge.fury.io/rb/sendmux-core.svg)](https://rubygems.org/gems/sendmux-core)
-[![CI](https://github.com/Sendmux/sendmux-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/Sendmux/sendmux-sdk/actions/workflows/ci.yml)
-[![Licence: MIT](https://img.shields.io/badge/licence-MIT-blue.svg)](https://github.com/Sendmux/sendmux-sdk/blob/main/LICENSE)
+[![CI](https://github.com/qubrics/qubrics-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/qubrics/qubrics-sdk/actions/workflows/ci.yml)
+[![Licence: MIT](https://img.shields.io/badge/licence-MIT-blue.svg)](https://github.com/qubrics/qubrics-sdk/blob/main/LICENSE)
 
 Shared authentication, retry, pagination, header, and error helpers for the Sendmux Ruby SDK packages.
 
 ## Documentation
 
 - Ruby SDK guide: https://sendmux.ai/docs/sdks/ruby
-- Source: https://github.com/Sendmux/sendmux-sdk/tree/main/packages/ruby/core
-- Changelog: https://github.com/Sendmux/sendmux-sdk/blob/main/packages/ruby/core/CHANGELOG.md
+- Source: https://github.com/qubrics/qubrics-sdk/tree/main/packages/ruby/core
+- Changelog: https://github.com/qubrics/qubrics-sdk/blob/main/packages/ruby/core/CHANGELOG.md
 
 ## Requirements
 
@@ -37,7 +37,7 @@ The core package is installed automatically by the surface gems, but it can also
 require "sendmux/core"
 
 surface = Sendmux::Core::Auth.assert_api_key_surface(
-  ENV.fetch("SENDMUX_ROOT_KEY"),
+  ENV.fetch("QUBRICS_ROOT_KEY"),
   Sendmux::Core::ApiKeySurface::ROOT
 )
 
@@ -64,7 +64,7 @@ conditional = Sendmux::Core::Headers.conditional(if_none_match: 'W/"cached"')
 
 ```ruby
 pager = Sendmux::Core.each_cursor(lambda do |opts|
-  mailbox_client.mailbox_api.mailbox_list_messages(opts.merge(limit: 50))
+  mailbox_client.mailbox_api.qubrics_mailbox_list_messages(opts.merge(limit: 50))
 end)
 
 pager.each do |message|
@@ -97,4 +97,4 @@ Retries are enabled for safe requests and for idempotent `POST` requests that us
 
 ## Licence
 
-MIT licence. See https://github.com/Sendmux/sendmux-sdk/blob/main/LICENSE.
+MIT licence. See https://github.com/qubrics/qubrics-sdk/blob/main/LICENSE.

@@ -68,8 +68,8 @@ Description:
 Links:
 
 - Website: `https://sendmux.ai/docs`
-- Source code: `https://github.com/Sendmux/sendmux-sdk`
-- Issues/support: `https://github.com/Sendmux/sendmux-sdk/issues`
+- Source code: `https://github.com/qubrics/qubrics-sdk`
+- Issues/support: `https://github.com/qubrics/qubrics-sdk/issues`
 - npm package: `https://www.npmjs.com/package/@sendmux/cli`
 
 Search terms covered by listing copy:
@@ -176,13 +176,13 @@ secret_file="$(mktemp)"
 expires_at="$(date -u -v+1y +"%Y-%m-%dT%H:%M:%SZ")"
 snapcraft export-login --snaps=sendmux --channels=edge --acls=package_access,package_push,package_update,package_release --expires="$expires_at" "$secret_file"
 test -s "$secret_file"
-gh secret set SNAPCRAFT_STORE_CREDENTIALS --repo Sendmux/sendmux-sdk < "$secret_file"
+gh secret set SNAPCRAFT_STORE_CREDENTIALS --repo qubrics/qubrics-sdk < "$secret_file"
 rm -f "$secret_file"
 ```
 
 The `test -s` line is intentional: GitHub accepts empty secret input, so the
 credential file must be proven non-empty before `gh secret set` runs. After
-setting the secret, verify `gh secret list --repo Sendmux/sendmux-sdk` shows a
+setting the secret, verify `gh secret list --repo qubrics/qubrics-sdk` shows a
 fresh `SNAPCRAFT_STORE_CREDENTIALS` update time. Keep `stable` promotion manual
 after the `edge` revision is verified.
 

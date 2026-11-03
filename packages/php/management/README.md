@@ -24,7 +24,7 @@ Until then, retain your existing Composer constraint.
 composer require sendmux/management:^2.1.1
 ```
 
-Upgrading from 1.x? Read the [PHP 2.0 migration guide](https://github.com/Sendmux/sendmux-sdk/blob/main/packages/php/UPGRADING.md) before changing your Composer constraint.
+Upgrading from 1.x? Read the [PHP 2.0 migration guide](https://github.com/qubrics/qubrics-sdk/blob/main/packages/php/UPGRADING.md) before changing your Composer constraint.
 
 If your custom Guzzle client uses `FileCookieJar` or `SessionCookieJar`, back up its state and re-authenticate into a fresh jar when upgrading. Guzzle rejects old records without a boolean `HostOnly`; do not guess that value. Default Sendmux API clients do not enable cookies. See the [upstream migration warning](https://github.com/guzzle/guzzle/security/advisories/GHSA-wm3w-8rrp-j577).
 
@@ -40,19 +40,19 @@ require __DIR__ . '/vendor/autoload.php';
 use Sendmux\Management\ClientFactory;
 
 $connection = ClientFactory::createConnectionApi(
-    getenv('SENDMUX_ROOT_API_KEY') ?: ''
+    getenv('QUBRICS_ROOT_API_KEY') ?: ''
 );
 
 $mailboxes = ClientFactory::createMailboxesApi(
-    getenv('SENDMUX_ROOT_API_KEY') ?: ''
+    getenv('QUBRICS_ROOT_API_KEY') ?: ''
 );
 
 $domains = ClientFactory::createDomainsApi(
-    getenv('SENDMUX_ROOT_API_KEY') ?: ''
+    getenv('QUBRICS_ROOT_API_KEY') ?: ''
 );
 
 $webhooks = ClientFactory::createWebhooksApi(
-    getenv('SENDMUX_ROOT_API_KEY') ?: ''
+    getenv('QUBRICS_ROOT_API_KEY') ?: ''
 );
 ```
 
@@ -66,7 +66,7 @@ The factory also exposes clients for billing, domain filters, emails, inboxes, m
 
 ```php
 $client = ClientFactory::createConnectionApiWithAccessToken(
-    static fn (): string => getenv('SENDMUX_ACCESS_TOKEN') ?: ''
+    static fn (): string => getenv('QUBRICS_ACCESS_TOKEN') ?: ''
 );
 ```
 
@@ -96,7 +96,7 @@ For help, include the package name, version, API surface, and sanitised request 
 - PHP SDK guide: [sendmux.ai/docs/sdks/php](https://sendmux.ai/docs/sdks/php)
 - Management API reference: [sendmux.ai/docs/api/introduction](https://sendmux.ai/docs/api/introduction)
 - API keys guide: [sendmux.ai/docs/guides/api-keys](https://sendmux.ai/docs/guides/api-keys)
-- Source repository: [github.com/Sendmux/sendmux-sdk](https://github.com/Sendmux/sendmux-sdk)
+- Source repository: [github.com/qubrics/qubrics-sdk](https://github.com/qubrics/qubrics-sdk)
 
 ## License
 

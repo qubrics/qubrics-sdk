@@ -1,8 +1,8 @@
 # sendmux-sending
 
 [![Gem Version](https://badge.fury.io/rb/sendmux-sending.svg)](https://rubygems.org/gems/sendmux-sending)
-[![CI](https://github.com/Sendmux/sendmux-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/Sendmux/sendmux-sdk/actions/workflows/ci.yml)
-[![Licence: MIT](https://img.shields.io/badge/licence-MIT-blue.svg)](https://github.com/Sendmux/sendmux-sdk/blob/main/LICENSE)
+[![CI](https://github.com/qubrics/qubrics-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/qubrics/qubrics-sdk/actions/workflows/ci.yml)
+[![Licence: MIT](https://img.shields.io/badge/licence-MIT-blue.svg)](https://github.com/qubrics/qubrics-sdk/blob/main/LICENSE)
 
 Ruby SDK package for the Sendmux Sending API.
 
@@ -10,8 +10,8 @@ Ruby SDK package for the Sendmux Sending API.
 
 - Ruby SDK guide: https://sendmux.ai/docs/sdks/ruby
 - Sending API reference: https://sendmux.ai/docs/sending-api
-- Source: https://github.com/Sendmux/sendmux-sdk/tree/main/packages/ruby/sending
-- Changelog: https://github.com/Sendmux/sendmux-sdk/blob/main/packages/ruby/sending/CHANGELOG.md
+- Source: https://github.com/qubrics/qubrics-sdk/tree/main/packages/ruby/sending
+- Changelog: https://github.com/qubrics/qubrics-sdk/blob/main/packages/ruby/sending/CHANGELOG.md
 
 ## Requirements
 
@@ -40,7 +40,7 @@ Pass either `api_key:` or `access_token:`. `access_token:` accepts a bare token 
 require "sendmux/sending"
 
 client = Sendmux::Sending::Client.new(
-  access_token: -> { ENV.fetch("SENDMUX_ACCESS_TOKEN") }
+  access_token: -> { ENV.fetch("QUBRICS_ACCESS_TOKEN") }
 )
 ```
 
@@ -52,7 +52,7 @@ Create a sending client with a send-capable key for the API-key example below.
 require "sendmux/sending"
 
 client = Sendmux::Sending::Client.new(
-  api_key: ENV.fetch("SENDMUX_MAILBOX_KEY")
+  api_key: ENV.fetch("QUBRICS_MAILBOX_KEY")
 )
 
 request = Sendmux::Sending::Generated::EmailSendRequest.new(
@@ -62,7 +62,7 @@ request = Sendmux::Sending::Generated::EmailSendRequest.new(
   text_body: "This message was sent with the Sendmux Ruby SDK."
 )
 
-response = client.emails.sending_send_email(
+response = client.emails.qubrics_sending_send_email(
   request,
   Sendmux::Core::Headers.idempotency_key("send-email-001")
 )
@@ -74,7 +74,7 @@ puts response.data.message_id
 
 `Sendmux::Sending::Client` exposes:
 
-- `client.emails` for `sending_send_email` and `sending_send_email_batch`.
+- `client.emails` for `qubrics_sending_send_email` and `qubrics_sending_send_email_batch`.
 - `client.meta` for `sending_get_open_api_spec`.
 
 Pass `base_url:` only when you are targeting an explicitly provided Sendmux endpoint for a controlled environment.
@@ -84,7 +84,7 @@ Pass `base_url:` only when you are targeting an explicitly provided Sendmux endp
 Mutating sending operations accept the `:idempotency_key` option. Use `Sendmux::Core::Headers.idempotency_key` so retries are safe when a request is replayable.
 
 ```ruby
-client.emails.sending_send_email(
+client.emails.qubrics_sending_send_email(
   request,
   Sendmux::Core::Headers.idempotency_key("send-email-002")
 )
@@ -96,7 +96,7 @@ Generated API errors are mapped to `Sendmux::Core::ApiError`.
 
 ```ruby
 begin
-  client.emails.sending_send_email(request)
+  client.emails.qubrics_sending_send_email(request)
 rescue Sendmux::Core::ApiError => error
   warn "#{error.status} #{error.code}: #{error.message}"
 end
@@ -109,4 +109,4 @@ end
 
 ## Licence
 
-MIT licence. See https://github.com/Sendmux/sendmux-sdk/blob/main/LICENSE.
+MIT licence. See https://github.com/qubrics/qubrics-sdk/blob/main/LICENSE.

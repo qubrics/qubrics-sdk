@@ -14,9 +14,9 @@ description: |
   no credentials are included.
 
 license: MIT
-contact: https://github.com/Sendmux/sendmux-sdk/issues
-issues: https://github.com/Sendmux/sendmux-sdk/issues
-source-code: https://github.com/Sendmux/sendmux-sdk
+contact: https://github.com/qubrics/qubrics-sdk/issues
+issues: https://github.com/qubrics/qubrics-sdk/issues
+source-code: https://github.com/qubrics/qubrics-sdk
 website: https://sendmux.ai/docs
 
 grade: stable

@@ -24,7 +24,7 @@ Until then, retain your existing Composer constraint.
 composer require sendmux/mailbox:^3.0
 ```
 
-Before upgrading from 2.x, read the [Mailbox 3.0 migration guide](https://github.com/Sendmux/sendmux-sdk/blob/main/packages/php/UPGRADING-3.0.md) for changes-response return types, the distinct thread-message list response, and operation-specific metadata getter/setter types. Update typed wrappers and manually constructed metadata. If you use 1.x, apply the [PHP 2.0 migration guide](https://github.com/Sendmux/sendmux-sdk/blob/main/packages/php/UPGRADING.md) first.
+Before upgrading from 2.x, read the [Mailbox 3.0 migration guide](https://github.com/qubrics/qubrics-sdk/blob/main/packages/php/UPGRADING-3.0.md) for changes-response return types, the distinct thread-message list response, and operation-specific metadata getter/setter types. Update typed wrappers and manually constructed metadata. If you use 1.x, apply the [PHP 2.0 migration guide](https://github.com/qubrics/qubrics-sdk/blob/main/packages/php/UPGRADING.md) first.
 
 If your custom Guzzle client uses `FileCookieJar` or `SessionCookieJar`, back up its state and re-authenticate into a fresh jar when upgrading. Guzzle rejects old records without a boolean `HostOnly`; do not guess that value. Default Sendmux API clients do not enable cookies. See the [upstream migration warning](https://github.com/guzzle/guzzle/security/advisories/GHSA-wm3w-8rrp-j577).
 
@@ -40,7 +40,7 @@ require __DIR__ . '/vendor/autoload.php';
 use Sendmux\Mailbox\ClientFactory;
 
 $mailboxApi = ClientFactory::createMailboxAPIApi(
-    getenv('SENDMUX_MAILBOX_API_KEY') ?: ''
+    getenv('QUBRICS_MAILBOX_API_KEY') ?: ''
 );
 ```
 
@@ -62,7 +62,7 @@ Use `mailboxUploadAttachment()` to upload bytes and pass the returned `blob_id` 
 
 ```php
 $client = ClientFactory::createMailboxAPIApiWithAccessToken(
-    static fn (): string => getenv('SENDMUX_ACCESS_TOKEN') ?: ''
+    static fn (): string => getenv('QUBRICS_ACCESS_TOKEN') ?: ''
 );
 ```
 
@@ -92,7 +92,7 @@ For help, include the package name, version, API surface, and sanitised request 
 - PHP SDK guide: [sendmux.ai/docs/sdks/php](https://sendmux.ai/docs/sdks/php)
 - Mailbox API reference: [sendmux.ai/docs/mailbox-api/introduction](https://sendmux.ai/docs/mailbox-api/introduction)
 - API keys guide: [sendmux.ai/docs/guides/api-keys](https://sendmux.ai/docs/guides/api-keys)
-- Source repository: [github.com/Sendmux/sendmux-sdk](https://github.com/Sendmux/sendmux-sdk)
+- Source repository: [github.com/qubrics/qubrics-sdk](https://github.com/qubrics/qubrics-sdk)
 
 ## License
 

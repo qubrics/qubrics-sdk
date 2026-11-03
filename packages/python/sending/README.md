@@ -3,14 +3,14 @@
 [![PyPI version](https://img.shields.io/pypi/v/sendmux-sending)](https://pypi.org/project/sendmux-sending/)
 [![Python versions](https://img.shields.io/pypi/pyversions/sendmux-sending)](https://pypi.org/project/sendmux-sending/)
 [![PyPI downloads](https://img.shields.io/pypi/dm/sendmux-sending)](https://pypi.org/project/sendmux-sending/)
-[![Licence](https://img.shields.io/pypi/l/sendmux-sending)](https://github.com/Sendmux/sendmux-sdk/blob/main/LICENSE)
+[![Licence](https://img.shields.io/pypi/l/sendmux-sending)](https://github.com/qubrics/qubrics-sdk/blob/main/LICENSE)
 
 Generated Python client for the Sendmux Sending API.
 
 ## Documentation
 
 - Sending API reference: [sendmux.ai/docs/sending-api/introduction](https://sendmux.ai/docs/sending-api/introduction)
-- Source repository: [Sendmux/sendmux-sdk](https://github.com/Sendmux/sendmux-sdk)
+- Source repository: [qubrics/qubrics-sdk](https://github.com/qubrics/qubrics-sdk)
 
 ## Requirements
 
@@ -34,8 +34,8 @@ import os
 
 from sendmux_sending import MetaApi, create_sending_client
 
-with create_sending_client(api_key=os.environ["SENDMUX_SENDING_API_KEY"]) as client:
-    connection = MetaApi(client).sending_get_connection()
+with create_sending_client(api_key=os.environ["QUBRICS_SENDING_API_KEY"]) as client:
+    connection = MetaApi(client).qubrics_sending_get_connection()
     print(connection.data.label)
 ```
 
@@ -49,7 +49,7 @@ import os
 from sendmux_sending import create_sending_client
 
 client = create_sending_client(
-    access_token=lambda: os.environ["SENDMUX_ACCESS_TOKEN"]
+    access_token=lambda: os.environ["QUBRICS_ACCESS_TOKEN"]
 )
 ```
 
@@ -60,10 +60,10 @@ import os
 
 from sendmux_sending import Address, EmailSendRequest, EmailsApi, create_sending_client
 
-client = create_sending_client(api_key=os.environ["SENDMUX_SENDING_API_KEY"])
+client = create_sending_client(api_key=os.environ["QUBRICS_SENDING_API_KEY"])
 api = EmailsApi(client)
 
-response = api.sending_send_email(
+response = api.qubrics_sending_send_email(
     EmailSendRequest(
         var_from=Address(email="sender@example.com"),
         to=Address(email="recipient@example.com"),
@@ -93,7 +93,7 @@ import os
 
 from sendmux_sending import create_sending_client, send_email_with_files
 
-client = create_sending_client(api_key=os.environ["SENDMUX_SENDING_API_KEY"])
+client = create_sending_client(api_key=os.environ["QUBRICS_SENDING_API_KEY"])
 
 send_email_with_files(
     client,
@@ -115,10 +115,10 @@ import os
 
 from sendmux_sending import EmailSendRequest, EmailsApi, create_sending_client, upload_attachment_from_file
 
-client = create_sending_client(api_key=os.environ["SENDMUX_SENDING_API_KEY"])
+client = create_sending_client(api_key=os.environ["QUBRICS_SENDING_API_KEY"])
 attachment = upload_attachment_from_file(client, file_path="./report.pdf")
 
-EmailsApi(client).sending_send_email(
+EmailsApi(client).qubrics_sending_send_email(
     EmailSendRequest.from_dict({
         "from": {"email": "sender@example.com"},
         "to": {"email": "recipient@example.com"},
@@ -135,8 +135,8 @@ Use `sendmux-core` when you need explicit idempotency, conditional request, pagi
 
 ## Support
 
-Open an issue in [Sendmux/sendmux-sdk](https://github.com/Sendmux/sendmux-sdk/issues) with the package name, version, and request ID from any API error.
+Open an issue in [qubrics/qubrics-sdk](https://github.com/qubrics/qubrics-sdk/issues) with the package name, version, and request ID from any API error.
 
 ## Licence
 
-MIT. See the [licence file](https://github.com/Sendmux/sendmux-sdk/blob/main/LICENSE).
+MIT. See the [licence file](https://github.com/qubrics/qubrics-sdk/blob/main/LICENSE).
