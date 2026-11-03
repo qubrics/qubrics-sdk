@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import os
 from dataclasses import dataclass, field
-from typing import Literal, Mapping, Sequence, cast
+from typing import Literal, Mapping, Sequence, cast, overload
 
 from sendmux_core import validate_api_key
 
@@ -14,6 +14,21 @@ SURFACES: tuple[Surface, ...] = ("mailbox", "management", "sending")
 
 DEFAULT_APP_BASE_URL = "https://app.sendmux.ai/api/v1"
 DEFAULT_SENDING_BASE_URL = "https://smtp.sendmux.ai/api/v1"
+
+
+@overload
+def env_value(name: str, default: str) -> str: ...
+
+
+@overload
+def env_value(name: str, default: None = None) -> str | None: ...
+
+
+def env_value(name: str, default: str | None = None) -> str | None:
+    value = os.environ.get(name.replace("SENDMUX_", "QUBRICS_", 1))
+    if value:
+        return value
+    return os.environ.get(name, default)
 
 
 @dataclass(frozen=True)
@@ -88,13 +103,13 @@ class ServerConfig:
                 validate_api_key(api_key, surface=self.required_key_surface_for(surface))
             elif require_api_key:
                 raise ValueError(
-                    f"API key for {surface} is required. Set SENDMUX_{surface.upper()}_API_KEY"
-                    " or SENDMUX_API_KEY for a compatible single-key setup."
+                    f"API key for {surface} is required. Set QUBRICS_{surface.upper()}_API_KEY"
+                    " or QUBRICS_API_KEY for a single-key setup. SENDMUX_ names remain supported."
                 )
         if self.transport in {"http", "streamable-http"} and not self.allow_unauthenticated_http:
             if not self.http_bearer_token:
                 raise ValueError(
-                    "HTTP transport requires SENDMUX_MCP_HTTP_BEARER_TOKEN or --allow-unauthenticated-http."
+                    "HTTP transport requires QUBRICS_MCP_HTTP_BEARER_TOKEN (SENDMUX_MCP_HTTP_BEARER_TOKEN is also supported) or --allow-unauthenticated-http."
                 )
 
 
@@ -104,34 +119,34 @@ def config_from_env(
     api_key: str | None = None,
     require_api_key: bool = True,
 ) -> ServerConfig:
-    transport = normalise_transport(os.environ.get("SENDMUX_MCP_TRANSPORT", "stdio"))
+    transport = normalise_transport(env_value("SENDMUX_MCP_TRANSPORT", "stdio"))
     selected_surfaces = normalise_surfaces(
-        surfaces if surfaces is not None else parse_surfaces(os.environ.get("SENDMUX_MCP_SURFACES"), default=("mailbox",))
+        surfaces if surfaces is not None else parse_surfaces(env_value("SENDMUX_MCP_SURFACES"), default=("mailbox",))
     )
     env_api_keys = surface_api_keys_from_env()
-    retry_max_elapsed = os.environ.get("SENDMUX_MCP_RETRY_MAX_ELAPSED_SECONDS")
+    retry_max_elapsed = env_value("SENDMUX_MCP_RETRY_MAX_ELAPSED_SECONDS")
     return ServerConfig(
         surfaces=selected_surfaces,
-        api_key=api_key or os.environ.get("SENDMUX_API_KEY") or None,
+        api_key=api_key or env_value("SENDMUX_API_KEY") or None,
         api_keys=env_api_keys,
-        app_base_url=os.environ.get("SENDMUX_APP_BASE_URL", DEFAULT_APP_BASE_URL),
-        sending_base_url=os.environ.get("SENDMUX_SENDING_BASE_URL", DEFAULT_SENDING_BASE_URL),
+        app_base_url=env_value("SENDMUX_APP_BASE_URL", DEFAULT_APP_BASE_URL),
+        sending_base_url=env_value("SENDMUX_SENDING_BASE_URL", DEFAULT_SENDING_BASE_URL),
         transport=transport,
-        host=os.environ.get("SENDMUX_MCP_HOST", "127.0.0.1"),
-        port=int(os.environ.get("SENDMUX_MCP_PORT", "8765")),
-        path=os.environ.get("SENDMUX_MCP_PATH", "/mcp"),
-        openapi_input_dir=os.environ.get("SENDMUX_MCP_OPENAPI_INPUT_DIR") or os.environ.get("OPENAPI_INPUT_DIR"),
-        app_openapi=os.environ.get("SENDMUX_MCP_APP_OPENAPI"),
-        sending_openapi=os.environ.get("SENDMUX_MCP_SENDING_OPENAPI"),
-        allowed_origins=parse_csv(os.environ.get("SENDMUX_MCP_ALLOWED_ORIGINS")),
-        http_bearer_token=os.environ.get("SENDMUX_MCP_HTTP_BEARER_TOKEN"),
-        allow_unauthenticated_http=parse_bool(os.environ.get("SENDMUX_MCP_ALLOW_UNAUTHENTICATED_HTTP")),
-        timeout_seconds=float(os.environ.get("SENDMUX_MCP_TIMEOUT_SECONDS", "30")),
-        stateless_http=parse_bool(os.environ.get("SENDMUX_MCP_STATELESS_HTTP"), default=True),
+        host=env_value("SENDMUX_MCP_HOST", "127.0.0.1"),
+        port=int(env_value("SENDMUX_MCP_PORT", "8765")),
+        path=env_value("SENDMUX_MCP_PATH", "/mcp"),
+        openapi_input_dir=env_value("SENDMUX_MCP_OPENAPI_INPUT_DIR") or env_value("OPENAPI_INPUT_DIR"),
+        app_openapi=env_value("SENDMUX_MCP_APP_OPENAPI"),
+        sending_openapi=env_value("SENDMUX_MCP_SENDING_OPENAPI"),
+        allowed_origins=parse_csv(env_value("SENDMUX_MCP_ALLOWED_ORIGINS")),
+        http_bearer_token=env_value("SENDMUX_MCP_HTTP_BEARER_TOKEN"),
+        allow_unauthenticated_http=parse_bool(env_value("SENDMUX_MCP_ALLOW_UNAUTHENTICATED_HTTP")),
+        timeout_seconds=float(env_value("SENDMUX_MCP_TIMEOUT_SECONDS", "30")),
+        stateless_http=parse_bool(env_value("SENDMUX_MCP_STATELESS_HTTP"), default=True),
         retry=RetryConfig(
-            max_attempts=int(os.environ.get("SENDMUX_MCP_RETRY_MAX_ATTEMPTS", "3")),
-            base_delay_seconds=float(os.environ.get("SENDMUX_MCP_RETRY_BASE_DELAY_SECONDS", "0.25")),
-            max_delay_seconds=float(os.environ.get("SENDMUX_MCP_RETRY_MAX_DELAY_SECONDS", "8")),
+            max_attempts=int(env_value("SENDMUX_MCP_RETRY_MAX_ATTEMPTS", "3")),
+            base_delay_seconds=float(env_value("SENDMUX_MCP_RETRY_BASE_DELAY_SECONDS", "0.25")),
+            max_delay_seconds=float(env_value("SENDMUX_MCP_RETRY_MAX_DELAY_SECONDS", "8")),
             max_elapsed_seconds=float(retry_max_elapsed) if retry_max_elapsed else None,
         ),
     )
@@ -179,7 +194,7 @@ def normalise_surfaces(values: Surface | Sequence[str]) -> tuple[Surface, ...]:
 def surface_api_keys_from_env() -> dict[Surface, str]:
     keys: dict[Surface, str] = {}
     for surface in SURFACES:
-        value = os.environ.get(f"SENDMUX_{surface.upper()}_API_KEY")
+        value = env_value(f"SENDMUX_{surface.upper()}_API_KEY")
         if value:
             keys[surface] = value
     return keys
@@ -192,7 +207,7 @@ def parse_bool(value: str | None, *, default: bool = False) -> bool:
 
 
 def require_env(name: str) -> str:
-    value = os.environ.get(name)
+    value = env_value(name)
     if not value:
         raise ValueError(f"Missing required environment variable {name}")
     return value

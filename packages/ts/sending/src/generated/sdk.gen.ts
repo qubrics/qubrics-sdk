@@ -40,6 +40,7 @@ export const sendingCreateAttachmentUpload = <ThrowOnError extends boolean = fal
  */
 export const sendingCompleteAttachmentUpload = <ThrowOnError extends boolean = false>(options: Options<SendingCompleteAttachmentUploadData, ThrowOnError>) => (options.client ?? client).put<SendingCompleteAttachmentUploadResponses, SendingCompleteAttachmentUploadErrors, ThrowOnError>({
     bodySerializer: null,
+    security: [{ name: 'X-Qubrics-Upload-Token', type: 'apiKey' }, { name: 'X-Sendmux-Upload-Token', type: 'apiKey' }],
     url: '/emails/attachment-uploads/{upload_id}',
     ...options,
     headers: {

@@ -39,7 +39,7 @@ const {
   uploadMailboxAttachmentFromFile,
   uploadMailboxAttachmentViaPresignedFile,
 } = await import("../packages/ts/mailbox/dist/node.js");
-const { createSendingClient } = await import("../packages/ts/sending/dist/index.js");
+const { createSendingClient, sendingCompleteAttachmentUpload } = await import("../packages/ts/sending/dist/index.js");
 const { createManagementClient, managementGetConnection } = await import("../packages/ts/management/dist/index.js");
 const { mailboxGetConnection } = await import("../packages/ts/mailbox/dist/index.js");
 const { sendingGetConnection } = await import("../packages/ts/sending/dist/index.js");
@@ -49,6 +49,80 @@ for (const [surface, createClient, getConnection] of [
   ["mailbox", createMailboxClient, mailboxGetConnection],
   ["sending", createSendingClient, sendingGetConnection],
 ]) {
+  await test(`${surface} resolves Qubrics environment configuration before legacy names`, async (t) => {
+    const names = ["QUBRICS_API_KEY", "SENDMUX_API_KEY", "QUBRICS_ACCESS_TOKEN", "SENDMUX_ACCESS_TOKEN", "QUBRICS_BASE_URL", "SENDMUX_BASE_URL"];
+    const original = { ...process.env };
+    for (const name of names) delete process.env[name];
+    t.after(() => {
+      for (const name of names) {
+        if (original[name] === undefined) delete process.env[name];
+        else process.env[name] = original[name];
+      }
+    });
+    const prefix = surface === "management" ? "smx_root_" : "smx_mbx_";
+    process.env.SENDMUX_API_KEY = `${prefix}legacy`;
+    process.env.SENDMUX_BASE_URL = "https://legacy.fixture.test/api/v1";
+    const requests = [];
+    const fetch = async (request) => {
+      requests.push({ host: new URL(request.url).host, authorization: request.headers.get("Authorization") });
+      return Response.json({});
+    };
+    await getConnection({ client: createClient({ fetch }) });
+    process.env.QUBRICS_API_KEY = `${prefix}current`;
+    process.env.QUBRICS_BASE_URL = "https://current.fixture.test/api/v1";
+    await getConnection({ client: createClient({ fetch }) });
+    await getConnection({ client: createClient({ apiKey: `${prefix}explicit`, baseUrl: "https://explicit.fixture.test/api/v1", fetch }) });
+    assert.deepEqual(requests, [
+      { host: "legacy.fixture.test", authorization: `Bearer ${prefix}legacy` },
+      { host: "current.fixture.test", authorization: `Bearer ${prefix}current` },
+      { host: "explicit.fixture.test", authorization: `Bearer ${prefix}explicit` },
+    ]);
+  });
+
+  for (const [environmentName, optionName, legacy, current, explicit] of [
+    ["API_KEY", "apiKey", surface === "management" ? "smx_root_legacy" : "smx_mbx_legacy", surface === "management" ? "smx_root_current" : "smx_mbx_current", surface === "management" ? "smx_root_explicit" : "smx_mbx_explicit"],
+    ["ACCESS_TOKEN", "accessToken", "legacy.token", "current.token", "explicit.token"],
+  ]) {
+    await test(`${surface} empty Qubrics ${environmentName} retains legacy environment configuration`, async (t) => {
+      const names = ["QUBRICS_API_KEY", "SENDMUX_API_KEY", "QUBRICS_ACCESS_TOKEN", "SENDMUX_ACCESS_TOKEN", "QUBRICS_BASE_URL", "SENDMUX_BASE_URL"];
+      const original = { ...process.env };
+      for (const name of names) delete process.env[name];
+      t.after(() => {
+        for (const name of names) {
+          if (original[name] === undefined) delete process.env[name];
+          else process.env[name] = original[name];
+        }
+      });
+      process.env[`SENDMUX_${environmentName}`] = legacy;
+      process.env[`QUBRICS_${environmentName}`] = "";
+      process.env.SENDMUX_BASE_URL = "https://legacy.fixture.test/api/v1";
+      process.env.QUBRICS_BASE_URL = "";
+      const requests = [];
+      const fetch = async (request) => {
+        requests.push({ host: new URL(request.url).host, authorization: request.headers.get("Authorization") });
+        return Response.json({});
+      };
+      await getConnection({ client: createClient({ fetch }) });
+      process.env[`QUBRICS_${environmentName}`] = current;
+      await getConnection({ client: createClient({ fetch }) });
+      await getConnection({ client: createClient({ [optionName]: explicit, baseUrl: "https://explicit.fixture.test/api/v1", fetch }) });
+      await assert.rejects(getConnection({ client: createClient({ [optionName]: "", fetch }) }), (error) => {
+        assert.match(String(error.cause ?? error), /API keys must start|non-empty bearer token/);
+        return error instanceof SendmuxApiError;
+      });
+      process.env[`QUBRICS_${environmentName}`] = " ";
+      await assert.rejects(getConnection({ client: createClient({ fetch }) }), (error) => {
+        assert.match(String(error.cause ?? error), /API keys must start|non-empty bearer token/);
+        return error instanceof SendmuxApiError;
+      });
+      assert.deepEqual(requests, [
+        { host: "legacy.fixture.test", authorization: `Bearer ${legacy}` },
+        { host: "legacy.fixture.test", authorization: `Bearer ${current}` },
+        { host: "explicit.fixture.test", authorization: `Bearer ${explicit}` },
+      ]);
+    });
+  }
+
   await test(`${surface} accepts an access token and resolves a provider for each request`, async () => {
     const observed = [];
     const fetch = async (request) => {
@@ -123,7 +197,16 @@ for (const [surface, createClient, getConnection] of [
     assert.equal(providerCalls, 2);
   });
 
-  await test(`${surface} rejects missing, ambiguous or malformed credentials before making a request`, async () => {
+  await test(`${surface} rejects missing, ambiguous or malformed credentials before making a request`, async (t) => {
+    const names = ["QUBRICS_API_KEY", "SENDMUX_API_KEY", "QUBRICS_ACCESS_TOKEN", "SENDMUX_ACCESS_TOKEN", "QUBRICS_BASE_URL", "SENDMUX_BASE_URL"];
+    const original = { ...process.env };
+    for (const name of names) delete process.env[name];
+    t.after(() => {
+      for (const name of names) {
+        if (original[name] === undefined) delete process.env[name];
+        else process.env[name] = original[name];
+      }
+    });
     let requests = 0;
     const fetch = async () => { requests += 1; return Response.json({}); };
     for (const credentials of [
@@ -148,6 +231,36 @@ const {
   uploadAttachmentFromFile,
 } = await import("../packages/ts/sending/dist/node.js");
 const sdkNode = await import("../packages/ts/sdk/dist/node.js");
+
+await test("delegated uploads preserve either token header without reading or leaking the API credential", async () => {
+  let credentialReads = 0;
+  const received = [];
+  const client = createSendingClient({
+    apiKey: () => {
+      credentialReads += 1;
+      return "smx_mbx_private-key";
+    },
+    baseUrl: "https://upload.fixture.test/api/v1",
+    fetch: async (request) => {
+      received.push([
+        request.headers.get("X-Qubrics-Upload-Token"),
+        request.headers.get("X-Sendmux-Upload-Token"),
+        request.headers.get("Authorization"),
+      ]);
+      return Response.json({ ok: true });
+    },
+  });
+  for (const header of ["X-Qubrics-Upload-Token", "X-Sendmux-Upload-Token"]) {
+    await sendingCompleteAttachmentUpload({
+      client,
+      path: { upload_id: "upl_aaaaaaaaaaaaaaaaaaaaaaaa" },
+      headers: { "Content-Length": "4", [header]: "upload-token" },
+      body: new Uint8Array([116, 101, 115, 116]),
+    });
+  }
+  assert.equal(credentialReads, 0);
+  assert.deepEqual(received, [["upload-token", null, null], [null, "upload-token", null]]);
+});
 
 assert.equal(sdkNode.mailbox.uploadMailboxAttachmentFromFile, uploadMailboxAttachmentFromFile);
 assert.equal(sdkNode.mailbox.downloadMailboxAttachmentToBuffer, downloadMailboxAttachmentToBuffer);

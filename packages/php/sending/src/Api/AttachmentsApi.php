@@ -140,10 +140,11 @@ class AttachmentsApi
      *
      * Upload bytes to an attachment upload URL
      *
-     * @param  string $x_sendmux_upload_token Short-lived upload token returned by POST /emails/attachment-uploads. (required)
      * @param  int $content_length Exact number of bytes in the binary request body. (required)
      * @param  string $upload_id Upload intent ID returned by POST /emails/attachment-uploads. (required)
      * @param  \SplFileObject $body body (required)
+     * @param  string|null $x_qubrics_upload_token Short-lived upload token returned by POST /emails/attachment-uploads. Send this header or X-Sendmux-Upload-Token. If both are sent, their values must match. (optional)
+     * @param  string|null $x_sendmux_upload_token Compatibility alias for X-Qubrics-Upload-Token, retained indefinitely. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['sendingCompleteAttachmentUpload'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
@@ -151,17 +152,19 @@ class AttachmentsApi
      * @return \Sendmux\Sending\Model\AttachmentUploadResponse|\Sendmux\Sending\Model\ErrorResponse
      */
     public function sendingCompleteAttachmentUpload(
-        string $x_sendmux_upload_token,
-        int $content_length,
-        string $upload_id,
-        \SplFileObject $body,
+        int|string $content_length,
+        string|int $upload_id,
+        \SplFileObject|string $body,
+        \SplFileObject|string|null $x_qubrics_upload_token = null,
+        ?string $x_sendmux_upload_token = null,
         string $contentType = self::contentTypes['sendingCompleteAttachmentUpload'][0]
     ): \Sendmux\Sending\Model\AttachmentUploadResponse|\Sendmux\Sending\Model\ErrorResponse {
         list($response) = $this->sendingCompleteAttachmentUploadWithHttpInfo(
-            $x_sendmux_upload_token,
             $content_length,
             $upload_id,
             $body,
+            $x_qubrics_upload_token,
+            $x_sendmux_upload_token,
             $contentType
         );
         return $response;
@@ -172,10 +175,11 @@ class AttachmentsApi
      *
      * Upload bytes to an attachment upload URL
      *
-     * @param  string $x_sendmux_upload_token Short-lived upload token returned by POST /emails/attachment-uploads. (required)
      * @param  int $content_length Exact number of bytes in the binary request body. (required)
      * @param  string $upload_id Upload intent ID returned by POST /emails/attachment-uploads. (required)
      * @param  \SplFileObject $body body (required)
+     * @param  string|null $x_qubrics_upload_token Short-lived upload token returned by POST /emails/attachment-uploads. Send this header or X-Sendmux-Upload-Token. If both are sent, their values must match. (optional)
+     * @param  string|null $x_sendmux_upload_token Compatibility alias for X-Qubrics-Upload-Token, retained indefinitely. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['sendingCompleteAttachmentUpload'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
@@ -183,17 +187,19 @@ class AttachmentsApi
      * @return array of \Sendmux\Sending\Model\AttachmentUploadResponse|\Sendmux\Sending\Model\ErrorResponse|\Sendmux\Sending\Model\ErrorResponse|\Sendmux\Sending\Model\ErrorResponse|\Sendmux\Sending\Model\ErrorResponse|\Sendmux\Sending\Model\ErrorResponse|\Sendmux\Sending\Model\ErrorResponse|\Sendmux\Sending\Model\ErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
     public function sendingCompleteAttachmentUploadWithHttpInfo(
-        string $x_sendmux_upload_token,
-        int $content_length,
-        string $upload_id,
-        \SplFileObject $body,
+        int|string $content_length,
+        string|int $upload_id,
+        \SplFileObject|string $body,
+        \SplFileObject|string|null $x_qubrics_upload_token = null,
+        ?string $x_sendmux_upload_token = null,
         string $contentType = self::contentTypes['sendingCompleteAttachmentUpload'][0]
     ): array {
         $request = $this->sendingCompleteAttachmentUploadRequest(
-            $x_sendmux_upload_token,
             $content_length,
             $upload_id,
             $body,
+            $x_qubrics_upload_token,
+            $x_sendmux_upload_token,
             $contentType
         );
 
@@ -366,27 +372,30 @@ class AttachmentsApi
      *
      * Upload bytes to an attachment upload URL
      *
-     * @param  string $x_sendmux_upload_token Short-lived upload token returned by POST /emails/attachment-uploads. (required)
      * @param  int $content_length Exact number of bytes in the binary request body. (required)
      * @param  string $upload_id Upload intent ID returned by POST /emails/attachment-uploads. (required)
      * @param  \SplFileObject $body body (required)
+     * @param  string|null $x_qubrics_upload_token Short-lived upload token returned by POST /emails/attachment-uploads. Send this header or X-Sendmux-Upload-Token. If both are sent, their values must match. (optional)
+     * @param  string|null $x_sendmux_upload_token Compatibility alias for X-Qubrics-Upload-Token, retained indefinitely. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['sendingCompleteAttachmentUpload'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
      * @return PromiseInterface
      */
     public function sendingCompleteAttachmentUploadAsync(
-        string $x_sendmux_upload_token,
-        int $content_length,
-        string $upload_id,
-        \SplFileObject $body,
+        int|string $content_length,
+        string|int $upload_id,
+        \SplFileObject|string $body,
+        \SplFileObject|string|null $x_qubrics_upload_token = null,
+        ?string $x_sendmux_upload_token = null,
         string $contentType = self::contentTypes['sendingCompleteAttachmentUpload'][0]
     ): PromiseInterface {
         return $this->sendingCompleteAttachmentUploadAsyncWithHttpInfo(
-            $x_sendmux_upload_token,
             $content_length,
             $upload_id,
             $body,
+            $x_qubrics_upload_token,
+            $x_sendmux_upload_token,
             $contentType
         )
             ->then(
@@ -401,28 +410,31 @@ class AttachmentsApi
      *
      * Upload bytes to an attachment upload URL
      *
-     * @param  string $x_sendmux_upload_token Short-lived upload token returned by POST /emails/attachment-uploads. (required)
      * @param  int $content_length Exact number of bytes in the binary request body. (required)
      * @param  string $upload_id Upload intent ID returned by POST /emails/attachment-uploads. (required)
      * @param  \SplFileObject $body body (required)
+     * @param  string|null $x_qubrics_upload_token Short-lived upload token returned by POST /emails/attachment-uploads. Send this header or X-Sendmux-Upload-Token. If both are sent, their values must match. (optional)
+     * @param  string|null $x_sendmux_upload_token Compatibility alias for X-Qubrics-Upload-Token, retained indefinitely. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['sendingCompleteAttachmentUpload'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
      * @return PromiseInterface
      */
     public function sendingCompleteAttachmentUploadAsyncWithHttpInfo(
-        string $x_sendmux_upload_token,
-        int $content_length,
-        string $upload_id,
-        \SplFileObject $body,
+        int|string $content_length,
+        string|int $upload_id,
+        \SplFileObject|string $body,
+        \SplFileObject|string|null $x_qubrics_upload_token = null,
+        ?string $x_sendmux_upload_token = null,
         string $contentType = self::contentTypes['sendingCompleteAttachmentUpload'][0]
     ): PromiseInterface {
         $returnType = '\Sendmux\Sending\Model\AttachmentUploadResponse';
         $request = $this->sendingCompleteAttachmentUploadRequest(
-            $x_sendmux_upload_token,
             $content_length,
             $upload_id,
             $body,
+            $x_qubrics_upload_token,
+            $x_sendmux_upload_token,
             $contentType
         );
 
@@ -468,29 +480,38 @@ class AttachmentsApi
     /**
      * Create request for operation 'sendingCompleteAttachmentUpload'
      *
-     * @param  string $x_sendmux_upload_token Short-lived upload token returned by POST /emails/attachment-uploads. (required)
      * @param  int $content_length Exact number of bytes in the binary request body. (required)
      * @param  string $upload_id Upload intent ID returned by POST /emails/attachment-uploads. (required)
      * @param  \SplFileObject $body body (required)
+     * @param  string|null $x_qubrics_upload_token Short-lived upload token returned by POST /emails/attachment-uploads. Send this header or X-Sendmux-Upload-Token. If both are sent, their values must match. (optional)
+     * @param  string|null $x_sendmux_upload_token Compatibility alias for X-Qubrics-Upload-Token, retained indefinitely. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['sendingCompleteAttachmentUpload'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
     public function sendingCompleteAttachmentUploadRequest(
-        string $x_sendmux_upload_token,
-        int $content_length,
-        string $upload_id,
-        \SplFileObject $body,
+        int|string $content_length,
+        string|int $upload_id,
+        \SplFileObject|string $body,
+        \SplFileObject|string|null $x_qubrics_upload_token = null,
+        ?string $x_sendmux_upload_token = null,
         string $contentType = self::contentTypes['sendingCompleteAttachmentUpload'][0]
     ): Request {
-
-        // verify the required parameter 'x_sendmux_upload_token' is set
-        if ($x_sendmux_upload_token === null || (is_array($x_sendmux_upload_token) && count($x_sendmux_upload_token) === 0)) {
-            throw new InvalidArgumentException(
-                'Missing the required parameter $x_sendmux_upload_token when calling sendingCompleteAttachmentUpload'
-            );
+        if ($x_qubrics_upload_token instanceof \SplFileObject && is_string($body)) {
+            [$content_length, $upload_id, $body, $x_sendmux_upload_token, $contentType] = [
+                $upload_id, $body, $x_qubrics_upload_token, (string) $content_length,
+                $x_sendmux_upload_token ?? $contentType,
+            ];
+            $x_qubrics_upload_token = null;
         }
+        // Reapply the original parameter types after normalising the legacy positional form.
+        [$content_length, $upload_id, $body, $x_qubrics_upload_token] = (
+            static fn (int $length, string $id, \SplFileObject $file, ?string $token): array => [
+                $length, $id, $file, $token,
+            ]
+        )($content_length, $upload_id, $body, $x_qubrics_upload_token);
+
 
         // verify the required parameter 'content_length' is set
         if ($content_length === null || (is_array($content_length) && count($content_length) === 0)) {
@@ -520,6 +541,8 @@ class AttachmentsApi
         }
 
 
+
+
         $resourcePath = '/emails/attachment-uploads/{upload_id}';
         $formParams = [];
         $queryParams = [];
@@ -528,6 +551,10 @@ class AttachmentsApi
         $multipart = false;
 
 
+        // header params
+        if ($x_qubrics_upload_token !== null) {
+            $headerParams['X-Qubrics-Upload-Token'] = ObjectSerializer::toHeaderValue($x_qubrics_upload_token);
+        }
         // header params
         if ($x_sendmux_upload_token !== null) {
             $headerParams['X-Sendmux-Upload-Token'] = ObjectSerializer::toHeaderValue($x_sendmux_upload_token);
@@ -582,6 +609,18 @@ class AttachmentsApi
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
             }
+        }
+
+        // this endpoint requires API key authentication
+        $apiKey = $this->config->getApiKeyWithPrefix('X-Sendmux-Upload-Token');
+        if ($apiKey !== null) {
+            $headers['X-Sendmux-Upload-Token'] = $apiKey;
+        }
+
+        // this endpoint requires API key authentication
+        $apiKey = $this->config->getApiKeyWithPrefix('X-Qubrics-Upload-Token');
+        if ($apiKey !== null) {
+            $headers['X-Qubrics-Upload-Token'] = $apiKey;
         }
 
         $defaultHeaders = [];

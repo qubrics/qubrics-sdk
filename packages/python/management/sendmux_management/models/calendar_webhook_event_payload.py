@@ -29,7 +29,7 @@ class CalendarWebhookEventPayload(BaseModel):
     CalendarWebhookEventPayload
     """ # noqa: E501
     data: CalendarWebhookEventData
-    id: StrictStr = Field(description="Stable per-event identifier. Also sent in the X-Sendmux-Event-Id header.")
+    id: StrictStr = Field(description="Stable per-event identifier. Also sent in the X-Qubrics-Event-Id and X-Sendmux-Event-Id headers.")
     occurred_at: StrictStr = Field(description="When the event occurred.")
     team_public_id: StrictStr = Field(description="Team that owns the event.")
     type: StrictStr

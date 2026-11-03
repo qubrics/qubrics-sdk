@@ -371,7 +371,7 @@ class CalendarWebhookEventPayload implements ModelInterface, ArrayAccess, JsonSe
     /**
      * Sets id
      *
-     * @param string $id Stable per-event identifier. Also sent in the X-Sendmux-Event-Id header.
+     * @param string $id Stable per-event identifier. Also sent in the X-Qubrics-Event-Id and X-Sendmux-Event-Id headers.
      *
      * @return $this
      */

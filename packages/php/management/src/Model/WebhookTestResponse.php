@@ -280,7 +280,7 @@ class WebhookTestResponse implements ModelInterface, ArrayAccess, JsonSerializab
     /**
      * Sets event_id
      *
-     * @param string $event_id The event_id attached to the X-Sendmux-Event-Id header of the test delivery.
+     * @param string $event_id The event_id attached to the X-Qubrics-Event-Id and X-Sendmux-Event-Id headers of the test delivery.
      *
      * @return $this
      */

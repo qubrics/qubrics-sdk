@@ -32,16 +32,16 @@ export type ResolvedAuth = {
 
 export const authFlags = {
   "api-key": Flags.string({
-    description: "Sendmux API key. Defaults to SENDMUX_API_KEY.",
+    description: "API key. Defaults to QUBRICS_API_KEY, then SENDMUX_API_KEY for compatibility.",
     helpGroup: "GLOBAL",
   }),
   "base-url": Flags.string({
-    description: "Override the API base URL. Defaults to the SDK surface default or SENDMUX_BASE_URL.",
+    description: "API base URL. Defaults to QUBRICS_BASE_URL, then SENDMUX_BASE_URL for compatibility, then the SDK surface default.",
     helpGroup: "GLOBAL",
   }),
   profile: Flags.string({
     char: "p",
-    description: "Profile name from the local Sendmux CLI config. Defaults to SENDMUX_PROFILE or the configured default profile.",
+    description: "Local CLI profile. Defaults to QUBRICS_PROFILE, then SENDMUX_PROFILE for compatibility, then the configured default profile.",
     helpGroup: "GLOBAL",
   }),
 };
@@ -50,20 +50,20 @@ export abstract class SendmuxCommand extends Command {
   static enableJsonFlag = true;
 
   async resolveAuth(flags: AuthFlags, expectedKind: RequiredApiKeyKind): Promise<ResolvedAuth> {
-    const envApiKey = process.env.SENDMUX_API_KEY || undefined;
-    const accessToken = process.env.SENDMUX_ACCESS_TOKEN || undefined;
-    const envBaseUrl = process.env.SENDMUX_BASE_URL || undefined;
-    const envProfile = process.env.SENDMUX_PROFILE || undefined;
+    const envApiKey = process.env.QUBRICS_API_KEY || process.env.SENDMUX_API_KEY || undefined;
+    const accessToken = process.env.QUBRICS_ACCESS_TOKEN || process.env.SENDMUX_ACCESS_TOKEN || undefined;
+    const envBaseUrl = process.env.QUBRICS_BASE_URL || process.env.SENDMUX_BASE_URL || undefined;
+    const envProfile = process.env.QUBRICS_PROFILE || process.env.SENDMUX_PROFILE || undefined;
 
     if (accessToken && (flags["api-key"] || envApiKey)) {
-      this.error("Provide exactly one of an API key or SENDMUX_ACCESS_TOKEN.", { exit: 2 });
+      this.error("Provide exactly one of an API key or QUBRICS_ACCESS_TOKEN (SENDMUX_ACCESS_TOKEN is also supported).", { exit: 2 });
     }
     if (accessToken) {
       const baseUrl = flags["base-url"] ?? envBaseUrl;
       return {
         accessToken,
         apiKeyKind: "oauth",
-        source: "SENDMUX_ACCESS_TOKEN",
+        source: process.env.QUBRICS_ACCESS_TOKEN ? "QUBRICS_ACCESS_TOKEN" : "SENDMUX_ACCESS_TOKEN",
         ...(baseUrl ? { baseUrl } : {}),
       };
     }
@@ -78,7 +78,7 @@ export abstract class SendmuxCommand extends Command {
       const input: KeyKindInput = {
         apiKey,
         expectedKind,
-        source: flags["api-key"] ? "--api-key" : "SENDMUX_API_KEY",
+        source: flags["api-key"] ? "--api-key" : process.env.QUBRICS_API_KEY ? "QUBRICS_API_KEY" : "SENDMUX_API_KEY",
       };
       if (baseUrl) {
         input.baseUrl = baseUrl;

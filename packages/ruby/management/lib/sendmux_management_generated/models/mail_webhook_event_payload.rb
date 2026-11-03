@@ -17,7 +17,7 @@ module Sendmux::Management::Generated
   class MailWebhookEventPayload < ApiModelBase
     attr_accessor :data
 
-    # Stable per-event identifier. Also sent in the X-Sendmux-Event-Id header.
+    # Stable per-event identifier. Also sent in the X-Qubrics-Event-Id and X-Sendmux-Event-Id headers.
     attr_accessor :id
 
     # When the event occurred.
@@ -26,7 +26,7 @@ module Sendmux::Management::Generated
     # Team that owns the event.
     attr_accessor :team_public_id
 
-    # Dotted event type. Same value as the X-Sendmux-Event-Type header.
+    # Dotted event type. Same value as the X-Qubrics-Event-Type and X-Sendmux-Event-Type headers.
     attr_accessor :type
 
     class EnumAttributeValidator

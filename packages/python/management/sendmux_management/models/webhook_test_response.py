@@ -27,7 +27,7 @@ class WebhookTestResponse(BaseModel):
     """
     WebhookTestResponse
     """ # noqa: E501
-    event_id: StrictStr = Field(description="The event_id attached to the X-Sendmux-Event-Id header of the test delivery.")
+    event_id: StrictStr = Field(description="The event_id attached to the X-Qubrics-Event-Id and X-Sendmux-Event-Id headers of the test delivery.")
     __properties: ClassVar[List[str]] = ["event_id"]
 
     model_config = ConfigDict(

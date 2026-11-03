@@ -17,7 +17,7 @@ module Sendmux::Management::Generated
   class CalendarWebhookEventPayload < ApiModelBase
     attr_accessor :data
 
-    # Stable per-event identifier. Also sent in the X-Sendmux-Event-Id header.
+    # Stable per-event identifier. Also sent in the X-Qubrics-Event-Id and X-Sendmux-Event-Id headers.
     attr_accessor :id
 
     # When the event occurred.

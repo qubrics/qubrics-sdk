@@ -130,6 +130,8 @@ AuthSettings = TypedDict(
     {
         "BearerAuth": BearerAuthSetting,
         "OAuth2": OAuth2AuthSetting,
+        "UploadTokenQubrics": APIKeyAuthSetting,
+        "UploadTokenSendmux": APIKeyAuthSetting,
     },
     total=False,
 )
@@ -195,6 +197,25 @@ class Configuration:
     :param date_format: Date format string for serialization.
 
     :Example:
+
+    API Key Authentication Example.
+    Given the following security scheme in the OpenAPI specification:
+      components:
+        securitySchemes:
+          cookieAuth:         # name for the security scheme
+            type: apiKey
+            in: cookie
+            name: JSESSIONID  # cookie name
+
+    You can programmatically set the cookie:
+
+conf = sendmux_sending.Configuration(
+    api_key={'cookieAuth': 'abc123'}
+    api_key_prefix={'cookieAuth': 'JSESSIONID'}
+)
+
+    The following cookie will be added to the HTTP request:
+       Cookie: JSESSIONID abc123
     """
 
     _default: ClassVar[Optional[Self]] = None
@@ -546,6 +567,24 @@ class Configuration:
                 'in': 'header',
                 'key': 'Authorization',
                 'value': 'Bearer ' + self.access_token
+            }
+        if 'UploadTokenQubrics' in self.api_key:
+            auth['UploadTokenQubrics'] = {
+                'type': 'api_key',
+                'in': 'header',
+                'key': 'X-Qubrics-Upload-Token',
+                'value': self.get_api_key_with_prefix(
+                    'UploadTokenQubrics',
+                ),
+            }
+        if 'UploadTokenSendmux' in self.api_key:
+            auth['UploadTokenSendmux'] = {
+                'type': 'api_key',
+                'in': 'header',
+                'key': 'X-Sendmux-Upload-Token',
+                'value': self.get_api_key_with_prefix(
+                    'UploadTokenSendmux',
+                ),
             }
         return auth
 

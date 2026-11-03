@@ -69,6 +69,7 @@ class WebhookEventData implements ModelInterface, ArrayAccess, JsonSerializable
         'mailbox_id' => 'string',
         'message_id' => 'string',
         'message_id_kind' => 'string',
+        'qubrics_message_id' => 'string',
         'recipients' => 'string[]',
         'reject_reason' => 'string',
         'sender' => 'string',
@@ -92,6 +93,7 @@ class WebhookEventData implements ModelInterface, ArrayAccess, JsonSerializable
         'mailbox_id' => null,
         'message_id' => null,
         'message_id_kind' => null,
+        'qubrics_message_id' => null,
         'recipients' => null,
         'reject_reason' => null,
         'sender' => null,
@@ -115,6 +117,7 @@ class WebhookEventData implements ModelInterface, ArrayAccess, JsonSerializable
         'mailbox_id' => true,
         'message_id' => true,
         'message_id_kind' => true,
+        'qubrics_message_id' => true,
         'recipients' => false,
         'reject_reason' => true,
         'sender' => true,
@@ -208,6 +211,7 @@ class WebhookEventData implements ModelInterface, ArrayAccess, JsonSerializable
         'mailbox_id' => 'mailbox_id',
         'message_id' => 'message_id',
         'message_id_kind' => 'message_id_kind',
+        'qubrics_message_id' => 'qubrics_message_id',
         'recipients' => 'recipients',
         'reject_reason' => 'reject_reason',
         'sender' => 'sender',
@@ -231,6 +235,7 @@ class WebhookEventData implements ModelInterface, ArrayAccess, JsonSerializable
         'mailbox_id' => 'setMailboxId',
         'message_id' => 'setMessageId',
         'message_id_kind' => 'setMessageIdKind',
+        'qubrics_message_id' => 'setQubricsMessageId',
         'recipients' => 'setRecipients',
         'reject_reason' => 'setRejectReason',
         'sender' => 'setSender',
@@ -254,6 +259,7 @@ class WebhookEventData implements ModelInterface, ArrayAccess, JsonSerializable
         'mailbox_id' => 'getMailboxId',
         'message_id' => 'getMessageId',
         'message_id_kind' => 'getMessageIdKind',
+        'qubrics_message_id' => 'getQubricsMessageId',
         'recipients' => 'getRecipients',
         'reject_reason' => 'getRejectReason',
         'sender' => 'getSender',
@@ -354,6 +360,7 @@ class WebhookEventData implements ModelInterface, ArrayAccess, JsonSerializable
         $this->setIfExists('mailbox_id', $data ?? [], null);
         $this->setIfExists('message_id', $data ?? [], null);
         $this->setIfExists('message_id_kind', $data ?? [], null);
+        $this->setIfExists('qubrics_message_id', $data ?? [], null);
         $this->setIfExists('recipients', $data ?? [], null);
         $this->setIfExists('reject_reason', $data ?? [], null);
         $this->setIfExists('sender', $data ?? [], null);
@@ -810,6 +817,40 @@ class WebhookEventData implements ModelInterface, ArrayAccess, JsonSerializable
     }
 
     /**
+     * Gets qubrics_message_id
+     *
+     * @return string|null
+     */
+    public function getQubricsMessageId(): ?string
+    {
+        return $this->container['qubrics_message_id'];
+    }
+
+    /**
+     * Sets qubrics_message_id
+     *
+     * @param string|null $qubrics_message_id Qubrics message correlation ID, equal to sendmux_message_id. May be absent from older retained events.
+     *
+     * @return $this
+     */
+    public function setQubricsMessageId(?string $qubrics_message_id): static
+    {
+        if (is_null($qubrics_message_id)) {
+            array_push($this->openAPINullablesSetToNull, 'qubrics_message_id');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('qubrics_message_id', $nullablesSetToNull);
+            if ($index !== false) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['qubrics_message_id'] = $qubrics_message_id;
+
+        return $this;
+    }
+
+    /**
      * Gets recipients
      *
      * @return string[]
@@ -917,7 +958,7 @@ class WebhookEventData implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets sendmux_message_id
      *
-     * @param string|null $sendmux_message_id Qubrics message correlation ID for outbound sending feedback when available.
+     * @param string|null $sendmux_message_id Compatibility alias of qubrics_message_id for outbound sending feedback.
      *
      * @return $this
      */

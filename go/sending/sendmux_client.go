@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"net/http"
+	"os"
 
 	"sendmux.ai/go/v3/core"
 )
@@ -59,6 +60,9 @@ func WithRetryOptions(options core.RetryOptions) SendmuxOption {
 
 // New returns a Sendmux Sending API client authenticated with an API key.
 func New(apiKey string, opts ...SendmuxOption) (*Client, error) {
+	if apiKey == "" {
+		apiKey = environmentValue("API_KEY", "")
+	}
 	if err := core.ValidateAPIKey(apiKey, core.KeySurfaceSending); err != nil {
 		return nil, err
 	}
@@ -67,6 +71,9 @@ func New(apiKey string, opts ...SendmuxOption) (*Client, error) {
 
 // NewWithAccessToken returns a client authenticated with an OAuth access token.
 func NewWithAccessToken(token string, opts ...SendmuxOption) (*Client, error) {
+	if token == "" {
+		token = environmentValue("ACCESS_TOKEN", "")
+	}
 	if err := core.ValidateAccessToken(token); err != nil {
 		return nil, err
 	}
@@ -79,7 +86,7 @@ func NewWithTokenProvider(provider func(context.Context) (string, error), opts .
 	if provider == nil {
 		return nil, errors.New("sendmux: token provider is required")
 	}
-	config := sendmuxClientConfig{baseURL: DefaultBaseURL}
+	config := sendmuxClientConfig{baseURL: environmentValue("BASE_URL", DefaultBaseURL)}
 	for _, opt := range opts {
 		opt(&config)
 	}
@@ -88,6 +95,16 @@ func NewWithTokenProvider(provider func(context.Context) (string, error), opts .
 		securitySource{provider: provider},
 		WithClient(core.NewHTTPClient(config.httpClient, config.retryOptions)),
 	)
+}
+
+func environmentValue(suffix, fallback string) string {
+	if value := os.Getenv("QUBRICS_" + suffix); value != "" {
+		return value
+	}
+	if value := os.Getenv("SENDMUX_" + suffix); value != "" {
+		return value
+	}
+	return fallback
 }
 
 // OptionalHeader returns a generated optional string header value.

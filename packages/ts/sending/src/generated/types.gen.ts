@@ -387,9 +387,13 @@ export type SendingCompleteAttachmentUploadData = {
     body: Blob | File;
     headers: {
         /**
-         * Short-lived upload token returned by POST /emails/attachment-uploads.
+         * Short-lived upload token returned by POST /emails/attachment-uploads. Send this header or X-Sendmux-Upload-Token. If both are sent, their values must match.
          */
-        'X-Sendmux-Upload-Token': string;
+        'X-Qubrics-Upload-Token'?: string;
+        /**
+         * Compatibility alias for X-Qubrics-Upload-Token, retained indefinitely.
+         */
+        'X-Sendmux-Upload-Token'?: string;
         /**
          * Exact number of bytes in the binary request body.
          */

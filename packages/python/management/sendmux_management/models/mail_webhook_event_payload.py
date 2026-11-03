@@ -29,10 +29,10 @@ class MailWebhookEventPayload(BaseModel):
     MailWebhookEventPayload
     """ # noqa: E501
     data: WebhookEventData
-    id: StrictStr = Field(description="Stable per-event identifier. Also sent in the X-Sendmux-Event-Id header.")
+    id: StrictStr = Field(description="Stable per-event identifier. Also sent in the X-Qubrics-Event-Id and X-Sendmux-Event-Id headers.")
     occurred_at: StrictStr = Field(description="When the event occurred.")
     team_public_id: StrictStr = Field(description="Team that owns the event.")
-    type: StrictStr = Field(description="Dotted event type. Same value as the X-Sendmux-Event-Type header.")
+    type: StrictStr = Field(description="Dotted event type. Same value as the X-Qubrics-Event-Type and X-Sendmux-Event-Type headers.")
     __properties: ClassVar[List[str]] = ["data", "id", "occurred_at", "team_public_id", "type"]
 
     @field_validator('type')

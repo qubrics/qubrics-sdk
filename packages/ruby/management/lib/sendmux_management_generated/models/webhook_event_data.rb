@@ -45,6 +45,9 @@ module Sendmux::Management::Generated
     # `provider` for sending feedback IDs; `rfc5322` for inbound email Message-ID header values.
     attr_accessor :message_id_kind
 
+    # Qubrics message correlation ID, equal to sendmux_message_id. May be absent from older retained events.
+    attr_accessor :qubrics_message_id
+
     # All affected recipients. Empty for synthetic test events.
     attr_accessor :recipients
 
@@ -54,7 +57,7 @@ module Sendmux::Management::Generated
     # Sender/envelope-from address when available.
     attr_accessor :sender
 
-    # Qubrics message correlation ID for outbound sending feedback when available.
+    # Compatibility alias of qubrics_message_id for outbound sending feedback.
     attr_accessor :sendmux_message_id
 
     # Target webhook ID for synthetic `sendmux.test` payloads.
@@ -95,6 +98,7 @@ module Sendmux::Management::Generated
         :'mailbox_id' => :'mailbox_id',
         :'message_id' => :'message_id',
         :'message_id_kind' => :'message_id_kind',
+        :'qubrics_message_id' => :'qubrics_message_id',
         :'recipients' => :'recipients',
         :'reject_reason' => :'reject_reason',
         :'sender' => :'sender',
@@ -126,6 +130,7 @@ module Sendmux::Management::Generated
         :'mailbox_id' => :'String',
         :'message_id' => :'String',
         :'message_id_kind' => :'String',
+        :'qubrics_message_id' => :'String',
         :'recipients' => :'Array<String>',
         :'reject_reason' => :'String',
         :'sender' => :'String',
@@ -147,6 +152,7 @@ module Sendmux::Management::Generated
         :'mailbox_id',
         :'message_id',
         :'message_id_kind',
+        :'qubrics_message_id',
         :'reject_reason',
         :'sender',
         :'sendmux_message_id',
@@ -228,6 +234,10 @@ module Sendmux::Management::Generated
         self.message_id_kind = attributes[:'message_id_kind']
       else
         self.message_id_kind = nil
+      end
+
+      if attributes.key?(:'qubrics_message_id')
+        self.qubrics_message_id = attributes[:'qubrics_message_id']
       end
 
       if attributes.key?(:'recipients')
@@ -332,6 +342,7 @@ module Sendmux::Management::Generated
           mailbox_id == o.mailbox_id &&
           message_id == o.message_id &&
           message_id_kind == o.message_id_kind &&
+          qubrics_message_id == o.qubrics_message_id &&
           recipients == o.recipients &&
           reject_reason == o.reject_reason &&
           sender == o.sender &&
@@ -348,7 +359,7 @@ module Sendmux::Management::Generated
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [bounce_subtype, bounce_type, complaint_subtype, complaint_type, delay_expires_at, delay_type, is_spam, mailbox_id, message_id, message_id_kind, recipients, reject_reason, sender, sendmux_message_id, webhook_id].hash
+      [bounce_subtype, bounce_type, complaint_subtype, complaint_type, delay_expires_at, delay_type, is_spam, mailbox_id, message_id, message_id_kind, qubrics_message_id, recipients, reject_reason, sender, sendmux_message_id, webhook_id].hash
     end
 
     # Builds the object from hash

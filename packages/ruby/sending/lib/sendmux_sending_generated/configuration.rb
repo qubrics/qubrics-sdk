@@ -262,6 +262,20 @@ module Sendmux::Sending::Generated
             key: 'Authorization',
             value: "Bearer #{access_token_with_refresh}"
           },
+        'UploadTokenQubrics' =>
+          {
+            type: 'api_key',
+            in: 'header',
+            key: 'X-Qubrics-Upload-Token',
+            value: api_key_with_prefix('X-Qubrics-Upload-Token')
+          },
+        'UploadTokenSendmux' =>
+          {
+            type: 'api_key',
+            in: 'header',
+            key: 'X-Sendmux-Upload-Token',
+            value: api_key_with_prefix('X-Sendmux-Upload-Token')
+          },
       }
     end
 

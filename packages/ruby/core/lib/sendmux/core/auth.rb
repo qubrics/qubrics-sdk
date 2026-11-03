@@ -10,6 +10,7 @@ module Sendmux
       AGENT_PREFIX = 'smx_agent_'
 
       def self.configure_bearer(configuration, api_key, expected_surface, base_url: nil, access_token: nil)
+        api_key, access_token = environment_credentials(api_key, access_token)
         raise ArgumentError, 'Provide exactly one of api_key or access_token' if api_key.nil? == access_token.nil?
         unless configuration.respond_to?(:access_token=)
           raise ArgumentError, 'Generated configuration does not support bearer access tokens'
@@ -25,6 +26,20 @@ module Sendmux
         configure_base_url(configuration, base_url) if base_url && !base_url.empty?
         configuration
       end
+
+      def self.environment_credentials(api_key, access_token)
+        return [api_key, access_token] unless api_key.nil? && access_token.nil?
+
+        [environment_credential('API_KEY'), environment_credential('ACCESS_TOKEN')]
+      end
+      private_class_method :environment_credentials
+
+      def self.environment_credential(name)
+        value = ENV.fetch("QUBRICS_#{name}", nil)
+        value = nil if value&.empty?
+        value || ENV.fetch("SENDMUX_#{name}", nil)
+      end
+      private_class_method :environment_credential
 
       def self.configure_access_token(configuration, access_token)
         if access_token.respond_to?(:call)

@@ -104,6 +104,7 @@ for (const surface of surfaces) {
   rmSync(join(packageDir, "src"), { force: true, recursive: true });
   cpSync(join(generatedRoot, "src"), join(packageDir, "src"), { recursive: true });
   patchSerializer(surface, packageDir);
+  if (surface.name === "sending") patchSendingUploadArguments(packageDir);
   writeDeprecatedModelAliases(surface, packageDir);
   writeClientFactory(surface, packageDir);
 }
@@ -388,6 +389,46 @@ function patchSerializer(surface, packageDir) {
   writeFileSync(serializerPath, serializer);
 }
 
+function patchSendingUploadArguments(packageDir) {
+  const filePath = join(packageDir, "src", "Api", "AttachmentsApi.php");
+  let source = readFileSync(filePath, "utf8");
+  let signatures = 0;
+  source = source.replace(
+    /public function sendingCompleteAttachmentUpload(?:WithHttpInfo|AsyncWithHttpInfo|Async|Request)?\([\s\S]*?\n    \)/g,
+    (signature) => {
+      signatures++;
+      signature = replaceOnce(signature, "int $content_length,", "int|string $content_length,", filePath);
+      signature = replaceOnce(signature, "string $upload_id,", "string|int $upload_id,", filePath);
+      signature = replaceOnce(signature, "\\SplFileObject $body,", "\\SplFileObject|string $body,", filePath);
+      return replaceOnce(signature, "?string $x_qubrics_upload_token =", "\\SplFileObject|string|null $x_qubrics_upload_token =", filePath);
+    },
+  );
+  if (signatures !== 5) throw new Error(`Expected five delegated upload methods in ${filePath}, found ${signatures}`);
+  const requestSignature = source.match(/public function sendingCompleteAttachmentUploadRequest\([\s\S]*?\n    \): Request\n    \{/);
+  if (!requestSignature) throw new Error(`Missing delegated upload request method in ${filePath}`);
+  source = replaceOnce(
+    source,
+    requestSignature[0],
+    requestSignature[0] + String.raw`
+        if ($x_qubrics_upload_token instanceof \SplFileObject && is_string($body)) {
+            [$content_length, $upload_id, $body, $x_sendmux_upload_token, $contentType] = [
+                $upload_id, $body, $x_qubrics_upload_token, (string) $content_length,
+                $x_sendmux_upload_token ?? $contentType,
+            ];
+            $x_qubrics_upload_token = null;
+        }
+        // Reapply the original parameter types after normalising the legacy positional form.
+        [$content_length, $upload_id, $body, $x_qubrics_upload_token] = (
+            static fn (int $length, string $id, \SplFileObject $file, ?string $token): array => [
+                $length, $id, $file, $token,
+            ]
+        )($content_length, $upload_id, $body, $x_qubrics_upload_token);
+`,
+    filePath,
+  );
+  writeFileSync(filePath, source);
+}
+
 function replaceOnce(source, from, to, filePath) {
   if (!source.includes(from)) {
     throw new Error(`Could not find expected generated snippet in ${filePath}`);
@@ -473,8 +514,14 @@ use Sendmux\\Core\\RetryOptions;
 
 final class ClientFactory
 {
-    public static function configuration(string $apiKey, ?string $baseUrl = null): Configuration
+    public static function configuration(?string $apiKey = null, ?string $baseUrl = null): Configuration
     {
+        $qubricsApiKey = getenv('QUBRICS_API_KEY');
+        $apiKey ??= $qubricsApiKey !== false && $qubricsApiKey !== ''
+            ? $qubricsApiKey : (getenv('SENDMUX_API_KEY') ?: '');
+        $qubricsBaseUrl = getenv('QUBRICS_BASE_URL');
+        $baseUrl ??= $qubricsBaseUrl !== false && $qubricsBaseUrl !== ''
+            ? $qubricsBaseUrl : (getenv('SENDMUX_BASE_URL') ?: null);
         $configuration = new Configuration();
         if ($baseUrl !== null && $baseUrl !== '') {
             $configuration->setHost($baseUrl);
@@ -507,7 +554,7 @@ ${methods}
 
 function createApiFactoryMethod(apiClass) {
   return `    public static function create${apiClass}(
-        string $apiKey,
+        ?string $apiKey = null,
         ?string $baseUrl = null,
         ?RetryOptions $retryOptions = null
     ): ${apiClass} {
@@ -523,6 +570,9 @@ function createApiFactoryMethod(apiClass) {
         ?string $baseUrl = null,
         ?RetryOptions $retryOptions = null
     ): ${apiClass} {
+        $qubricsBaseUrl = getenv('QUBRICS_BASE_URL');
+        $baseUrl ??= $qubricsBaseUrl !== false && $qubricsBaseUrl !== ''
+            ? $qubricsBaseUrl : (getenv('SENDMUX_BASE_URL') ?: null);
         $configuration = new Configuration();
         if ($baseUrl !== null && $baseUrl !== '') {
             $configuration->setHost($baseUrl);

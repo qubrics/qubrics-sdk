@@ -36,7 +36,7 @@ export type WebhookFilters = {
 
 export type WebhookTestResponse = {
     /**
-     * The event_id attached to the X-Sendmux-Event-Id header of the test delivery.
+     * The event_id attached to the X-Qubrics-Event-Id and X-Sendmux-Event-Id headers of the test delivery.
      */
     event_id: string;
 };
@@ -77,7 +77,7 @@ export type WebhookSubscriptionWithSecret = {
      */
     name: string | null;
     /**
-     * Signing secret for both webhook signature headers. X-Sendmux-Signature signs the exact body bytes. X-Sendmux-Signature-V2 contains v1=<hex HMAC-SHA256> and signs X-Sendmux-Timestamp (Unix seconds), a full stop, then the exact body bytes. Check timestamp freshness and compare signatures in constant time before parsing the body. Store this secret securely; it is returned only on creation and rotation. Use POST /webhooks/{id}/rotate-secret to issue a new one.
+     * Signing secret for both webhook signature versions. X-Qubrics-Signature signs the exact body bytes. X-Qubrics-Signature-V2 contains v1=<hex HMAC-SHA256> and signs X-Qubrics-Timestamp (Unix seconds), a full stop, then the exact body bytes. The X-Sendmux-Signature, X-Sendmux-Signature-V2 and X-Sendmux-Timestamp headers carry the same values and remain supported indefinitely. Check timestamp freshness and compare signatures in constant time before parsing the body. Store this secret securely. It is returned only on creation and rotation. Use POST /webhooks/{id}/rotate-secret to issue a new one.
      */
     secret: string;
     /**
@@ -179,7 +179,7 @@ export type CalendarWebhookEventData = {
 export type CalendarWebhookEventPayload = {
     data: CalendarWebhookEventData;
     /**
-     * Stable per-event identifier. Also sent in the X-Sendmux-Event-Id header.
+     * Stable per-event identifier. Also sent in the X-Qubrics-Event-Id and X-Sendmux-Event-Id headers.
      */
     id: string;
     /**
@@ -235,6 +235,10 @@ export type WebhookEventData = {
      */
     message_id_kind: 'provider' | 'rfc5322' | null;
     /**
+     * Qubrics message correlation ID, equal to sendmux_message_id. May be absent from older retained events.
+     */
+    qubrics_message_id?: string | null;
+    /**
      * All affected recipients. Empty for synthetic test events.
      */
     recipients: Array<string>;
@@ -247,7 +251,7 @@ export type WebhookEventData = {
      */
     sender: string | null;
     /**
-     * Qubrics message correlation ID for outbound sending feedback when available.
+     * Compatibility alias of qubrics_message_id for outbound sending feedback.
      */
     sendmux_message_id: string | null;
     /**
@@ -259,7 +263,7 @@ export type WebhookEventData = {
 export type MailWebhookEventPayload = {
     data: WebhookEventData;
     /**
-     * Stable per-event identifier. Also sent in the X-Sendmux-Event-Id header.
+     * Stable per-event identifier. Also sent in the X-Qubrics-Event-Id and X-Sendmux-Event-Id headers.
      */
     id: string;
     /**
@@ -271,7 +275,7 @@ export type MailWebhookEventPayload = {
      */
     team_public_id: string;
     /**
-     * Dotted event type. Same value as the X-Sendmux-Event-Type header.
+     * Dotted event type. Same value as the X-Qubrics-Event-Type and X-Sendmux-Event-Type headers.
      */
     type: 'message.delivered' | 'message.bounced' | 'message.complained' | 'message.rejected' | 'message.delivery_delayed' | 'message.received' | 'message.received.spam' | 'sendmux.test';
 };

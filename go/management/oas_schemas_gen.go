@@ -762,7 +762,7 @@ func (s *CalendarWebhookEventDataResource) UnmarshalText(data []byte) error {
 // Ref: #/components/schemas/CalendarWebhookEventPayload
 type CalendarWebhookEventPayload struct {
 	Data CalendarWebhookEventData `json:"data"`
-	// Stable per-event identifier. Also sent in the X-Sendmux-Event-Id header.
+	// Stable per-event identifier. Also sent in the X-Qubrics-Event-Id and X-Sendmux-Event-Id headers.
 	ID string `json:"id"`
 	// When the event occurred.
 	OccurredAt string `json:"occurred_at"`
@@ -3944,13 +3944,13 @@ func (IncomingLogItemResponseOk) AllValues() []IncomingLogItemResponseOk {
 // Ref: #/components/schemas/MailWebhookEventPayload
 type MailWebhookEventPayload struct {
 	Data WebhookEventData `json:"data"`
-	// Stable per-event identifier. Also sent in the X-Sendmux-Event-Id header.
+	// Stable per-event identifier. Also sent in the X-Qubrics-Event-Id and X-Sendmux-Event-Id headers.
 	ID string `json:"id"`
 	// When the event occurred.
 	OccurredAt string `json:"occurred_at"`
 	// Team that owns the event.
 	TeamPublicID string `json:"team_public_id"`
-	// Dotted event type. Same value as the X-Sendmux-Event-Type header.
+	// Dotted event type. Same value as the X-Qubrics-Event-Type and X-Sendmux-Event-Type headers.
 	Type MailWebhookEventPayloadType `json:"type"`
 }
 
@@ -4004,7 +4004,7 @@ func (s *MailWebhookEventPayload) SetType(val MailWebhookEventPayloadType) {
 	s.Type = val
 }
 
-// Dotted event type. Same value as the X-Sendmux-Event-Type header.
+// Dotted event type. Same value as the X-Qubrics-Event-Type and X-Sendmux-Event-Type headers.
 type MailWebhookEventPayloadType string
 
 const (
@@ -18336,13 +18336,16 @@ type WebhookEventData struct {
 	MessageID NilString `json:"message_id"`
 	// `provider` for sending feedback IDs; `rfc5322` for inbound email Message-ID header values.
 	MessageIDKind NilWebhookEventDataMessageIDKind `json:"message_id_kind"`
+	// Qubrics message correlation ID, equal to sendmux_message_id. May be absent from older retained
+	// events.
+	QubricsMessageID OptNilString `json:"qubrics_message_id"`
 	// All affected recipients. Empty for synthetic test events.
 	Recipients []string `json:"recipients"`
 	// Reject reason for `message.rejected` events.
 	RejectReason NilString `json:"reject_reason"`
 	// Sender/envelope-from address when available.
 	Sender NilString `json:"sender"`
-	// Qubrics message correlation ID for outbound sending feedback when available.
+	// Compatibility alias of qubrics_message_id for outbound sending feedback.
 	SendmuxMessageID NilString `json:"sendmux_message_id"`
 	// Target webhook ID for synthetic `sendmux.test` payloads.
 	WebhookID NilString `json:"webhook_id"`
@@ -18396,6 +18399,11 @@ func (s *WebhookEventData) GetMessageID() NilString {
 // GetMessageIDKind returns the value of MessageIDKind.
 func (s *WebhookEventData) GetMessageIDKind() NilWebhookEventDataMessageIDKind {
 	return s.MessageIDKind
+}
+
+// GetQubricsMessageID returns the value of QubricsMessageID.
+func (s *WebhookEventData) GetQubricsMessageID() OptNilString {
+	return s.QubricsMessageID
 }
 
 // GetRecipients returns the value of Recipients.
@@ -18471,6 +18479,11 @@ func (s *WebhookEventData) SetMessageID(val NilString) {
 // SetMessageIDKind sets the value of MessageIDKind.
 func (s *WebhookEventData) SetMessageIDKind(val NilWebhookEventDataMessageIDKind) {
 	s.MessageIDKind = val
+}
+
+// SetQubricsMessageID sets the value of QubricsMessageID.
+func (s *WebhookEventData) SetQubricsMessageID(val OptNilString) {
+	s.QubricsMessageID = val
 }
 
 // SetRecipients sets the value of Recipients.
@@ -19183,11 +19196,13 @@ type WebhookSubscriptionWithSecret struct {
 	// Optional human-friendly label used in dashboard list/detail pages. May be `null` for subscriptions
 	// created without a name.
 	Name NilString `json:"name"`
-	// Signing secret for both webhook signature headers. X-Sendmux-Signature signs the exact body bytes.
-	// X-Sendmux-Signature-V2 contains v1=<hex HMAC-SHA256> and signs X-Sendmux-Timestamp (Unix seconds),
-	// a full stop, then the exact body bytes. Check timestamp freshness and compare signatures in
-	// constant time before parsing the body. Store this secret securely; it is returned only on creation
-	// and rotation. Use POST /webhooks/{id}/rotate-secret to issue a new one.
+	// Signing secret for both webhook signature versions. X-Qubrics-Signature signs the exact body bytes.
+	//  X-Qubrics-Signature-V2 contains v1=<hex HMAC-SHA256> and signs X-Qubrics-Timestamp (Unix seconds),
+	//  a full stop, then the exact body bytes. The X-Sendmux-Signature, X-Sendmux-Signature-V2 and
+	// X-Sendmux-Timestamp headers carry the same values and remain supported indefinitely. Check
+	// timestamp freshness and compare signatures in constant time before parsing the body. Store this
+	// secret securely. It is returned only on creation and rotation. Use POST
+	// /webhooks/{id}/rotate-secret to issue a new one.
 	Secret string `json:"secret"`
 	// ISO 8601 last-modified timestamp.
 	UpdatedAt string `json:"updated_at"`
@@ -19507,7 +19522,8 @@ func (WebhookSubscriptionWithSecretResponseOk) AllValues() []WebhookSubscription
 
 // Ref: #/components/schemas/WebhookTestResponse
 type WebhookTestResponse struct {
-	// The event_id attached to the X-Sendmux-Event-Id header of the test delivery.
+	// The event_id attached to the X-Qubrics-Event-Id and X-Sendmux-Event-Id headers of the test
+	// delivery.
 	EventID string `json:"event_id"`
 }
 

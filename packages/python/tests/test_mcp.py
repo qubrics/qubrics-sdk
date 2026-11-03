@@ -241,12 +241,16 @@ def test_toolsets_are_curated_and_key_split() -> None:
         management_names = {tool.name for tool in management_tools}
         sending_names = {tool.name for tool in sending_tools}
 
-        assert mailbox_names == {tool.name for tool in TOOLS_BY_SURFACE["mailbox"]}
-        assert management_names == {tool.name for tool in TOOLS_BY_SURFACE["management"]}
-        assert sending_names == {tool.name for tool in TOOLS_BY_SURFACE["sending"]}
-        assert mailbox_names == EXPECTED_TOOL_NAMES_BY_SURFACE["mailbox"]
-        assert management_names == EXPECTED_TOOL_NAMES_BY_SURFACE["management"]
-        assert sending_names == EXPECTED_TOOL_NAMES_BY_SURFACE["sending"]
+        names_by_surface: dict[Surface, set[str]] = {
+            "mailbox": mailbox_names,
+            "management": management_names,
+            "sending": sending_names,
+        }
+        for surface, names in names_by_surface.items():
+            originals = {tool.name for tool in TOOLS_BY_SURFACE[surface]}
+            expected = EXPECTED_TOOL_NAMES_BY_SURFACE[surface]
+            assert names == originals | {f"qubrics_{name}" for name in originals}
+            assert names == expected | {f"qubrics_{name}" for name in expected}
 
         assert "mailbox_send_message" in mailbox_names
         assert "mailbox_list_messages" in mailbox_names
@@ -277,16 +281,19 @@ def test_curated_tools_have_complete_mcp_quality_metadata() -> None:
             async with Client(server) as client:
                 tools.extend(await client.list_tools())
 
-        assert len(tools) == 75
-        assert {tool.name for tool in tools if tool.output_schema is None} == NO_OUTPUT_SCHEMA_TOOL_NAMES
+        assert len(tools) == 150
+        assert {tool.name for tool in tools if tool.output_schema is None} == (
+            NO_OUTPUT_SCHEMA_TOOL_NAMES | {f"qubrics_{name}" for name in NO_OUTPUT_SCHEMA_TOOL_NAMES}
+        )
 
         for tool in tools:
+            original_name = tool.name.removeprefix("qubrics_")
             annotations = tool.annotations
             assert annotations is not None, tool.name
-            assert annotations.read_only_hint is (tool.name in READ_ONLY_TOOL_NAMES)
-            assert annotations.destructive_hint is (tool.name in DESTRUCTIVE_TOOL_NAMES)
+            assert annotations.read_only_hint is (original_name in READ_ONLY_TOOL_NAMES)
+            assert annotations.destructive_hint is (original_name in DESTRUCTIVE_TOOL_NAMES)
             assert annotations.idempotent_hint is (
-                tool.name in READ_ONLY_TOOL_NAMES or tool.name in IDEMPOTENT_WRITE_TOOL_NAMES
+                original_name in READ_ONLY_TOOL_NAMES or original_name in IDEMPOTENT_WRITE_TOOL_NAMES
             )
             assert annotations.open_world_hint is True
             if tool.output_schema is not None:

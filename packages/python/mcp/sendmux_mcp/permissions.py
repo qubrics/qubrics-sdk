@@ -107,7 +107,7 @@ def api_key_has_permission(required: str, granted_permissions: tuple[str, ...]) 
 
 
 def permissions_for_tool(tool_name: str) -> PermissionRequirement:
-    permissions = TOOL_PERMISSION_REQUIREMENTS.get(tool_name)
+    permissions = TOOL_PERMISSION_REQUIREMENTS.get(tool_name.removeprefix("qubrics_"))
     if permissions is None:
         raise ValueError(f"unknown MCP tool: {tool_name}")
     return permissions
@@ -140,7 +140,7 @@ def tool_permission_auth_check(ctx: AuthContext) -> bool:
 
     try:
         required_permissions = permissions_for_tool(component_name)
-        required_surface = TOOL_SURFACES[component_name]
+        required_surface = TOOL_SURFACES[component_name.removeprefix("qubrics_")]
     except ValueError:
         return False
     except KeyError:

@@ -5252,8 +5252,15 @@ export const operations = {
     "description": "Upload bytes to an attachment upload URL",
     "headerParams": [
       {
+        "name": "X-Qubrics-Upload-Token",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      {
         "name": "X-Sendmux-Upload-Token",
-        "required": true,
+        "required": false,
         "schema": {
           "type": "string"
         }

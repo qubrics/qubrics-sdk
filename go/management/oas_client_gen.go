@@ -427,8 +427,8 @@ type Invoker interface {
 	//
 	// Publishes a synthetic `sendmux.test` event to this webhook subscription. The subscription must
 	// include `"sendmux.test"` in `event_types`, and mailbox filters do not block the test delivery.
-	// Returns the generated `event_id` so you can correlate the `X-Sendmux-Event-Id` header on your
-	// endpoint.
+	// Returns the generated `event_id` so you can correlate the `X-Qubrics-Event-Id` or
+	// `X-Sendmux-Event-Id` header on your endpoint.
 	// Supply an `Idempotency-Key` header to safely retry on network errors — replays under the same
 	// key return the original `event_id` rather than publishing a second test event.
 	//
@@ -7815,8 +7815,8 @@ func (c *Client) sendManagementTestProvider(ctx context.Context, params Manageme
 //
 // Publishes a synthetic `sendmux.test` event to this webhook subscription. The subscription must
 // include `"sendmux.test"` in `event_types`, and mailbox filters do not block the test delivery.
-// Returns the generated `event_id` so you can correlate the `X-Sendmux-Event-Id` header on your
-// endpoint.
+// Returns the generated `event_id` so you can correlate the `X-Qubrics-Event-Id` or
+// `X-Sendmux-Event-Id` header on your endpoint.
 // Supply an `Idempotency-Key` header to safely retry on network errors — replays under the same
 // key return the original `event_id` rather than publishing a second test event.
 //

@@ -35,7 +35,7 @@ module Sendmux::Management::Generated
     # Optional human-friendly label used in dashboard list/detail pages. May be `null` for subscriptions created without a name.
     attr_accessor :name
 
-    # Signing secret for both webhook signature headers. X-Sendmux-Signature signs the exact body bytes. X-Sendmux-Signature-V2 contains v1=<hex HMAC-SHA256> and signs X-Sendmux-Timestamp (Unix seconds), a full stop, then the exact body bytes. Check timestamp freshness and compare signatures in constant time before parsing the body. Store this secret securely; it is returned only on creation and rotation. Use POST /webhooks/{id}/rotate-secret to issue a new one.
+    # Signing secret for both webhook signature versions. X-Qubrics-Signature signs the exact body bytes. X-Qubrics-Signature-V2 contains v1=<hex HMAC-SHA256> and signs X-Qubrics-Timestamp (Unix seconds), a full stop, then the exact body bytes. The X-Sendmux-Signature, X-Sendmux-Signature-V2 and X-Sendmux-Timestamp headers carry the same values and remain supported indefinitely. Check timestamp freshness and compare signatures in constant time before parsing the body. Store this secret securely. It is returned only on creation and rotation. Use POST /webhooks/{id}/rotate-secret to issue a new one.
     attr_accessor :secret
 
     # ISO 8601 last-modified timestamp

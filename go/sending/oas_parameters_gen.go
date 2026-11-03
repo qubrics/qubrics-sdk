@@ -17,7 +17,10 @@ import (
 
 // SendingCompleteAttachmentUploadParams is parameters of sendingCompleteAttachmentUpload operation.
 type SendingCompleteAttachmentUploadParams struct {
-	// Short-lived upload token returned by POST /emails/attachment-uploads.
+	// Short-lived upload token returned by POST /emails/attachment-uploads. Send this header or
+	// X-Sendmux-Upload-Token. If both are sent, their values must match.
+	XQubricsUploadToken OptString
+	// Compatibility alias for X-Qubrics-Upload-Token, retained indefinitely.
 	XSendmuxUploadToken string
 	// Exact number of bytes in the binary request body.
 	ContentLength int64
@@ -28,10 +31,21 @@ type SendingCompleteAttachmentUploadParams struct {
 func unpackSendingCompleteAttachmentUploadParams(packed middleware.Parameters) (params SendingCompleteAttachmentUploadParams) {
 	{
 		key := middleware.ParameterKey{
+			Name: "X-Qubrics-Upload-Token",
+			In:   "header",
+		}
+		if v, ok := packed[key]; ok {
+			params.XQubricsUploadToken = v.(OptString)
+		}
+	}
+	{
+		key := middleware.ParameterKey{
 			Name: "X-Sendmux-Upload-Token",
 			In:   "header",
 		}
-		params.XSendmuxUploadToken = packed[key].(string)
+		if v, ok := packed[key]; ok {
+			params.XSendmuxUploadToken = v.(string)
+		}
 	}
 	{
 		key := middleware.ParameterKey{
@@ -52,6 +66,45 @@ func unpackSendingCompleteAttachmentUploadParams(packed middleware.Parameters) (
 
 func decodeSendingCompleteAttachmentUploadParams(args [1]string, argsEscaped bool, r *http.Request) (params SendingCompleteAttachmentUploadParams, _ error) {
 	h := uri.NewHeaderDecoder(r.Header)
+	// Decode header: X-Qubrics-Upload-Token.
+	if err := func() error {
+		cfg := uri.HeaderParameterDecodingConfig{
+			Name:    "X-Qubrics-Upload-Token",
+			Explode: false,
+		}
+		if err := h.HasParam(cfg); err == nil {
+			if err := h.DecodeParam(cfg, func(d uri.Decoder) error {
+				var paramsDotXQubricsUploadTokenVal string
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToString(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotXQubricsUploadTokenVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.XQubricsUploadToken.SetTo(paramsDotXQubricsUploadTokenVal)
+				return nil
+			}); err != nil {
+				return err
+			}
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "X-Qubrics-Upload-Token",
+			In:   "header",
+			Err:  err,
+		}
+	}
 	// Decode header: X-Sendmux-Upload-Token.
 	if err := func() error {
 		cfg := uri.HeaderParameterDecodingConfig{
@@ -60,23 +113,28 @@ func decodeSendingCompleteAttachmentUploadParams(args [1]string, argsEscaped boo
 		}
 		if err := h.HasParam(cfg); err == nil {
 			if err := h.DecodeParam(cfg, func(d uri.Decoder) error {
-				val, err := d.DecodeValue()
-				if err != nil {
+				var paramsDotXSendmuxUploadTokenVal string
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToString(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotXSendmuxUploadTokenVal = c
+					return nil
+				}(); err != nil {
 					return err
 				}
-
-				c, err := conv.ToString(val)
-				if err != nil {
-					return err
-				}
-
-				params.XSendmuxUploadToken = c
+				params.XSendmuxUploadToken = paramsDotXSendmuxUploadTokenVal
 				return nil
 			}); err != nil {
 				return err
 			}
-		} else {
-			return err
 		}
 		return nil
 	}(); err != nil {

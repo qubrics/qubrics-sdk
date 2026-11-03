@@ -385,7 +385,7 @@ class MailWebhookEventPayload implements ModelInterface, ArrayAccess, JsonSerial
     /**
      * Sets id
      *
-     * @param string $id Stable per-event identifier. Also sent in the X-Sendmux-Event-Id header.
+     * @param string $id Stable per-event identifier. Also sent in the X-Qubrics-Event-Id and X-Sendmux-Event-Id headers.
      *
      * @return $this
      */
@@ -466,7 +466,7 @@ class MailWebhookEventPayload implements ModelInterface, ArrayAccess, JsonSerial
     /**
      * Sets type
      *
-     * @param string $type Dotted event type. Same value as the X-Sendmux-Event-Type header.
+     * @param string $type Dotted event type. Same value as the X-Qubrics-Event-Type and X-Sendmux-Event-Type headers.
      *
      * @return $this
      */

@@ -34282,6 +34282,12 @@ func (s *WebhookEventData) encodeFields(e *jx.Encoder) {
 		s.MessageIDKind.Encode(e)
 	}
 	{
+		if s.QubricsMessageID.Set {
+			e.FieldStart("qubrics_message_id")
+			s.QubricsMessageID.Encode(e)
+		}
+	}
+	{
 		e.FieldStart("recipients")
 		e.ArrStart()
 		for _, elem := range s.Recipients {
@@ -34307,7 +34313,7 @@ func (s *WebhookEventData) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfWebhookEventData = [15]string{
+var jsonFieldsNameOfWebhookEventData = [16]string{
 	0:  "bounce_subtype",
 	1:  "bounce_type",
 	2:  "complaint_subtype",
@@ -34318,11 +34324,12 @@ var jsonFieldsNameOfWebhookEventData = [15]string{
 	7:  "mailbox_id",
 	8:  "message_id",
 	9:  "message_id_kind",
-	10: "recipients",
-	11: "reject_reason",
-	12: "sender",
-	13: "sendmux_message_id",
-	14: "webhook_id",
+	10: "qubrics_message_id",
+	11: "recipients",
+	12: "reject_reason",
+	13: "sender",
+	14: "sendmux_message_id",
+	15: "webhook_id",
 }
 
 // Decode decodes WebhookEventData from json.
@@ -34434,8 +34441,18 @@ func (s *WebhookEventData) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"message_id_kind\"")
 			}
+		case "qubrics_message_id":
+			if err := func() error {
+				s.QubricsMessageID.Reset()
+				if err := s.QubricsMessageID.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"qubrics_message_id\"")
+			}
 		case "recipients":
-			requiredBitSet[1] |= 1 << 2
+			requiredBitSet[1] |= 1 << 3
 			if err := func() error {
 				s.Recipients = make([]string, 0)
 				if err := d.Arr(func(d *jx.Decoder) error {
@@ -34455,7 +34472,7 @@ func (s *WebhookEventData) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"recipients\"")
 			}
 		case "reject_reason":
-			requiredBitSet[1] |= 1 << 3
+			requiredBitSet[1] |= 1 << 4
 			if err := func() error {
 				if err := s.RejectReason.Decode(d); err != nil {
 					return err
@@ -34465,7 +34482,7 @@ func (s *WebhookEventData) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"reject_reason\"")
 			}
 		case "sender":
-			requiredBitSet[1] |= 1 << 4
+			requiredBitSet[1] |= 1 << 5
 			if err := func() error {
 				if err := s.Sender.Decode(d); err != nil {
 					return err
@@ -34475,7 +34492,7 @@ func (s *WebhookEventData) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"sender\"")
 			}
 		case "sendmux_message_id":
-			requiredBitSet[1] |= 1 << 5
+			requiredBitSet[1] |= 1 << 6
 			if err := func() error {
 				if err := s.SendmuxMessageID.Decode(d); err != nil {
 					return err
@@ -34485,7 +34502,7 @@ func (s *WebhookEventData) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"sendmux_message_id\"")
 			}
 		case "webhook_id":
-			requiredBitSet[1] |= 1 << 6
+			requiredBitSet[1] |= 1 << 7
 			if err := func() error {
 				if err := s.WebhookID.Decode(d); err != nil {
 					return err
@@ -34505,7 +34522,7 @@ func (s *WebhookEventData) Decode(d *jx.Decoder) error {
 	var failures []validate.FieldError
 	for i, mask := range [2]uint8{
 		0b11111111,
-		0b01111111,
+		0b11111011,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.

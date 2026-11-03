@@ -1111,49 +1111,94 @@ function defaultQueryFor(operation) {
 
 /* CD14 START - Run-owned non-sending Calendar lifecycle fixtures. */
 async function prepareMailboxCreateCalendar({ fixtureRuntime }) {
-  return { cleanupSelectors: ["data.id"], request: { body: { name: fixtureRuntime.resourceLabel("calendar"), time_zone: "Australia/Melbourne" } } };
+  fixtureRuntime.requireDedicatedMailbox();
+  const name = fixtureRuntime.resourceLabel("calendar");
+  let confirmed = false;
+  fixtureRuntime.addTeardown(() => {
+    if (!confirmed) throw new UnmetPrecondition("Calendar create remains uncertain; do not repeat it");
+  });
+  return {
+    cleanupSelectors: ["data.id"],
+    request: { body: { name, time_zone: "Australia/Melbourne" } },
+    afterResult: async value => {
+      requireSelectedValue(value, ["data.id"], "created calendar ID");
+      assert.equal(value.data?.name, name, "Calendar create name mismatch");
+      assert.equal(value.data?.mailbox_id, fixtureRuntime.proof.mailboxId, "Calendar create mailbox mismatch");
+      confirmed = true;
+    },
+  };
 }
 
 async function createOwnedCalendar(fixtureRuntime) {
   const prepared = await prepareMailboxCreateCalendar({ fixtureRuntime });
   const value = await fixtureRuntime.runOperation("mailboxCreateCalendar", prepared.request);
+  await prepared.afterResult(value);
   return requireSelectedValue(value, ["data.id"], "owned calendar ID");
 }
 
 async function prepareMailboxCreateCalendarEvent({ fixtureRuntime }) {
   const calendarId = await createOwnedCalendar(fixtureRuntime);
+  const uid = `${fixtureRuntime.resourceLabel("calendar-event")}-${randomUUID()}`;
+  let confirmed = false;
+  fixtureRuntime.addTeardown(() => {
+    if (!confirmed) throw new UnmetPrecondition("Calendar event create remains uncertain; do not repeat it");
+  });
   return { cleanupSelectors: ["data.id"], request: { body: {
     calendar_id: calendarId,
-    uid: `${fixtureRuntime.resourceLabel("calendar-event")}-${randomUUID()}`,
+    uid,
     title: fixtureRuntime.resourceLabel("event"),
     start: "2026-11-02T10:00:00",
     time_zone: "Australia/Melbourne",
     duration: "PT1H",
-  } } };
+  } }, afterResult: async value => {
+    assert.equal(value.data?.uid, uid, "Calendar create UID mismatch");
+    assert.equal(value.data?.mailbox_id, fixtureRuntime.proof.mailboxId, "Calendar create mailbox mismatch");
+    requireSelectedValue(value, ["data.id"], "created calendar event ID");
+    confirmed = true;
+  } };
 }
 
 async function createOwnedCalendarEvent(fixtureRuntime) {
   const prepared = await prepareMailboxCreateCalendarEvent({ fixtureRuntime });
   const value = await fixtureRuntime.runOperation("mailboxCreateCalendarEvent", prepared.request);
+  await prepared.afterResult(value);
   return requireSelectedValue(value, ["data.id"], "owned calendar event ID");
 }
 
 async function prepareOwnedCalendarDelete({ fixtureRuntime }) {
-  return { request: await ownedCalendarWriteRequest(fixtureRuntime, "calendar", await createOwnedCalendar(fixtureRuntime)) };
+  const id = await createOwnedCalendar(fixtureRuntime);
+  return {
+    request: (await ownedCalendarWriteState({ fixtureRuntime, kind: "calendar", id })).request,
+    afterResult: async value => {
+      assert.equal(value.data?.id, id);
+      assert.equal(value.data?.deleted, true);
+    },
+  };
 }
 
 async function prepareOwnedCalendarEventDelete({ fixtureRuntime }) {
-  return { request: await ownedCalendarWriteRequest(fixtureRuntime, "calendar_event", await createOwnedCalendarEvent(fixtureRuntime)) };
+  return { request: (await ownedCalendarWriteState({ fixtureRuntime, kind: "calendar_event", id: await createOwnedCalendarEvent(fixtureRuntime) })).request };
 }
 
 async function prepareOwnedCalendarEventUpdate({ fixtureRuntime }) {
   const id = await createOwnedCalendarEvent(fixtureRuntime);
+  const original = await ownedCalendarWriteState({ fixtureRuntime, kind: "calendar_event", id });
+  const restore = async () => {
+    const current = await ownedCalendarWriteState({ fixtureRuntime, kind: "calendar_event", id });
+    if (current.value.data.title !== original.value.data.title) {
+      await fixtureRuntime.runOperation("mailboxUpdateCalendarEvent", { ...current.request, body: { title: original.value.data.title } });
+    }
+    const restored = await fixtureRuntime.runOperation("mailboxGetCalendarEvent", { path: { event_id: id } });
+    assert.equal(restored.data?.title, original.value.data.title, "Calendar title restore readback mismatch");
+  };
+  fixtureRuntime.addRestore("calendarEvent", id, { title: original.value.data.title }, restore);
   const title = fixtureRuntime.resourceLabel("updated-event");
   return {
-    request: { ...await ownedCalendarWriteRequest(fixtureRuntime, "calendar_event", id), body: { title } },
+    request: { ...original.request, body: { title } },
     afterResult: async () => {
       const value = await fixtureRuntime.runOperation("mailboxGetCalendarEvent", { path: { event_id: id } });
       assert.equal(value.data?.title, title, "Owned event update readback mismatch");
+      await restore();
     },
   };
 }
@@ -1166,22 +1211,26 @@ function requireOwnedCalendarResource(fixtureRuntime, kind, id) {
   return entry;
 }
 
-async function ownedCalendarWriteRequest(fixtureRuntime, kind, id) {
+async function ownedCalendarWriteState({ fixtureRuntime, kind, id }) {
   const entry = requireOwnedCalendarResource(fixtureRuntime, kind, id);
-  const read = kind === "calendar" ? "mailboxGetCalendar" : "mailboxGetCalendarEvent";
-  const value = await fixtureRuntime.runOperation(read, { path: entry.path });
-  assert.equal(value.data?.id, id, "Owned Calendar readback ID mismatch");
-  assert.equal(value.data?.mailbox_id, fixtureRuntime.proof.mailboxId, "Owned Calendar mailbox mismatch");
-  if (kind === "calendar") {
-    assert.equal(value.data.name, entry.name, "Owned calendar name mismatch");
-    assert.equal(value.data.is_default, false, "Default calendar cannot be an owned cleanup fixture");
+  const isCalendar = kind === "calendar";
+  const read = isCalendar ? "mailboxGetCalendar" : "mailboxGetCalendarEvent";
+  const result = isCalendar
+    ? await fixtureRuntime.runOperationWithResponse({ operationId: read, request: { path: entry.path } })
+    : { data: await fixtureRuntime.runOperation(read, { path: entry.path }) };
+  const value = result.data;
+  assert.equal(value.data?.id, id, isCalendar ? "Calendar cleanup ID mismatch" : "Owned Calendar readback ID mismatch");
+  assert.equal(value.data?.mailbox_id, fixtureRuntime.proof.mailboxId, isCalendar ? "Calendar cleanup mailbox mismatch" : "Owned Calendar mailbox mismatch");
+  if (isCalendar) {
+    assert.equal(value.data.name, entry.name, "Calendar cleanup name mismatch");
+    assert.equal(value.data.is_default, false, "Calendar cleanup must not remove the default calendar");
   } else {
-    assert.equal(value.data.uid, entry.uid, "Owned event UID mismatch");
+    assert.equal(value.data.uid, entry.uid, "Calendar cleanup UID mismatch");
     assert.deepEqual(value.data.calendar_ids, [entry.calendar_id], "Owned event parent mismatch");
   }
-  const etag = requireSelectedValue(value, ["data.etag"], "current Calendar ETag");
-  assert.ok(typeof etag === "string" && etag.trim() && etag !== "*", "Invalid Calendar ETag");
-  return { path: entry.path, headers: { "If-Match": etag } };
+  const etag = isCalendar ? result.response?.headers.get("ETag") : requireSelectedValue(value, ["data.etag"], "current Calendar ETag");
+  assert.ok(typeof etag === "string" && etag.trim() && etag !== "*", isCalendar ? "Calendar cleanup requires the GET response ETag" : "Invalid Calendar ETag");
+  return { value, request: { path: entry.path, headers: { "If-Match": etag } } };
 }
 
 async function cleanupOwnedCalendarResource(fixtureRuntime, entry) {
@@ -1198,9 +1247,9 @@ async function cleanupOwnedCalendarResource(fixtureRuntime, entry) {
   }
   const parameter = entry.kind === "calendar" ? "calendar_id" : "event_id";
   if (!entry.path[parameter]) throw new UnmetPrecondition("Uncertain calendar create has no owned resource ID");
-  const request = await ignoreCleanupErrors(() => ownedCalendarWriteRequest(fixtureRuntime, entry.kind, entry.id));
-  if (request) {
-    await ignoreCleanupErrors(() => fixtureRuntime.runOperation(entry.kind === "calendar" ? "mailboxDeleteCalendar" : "mailboxDeleteCalendarEvent", request));
+  const state = await ignoreCleanupErrors(() => ownedCalendarWriteState({ fixtureRuntime, kind: entry.kind, id: entry.id }));
+  if (state) {
+    await ignoreCleanupErrors(() => fixtureRuntime.runOperation(entry.kind === "calendar" ? "mailboxDeleteCalendar" : "mailboxDeleteCalendarEvent", state.request));
     const remaining = await ignoreCleanupErrors(() => fixtureRuntime.runOperation(entry.kind === "calendar" ? "mailboxGetCalendar" : "mailboxGetCalendarEvent", { path: entry.path }));
     assert.equal(remaining, undefined, "Owned Calendar resource remains after cleanup");
   }
@@ -3081,6 +3130,10 @@ function createFixtureRuntime({ credentials, fixtures, operations, runId, sdk, s
     },
     runId,
     async runOperation(operationId, request = {}, { attachmentEvidence } = {}) {
+      const response = await this.runOperationWithResponse({ operationId, request, attachmentEvidence });
+      return response.data;
+    },
+    async runOperationWithResponse({ operationId, request = {}, attachmentEvidence }) {
       assert.ok(proof, "Connection identity preflight must succeed before fixture operations");
       this.beginOperation(operationId, request);
       const operation = operationsById.get(operationId);
@@ -3093,7 +3146,7 @@ function createFixtureRuntime({ credentials, fixtures, operations, runId, sdk, s
       const response = await runBoundedSdkOperation({ client, operation, request, onResponse: response => this.observeResult(operationId, request, response.data, attachmentEvidence), sdkOperation });
       this.observeResult(operationId, request, response.data, attachmentEvidence);
       assertLiveResponse(response.data, operation);
-      return response.data;
+      return response;
     },
     async runMailboxOperationWithApiKey(apiKey, operationId, request = {}) {
       const operation = operationsById.get(operationId);

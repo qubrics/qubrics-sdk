@@ -15,7 +15,7 @@ require 'time'
 
 module Sendmux::Management::Generated
   class WebhookTestResponse < ApiModelBase
-    # The event_id attached to the X-Sendmux-Event-Id header of the test delivery.
+    # The event_id attached to the X-Qubrics-Event-Id and X-Sendmux-Event-Id headers of the test delivery.
     attr_accessor :event_id
 
     # Attribute mapping from ruby-style variable name to JSON key.
