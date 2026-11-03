@@ -353,10 +353,17 @@ def test_hosted_root_metadata_recognises_both_mcp_aliases(mcp_origin: str) -> No
         metadata_path = "/.well-known/oauth-protected-resource"
         async with httpx.AsyncClient(transport=httpx.ASGITransport(app=app)) as client:
             for origin in ("https://mcp.sendmux.ai", "https://mcp.qubrics.com"):
-                metadata = await client.get(f"{origin}{metadata_path}")
-                assert metadata.status_code == 200
-                assert metadata.json()["resource"] == f"{mcp_origin}/mcp"
-                assert metadata.json()["resource_name"] == "Sendmux MCP"
+                for path in (metadata_path, f"{metadata_path}/mcp"):
+                    metadata = await client.get(f"{origin}{path}")
+                    assert metadata.status_code == 200
+                    assert metadata.json()["resource"] == f"{origin}/mcp"
+                    assert metadata.json()["resource_name"] == "Sendmux MCP"
+                for headers in ({}, {"Authorization": "Bearer invalid-token"}):
+                    unauthorised = await client.post(f"{origin}/mcp", headers=headers)
+                    assert unauthorised.status_code == 401
+                    assert f'resource_metadata="{origin}{metadata_path}/mcp"' in (
+                        unauthorised.headers["www-authenticate"]
+                    )
             a2a = await client.get(f"https://a2a.sendmux.ai{metadata_path}")
             assert a2a.json()["resource"] == "https://a2a.sendmux.ai/a2a/v1"
 
