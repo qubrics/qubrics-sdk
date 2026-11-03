@@ -3,6 +3,7 @@
 package management
 
 import (
+	"fmt"
 	"io"
 	"net/url"
 	"time"
@@ -610,6 +611,248 @@ func (s *BearerAuth) SetToken(val string) {
 // SetRoles sets the value of Roles.
 func (s *BearerAuth) SetRoles(val []string) {
 	s.Roles = val
+}
+
+// Ref: #/components/schemas/CalendarWebhookEventData
+type CalendarWebhookEventData struct {
+	Created   []string `json:"created"`
+	Destroyed []string `json:"destroyed"`
+	HasMore   bool     `json:"has_more"`
+	MailboxID string   `json:"mailbox_id"`
+	// Opaque identifier scoped to the selected mailbox.
+	NewState string `json:"new_state"`
+	// Opaque identifier scoped to the selected mailbox.
+	OldState     string                           `json:"old_state"`
+	Resource     CalendarWebhookEventDataResource `json:"resource"`
+	SyncRequired bool                             `json:"sync_required"`
+	Updated      []string                         `json:"updated"`
+}
+
+// GetCreated returns the value of Created.
+func (s *CalendarWebhookEventData) GetCreated() []string {
+	return s.Created
+}
+
+// GetDestroyed returns the value of Destroyed.
+func (s *CalendarWebhookEventData) GetDestroyed() []string {
+	return s.Destroyed
+}
+
+// GetHasMore returns the value of HasMore.
+func (s *CalendarWebhookEventData) GetHasMore() bool {
+	return s.HasMore
+}
+
+// GetMailboxID returns the value of MailboxID.
+func (s *CalendarWebhookEventData) GetMailboxID() string {
+	return s.MailboxID
+}
+
+// GetNewState returns the value of NewState.
+func (s *CalendarWebhookEventData) GetNewState() string {
+	return s.NewState
+}
+
+// GetOldState returns the value of OldState.
+func (s *CalendarWebhookEventData) GetOldState() string {
+	return s.OldState
+}
+
+// GetResource returns the value of Resource.
+func (s *CalendarWebhookEventData) GetResource() CalendarWebhookEventDataResource {
+	return s.Resource
+}
+
+// GetSyncRequired returns the value of SyncRequired.
+func (s *CalendarWebhookEventData) GetSyncRequired() bool {
+	return s.SyncRequired
+}
+
+// GetUpdated returns the value of Updated.
+func (s *CalendarWebhookEventData) GetUpdated() []string {
+	return s.Updated
+}
+
+// SetCreated sets the value of Created.
+func (s *CalendarWebhookEventData) SetCreated(val []string) {
+	s.Created = val
+}
+
+// SetDestroyed sets the value of Destroyed.
+func (s *CalendarWebhookEventData) SetDestroyed(val []string) {
+	s.Destroyed = val
+}
+
+// SetHasMore sets the value of HasMore.
+func (s *CalendarWebhookEventData) SetHasMore(val bool) {
+	s.HasMore = val
+}
+
+// SetMailboxID sets the value of MailboxID.
+func (s *CalendarWebhookEventData) SetMailboxID(val string) {
+	s.MailboxID = val
+}
+
+// SetNewState sets the value of NewState.
+func (s *CalendarWebhookEventData) SetNewState(val string) {
+	s.NewState = val
+}
+
+// SetOldState sets the value of OldState.
+func (s *CalendarWebhookEventData) SetOldState(val string) {
+	s.OldState = val
+}
+
+// SetResource sets the value of Resource.
+func (s *CalendarWebhookEventData) SetResource(val CalendarWebhookEventDataResource) {
+	s.Resource = val
+}
+
+// SetSyncRequired sets the value of SyncRequired.
+func (s *CalendarWebhookEventData) SetSyncRequired(val bool) {
+	s.SyncRequired = val
+}
+
+// SetUpdated sets the value of Updated.
+func (s *CalendarWebhookEventData) SetUpdated(val []string) {
+	s.Updated = val
+}
+
+type CalendarWebhookEventDataResource string
+
+const (
+	CalendarWebhookEventDataResourceCalendar CalendarWebhookEventDataResource = "calendar"
+	CalendarWebhookEventDataResourceEvent    CalendarWebhookEventDataResource = "event"
+)
+
+// AllValues returns all CalendarWebhookEventDataResource values.
+func (CalendarWebhookEventDataResource) AllValues() []CalendarWebhookEventDataResource {
+	return []CalendarWebhookEventDataResource{
+		CalendarWebhookEventDataResourceCalendar,
+		CalendarWebhookEventDataResourceEvent,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s CalendarWebhookEventDataResource) MarshalText() ([]byte, error) {
+	switch s {
+	case CalendarWebhookEventDataResourceCalendar:
+		return []byte(s), nil
+	case CalendarWebhookEventDataResourceEvent:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *CalendarWebhookEventDataResource) UnmarshalText(data []byte) error {
+	switch CalendarWebhookEventDataResource(data) {
+	case CalendarWebhookEventDataResourceCalendar:
+		*s = CalendarWebhookEventDataResourceCalendar
+		return nil
+	case CalendarWebhookEventDataResourceEvent:
+		*s = CalendarWebhookEventDataResourceEvent
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+// Ref: #/components/schemas/CalendarWebhookEventPayload
+type CalendarWebhookEventPayload struct {
+	Data CalendarWebhookEventData `json:"data"`
+	// Stable per-event identifier. Also sent in the X-Sendmux-Event-Id header.
+	ID string `json:"id"`
+	// When the event occurred.
+	OccurredAt string `json:"occurred_at"`
+	// Team that owns the event.
+	TeamPublicID string                          `json:"team_public_id"`
+	Type         CalendarWebhookEventPayloadType `json:"type"`
+}
+
+// GetData returns the value of Data.
+func (s *CalendarWebhookEventPayload) GetData() CalendarWebhookEventData {
+	return s.Data
+}
+
+// GetID returns the value of ID.
+func (s *CalendarWebhookEventPayload) GetID() string {
+	return s.ID
+}
+
+// GetOccurredAt returns the value of OccurredAt.
+func (s *CalendarWebhookEventPayload) GetOccurredAt() string {
+	return s.OccurredAt
+}
+
+// GetTeamPublicID returns the value of TeamPublicID.
+func (s *CalendarWebhookEventPayload) GetTeamPublicID() string {
+	return s.TeamPublicID
+}
+
+// GetType returns the value of Type.
+func (s *CalendarWebhookEventPayload) GetType() CalendarWebhookEventPayloadType {
+	return s.Type
+}
+
+// SetData sets the value of Data.
+func (s *CalendarWebhookEventPayload) SetData(val CalendarWebhookEventData) {
+	s.Data = val
+}
+
+// SetID sets the value of ID.
+func (s *CalendarWebhookEventPayload) SetID(val string) {
+	s.ID = val
+}
+
+// SetOccurredAt sets the value of OccurredAt.
+func (s *CalendarWebhookEventPayload) SetOccurredAt(val string) {
+	s.OccurredAt = val
+}
+
+// SetTeamPublicID sets the value of TeamPublicID.
+func (s *CalendarWebhookEventPayload) SetTeamPublicID(val string) {
+	s.TeamPublicID = val
+}
+
+// SetType sets the value of Type.
+func (s *CalendarWebhookEventPayload) SetType(val CalendarWebhookEventPayloadType) {
+	s.Type = val
+}
+
+type CalendarWebhookEventPayloadType string
+
+const (
+	CalendarWebhookEventPayloadTypeCalendarChanged CalendarWebhookEventPayloadType = "calendar.changed"
+)
+
+// AllValues returns all CalendarWebhookEventPayloadType values.
+func (CalendarWebhookEventPayloadType) AllValues() []CalendarWebhookEventPayloadType {
+	return []CalendarWebhookEventPayloadType{
+		CalendarWebhookEventPayloadTypeCalendarChanged,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s CalendarWebhookEventPayloadType) MarshalText() ([]byte, error) {
+	switch s {
+	case CalendarWebhookEventPayloadTypeCalendarChanged:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *CalendarWebhookEventPayloadType) UnmarshalText(data []byte) error {
+	switch CalendarWebhookEventPayloadType(data) {
+	case CalendarWebhookEventPayloadTypeCalendarChanged:
+		*s = CalendarWebhookEventPayloadTypeCalendarChanged
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
 }
 
 // Ref: #/components/schemas/Connection
@@ -3698,6 +3941,153 @@ func (IncomingLogItemResponseOk) AllValues() []IncomingLogItemResponseOk {
 	}
 }
 
+// Ref: #/components/schemas/MailWebhookEventPayload
+type MailWebhookEventPayload struct {
+	Data WebhookEventData `json:"data"`
+	// Stable per-event identifier. Also sent in the X-Sendmux-Event-Id header.
+	ID string `json:"id"`
+	// When the event occurred.
+	OccurredAt string `json:"occurred_at"`
+	// Team that owns the event.
+	TeamPublicID string `json:"team_public_id"`
+	// Dotted event type. Same value as the X-Sendmux-Event-Type header.
+	Type MailWebhookEventPayloadType `json:"type"`
+}
+
+// GetData returns the value of Data.
+func (s *MailWebhookEventPayload) GetData() WebhookEventData {
+	return s.Data
+}
+
+// GetID returns the value of ID.
+func (s *MailWebhookEventPayload) GetID() string {
+	return s.ID
+}
+
+// GetOccurredAt returns the value of OccurredAt.
+func (s *MailWebhookEventPayload) GetOccurredAt() string {
+	return s.OccurredAt
+}
+
+// GetTeamPublicID returns the value of TeamPublicID.
+func (s *MailWebhookEventPayload) GetTeamPublicID() string {
+	return s.TeamPublicID
+}
+
+// GetType returns the value of Type.
+func (s *MailWebhookEventPayload) GetType() MailWebhookEventPayloadType {
+	return s.Type
+}
+
+// SetData sets the value of Data.
+func (s *MailWebhookEventPayload) SetData(val WebhookEventData) {
+	s.Data = val
+}
+
+// SetID sets the value of ID.
+func (s *MailWebhookEventPayload) SetID(val string) {
+	s.ID = val
+}
+
+// SetOccurredAt sets the value of OccurredAt.
+func (s *MailWebhookEventPayload) SetOccurredAt(val string) {
+	s.OccurredAt = val
+}
+
+// SetTeamPublicID sets the value of TeamPublicID.
+func (s *MailWebhookEventPayload) SetTeamPublicID(val string) {
+	s.TeamPublicID = val
+}
+
+// SetType sets the value of Type.
+func (s *MailWebhookEventPayload) SetType(val MailWebhookEventPayloadType) {
+	s.Type = val
+}
+
+// Dotted event type. Same value as the X-Sendmux-Event-Type header.
+type MailWebhookEventPayloadType string
+
+const (
+	MailWebhookEventPayloadTypeMessageDelivered       MailWebhookEventPayloadType = "message.delivered"
+	MailWebhookEventPayloadTypeMessageBounced         MailWebhookEventPayloadType = "message.bounced"
+	MailWebhookEventPayloadTypeMessageComplained      MailWebhookEventPayloadType = "message.complained"
+	MailWebhookEventPayloadTypeMessageRejected        MailWebhookEventPayloadType = "message.rejected"
+	MailWebhookEventPayloadTypeMessageDeliveryDelayed MailWebhookEventPayloadType = "message.delivery_delayed"
+	MailWebhookEventPayloadTypeMessageReceived        MailWebhookEventPayloadType = "message.received"
+	MailWebhookEventPayloadTypeMessageReceivedSpam    MailWebhookEventPayloadType = "message.received.spam"
+	MailWebhookEventPayloadTypeSendmuxTest            MailWebhookEventPayloadType = "sendmux.test"
+)
+
+// AllValues returns all MailWebhookEventPayloadType values.
+func (MailWebhookEventPayloadType) AllValues() []MailWebhookEventPayloadType {
+	return []MailWebhookEventPayloadType{
+		MailWebhookEventPayloadTypeMessageDelivered,
+		MailWebhookEventPayloadTypeMessageBounced,
+		MailWebhookEventPayloadTypeMessageComplained,
+		MailWebhookEventPayloadTypeMessageRejected,
+		MailWebhookEventPayloadTypeMessageDeliveryDelayed,
+		MailWebhookEventPayloadTypeMessageReceived,
+		MailWebhookEventPayloadTypeMessageReceivedSpam,
+		MailWebhookEventPayloadTypeSendmuxTest,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s MailWebhookEventPayloadType) MarshalText() ([]byte, error) {
+	switch s {
+	case MailWebhookEventPayloadTypeMessageDelivered:
+		return []byte(s), nil
+	case MailWebhookEventPayloadTypeMessageBounced:
+		return []byte(s), nil
+	case MailWebhookEventPayloadTypeMessageComplained:
+		return []byte(s), nil
+	case MailWebhookEventPayloadTypeMessageRejected:
+		return []byte(s), nil
+	case MailWebhookEventPayloadTypeMessageDeliveryDelayed:
+		return []byte(s), nil
+	case MailWebhookEventPayloadTypeMessageReceived:
+		return []byte(s), nil
+	case MailWebhookEventPayloadTypeMessageReceivedSpam:
+		return []byte(s), nil
+	case MailWebhookEventPayloadTypeSendmuxTest:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *MailWebhookEventPayloadType) UnmarshalText(data []byte) error {
+	switch MailWebhookEventPayloadType(data) {
+	case MailWebhookEventPayloadTypeMessageDelivered:
+		*s = MailWebhookEventPayloadTypeMessageDelivered
+		return nil
+	case MailWebhookEventPayloadTypeMessageBounced:
+		*s = MailWebhookEventPayloadTypeMessageBounced
+		return nil
+	case MailWebhookEventPayloadTypeMessageComplained:
+		*s = MailWebhookEventPayloadTypeMessageComplained
+		return nil
+	case MailWebhookEventPayloadTypeMessageRejected:
+		*s = MailWebhookEventPayloadTypeMessageRejected
+		return nil
+	case MailWebhookEventPayloadTypeMessageDeliveryDelayed:
+		*s = MailWebhookEventPayloadTypeMessageDeliveryDelayed
+		return nil
+	case MailWebhookEventPayloadTypeMessageReceived:
+		*s = MailWebhookEventPayloadTypeMessageReceived
+		return nil
+	case MailWebhookEventPayloadTypeMessageReceivedSpam:
+		*s = MailWebhookEventPayloadTypeMessageReceivedSpam
+		return nil
+	case MailWebhookEventPayloadTypeSendmuxTest:
+		*s = MailWebhookEventPayloadTypeSendmuxTest
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
 // Ref: #/components/schemas/Mailbox
 type Mailbox struct {
 	// ISO 8601 creation timestamp.
@@ -5338,7 +5728,7 @@ type MailboxDomainDnsRecords struct {
 	Dkim     []MailboxDomainNameValueRecord `json:"dkim"`
 	Dmarc    MailboxDomainDnsRecordsDmarc   `json:"dmarc"`
 	MailFrom MailboxDomainMailFromRecords   `json:"mail_from"`
-	// MX records the customer must place. All point at Sendmux's inbound mail servers.
+	// MX records the customer must place. All point at Qubrics' inbound mail servers.
 	Mx           []MailboxDomainMxRecord             `json:"mx"`
 	Spf          MailboxDomainDnsRecordsSpf          `json:"spf"`
 	Verification MailboxDomainDnsRecordsVerification `json:"verification"`
@@ -7739,6 +8129,7 @@ const (
 	ManagementListDeliveryEventTypeMessageDeliveryDelayed ManagementListDeliveryEventType = "message.delivery_delayed"
 	ManagementListDeliveryEventTypeMessageReceived        ManagementListDeliveryEventType = "message.received"
 	ManagementListDeliveryEventTypeMessageReceivedSpam    ManagementListDeliveryEventType = "message.received.spam"
+	ManagementListDeliveryEventTypeCalendarChanged        ManagementListDeliveryEventType = "calendar.changed"
 	ManagementListDeliveryEventTypeSendmuxTest            ManagementListDeliveryEventType = "sendmux.test"
 )
 
@@ -7752,6 +8143,7 @@ func (ManagementListDeliveryEventType) AllValues() []ManagementListDeliveryEvent
 		ManagementListDeliveryEventTypeMessageDeliveryDelayed,
 		ManagementListDeliveryEventTypeMessageReceived,
 		ManagementListDeliveryEventTypeMessageReceivedSpam,
+		ManagementListDeliveryEventTypeCalendarChanged,
 		ManagementListDeliveryEventTypeSendmuxTest,
 	}
 }
@@ -7772,6 +8164,8 @@ func (s ManagementListDeliveryEventType) MarshalText() ([]byte, error) {
 	case ManagementListDeliveryEventTypeMessageReceived:
 		return []byte(s), nil
 	case ManagementListDeliveryEventTypeMessageReceivedSpam:
+		return []byte(s), nil
+	case ManagementListDeliveryEventTypeCalendarChanged:
 		return []byte(s), nil
 	case ManagementListDeliveryEventTypeSendmuxTest:
 		return []byte(s), nil
@@ -7803,6 +8197,9 @@ func (s *ManagementListDeliveryEventType) UnmarshalText(data []byte) error {
 		return nil
 	case ManagementListDeliveryEventTypeMessageReceivedSpam:
 		*s = ManagementListDeliveryEventTypeMessageReceivedSpam
+		return nil
+	case ManagementListDeliveryEventTypeCalendarChanged:
+		*s = ManagementListDeliveryEventTypeCalendarChanged
 		return nil
 	case ManagementListDeliveryEventTypeSendmuxTest:
 		*s = ManagementListDeliveryEventTypeSendmuxTest
@@ -16974,6 +17371,7 @@ const (
 	WebhookCreateBodyEventTypesItemMessageDeliveryDelayed WebhookCreateBodyEventTypesItem = "message.delivery_delayed"
 	WebhookCreateBodyEventTypesItemMessageReceived        WebhookCreateBodyEventTypesItem = "message.received"
 	WebhookCreateBodyEventTypesItemMessageReceivedSpam    WebhookCreateBodyEventTypesItem = "message.received.spam"
+	WebhookCreateBodyEventTypesItemCalendarChanged        WebhookCreateBodyEventTypesItem = "calendar.changed"
 	WebhookCreateBodyEventTypesItemSendmuxTest            WebhookCreateBodyEventTypesItem = "sendmux.test"
 )
 
@@ -16987,6 +17385,7 @@ func (WebhookCreateBodyEventTypesItem) AllValues() []WebhookCreateBodyEventTypes
 		WebhookCreateBodyEventTypesItemMessageDeliveryDelayed,
 		WebhookCreateBodyEventTypesItemMessageReceived,
 		WebhookCreateBodyEventTypesItemMessageReceivedSpam,
+		WebhookCreateBodyEventTypesItemCalendarChanged,
 		WebhookCreateBodyEventTypesItemSendmuxTest,
 	}
 }
@@ -17007,6 +17406,8 @@ func (s WebhookCreateBodyEventTypesItem) MarshalText() ([]byte, error) {
 	case WebhookCreateBodyEventTypesItemMessageReceived:
 		return []byte(s), nil
 	case WebhookCreateBodyEventTypesItemMessageReceivedSpam:
+		return []byte(s), nil
+	case WebhookCreateBodyEventTypesItemCalendarChanged:
 		return []byte(s), nil
 	case WebhookCreateBodyEventTypesItemSendmuxTest:
 		return []byte(s), nil
@@ -17038,6 +17439,9 @@ func (s *WebhookCreateBodyEventTypesItem) UnmarshalText(data []byte) error {
 		return nil
 	case WebhookCreateBodyEventTypesItemMessageReceivedSpam:
 		*s = WebhookCreateBodyEventTypesItemMessageReceivedSpam
+		return nil
+	case WebhookCreateBodyEventTypesItemCalendarChanged:
+		*s = WebhookCreateBodyEventTypesItemCalendarChanged
 		return nil
 	case WebhookCreateBodyEventTypesItemSendmuxTest:
 		*s = WebhookCreateBodyEventTypesItemSendmuxTest
@@ -17503,6 +17907,7 @@ const (
 	WebhookDeliveryAttemptEventTypeMessageDeliveryDelayed WebhookDeliveryAttemptEventType = "message.delivery_delayed"
 	WebhookDeliveryAttemptEventTypeMessageReceived        WebhookDeliveryAttemptEventType = "message.received"
 	WebhookDeliveryAttemptEventTypeMessageReceivedSpam    WebhookDeliveryAttemptEventType = "message.received.spam"
+	WebhookDeliveryAttemptEventTypeCalendarChanged        WebhookDeliveryAttemptEventType = "calendar.changed"
 	WebhookDeliveryAttemptEventTypeSendmuxTest            WebhookDeliveryAttemptEventType = "sendmux.test"
 )
 
@@ -17516,6 +17921,7 @@ func (WebhookDeliveryAttemptEventType) AllValues() []WebhookDeliveryAttemptEvent
 		WebhookDeliveryAttemptEventTypeMessageDeliveryDelayed,
 		WebhookDeliveryAttemptEventTypeMessageReceived,
 		WebhookDeliveryAttemptEventTypeMessageReceivedSpam,
+		WebhookDeliveryAttemptEventTypeCalendarChanged,
 		WebhookDeliveryAttemptEventTypeSendmuxTest,
 	}
 }
@@ -17536,6 +17942,8 @@ func (s WebhookDeliveryAttemptEventType) MarshalText() ([]byte, error) {
 	case WebhookDeliveryAttemptEventTypeMessageReceived:
 		return []byte(s), nil
 	case WebhookDeliveryAttemptEventTypeMessageReceivedSpam:
+		return []byte(s), nil
+	case WebhookDeliveryAttemptEventTypeCalendarChanged:
 		return []byte(s), nil
 	case WebhookDeliveryAttemptEventTypeSendmuxTest:
 		return []byte(s), nil
@@ -17567,6 +17975,9 @@ func (s *WebhookDeliveryAttemptEventType) UnmarshalText(data []byte) error {
 		return nil
 	case WebhookDeliveryAttemptEventTypeMessageReceivedSpam:
 		*s = WebhookDeliveryAttemptEventTypeMessageReceivedSpam
+		return nil
+	case WebhookDeliveryAttemptEventTypeCalendarChanged:
+		*s = WebhookDeliveryAttemptEventTypeCalendarChanged
 		return nil
 	case WebhookDeliveryAttemptEventTypeSendmuxTest:
 		*s = WebhookDeliveryAttemptEventTypeSendmuxTest
@@ -17732,6 +18143,7 @@ const (
 	WebhookDeliveryPayloadEventTypeMessageDeliveryDelayed WebhookDeliveryPayloadEventType = "message.delivery_delayed"
 	WebhookDeliveryPayloadEventTypeMessageReceived        WebhookDeliveryPayloadEventType = "message.received"
 	WebhookDeliveryPayloadEventTypeMessageReceivedSpam    WebhookDeliveryPayloadEventType = "message.received.spam"
+	WebhookDeliveryPayloadEventTypeCalendarChanged        WebhookDeliveryPayloadEventType = "calendar.changed"
 	WebhookDeliveryPayloadEventTypeSendmuxTest            WebhookDeliveryPayloadEventType = "sendmux.test"
 )
 
@@ -17745,6 +18157,7 @@ func (WebhookDeliveryPayloadEventType) AllValues() []WebhookDeliveryPayloadEvent
 		WebhookDeliveryPayloadEventTypeMessageDeliveryDelayed,
 		WebhookDeliveryPayloadEventTypeMessageReceived,
 		WebhookDeliveryPayloadEventTypeMessageReceivedSpam,
+		WebhookDeliveryPayloadEventTypeCalendarChanged,
 		WebhookDeliveryPayloadEventTypeSendmuxTest,
 	}
 }
@@ -17765,6 +18178,8 @@ func (s WebhookDeliveryPayloadEventType) MarshalText() ([]byte, error) {
 	case WebhookDeliveryPayloadEventTypeMessageReceived:
 		return []byte(s), nil
 	case WebhookDeliveryPayloadEventTypeMessageReceivedSpam:
+		return []byte(s), nil
+	case WebhookDeliveryPayloadEventTypeCalendarChanged:
 		return []byte(s), nil
 	case WebhookDeliveryPayloadEventTypeSendmuxTest:
 		return []byte(s), nil
@@ -17796,6 +18211,9 @@ func (s *WebhookDeliveryPayloadEventType) UnmarshalText(data []byte) error {
 		return nil
 	case WebhookDeliveryPayloadEventTypeMessageReceivedSpam:
 		*s = WebhookDeliveryPayloadEventTypeMessageReceivedSpam
+		return nil
+	case WebhookDeliveryPayloadEventTypeCalendarChanged:
+		*s = WebhookDeliveryPayloadEventTypeCalendarChanged
 		return nil
 	case WebhookDeliveryPayloadEventTypeSendmuxTest:
 		*s = WebhookDeliveryPayloadEventTypeSendmuxTest
@@ -17924,7 +18342,7 @@ type WebhookEventData struct {
 	RejectReason NilString `json:"reject_reason"`
 	// Sender/envelope-from address when available.
 	Sender NilString `json:"sender"`
-	// Sendmux message correlation ID for outbound sending feedback when available.
+	// Qubrics message correlation ID for outbound sending feedback when available.
 	SendmuxMessageID NilString `json:"sendmux_message_id"`
 	// Target webhook ID for synthetic `sendmux.test` payloads.
 	WebhookID NilString `json:"webhook_id"`
@@ -18173,150 +18591,137 @@ func (s *WebhookEventDataMessageIDKind) UnmarshalText(data []byte) error {
 
 // The JSON request body delivered to the webhook endpoint.
 // Ref: #/components/schemas/WebhookEventPayload
+// WebhookEventPayload represents sum type.
 type WebhookEventPayload struct {
-	Data WebhookEventData `json:"data"`
-	// Stable per-event identifier. Also sent in the X-Sendmux-Event-Id header.
-	ID string `json:"id"`
-	// When the event occurred.
-	OccurredAt string `json:"occurred_at"`
-	// Team that owns the event.
-	TeamPublicID string `json:"team_public_id"`
-	// Dotted event type. Same value as the X-Sendmux-Event-Type header.
-	Type WebhookEventPayloadType `json:"type"`
+	Type                        WebhookEventPayloadType // switch on this field
+	MailWebhookEventPayload     MailWebhookEventPayload
+	CalendarWebhookEventPayload CalendarWebhookEventPayload
 }
 
-// GetData returns the value of Data.
-func (s *WebhookEventPayload) GetData() WebhookEventData {
-	return s.Data
-}
-
-// GetID returns the value of ID.
-func (s *WebhookEventPayload) GetID() string {
-	return s.ID
-}
-
-// GetOccurredAt returns the value of OccurredAt.
-func (s *WebhookEventPayload) GetOccurredAt() string {
-	return s.OccurredAt
-}
-
-// GetTeamPublicID returns the value of TeamPublicID.
-func (s *WebhookEventPayload) GetTeamPublicID() string {
-	return s.TeamPublicID
-}
-
-// GetType returns the value of Type.
-func (s *WebhookEventPayload) GetType() WebhookEventPayloadType {
-	return s.Type
-}
-
-// SetData sets the value of Data.
-func (s *WebhookEventPayload) SetData(val WebhookEventData) {
-	s.Data = val
-}
-
-// SetID sets the value of ID.
-func (s *WebhookEventPayload) SetID(val string) {
-	s.ID = val
-}
-
-// SetOccurredAt sets the value of OccurredAt.
-func (s *WebhookEventPayload) SetOccurredAt(val string) {
-	s.OccurredAt = val
-}
-
-// SetTeamPublicID sets the value of TeamPublicID.
-func (s *WebhookEventPayload) SetTeamPublicID(val string) {
-	s.TeamPublicID = val
-}
-
-// SetType sets the value of Type.
-func (s *WebhookEventPayload) SetType(val WebhookEventPayloadType) {
-	s.Type = val
-}
-
-// Dotted event type. Same value as the X-Sendmux-Event-Type header.
+// WebhookEventPayloadType is oneOf type of WebhookEventPayload.
 type WebhookEventPayloadType string
 
+// Possible values for WebhookEventPayloadType.
 const (
-	WebhookEventPayloadTypeMessageDelivered       WebhookEventPayloadType = "message.delivered"
-	WebhookEventPayloadTypeMessageBounced         WebhookEventPayloadType = "message.bounced"
-	WebhookEventPayloadTypeMessageComplained      WebhookEventPayloadType = "message.complained"
-	WebhookEventPayloadTypeMessageRejected        WebhookEventPayloadType = "message.rejected"
-	WebhookEventPayloadTypeMessageDeliveryDelayed WebhookEventPayloadType = "message.delivery_delayed"
-	WebhookEventPayloadTypeMessageReceived        WebhookEventPayloadType = "message.received"
-	WebhookEventPayloadTypeMessageReceivedSpam    WebhookEventPayloadType = "message.received.spam"
-	WebhookEventPayloadTypeSendmuxTest            WebhookEventPayloadType = "sendmux.test"
+	WebhookEventPayloadMessageBouncedWebhookEventPayload         WebhookEventPayloadType = "message.bounced"
+	WebhookEventPayloadMessageComplainedWebhookEventPayload      WebhookEventPayloadType = "message.complained"
+	WebhookEventPayloadMessageDeliveredWebhookEventPayload       WebhookEventPayloadType = "message.delivered"
+	WebhookEventPayloadMessageDeliveryDelayedWebhookEventPayload WebhookEventPayloadType = "message.delivery_delayed"
+	WebhookEventPayloadMessageReceivedWebhookEventPayload        WebhookEventPayloadType = "message.received"
+	WebhookEventPayloadMessageReceivedSpamWebhookEventPayload    WebhookEventPayloadType = "message.received.spam"
+	WebhookEventPayloadMessageRejectedWebhookEventPayload        WebhookEventPayloadType = "message.rejected"
+	WebhookEventPayloadSendmuxTestWebhookEventPayload            WebhookEventPayloadType = "sendmux.test"
+	CalendarWebhookEventPayloadWebhookEventPayload               WebhookEventPayloadType = "calendar.changed"
 )
 
-// AllValues returns all WebhookEventPayloadType values.
-func (WebhookEventPayloadType) AllValues() []WebhookEventPayloadType {
-	return []WebhookEventPayloadType{
-		WebhookEventPayloadTypeMessageDelivered,
-		WebhookEventPayloadTypeMessageBounced,
-		WebhookEventPayloadTypeMessageComplained,
-		WebhookEventPayloadTypeMessageRejected,
-		WebhookEventPayloadTypeMessageDeliveryDelayed,
-		WebhookEventPayloadTypeMessageReceived,
-		WebhookEventPayloadTypeMessageReceivedSpam,
-		WebhookEventPayloadTypeSendmuxTest,
+// IsMailWebhookEventPayload reports whether WebhookEventPayload is MailWebhookEventPayload.
+func (s WebhookEventPayload) IsMailWebhookEventPayload() bool {
+	switch s.Type {
+	case WebhookEventPayloadMessageBouncedWebhookEventPayload, WebhookEventPayloadMessageComplainedWebhookEventPayload, WebhookEventPayloadMessageDeliveredWebhookEventPayload, WebhookEventPayloadMessageDeliveryDelayedWebhookEventPayload, WebhookEventPayloadMessageReceivedWebhookEventPayload, WebhookEventPayloadMessageReceivedSpamWebhookEventPayload, WebhookEventPayloadMessageRejectedWebhookEventPayload, WebhookEventPayloadSendmuxTestWebhookEventPayload:
+		return true
+	default:
+		return false
 	}
 }
 
-// MarshalText implements encoding.TextMarshaler.
-func (s WebhookEventPayloadType) MarshalText() ([]byte, error) {
-	switch s {
-	case WebhookEventPayloadTypeMessageDelivered:
-		return []byte(s), nil
-	case WebhookEventPayloadTypeMessageBounced:
-		return []byte(s), nil
-	case WebhookEventPayloadTypeMessageComplained:
-		return []byte(s), nil
-	case WebhookEventPayloadTypeMessageRejected:
-		return []byte(s), nil
-	case WebhookEventPayloadTypeMessageDeliveryDelayed:
-		return []byte(s), nil
-	case WebhookEventPayloadTypeMessageReceived:
-		return []byte(s), nil
-	case WebhookEventPayloadTypeMessageReceivedSpam:
-		return []byte(s), nil
-	case WebhookEventPayloadTypeSendmuxTest:
-		return []byte(s), nil
-	default:
-		return nil, errors.Errorf("invalid value: %q", s)
+// IsCalendarWebhookEventPayload reports whether WebhookEventPayload is CalendarWebhookEventPayload.
+func (s WebhookEventPayload) IsCalendarWebhookEventPayload() bool {
+	return s.Type == CalendarWebhookEventPayloadWebhookEventPayload
+}
+
+// SetMailWebhookEventPayload sets WebhookEventPayload to MailWebhookEventPayload.
+// panics if `t` is not associated with MailWebhookEventPayload
+func (s *WebhookEventPayload) SetMailWebhookEventPayload(t WebhookEventPayloadType, v MailWebhookEventPayload) {
+	s.Type = t
+	s.MailWebhookEventPayload = v
+	if !s.IsMailWebhookEventPayload() {
+		panic(fmt.Errorf("invariant: %v is not MailWebhookEventPayload", t))
 	}
 }
 
-// UnmarshalText implements encoding.TextUnmarshaler.
-func (s *WebhookEventPayloadType) UnmarshalText(data []byte) error {
-	switch WebhookEventPayloadType(data) {
-	case WebhookEventPayloadTypeMessageDelivered:
-		*s = WebhookEventPayloadTypeMessageDelivered
-		return nil
-	case WebhookEventPayloadTypeMessageBounced:
-		*s = WebhookEventPayloadTypeMessageBounced
-		return nil
-	case WebhookEventPayloadTypeMessageComplained:
-		*s = WebhookEventPayloadTypeMessageComplained
-		return nil
-	case WebhookEventPayloadTypeMessageRejected:
-		*s = WebhookEventPayloadTypeMessageRejected
-		return nil
-	case WebhookEventPayloadTypeMessageDeliveryDelayed:
-		*s = WebhookEventPayloadTypeMessageDeliveryDelayed
-		return nil
-	case WebhookEventPayloadTypeMessageReceived:
-		*s = WebhookEventPayloadTypeMessageReceived
-		return nil
-	case WebhookEventPayloadTypeMessageReceivedSpam:
-		*s = WebhookEventPayloadTypeMessageReceivedSpam
-		return nil
-	case WebhookEventPayloadTypeSendmuxTest:
-		*s = WebhookEventPayloadTypeSendmuxTest
-		return nil
-	default:
-		return errors.Errorf("invalid value: %q", data)
+// GetMailWebhookEventPayload returns MailWebhookEventPayload and true boolean if WebhookEventPayload is MailWebhookEventPayload.
+func (s WebhookEventPayload) GetMailWebhookEventPayload() (v MailWebhookEventPayload, ok bool) {
+	if !s.IsMailWebhookEventPayload() {
+		return v, false
 	}
+	return s.MailWebhookEventPayload, true
+}
+
+// NewWebhookEventPayloadMessageBouncedWebhookEventPayload returns new WebhookEventPayload from MailWebhookEventPayload.
+func NewWebhookEventPayloadMessageBouncedWebhookEventPayload(v MailWebhookEventPayload) WebhookEventPayload {
+	var s WebhookEventPayload
+	s.SetMailWebhookEventPayload(WebhookEventPayloadMessageBouncedWebhookEventPayload, v)
+	return s
+}
+
+// NewWebhookEventPayloadMessageComplainedWebhookEventPayload returns new WebhookEventPayload from MailWebhookEventPayload.
+func NewWebhookEventPayloadMessageComplainedWebhookEventPayload(v MailWebhookEventPayload) WebhookEventPayload {
+	var s WebhookEventPayload
+	s.SetMailWebhookEventPayload(WebhookEventPayloadMessageComplainedWebhookEventPayload, v)
+	return s
+}
+
+// NewWebhookEventPayloadMessageDeliveredWebhookEventPayload returns new WebhookEventPayload from MailWebhookEventPayload.
+func NewWebhookEventPayloadMessageDeliveredWebhookEventPayload(v MailWebhookEventPayload) WebhookEventPayload {
+	var s WebhookEventPayload
+	s.SetMailWebhookEventPayload(WebhookEventPayloadMessageDeliveredWebhookEventPayload, v)
+	return s
+}
+
+// NewWebhookEventPayloadMessageDeliveryDelayedWebhookEventPayload returns new WebhookEventPayload from MailWebhookEventPayload.
+func NewWebhookEventPayloadMessageDeliveryDelayedWebhookEventPayload(v MailWebhookEventPayload) WebhookEventPayload {
+	var s WebhookEventPayload
+	s.SetMailWebhookEventPayload(WebhookEventPayloadMessageDeliveryDelayedWebhookEventPayload, v)
+	return s
+}
+
+// NewWebhookEventPayloadMessageReceivedWebhookEventPayload returns new WebhookEventPayload from MailWebhookEventPayload.
+func NewWebhookEventPayloadMessageReceivedWebhookEventPayload(v MailWebhookEventPayload) WebhookEventPayload {
+	var s WebhookEventPayload
+	s.SetMailWebhookEventPayload(WebhookEventPayloadMessageReceivedWebhookEventPayload, v)
+	return s
+}
+
+// NewWebhookEventPayloadMessageReceivedSpamWebhookEventPayload returns new WebhookEventPayload from MailWebhookEventPayload.
+func NewWebhookEventPayloadMessageReceivedSpamWebhookEventPayload(v MailWebhookEventPayload) WebhookEventPayload {
+	var s WebhookEventPayload
+	s.SetMailWebhookEventPayload(WebhookEventPayloadMessageReceivedSpamWebhookEventPayload, v)
+	return s
+}
+
+// NewWebhookEventPayloadMessageRejectedWebhookEventPayload returns new WebhookEventPayload from MailWebhookEventPayload.
+func NewWebhookEventPayloadMessageRejectedWebhookEventPayload(v MailWebhookEventPayload) WebhookEventPayload {
+	var s WebhookEventPayload
+	s.SetMailWebhookEventPayload(WebhookEventPayloadMessageRejectedWebhookEventPayload, v)
+	return s
+}
+
+// NewWebhookEventPayloadSendmuxTestWebhookEventPayload returns new WebhookEventPayload from MailWebhookEventPayload.
+func NewWebhookEventPayloadSendmuxTestWebhookEventPayload(v MailWebhookEventPayload) WebhookEventPayload {
+	var s WebhookEventPayload
+	s.SetMailWebhookEventPayload(WebhookEventPayloadSendmuxTestWebhookEventPayload, v)
+	return s
+}
+
+// SetCalendarWebhookEventPayload sets WebhookEventPayload to CalendarWebhookEventPayload.
+func (s *WebhookEventPayload) SetCalendarWebhookEventPayload(v CalendarWebhookEventPayload) {
+	s.Type = CalendarWebhookEventPayloadWebhookEventPayload
+	s.CalendarWebhookEventPayload = v
+}
+
+// GetCalendarWebhookEventPayload returns CalendarWebhookEventPayload and true boolean if WebhookEventPayload is CalendarWebhookEventPayload.
+func (s WebhookEventPayload) GetCalendarWebhookEventPayload() (v CalendarWebhookEventPayload, ok bool) {
+	if !s.IsCalendarWebhookEventPayload() {
+		return v, false
+	}
+	return s.CalendarWebhookEventPayload, true
+}
+
+// NewCalendarWebhookEventPayloadWebhookEventPayload returns new WebhookEventPayload from CalendarWebhookEventPayload.
+func NewCalendarWebhookEventPayloadWebhookEventPayload(v CalendarWebhookEventPayload) WebhookEventPayload {
+	var s WebhookEventPayload
+	s.SetCalendarWebhookEventPayload(v)
+	return s
 }
 
 // Optional delivery scope. Empty mailbox_ids means all team mailboxes.
@@ -18563,6 +18968,7 @@ const (
 	WebhookSubscriptionEventTypesItemMessageDeliveryDelayed WebhookSubscriptionEventTypesItem = "message.delivery_delayed"
 	WebhookSubscriptionEventTypesItemMessageReceived        WebhookSubscriptionEventTypesItem = "message.received"
 	WebhookSubscriptionEventTypesItemMessageReceivedSpam    WebhookSubscriptionEventTypesItem = "message.received.spam"
+	WebhookSubscriptionEventTypesItemCalendarChanged        WebhookSubscriptionEventTypesItem = "calendar.changed"
 	WebhookSubscriptionEventTypesItemSendmuxTest            WebhookSubscriptionEventTypesItem = "sendmux.test"
 )
 
@@ -18576,6 +18982,7 @@ func (WebhookSubscriptionEventTypesItem) AllValues() []WebhookSubscriptionEventT
 		WebhookSubscriptionEventTypesItemMessageDeliveryDelayed,
 		WebhookSubscriptionEventTypesItemMessageReceived,
 		WebhookSubscriptionEventTypesItemMessageReceivedSpam,
+		WebhookSubscriptionEventTypesItemCalendarChanged,
 		WebhookSubscriptionEventTypesItemSendmuxTest,
 	}
 }
@@ -18596,6 +19003,8 @@ func (s WebhookSubscriptionEventTypesItem) MarshalText() ([]byte, error) {
 	case WebhookSubscriptionEventTypesItemMessageReceived:
 		return []byte(s), nil
 	case WebhookSubscriptionEventTypesItemMessageReceivedSpam:
+		return []byte(s), nil
+	case WebhookSubscriptionEventTypesItemCalendarChanged:
 		return []byte(s), nil
 	case WebhookSubscriptionEventTypesItemSendmuxTest:
 		return []byte(s), nil
@@ -18627,6 +19036,9 @@ func (s *WebhookSubscriptionEventTypesItem) UnmarshalText(data []byte) error {
 		return nil
 	case WebhookSubscriptionEventTypesItemMessageReceivedSpam:
 		*s = WebhookSubscriptionEventTypesItemMessageReceivedSpam
+		return nil
+	case WebhookSubscriptionEventTypesItemCalendarChanged:
+		*s = WebhookSubscriptionEventTypesItemCalendarChanged
 		return nil
 	case WebhookSubscriptionEventTypesItemSendmuxTest:
 		*s = WebhookSubscriptionEventTypesItemSendmuxTest
@@ -18895,6 +19307,7 @@ const (
 	WebhookSubscriptionWithSecretEventTypesItemMessageDeliveryDelayed WebhookSubscriptionWithSecretEventTypesItem = "message.delivery_delayed"
 	WebhookSubscriptionWithSecretEventTypesItemMessageReceived        WebhookSubscriptionWithSecretEventTypesItem = "message.received"
 	WebhookSubscriptionWithSecretEventTypesItemMessageReceivedSpam    WebhookSubscriptionWithSecretEventTypesItem = "message.received.spam"
+	WebhookSubscriptionWithSecretEventTypesItemCalendarChanged        WebhookSubscriptionWithSecretEventTypesItem = "calendar.changed"
 	WebhookSubscriptionWithSecretEventTypesItemSendmuxTest            WebhookSubscriptionWithSecretEventTypesItem = "sendmux.test"
 )
 
@@ -18908,6 +19321,7 @@ func (WebhookSubscriptionWithSecretEventTypesItem) AllValues() []WebhookSubscrip
 		WebhookSubscriptionWithSecretEventTypesItemMessageDeliveryDelayed,
 		WebhookSubscriptionWithSecretEventTypesItemMessageReceived,
 		WebhookSubscriptionWithSecretEventTypesItemMessageReceivedSpam,
+		WebhookSubscriptionWithSecretEventTypesItemCalendarChanged,
 		WebhookSubscriptionWithSecretEventTypesItemSendmuxTest,
 	}
 }
@@ -18928,6 +19342,8 @@ func (s WebhookSubscriptionWithSecretEventTypesItem) MarshalText() ([]byte, erro
 	case WebhookSubscriptionWithSecretEventTypesItemMessageReceived:
 		return []byte(s), nil
 	case WebhookSubscriptionWithSecretEventTypesItemMessageReceivedSpam:
+		return []byte(s), nil
+	case WebhookSubscriptionWithSecretEventTypesItemCalendarChanged:
 		return []byte(s), nil
 	case WebhookSubscriptionWithSecretEventTypesItemSendmuxTest:
 		return []byte(s), nil
@@ -18959,6 +19375,9 @@ func (s *WebhookSubscriptionWithSecretEventTypesItem) UnmarshalText(data []byte)
 		return nil
 	case WebhookSubscriptionWithSecretEventTypesItemMessageReceivedSpam:
 		*s = WebhookSubscriptionWithSecretEventTypesItemMessageReceivedSpam
+		return nil
+	case WebhookSubscriptionWithSecretEventTypesItemCalendarChanged:
+		*s = WebhookSubscriptionWithSecretEventTypesItemCalendarChanged
 		return nil
 	case WebhookSubscriptionWithSecretEventTypesItemSendmuxTest:
 		*s = WebhookSubscriptionWithSecretEventTypesItemSendmuxTest
@@ -19178,6 +19597,7 @@ const (
 	WebhookUpdateBodyEventTypesItemMessageDeliveryDelayed WebhookUpdateBodyEventTypesItem = "message.delivery_delayed"
 	WebhookUpdateBodyEventTypesItemMessageReceived        WebhookUpdateBodyEventTypesItem = "message.received"
 	WebhookUpdateBodyEventTypesItemMessageReceivedSpam    WebhookUpdateBodyEventTypesItem = "message.received.spam"
+	WebhookUpdateBodyEventTypesItemCalendarChanged        WebhookUpdateBodyEventTypesItem = "calendar.changed"
 	WebhookUpdateBodyEventTypesItemSendmuxTest            WebhookUpdateBodyEventTypesItem = "sendmux.test"
 )
 
@@ -19191,6 +19611,7 @@ func (WebhookUpdateBodyEventTypesItem) AllValues() []WebhookUpdateBodyEventTypes
 		WebhookUpdateBodyEventTypesItemMessageDeliveryDelayed,
 		WebhookUpdateBodyEventTypesItemMessageReceived,
 		WebhookUpdateBodyEventTypesItemMessageReceivedSpam,
+		WebhookUpdateBodyEventTypesItemCalendarChanged,
 		WebhookUpdateBodyEventTypesItemSendmuxTest,
 	}
 }
@@ -19211,6 +19632,8 @@ func (s WebhookUpdateBodyEventTypesItem) MarshalText() ([]byte, error) {
 	case WebhookUpdateBodyEventTypesItemMessageReceived:
 		return []byte(s), nil
 	case WebhookUpdateBodyEventTypesItemMessageReceivedSpam:
+		return []byte(s), nil
+	case WebhookUpdateBodyEventTypesItemCalendarChanged:
 		return []byte(s), nil
 	case WebhookUpdateBodyEventTypesItemSendmuxTest:
 		return []byte(s), nil
@@ -19242,6 +19665,9 @@ func (s *WebhookUpdateBodyEventTypesItem) UnmarshalText(data []byte) error {
 		return nil
 	case WebhookUpdateBodyEventTypesItemMessageReceivedSpam:
 		*s = WebhookUpdateBodyEventTypesItemMessageReceivedSpam
+		return nil
+	case WebhookUpdateBodyEventTypesItemCalendarChanged:
+		*s = WebhookUpdateBodyEventTypesItemCalendarChanged
 		return nil
 	case WebhookUpdateBodyEventTypesItemSendmuxTest:
 		*s = WebhookUpdateBodyEventTypesItemSendmuxTest

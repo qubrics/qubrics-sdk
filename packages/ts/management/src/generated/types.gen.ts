@@ -12,7 +12,7 @@ export type WebhookUpdateBody = {
     /**
      * Replaces the full event-type list. At least one must be provided.
      */
-    event_types?: Array<'message.delivered' | 'message.bounced' | 'message.complained' | 'message.rejected' | 'message.delivery_delayed' | 'message.received' | 'message.received.spam' | 'sendmux.test'>;
+    event_types?: Array<'message.delivered' | 'message.bounced' | 'message.complained' | 'message.rejected' | 'message.delivery_delayed' | 'message.received' | 'message.received.spam' | 'calendar.changed' | 'sendmux.test'>;
     filters?: WebhookFilters & unknown;
     /**
      * Replace the human-friendly label. Send `null` to clear it; omit to leave unchanged.
@@ -62,7 +62,7 @@ export type WebhookSubscriptionWithSecret = {
     /**
      * Event types this subscription receives.
      */
-    event_types: Array<'message.delivered' | 'message.bounced' | 'message.complained' | 'message.rejected' | 'message.delivery_delayed' | 'message.received' | 'message.received.spam' | 'sendmux.test'>;
+    event_types: Array<'message.delivered' | 'message.bounced' | 'message.complained' | 'message.rejected' | 'message.delivery_delayed' | 'message.received' | 'message.received.spam' | 'calendar.changed' | 'sendmux.test'>;
     /**
      * True when the 24-hour retry window has been exhausted for this subscription. Reset by updating the subscription (e.g. fixing the URL) and re-enabling.
      */
@@ -114,7 +114,7 @@ export type WebhookSubscription = {
     /**
      * Event types this subscription receives.
      */
-    event_types: Array<'message.delivered' | 'message.bounced' | 'message.complained' | 'message.rejected' | 'message.delivery_delayed' | 'message.received' | 'message.received.spam' | 'sendmux.test'>;
+    event_types: Array<'message.delivered' | 'message.bounced' | 'message.complained' | 'message.rejected' | 'message.delivery_delayed' | 'message.received' | 'message.received.spam' | 'calendar.changed' | 'sendmux.test'>;
     /**
      * True when the 24-hour retry window has been exhausted for this subscription. Reset by updating the subscription (e.g. fixing the URL) and re-enabling.
      */
@@ -152,8 +152,32 @@ export type CursorPagination = {
 /**
  * The JSON request body delivered to the webhook endpoint.
  */
-export type WebhookEventPayload = {
-    data: WebhookEventData;
+export type WebhookEventPayload = ({
+    type: 'message.bounced' | 'message.complained' | 'message.delivered' | 'message.delivery_delayed' | 'message.received' | 'message.received.spam' | 'message.rejected' | 'sendmux.test';
+} & MailWebhookEventPayload) | ({
+    type: 'calendar.changed';
+} & CalendarWebhookEventPayload);
+
+export type CalendarWebhookEventData = {
+    created: Array<string>;
+    destroyed: Array<string>;
+    has_more: boolean;
+    mailbox_id: string;
+    /**
+     * Opaque identifier scoped to the selected mailbox.
+     */
+    new_state: string;
+    /**
+     * Opaque identifier scoped to the selected mailbox.
+     */
+    old_state: string;
+    resource: 'calendar' | 'event';
+    sync_required: boolean;
+    updated: Array<string>;
+};
+
+export type CalendarWebhookEventPayload = {
+    data: CalendarWebhookEventData;
     /**
      * Stable per-event identifier. Also sent in the X-Sendmux-Event-Id header.
      */
@@ -166,10 +190,7 @@ export type WebhookEventPayload = {
      * Team that owns the event.
      */
     team_public_id: string;
-    /**
-     * Dotted event type. Same value as the X-Sendmux-Event-Type header.
-     */
-    type: 'message.delivered' | 'message.bounced' | 'message.complained' | 'message.rejected' | 'message.delivery_delayed' | 'message.received' | 'message.received.spam' | 'sendmux.test';
+    type: 'calendar.changed';
 };
 
 export type WebhookEventData = {
@@ -226,13 +247,33 @@ export type WebhookEventData = {
      */
     sender: string | null;
     /**
-     * Sendmux message correlation ID for outbound sending feedback when available.
+     * Qubrics message correlation ID for outbound sending feedback when available.
      */
     sendmux_message_id: string | null;
     /**
      * Target webhook ID for synthetic `sendmux.test` payloads.
      */
     webhook_id: string | null;
+};
+
+export type MailWebhookEventPayload = {
+    data: WebhookEventData;
+    /**
+     * Stable per-event identifier. Also sent in the X-Sendmux-Event-Id header.
+     */
+    id: string;
+    /**
+     * When the event occurred.
+     */
+    occurred_at: string;
+    /**
+     * Team that owns the event.
+     */
+    team_public_id: string;
+    /**
+     * Dotted event type. Same value as the X-Sendmux-Event-Type header.
+     */
+    type: 'message.delivered' | 'message.bounced' | 'message.complained' | 'message.rejected' | 'message.delivery_delayed' | 'message.received' | 'message.received.spam' | 'sendmux.test';
 };
 
 export type WebhookDeliveryPayloadResponse = SuccessEnvelope & {
@@ -256,7 +297,7 @@ export type WebhookDeliveryPayload = {
     /**
      * Event types a webhook may subscribe to. `sendmux.test` is accepted so you can verify end-to-end delivery via POST /webhooks/{id}/test.
      */
-    event_type: 'message.delivered' | 'message.bounced' | 'message.complained' | 'message.rejected' | 'message.delivery_delayed' | 'message.received' | 'message.received.spam' | 'sendmux.test';
+    event_type: 'message.delivered' | 'message.bounced' | 'message.complained' | 'message.rejected' | 'message.delivery_delayed' | 'message.received' | 'message.received.spam' | 'calendar.changed' | 'sendmux.test';
     /**
      * Timestamp when this retained payload expires.
      */
@@ -294,7 +335,7 @@ export type WebhookDeliveryAttempt = {
     /**
      * Event types a webhook may subscribe to. `sendmux.test` is accepted so you can verify end-to-end delivery via POST /webhooks/{id}/test.
      */
-    event_type: 'message.delivered' | 'message.bounced' | 'message.complained' | 'message.rejected' | 'message.delivery_delayed' | 'message.received' | 'message.received.spam' | 'sendmux.test';
+    event_type: 'message.delivered' | 'message.bounced' | 'message.complained' | 'message.rejected' | 'message.delivery_delayed' | 'message.received' | 'message.received.spam' | 'calendar.changed' | 'sendmux.test';
     /**
      * Delivery-attempt public ID
      */
@@ -357,7 +398,7 @@ export type WebhookCreateBody = {
     /**
      * At least one event type must be provided.
      */
-    event_types: Array<'message.delivered' | 'message.bounced' | 'message.complained' | 'message.rejected' | 'message.delivery_delayed' | 'message.received' | 'message.received.spam' | 'sendmux.test'>;
+    event_types: Array<'message.delivered' | 'message.bounced' | 'message.complained' | 'message.rejected' | 'message.delivery_delayed' | 'message.received' | 'message.received.spam' | 'calendar.changed' | 'sendmux.test'>;
     filters?: WebhookFilters & unknown;
     /**
      * Optional human-friendly label (max 255 chars). Surfaced in dashboard list/detail views.
@@ -1217,7 +1258,7 @@ export type MailboxDomainDnsRecords = {
     dmarc: MailboxDomainNameValueRecord & unknown;
     mail_from: MailboxDomainMailFromRecords;
     /**
-     * MX records the customer must place. All point at Sendmux's inbound mail servers.
+     * MX records the customer must place. All point at Qubrics' inbound mail servers.
      */
     mx: Array<MailboxDomainMxRecord>;
     spf: MailboxDomainNameValueRecord & unknown;
@@ -4092,7 +4133,7 @@ export type ManagementListDeliveryData = {
         /**
          * Filter by event type.
          */
-        event_type?: 'message.delivered' | 'message.bounced' | 'message.complained' | 'message.rejected' | 'message.delivery_delayed' | 'message.received' | 'message.received.spam' | 'sendmux.test';
+        event_type?: 'message.delivered' | 'message.bounced' | 'message.complained' | 'message.rejected' | 'message.delivery_delayed' | 'message.received' | 'message.received.spam' | 'calendar.changed' | 'sendmux.test';
         /**
          * Filter by delivery result.
          */

@@ -44,16 +44,16 @@
       "cli.py": "ed2b48ed6ee9a081ac40a1e8c5c29d032bb356eaee1f0a31713092a0558f1539",
       "config.py": "28f9fe9f396d707562fb119a75f3a92a27db78ade735cf3bf2f5d3039c6583df",
       "contract.py": "8be5dcf207fd771774beddf433cad3734a9250284a26e57d9d3f607c670395c3",
-      "curation.py": "ba8e91c99cf203654e25a766db3bb02d1fa2bfa5768ad6a3edb69df03ad9774f",
+      "curation.py": "2aa82e2282e56502ed8d55a151069688a226748d7826c41a2de5b208fd9471a6",
       "hosted.py": "6ed9af8290311fb7ce34dd52fe234d003b28069bd63ee0d78ecdfd8dcba084b8",
       "hosted_auth.py": "3e7e8452d02e764b3e4f680948c2215254a5372692429bb3a2946a6401254ffe",
-      "hosted_proxy.py": "10c51845ef393fbb75749cc8b9cbaedc2f0c5e43f650805842dad3c84f538493",
+      "hosted_proxy.py": "c54f9e98f3e23c86e3a8dbfe11780b5ce1e2a871564ac684b97e631d823d6dac",
       "live_e2e.py": "714b1ad5a70d694f0c8907037e937f24354ee12c9eb42bde13ed070cd38ce93b",
       "observability.py": "c15ac702f237bdf4f00b46a431e97d3e5d4ed41a0a1c20643bd7c07805728427",
       "openapi/__init__.py": "04a300726f2d3f551c88591fa171ed8bd7c7caa6f3257f438e52884ba782fdb1",
-      "openapi/openapi-app.json": "dd39d2329fc51098455f499e551ad3e33f14bc9243c793dfa47fc353a57f62ea",
+      "openapi/openapi-app.json": "70cb2afda691acce48f15f4a20edfd4eacac2096886d2be51ac4a872f5d7a834",
       "openapi/openapi-sending.json": "c1f82f9b8944026571d9e66ae84d4bef90e6c575cc8a57127afcdc6e90aa7b0e",
-      "permissions.py": "aa27f177b17871d954327a8a6d063dfb5b1f87d1a77d661893739137a1d5e2ca",
+      "permissions.py": "ab82598020c7f057b2ea48156d0ccc7e75b77f3ddea38feb139b71afb5ff83ab",
       "response_ownership.py": "eff042d51d3d158438e05fd131e0e993fa76706a2895838e84114fb0c488ef83",
       "retry.py": "e1454a54ffe1b5b558c820b6e9cff2d2c0f8c1ea501f63051dc9716bf1f67191",
       "security.py": "45f59d632995254dc8dc5acec41b6f0f5c583a7db3f9c50a143a8c48dffa4016",
@@ -2049,6 +2049,304 @@
             "open_world_hint": true,
             "read_only_hint": false
           },
+          "description": "Create a private calendar only when the user asks. Requires calendar.write. This does not send invitations or email reminders.",
+          "input_schema": {
+            "properties": {
+              "Idempotency-Key": {
+                "description": "Stable key for this exact create in this mailbox. Saved responses replay for 24 hours. Uncertain creates still require read-only reconciliation.",
+                "maxLength": 255,
+                "minLength": 1,
+                "type": "string"
+              },
+              "mailbox_id": {
+                "description": "Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox.",
+                "type": "string"
+              },
+              "name": {
+                "description": "Private calendar name.",
+                "example": "Appointments",
+                "maxLength": 255,
+                "minLength": 1,
+                "type": "string"
+              },
+              "time_zone": {
+                "description": "Time zone for local event times.",
+                "example": "Australia/Melbourne",
+                "maxLength": 100,
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "name",
+              "time_zone"
+            ],
+            "type": "object"
+          },
+          "name": "mailbox_create_calendar",
+          "output_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "properties": {
+              "result": {
+                "allOf": [
+                  {
+                    "properties": {
+                      "meta": {
+                        "additionalProperties": {},
+                        "properties": {},
+                        "type": "object"
+                      },
+                      "ok": {
+                        "enum": [
+                          true
+                        ],
+                        "type": "boolean"
+                      }
+                    },
+                    "required": [
+                      "ok",
+                      "meta"
+                    ],
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "data": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "id": {
+                            "description": "Opaque identifier scoped to the selected mailbox.",
+                            "maxLength": 4096,
+                            "minLength": 1,
+                            "pattern": "^[A-Za-z0-9_-]+$",
+                            "type": "string"
+                          },
+                          "mailbox_id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "time_zone": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "mailbox_id",
+                          "name",
+                          "time_zone"
+                        ],
+                        "type": "object"
+                      },
+                      "meta": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "request_id": {
+                            "example": "req_clxxxxxxxxxxxxxxxxxxxxxxxxx",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "request_id"
+                        ],
+                        "type": "object"
+                      }
+                    },
+                    "required": [
+                      "data"
+                    ],
+                    "type": "object"
+                  }
+                ],
+                "unevaluatedProperties": {
+                  "not": {}
+                },
+                "x-fastmcp-top-level-schema": "MailboxCalendarCreatedResponse"
+              }
+            },
+            "required": [
+              "result"
+            ],
+            "type": "object",
+            "x-fastmcp-wrap-result": true
+          },
+          "title": "Create Calendar"
+        },
+        {
+          "annotations": {
+            "destructive_hint": false,
+            "idempotent_hint": false,
+            "open_world_hint": true,
+            "read_only_hint": false
+          },
+          "description": "Save an event without invitations or email reminders. Requires calendar.write. Retain the required UID before dispatch; after an uncertain result reconcile by UID lookup and never repeat the create after an empty immediate lookup.",
+          "input_schema": {
+            "properties": {
+              "Idempotency-Key": {
+                "description": "Stable key for this exact create in this mailbox. Saved responses replay for 24 hours. Uncertain creates still require read-only reconciliation.",
+                "maxLength": 255,
+                "minLength": 1,
+                "type": "string"
+              },
+              "calendar_id": {
+                "description": "Calendar ID in the selected mailbox.",
+                "maxLength": 4096,
+                "minLength": 1,
+                "pattern": "^[A-Za-z0-9_-]+$",
+                "type": "string"
+              },
+              "description": {
+                "description": "Plain text event details. Set null to clear.",
+                "maxLength": 20000,
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "duration": {
+                "description": "Event duration expressed as days, hours, minutes or seconds.",
+                "example": "PT1H",
+                "maxLength": 80,
+                "pattern": "^P(?=\\d+D|T\\d)(?:\\d+D)?(?:T(?=\\d)(?:\\d+H)?(?:\\d+M)?(?:\\d+(?:\\.\\d{1,9})?S)?)?$",
+                "type": "string"
+              },
+              "mailbox_id": {
+                "description": "Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox.",
+                "type": "string"
+              },
+              "start": {
+                "description": "Local start date and time without an offset, interpreted in time_zone.",
+                "example": "2026-11-02T10:00:00",
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}$",
+                "type": "string"
+              },
+              "time_zone": {
+                "description": "Time zone for local event times.",
+                "example": "Australia/Melbourne",
+                "maxLength": 100,
+                "minLength": 1,
+                "type": "string"
+              },
+              "title": {
+                "description": "Event title.",
+                "example": "Appointment",
+                "maxLength": 1000,
+                "type": "string"
+              },
+              "uid": {
+                "description": "Stable caller-held identity, retained before this request. An uncertain create must be reconciled by UID lookup; never repeat it after an empty immediate lookup.",
+                "maxLength": 255,
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "calendar_id",
+              "uid",
+              "title",
+              "start",
+              "time_zone",
+              "duration"
+            ],
+            "type": "object"
+          },
+          "name": "mailbox_create_calendar_event",
+          "output_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "properties": {
+              "result": {
+                "allOf": [
+                  {
+                    "properties": {
+                      "meta": {
+                        "additionalProperties": {},
+                        "properties": {},
+                        "type": "object"
+                      },
+                      "ok": {
+                        "enum": [
+                          true
+                        ],
+                        "type": "boolean"
+                      }
+                    },
+                    "required": [
+                      "ok",
+                      "meta"
+                    ],
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "data": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "id": {
+                            "description": "Opaque identifier scoped to the selected mailbox.",
+                            "maxLength": 4096,
+                            "minLength": 1,
+                            "pattern": "^[A-Za-z0-9_-]+$",
+                            "type": "string"
+                          },
+                          "mailbox_id": {
+                            "type": "string"
+                          },
+                          "uid": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "mailbox_id",
+                          "uid"
+                        ],
+                        "type": "object"
+                      },
+                      "meta": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "request_id": {
+                            "example": "req_clxxxxxxxxxxxxxxxxxxxxxxxxx",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "request_id"
+                        ],
+                        "type": "object"
+                      }
+                    },
+                    "required": [
+                      "data"
+                    ],
+                    "type": "object"
+                  }
+                ],
+                "unevaluatedProperties": {
+                  "not": {}
+                },
+                "x-fastmcp-top-level-schema": "MailboxCalendarEventCreatedResponse"
+              }
+            },
+            "required": [
+              "result"
+            ],
+            "type": "object",
+            "x-fastmcp-wrap-result": true
+          },
+          "title": "Create Calendar Event"
+        },
+        {
+          "annotations": {
+            "destructive_hint": false,
+            "idempotent_hint": false,
+            "open_world_hint": true,
+            "read_only_hint": false
+          },
           "description": "Save a message for review without sending it. Requires mailbox.read and mailbox.drafts.write. Use source.action for reply, reply_all, forward or adopt; explicit content overrides prepared defaults. Adoption requires Idempotency-Key; reuse it when retrying the same create request.",
           "input_schema": {
             "properties": {
@@ -2679,6 +2977,242 @@
         {
           "annotations": {
             "destructive_hint": true,
+            "idempotent_hint": true,
+            "open_world_hint": true,
+            "read_only_hint": false
+          },
+          "description": "Requires calendar.write. Fetch the calendar and pass its ETag in If-Match. A calendar containing events returns 409 conflict.",
+          "input_schema": {
+            "properties": {
+              "If-Match": {
+                "description": "ETag from the most recent calendar GET. Wildcards are rejected.",
+                "minLength": 1,
+                "type": "string"
+              },
+              "calendar_id": {
+                "description": "Calendar ID in the selected mailbox.",
+                "maxLength": 4096,
+                "minLength": 1,
+                "pattern": "^[A-Za-z0-9_-]+$",
+                "type": "string"
+              },
+              "mailbox_id": {
+                "description": "Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "calendar_id",
+              "If-Match"
+            ],
+            "type": "object"
+          },
+          "name": "mailbox_delete_calendar",
+          "output_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "properties": {
+              "result": {
+                "allOf": [
+                  {
+                    "properties": {
+                      "meta": {
+                        "additionalProperties": {},
+                        "properties": {},
+                        "type": "object"
+                      },
+                      "ok": {
+                        "enum": [
+                          true
+                        ],
+                        "type": "boolean"
+                      }
+                    },
+                    "required": [
+                      "ok",
+                      "meta"
+                    ],
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "data": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "deleted": {
+                            "enum": [
+                              true
+                            ],
+                            "type": "boolean"
+                          },
+                          "id": {
+                            "description": "Opaque identifier scoped to the selected mailbox.",
+                            "maxLength": 4096,
+                            "minLength": 1,
+                            "pattern": "^[A-Za-z0-9_-]+$",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "deleted"
+                        ],
+                        "type": "object"
+                      },
+                      "meta": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "request_id": {
+                            "example": "req_clxxxxxxxxxxxxxxxxxxxxxxxxx",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "request_id"
+                        ],
+                        "type": "object"
+                      }
+                    },
+                    "required": [
+                      "data"
+                    ],
+                    "type": "object"
+                  }
+                ],
+                "unevaluatedProperties": {
+                  "not": {}
+                },
+                "x-fastmcp-top-level-schema": "MailboxCalendarDeletedResponse"
+              }
+            },
+            "required": [
+              "result"
+            ],
+            "type": "object",
+            "x-fastmcp-wrap-result": true
+          },
+          "title": "Delete an empty calendar"
+        },
+        {
+          "annotations": {
+            "destructive_hint": true,
+            "idempotent_hint": true,
+            "open_world_hint": true,
+            "read_only_hint": false
+          },
+          "description": "Delete an event only when the user asks. Requires calendar.write and the reviewed If-Match value. This does not send cancellation emails; reload after a conflict.",
+          "input_schema": {
+            "properties": {
+              "If-Match": {
+                "description": "ETag from the most recent event GET. Wildcards are rejected.",
+                "minLength": 1,
+                "type": "string"
+              },
+              "event_id": {
+                "description": "Event ID in the selected mailbox.",
+                "maxLength": 4096,
+                "minLength": 1,
+                "pattern": "^[A-Za-z0-9_-]+$",
+                "type": "string"
+              },
+              "mailbox_id": {
+                "description": "Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "If-Match"
+            ],
+            "type": "object"
+          },
+          "name": "mailbox_delete_calendar_event",
+          "output_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "properties": {
+              "result": {
+                "allOf": [
+                  {
+                    "properties": {
+                      "meta": {
+                        "additionalProperties": {},
+                        "properties": {},
+                        "type": "object"
+                      },
+                      "ok": {
+                        "enum": [
+                          true
+                        ],
+                        "type": "boolean"
+                      }
+                    },
+                    "required": [
+                      "ok",
+                      "meta"
+                    ],
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "data": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "deleted": {
+                            "enum": [
+                              true
+                            ],
+                            "type": "boolean"
+                          },
+                          "id": {
+                            "description": "Opaque identifier scoped to the selected mailbox.",
+                            "maxLength": 4096,
+                            "minLength": 1,
+                            "pattern": "^[A-Za-z0-9_-]+$",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "deleted"
+                        ],
+                        "type": "object"
+                      },
+                      "meta": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "request_id": {
+                            "example": "req_clxxxxxxxxxxxxxxxxxxxxxxxxx",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "request_id"
+                        ],
+                        "type": "object"
+                      }
+                    },
+                    "required": [
+                      "data"
+                    ],
+                    "type": "object"
+                  }
+                ],
+                "unevaluatedProperties": {
+                  "not": {}
+                },
+                "x-fastmcp-top-level-schema": "MailboxCalendarEventDeletedResponse"
+              }
+            },
+            "required": [
+              "result"
+            ],
+            "type": "object",
+            "x-fastmcp-wrap-result": true
+          },
+          "title": "Delete Calendar Event"
+        },
+        {
+          "annotations": {
+            "destructive_hint": true,
             "idempotent_hint": false,
             "open_world_hint": true,
             "read_only_hint": false
@@ -3152,6 +3686,468 @@
             "x-fastmcp-wrap-result": true
           },
           "title": "Read Attachment Text"
+        },
+        {
+          "annotations": {
+            "destructive_hint": false,
+            "idempotent_hint": true,
+            "open_world_hint": true,
+            "read_only_hint": true
+          },
+          "description": "Read one calendar in the selected mailbox. Requires calendar.read.",
+          "input_schema": {
+            "properties": {
+              "If-None-Match": {
+                "description": "ETag from a previous resource GET; a matching version returns 304.",
+                "type": "string"
+              },
+              "calendar_id": {
+                "description": "Calendar ID in the selected mailbox.",
+                "maxLength": 4096,
+                "minLength": 1,
+                "pattern": "^[A-Za-z0-9_-]+$",
+                "type": "string"
+              },
+              "mailbox_id": {
+                "description": "Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "calendar_id"
+            ],
+            "type": "object"
+          },
+          "name": "mailbox_get_calendar",
+          "output_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "properties": {
+              "result": {
+                "allOf": [
+                  {
+                    "properties": {
+                      "meta": {
+                        "additionalProperties": {},
+                        "properties": {},
+                        "type": "object"
+                      },
+                      "ok": {
+                        "enum": [
+                          true
+                        ],
+                        "type": "boolean"
+                      }
+                    },
+                    "required": [
+                      "ok",
+                      "meta"
+                    ],
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "data": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "id": {
+                            "description": "Opaque identifier scoped to the selected mailbox.",
+                            "maxLength": 4096,
+                            "minLength": 1,
+                            "pattern": "^[A-Za-z0-9_-]+$",
+                            "type": "string"
+                          },
+                          "is_default": {
+                            "description": "Whether this is the mailbox's current default calendar.",
+                            "type": "boolean"
+                          },
+                          "mailbox_id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "time_zone": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "mailbox_id",
+                          "name",
+                          "time_zone",
+                          "is_default"
+                        ],
+                        "type": "object"
+                      },
+                      "meta": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "request_id": {
+                            "example": "req_clxxxxxxxxxxxxxxxxxxxxxxxxx",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "request_id"
+                        ],
+                        "type": "object"
+                      }
+                    },
+                    "required": [
+                      "data"
+                    ],
+                    "type": "object"
+                  }
+                ],
+                "unevaluatedProperties": {
+                  "not": {}
+                },
+                "x-fastmcp-top-level-schema": "MailboxCalendarResponse"
+              }
+            },
+            "required": [
+              "result"
+            ],
+            "type": "object",
+            "x-fastmcp-wrap-result": true
+          },
+          "title": "Get Calendar"
+        },
+        {
+          "annotations": {
+            "destructive_hint": false,
+            "idempotent_hint": true,
+            "open_world_hint": true,
+            "read_only_hint": true
+          },
+          "description": "Read one event before editing or deleting it. Requires calendar.read. Retain its current concurrency token for the next conditional change.",
+          "input_schema": {
+            "properties": {
+              "If-None-Match": {
+                "description": "ETag from a previous resource GET; a matching version returns 304.",
+                "type": "string"
+              },
+              "event_id": {
+                "description": "Event ID in the selected mailbox.",
+                "maxLength": 4096,
+                "minLength": 1,
+                "pattern": "^[A-Za-z0-9_-]+$",
+                "type": "string"
+              },
+              "mailbox_id": {
+                "description": "Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id"
+            ],
+            "type": "object"
+          },
+          "name": "mailbox_get_calendar_event",
+          "output_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "properties": {
+              "result": {
+                "allOf": [
+                  {
+                    "properties": {
+                      "meta": {
+                        "additionalProperties": {},
+                        "properties": {},
+                        "type": "object"
+                      },
+                      "ok": {
+                        "enum": [
+                          true
+                        ],
+                        "type": "boolean"
+                      }
+                    },
+                    "required": [
+                      "ok",
+                      "meta"
+                    ],
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "data": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "calendar_ids": {
+                            "items": {
+                              "description": "Opaque identifier scoped to the selected mailbox.",
+                              "maxLength": 4096,
+                              "minLength": 1,
+                              "pattern": "^[A-Za-z0-9_-]+$",
+                              "type": "string"
+                            },
+                            "maxItems": 250,
+                            "type": "array"
+                          },
+                          "description": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          },
+                          "duration": {
+                            "type": "string"
+                          },
+                          "etag": {
+                            "description": "Current event version, also returned in the ETag response header. Pass this value in If-Match when updating or deleting the event.",
+                            "type": "string"
+                          },
+                          "id": {
+                            "description": "Opaque identifier scoped to the selected mailbox.",
+                            "maxLength": 4096,
+                            "minLength": 1,
+                            "pattern": "^[A-Za-z0-9_-]+$",
+                            "type": "string"
+                          },
+                          "mailbox_id": {
+                            "type": "string"
+                          },
+                          "start": {
+                            "type": "string"
+                          },
+                          "time_zone": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "uid": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "mailbox_id",
+                          "calendar_ids",
+                          "uid",
+                          "title",
+                          "description",
+                          "start",
+                          "time_zone",
+                          "duration",
+                          "etag"
+                        ],
+                        "type": "object"
+                      },
+                      "meta": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "request_id": {
+                            "example": "req_clxxxxxxxxxxxxxxxxxxxxxxxxx",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "request_id"
+                        ],
+                        "type": "object"
+                      }
+                    },
+                    "required": [
+                      "data"
+                    ],
+                    "type": "object"
+                  }
+                ],
+                "unevaluatedProperties": {
+                  "not": {}
+                },
+                "x-fastmcp-top-level-schema": "MailboxCalendarEventResponse"
+              }
+            },
+            "required": [
+              "result"
+            ],
+            "type": "object",
+            "x-fastmcp-wrap-result": true
+          },
+          "title": "Get Calendar Event"
+        },
+        {
+          "annotations": {
+            "destructive_hint": false,
+            "idempotent_hint": true,
+            "open_world_hint": true,
+            "read_only_hint": true
+          },
+          "description": "Read bounded event changes from a retained state. Requires calendar.read. When sync_required is true, perform a full event resync; these coalesced changes are not a complete activity history.",
+          "input_schema": {
+            "properties": {
+              "limit": {
+                "default": 100,
+                "description": "Maximum changed IDs across the response, up to 100.",
+                "maximum": 100.0,
+                "minimum": 1.0,
+                "type": "integer"
+              },
+              "mailbox_id": {
+                "description": "Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox.",
+                "type": "string"
+              },
+              "since_state": {
+                "description": "Event state from the previous changes response. Omit to establish a full-refresh baseline.",
+                "maxLength": 4096,
+                "minLength": 1,
+                "pattern": "^[A-Za-z0-9_-]+$",
+                "type": "string"
+              }
+            },
+            "required": [],
+            "type": "object"
+          },
+          "name": "mailbox_get_calendar_event_changes",
+          "output_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "properties": {
+              "result": {
+                "allOf": [
+                  {
+                    "properties": {
+                      "meta": {
+                        "additionalProperties": {},
+                        "properties": {},
+                        "type": "object"
+                      },
+                      "ok": {
+                        "enum": [
+                          true
+                        ],
+                        "type": "boolean"
+                      }
+                    },
+                    "required": [
+                      "ok",
+                      "meta"
+                    ],
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "data": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "created": {
+                            "items": {
+                              "description": "Opaque identifier scoped to the selected mailbox.",
+                              "maxLength": 4096,
+                              "minLength": 1,
+                              "pattern": "^[A-Za-z0-9_-]+$",
+                              "type": "string"
+                            },
+                            "maxItems": 100,
+                            "type": "array"
+                          },
+                          "destroyed": {
+                            "items": {
+                              "description": "Opaque identifier scoped to the selected mailbox.",
+                              "maxLength": 4096,
+                              "minLength": 1,
+                              "pattern": "^[A-Za-z0-9_-]+$",
+                              "type": "string"
+                            },
+                            "maxItems": 100,
+                            "type": "array"
+                          },
+                          "has_more": {
+                            "type": "boolean"
+                          },
+                          "mailbox_id": {
+                            "type": "string"
+                          },
+                          "new_state": {
+                            "description": "Opaque identifier scoped to the selected mailbox.",
+                            "maxLength": 4096,
+                            "minLength": 1,
+                            "pattern": "^[A-Za-z0-9_-]+$",
+                            "type": "string"
+                          },
+                          "old_state": {
+                            "description": "Opaque identifier scoped to the selected mailbox.",
+                            "maxLength": 4096,
+                            "minLength": 1,
+                            "pattern": "^[A-Za-z0-9_-]+$",
+                            "type": "string"
+                          },
+                          "resource": {
+                            "enum": [
+                              "event"
+                            ],
+                            "type": "string"
+                          },
+                          "sync_required": {
+                            "type": "boolean"
+                          },
+                          "updated": {
+                            "items": {
+                              "description": "Opaque identifier scoped to the selected mailbox.",
+                              "maxLength": 4096,
+                              "minLength": 1,
+                              "pattern": "^[A-Za-z0-9_-]+$",
+                              "type": "string"
+                            },
+                            "maxItems": 100,
+                            "type": "array"
+                          }
+                        },
+                        "required": [
+                          "mailbox_id",
+                          "resource",
+                          "created",
+                          "updated",
+                          "destroyed",
+                          "old_state",
+                          "new_state",
+                          "has_more",
+                          "sync_required"
+                        ],
+                        "type": "object"
+                      },
+                      "meta": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "request_id": {
+                            "example": "req_clxxxxxxxxxxxxxxxxxxxxxxxxx",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "request_id"
+                        ],
+                        "type": "object"
+                      }
+                    },
+                    "required": [
+                      "data"
+                    ],
+                    "type": "object"
+                  }
+                ],
+                "unevaluatedProperties": {
+                  "not": {}
+                },
+                "x-fastmcp-top-level-schema": "MailboxCalendarChangesResponse"
+              }
+            },
+            "required": [
+              "result"
+            ],
+            "type": "object",
+            "x-fastmcp-wrap-result": true
+          },
+          "title": "Get Calendar Event Changes"
         },
         {
           "annotations": {
@@ -6487,6 +7483,343 @@
             "x-fastmcp-wrap-result": true
           },
           "title": "Read Message Body"
+        },
+        {
+          "annotations": {
+            "destructive_hint": false,
+            "idempotent_hint": true,
+            "open_world_hint": true,
+            "read_only_hint": true
+          },
+          "description": "List events in the selected mailbox or look up a caller-held UID. Requires calendar.read. UID search is eventually consistent: an empty immediate lookup leaves an uncertain create unresolved and never authorises repeating it.",
+          "input_schema": {
+            "properties": {
+              "calendar_id": {
+                "description": "Limit events to this calendar in the selected mailbox.",
+                "maxLength": 4096,
+                "minLength": 1,
+                "pattern": "^[A-Za-z0-9_-]+$",
+                "type": "string"
+              },
+              "cursor": {
+                "description": "Cursor from the previous page. Keep the same filters while paging.",
+                "maxLength": 4096,
+                "minLength": 1,
+                "pattern": "^[A-Za-z0-9_-]+$",
+                "type": "string"
+              },
+              "limit": {
+                "default": 50,
+                "description": "Maximum records per page, up to 100.",
+                "maximum": 100.0,
+                "minimum": 1.0,
+                "type": "integer"
+              },
+              "mailbox_id": {
+                "description": "Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox.",
+                "type": "string"
+              },
+              "uid": {
+                "description": "Exact immutable event UID. Empty results can reflect a recent create awaiting search visibility; never repeat an uncertain create.",
+                "maxLength": 255,
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [],
+            "type": "object"
+          },
+          "name": "mailbox_list_calendar_events",
+          "output_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "properties": {
+              "result": {
+                "allOf": [
+                  {
+                    "properties": {
+                      "meta": {
+                        "additionalProperties": {},
+                        "properties": {},
+                        "type": "object"
+                      },
+                      "ok": {
+                        "enum": [
+                          true
+                        ],
+                        "type": "boolean"
+                      }
+                    },
+                    "required": [
+                      "ok",
+                      "meta"
+                    ],
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "data": {
+                        "items": {
+                          "additionalProperties": false,
+                          "properties": {
+                            "calendar_ids": {
+                              "items": {
+                                "description": "Opaque identifier scoped to the selected mailbox.",
+                                "maxLength": 4096,
+                                "minLength": 1,
+                                "pattern": "^[A-Za-z0-9_-]+$",
+                                "type": "string"
+                              },
+                              "maxItems": 250,
+                              "type": "array"
+                            },
+                            "description": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "duration": {
+                              "type": "string"
+                            },
+                            "id": {
+                              "description": "Opaque identifier scoped to the selected mailbox.",
+                              "maxLength": 4096,
+                              "minLength": 1,
+                              "pattern": "^[A-Za-z0-9_-]+$",
+                              "type": "string"
+                            },
+                            "mailbox_id": {
+                              "type": "string"
+                            },
+                            "start": {
+                              "type": "string"
+                            },
+                            "time_zone": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "title": {
+                              "type": "string"
+                            },
+                            "uid": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "mailbox_id",
+                            "calendar_ids",
+                            "uid",
+                            "title",
+                            "description",
+                            "start",
+                            "time_zone",
+                            "duration"
+                          ],
+                          "type": "object"
+                        },
+                        "type": "array"
+                      },
+                      "meta": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "request_id": {
+                            "example": "req_clxxxxxxxxxxxxxxxxxxxxxxxxx",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "request_id"
+                        ],
+                        "type": "object"
+                      },
+                      "pagination": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "has_more": {
+                            "type": "boolean"
+                          },
+                          "next_cursor": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "has_more"
+                        ],
+                        "type": "object"
+                      }
+                    },
+                    "required": [
+                      "data",
+                      "pagination"
+                    ],
+                    "type": "object"
+                  }
+                ],
+                "unevaluatedProperties": {
+                  "not": {}
+                },
+                "x-fastmcp-top-level-schema": "MailboxCalendarEventListResponse"
+              }
+            },
+            "required": [
+              "result"
+            ],
+            "type": "object",
+            "x-fastmcp-wrap-result": true
+          },
+          "title": "List Calendar Events"
+        },
+        {
+          "annotations": {
+            "destructive_hint": false,
+            "idempotent_hint": true,
+            "open_world_hint": true,
+            "read_only_hint": true
+          },
+          "description": "List calendars in the selected mailbox. Requires calendar.read. Use a small limit and continue with the returned cursor.",
+          "input_schema": {
+            "properties": {
+              "cursor": {
+                "description": "Cursor from the previous page. Keep the same filters while paging.",
+                "maxLength": 4096,
+                "minLength": 1,
+                "pattern": "^[A-Za-z0-9_-]+$",
+                "type": "string"
+              },
+              "limit": {
+                "default": 50,
+                "description": "Maximum records per page, up to 100.",
+                "maximum": 100.0,
+                "minimum": 1.0,
+                "type": "integer"
+              },
+              "mailbox_id": {
+                "description": "Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox.",
+                "type": "string"
+              }
+            },
+            "required": [],
+            "type": "object"
+          },
+          "name": "mailbox_list_calendars",
+          "output_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "properties": {
+              "result": {
+                "allOf": [
+                  {
+                    "properties": {
+                      "meta": {
+                        "additionalProperties": {},
+                        "properties": {},
+                        "type": "object"
+                      },
+                      "ok": {
+                        "enum": [
+                          true
+                        ],
+                        "type": "boolean"
+                      }
+                    },
+                    "required": [
+                      "ok",
+                      "meta"
+                    ],
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "data": {
+                        "items": {
+                          "additionalProperties": false,
+                          "properties": {
+                            "id": {
+                              "description": "Opaque identifier scoped to the selected mailbox.",
+                              "maxLength": 4096,
+                              "minLength": 1,
+                              "pattern": "^[A-Za-z0-9_-]+$",
+                              "type": "string"
+                            },
+                            "is_default": {
+                              "description": "Whether this is the mailbox's current default calendar.",
+                              "type": "boolean"
+                            },
+                            "mailbox_id": {
+                              "type": "string"
+                            },
+                            "name": {
+                              "type": "string"
+                            },
+                            "time_zone": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "mailbox_id",
+                            "name",
+                            "time_zone",
+                            "is_default"
+                          ],
+                          "type": "object"
+                        },
+                        "type": "array"
+                      },
+                      "meta": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "request_id": {
+                            "example": "req_clxxxxxxxxxxxxxxxxxxxxxxxxx",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "request_id"
+                        ],
+                        "type": "object"
+                      },
+                      "pagination": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "has_more": {
+                            "type": "boolean"
+                          },
+                          "next_cursor": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "has_more"
+                        ],
+                        "type": "object"
+                      }
+                    },
+                    "required": [
+                      "data",
+                      "pagination"
+                    ],
+                    "type": "object"
+                  }
+                ],
+                "unevaluatedProperties": {
+                  "not": {}
+                },
+                "x-fastmcp-top-level-schema": "MailboxCalendarListResponse"
+              }
+            },
+            "required": [
+              "result"
+            ],
+            "type": "object",
+            "x-fastmcp-wrap-result": true
+          },
+          "title": "List Calendars"
         },
         {
           "annotations": {
@@ -10878,6 +12211,158 @@
         {
           "annotations": {
             "destructive_hint": false,
+            "idempotent_hint": true,
+            "open_world_hint": true,
+            "read_only_hint": false
+          },
+          "description": "Edit an event without sending invitations or email reminders. Requires calendar.write and the reviewed If-Match value. Reload after a conflict before making another change.",
+          "input_schema": {
+            "properties": {
+              "If-Match": {
+                "description": "ETag from the most recent event GET. Wildcards are rejected.",
+                "minLength": 1,
+                "type": "string"
+              },
+              "description": {
+                "description": "Plain text event details. Set null to clear.",
+                "maxLength": 20000,
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "duration": {
+                "description": "Event duration expressed as days, hours, minutes or seconds.",
+                "example": "PT1H",
+                "maxLength": 80,
+                "pattern": "^P(?=\\d+D|T\\d)(?:\\d+D)?(?:T(?=\\d)(?:\\d+H)?(?:\\d+M)?(?:\\d+(?:\\.\\d{1,9})?S)?)?$",
+                "type": "string"
+              },
+              "event_id": {
+                "description": "Event ID in the selected mailbox.",
+                "maxLength": 4096,
+                "minLength": 1,
+                "pattern": "^[A-Za-z0-9_-]+$",
+                "type": "string"
+              },
+              "mailbox_id": {
+                "description": "Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox.",
+                "type": "string"
+              },
+              "start": {
+                "description": "Local start date and time without an offset, interpreted in time_zone.",
+                "example": "2026-11-02T10:00:00",
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}$",
+                "type": "string"
+              },
+              "time_zone": {
+                "description": "Time zone for local event times.",
+                "example": "Australia/Melbourne",
+                "maxLength": 100,
+                "minLength": 1,
+                "type": "string"
+              },
+              "title": {
+                "description": "Event title.",
+                "example": "Appointment",
+                "maxLength": 1000,
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_id",
+              "If-Match"
+            ],
+            "type": "object"
+          },
+          "name": "mailbox_update_calendar_event",
+          "output_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "properties": {
+              "result": {
+                "allOf": [
+                  {
+                    "properties": {
+                      "meta": {
+                        "additionalProperties": {},
+                        "properties": {},
+                        "type": "object"
+                      },
+                      "ok": {
+                        "enum": [
+                          true
+                        ],
+                        "type": "boolean"
+                      }
+                    },
+                    "required": [
+                      "ok",
+                      "meta"
+                    ],
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "data": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "id": {
+                            "description": "Opaque identifier scoped to the selected mailbox.",
+                            "maxLength": 4096,
+                            "minLength": 1,
+                            "pattern": "^[A-Za-z0-9_-]+$",
+                            "type": "string"
+                          },
+                          "updated": {
+                            "enum": [
+                              true
+                            ],
+                            "type": "boolean"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "updated"
+                        ],
+                        "type": "object"
+                      },
+                      "meta": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "request_id": {
+                            "example": "req_clxxxxxxxxxxxxxxxxxxxxxxxxx",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "request_id"
+                        ],
+                        "type": "object"
+                      }
+                    },
+                    "required": [
+                      "data"
+                    ],
+                    "type": "object"
+                  }
+                ],
+                "unevaluatedProperties": {
+                  "not": {}
+                },
+                "x-fastmcp-top-level-schema": "MailboxCalendarEventUpdatedResponse"
+              }
+            },
+            "required": [
+              "result"
+            ],
+            "type": "object",
+            "x-fastmcp-wrap-result": true
+          },
+          "title": "Edit Calendar Event"
+        },
+        {
+          "annotations": {
+            "destructive_hint": false,
             "idempotent_hint": false,
             "open_world_hint": true,
             "read_only_hint": false
@@ -12560,7 +14045,7 @@
                                 "type": "object"
                               },
                               "mx": {
-                                "description": "MX records the customer must place. All point at Sendmux's inbound mail servers.",
+                                "description": "MX records the customer must place. All point at Qubrics' inbound mail servers.",
                                 "items": {
                                   "additionalProperties": false,
                                   "properties": {
@@ -12629,7 +14114,7 @@
                                     "type": "object"
                                   },
                                   {
-                                    "description": "Ownership-proof TXT record (Sendmux-specific)"
+                                    "description": "Ownership-proof TXT record (Qubrics-specific)"
                                   }
                                 ]
                               }
@@ -13267,6 +14752,7 @@
                     "message.delivery_delayed",
                     "message.received",
                     "message.received.spam",
+                    "calendar.changed",
                     "sendmux.test"
                   ],
                   "example": "message.bounced",
@@ -13377,6 +14863,7 @@
                                 "message.delivery_delayed",
                                 "message.received",
                                 "message.received.spam",
+                                "calendar.changed",
                                 "sendmux.test"
                               ],
                               "example": "message.bounced",
@@ -13929,7 +15416,7 @@
                                 "type": "object"
                               },
                               "mx": {
-                                "description": "MX records the customer must place. All point at Sendmux's inbound mail servers.",
+                                "description": "MX records the customer must place. All point at Qubrics' inbound mail servers.",
                                 "items": {
                                   "additionalProperties": false,
                                   "properties": {
@@ -13998,7 +15485,7 @@
                                     "type": "object"
                                   },
                                   {
-                                    "description": "Ownership-proof TXT record (Sendmux-specific)"
+                                    "description": "Ownership-proof TXT record (Qubrics-specific)"
                                   }
                                 ]
                               }
@@ -15455,7 +16942,7 @@
                                   "type": "object"
                                 },
                                 "mx": {
-                                  "description": "MX records the customer must place. All point at Sendmux's inbound mail servers.",
+                                  "description": "MX records the customer must place. All point at Qubrics' inbound mail servers.",
                                   "items": {
                                     "additionalProperties": false,
                                     "properties": {
@@ -15524,7 +17011,7 @@
                                       "type": "object"
                                     },
                                     {
-                                      "description": "Ownership-proof TXT record (Sendmux-specific)"
+                                      "description": "Ownership-proof TXT record (Qubrics-specific)"
                                     }
                                   ]
                                 }
@@ -16254,6 +17741,7 @@
                                   "message.delivery_delayed",
                                   "message.received",
                                   "message.received.spam",
+                                  "calendar.changed",
                                   "sendmux.test"
                                 ],
                                 "example": "message.bounced",
@@ -18687,7 +20175,7 @@
         }
       ]
     },
-    "count": 65
+    "count": 75
   },
   "uploads": {
     "inline_decoded_max_bytes": 32768,

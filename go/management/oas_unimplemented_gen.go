@@ -135,7 +135,7 @@ func (UnimplementedHandler) ManagementDeactivateProvider(ctx context.Context, pa
 
 // ManagementDeleteDomain implements managementDeleteDomain operation.
 //
-// Removes a domain from our mail platform, Amazon SES, and Sendmux. Blocked if any active mailbox
+// Removes a domain from our mail platform, Amazon SES, and Qubrics. Blocked if any active mailbox
 // still uses the domain — delete those mailboxes first.
 //
 // DELETE /domains/{public_id}
@@ -145,7 +145,7 @@ func (UnimplementedHandler) ManagementDeleteDomain(ctx context.Context, params M
 
 // ManagementDeleteMailbox implements managementDeleteMailbox operation.
 //
-// Removes a mailbox from our mail platform, Amazon SES (for `@myagent.mx` addresses), and Sendmux.
+// Removes a mailbox from our mail platform, Amazon SES (for `@myagent.mx` addresses), and Qubrics.
 // All associated API keys are revoked.
 //
 // DELETE /mailboxes/{public_id}

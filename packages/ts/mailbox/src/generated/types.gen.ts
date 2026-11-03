@@ -252,6 +252,29 @@ export type PatchMailboxFolderBody = {
     sort_order?: number;
 };
 
+export type PatchCalendarEventBody = {
+    /**
+     * Plain text event details. Set null to clear.
+     */
+    description?: string | null;
+    /**
+     * Event duration expressed as days, hours, minutes or seconds.
+     */
+    duration?: string;
+    /**
+     * Local start date and time without an offset, interpreted in time_zone.
+     */
+    start?: string;
+    /**
+     * Time zone for local event times.
+     */
+    time_zone?: string;
+    /**
+     * Event title.
+     */
+    title?: string;
+};
+
 export type MailboxUsageResponse = SuccessEnvelope & {
     data: MailboxUsage;
     meta?: ResponseMeta;
@@ -1256,6 +1279,161 @@ export type MailboxChangesResponse = SuccessEnvelope & {
     meta?: ResponseMeta;
 };
 
+export type MailboxCalendarResponse = SuccessEnvelope & {
+    data: MailboxCalendar;
+    meta?: ResponseMeta;
+};
+
+export type MailboxCalendar = {
+    /**
+     * Opaque identifier scoped to the selected mailbox.
+     */
+    id: string;
+    /**
+     * Whether this is the mailbox's current default calendar.
+     */
+    is_default: boolean;
+    mailbox_id: string;
+    name: string;
+    time_zone: string | null;
+};
+
+export type MailboxCalendarListResponse = SuccessEnvelope & {
+    data: Array<MailboxCalendar>;
+    meta?: ResponseMeta;
+    pagination: CursorPagination;
+};
+
+export type MailboxCalendarEventWithEtag = {
+    calendar_ids: Array<string>;
+    description: string | null;
+    duration: string;
+    /**
+     * Current event version, also returned in the ETag response header. Pass this value in If-Match when updating or deleting the event.
+     */
+    etag: string;
+    /**
+     * Opaque identifier scoped to the selected mailbox.
+     */
+    id: string;
+    mailbox_id: string;
+    start: string;
+    time_zone: string | null;
+    title: string;
+    uid: string;
+};
+
+export type MailboxCalendarEventUpdatedResponse = SuccessEnvelope & {
+    data: {
+        /**
+         * Opaque identifier scoped to the selected mailbox.
+         */
+        id: string;
+        updated: true;
+    };
+    meta?: ResponseMeta;
+};
+
+export type MailboxCalendarEventResponse = SuccessEnvelope & {
+    data: MailboxCalendarEventWithEtag;
+    meta?: ResponseMeta;
+};
+
+export type MailboxCalendarEventListResponse = SuccessEnvelope & {
+    data: Array<MailboxCalendarEvent>;
+    meta?: ResponseMeta;
+    pagination: CursorPagination;
+};
+
+export type MailboxCalendarEvent = {
+    calendar_ids: Array<string>;
+    description: string | null;
+    duration: string;
+    /**
+     * Opaque identifier scoped to the selected mailbox.
+     */
+    id: string;
+    mailbox_id: string;
+    start: string;
+    time_zone: string | null;
+    title: string;
+    uid: string;
+};
+
+export type MailboxCalendarEventDeletedResponse = SuccessEnvelope & {
+    data: {
+        deleted: true;
+        /**
+         * Opaque identifier scoped to the selected mailbox.
+         */
+        id: string;
+    };
+    meta?: ResponseMeta;
+};
+
+export type MailboxCalendarEventCreatedResponse = SuccessEnvelope & {
+    data: MailboxCalendarEventCreated;
+    meta?: ResponseMeta;
+};
+
+export type MailboxCalendarEventCreated = {
+    /**
+     * Opaque identifier scoped to the selected mailbox.
+     */
+    id: string;
+    mailbox_id: string;
+    uid: string;
+};
+
+export type MailboxCalendarDeletedResponse = SuccessEnvelope & {
+    data: {
+        deleted: true;
+        /**
+         * Opaque identifier scoped to the selected mailbox.
+         */
+        id: string;
+    };
+    meta?: ResponseMeta;
+};
+
+export type MailboxCalendarCreatedResponse = SuccessEnvelope & {
+    data: MailboxCalendarCreated;
+    meta?: ResponseMeta;
+};
+
+export type MailboxCalendarCreated = {
+    /**
+     * Opaque identifier scoped to the selected mailbox.
+     */
+    id: string;
+    mailbox_id: string;
+    name: string;
+    time_zone: string | null;
+};
+
+export type MailboxCalendarChangesResponse = SuccessEnvelope & {
+    data: MailboxCalendarChanges;
+    meta?: ResponseMeta;
+};
+
+export type MailboxCalendarChanges = {
+    created: Array<string>;
+    destroyed: Array<string>;
+    has_more: boolean;
+    mailbox_id: string;
+    /**
+     * Opaque identifier scoped to the selected mailbox.
+     */
+    new_state: string;
+    /**
+     * Opaque identifier scoped to the selected mailbox.
+     */
+    old_state: string;
+    resource: 'event';
+    sync_required: boolean;
+    updated: Array<string>;
+};
+
 export type MailboxBatchUpdateMessagesResultResponse = SuccessEnvelope & {
     data: MailboxBatchUpdateMessagesResult;
     meta?: ResponseMeta;
@@ -1609,6 +1787,48 @@ export type CreateMailboxDraft = {
     }>;
 };
 
+export type CreateCalendarEventBody = {
+    /**
+     * Calendar ID in the selected mailbox.
+     */
+    calendar_id: string;
+    /**
+     * Plain text event details. Set null to clear.
+     */
+    description?: string | null;
+    /**
+     * Event duration expressed as days, hours, minutes or seconds.
+     */
+    duration: string;
+    /**
+     * Local start date and time without an offset, interpreted in time_zone.
+     */
+    start: string;
+    /**
+     * Time zone for local event times.
+     */
+    time_zone: string;
+    /**
+     * Event title.
+     */
+    title: string;
+    /**
+     * Stable caller-held identity, retained before this request. An uncertain create must be reconciled by UID lookup; never repeat it after an empty immediate lookup.
+     */
+    uid: string;
+};
+
+export type CreateCalendarBody = {
+    /**
+     * Private calendar name.
+     */
+    name: string;
+    /**
+     * Time zone for local event times.
+     */
+    time_zone: string;
+};
+
 export type ControlMailboxDraftSchedule = {
     /**
      * Exact saved content revision.
@@ -1820,6 +2040,765 @@ export type MailboxUploadAttachmentResponses = {
 };
 
 export type MailboxUploadAttachmentResponse = MailboxUploadAttachmentResponses[keyof MailboxUploadAttachmentResponses];
+
+export type MailboxListCalendarEventsData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Maximum records per page, up to 100.
+         */
+        limit?: number;
+        /**
+         * Cursor from the previous page. Keep the same filters while paging.
+         */
+        cursor?: string;
+        /**
+         * Exact immutable event UID. Empty results can reflect a recent create awaiting search visibility; never repeat an uncertain create.
+         */
+        uid?: string;
+        /**
+         * Limit events to this calendar in the selected mailbox.
+         */
+        calendar_id?: string;
+        /**
+         * Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox.
+         */
+        mailbox_id?: string;
+    };
+    url: '/mailbox/calendar-events';
+};
+
+export type MailboxListCalendarEventsErrors = {
+    /**
+     * Request failed.
+     */
+    400: ApiError;
+    /**
+     * Request failed.
+     */
+    401: ApiError;
+    /**
+     * Request failed.
+     */
+    403: ApiError;
+    /**
+     * Request failed.
+     */
+    404: ApiError;
+    /**
+     * Request failed.
+     */
+    409: ApiError;
+    /**
+     * Request failed.
+     */
+    413: ApiError;
+    /**
+     * Request failed.
+     */
+    422: ApiError;
+    /**
+     * Request failed.
+     */
+    429: ApiError;
+    /**
+     * Request failed.
+     */
+    500: ApiError;
+    /**
+     * Request failed.
+     */
+    503: ApiError;
+};
+
+export type MailboxListCalendarEventsError = MailboxListCalendarEventsErrors[keyof MailboxListCalendarEventsErrors];
+
+export type MailboxListCalendarEventsResponses = {
+    /**
+     * Events.
+     */
+    200: MailboxCalendarEventListResponse;
+};
+
+export type MailboxListCalendarEventsResponse = MailboxListCalendarEventsResponses[keyof MailboxListCalendarEventsResponses];
+
+export type MailboxCreateCalendarEventData = {
+    body: CreateCalendarEventBody;
+    headers?: {
+        /**
+         * Stable key for this exact create in this mailbox. Saved responses replay for 24 hours. Uncertain creates still require read-only reconciliation.
+         */
+        'Idempotency-Key'?: string;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox.
+         */
+        mailbox_id?: string;
+    };
+    url: '/mailbox/calendar-events';
+};
+
+export type MailboxCreateCalendarEventErrors = {
+    /**
+     * Request failed.
+     */
+    400: ApiError;
+    /**
+     * Request failed.
+     */
+    401: ApiError;
+    /**
+     * Request failed.
+     */
+    403: ApiError;
+    /**
+     * Request failed.
+     */
+    404: ApiError;
+    /**
+     * Request failed.
+     */
+    409: ApiError;
+    /**
+     * Request failed.
+     */
+    413: ApiError;
+    /**
+     * Request failed.
+     */
+    422: ApiError;
+    /**
+     * Request failed.
+     */
+    429: ApiError;
+    /**
+     * Request failed.
+     */
+    500: ApiError;
+    /**
+     * Request failed.
+     */
+    503: ApiError;
+};
+
+export type MailboxCreateCalendarEventError = MailboxCreateCalendarEventErrors[keyof MailboxCreateCalendarEventErrors];
+
+export type MailboxCreateCalendarEventResponses = {
+    /**
+     * Event identity acknowledged. Fetch it using the Location header.
+     */
+    201: MailboxCalendarEventCreatedResponse;
+};
+
+export type MailboxCreateCalendarEventResponse = MailboxCreateCalendarEventResponses[keyof MailboxCreateCalendarEventResponses];
+
+export type MailboxDeleteCalendarEventData = {
+    body?: never;
+    headers: {
+        /**
+         * ETag from the most recent event GET. Wildcards are rejected.
+         */
+        'If-Match': string;
+    };
+    path: {
+        /**
+         * Event ID in the selected mailbox.
+         */
+        event_id: string;
+    };
+    query?: {
+        /**
+         * Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox.
+         */
+        mailbox_id?: string;
+    };
+    url: '/mailbox/calendar-events/{event_id}';
+};
+
+export type MailboxDeleteCalendarEventErrors = {
+    /**
+     * Request failed.
+     */
+    400: ApiError;
+    /**
+     * Request failed.
+     */
+    401: ApiError;
+    /**
+     * Request failed.
+     */
+    403: ApiError;
+    /**
+     * Request failed.
+     */
+    404: ApiError;
+    /**
+     * Request failed.
+     */
+    409: ApiError;
+    /**
+     * Request failed.
+     */
+    413: ApiError;
+    /**
+     * Request failed.
+     */
+    422: ApiError;
+    /**
+     * Request failed.
+     */
+    429: ApiError;
+    /**
+     * Request failed.
+     */
+    500: ApiError;
+    /**
+     * Request failed.
+     */
+    503: ApiError;
+};
+
+export type MailboxDeleteCalendarEventError = MailboxDeleteCalendarEventErrors[keyof MailboxDeleteCalendarEventErrors];
+
+export type MailboxDeleteCalendarEventResponses = {
+    /**
+     * Event deleted.
+     */
+    200: MailboxCalendarEventDeletedResponse;
+};
+
+export type MailboxDeleteCalendarEventResponse = MailboxDeleteCalendarEventResponses[keyof MailboxDeleteCalendarEventResponses];
+
+export type MailboxGetCalendarEventData = {
+    body?: never;
+    headers?: {
+        /**
+         * ETag from a previous resource GET; a matching version returns 304.
+         */
+        'If-None-Match'?: string;
+    };
+    path: {
+        /**
+         * Event ID in the selected mailbox.
+         */
+        event_id: string;
+    };
+    query?: {
+        /**
+         * Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox.
+         */
+        mailbox_id?: string;
+    };
+    url: '/mailbox/calendar-events/{event_id}';
+};
+
+export type MailboxGetCalendarEventErrors = {
+    /**
+     * Request failed.
+     */
+    400: ApiError;
+    /**
+     * Request failed.
+     */
+    401: ApiError;
+    /**
+     * Request failed.
+     */
+    403: ApiError;
+    /**
+     * Request failed.
+     */
+    404: ApiError;
+    /**
+     * Request failed.
+     */
+    409: ApiError;
+    /**
+     * Request failed.
+     */
+    413: ApiError;
+    /**
+     * Request failed.
+     */
+    422: ApiError;
+    /**
+     * Request failed.
+     */
+    429: ApiError;
+    /**
+     * Request failed.
+     */
+    500: ApiError;
+    /**
+     * Request failed.
+     */
+    503: ApiError;
+};
+
+export type MailboxGetCalendarEventError = MailboxGetCalendarEventErrors[keyof MailboxGetCalendarEventErrors];
+
+export type MailboxGetCalendarEventResponses = {
+    /**
+     * Event.
+     */
+    200: MailboxCalendarEventResponse;
+};
+
+export type MailboxGetCalendarEventResponse = MailboxGetCalendarEventResponses[keyof MailboxGetCalendarEventResponses];
+
+export type MailboxUpdateCalendarEventData = {
+    body: PatchCalendarEventBody;
+    headers: {
+        /**
+         * ETag from the most recent event GET. Wildcards are rejected.
+         */
+        'If-Match': string;
+    };
+    path: {
+        /**
+         * Event ID in the selected mailbox.
+         */
+        event_id: string;
+    };
+    query?: {
+        /**
+         * Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox.
+         */
+        mailbox_id?: string;
+    };
+    url: '/mailbox/calendar-events/{event_id}';
+};
+
+export type MailboxUpdateCalendarEventErrors = {
+    /**
+     * Request failed.
+     */
+    400: ApiError;
+    /**
+     * Request failed.
+     */
+    401: ApiError;
+    /**
+     * Request failed.
+     */
+    403: ApiError;
+    /**
+     * Request failed.
+     */
+    404: ApiError;
+    /**
+     * Request failed.
+     */
+    409: ApiError;
+    /**
+     * Request failed.
+     */
+    413: ApiError;
+    /**
+     * Request failed.
+     */
+    422: ApiError;
+    /**
+     * Request failed.
+     */
+    429: ApiError;
+    /**
+     * Request failed.
+     */
+    500: ApiError;
+    /**
+     * Request failed.
+     */
+    503: ApiError;
+};
+
+export type MailboxUpdateCalendarEventError = MailboxUpdateCalendarEventErrors[keyof MailboxUpdateCalendarEventErrors];
+
+export type MailboxUpdateCalendarEventResponses = {
+    /**
+     * Update acknowledged. Fetch the event for its current version.
+     */
+    200: MailboxCalendarEventUpdatedResponse;
+};
+
+export type MailboxUpdateCalendarEventResponse = MailboxUpdateCalendarEventResponses[keyof MailboxUpdateCalendarEventResponses];
+
+export type MailboxGetCalendarEventChangesData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Event state from the previous changes response. Omit to establish a full-refresh baseline.
+         */
+        since_state?: string;
+        /**
+         * Maximum changed IDs across the response, up to 100.
+         */
+        limit?: number;
+        /**
+         * Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox.
+         */
+        mailbox_id?: string;
+    };
+    url: '/mailbox/calendar-events/changes';
+};
+
+export type MailboxGetCalendarEventChangesErrors = {
+    /**
+     * Request failed.
+     */
+    400: ApiError;
+    /**
+     * Request failed.
+     */
+    401: ApiError;
+    /**
+     * Request failed.
+     */
+    403: ApiError;
+    /**
+     * Request failed.
+     */
+    404: ApiError;
+    /**
+     * Request failed.
+     */
+    409: ApiError;
+    /**
+     * Request failed.
+     */
+    413: ApiError;
+    /**
+     * Request failed.
+     */
+    422: ApiError;
+    /**
+     * Request failed.
+     */
+    429: ApiError;
+    /**
+     * Request failed.
+     */
+    500: ApiError;
+    /**
+     * Request failed.
+     */
+    503: ApiError;
+};
+
+export type MailboxGetCalendarEventChangesError = MailboxGetCalendarEventChangesErrors[keyof MailboxGetCalendarEventChangesErrors];
+
+export type MailboxGetCalendarEventChangesResponses = {
+    /**
+     * Changes or an explicit full refresh requirement.
+     */
+    200: MailboxCalendarChangesResponse;
+};
+
+export type MailboxGetCalendarEventChangesResponse = MailboxGetCalendarEventChangesResponses[keyof MailboxGetCalendarEventChangesResponses];
+
+export type MailboxListCalendarsData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Maximum records per page, up to 100.
+         */
+        limit?: number;
+        /**
+         * Cursor from the previous page. Keep the same filters while paging.
+         */
+        cursor?: string;
+        /**
+         * Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox.
+         */
+        mailbox_id?: string;
+    };
+    url: '/mailbox/calendars';
+};
+
+export type MailboxListCalendarsErrors = {
+    /**
+     * Request failed.
+     */
+    400: ApiError;
+    /**
+     * Request failed.
+     */
+    401: ApiError;
+    /**
+     * Request failed.
+     */
+    403: ApiError;
+    /**
+     * Request failed.
+     */
+    404: ApiError;
+    /**
+     * Request failed.
+     */
+    409: ApiError;
+    /**
+     * Request failed.
+     */
+    413: ApiError;
+    /**
+     * Request failed.
+     */
+    422: ApiError;
+    /**
+     * Request failed.
+     */
+    429: ApiError;
+    /**
+     * Request failed.
+     */
+    500: ApiError;
+    /**
+     * Request failed.
+     */
+    503: ApiError;
+};
+
+export type MailboxListCalendarsError = MailboxListCalendarsErrors[keyof MailboxListCalendarsErrors];
+
+export type MailboxListCalendarsResponses = {
+    /**
+     * Calendars.
+     */
+    200: MailboxCalendarListResponse;
+};
+
+export type MailboxListCalendarsResponse = MailboxListCalendarsResponses[keyof MailboxListCalendarsResponses];
+
+export type MailboxCreateCalendarData = {
+    body: CreateCalendarBody;
+    headers?: {
+        /**
+         * Stable key for this exact create in this mailbox. Saved responses replay for 24 hours. Uncertain creates still require read-only reconciliation.
+         */
+        'Idempotency-Key'?: string;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox.
+         */
+        mailbox_id?: string;
+    };
+    url: '/mailbox/calendars';
+};
+
+export type MailboxCreateCalendarErrors = {
+    /**
+     * Request failed.
+     */
+    400: ApiError;
+    /**
+     * Request failed.
+     */
+    401: ApiError;
+    /**
+     * Request failed.
+     */
+    403: ApiError;
+    /**
+     * Request failed.
+     */
+    404: ApiError;
+    /**
+     * Request failed.
+     */
+    409: ApiError;
+    /**
+     * Request failed.
+     */
+    413: ApiError;
+    /**
+     * Request failed.
+     */
+    422: ApiError;
+    /**
+     * Request failed.
+     */
+    429: ApiError;
+    /**
+     * Request failed.
+     */
+    500: ApiError;
+    /**
+     * Request failed.
+     */
+    503: ApiError;
+};
+
+export type MailboxCreateCalendarError = MailboxCreateCalendarErrors[keyof MailboxCreateCalendarErrors];
+
+export type MailboxCreateCalendarResponses = {
+    /**
+     * Calendar created.
+     */
+    201: MailboxCalendarCreatedResponse;
+};
+
+export type MailboxCreateCalendarResponse = MailboxCreateCalendarResponses[keyof MailboxCreateCalendarResponses];
+
+export type MailboxDeleteCalendarData = {
+    body?: never;
+    headers: {
+        /**
+         * ETag from the most recent calendar GET. Wildcards are rejected.
+         */
+        'If-Match': string;
+    };
+    path: {
+        /**
+         * Calendar ID in the selected mailbox.
+         */
+        calendar_id: string;
+    };
+    query?: {
+        /**
+         * Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox.
+         */
+        mailbox_id?: string;
+    };
+    url: '/mailbox/calendars/{calendar_id}';
+};
+
+export type MailboxDeleteCalendarErrors = {
+    /**
+     * Request failed.
+     */
+    400: ApiError;
+    /**
+     * Request failed.
+     */
+    401: ApiError;
+    /**
+     * Request failed.
+     */
+    403: ApiError;
+    /**
+     * Request failed.
+     */
+    404: ApiError;
+    /**
+     * Request failed.
+     */
+    409: ApiError;
+    /**
+     * Request failed.
+     */
+    413: ApiError;
+    /**
+     * Request failed.
+     */
+    422: ApiError;
+    /**
+     * Request failed.
+     */
+    429: ApiError;
+    /**
+     * Request failed.
+     */
+    500: ApiError;
+    /**
+     * Request failed.
+     */
+    503: ApiError;
+};
+
+export type MailboxDeleteCalendarError = MailboxDeleteCalendarErrors[keyof MailboxDeleteCalendarErrors];
+
+export type MailboxDeleteCalendarResponses = {
+    /**
+     * Calendar deleted.
+     */
+    200: MailboxCalendarDeletedResponse;
+};
+
+export type MailboxDeleteCalendarResponse = MailboxDeleteCalendarResponses[keyof MailboxDeleteCalendarResponses];
+
+export type MailboxGetCalendarData = {
+    body?: never;
+    headers?: {
+        /**
+         * ETag from a previous resource GET; a matching version returns 304.
+         */
+        'If-None-Match'?: string;
+    };
+    path: {
+        /**
+         * Calendar ID in the selected mailbox.
+         */
+        calendar_id: string;
+    };
+    query?: {
+        /**
+         * Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox.
+         */
+        mailbox_id?: string;
+    };
+    url: '/mailbox/calendars/{calendar_id}';
+};
+
+export type MailboxGetCalendarErrors = {
+    /**
+     * Request failed.
+     */
+    400: ApiError;
+    /**
+     * Request failed.
+     */
+    401: ApiError;
+    /**
+     * Request failed.
+     */
+    403: ApiError;
+    /**
+     * Request failed.
+     */
+    404: ApiError;
+    /**
+     * Request failed.
+     */
+    409: ApiError;
+    /**
+     * Request failed.
+     */
+    413: ApiError;
+    /**
+     * Request failed.
+     */
+    422: ApiError;
+    /**
+     * Request failed.
+     */
+    429: ApiError;
+    /**
+     * Request failed.
+     */
+    500: ApiError;
+    /**
+     * Request failed.
+     */
+    503: ApiError;
+};
+
+export type MailboxGetCalendarError = MailboxGetCalendarErrors[keyof MailboxGetCalendarErrors];
+
+export type MailboxGetCalendarResponses = {
+    /**
+     * Calendar.
+     */
+    200: MailboxCalendarResponse;
+};
+
+export type MailboxGetCalendarResponse = MailboxGetCalendarResponses[keyof MailboxGetCalendarResponses];
 
 export type MailboxGetChangesData = {
     body?: never;

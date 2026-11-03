@@ -12,6 +12,16 @@ PermissionRequirement = tuple[str, ...]
 
 TOOL_PERMISSION_REQUIREMENTS: Mapping[str, PermissionRequirement] = MappingProxyType(
     {
+        "mailbox_list_calendars": ("calendar.read",),
+        "mailbox_create_calendar": ("calendar.write",),
+        "mailbox_get_calendar": ("calendar.read",),
+        "mailbox_list_calendar_events": ("calendar.read",),
+        "mailbox_create_calendar_event": ("calendar.write",),
+        "mailbox_get_calendar_event": ("calendar.read",),
+        "mailbox_update_calendar_event": ("calendar.write",),
+        "mailbox_delete_calendar_event": ("calendar.write",),
+        "mailbox_delete_calendar": ("calendar.write",),
+        "mailbox_get_calendar_event_changes": ("calendar.read",),
         "mailbox_list_drafts": ("mailbox.read",),
         "mailbox_get_draft": ("mailbox.read",),
         "mailbox_create_draft": ("mailbox.read", "mailbox.drafts.write"),

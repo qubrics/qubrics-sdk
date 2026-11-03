@@ -19,6 +19,7 @@ import (
 var regexMap = map[string]ogenregex.Regexp{
 	"^(?!-)[a-z0-9-]{1,63}(?<!-)(?:\\.(?!-)[a-z0-9-]{1,63}(?<!-))+$":                                                              ogenregex.MustCompile("^(?!-)[a-z0-9-]{1,63}(?<!-)(?:\\.(?!-)[a-z0-9-]{1,63}(?<!-))+$"),
 	"^(?![^\\r\\n]*[\\r\\n])(?![^@]*\\.\\.)[a-zA-Z0-9_%+-](?:[a-zA-Z0-9._%+-]*[a-zA-Z0-9_%+-])?@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,63}$": ogenregex.MustCompile("^(?![^\\r\\n]*[\\r\\n])(?![^@]*\\.\\.)[a-zA-Z0-9_%+-](?:[a-zA-Z0-9._%+-]*[a-zA-Z0-9_%+-])?@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,63}$"),
+	"^[A-Za-z0-9_-]+$": ogenregex.MustCompile("^[A-Za-z0-9_-]+$"),
 	"^[a-f0-9]{64}$":   ogenregex.MustCompile("^[a-f0-9]{64}$"),
 	"^\\d+$":           ogenregex.MustCompile("^\\d+$"),
 	"^\\d+\\.\\d{18}$": ogenregex.MustCompile("^\\d+\\.\\d{18}$"),

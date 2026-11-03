@@ -2,7 +2,7 @@
 
 import { client } from './client.gen.js';
 import type { Client, Options as Options2, TDataShape } from './client/index.js';
-import type { MailboxBatchDeleteMessagesData, MailboxBatchDeleteMessagesErrors, MailboxBatchDeleteMessagesResponses, MailboxBatchGetMessagesData, MailboxBatchGetMessagesErrors, MailboxBatchGetMessagesResponses, MailboxBatchUpdateMessagesData, MailboxBatchUpdateMessagesErrors, MailboxBatchUpdateMessagesResponses, MailboxControlDraftScheduleData, MailboxControlDraftScheduleErrors, MailboxControlDraftScheduleResponses, MailboxCountMessagesData, MailboxCountMessagesErrors, MailboxCountMessagesResponses, MailboxCreateAttachmentUploadData, MailboxCreateAttachmentUploadErrors, MailboxCreateAttachmentUploadResponses, MailboxCreateDraftData, MailboxCreateDraftErrors, MailboxCreateDraftResponses, MailboxCreateFolderData, MailboxCreateFolderErrors, MailboxCreateFolderResponses, MailboxDeleteDraftData, MailboxDeleteDraftErrors, MailboxDeleteDraftResponses, MailboxDeleteFolderData, MailboxDeleteFolderErrors, MailboxDeleteFolderResponses, MailboxDeleteMessageData, MailboxDeleteMessageErrors, MailboxDeleteMessageResponses, MailboxDownloadRawMessageData, MailboxDownloadRawMessageErrors, MailboxDownloadRawMessageResponses, MailboxGetAttachmentTextData, MailboxGetAttachmentTextErrors, MailboxGetAttachmentTextResponses, MailboxGetChangesData, MailboxGetChangesErrors, MailboxGetChangesResponses, MailboxGetConnectionData, MailboxGetConnectionErrors, MailboxGetConnectionResponses, MailboxGetDraftData, MailboxGetDraftErrors, MailboxGetDraftResponses, MailboxGetFolderChangesData, MailboxGetFolderChangesErrors, MailboxGetFolderChangesResponses, MailboxGetFolderData, MailboxGetFolderErrors, MailboxGetFolderResponses, MailboxGetIdentityData, MailboxGetIdentityErrors, MailboxGetIdentityResponses, MailboxGetMeData, MailboxGetMeErrors, MailboxGetMeResponses, MailboxGetMessageAttachmentData, MailboxGetMessageAttachmentErrors, MailboxGetMessageAttachmentResponses, MailboxGetMessageData, MailboxGetMessageErrors, MailboxGetMessageResponses, MailboxGetQuotaChangesData, MailboxGetQuotaChangesErrors, MailboxGetQuotaChangesResponses, MailboxGetSenderChoicesData, MailboxGetSenderChoicesErrors, MailboxGetSenderChoicesResponses, MailboxGetSessionData, MailboxGetSessionErrors, MailboxGetSessionResponses, MailboxGetSubmissionChangesData, MailboxGetSubmissionChangesErrors, MailboxGetSubmissionChangesResponses, MailboxGetSubmissionData, MailboxGetSubmissionErrors, MailboxGetSubmissionResponses, MailboxGetThreadContentData, MailboxGetThreadContentErrors, MailboxGetThreadContentResponses, MailboxGetThreadData, MailboxGetThreadErrors, MailboxGetThreadResponses, MailboxListBodyData, MailboxListBodyErrors, MailboxListBodyResponses, MailboxListContentData, MailboxListContentErrors, MailboxListContentResponses, MailboxListDraftsData, MailboxListDraftsErrors, MailboxListDraftsResponses, MailboxListFoldersData, MailboxListFoldersResponses, MailboxListGrantedMailboxesData, MailboxListGrantedMailboxesErrors, MailboxListGrantedMailboxesResponses, MailboxListIdentitiesData, MailboxListIdentitiesErrors, MailboxListIdentitiesResponses, MailboxListMessagesData, MailboxListMessagesErrors, MailboxListMessagesResponses, MailboxListQuotasData, MailboxListQuotasErrors, MailboxListQuotasResponses, MailboxListSubmissionsData, MailboxListSubmissionsErrors, MailboxListSubmissionsResponses, MailboxListThreadMessagesData, MailboxListThreadMessagesErrors, MailboxListThreadMessagesResponses, MailboxListThreadsData, MailboxListThreadsErrors, MailboxListThreadsResponses, MailboxListUsageData, MailboxListUsageResponses, MailboxQueryFolderChangesData, MailboxQueryFolderChangesErrors, MailboxQueryFolderChangesResponses, MailboxQueryMessageChangesData, MailboxQueryMessageChangesErrors, MailboxQueryMessageChangesResponses, MailboxRequestAttachmentTextData, MailboxRequestAttachmentTextErrors, MailboxRequestAttachmentTextResponses, MailboxSearchMessageSnippetsData, MailboxSearchMessageSnippetsErrors, MailboxSearchMessageSnippetsResponses, MailboxSendDraftData, MailboxSendDraftErrors, MailboxSendDraftResponses, MailboxSendMessageData, MailboxSendMessageErrors, MailboxSendMessageResponses, MailboxStreamEventsData, MailboxStreamEventsErrors, MailboxStreamEventsResponse, MailboxStreamEventsResponses, MailboxUpdateDraftData, MailboxUpdateDraftErrors, MailboxUpdateDraftResponses, MailboxUpdateFolderData, MailboxUpdateFolderErrors, MailboxUpdateFolderResponses, MailboxUpdateIdentityData, MailboxUpdateIdentityErrors, MailboxUpdateIdentityResponses, MailboxUpdateMessageData, MailboxUpdateMessageErrors, MailboxUpdateMessageResponses, MailboxUploadAttachmentData, MailboxUploadAttachmentErrors, MailboxUploadAttachmentResponses } from './types.gen.js';
+import type { MailboxBatchDeleteMessagesData, MailboxBatchDeleteMessagesErrors, MailboxBatchDeleteMessagesResponses, MailboxBatchGetMessagesData, MailboxBatchGetMessagesErrors, MailboxBatchGetMessagesResponses, MailboxBatchUpdateMessagesData, MailboxBatchUpdateMessagesErrors, MailboxBatchUpdateMessagesResponses, MailboxControlDraftScheduleData, MailboxControlDraftScheduleErrors, MailboxControlDraftScheduleResponses, MailboxCountMessagesData, MailboxCountMessagesErrors, MailboxCountMessagesResponses, MailboxCreateAttachmentUploadData, MailboxCreateAttachmentUploadErrors, MailboxCreateAttachmentUploadResponses, MailboxCreateCalendarData, MailboxCreateCalendarErrors, MailboxCreateCalendarEventData, MailboxCreateCalendarEventErrors, MailboxCreateCalendarEventResponses, MailboxCreateCalendarResponses, MailboxCreateDraftData, MailboxCreateDraftErrors, MailboxCreateDraftResponses, MailboxCreateFolderData, MailboxCreateFolderErrors, MailboxCreateFolderResponses, MailboxDeleteCalendarData, MailboxDeleteCalendarErrors, MailboxDeleteCalendarEventData, MailboxDeleteCalendarEventErrors, MailboxDeleteCalendarEventResponses, MailboxDeleteCalendarResponses, MailboxDeleteDraftData, MailboxDeleteDraftErrors, MailboxDeleteDraftResponses, MailboxDeleteFolderData, MailboxDeleteFolderErrors, MailboxDeleteFolderResponses, MailboxDeleteMessageData, MailboxDeleteMessageErrors, MailboxDeleteMessageResponses, MailboxDownloadRawMessageData, MailboxDownloadRawMessageErrors, MailboxDownloadRawMessageResponses, MailboxGetAttachmentTextData, MailboxGetAttachmentTextErrors, MailboxGetAttachmentTextResponses, MailboxGetCalendarData, MailboxGetCalendarErrors, MailboxGetCalendarEventChangesData, MailboxGetCalendarEventChangesErrors, MailboxGetCalendarEventChangesResponses, MailboxGetCalendarEventData, MailboxGetCalendarEventErrors, MailboxGetCalendarEventResponses, MailboxGetCalendarResponses, MailboxGetChangesData, MailboxGetChangesErrors, MailboxGetChangesResponses, MailboxGetConnectionData, MailboxGetConnectionErrors, MailboxGetConnectionResponses, MailboxGetDraftData, MailboxGetDraftErrors, MailboxGetDraftResponses, MailboxGetFolderChangesData, MailboxGetFolderChangesErrors, MailboxGetFolderChangesResponses, MailboxGetFolderData, MailboxGetFolderErrors, MailboxGetFolderResponses, MailboxGetIdentityData, MailboxGetIdentityErrors, MailboxGetIdentityResponses, MailboxGetMeData, MailboxGetMeErrors, MailboxGetMeResponses, MailboxGetMessageAttachmentData, MailboxGetMessageAttachmentErrors, MailboxGetMessageAttachmentResponses, MailboxGetMessageData, MailboxGetMessageErrors, MailboxGetMessageResponses, MailboxGetQuotaChangesData, MailboxGetQuotaChangesErrors, MailboxGetQuotaChangesResponses, MailboxGetSenderChoicesData, MailboxGetSenderChoicesErrors, MailboxGetSenderChoicesResponses, MailboxGetSessionData, MailboxGetSessionErrors, MailboxGetSessionResponses, MailboxGetSubmissionChangesData, MailboxGetSubmissionChangesErrors, MailboxGetSubmissionChangesResponses, MailboxGetSubmissionData, MailboxGetSubmissionErrors, MailboxGetSubmissionResponses, MailboxGetThreadContentData, MailboxGetThreadContentErrors, MailboxGetThreadContentResponses, MailboxGetThreadData, MailboxGetThreadErrors, MailboxGetThreadResponses, MailboxListBodyData, MailboxListBodyErrors, MailboxListBodyResponses, MailboxListCalendarEventsData, MailboxListCalendarEventsErrors, MailboxListCalendarEventsResponses, MailboxListCalendarsData, MailboxListCalendarsErrors, MailboxListCalendarsResponses, MailboxListContentData, MailboxListContentErrors, MailboxListContentResponses, MailboxListDraftsData, MailboxListDraftsErrors, MailboxListDraftsResponses, MailboxListFoldersData, MailboxListFoldersResponses, MailboxListGrantedMailboxesData, MailboxListGrantedMailboxesErrors, MailboxListGrantedMailboxesResponses, MailboxListIdentitiesData, MailboxListIdentitiesErrors, MailboxListIdentitiesResponses, MailboxListMessagesData, MailboxListMessagesErrors, MailboxListMessagesResponses, MailboxListQuotasData, MailboxListQuotasErrors, MailboxListQuotasResponses, MailboxListSubmissionsData, MailboxListSubmissionsErrors, MailboxListSubmissionsResponses, MailboxListThreadMessagesData, MailboxListThreadMessagesErrors, MailboxListThreadMessagesResponses, MailboxListThreadsData, MailboxListThreadsErrors, MailboxListThreadsResponses, MailboxListUsageData, MailboxListUsageResponses, MailboxQueryFolderChangesData, MailboxQueryFolderChangesErrors, MailboxQueryFolderChangesResponses, MailboxQueryMessageChangesData, MailboxQueryMessageChangesErrors, MailboxQueryMessageChangesResponses, MailboxRequestAttachmentTextData, MailboxRequestAttachmentTextErrors, MailboxRequestAttachmentTextResponses, MailboxSearchMessageSnippetsData, MailboxSearchMessageSnippetsErrors, MailboxSearchMessageSnippetsResponses, MailboxSendDraftData, MailboxSendDraftErrors, MailboxSendDraftResponses, MailboxSendMessageData, MailboxSendMessageErrors, MailboxSendMessageResponses, MailboxStreamEventsData, MailboxStreamEventsErrors, MailboxStreamEventsResponse, MailboxStreamEventsResponses, MailboxUpdateCalendarEventData, MailboxUpdateCalendarEventErrors, MailboxUpdateCalendarEventResponses, MailboxUpdateDraftData, MailboxUpdateDraftErrors, MailboxUpdateDraftResponses, MailboxUpdateFolderData, MailboxUpdateFolderErrors, MailboxUpdateFolderResponses, MailboxUpdateIdentityData, MailboxUpdateIdentityErrors, MailboxUpdateIdentityResponses, MailboxUpdateMessageData, MailboxUpdateMessageErrors, MailboxUpdateMessageResponses, MailboxUploadAttachmentData, MailboxUploadAttachmentErrors, MailboxUploadAttachmentResponses } from './types.gen.js';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -47,6 +47,116 @@ export const mailboxUploadAttachment = <ThrowOnError extends boolean = false>(op
         'Content-Type': 'application/octet-stream',
         ...options.headers
     }
+});
+
+/**
+ * List calendar events
+ *
+ * UID search is eventually consistent. An empty immediate lookup leaves an uncertain create unresolved and never authorises repeating it.
+ */
+export const mailboxListCalendarEvents = <ThrowOnError extends boolean = false>(options?: Options<MailboxListCalendarEventsData, ThrowOnError>) => (options?.client ?? client).get<MailboxListCalendarEventsResponses, MailboxListCalendarEventsErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }, { scheme: 'bearer', type: 'http' }],
+    url: '/mailbox/calendar-events',
+    ...options
+});
+
+/**
+ * Create a non-sending event
+ *
+ * Creates one event without participants, recurrence or alerts. Invitations and scheduling messages are disabled. Retain UID before dispatch. If creation is uncertain, use read-only UID lookup; do not repeat the create.
+ */
+export const mailboxCreateCalendarEvent = <ThrowOnError extends boolean = false>(options: Options<MailboxCreateCalendarEventData, ThrowOnError>) => (options.client ?? client).post<MailboxCreateCalendarEventResponses, MailboxCreateCalendarEventErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }, { scheme: 'bearer', type: 'http' }],
+    url: '/mailbox/calendar-events',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Delete a non-sending event
+ */
+export const mailboxDeleteCalendarEvent = <ThrowOnError extends boolean = false>(options: Options<MailboxDeleteCalendarEventData, ThrowOnError>) => (options.client ?? client).delete<MailboxDeleteCalendarEventResponses, MailboxDeleteCalendarEventErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }, { scheme: 'bearer', type: 'http' }],
+    url: '/mailbox/calendar-events/{event_id}',
+    ...options
+});
+
+/**
+ * Get a calendar event
+ */
+export const mailboxGetCalendarEvent = <ThrowOnError extends boolean = false>(options: Options<MailboxGetCalendarEventData, ThrowOnError>) => (options.client ?? client).get<MailboxGetCalendarEventResponses, MailboxGetCalendarEventErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }, { scheme: 'bearer', type: 'http' }],
+    url: '/mailbox/calendar-events/{event_id}',
+    ...options
+});
+
+/**
+ * Update a non-sending event
+ */
+export const mailboxUpdateCalendarEvent = <ThrowOnError extends boolean = false>(options: Options<MailboxUpdateCalendarEventData, ThrowOnError>) => (options.client ?? client).patch<MailboxUpdateCalendarEventResponses, MailboxUpdateCalendarEventErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }, { scheme: 'bearer', type: 'http' }],
+    url: '/mailbox/calendar-events/{event_id}',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Get calendar event changes
+ *
+ * Coalesced changes for synchronisation, not a lossless mutation history. Missing or expired state requires a full list refresh; establish a new baseline before listing and then consume changes to cover concurrent edits.
+ */
+export const mailboxGetCalendarEventChanges = <ThrowOnError extends boolean = false>(options?: Options<MailboxGetCalendarEventChangesData, ThrowOnError>) => (options?.client ?? client).get<MailboxGetCalendarEventChangesResponses, MailboxGetCalendarEventChangesErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }, { scheme: 'bearer', type: 'http' }],
+    url: '/mailbox/calendar-events/changes',
+    ...options
+});
+
+/**
+ * List calendars
+ */
+export const mailboxListCalendars = <ThrowOnError extends boolean = false>(options?: Options<MailboxListCalendarsData, ThrowOnError>) => (options?.client ?? client).get<MailboxListCalendarsResponses, MailboxListCalendarsErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }, { scheme: 'bearer', type: 'http' }],
+    url: '/mailbox/calendars',
+    ...options
+});
+
+/**
+ * Create a private calendar
+ */
+export const mailboxCreateCalendar = <ThrowOnError extends boolean = false>(options: Options<MailboxCreateCalendarData, ThrowOnError>) => (options.client ?? client).post<MailboxCreateCalendarResponses, MailboxCreateCalendarErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }, { scheme: 'bearer', type: 'http' }],
+    url: '/mailbox/calendars',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Delete an empty calendar
+ *
+ * Fetch the calendar and supply its ETag in If-Match. A calendar containing events returns 409 conflict.
+ */
+export const mailboxDeleteCalendar = <ThrowOnError extends boolean = false>(options: Options<MailboxDeleteCalendarData, ThrowOnError>) => (options.client ?? client).delete<MailboxDeleteCalendarResponses, MailboxDeleteCalendarErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }, { scheme: 'bearer', type: 'http' }],
+    url: '/mailbox/calendars/{calendar_id}',
+    ...options
+});
+
+/**
+ * Get a calendar
+ */
+export const mailboxGetCalendar = <ThrowOnError extends boolean = false>(options: Options<MailboxGetCalendarData, ThrowOnError>) => (options.client ?? client).get<MailboxGetCalendarResponses, MailboxGetCalendarErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }, { scheme: 'bearer', type: 'http' }],
+    url: '/mailbox/calendars/{calendar_id}',
+    ...options
 });
 
 /**

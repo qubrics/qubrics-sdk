@@ -1969,7 +1969,7 @@ func (s *Server) handleManagementDeactivateProviderRequest(args [1]string, argsE
 
 // handleManagementDeleteDomainRequest handles managementDeleteDomain operation.
 //
-// Removes a domain from our mail platform, Amazon SES, and Sendmux. Blocked if any active mailbox
+// Removes a domain from our mail platform, Amazon SES, and Qubrics. Blocked if any active mailbox
 // still uses the domain — delete those mailboxes first.
 //
 // DELETE /domains/{public_id}
@@ -2152,7 +2152,7 @@ func (s *Server) handleManagementDeleteDomainRequest(args [1]string, argsEscaped
 
 // handleManagementDeleteMailboxRequest handles managementDeleteMailbox operation.
 //
-// Removes a mailbox from our mail platform, Amazon SES (for `@myagent.mx` addresses), and Sendmux.
+// Removes a mailbox from our mail platform, Amazon SES (for `@myagent.mx` addresses), and Qubrics.
 // All associated API keys are revoked.
 //
 // DELETE /mailboxes/{public_id}
