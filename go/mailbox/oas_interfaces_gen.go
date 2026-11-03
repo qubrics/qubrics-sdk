@@ -45,6 +45,10 @@ type MailboxDeleteCalendarEventRes interface {
 	mailboxDeleteCalendarEventRes()
 }
 
+type MailboxDeleteCalendarRes interface {
+	mailboxDeleteCalendarRes()
+}
+
 type MailboxDeleteDraftRes interface {
 	mailboxDeleteDraftRes()
 }

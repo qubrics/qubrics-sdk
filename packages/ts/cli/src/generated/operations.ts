@@ -413,6 +413,49 @@ export const operations = {
     "requiredKeyKind": "mailbox",
     "surface": "mailbox"
   },
+  mailboxDeleteCalendar: {
+    "bodyKind": "none",
+    "command": "mailbox:delete-calendar",
+    "description": "Delete an empty calendar",
+    "headerParams": [
+      {
+        "name": "If-Match",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    ],
+    "method": "delete",
+    "operationId": "mailboxDeleteCalendar",
+    "path": "/mailbox/calendars/{calendar_id}",
+    "pathParams": [
+      {
+        "name": "calendar_id",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096,
+          "pattern": "^[A-Za-z0-9_-]+$"
+        }
+      }
+    ],
+    "queryParams": [
+      {
+        "name": "mailbox_id",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "responseKind": "json",
+    "requestBodyRequired": false,
+    "requiredKeyKind": "mailbox",
+    "surface": "mailbox"
+  },
   mailboxDeleteCalendarEvent: {
     "bodyKind": "none",
     "command": "mailbox:delete-calendar-event",

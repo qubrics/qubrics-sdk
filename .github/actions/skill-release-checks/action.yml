@@ -2,7 +2,7 @@ name: Prepare skill release checks
 description: Check out reviewed skills for release checks.
 inputs:
   revision:
-    description: Optional proposed Sendmux/skills commit SHA; defaults to the latest approved release.
+    description: Optional proposed qubrics/skills commit SHA; defaults to the latest approved release.
     required: false
     default: ""
 runs:
@@ -24,10 +24,10 @@ runs:
         let acceptance = "";
         if (!revision) {
           const options = { encoding: "utf8", timeout: 20_000, maxBuffer: 2 * 1024 * 1024 };
-          tag = execFileSync("gh", ["release", "view", "--repo", "Sendmux/skills", "--json", "tagName", "--jq", ".tagName"], options).trim();
+          tag = execFileSync("gh", ["release", "view", "--repo", "qubrics/skills", "--json", "tagName", "--jq", ".tagName"], options).trim();
           execFileSync("git", ["check-ref-format", `refs/tags/${tag}`], options);
           const directory = mkdtempSync(join(process.env.RUNNER_TEMP, "sendmux-approved-skills-"));
-          execFileSync("gh", ["release", "download", tag, "--repo", "Sendmux/skills", "--pattern", "acceptance.json", "--dir", directory], options);
+          execFileSync("gh", ["release", "download", tag, "--repo", "qubrics/skills", "--pattern", "acceptance.json", "--dir", directory], options);
           acceptance = join(directory, "acceptance.json");
           const receipt = JSON.parse(readFileSync(acceptance, "utf8"));
           if (receipt.accepted !== true) throw new Error("Latest skills release has no approved acceptance receipt");
@@ -40,7 +40,7 @@ runs:
     - name: Check out reviewed skills
       uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
       with:
-        repository: Sendmux/skills
+        repository: qubrics/skills
         ref: ${{ steps.source.outputs.revision }}
         path: _skills
         fetch-depth: 0

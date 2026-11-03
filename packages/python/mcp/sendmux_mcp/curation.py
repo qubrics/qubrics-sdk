@@ -22,6 +22,12 @@ class ToolSpec:
 
 OPENAPI_MAILBOX_TOOLS: tuple[ToolSpec, ...] = (
     ToolSpec(
+        operation_id="mailboxDeleteCalendar",
+        name="mailbox_delete_calendar",
+        title="Delete an empty calendar",
+        description="Requires calendar.write. Fetch the calendar and pass its ETag in If-Match. A calendar containing events returns 409 conflict.",
+    ),
+    ToolSpec(
         operation_id="mailboxListCalendars",
         name="mailbox_list_calendars",
         title="List Calendars",
@@ -580,6 +586,7 @@ READ_ONLY_OPERATION_IDS = frozenset(
 
 DESTRUCTIVE_OPERATION_IDS = frozenset(
     {
+        "mailboxDeleteCalendar",
         "mailboxDeleteCalendarEvent",
         "mailboxDeleteDraft",
         "mailboxBatchDeleteMessages",
@@ -589,6 +596,7 @@ DESTRUCTIVE_OPERATION_IDS = frozenset(
 
 IDEMPOTENT_WRITE_OPERATION_IDS = frozenset(
     {
+        "mailboxDeleteCalendar",
         "mailboxUpdateCalendarEvent",
         "mailboxDeleteCalendarEvent",
         "mailboxControlDraftSchedule",

@@ -3,7 +3,7 @@
 [![PyPI version](https://img.shields.io/pypi/v/sendmux-sdk)](https://pypi.org/project/sendmux-sdk/)
 [![Python versions](https://img.shields.io/pypi/pyversions/sendmux-sdk)](https://pypi.org/project/sendmux-sdk/)
 [![PyPI downloads](https://img.shields.io/pypi/dm/sendmux-sdk)](https://pypi.org/project/sendmux-sdk/)
-[![Licence](https://img.shields.io/pypi/l/sendmux-sdk)](https://github.com/Sendmux/sendmux-sdk/blob/main/LICENSE)
+[![Licence](https://img.shields.io/pypi/l/sendmux-sdk)](https://github.com/qubrics/qubrics-sdk/blob/main/LICENSE)
 
 Optional umbrella package for the Sendmux Python SDK.
 
@@ -13,7 +13,7 @@ Optional umbrella package for the Sendmux Python SDK.
 - Management API reference: [sendmux.ai/docs/api/introduction](https://sendmux.ai/docs/api/introduction)
 - Mailbox API reference: [sendmux.ai/docs/mailbox-api/introduction](https://sendmux.ai/docs/mailbox-api/introduction)
 - Sending API reference: [sendmux.ai/docs/sending-api/introduction](https://sendmux.ai/docs/sending-api/introduction)
-- Source repository: [Sendmux/sendmux-sdk](https://github.com/Sendmux/sendmux-sdk)
+- Source repository: [qubrics/qubrics-sdk](https://github.com/qubrics/qubrics-sdk)
 
 ## Requirements
 
@@ -40,9 +40,9 @@ import os
 from sendmux_sdk import management
 
 with management.create_management_client(
-    api_key=os.environ["SENDMUX_MANAGEMENT_API_KEY"]
+    api_key=os.environ["QUBRICS_MANAGEMENT_API_KEY"]
 ) as client:
-    connection = management.ConnectionApi(client).management_get_connection()
+    connection = management.ConnectionApi(client).qubrics_management_get_connection()
     print(connection.data.label, connection.data.team.id)
 ```
 
@@ -51,9 +51,9 @@ identifier. Each API surface has its own connection operation:
 
 | Surface | API class | Method |
 | --- | --- | --- |
-| Management | `management.ConnectionApi` | `management_get_connection()` |
-| Mailbox | `mailbox.MailboxAPIApi` | `mailbox_get_connection()` |
-| Sending | `sending.MetaApi` | `sending_get_connection()` |
+| Management | `management.ConnectionApi` | `qubrics_management_get_connection()` |
+| Mailbox | `mailbox.MailboxAPIApi` | `qubrics_mailbox_get_connection()` |
+| Sending | `sending.MetaApi` | `qubrics_sending_get_connection()` |
 
 Create each client with the credential for that surface.
 
@@ -67,7 +67,7 @@ import os
 from sendmux_sdk import management
 
 client = management.create_management_client(
-    access_token=lambda: os.environ["SENDMUX_ACCESS_TOKEN"]
+    access_token=lambda: os.environ["QUBRICS_ACCESS_TOKEN"]
 )
 ```
 
@@ -78,10 +78,10 @@ import os
 
 from sendmux_sdk import sending
 
-client = sending.create_sending_client(api_key=os.environ["SENDMUX_SENDING_API_KEY"])
+client = sending.create_sending_client(api_key=os.environ["QUBRICS_SENDING_API_KEY"])
 api = sending.EmailsApi(client)
 
-response = api.sending_send_email(
+response = api.qubrics_sending_send_email(
     sending.EmailSendRequest(
         var_from=sending.Address(email="sender@example.com"),
         to=sending.Address(email="recipient@example.com"),
@@ -124,8 +124,8 @@ Update `sendmux-sdk`, `sendmux-mailbox`, the lockfile, and affected annotations 
 
 ## Support
 
-Open an issue in [Sendmux/sendmux-sdk](https://github.com/Sendmux/sendmux-sdk/issues) with the package name, version, and request ID from any API error.
+Open an issue in [qubrics/qubrics-sdk](https://github.com/qubrics/qubrics-sdk/issues) with the package name, version, and request ID from any API error.
 
 ## Licence
 
-MIT. See the [licence file](https://github.com/Sendmux/sendmux-sdk/blob/main/LICENSE).
+MIT. See the [licence file](https://github.com/qubrics/qubrics-sdk/blob/main/LICENSE).

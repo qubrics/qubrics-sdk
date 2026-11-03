@@ -85,6 +85,7 @@ def test_calendar_manifest_allows_only_canonical_routes_and_scopes() -> None:
         ("GET", "/mailbox/calendars", "mailboxListCalendars", "calendar.read"),
         ("POST", "/mailbox/calendars", "mailboxCreateCalendar", "calendar.write"),
         ("GET", "/mailbox/calendars/owned", "mailboxGetCalendar", "calendar.read"),
+        ("DELETE", "/mailbox/calendars/owned", "mailboxDeleteCalendar", "calendar.write"),
         ("GET", "/mailbox/calendar-events", "mailboxListCalendarEvents", "calendar.read"),
         ("POST", "/mailbox/calendar-events", "mailboxCreateCalendarEvent", "calendar.write"),
         ("GET", "/mailbox/calendar-events/owned", "mailboxGetCalendarEvent", "calendar.read"),
@@ -96,7 +97,7 @@ def test_calendar_manifest_allows_only_canonical_routes_and_scopes() -> None:
         assert route is not None
         assert route.operation_id == operation_id
         assert route.permissions == (permission,)
-    assert manifest.resolve("DELETE", "/mailbox/calendars/owned") is None
+    assert manifest.resolve("PATCH", "/mailbox/calendars/owned") is None
     assert manifest.resolve("POST", "/mailbox/calendar-events/owned") is None
 
 

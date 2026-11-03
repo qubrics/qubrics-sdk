@@ -44,6 +44,7 @@ EXPECTED_TOOL_NAMES_BY_SURFACE = {
         "mailbox_get_calendar_event",
         "mailbox_update_calendar_event",
         "mailbox_delete_calendar_event",
+        "mailbox_delete_calendar",
         "mailbox_get_calendar_event_changes",
         "mailbox_list_drafts",
         "mailbox_get_draft",
@@ -194,6 +195,7 @@ READ_ONLY_TOOL_NAMES = {
 }
 
 DESTRUCTIVE_TOOL_NAMES = {
+    "mailbox_delete_calendar",
     "mailbox_delete_calendar_event",
     "mailbox_delete_draft",
     "mailbox_batch_delete_messages",
@@ -201,6 +203,7 @@ DESTRUCTIVE_TOOL_NAMES = {
 }
 
 IDEMPOTENT_WRITE_TOOL_NAMES = {
+    "mailbox_delete_calendar",
     "mailbox_update_calendar_event",
     "mailbox_delete_calendar_event",
     "mailbox_control_draft_schedule",
@@ -278,7 +281,7 @@ def test_curated_tools_have_complete_mcp_quality_metadata() -> None:
             async with Client(server) as client:
                 tools.extend(await client.list_tools())
 
-        assert len(tools) == 148
+        assert len(tools) == 150
         assert {tool.name for tool in tools if tool.output_schema is None} == (
             NO_OUTPUT_SCHEMA_TOOL_NAMES | {f"qubrics_{name}" for name in NO_OUTPUT_SCHEMA_TOOL_NAMES}
         )

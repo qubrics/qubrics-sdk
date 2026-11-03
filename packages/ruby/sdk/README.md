@@ -1,16 +1,16 @@
 # sendmux-sdk
 
 [![Gem Version](https://badge.fury.io/rb/sendmux-sdk.svg)](https://rubygems.org/gems/sendmux-sdk)
-[![CI](https://github.com/Sendmux/sendmux-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/Sendmux/sendmux-sdk/actions/workflows/ci.yml)
-[![Licence: MIT](https://img.shields.io/badge/licence-MIT-blue.svg)](https://github.com/Sendmux/sendmux-sdk/blob/main/LICENSE)
+[![CI](https://github.com/qubrics/qubrics-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/qubrics/qubrics-sdk/actions/workflows/ci.yml)
+[![Licence: MIT](https://img.shields.io/badge/licence-MIT-blue.svg)](https://github.com/qubrics/qubrics-sdk/blob/main/LICENSE)
 
 Umbrella Ruby SDK package for Sendmux.
 
 ## Documentation
 
 - Ruby SDK guide: https://sendmux.ai/docs/sdks/ruby
-- Source: https://github.com/Sendmux/sendmux-sdk/tree/main/packages/ruby/sdk
-- Changelog: https://github.com/Sendmux/sendmux-sdk/blob/main/packages/ruby/sdk/CHANGELOG.md
+- Source: https://github.com/qubrics/qubrics-sdk/tree/main/packages/ruby/sdk
+- Changelog: https://github.com/qubrics/qubrics-sdk/blob/main/packages/ruby/sdk/CHANGELOG.md
 
 ## Requirements
 
@@ -74,7 +74,7 @@ fields keeps working.
    variables. Update hand-built detail fixtures to include `variables: {}` when
    no variables are set.
 
-2. `mailbox_list_thread_messages` returns
+2. `qubrics_mailbox_list_thread_messages` returns
    `MailboxThreadMessageSummaryCursorListResponse` instead of
    `MailboxMessageSummaryCursorListResponse`: its `meta` is
    `MailboxThreadMessagesMeta`, whose `thread_id` is required and whose
@@ -98,7 +98,7 @@ fields keeps working.
    end
    ```
 
-   Ordinary `mailbox_list_messages` results remain
+   Ordinary `qubrics_mailbox_list_messages` results remain
    `MailboxMessageSummaryCursorListResponse` and have no thread identity. The
    other Mailbox list families replace the generic `ResponseMeta` with typed
    metadata whose `request_id` is unchanged and whose new fields are optional.
@@ -120,7 +120,7 @@ Pass either `api_key:` or `access_token:`. `access_token:` accepts a bare token 
 require "sendmux/sdk"
 
 client = Sendmux::SDK.management(
-  access_token: -> { ENV.fetch("SENDMUX_ACCESS_TOKEN") }
+  access_token: -> { ENV.fetch("QUBRICS_ACCESS_TOKEN") }
 )
 ```
 
@@ -132,15 +132,15 @@ Use the umbrella gem when you want all Ruby SDK surfaces in one install.
 require "sendmux/sdk"
 
 sending = Sendmux::SDK.sending(
-  api_key: ENV.fetch("SENDMUX_MAILBOX_KEY")
+  api_key: ENV.fetch("QUBRICS_MAILBOX_KEY")
 )
 
 mailbox = Sendmux::SDK.mailbox(
-  api_key: ENV.fetch("SENDMUX_MAILBOX_KEY")
+  api_key: ENV.fetch("QUBRICS_MAILBOX_KEY")
 )
 
 management = Sendmux::SDK.management(
-  api_key: ENV.fetch("SENDMUX_ROOT_KEY")
+  api_key: ENV.fetch("QUBRICS_ROOT_KEY")
 )
 
 puts sending.emails.class
@@ -173,12 +173,12 @@ Pass `Sendmux::Core::RetryOptions` through any umbrella helper. Use `Sendmux::Co
 retry_options = Sendmux::Core::RetryOptions.new(max_attempts: 4)
 
 management = Sendmux::SDK.management(
-  api_key: ENV.fetch("SENDMUX_ROOT_KEY"),
+  api_key: ENV.fetch("QUBRICS_ROOT_KEY"),
   retry_options: retry_options
 )
 
 pager = Sendmux::Core.each_cursor(lambda do |opts|
-  management.mailboxes.management_list_mailboxes(opts.merge(limit: 50))
+  management.mailboxes.qubrics_management_list_mailboxes(opts.merge(limit: 50))
 end)
 
 pager.each { |mailbox| puts mailbox.id }
@@ -193,4 +193,4 @@ Generated API errors are mapped to `Sendmux::Core::ApiError`.
 
 ## Licence
 
-MIT licence. See https://github.com/Sendmux/sendmux-sdk/blob/main/LICENSE.
+MIT licence. See https://github.com/qubrics/qubrics-sdk/blob/main/LICENSE.

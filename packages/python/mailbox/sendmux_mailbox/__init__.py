@@ -77,6 +77,7 @@ __all__ = [
     "MailboxCalendarChangesResponse",
     "MailboxCalendarCreated",
     "MailboxCalendarCreatedResponse",
+    "MailboxCalendarDeletedResponse",
     "MailboxCalendarEvent",
     "MailboxCalendarEventCreated",
     "MailboxCalendarEventCreatedResponse",
@@ -89,6 +90,7 @@ __all__ = [
     "MailboxCalendarEventWithEtag",
     "MailboxCalendarListResponse",
     "MailboxCalendarResponse",
+    "MailboxCalendarWithEtag",
     "MailboxChanges",
     "MailboxChangesResponse",
     "MailboxContentHeaders",
@@ -267,6 +269,7 @@ from sendmux_mailbox.models.mailbox_calendar_changes import MailboxCalendarChang
 from sendmux_mailbox.models.mailbox_calendar_changes_response import MailboxCalendarChangesResponse as MailboxCalendarChangesResponse
 from sendmux_mailbox.models.mailbox_calendar_created import MailboxCalendarCreated as MailboxCalendarCreated
 from sendmux_mailbox.models.mailbox_calendar_created_response import MailboxCalendarCreatedResponse as MailboxCalendarCreatedResponse
+from sendmux_mailbox.models.mailbox_calendar_deleted_response import MailboxCalendarDeletedResponse as MailboxCalendarDeletedResponse
 from sendmux_mailbox.models.mailbox_calendar_event import MailboxCalendarEvent as MailboxCalendarEvent
 from sendmux_mailbox.models.mailbox_calendar_event_created import MailboxCalendarEventCreated as MailboxCalendarEventCreated
 from sendmux_mailbox.models.mailbox_calendar_event_created_response import MailboxCalendarEventCreatedResponse as MailboxCalendarEventCreatedResponse
@@ -279,6 +282,7 @@ from sendmux_mailbox.models.mailbox_calendar_event_updated_response_all_of_data 
 from sendmux_mailbox.models.mailbox_calendar_event_with_etag import MailboxCalendarEventWithEtag as MailboxCalendarEventWithEtag
 from sendmux_mailbox.models.mailbox_calendar_list_response import MailboxCalendarListResponse as MailboxCalendarListResponse
 from sendmux_mailbox.models.mailbox_calendar_response import MailboxCalendarResponse as MailboxCalendarResponse
+from sendmux_mailbox.models.mailbox_calendar_with_etag import MailboxCalendarWithEtag as MailboxCalendarWithEtag
 from sendmux_mailbox.models.mailbox_changes import MailboxChanges as MailboxChanges
 from sendmux_mailbox.models.mailbox_changes_response import MailboxChangesResponse as MailboxChangesResponse
 from sendmux_mailbox.models.mailbox_content_headers import MailboxContentHeaders as MailboxContentHeaders

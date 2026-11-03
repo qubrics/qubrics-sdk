@@ -46,6 +46,7 @@ var operationRolesBearerAuth = map[string][]string{
 	MailboxCreateCalendarEventOperation:     []string{},
 	MailboxCreateDraftOperation:             []string{},
 	MailboxCreateFolderOperation:            []string{},
+	MailboxDeleteCalendarOperation:          []string{},
 	MailboxDeleteCalendarEventOperation:     []string{},
 	MailboxDeleteDraftOperation:             []string{},
 	MailboxDeleteFolderOperation:            []string{},

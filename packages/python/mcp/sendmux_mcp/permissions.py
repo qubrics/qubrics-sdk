@@ -20,6 +20,7 @@ TOOL_PERMISSION_REQUIREMENTS: Mapping[str, PermissionRequirement] = MappingProxy
         "mailbox_get_calendar_event": ("calendar.read",),
         "mailbox_update_calendar_event": ("calendar.write",),
         "mailbox_delete_calendar_event": ("calendar.write",),
+        "mailbox_delete_calendar": ("calendar.write",),
         "mailbox_get_calendar_event_changes": ("calendar.read",),
         "mailbox_list_drafts": ("mailbox.read",),
         "mailbox_get_draft": ("mailbox.read",),

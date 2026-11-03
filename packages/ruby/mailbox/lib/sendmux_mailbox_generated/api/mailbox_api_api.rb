@@ -795,6 +795,96 @@ module Sendmux::Mailbox::Generated
       return data, status_code, headers
     end
 
+    # Delete an empty calendar
+    # Fetch the calendar and supply its ETag in If-Match. A calendar containing events returns 409 conflict.
+    # @param calendar_id [String]
+    # @param if_match [String]
+    # @param [Hash] opts the optional parameters
+    # @option opts [String] :mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox.
+    # @return [MailboxCalendarDeletedResponse]
+    def mailbox_delete_calendar(calendar_id, if_match, opts = {})
+      data, _status_code, _headers = mailbox_delete_calendar_with_http_info(calendar_id, if_match, opts)
+      data
+    end
+
+    # Delete an empty calendar
+    # Fetch the calendar and supply its ETag in If-Match. A calendar containing events returns 409 conflict.
+    # @param calendar_id [String]
+    # @param if_match [String]
+    # @param [Hash] opts the optional parameters
+    # @option opts [String] :mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox.
+    # @return [Array<(MailboxCalendarDeletedResponse, Integer, Hash)>] MailboxCalendarDeletedResponse data, response status code and response headers
+    def mailbox_delete_calendar_with_http_info(calendar_id, if_match, opts = {})
+      if @api_client.config.debugging
+        @api_client.config.logger.debug 'Calling API: MailboxAPIApi.mailbox_delete_calendar ...'
+      end
+      # verify the required parameter 'calendar_id' is set
+      if @api_client.config.client_side_validation && calendar_id.nil?
+        fail ArgumentError, "Missing the required parameter 'calendar_id' when calling MailboxAPIApi.mailbox_delete_calendar"
+      end
+      if @api_client.config.client_side_validation && calendar_id.to_s.length > 4096
+        fail ArgumentError, 'invalid value for "calendar_id" when calling MailboxAPIApi.mailbox_delete_calendar, the character length must be smaller than or equal to 4096.'
+      end
+
+      if @api_client.config.client_side_validation && calendar_id.to_s.length < 1
+        fail ArgumentError, 'invalid value for "calendar_id" when calling MailboxAPIApi.mailbox_delete_calendar, the character length must be greater than or equal to 1.'
+      end
+
+      pattern = Regexp.new(/^[A-Za-z0-9_-]+$/)
+      if @api_client.config.client_side_validation && calendar_id !~ pattern
+        fail ArgumentError, "invalid value for 'calendar_id' when calling MailboxAPIApi.mailbox_delete_calendar, must conform to the pattern #{pattern}."
+      end
+
+      # verify the required parameter 'if_match' is set
+      if @api_client.config.client_side_validation && if_match.nil?
+        fail ArgumentError, "Missing the required parameter 'if_match' when calling MailboxAPIApi.mailbox_delete_calendar"
+      end
+      if @api_client.config.client_side_validation && if_match.to_s.length < 1
+        fail ArgumentError, 'invalid value for "if_match" when calling MailboxAPIApi.mailbox_delete_calendar, the character length must be greater than or equal to 1.'
+      end
+
+      # resource path
+      local_var_path = '/mailbox/calendars/{calendar_id}'.sub('{calendar_id}', CGI.escape(calendar_id.to_s))
+
+      # query parameters
+      query_params = opts[:query_params] || {}
+      query_params[:'mailbox_id'] = opts[:'mailbox_id'] if !opts[:'mailbox_id'].nil?
+
+      # header parameters
+      header_params = opts[:header_params] || {}
+      # HTTP header 'Accept' (if needed)
+      header_params['Accept'] = @api_client.select_header_accept(['application/json']) unless header_params['Accept']
+      header_params[:'If-Match'] = if_match
+
+      # form parameters
+      form_params = opts[:form_params] || {}
+
+      # http body (model)
+      post_body = opts[:debug_body]
+
+      # return_type
+      return_type = opts[:debug_return_type] || 'MailboxCalendarDeletedResponse'
+
+      # auth_names
+      auth_names = opts[:debug_auth_names] || ['oauth2', 'bearerAuth']
+
+      new_options = opts.merge(
+        :operation => :"MailboxAPIApi.mailbox_delete_calendar",
+        :header_params => header_params,
+        :query_params => query_params,
+        :form_params => form_params,
+        :body => post_body,
+        :auth_names => auth_names,
+        :return_type => return_type
+      )
+
+      data, status_code, headers = @api_client.call_api(:DELETE, local_var_path, new_options)
+      if @api_client.config.debugging
+        @api_client.config.logger.debug "API called: MailboxAPIApi#mailbox_delete_calendar\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
+      end
+      return data, status_code, headers
+    end
+
     # Delete a non-sending event
     # @param event_id [String]
     # @param if_match [String]

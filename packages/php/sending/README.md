@@ -24,7 +24,7 @@ Until then, retain your existing Composer constraint.
 composer require sendmux/sending:^2.1.1
 ```
 
-Upgrading from 1.x? Read the [PHP 2.0 migration guide](https://github.com/Sendmux/sendmux-sdk/blob/main/packages/php/UPGRADING.md) before changing your Composer constraint.
+Upgrading from 1.x? Read the [PHP 2.0 migration guide](https://github.com/qubrics/qubrics-sdk/blob/main/packages/php/UPGRADING.md) before changing your Composer constraint.
 
 If your custom Guzzle client uses `FileCookieJar` or `SessionCookieJar`, back up its state and re-authenticate into a fresh jar when upgrading. Guzzle rejects old records without a boolean `HostOnly`; do not guess that value. Default Sendmux API clients do not enable cookies. See the [upstream migration warning](https://github.com/guzzle/guzzle/security/advisories/GHSA-wm3w-8rrp-j577).
 
@@ -40,11 +40,11 @@ require __DIR__ . '/vendor/autoload.php';
 use Sendmux\Sending\ClientFactory;
 
 $emails = ClientFactory::createEmailsApi(
-    getenv('SENDMUX_MAILBOX_API_KEY') ?: ''
+    getenv('QUBRICS_MAILBOX_API_KEY') ?: ''
 );
 
 $meta = ClientFactory::createMetaApi(
-    getenv('SENDMUX_MAILBOX_API_KEY') ?: ''
+    getenv('QUBRICS_MAILBOX_API_KEY') ?: ''
 );
 ```
 
@@ -56,7 +56,7 @@ The generated `EmailsApi` exposes `sendingSendEmail()` and `sendingSendEmailBatc
 
 ```php
 $client = ClientFactory::createMetaApiWithAccessToken(
-    static fn (): string => getenv('SENDMUX_ACCESS_TOKEN') ?: ''
+    static fn (): string => getenv('QUBRICS_ACCESS_TOKEN') ?: ''
 );
 ```
 
@@ -86,7 +86,7 @@ For help, include the package name, version, API surface, and sanitised request 
 - PHP SDK guide: [sendmux.ai/docs/sdks/php](https://sendmux.ai/docs/sdks/php)
 - Sending API reference: [sendmux.ai/docs/sending-api/introduction](https://sendmux.ai/docs/sending-api/introduction)
 - API keys guide: [sendmux.ai/docs/guides/api-keys](https://sendmux.ai/docs/guides/api-keys)
-- Source repository: [github.com/Sendmux/sendmux-sdk](https://github.com/Sendmux/sendmux-sdk)
+- Source repository: [github.com/qubrics/qubrics-sdk](https://github.com/qubrics/qubrics-sdk)
 
 ## License
 

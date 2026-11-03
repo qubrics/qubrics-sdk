@@ -16,6 +16,7 @@ const (
 	MailboxCreateCalendarEventOperation     OperationName = "MailboxCreateCalendarEvent"
 	MailboxCreateDraftOperation             OperationName = "MailboxCreateDraft"
 	MailboxCreateFolderOperation            OperationName = "MailboxCreateFolder"
+	MailboxDeleteCalendarOperation          OperationName = "MailboxDeleteCalendar"
 	MailboxDeleteCalendarEventOperation     OperationName = "MailboxDeleteCalendarEvent"
 	MailboxDeleteDraftOperation             OperationName = "MailboxDeleteDraft"
 	MailboxDeleteFolderOperation            OperationName = "MailboxDeleteFolder"

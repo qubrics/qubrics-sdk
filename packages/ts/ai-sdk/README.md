@@ -48,7 +48,7 @@ Set `accessToken` to a bare REST OAuth token or a synchronous or asynchronous pr
 import { sendmux } from "@sendmux/ai-sdk";
 
 const tools = sendmux({
-  accessToken: () => process.env.SENDMUX_ACCESS_TOKEN!,
+  accessToken: () => process.env.QUBRICS_ACCESS_TOKEN!,
   defaultFrom: "agent@yourdomain.dev",
 });
 ```
@@ -66,7 +66,7 @@ import { sendmux } from "@sendmux/ai-sdk";
 const { text } = await generateText({
   model: openai("gpt-4o"),
   tools: sendmux({
-    apiKey: process.env.SENDMUX_API_KEY!,
+    apiKey: process.env.QUBRICS_API_KEY!,
     defaultFrom: "agent@yourdomain.dev",
   }),
   prompt: "Read the inbox and reply to anyone asking about pricing.",
@@ -148,4 +148,4 @@ Details: [idempotency](https://sendmux.ai/docs/guides/idempotency).
 
 ## Licence
 
-MIT. See the [licence file](https://github.com/Sendmux/sendmux-sdk/blob/main/LICENSE).
+MIT. See the [licence file](https://github.com/qubrics/qubrics-sdk/blob/main/LICENSE).

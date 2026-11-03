@@ -42,8 +42,8 @@ dependencies = [
 [project.urls]
 Homepage = "https://sendmux.ai"
 Documentation = "https://sendmux.ai/docs/sdks"
-Repository = "https://github.com/Sendmux/sendmux-sdk"
-Issues = "https://github.com/Sendmux/sendmux-sdk/issues"
+Repository = "https://github.com/qubrics/qubrics-sdk"
+Issues = "https://github.com/qubrics/qubrics-sdk/issues"
 
 [tool.hatch.build.targets.sdist]
 core-metadata-version = "2.4"

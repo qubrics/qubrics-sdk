@@ -97,7 +97,7 @@ for (const surface of surfaces) {
       `moduleName=Sendmux::${surface.moduleName}::Generated`,
       "gemVersion=1.0.0",
       "gemLicense=MIT",
-      "gemHomepage=https://github.com/Sendmux/sendmux-sdk",
+      "gemHomepage=https://github.com/qubrics/qubrics-sdk",
       "hideGenerationTimestamp=true",
       "library=faraday",
       "enumUnknownDefaultCase=true",

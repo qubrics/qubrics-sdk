@@ -23,7 +23,7 @@ pub const APP_OPENAPI_PATH: &str = "packages/python/mcp/sendmux_mcp/openapi/open
 
 /// SHA-256 of `APP_OPENAPI_PATH` at the time this crate surface was added.
 pub const APP_OPENAPI_SHA256: &str =
-    "16439b3c0d9eee73554202cf909af6aade12b6f8d3390ddee922663ba061de1a";
+    "28f2fc773b1470057b5ff5bab9c4e00f6d4a34925dbee91e3b57bc0057355656";
 
 /// Tags included from the Sending API snapshot.
 pub const SENDING_TAGS: &[&str] = &["Emails", "Meta"];

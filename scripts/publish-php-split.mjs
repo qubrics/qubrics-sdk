@@ -69,8 +69,8 @@ async function proveSplit(input) {
   const destinations = (await run(["remote", "get-url", "--push", "--all", "origin"])).trim().split("\n");
   if (destinations.length !== 1 || !destinations[0]) throw new Error("PHP publication requires exactly one push destination");
   const remote = destinations[0];
-  const expected = `sendmux-php-${input.package}`;
-  const official = remote === `git@github.com:Sendmux/${expected}.git` || remote === `https://github.com/Sendmux/${expected}.git` || remote === `https://github.com/Sendmux/${expected}`;
+  const expected = `qubrics-php-${input.package}`;
+  const official = remote === `git@github.com:qubrics/${expected}.git` || remote === `https://github.com/qubrics/${expected}.git` || remote === `https://github.com/qubrics/${expected}`;
   const local = remote.startsWith("/") && basename(remote) === `${expected}.git` && statSync(remote).isDirectory()
     && (await git({ repo: remote, args: ["rev-parse", "--is-bare-repository"] })).trim() === "true";
   if (!official && !local) throw new Error("Split origin does not identify the expected package repository");

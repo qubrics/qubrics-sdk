@@ -9,7 +9,7 @@ import { fileURLToPath } from "node:url";
 
 const rootDir = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const cliManifestPath = join(rootDir, "packages/ts/cli/package.json");
-const tapRepo = process.env.SENDMUX_HOMEBREW_TAP_REPO ?? "Sendmux/homebrew-tap";
+const tapRepo = process.env.SENDMUX_HOMEBREW_TAP_REPO ?? "qubrics/homebrew-tap";
 const baseBranch = process.env.SENDMUX_HOMEBREW_TAP_BASE_BRANCH ?? "main";
 const packageName = "@sendmux/cli";
 const cliManifest = JSON.parse(readFileSync(cliManifestPath, "utf8"));
@@ -18,7 +18,7 @@ const branch = process.env.SENDMUX_HOMEBREW_TAP_BRANCH ?? `homebrew/sendmux-v${v
 const token = process.env.GH_TOKEN ?? process.env.GITHUB_TOKEN;
 
 if (!token) {
-  throw new Error("Missing GH_TOKEN or GITHUB_TOKEN for Sendmux/homebrew-tap write access.");
+  throw new Error("Missing GH_TOKEN or GITHUB_TOKEN for qubrics/homebrew-tap write access.");
 }
 
 let tapDir;

@@ -1,16 +1,16 @@
 # @sendmux/mailbox
 
 [![npm version](https://img.shields.io/npm/v/@sendmux%2Fmailbox)](https://www.npmjs.com/package/@sendmux/mailbox)
-[![CI](https://github.com/Sendmux/sendmux-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/Sendmux/sendmux-sdk/actions/workflows/ci.yml)
+[![CI](https://github.com/qubrics/qubrics-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/qubrics/qubrics-sdk/actions/workflows/ci.yml)
 [![npm downloads](https://img.shields.io/npm/dm/@sendmux%2Fmailbox)](https://www.npmjs.com/package/@sendmux/mailbox)
-[![Licence](https://img.shields.io/npm/l/@sendmux%2Fmailbox)](https://github.com/Sendmux/sendmux-sdk/blob/main/LICENSE)
+[![Licence](https://img.shields.io/npm/l/@sendmux%2Fmailbox)](https://github.com/qubrics/qubrics-sdk/blob/main/LICENSE)
 
 Generated TypeScript client for the Sendmux Mailbox API.
 
 ## Documentation
 
 - Mailbox API reference: [sendmux.ai/docs/mailbox-api/introduction](https://sendmux.ai/docs/mailbox-api/introduction)
-- Source repository: [Sendmux/sendmux-sdk](https://github.com/Sendmux/sendmux-sdk)
+- Source repository: [qubrics/qubrics-sdk](https://github.com/qubrics/qubrics-sdk)
 
 ## Requirements
 
@@ -78,7 +78,7 @@ Pass `accessToken` instead of `apiKey` for a REST OAuth token or synchronous/asy
 import { createMailboxClient } from "@sendmux/mailbox";
 
 const client = createMailboxClient({
-  accessToken: () => process.env.SENDMUX_ACCESS_TOKEN!,
+  accessToken: () => process.env.QUBRICS_ACCESS_TOKEN!,
 });
 ```
 
@@ -94,7 +94,7 @@ import {
 } from "@sendmux/mailbox";
 
 const client = createMailboxClient({
-  apiKey: process.env.SENDMUX_MAILBOX_API_KEY!,
+  apiKey: process.env.QUBRICS_MAILBOX_API_KEY!,
 });
 
 const messages = await mailboxListMessages({
@@ -128,7 +128,7 @@ import {
 } from "@sendmux/mailbox";
 
 const client = createMailboxClient({
-  apiKey: process.env.SENDMUX_MAILBOX_API_KEY!,
+  apiKey: process.env.QUBRICS_MAILBOX_API_KEY!,
 });
 
 const message = await mailboxGetMessage({
@@ -171,7 +171,7 @@ For local files in Node, use the helper subpath so file bytes stay out of model 
 import { createMailboxClient } from "@sendmux/mailbox";
 import { readMailboxTextAttachment, sendMailboxMessageWithFiles } from "@sendmux/mailbox/node";
 
-const client = createMailboxClient({ apiKey: process.env.SENDMUX_MAILBOX_API_KEY! });
+const client = createMailboxClient({ apiKey: process.env.QUBRICS_MAILBOX_API_KEY! });
 
 await sendMailboxMessageWithFiles({
   client,
@@ -218,7 +218,7 @@ import {
 } from "@sendmux/mailbox";
 
 const client = createMailboxClient({
-  apiKey: process.env.SENDMUX_MAILBOX_API_KEY!,
+  apiKey: process.env.QUBRICS_MAILBOX_API_KEY!,
 });
 
 for await (const message of paginate(async (cursor) => {
@@ -235,8 +235,8 @@ for await (const message of paginate(async (cursor) => {
 
 ## Support
 
-Open an issue in [Sendmux/sendmux-sdk](https://github.com/Sendmux/sendmux-sdk/issues) with the package name, version, and request ID from any API error.
+Open an issue in [qubrics/qubrics-sdk](https://github.com/qubrics/qubrics-sdk/issues) with the package name, version, and request ID from any API error.
 
 ## Licence
 
-MIT. See the [licence file](https://github.com/Sendmux/sendmux-sdk/blob/main/LICENSE).
+MIT. See the [licence file](https://github.com/qubrics/qubrics-sdk/blob/main/LICENSE).

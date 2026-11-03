@@ -61,7 +61,7 @@ class MailboxCalendarResponse implements ModelInterface, ArrayAccess, JsonSerial
     protected static array $openAPITypes = [
         'meta' => '\Sendmux\Mailbox\Model\ResponseMeta',
         'ok' => 'bool',
-        'data' => '\Sendmux\Mailbox\Model\MailboxCalendar'
+        'data' => '\Sendmux\Mailbox\Model\MailboxCalendarWithEtag'
     ];
 
     /**
@@ -344,9 +344,9 @@ class MailboxCalendarResponse implements ModelInterface, ArrayAccess, JsonSerial
     /**
      * Gets data
      *
-     * @return \Sendmux\Mailbox\Model\MailboxCalendar
+     * @return \Sendmux\Mailbox\Model\MailboxCalendarWithEtag
      */
-    public function getData(): \Sendmux\Mailbox\Model\MailboxCalendar
+    public function getData(): \Sendmux\Mailbox\Model\MailboxCalendarWithEtag
     {
         return $this->container['data'];
     }
@@ -354,11 +354,11 @@ class MailboxCalendarResponse implements ModelInterface, ArrayAccess, JsonSerial
     /**
      * Sets data
      *
-     * @param \Sendmux\Mailbox\Model\MailboxCalendar $data data
+     * @param \Sendmux\Mailbox\Model\MailboxCalendarWithEtag $data data
      *
      * @return $this
      */
-    public function setData(\Sendmux\Mailbox\Model\MailboxCalendar $data): static
+    public function setData(\Sendmux\Mailbox\Model\MailboxCalendarWithEtag $data): static
     {
         if (is_null($data)) {
             throw new InvalidArgumentException('non-nullable data cannot be null');

@@ -105,6 +105,9 @@ class MailboxAPIApi
         'mailboxCreateFolder' => [
             'application/json',
         ],
+        'mailboxDeleteCalendar' => [
+            'application/json',
+        ],
         'mailboxDeleteCalendarEvent' => [
             'application/json',
         ],
@@ -4821,6 +4824,505 @@ class MailboxAPIApi
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'POST',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation mailboxDeleteCalendar
+     *
+     * Delete an empty calendar
+     *
+     * @param  string $calendar_id calendar_id (required)
+     * @param  string $if_match if_match (required)
+     * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxDeleteCalendar'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return \Sendmux\Mailbox\Model\MailboxCalendarDeletedResponse|\Sendmux\Mailbox\Model\ApiError
+     */
+    public function mailboxDeleteCalendar(
+        string $calendar_id,
+        string $if_match,
+        ?string $mailbox_id = null,
+        string $contentType = self::contentTypes['mailboxDeleteCalendar'][0]
+    ): \Sendmux\Mailbox\Model\MailboxCalendarDeletedResponse|\Sendmux\Mailbox\Model\ApiError {
+        list($response) = $this->mailboxDeleteCalendarWithHttpInfo(
+            $calendar_id,
+            $if_match,
+            $mailbox_id,
+            $contentType
+        );
+        return $response;
+    }
+
+    /**
+     * Operation mailboxDeleteCalendarWithHttpInfo
+     *
+     * Delete an empty calendar
+     *
+     * @param  string $calendar_id calendar_id (required)
+     * @param  string $if_match if_match (required)
+     * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxDeleteCalendar'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return array of \Sendmux\Mailbox\Model\MailboxCalendarDeletedResponse|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function mailboxDeleteCalendarWithHttpInfo(
+        string $calendar_id,
+        string $if_match,
+        ?string $mailbox_id = null,
+        string $contentType = self::contentTypes['mailboxDeleteCalendar'][0]
+    ): array {
+        $request = $this->mailboxDeleteCalendarRequest(
+            $calendar_id,
+            $if_match,
+            $mailbox_id,
+            $contentType
+        );
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            switch ($statusCode) {
+                case 200:
+                    return $this->handleResponseWithDataType(
+                        '\Sendmux\Mailbox\Model\MailboxCalendarDeletedResponse',
+                        $request,
+                        $response,
+                    );
+                case 400:
+                    return $this->handleResponseWithDataType(
+                        '\Sendmux\Mailbox\Model\ApiError',
+                        $request,
+                        $response,
+                    );
+                case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Sendmux\Mailbox\Model\ApiError',
+                        $request,
+                        $response,
+                    );
+                case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Sendmux\Mailbox\Model\ApiError',
+                        $request,
+                        $response,
+                    );
+                case 404:
+                    return $this->handleResponseWithDataType(
+                        '\Sendmux\Mailbox\Model\ApiError',
+                        $request,
+                        $response,
+                    );
+                case 409:
+                    return $this->handleResponseWithDataType(
+                        '\Sendmux\Mailbox\Model\ApiError',
+                        $request,
+                        $response,
+                    );
+                case 413:
+                    return $this->handleResponseWithDataType(
+                        '\Sendmux\Mailbox\Model\ApiError',
+                        $request,
+                        $response,
+                    );
+                case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Sendmux\Mailbox\Model\ApiError',
+                        $request,
+                        $response,
+                    );
+                case 429:
+                    return $this->handleResponseWithDataType(
+                        '\Sendmux\Mailbox\Model\ApiError',
+                        $request,
+                        $response,
+                    );
+                case 500:
+                    return $this->handleResponseWithDataType(
+                        '\Sendmux\Mailbox\Model\ApiError',
+                        $request,
+                        $response,
+                    );
+                case 503:
+                    return $this->handleResponseWithDataType(
+                        '\Sendmux\Mailbox\Model\ApiError',
+                        $request,
+                        $response,
+                    );
+            }
+
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\Sendmux\Mailbox\Model\MailboxCalendarDeletedResponse',
+                $request,
+                $response,
+            );
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Sendmux\Mailbox\Model\MailboxCalendarDeletedResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 400:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Sendmux\Mailbox\Model\ApiError',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Sendmux\Mailbox\Model\ApiError',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Sendmux\Mailbox\Model\ApiError',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Sendmux\Mailbox\Model\ApiError',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 409:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Sendmux\Mailbox\Model\ApiError',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 413:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Sendmux\Mailbox\Model\ApiError',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 422:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Sendmux\Mailbox\Model\ApiError',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 429:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Sendmux\Mailbox\Model\ApiError',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 500:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Sendmux\Mailbox\Model\ApiError',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 503:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Sendmux\Mailbox\Model\ApiError',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+            }
+
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation mailboxDeleteCalendarAsync
+     *
+     * Delete an empty calendar
+     *
+     * @param  string $calendar_id calendar_id (required)
+     * @param  string $if_match if_match (required)
+     * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxDeleteCalendar'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function mailboxDeleteCalendarAsync(
+        string $calendar_id,
+        string $if_match,
+        ?string $mailbox_id = null,
+        string $contentType = self::contentTypes['mailboxDeleteCalendar'][0]
+    ): PromiseInterface {
+        return $this->mailboxDeleteCalendarAsyncWithHttpInfo(
+            $calendar_id,
+            $if_match,
+            $mailbox_id,
+            $contentType
+        )
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation mailboxDeleteCalendarAsyncWithHttpInfo
+     *
+     * Delete an empty calendar
+     *
+     * @param  string $calendar_id calendar_id (required)
+     * @param  string $if_match if_match (required)
+     * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxDeleteCalendar'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function mailboxDeleteCalendarAsyncWithHttpInfo(
+        string $calendar_id,
+        string $if_match,
+        ?string $mailbox_id = null,
+        string $contentType = self::contentTypes['mailboxDeleteCalendar'][0]
+    ): PromiseInterface {
+        $returnType = '\Sendmux\Mailbox\Model\MailboxCalendarDeletedResponse';
+        $request = $this->mailboxDeleteCalendarRequest(
+            $calendar_id,
+            $if_match,
+            $mailbox_id,
+            $contentType
+        );
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType, $request) {
+                    return $this->handleResponseWithDataType($returnType, $request, $response);
+                },
+                function ($exception) {
+                    if ($exception instanceof RequestException) {
+                        throw new ApiException(
+                            "[{$exception->getCode()}] {$exception->getMessage()}",
+                            (int) $exception->getCode(),
+                            $exception->getResponse() ? $exception->getResponse()->getHeaders() : null,
+                            $exception->getResponse() ? (string) $exception->getResponse()->getBody() : null
+                        );
+                    }
+
+                    if ($exception instanceof ConnectException) {
+                        throw new ApiException(
+                            "[{$exception->getCode()}] {$exception->getMessage()}",
+                            (int) $exception->getCode(),
+                            null,
+                            null
+                        );
+                    }
+
+                    if ($exception instanceof \Throwable) {
+                        throw new ApiException(
+                            "[{$exception->getCode()}] {$exception->getMessage()}",
+                            (int) $exception->getCode(),
+                            null,
+                            null
+                        );
+                    }
+
+                    throw new ApiException('[0] Unknown API error', 0, null, null);
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'mailboxDeleteCalendar'
+     *
+     * @param  string $calendar_id calendar_id (required)
+     * @param  string $if_match if_match (required)
+     * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxDeleteCalendar'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function mailboxDeleteCalendarRequest(
+        string $calendar_id,
+        string $if_match,
+        ?string $mailbox_id = null,
+        string $contentType = self::contentTypes['mailboxDeleteCalendar'][0]
+    ): Request {
+
+        // verify the required parameter 'calendar_id' is set
+        if ($calendar_id === null || (is_array($calendar_id) && count($calendar_id) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $calendar_id when calling mailboxDeleteCalendar'
+            );
+        }
+        if (strlen($calendar_id) > 4096) {
+            throw new InvalidArgumentException('invalid length for "$calendar_id" when calling MailboxAPIApi.mailboxDeleteCalendar, must be smaller than or equal to 4096.');
+        }
+        if (strlen($calendar_id) < 1) {
+            throw new InvalidArgumentException('invalid length for "$calendar_id" when calling MailboxAPIApi.mailboxDeleteCalendar, must be bigger than or equal to 1.');
+        }
+        if (!preg_match("/^[A-Za-z0-9_-]+$/", $calendar_id)) {
+            throw new InvalidArgumentException("invalid value for \"calendar_id\" when calling MailboxAPIApi.mailboxDeleteCalendar, must conform to the pattern /^[A-Za-z0-9_-]+$/.");
+        }
+
+        // verify the required parameter 'if_match' is set
+        if ($if_match === null || (is_array($if_match) && count($if_match) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $if_match when calling mailboxDeleteCalendar'
+            );
+        }
+        if (strlen($if_match) < 1) {
+            throw new InvalidArgumentException('invalid length for "$if_match" when calling MailboxAPIApi.mailboxDeleteCalendar, must be bigger than or equal to 1.');
+        }
+
+
+
+        $resourcePath = '/mailbox/calendars/{calendar_id}';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $mailbox_id,
+            'mailbox_id', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+
+        // header params
+        if ($if_match !== null) {
+            $headerParams['If-Match'] = ObjectSerializer::toHeaderValue($if_match);
+        }
+
+        // path params
+        if ($calendar_id !== null) {
+            $resourcePath = str_replace(
+                '{calendar_id}',
+                ObjectSerializer::toPathValue($calendar_id),
+                $resourcePath
+            );
+        }
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires OAuth (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        // this endpoint requires Bearer (API Key) authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'DELETE',
             $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
             $httpBody

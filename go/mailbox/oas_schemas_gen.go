@@ -4237,6 +4237,136 @@ func (MailboxCalendarCreatedResponseOk) AllValues() []MailboxCalendarCreatedResp
 	}
 }
 
+// Merged schema.
+// Ref: #/components/schemas/MailboxCalendarDeletedResponse
+type MailboxCalendarDeletedResponse struct {
+	// Merged property.
+	Meta MailboxCalendarDeletedResponseMeta `json:"meta"`
+	Ok   MailboxCalendarDeletedResponseOk   `json:"ok"`
+	Data MailboxCalendarDeletedResponseData `json:"data"`
+}
+
+// GetMeta returns the value of Meta.
+func (s *MailboxCalendarDeletedResponse) GetMeta() MailboxCalendarDeletedResponseMeta {
+	return s.Meta
+}
+
+// GetOk returns the value of Ok.
+func (s *MailboxCalendarDeletedResponse) GetOk() MailboxCalendarDeletedResponseOk {
+	return s.Ok
+}
+
+// GetData returns the value of Data.
+func (s *MailboxCalendarDeletedResponse) GetData() MailboxCalendarDeletedResponseData {
+	return s.Data
+}
+
+// SetMeta sets the value of Meta.
+func (s *MailboxCalendarDeletedResponse) SetMeta(val MailboxCalendarDeletedResponseMeta) {
+	s.Meta = val
+}
+
+// SetOk sets the value of Ok.
+func (s *MailboxCalendarDeletedResponse) SetOk(val MailboxCalendarDeletedResponseOk) {
+	s.Ok = val
+}
+
+// SetData sets the value of Data.
+func (s *MailboxCalendarDeletedResponse) SetData(val MailboxCalendarDeletedResponseData) {
+	s.Data = val
+}
+
+func (*MailboxCalendarDeletedResponse) mailboxDeleteCalendarRes() {}
+
+type MailboxCalendarDeletedResponseData struct {
+	Deleted MailboxCalendarDeletedResponseDataDeleted `json:"deleted"`
+	// Opaque identifier scoped to the selected mailbox.
+	ID string `json:"id"`
+}
+
+// GetDeleted returns the value of Deleted.
+func (s *MailboxCalendarDeletedResponseData) GetDeleted() MailboxCalendarDeletedResponseDataDeleted {
+	return s.Deleted
+}
+
+// GetID returns the value of ID.
+func (s *MailboxCalendarDeletedResponseData) GetID() string {
+	return s.ID
+}
+
+// SetDeleted sets the value of Deleted.
+func (s *MailboxCalendarDeletedResponseData) SetDeleted(val MailboxCalendarDeletedResponseDataDeleted) {
+	s.Deleted = val
+}
+
+// SetID sets the value of ID.
+func (s *MailboxCalendarDeletedResponseData) SetID(val string) {
+	s.ID = val
+}
+
+type MailboxCalendarDeletedResponseDataDeleted bool
+
+const (
+	MailboxCalendarDeletedResponseDataDeletedTrue MailboxCalendarDeletedResponseDataDeleted = true
+)
+
+// AllValues returns all MailboxCalendarDeletedResponseDataDeleted values.
+func (MailboxCalendarDeletedResponseDataDeleted) AllValues() []MailboxCalendarDeletedResponseDataDeleted {
+	return []MailboxCalendarDeletedResponseDataDeleted{
+		MailboxCalendarDeletedResponseDataDeletedTrue,
+	}
+}
+
+// Merged schema.
+type MailboxCalendarDeletedResponseMeta struct {
+	RequestID       string `json:"request_id"`
+	AdditionalProps MailboxCalendarDeletedResponseMetaAdditional
+}
+
+// GetRequestID returns the value of RequestID.
+func (s *MailboxCalendarDeletedResponseMeta) GetRequestID() string {
+	return s.RequestID
+}
+
+// GetAdditionalProps returns the value of AdditionalProps.
+func (s *MailboxCalendarDeletedResponseMeta) GetAdditionalProps() MailboxCalendarDeletedResponseMetaAdditional {
+	return s.AdditionalProps
+}
+
+// SetRequestID sets the value of RequestID.
+func (s *MailboxCalendarDeletedResponseMeta) SetRequestID(val string) {
+	s.RequestID = val
+}
+
+// SetAdditionalProps sets the value of AdditionalProps.
+func (s *MailboxCalendarDeletedResponseMeta) SetAdditionalProps(val MailboxCalendarDeletedResponseMetaAdditional) {
+	s.AdditionalProps = val
+}
+
+type MailboxCalendarDeletedResponseMetaAdditional map[string]jx.Raw
+
+func (s *MailboxCalendarDeletedResponseMetaAdditional) init() MailboxCalendarDeletedResponseMetaAdditional {
+	m := *s
+	if m == nil {
+		m = map[string]jx.Raw{}
+		*s = m
+	}
+	return m
+}
+
+type MailboxCalendarDeletedResponseOk bool
+
+const (
+	MailboxCalendarDeletedResponseOkTrue MailboxCalendarDeletedResponseOk = true
+)
+
+// AllValues returns all MailboxCalendarDeletedResponseOk values.
+func (MailboxCalendarDeletedResponseOk) AllValues() []MailboxCalendarDeletedResponseOk {
+	return []MailboxCalendarDeletedResponseOk{
+		MailboxCalendarDeletedResponseOkTrue,
+	}
+}
+
 // Ref: #/components/schemas/MailboxCalendarEvent
 type MailboxCalendarEvent struct {
 	CalendarIds []string  `json:"calendar_ids"`
@@ -5200,7 +5330,7 @@ type MailboxCalendarResponse struct {
 	// Merged property.
 	Meta MailboxCalendarResponseMeta `json:"meta"`
 	Ok   MailboxCalendarResponseOk   `json:"ok"`
-	Data MailboxCalendar             `json:"data"`
+	Data MailboxCalendarWithEtag     `json:"data"`
 }
 
 // GetMeta returns the value of Meta.
@@ -5214,7 +5344,7 @@ func (s *MailboxCalendarResponse) GetOk() MailboxCalendarResponseOk {
 }
 
 // GetData returns the value of Data.
-func (s *MailboxCalendarResponse) GetData() MailboxCalendar {
+func (s *MailboxCalendarResponse) GetData() MailboxCalendarWithEtag {
 	return s.Data
 }
 
@@ -5229,7 +5359,7 @@ func (s *MailboxCalendarResponse) SetOk(val MailboxCalendarResponseOk) {
 }
 
 // SetData sets the value of Data.
-func (s *MailboxCalendarResponse) SetData(val MailboxCalendar) {
+func (s *MailboxCalendarResponse) SetData(val MailboxCalendarWithEtag) {
 	s.Data = val
 }
 
@@ -5309,6 +5439,80 @@ func (MailboxCalendarResponseOk) AllValues() []MailboxCalendarResponseOk {
 	return []MailboxCalendarResponseOk{
 		MailboxCalendarResponseOkTrue,
 	}
+}
+
+// Ref: #/components/schemas/MailboxCalendarWithEtag
+type MailboxCalendarWithEtag struct {
+	// Current calendar version, matching the ETag response header. Use this value in If-Match to delete
+	// an empty calendar.
+	Etag string `json:"etag"`
+	// Opaque identifier scoped to the selected mailbox.
+	ID string `json:"id"`
+	// Whether this is the mailbox's current default calendar.
+	IsDefault bool      `json:"is_default"`
+	MailboxID string    `json:"mailbox_id"`
+	Name      string    `json:"name"`
+	TimeZone  NilString `json:"time_zone"`
+}
+
+// GetEtag returns the value of Etag.
+func (s *MailboxCalendarWithEtag) GetEtag() string {
+	return s.Etag
+}
+
+// GetID returns the value of ID.
+func (s *MailboxCalendarWithEtag) GetID() string {
+	return s.ID
+}
+
+// GetIsDefault returns the value of IsDefault.
+func (s *MailboxCalendarWithEtag) GetIsDefault() bool {
+	return s.IsDefault
+}
+
+// GetMailboxID returns the value of MailboxID.
+func (s *MailboxCalendarWithEtag) GetMailboxID() string {
+	return s.MailboxID
+}
+
+// GetName returns the value of Name.
+func (s *MailboxCalendarWithEtag) GetName() string {
+	return s.Name
+}
+
+// GetTimeZone returns the value of TimeZone.
+func (s *MailboxCalendarWithEtag) GetTimeZone() NilString {
+	return s.TimeZone
+}
+
+// SetEtag sets the value of Etag.
+func (s *MailboxCalendarWithEtag) SetEtag(val string) {
+	s.Etag = val
+}
+
+// SetID sets the value of ID.
+func (s *MailboxCalendarWithEtag) SetID(val string) {
+	s.ID = val
+}
+
+// SetIsDefault sets the value of IsDefault.
+func (s *MailboxCalendarWithEtag) SetIsDefault(val bool) {
+	s.IsDefault = val
+}
+
+// SetMailboxID sets the value of MailboxID.
+func (s *MailboxCalendarWithEtag) SetMailboxID(val string) {
+	s.MailboxID = val
+}
+
+// SetName sets the value of Name.
+func (s *MailboxCalendarWithEtag) SetName(val string) {
+	s.Name = val
+}
+
+// SetTimeZone sets the value of TimeZone.
+func (s *MailboxCalendarWithEtag) SetTimeZone(val NilString) {
+	s.TimeZone = val
 }
 
 // Ref: #/components/schemas/MailboxChanges
@@ -5838,6 +6042,14 @@ type MailboxCreateFolderUnprocessableEntity ApiError
 
 func (*MailboxCreateFolderUnprocessableEntity) mailboxCreateFolderRes() {}
 
+type MailboxDeleteCalendarBadRequest ApiError
+
+func (*MailboxDeleteCalendarBadRequest) mailboxDeleteCalendarRes() {}
+
+type MailboxDeleteCalendarConflict ApiError
+
+func (*MailboxDeleteCalendarConflict) mailboxDeleteCalendarRes() {}
+
 type MailboxDeleteCalendarEventBadRequest ApiError
 
 func (*MailboxDeleteCalendarEventBadRequest) mailboxDeleteCalendarEventRes() {}
@@ -5877,6 +6089,38 @@ func (*MailboxDeleteCalendarEventUnauthorized) mailboxDeleteCalendarEventRes() {
 type MailboxDeleteCalendarEventUnprocessableEntity ApiError
 
 func (*MailboxDeleteCalendarEventUnprocessableEntity) mailboxDeleteCalendarEventRes() {}
+
+type MailboxDeleteCalendarForbidden ApiError
+
+func (*MailboxDeleteCalendarForbidden) mailboxDeleteCalendarRes() {}
+
+type MailboxDeleteCalendarInternalServerError ApiError
+
+func (*MailboxDeleteCalendarInternalServerError) mailboxDeleteCalendarRes() {}
+
+type MailboxDeleteCalendarNotFound ApiError
+
+func (*MailboxDeleteCalendarNotFound) mailboxDeleteCalendarRes() {}
+
+type MailboxDeleteCalendarRequestEntityTooLarge ApiError
+
+func (*MailboxDeleteCalendarRequestEntityTooLarge) mailboxDeleteCalendarRes() {}
+
+type MailboxDeleteCalendarServiceUnavailable ApiError
+
+func (*MailboxDeleteCalendarServiceUnavailable) mailboxDeleteCalendarRes() {}
+
+type MailboxDeleteCalendarTooManyRequests ApiError
+
+func (*MailboxDeleteCalendarTooManyRequests) mailboxDeleteCalendarRes() {}
+
+type MailboxDeleteCalendarUnauthorized ApiError
+
+func (*MailboxDeleteCalendarUnauthorized) mailboxDeleteCalendarRes() {}
+
+type MailboxDeleteCalendarUnprocessableEntity ApiError
+
+func (*MailboxDeleteCalendarUnprocessableEntity) mailboxDeleteCalendarRes() {}
 
 type MailboxDeleteDraftBadRequest ApiError
 

@@ -76,6 +76,13 @@ type Handler interface {
 	//
 	// POST /mailbox/folders
 	MailboxCreateFolder(ctx context.Context, req OptCreateMailboxFolderBody, params MailboxCreateFolderParams) (MailboxCreateFolderRes, error)
+	// MailboxDeleteCalendar implements mailboxDeleteCalendar operation.
+	//
+	// Fetch the calendar and supply its ETag in If-Match. A calendar containing events returns 409
+	// conflict.
+	//
+	// DELETE /mailbox/calendars/{calendar_id}
+	MailboxDeleteCalendar(ctx context.Context, params MailboxDeleteCalendarParams) (MailboxDeleteCalendarRes, error)
 	// MailboxDeleteCalendarEvent implements mailboxDeleteCalendarEvent operation.
 	//
 	// Delete a non-sending event.

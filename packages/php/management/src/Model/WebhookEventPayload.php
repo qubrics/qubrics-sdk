@@ -47,6 +47,18 @@ class WebhookEventPayload implements ModelInterface, ArrayAccess, JsonSerializab
 {
     public const DISCRIMINATOR = 'type';
 
+    public const DISCRIMINATOR_MAPPING = [
+        'calendar.changed' => CalendarWebhookEventPayload::class,
+        'message.bounced' => MailWebhookEventPayload::class,
+        'message.complained' => MailWebhookEventPayload::class,
+        'message.delivered' => MailWebhookEventPayload::class,
+        'message.delivery_delayed' => MailWebhookEventPayload::class,
+        'message.received' => MailWebhookEventPayload::class,
+        'message.received.spam' => MailWebhookEventPayload::class,
+        'message.rejected' => MailWebhookEventPayload::class,
+        'sendmux.test' => MailWebhookEventPayload::class,
+    ];
+
     /**
      * The original name of the model.
      *

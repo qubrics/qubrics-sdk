@@ -63,7 +63,7 @@ assert.match(
 );
 assert.match(
   snapReadme,
-  /gh secret list --repo Sendmux\/sendmux-sdk/,
+  /gh secret list --repo qubrics\/qubrics-sdk/,
   "Snap credential docs must require verifying the GitHub secret update timestamp.",
 );
 

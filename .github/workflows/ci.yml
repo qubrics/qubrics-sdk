@@ -32,7 +32,7 @@ jobs:
           docs_ref="main"
           if [ "$SOURCE_REPOSITORY" = "$CURRENT_REPOSITORY" ] &&
             [ -n "$CANDIDATE_DOCS_REF" ] &&
-            git ls-remote --exit-code --heads https://github.com/Sendmux/docs.git \
+            git ls-remote --exit-code --heads https://github.com/qubrics/docs.git \
               "refs/heads/$CANDIDATE_DOCS_REF" >/dev/null 2>&1; then
             docs_ref="$CANDIDATE_DOCS_REF"
           fi
@@ -41,7 +41,7 @@ jobs:
       - name: Check out OpenAPI snapshots
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
-          repository: Sendmux/docs
+          repository: qubrics/docs
           ref: ${{ steps.docs-ref.outputs.ref }}
           path: sendmux-docs
           persist-credentials: false
@@ -142,7 +142,7 @@ jobs:
           docs_ref="main"
           if [ "$SOURCE_REPOSITORY" = "$CURRENT_REPOSITORY" ] &&
             [ -n "$CANDIDATE_DOCS_REF" ] &&
-            git ls-remote --exit-code --heads https://github.com/Sendmux/docs.git \
+            git ls-remote --exit-code --heads https://github.com/qubrics/docs.git \
               "refs/heads/$CANDIDATE_DOCS_REF" >/dev/null 2>&1; then
             docs_ref="$CANDIDATE_DOCS_REF"
           fi
@@ -151,7 +151,7 @@ jobs:
       - name: Check out OpenAPI snapshots
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
-          repository: Sendmux/docs
+          repository: qubrics/docs
           ref: ${{ steps.docs-ref.outputs.ref }}
           path: sendmux-docs
           persist-credentials: false

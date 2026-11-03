@@ -268,12 +268,16 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							if len(elem) == 0 {
 								// Leaf node.
 								switch r.Method {
+								case "DELETE":
+									s.handleMailboxDeleteCalendarRequest([1]string{
+										args[0],
+									}, elemIsEscaped, w, r)
 								case "GET":
 									s.handleMailboxGetCalendarRequest([1]string{
 										args[0],
 									}, elemIsEscaped, w, r)
 								default:
-									s.notAllowed(w, r, "GET")
+									s.notAllowed(w, r, "DELETE,GET")
 								}
 
 								return
@@ -1725,6 +1729,14 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							if len(elem) == 0 {
 								// Leaf node.
 								switch method {
+								case "DELETE":
+									r.name = MailboxDeleteCalendarOperation
+									r.summary = "Delete an empty calendar"
+									r.operationID = "mailboxDeleteCalendar"
+									r.pathPattern = "/mailbox/calendars/{calendar_id}"
+									r.args = args
+									r.count = 1
+									return r, true
 								case "GET":
 									r.name = MailboxGetCalendarOperation
 									r.summary = "Get a calendar"

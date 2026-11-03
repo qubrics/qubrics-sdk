@@ -111,6 +111,16 @@ func (UnimplementedHandler) MailboxCreateFolder(ctx context.Context, req OptCrea
 	return r, ht.ErrNotImplemented
 }
 
+// MailboxDeleteCalendar implements mailboxDeleteCalendar operation.
+//
+// Fetch the calendar and supply its ETag in If-Match. A calendar containing events returns 409
+// conflict.
+//
+// DELETE /mailbox/calendars/{calendar_id}
+func (UnimplementedHandler) MailboxDeleteCalendar(ctx context.Context, params MailboxDeleteCalendarParams) (r MailboxDeleteCalendarRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // MailboxDeleteCalendarEvent implements mailboxDeleteCalendarEvent operation.
 //
 // Delete a non-sending event.

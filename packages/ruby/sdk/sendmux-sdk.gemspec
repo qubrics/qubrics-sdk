@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.authors = ['Sendmux']
   spec.email = ['contact@sendmux.ai']
   spec.summary = 'Umbrella Ruby SDK for Sendmux.'
-  spec.homepage = 'https://github.com/Sendmux/sendmux-sdk'
+  spec.homepage = 'https://github.com/qubrics/qubrics-sdk'
   spec.license = 'MIT'
   spec.required_ruby_version = '>= 3.1'
   spec.metadata = {

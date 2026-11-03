@@ -27,7 +27,7 @@
   ],
   "provenance": {
     "build_inputs": {
-      "pyproject.toml": "f6ddf639c450805939964c024be15a841b991c0cad77d7095e21ae28820e8d15",
+      "pyproject.toml": "114925ee687960f247f7a693fb9f2b1d27055669d36c97c793fc0c4c86e31ee7",
       "scripts/mcp-conformance-required-checks.json": "c82a24f9f893f69c45ab31949e4089f80836230e913d95ca7a05f5933cb788e4"
     },
     "certified_protocols": "scripts/mcp-conformance-required-checks.json",
@@ -44,16 +44,16 @@
       "cli.py": "17b54de9a43c97bb0aef25b69f399eb8bceafe2fa37cb30b23f6096982895096",
       "config.py": "32d37a9c218531a6a1db3491e5409242fa9287c0cdac20fd70cda1a1ae2e5e4b",
       "contract.py": "8be5dcf207fd771774beddf433cad3734a9250284a26e57d9d3f607c670395c3",
-      "curation.py": "6d9e29d6cc5f8d913629280cf33e0103e0df0fedba3064a85b844a04a79f1c19",
+      "curation.py": "2aa82e2282e56502ed8d55a151069688a226748d7826c41a2de5b208fd9471a6",
       "hosted.py": "055394dbf74ce9ea122fff18fdf310780930323a9a360b255e920ce137dbe345",
       "hosted_auth.py": "3e7e8452d02e764b3e4f680948c2215254a5372692429bb3a2946a6401254ffe",
       "hosted_proxy.py": "c54f9e98f3e23c86e3a8dbfe11780b5ce1e2a871564ac684b97e631d823d6dac",
       "live_e2e.py": "714b1ad5a70d694f0c8907037e937f24354ee12c9eb42bde13ed070cd38ce93b",
       "observability.py": "c39911894d5575f0faaa0f86b190849528bd1014a8790ca90df40730ff200f7d",
       "openapi/__init__.py": "04a300726f2d3f551c88591fa171ed8bd7c7caa6f3257f438e52884ba782fdb1",
-      "openapi/openapi-app.json": "16439b3c0d9eee73554202cf909af6aade12b6f8d3390ddee922663ba061de1a",
+      "openapi/openapi-app.json": "28f2fc773b1470057b5ff5bab9c4e00f6d4a34925dbee91e3b57bc0057355656",
       "openapi/openapi-sending.json": "3138c5f27e3c0ab8475d1ccaf7378815c12e12918c30a90e77e2115642bc3647",
-      "permissions.py": "1b77e848afdca7e7bc10ac49b245a1cdc758f4603eef6d6823144120091727ab",
+      "permissions.py": "aca9c97a2834ff6463c210eb9528e1da20d3a174b28e7ac0c112b205a91c9673",
       "response_ownership.py": "eff042d51d3d158438e05fd131e0e993fa76706a2895838e84114fb0c488ef83",
       "retry.py": "e1454a54ffe1b5b558c820b6e9cff2d2c0f8c1ea501f63051dc9716bf1f67191",
       "security.py": "45f59d632995254dc8dc5acec41b6f0f5c583a7db3f9c50a143a8c48dffa4016",
@@ -2981,6 +2981,124 @@
             "open_world_hint": true,
             "read_only_hint": false
           },
+          "description": "Requires calendar.write. Fetch the calendar and pass its ETag in If-Match. A calendar containing events returns 409 conflict.",
+          "input_schema": {
+            "properties": {
+              "If-Match": {
+                "description": "ETag from the most recent calendar GET. Wildcards are rejected.",
+                "minLength": 1,
+                "type": "string"
+              },
+              "calendar_id": {
+                "description": "Calendar ID in the selected mailbox.",
+                "maxLength": 4096,
+                "minLength": 1,
+                "pattern": "^[A-Za-z0-9_-]+$",
+                "type": "string"
+              },
+              "mailbox_id": {
+                "description": "Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "calendar_id",
+              "If-Match"
+            ],
+            "type": "object"
+          },
+          "name": "mailbox_delete_calendar",
+          "output_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "properties": {
+              "result": {
+                "allOf": [
+                  {
+                    "properties": {
+                      "meta": {
+                        "additionalProperties": {},
+                        "properties": {},
+                        "type": "object"
+                      },
+                      "ok": {
+                        "enum": [
+                          true
+                        ],
+                        "type": "boolean"
+                      }
+                    },
+                    "required": [
+                      "ok",
+                      "meta"
+                    ],
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "data": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "deleted": {
+                            "enum": [
+                              true
+                            ],
+                            "type": "boolean"
+                          },
+                          "id": {
+                            "description": "Opaque identifier scoped to the selected mailbox.",
+                            "maxLength": 4096,
+                            "minLength": 1,
+                            "pattern": "^[A-Za-z0-9_-]+$",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "deleted"
+                        ],
+                        "type": "object"
+                      },
+                      "meta": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "request_id": {
+                            "example": "req_clxxxxxxxxxxxxxxxxxxxxxxxxx",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "request_id"
+                        ],
+                        "type": "object"
+                      }
+                    },
+                    "required": [
+                      "data"
+                    ],
+                    "type": "object"
+                  }
+                ],
+                "unevaluatedProperties": {
+                  "not": {}
+                },
+                "x-fastmcp-top-level-schema": "MailboxCalendarDeletedResponse"
+              }
+            },
+            "required": [
+              "result"
+            ],
+            "type": "object",
+            "x-fastmcp-wrap-result": true
+          },
+          "title": "Delete an empty calendar"
+        },
+        {
+          "annotations": {
+            "destructive_hint": true,
+            "idempotent_hint": true,
+            "open_world_hint": true,
+            "read_only_hint": false
+          },
           "description": "Delete an event only when the user asks. Requires calendar.write and the reviewed If-Match value. This does not send cancellation emails; reload after a conflict.",
           "input_schema": {
             "properties": {
@@ -3631,6 +3749,10 @@
                       "data": {
                         "additionalProperties": false,
                         "properties": {
+                          "etag": {
+                            "description": "Current calendar version, matching the ETag response header. Use this value in If-Match to delete an empty calendar.",
+                            "type": "string"
+                          },
                           "id": {
                             "description": "Opaque identifier scoped to the selected mailbox.",
                             "maxLength": 4096,
@@ -3660,7 +3782,8 @@
                           "mailbox_id",
                           "name",
                           "time_zone",
-                          "is_default"
+                          "is_default",
+                          "etag"
                         ],
                         "type": "object"
                       },
@@ -16542,6 +16665,124 @@
             "open_world_hint": true,
             "read_only_hint": false
           },
+          "description": "Requires calendar.write. Fetch the calendar and pass its ETag in If-Match. A calendar containing events returns 409 conflict.",
+          "input_schema": {
+            "properties": {
+              "If-Match": {
+                "description": "ETag from the most recent calendar GET. Wildcards are rejected.",
+                "minLength": 1,
+                "type": "string"
+              },
+              "calendar_id": {
+                "description": "Calendar ID in the selected mailbox.",
+                "maxLength": 4096,
+                "minLength": 1,
+                "pattern": "^[A-Za-z0-9_-]+$",
+                "type": "string"
+              },
+              "mailbox_id": {
+                "description": "Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "calendar_id",
+              "If-Match"
+            ],
+            "type": "object"
+          },
+          "name": "qubrics_mailbox_delete_calendar",
+          "output_schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "properties": {
+              "result": {
+                "allOf": [
+                  {
+                    "properties": {
+                      "meta": {
+                        "additionalProperties": {},
+                        "properties": {},
+                        "type": "object"
+                      },
+                      "ok": {
+                        "enum": [
+                          true
+                        ],
+                        "type": "boolean"
+                      }
+                    },
+                    "required": [
+                      "ok",
+                      "meta"
+                    ],
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "data": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "deleted": {
+                            "enum": [
+                              true
+                            ],
+                            "type": "boolean"
+                          },
+                          "id": {
+                            "description": "Opaque identifier scoped to the selected mailbox.",
+                            "maxLength": 4096,
+                            "minLength": 1,
+                            "pattern": "^[A-Za-z0-9_-]+$",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "deleted"
+                        ],
+                        "type": "object"
+                      },
+                      "meta": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "request_id": {
+                            "example": "req_clxxxxxxxxxxxxxxxxxxxxxxxxx",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "request_id"
+                        ],
+                        "type": "object"
+                      }
+                    },
+                    "required": [
+                      "data"
+                    ],
+                    "type": "object"
+                  }
+                ],
+                "unevaluatedProperties": {
+                  "not": {}
+                },
+                "x-fastmcp-top-level-schema": "MailboxCalendarDeletedResponse"
+              }
+            },
+            "required": [
+              "result"
+            ],
+            "type": "object",
+            "x-fastmcp-wrap-result": true
+          },
+          "title": "Delete an empty calendar"
+        },
+        {
+          "annotations": {
+            "destructive_hint": true,
+            "idempotent_hint": true,
+            "open_world_hint": true,
+            "read_only_hint": false
+          },
           "description": "Delete an event only when the user asks. Requires calendar.write and the reviewed If-Match value. This does not send cancellation emails; reload after a conflict.",
           "input_schema": {
             "properties": {
@@ -17192,6 +17433,10 @@
                       "data": {
                         "additionalProperties": false,
                         "properties": {
+                          "etag": {
+                            "description": "Current calendar version, matching the ETag response header. Use this value in If-Match to delete an empty calendar.",
+                            "type": "string"
+                          },
                           "id": {
                             "description": "Opaque identifier scoped to the selected mailbox.",
                             "maxLength": 4096,
@@ -17221,7 +17466,8 @@
                           "mailbox_id",
                           "name",
                           "time_zone",
-                          "is_default"
+                          "is_default",
+                          "etag"
                         ],
                         "type": "object"
                       },
@@ -40036,7 +40282,7 @@
         }
       ]
     },
-    "count": 148
+    "count": 150
   },
   "uploads": {
     "inline_decoded_max_bytes": 32768,

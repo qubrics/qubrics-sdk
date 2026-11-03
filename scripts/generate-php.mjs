@@ -103,7 +103,7 @@ for (const surface of surfaces) {
 
   rmSync(join(packageDir, "src"), { force: true, recursive: true });
   cpSync(join(generatedRoot, "src"), join(packageDir, "src"), { recursive: true });
-  patchPrimitiveUnionSerializer(surface, packageDir);
+  patchSerializer(surface, packageDir);
   writeDeprecatedModelAliases(surface, packageDir);
   writeClientFactory(surface, packageDir);
 }
@@ -115,6 +115,7 @@ function writeFilteredSpec(surface) {
   const source = JSON.parse(readFileSync(join(root, surface.spec), "utf8"));
   prepareAttachmentUnion(source);
   prepareDeliveryGroupPrimitiveUnion(source, surface);
+  prepareDiscriminatorPropertyTypes(source, surface);
   const allowed = new Set(surface.tags);
   const paths = {};
 
@@ -211,6 +212,17 @@ function prepareDeliveryGroupPrimitiveUnion(document, surface) {
   deliveryGroup["x-sendmux-primitive-pattern"] = expectedPattern;
   deliveryGroup["x-sendmux-primitive-min-items"] = list.minItems;
   deliveryGroup["x-sendmux-primitive-max-items"] = list.maxItems;
+}
+
+function prepareDiscriminatorPropertyTypes(document, surface) {
+  const schemas = document.components?.schemas ?? {};
+  for (const [name, schema] of Object.entries(schemas)) {
+    const mapping = schema.discriminator?.mapping;
+    if (!mapping) continue;
+    const models = [name, ...Object.values(mapping).map(ref => ref.split("/").at(-1))];
+    schema["x-sendmux-discriminator-union-type"] = [...new Set(models)]
+      .map(model => `\\${surface.namespace}\\Model\\${model}`).join("|");
+  }
 }
 
 function markTrailingSdkParams(document) {
@@ -325,13 +337,22 @@ function collectRefs(value, refs) {
   }
 }
 
-function patchPrimitiveUnionSerializer(surface, packageDir) {
+function patchSerializer(surface, packageDir) {
+  const serializerPath = join(packageDir, "src", "ObjectSerializer.php");
+  let serializer = readFileSync(serializerPath, "utf8");
+  serializer = replaceOnce(
+    serializer,
+    "                if (is_subclass_of($subclass, $class)) {",
+    String.raw`                $mapping = defined($class . '::DISCRIMINATOR_MAPPING') ? $class::DISCRIMINATOR_MAPPING : [];
+                $subclass = $mapping[$data->{$discriminator}] ?? $subclass;
+                if (isset($mapping[$data->{$discriminator}]) || is_subclass_of($subclass, $class)) {`,
+    serializerPath,
+  );
   if (surface.name !== "sending") {
+    writeFileSync(serializerPath, serializer);
     return;
   }
 
-  const serializerPath = join(packageDir, "src", "ObjectSerializer.php");
-  let serializer = readFileSync(serializerPath, "utf8");
   serializer = replaceOnce(
     serializer,
     `        if (is_scalar($data) || null === $data) {

@@ -63,6 +63,7 @@ def test_calendar_tools_require_calendar_scope_without_inheriting_mail_authority
         "mailbox_create_calendar_event",
         "mailbox_update_calendar_event",
         "mailbox_delete_calendar_event",
+        "mailbox_delete_calendar",
     }
     for name in read_tools:
         assert permissions_for_tool(name) == ("calendar.read",)

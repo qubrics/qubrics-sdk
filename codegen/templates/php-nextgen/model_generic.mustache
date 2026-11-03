@@ -1,6 +1,14 @@
 class {{classname}} {{#parentSchema}}extends {{{parent}}}{{/parentSchema}}{{^parentSchema}}implements ModelInterface, ArrayAccess, JsonSerializable{{/parentSchema}}
 {
     public const DISCRIMINATOR = {{#discriminator}}'{{discriminatorName}}'{{/discriminator}}{{^discriminator}}null{{/discriminator}};
+{{#discriminator}}
+
+    public const DISCRIMINATOR_MAPPING = [
+{{#mappedModels}}
+        '{{mappingName}}' => {{modelName}}::class,
+{{/mappedModels}}
+    ];
+{{/discriminator}}
 
     /**
      * The original name of the model.
@@ -412,12 +420,12 @@ class {{classname}} {{#parentSchema}}extends {{{parent}}}{{/parentSchema}}{{^par
     /**
      * Gets {{name}}
      *
-     * @return {{#vendorExtensions.x-sendmux-primitive-union}}string|string[]{{/vendorExtensions.x-sendmux-primitive-union}}{{^vendorExtensions.x-sendmux-primitive-union}}{{{dataType}}}{{/vendorExtensions.x-sendmux-primitive-union}}{{#notRequiredOrIsNullable}}|null{{/notRequiredOrIsNullable}}
+     * @return {{#vendorExtensions.x-sendmux-primitive-union}}string|string[]{{/vendorExtensions.x-sendmux-primitive-union}}{{^vendorExtensions.x-sendmux-primitive-union}}{{#vendorExtensions.x-sendmux-discriminator-union-type}}{{{.}}}{{/vendorExtensions.x-sendmux-discriminator-union-type}}{{^vendorExtensions.x-sendmux-discriminator-union-type}}{{{dataType}}}{{/vendorExtensions.x-sendmux-discriminator-union-type}}{{/vendorExtensions.x-sendmux-primitive-union}}{{#notRequiredOrIsNullable}}|null{{/notRequiredOrIsNullable}}
     {{#deprecated}}
      * @deprecated
     {{/deprecated}}
      */
-    public function {{getter}}(): {{#vendorExtensions.x-sendmux-primitive-union}}string|array|null{{/vendorExtensions.x-sendmux-primitive-union}}{{^vendorExtensions.x-sendmux-primitive-union}}{{exts.x-php-prop-type}}{{/vendorExtensions.x-sendmux-primitive-union}}
+    public function {{getter}}(): {{#vendorExtensions.x-sendmux-primitive-union}}string|array|null{{/vendorExtensions.x-sendmux-primitive-union}}{{^vendorExtensions.x-sendmux-primitive-union}}{{#vendorExtensions.x-sendmux-discriminator-union-type}}{{{.}}}{{#notRequiredOrIsNullable}}|null{{/notRequiredOrIsNullable}}{{/vendorExtensions.x-sendmux-discriminator-union-type}}{{^vendorExtensions.x-sendmux-discriminator-union-type}}{{exts.x-php-prop-type}}{{/vendorExtensions.x-sendmux-discriminator-union-type}}{{/vendorExtensions.x-sendmux-primitive-union}}
     {
         return $this->container['{{name}}'];
     }
@@ -425,14 +433,14 @@ class {{classname}} {{#parentSchema}}extends {{{parent}}}{{/parentSchema}}{{^par
     /**
      * Sets {{name}}
      *
-     * @param {{#vendorExtensions.x-sendmux-primitive-union}}string|string[]{{/vendorExtensions.x-sendmux-primitive-union}}{{^vendorExtensions.x-sendmux-primitive-union}}{{{dataType}}}{{#notRequiredOrIsNullable}}|null{{/notRequiredOrIsNullable}}{{/vendorExtensions.x-sendmux-primitive-union}} ${{name}}{{#description}} {{{.}}}{{/description}}{{^description}} {{{name}}}{{/description}}
+     * @param {{#vendorExtensions.x-sendmux-primitive-union}}string|string[]{{/vendorExtensions.x-sendmux-primitive-union}}{{^vendorExtensions.x-sendmux-primitive-union}}{{#vendorExtensions.x-sendmux-discriminator-union-type}}{{{.}}}{{/vendorExtensions.x-sendmux-discriminator-union-type}}{{^vendorExtensions.x-sendmux-discriminator-union-type}}{{{dataType}}}{{/vendorExtensions.x-sendmux-discriminator-union-type}}{{#notRequiredOrIsNullable}}|null{{/notRequiredOrIsNullable}}{{/vendorExtensions.x-sendmux-primitive-union}} ${{name}}{{#description}} {{{.}}}{{/description}}{{^description}} {{{name}}}{{/description}}
      *
      * @return $this
     {{#deprecated}}
      * @deprecated
     {{/deprecated}}
      */
-    public function {{setter}}({{#vendorExtensions.x-sendmux-primitive-union}}string|array{{/vendorExtensions.x-sendmux-primitive-union}}{{^vendorExtensions.x-sendmux-primitive-union}}{{exts.x-php-prop-type}}{{/vendorExtensions.x-sendmux-primitive-union}} ${{name}}): static
+    public function {{setter}}({{#vendorExtensions.x-sendmux-primitive-union}}string|array{{/vendorExtensions.x-sendmux-primitive-union}}{{^vendorExtensions.x-sendmux-primitive-union}}{{#vendorExtensions.x-sendmux-discriminator-union-type}}{{{.}}}{{#notRequiredOrIsNullable}}|null{{/notRequiredOrIsNullable}}{{/vendorExtensions.x-sendmux-discriminator-union-type}}{{^vendorExtensions.x-sendmux-discriminator-union-type}}{{exts.x-php-prop-type}}{{/vendorExtensions.x-sendmux-discriminator-union-type}}{{/vendorExtensions.x-sendmux-primitive-union}} ${{name}}): static
     {
         {{#vendorExtensions.x-sendmux-primitive-union}}
         new {{{dataType}}}(${{name}});

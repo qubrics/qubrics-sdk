@@ -332,6 +332,18 @@ func (r *MailboxCreateFolderUnprocessableEntity) APIError() *core.APIError {
 	return err
 }
 
+// APIError maps MailboxDeleteCalendarBadRequest into the shared typed API error.
+func (r *MailboxDeleteCalendarBadRequest) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 400)
+	return err
+}
+
+// APIError maps MailboxDeleteCalendarConflict into the shared typed API error.
+func (r *MailboxDeleteCalendarConflict) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 409)
+	return err
+}
+
 // APIError maps MailboxDeleteCalendarEventBadRequest into the shared typed API error.
 func (r *MailboxDeleteCalendarEventBadRequest) APIError() *core.APIError {
 	err, _ := core.APIErrorFromResponse(r, 400)
@@ -388,6 +400,54 @@ func (r *MailboxDeleteCalendarEventUnauthorized) APIError() *core.APIError {
 
 // APIError maps MailboxDeleteCalendarEventUnprocessableEntity into the shared typed API error.
 func (r *MailboxDeleteCalendarEventUnprocessableEntity) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 422)
+	return err
+}
+
+// APIError maps MailboxDeleteCalendarForbidden into the shared typed API error.
+func (r *MailboxDeleteCalendarForbidden) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 403)
+	return err
+}
+
+// APIError maps MailboxDeleteCalendarInternalServerError into the shared typed API error.
+func (r *MailboxDeleteCalendarInternalServerError) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 500)
+	return err
+}
+
+// APIError maps MailboxDeleteCalendarNotFound into the shared typed API error.
+func (r *MailboxDeleteCalendarNotFound) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 404)
+	return err
+}
+
+// APIError maps MailboxDeleteCalendarRequestEntityTooLarge into the shared typed API error.
+func (r *MailboxDeleteCalendarRequestEntityTooLarge) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 413)
+	return err
+}
+
+// APIError maps MailboxDeleteCalendarServiceUnavailable into the shared typed API error.
+func (r *MailboxDeleteCalendarServiceUnavailable) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 503)
+	return err
+}
+
+// APIError maps MailboxDeleteCalendarTooManyRequests into the shared typed API error.
+func (r *MailboxDeleteCalendarTooManyRequests) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 429)
+	return err
+}
+
+// APIError maps MailboxDeleteCalendarUnauthorized into the shared typed API error.
+func (r *MailboxDeleteCalendarUnauthorized) APIError() *core.APIError {
+	err, _ := core.APIErrorFromResponse(r, 401)
+	return err
+}
+
+// APIError maps MailboxDeleteCalendarUnprocessableEntity into the shared typed API error.
+func (r *MailboxDeleteCalendarUnprocessableEntity) APIError() *core.APIError {
 	err, _ := core.APIErrorFromResponse(r, 422)
 	return err
 }
