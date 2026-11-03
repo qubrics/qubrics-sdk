@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import os
-from collections.abc import AsyncIterator, Sequence
+from collections.abc import AsyncIterator, Mapping, Sequence
 from contextlib import asynccontextmanager
 from dataclasses import dataclass
 from urllib.parse import urlparse
@@ -9,8 +9,11 @@ from urllib.parse import urlparse
 import httpx
 import uvicorn
 from fastmcp import FastMCP
+from fastmcp.server.auth import RemoteAuthProvider
 from fastmcp.server.auth.providers.jwt import JWTVerifier
 from fastmcp.server.middleware import AuthMiddleware
+from mcp.server.auth.routes import build_resource_metadata_url, create_protected_resource_routes
+from pydantic import AnyHttpUrl
 from starlette.middleware import Middleware
 from starlette.middleware.cors import CORSMiddleware
 from starlette.requests import Request
@@ -23,6 +26,7 @@ from sendmux_mcp.config import DEFAULT_APP_BASE_URL, ServerConfig, Surface, conf
 from sendmux_mcp.a2a import A2A_RESOURCE_URL, A2ATokenVerifier, build_a2a_http_components
 from sendmux_mcp.hosted_auth import (
     HOSTED_MCP_DISCOVERY_SCOPES,
+    HOSTED_MCP_RESOURCE_URLS,
     HostedAuthConfig,
     create_remote_auth_provider,
     hosted_mcp_resource_url,
@@ -35,7 +39,7 @@ from sendmux_mcp.server import SENDMUX_MCP_VERSION, create_server
 from sendmux_mcp.specs import load_spec, prepare_for_fastmcp
 
 HOSTED_SURFACES: tuple[Surface, ...] = ("mailbox", "management", "sending")
-DEFAULT_MCP_RESOURCE_BASE_URL = "https://mcp.sendmux.ai"
+DEFAULT_MCP_RESOURCE_BASE_URL = "https://mcp.qubrics.com"
 DEFAULT_MCP_APP_ORIGIN = "https://app.sendmux.ai"
 DEFAULT_MCP_PATH = "/mcp"
 HOSTED_CORS_ALLOWED_HEADERS = (
@@ -54,7 +58,7 @@ HOSTED_CORS_ALLOWED_METHODS = ("GET", "POST", "DELETE", "OPTIONS")
 
 @dataclass(frozen=True)
 class HostedServerRuntimeConfig:
-    issuer: str
+    issuer: str | list[str]
     authorization_servers: tuple[str, ...]
     jwks_uri: str
     resource_base_url: str
@@ -74,8 +78,9 @@ def hosted_runtime_config_from_env() -> HostedServerRuntimeConfig:
     )
     resource_base_url = env_value("SENDMUX_MCP_RESOURCE_BASE_URL", DEFAULT_MCP_RESOURCE_BASE_URL)
     mcp_path = env_value("SENDMUX_MCP_PATH", DEFAULT_MCP_PATH)
-    issuer = env_value("SENDMUX_MCP_OAUTH_ISSUER", app_origin)
-    authorization_servers = parse_csv(env_value("SENDMUX_MCP_AUTHORIZATION_SERVERS")) or (issuer,)
+    issuers = parse_csv(env_value("SENDMUX_MCP_OAUTH_ISSUER")) or (app_origin,)
+    issuer: str | list[str] = issuers[0] if len(issuers) == 1 else list(issuers)
+    authorization_servers = parse_csv(env_value("SENDMUX_MCP_AUTHORIZATION_SERVERS")) or issuers
     jwks_uri = env_value("SENDMUX_MCP_JWKS_URI", f"{app_origin}/.well-known/jwks.json")
     proxy_url = env_value("SENDMUX_MCP_PROXY_URL", f"{app_origin}/api/internal/mcp/proxy")
     allowed_origins = normalise_hosted_allowed_origins(
@@ -169,9 +174,23 @@ def create_hosted_http_app(
 ) -> Starlette:
     runtime = runtime or hosted_runtime_config_from_env()
     server = create_hosted_server(runtime)
+    resource_aliases = (
+        HOSTED_MCP_RESOURCE_URLS
+        if hosted_mcp_resource_url(runtime.resource_base_url, runtime.mcp_path) in HOSTED_MCP_RESOURCE_URLS
+        else ()
+    )
+    resource_metadata_urls = {
+        urlparse(resource).netloc: str(build_resource_metadata_url(AnyHttpUrl(resource)))
+        for resource in resource_aliases
+    }
     app = server.http_app(
         path=runtime.mcp_path,
-        middleware=hosted_http_middleware(runtime.allowed_origins, runtime.scopes_supported),
+        middleware=hosted_http_middleware(
+            runtime.allowed_origins,
+            runtime.scopes_supported,
+            resource_metadata_urls=resource_metadata_urls,
+            resource_path=runtime.mcp_path,
+        ),
         stateless_http=runtime.stateless_http,
         transport="http",
     )
@@ -181,6 +200,27 @@ def create_hosted_http_app(
     )
     mcp_hostname = urlparse(runtime.resource_base_url).hostname
     assert mcp_hostname is not None
+    metadata_routes_by_host: dict[str, Route] = {}
+    if resource_aliases:
+        auth = server.auth
+        assert isinstance(auth, RemoteAuthProvider)
+        for resource in resource_aliases:
+            metadata_routes_by_host[urlparse(resource).netloc] = create_protected_resource_routes(
+                resource_url=AnyHttpUrl(resource),
+                authorization_servers=auth.authorization_servers,
+                scopes_supported=auth.scopes_supported,
+                resource_name=auth.resource_name,
+                resource_documentation=auth.resource_documentation,
+            )[0]
+
+    async def mcp_resource_metadata(request: Request) -> ASGIApp:
+        return metadata_routes_by_host.get(request.url.netloc.lower(), mcp_metadata_route).handle
+
+    if metadata_routes_by_host:
+        scoped_metadata_route = Route(mcp_metadata_route.path, endpoint=mcp_resource_metadata, methods=[])
+        app.router.routes = [
+            scoped_metadata_route if route is mcp_metadata_route else route for route in app.router.routes
+        ]
 
     manifests = []
     for surface in HOSTED_SURFACES:
@@ -210,7 +250,9 @@ def create_hosted_http_app(
     )
 
     async def root_resource_metadata(request: Request) -> ASGIApp:
-        if request.url.hostname == mcp_hostname:
+        if request.url.netloc.lower() in metadata_routes_by_host:
+            return await mcp_resource_metadata(request)
+        if not metadata_routes_by_host and request.url.hostname == mcp_hostname:
             return mcp_metadata_route.handle
         return a2a_metadata_route.handle
 
@@ -238,6 +280,9 @@ def create_hosted_http_app(
 def hosted_http_middleware(
     allowed_origins: Sequence[str] | None = None,
     challenge_scopes: Sequence[str] = HOSTED_MCP_DISCOVERY_SCOPES,
+    *,
+    resource_metadata_urls: Mapping[str, str] | None = None,
+    resource_path: str = DEFAULT_MCP_PATH,
 ) -> list[Middleware]:
     origins = normalise_hosted_allowed_origins(
         allowed_origins or default_hosted_allowed_origins(DEFAULT_MCP_APP_ORIGIN)
@@ -246,7 +291,12 @@ def hosted_http_middleware(
         posthog_exception_middleware(),
         Middleware(OriginGuardMiddleware, allowed_origins=origins),
         Middleware(MCPHeaderGuardMiddleware, allowed_preflight_headers=HOSTED_CORS_ALLOWED_HEADERS),
-        Middleware(BearerScopeChallengeMiddleware, scopes=challenge_scopes),
+        Middleware(
+            BearerScopeChallengeMiddleware,
+            scopes=challenge_scopes,
+            resource_metadata_urls=resource_metadata_urls,
+            resource_path=resource_path,
+        ),
         Middleware(
             CORSMiddleware,
             allow_origins=list(origins),

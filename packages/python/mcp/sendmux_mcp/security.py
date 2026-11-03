@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from collections.abc import Awaitable, Callable, Sequence
+from collections.abc import Awaitable, Callable, Mapping, Sequence
 
 from starlette.datastructures import Headers
 from starlette.middleware.base import BaseHTTPMiddleware
@@ -97,16 +97,28 @@ class MCPHeaderGuardMiddleware:
 
 
 class BearerScopeChallengeMiddleware(BaseHTTPMiddleware):
-    def __init__(self, app: ASGIApp, *, scopes: Sequence[str]) -> None:
+    def __init__(
+        self, app: ASGIApp, *, scopes: Sequence[str],
+        resource_metadata_urls: Mapping[str, str] | None = None, resource_path: str = "/mcp",
+    ) -> None:
         super().__init__(app)
         self.scope_value = " ".join(scopes)
+        self.resource_metadata_urls = dict(resource_metadata_urls or {})
+        self.resource_path = resource_path
 
     async def dispatch(self, request: Request, call_next: Callable[[Request], Awaitable[Response]]) -> Response:
         response = await call_next(request)
         challenge = response.headers.get("www-authenticate")
-        if response.status_code == 401 and challenge and "bearer" in challenge.lower() and self.scope_value:
-            if 'scope="' not in challenge.lower():
-                response.headers["WWW-Authenticate"] = f'{challenge}, scope="{self.scope_value}"'
+        if response.status_code == 401 and challenge and "bearer" in challenge.lower():
+            metadata_url = self.resource_metadata_urls.get(request.url.netloc.lower())
+            if metadata_url is not None and request.url.path == self.resource_path:
+                for previous_url in self.resource_metadata_urls.values():
+                    challenge = challenge.replace(
+                        f'resource_metadata="{previous_url}"', f'resource_metadata="{metadata_url}"',
+                    )
+            if self.scope_value and 'scope="' not in challenge.lower():
+                challenge = f'{challenge}, scope="{self.scope_value}"'
+            response.headers["WWW-Authenticate"] = challenge
         return response
 
 

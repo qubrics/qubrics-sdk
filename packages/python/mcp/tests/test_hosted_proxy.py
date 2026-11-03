@@ -188,6 +188,49 @@ def test_proxy_transport_sends_operation_envelope_without_token_passthrough(
     asyncio.run(run())
 
 
+@pytest.mark.parametrize(
+    ("runtime_resource", "token_resource"),
+    [
+        ("https://mcp.sendmux.ai/mcp", "https://mcp.qubrics.com/mcp"),
+        ("https://mcp.qubrics.com/mcp", "https://mcp.sendmux.ai/mcp"),
+    ],
+)
+def test_proxy_transport_preserves_verified_mcp_audience(
+    monkeypatch: pytest.MonkeyPatch, runtime_resource: str, token_resource: str,
+) -> None:
+    async def run() -> None:
+        token = AccessToken(
+            token="verified-mcp-token",
+            client_id="mcp_client_public",
+            scopes=["domain.read"],
+            claims={"grant_id": "mcp_grant_public", "aud": token_resource},
+        )
+        monkeypatch.setattr("sendmux_mcp.hosted_proxy.get_access_token", lambda: token)
+
+        def app_proxy(request: httpx.Request) -> httpx.Response:
+            envelope = json.loads(request.content)
+            assert envelope["resource"] == token_resource
+            assert envelope["protocol"] == "mcp"
+            return httpx.Response(200, json={"ok": True})
+
+        config = ServerConfig(surfaces=("management",), api_key=None)
+        document = prepare_for_fastmcp(load_spec(config), base_url=config.api_base_url)
+        transport = HostedProxyTransport(
+            HostedProxyConfig(
+                proxy_url="https://app.sendmux.ai/api/internal/mcp/proxy",
+                upstream_base_url=config.api_base_url,
+                resource=runtime_resource,
+                protocol="mcp",
+            ),
+            manifest=build_hosted_operation_manifest(document, "management"),
+            inner=httpx.MockTransport(app_proxy),
+        )
+        response = await transport.handle_async_request(httpx.Request("GET", f"{config.api_base_url}/domains"))
+        assert response.status_code == 200
+
+    asyncio.run(run())
+
+
 def test_proxy_transport_forwards_delivery_groups_for_hosted_sending(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
