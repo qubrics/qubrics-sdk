@@ -1160,6 +1160,55 @@ func (s AttachmentEncoding) Validate() error {`,
 
 function patchSendingUploadSecurityCompatibility(packageDir) {
   const securityPath = join(packageDir, "oas_security_gen.go");
+  const parametersPath = join(packageDir, "oas_parameters_gen.go");
+  replaceInFile(
+    parametersPath,
+    /XSendmuxUploadToken OptString/,
+    "XSendmuxUploadToken string",
+    "delegated upload legacy keyed field type",
+  );
+  replaceInFile(
+    parametersPath,
+    /params\.XSendmuxUploadToken = v\.\(OptString\)/,
+    "params.XSendmuxUploadToken = v.(string)",
+    "delegated upload legacy middleware field type",
+  );
+  replaceInFile(
+    parametersPath,
+    /params\.XSendmuxUploadToken\.SetTo\(paramsDotXSendmuxUploadTokenVal\)/,
+    "params.XSendmuxUploadToken = paramsDotXSendmuxUploadTokenVal",
+    "delegated upload optional legacy header decoding",
+  );
+  replaceInFile(
+    join(packageDir, "oas_client_gen.go"),
+    /if val, ok := params\.XSendmuxUploadToken\.Get\(\); ok \{\n\s+return e\.EncodeValue\(conv\.StringToString\(val\)\)/,
+    `if params.XSendmuxUploadToken != "" {
+\t\t\t\t\treturn e.EncodeValue(conv.StringToString(params.XSendmuxUploadToken))`,
+    "delegated upload optional legacy header encoding",
+  );
+  replaceInFile(
+    join(packageDir, "oas_handlers_gen.go"),
+    /(\n\t\t\tID:\s+"sendingCompleteAttachmentUpload",\n\t\t}\n\t\)\n)/,
+    `$1\tqubricsTokens := r.Header.Values("X-Qubrics-Upload-Token")
+\tsendmuxTokens := r.Header.Values("X-Sendmux-Upload-Token")
+\tif len(qubricsTokens) > 0 && len(sendmuxTokens) > 0 && qubricsTokens[0] != sendmuxTokens[0] {
+\t\terr = &ogenerrors.SecurityError{
+\t\t\tOperationContext: opErrContext,
+\t\t\tErr: ogenerrors.ErrSecurityRequirementIsNotSatisfied,
+\t\t}
+\t\tdefer recordError("Security", err)
+\t\ts.cfg.ErrorHandler(ctx, w, r, err)
+\t\treturn
+\t}
+`,
+    "delegated upload conflicting token rejection before authentication",
+  );
+  replaceInFile(
+    join(packageDir, "oas_handlers_gen.go"),
+    /\t\t\{\n(\t\t\tsctx, ok, err := s\.securityUploadTokenSendmux\(ctx, SendingCompleteAttachmentUploadOperation, r\))/,
+    "\t\tif satisfied[0] == 0 {\n$1",
+    "delegated upload alternative authentication short-circuit",
+  );
   for (const family of ["Qubrics", "Sendmux"]) {
     const scheme = `UploadToken${family}`;
     const header = `X-${family}-Upload-Token`;

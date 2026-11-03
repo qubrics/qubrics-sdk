@@ -227,8 +227,8 @@ func (c *Client) sendSendingCompleteAttachmentUpload(ctx context.Context, reques
 			Explode: false,
 		}
 		if err := h.EncodeParam(cfg, func(e uri.Encoder) error {
-			if val, ok := params.XSendmuxUploadToken.Get(); ok {
-				return e.EncodeValue(conv.StringToString(val))
+			if params.XSendmuxUploadToken != "" {
+					return e.EncodeValue(conv.StringToString(params.XSendmuxUploadToken))
 			}
 			return nil
 		}); err != nil {

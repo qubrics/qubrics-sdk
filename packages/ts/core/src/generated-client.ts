@@ -19,8 +19,8 @@ export function configureGeneratedClient<TClient extends GeneratedSendmuxClient>
 ): TClient {
   const env = (globalThis as { process?: { env?: Record<string, string | undefined> } }).process?.env ?? {};
   if (config.apiKey === undefined && config.accessToken === undefined) {
-    const apiKey = env.QUBRICS_API_KEY ?? env.SENDMUX_API_KEY;
-    const accessToken = env.QUBRICS_ACCESS_TOKEN ?? env.SENDMUX_ACCESS_TOKEN;
+    const apiKey = env.QUBRICS_API_KEY || env.SENDMUX_API_KEY;
+    const accessToken = env.QUBRICS_ACCESS_TOKEN || env.SENDMUX_ACCESS_TOKEN;
     config = { ...config, ...(apiKey ? { apiKey } : {}), ...(accessToken ? { accessToken } : {}) };
   }
   const replayBodies = replayBodyStoreFor(client);
@@ -37,7 +37,7 @@ export function configureGeneratedClient<TClient extends GeneratedSendmuxClient>
     throwOnError: true,
   };
 
-  const baseUrl = config.baseUrl ?? env.QUBRICS_BASE_URL ?? env.SENDMUX_BASE_URL;
+  const baseUrl = config.baseUrl ?? (env.QUBRICS_BASE_URL || env.SENDMUX_BASE_URL);
   if (baseUrl) {
     nextConfig.baseUrl = baseUrl;
   }

@@ -119,6 +119,11 @@ for (const surface of surfaces) {
   });
   patchGeneratedApiClientHeaders(join(packageDir, "lib", surface.generatedGemName, "api_client.rb"));
   patchGeneratedModelTimestamps(join(packageDir, "lib", surface.generatedGemName, "api_model_base.rb"));
+  if (surface.name === "sending") {
+    patchGeneratedSendingUploadArguments(
+      join(packageDir, "lib", surface.generatedGemName, "api", "attachments_api.rb"),
+    );
+  }
   if (surface.name === "management") {
     patchGeneratedManagementCostUsageTimestamps(
       join(packageDir, "lib", surface.generatedGemName, "api", "mailboxes_api.rb"),
@@ -331,11 +336,13 @@ module Sendmux
       attr_reader :api_client, :configuration
 
       def initialize(api_key: nil, access_token: nil, base_url: nil, retry_options: nil)
+        qubrics_base_url = ENV.fetch('QUBRICS_BASE_URL', nil)
+        qubrics_base_url = nil if qubrics_base_url&.empty?
         @configuration = Sendmux::Core::Auth.configure_bearer(
           Generated::Configuration.new,
           api_key,
           Sendmux::Core::ApiKeySurface::${surface.keySurface},
-          base_url: base_url || ENV.fetch('QUBRICS_BASE_URL', ENV.fetch('SENDMUX_BASE_URL', DEFAULT_BASE_URL)),
+          base_url: base_url || qubrics_base_url || ENV.fetch('SENDMUX_BASE_URL', DEFAULT_BASE_URL),
           access_token: access_token
         )
         Sendmux::Core::Retry.configure(@configuration, retry_options)
@@ -462,6 +469,27 @@ function patchGeneratedApiClientHeaders(apiClientPath) {
     apiClientPath,
     source.replace(headerAssignment, patchedHeaderAssignment).replace(methodInsertionPoint, stringifyMethod + methodInsertionPoint),
   );
+}
+
+function patchGeneratedSendingUploadArguments(apiPath) {
+  let source = readFileSync(apiPath, "utf8");
+  const signatures = /def sending_complete_attachment_upload(?:_with_http_info)?\(content_length, upload_id, body, opts = \{\}\)/g;
+  if ((source.match(signatures) ?? []).length !== 2) {
+    throw new Error(`Expected both generated Ruby delegated-upload methods in ${apiPath}`);
+  }
+  source = source.replace(signatures, (signature) => signature.replace("opts = {})", "opts = {}, legacy_opts = nil)"));
+  const delegate = "sending_complete_attachment_upload_with_http_info(content_length, upload_id, body, opts)";
+  if (!source.includes(delegate)) {
+    throw new Error(`Could not find generated Ruby delegated-upload call in ${apiPath}`);
+  }
+  source = source.replace(delegate, delegate.replace("body, opts)", "body, opts, legacy_opts)"));
+  const signature = "    def sending_complete_attachment_upload_with_http_info(content_length, upload_id, body, opts = {}, legacy_opts = nil)\n";
+  const normalisation = `      if !opts.is_a?(Hash) || !legacy_opts.nil?
+        content_length, upload_id, body, opts = upload_id, body, opts,
+                                               (legacy_opts || {}).merge(x_sendmux_upload_token: content_length)
+      end
+`;
+  writeFileSync(apiPath, source.replace(signature, signature + normalisation));
 }
 
 function patchGeneratedManagementMailboxEmailAnchors(modelPath) {

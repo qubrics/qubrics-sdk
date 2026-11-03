@@ -13,4 +13,7 @@ def env_value(name: str, default: None = None) -> str | None: ...
 
 
 def env_value(name: str, default: str | None = None) -> str | None:
-    return os.environ.get(name.replace("SENDMUX_", "QUBRICS_", 1), os.environ.get(name, default))
+    value = os.environ.get(name.replace("SENDMUX_", "QUBRICS_", 1))
+    if value:
+        return value
+    return os.environ.get(name, default)

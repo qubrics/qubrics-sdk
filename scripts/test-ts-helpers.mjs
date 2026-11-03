@@ -77,6 +77,50 @@ for (const [surface, createClient, getConnection] of [
     ]);
   });
 
+  for (const [environmentName, optionName, legacy, current, explicit] of [
+    ["API_KEY", "apiKey", surface === "management" ? "smx_root_legacy" : "smx_mbx_legacy", surface === "management" ? "smx_root_current" : "smx_mbx_current", surface === "management" ? "smx_root_explicit" : "smx_mbx_explicit"],
+    ["ACCESS_TOKEN", "accessToken", "legacy.token", "current.token", "explicit.token"],
+  ]) {
+    await test(`${surface} empty Qubrics ${environmentName} retains legacy environment configuration`, async (t) => {
+      const names = ["QUBRICS_API_KEY", "SENDMUX_API_KEY", "QUBRICS_ACCESS_TOKEN", "SENDMUX_ACCESS_TOKEN", "QUBRICS_BASE_URL", "SENDMUX_BASE_URL"];
+      const original = { ...process.env };
+      for (const name of names) delete process.env[name];
+      t.after(() => {
+        for (const name of names) {
+          if (original[name] === undefined) delete process.env[name];
+          else process.env[name] = original[name];
+        }
+      });
+      process.env[`SENDMUX_${environmentName}`] = legacy;
+      process.env[`QUBRICS_${environmentName}`] = "";
+      process.env.SENDMUX_BASE_URL = "https://legacy.fixture.test/api/v1";
+      process.env.QUBRICS_BASE_URL = "";
+      const requests = [];
+      const fetch = async (request) => {
+        requests.push({ host: new URL(request.url).host, authorization: request.headers.get("Authorization") });
+        return Response.json({});
+      };
+      await getConnection({ client: createClient({ fetch }) });
+      process.env[`QUBRICS_${environmentName}`] = current;
+      await getConnection({ client: createClient({ fetch }) });
+      await getConnection({ client: createClient({ [optionName]: explicit, baseUrl: "https://explicit.fixture.test/api/v1", fetch }) });
+      await assert.rejects(getConnection({ client: createClient({ [optionName]: "", fetch }) }), (error) => {
+        assert.match(String(error.cause ?? error), /API keys must start|non-empty bearer token/);
+        return error instanceof SendmuxApiError;
+      });
+      process.env[`QUBRICS_${environmentName}`] = " ";
+      await assert.rejects(getConnection({ client: createClient({ fetch }) }), (error) => {
+        assert.match(String(error.cause ?? error), /API keys must start|non-empty bearer token/);
+        return error instanceof SendmuxApiError;
+      });
+      assert.deepEqual(requests, [
+        { host: "legacy.fixture.test", authorization: `Bearer ${legacy}` },
+        { host: "legacy.fixture.test", authorization: `Bearer ${current}` },
+        { host: "explicit.fixture.test", authorization: `Bearer ${explicit}` },
+      ]);
+    });
+  }
+
   await test(`${surface} accepts an access token and resolves a provider for each request`, async () => {
     const observed = [];
     const fetch = async (request) => {

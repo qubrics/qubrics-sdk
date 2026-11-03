@@ -201,7 +201,7 @@ class WebhookEventData(BaseModel):
             "mailbox_id": obj.get("mailbox_id"),
             "message_id": obj.get("message_id"),
             "message_id_kind": obj.get("message_id_kind"),
-            "qubrics_message_id": obj.get("qubrics_message_id"),
+            **({"qubrics_message_id": obj["qubrics_message_id"]} if "qubrics_message_id" in obj else {}),
             "recipients": obj.get("recipients"),
             "reject_reason": obj.get("reject_reason"),
             "sender": obj.get("sender"),

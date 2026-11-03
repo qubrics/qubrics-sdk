@@ -30,10 +30,16 @@ module Sendmux
       def self.environment_credentials(api_key, access_token)
         return [api_key, access_token] unless api_key.nil? && access_token.nil?
 
-        [ENV.fetch('QUBRICS_API_KEY', ENV.fetch('SENDMUX_API_KEY', nil)),
-         ENV.fetch('QUBRICS_ACCESS_TOKEN', ENV.fetch('SENDMUX_ACCESS_TOKEN', nil))]
+        [environment_credential('API_KEY'), environment_credential('ACCESS_TOKEN')]
       end
       private_class_method :environment_credentials
+
+      def self.environment_credential(name)
+        value = ENV.fetch("QUBRICS_#{name}", nil)
+        value = nil if value&.empty?
+        value || ENV.fetch("SENDMUX_#{name}", nil)
+      end
+      private_class_method :environment_credential
 
       def self.configure_access_token(configuration, access_token)
         if access_token.respond_to?(:call)

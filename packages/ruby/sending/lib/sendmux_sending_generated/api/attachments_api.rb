@@ -28,8 +28,8 @@ module Sendmux::Sending::Generated
     # @option opts [String] :x_qubrics_upload_token Short-lived upload token returned by POST /emails/attachment-uploads. Send this header or X-Sendmux-Upload-Token. If both are sent, their values must match.
     # @option opts [String] :x_sendmux_upload_token Compatibility alias for X-Qubrics-Upload-Token, retained indefinitely.
     # @return [AttachmentUploadResponse]
-    def sending_complete_attachment_upload(content_length, upload_id, body, opts = {})
-      data, _status_code, _headers = sending_complete_attachment_upload_with_http_info(content_length, upload_id, body, opts)
+    def sending_complete_attachment_upload(content_length, upload_id, body, opts = {}, legacy_opts = nil)
+      data, _status_code, _headers = sending_complete_attachment_upload_with_http_info(content_length, upload_id, body, opts, legacy_opts)
       data
     end
 
@@ -42,7 +42,11 @@ module Sendmux::Sending::Generated
     # @option opts [String] :x_qubrics_upload_token Short-lived upload token returned by POST /emails/attachment-uploads. Send this header or X-Sendmux-Upload-Token. If both are sent, their values must match.
     # @option opts [String] :x_sendmux_upload_token Compatibility alias for X-Qubrics-Upload-Token, retained indefinitely.
     # @return [Array<(AttachmentUploadResponse, Integer, Hash)>] AttachmentUploadResponse data, response status code and response headers
-    def sending_complete_attachment_upload_with_http_info(content_length, upload_id, body, opts = {})
+    def sending_complete_attachment_upload_with_http_info(content_length, upload_id, body, opts = {}, legacy_opts = nil)
+      if !opts.is_a?(Hash) || !legacy_opts.nil?
+        content_length, upload_id, body, opts = upload_id, body, opts,
+                                               (legacy_opts || {}).merge(x_sendmux_upload_token: content_length)
+      end
       if @api_client.config.debugging
         @api_client.config.logger.debug 'Calling API: AttachmentsApi.sending_complete_attachment_upload ...'
       end

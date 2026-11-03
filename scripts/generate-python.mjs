@@ -121,6 +121,7 @@ for (const surface of surfaces) {
   cpSync(join(generatedRoot, surface.packageName), join(packageDir, surface.packageName), { recursive: true });
   correctPrimitiveUnionAnnotations(surface, packageDir);
   correctManagementCostUsageTimestamps(surface, packageDir);
+  correctManagementWebhookMessageId(surface, packageDir);
   writeSurfaceClient(surface);
   writeDeprecatedModelAliases(surface, packageDir);
   linkGeneratedRuntimeVersion(surface, packageDir);
@@ -128,6 +129,21 @@ for (const surface of surfaces) {
 }
 
 console.log("Generated Python SDK packages");
+
+function correctManagementWebhookMessageId(surface, packageDir) {
+  if (surface.name !== "management") {
+    return;
+  }
+
+  const modelPath = join(packageDir, surface.packageName, "models", "webhook_event_data.py");
+  const source = readFileSync(modelPath, "utf8");
+  writeFileSync(modelPath, replaceOnce({
+    source,
+    filePath: modelPath,
+    from: '            "qubrics_message_id": obj.get("qubrics_message_id"),',
+    to: '            **({"qubrics_message_id": obj["qubrics_message_id"]} if "qubrics_message_id" in obj else {}),',
+  }));
+}
 
 function correctManagementCostUsageTimestamps(surface, packageDir) {
   if (surface.name !== "management") {
@@ -437,10 +453,10 @@ def create_${surface.name}_client(
     retry_options: RetryOptions | None = None,
 ) -> Sendmux${className}ApiClient:
     if api_key is None and access_token is None:
-        api_key = os.environ.get("QUBRICS_API_KEY", os.environ.get("SENDMUX_API_KEY"))
-        access_token = os.environ.get("QUBRICS_ACCESS_TOKEN", os.environ.get("SENDMUX_ACCESS_TOKEN"))
+        api_key = os.environ.get("QUBRICS_API_KEY") or os.environ.get("SENDMUX_API_KEY")
+        access_token = os.environ.get("QUBRICS_ACCESS_TOKEN") or os.environ.get("SENDMUX_ACCESS_TOKEN")
     validate_auth(api_key=api_key, access_token=access_token, surface="${keySurface}")
-    configuration = Configuration(host=base_url or os.environ.get("QUBRICS_BASE_URL", os.environ.get("SENDMUX_BASE_URL")) or DEFAULT_BASE_URL, ssl_ca_cert=certifi.where())
+    configuration = Configuration(host=base_url or os.environ.get("QUBRICS_BASE_URL") or os.environ.get("SENDMUX_BASE_URL") or DEFAULT_BASE_URL, ssl_ca_cert=certifi.where())
     if api_key is not None:
         configure_auth(configuration, api_key=api_key)
     return Sendmux${className}ApiClient(configuration, access_token=access_token, retry_options=retry_options)

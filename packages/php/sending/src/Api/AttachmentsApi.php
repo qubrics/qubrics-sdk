@@ -152,10 +152,10 @@ class AttachmentsApi
      * @return \Sendmux\Sending\Model\AttachmentUploadResponse|\Sendmux\Sending\Model\ErrorResponse
      */
     public function sendingCompleteAttachmentUpload(
-        int $content_length,
-        string $upload_id,
-        \SplFileObject $body,
-        ?string $x_qubrics_upload_token = null,
+        int|string $content_length,
+        string|int $upload_id,
+        \SplFileObject|string $body,
+        \SplFileObject|string|null $x_qubrics_upload_token = null,
         ?string $x_sendmux_upload_token = null,
         string $contentType = self::contentTypes['sendingCompleteAttachmentUpload'][0]
     ): \Sendmux\Sending\Model\AttachmentUploadResponse|\Sendmux\Sending\Model\ErrorResponse {
@@ -187,10 +187,10 @@ class AttachmentsApi
      * @return array of \Sendmux\Sending\Model\AttachmentUploadResponse|\Sendmux\Sending\Model\ErrorResponse|\Sendmux\Sending\Model\ErrorResponse|\Sendmux\Sending\Model\ErrorResponse|\Sendmux\Sending\Model\ErrorResponse|\Sendmux\Sending\Model\ErrorResponse|\Sendmux\Sending\Model\ErrorResponse|\Sendmux\Sending\Model\ErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
     public function sendingCompleteAttachmentUploadWithHttpInfo(
-        int $content_length,
-        string $upload_id,
-        \SplFileObject $body,
-        ?string $x_qubrics_upload_token = null,
+        int|string $content_length,
+        string|int $upload_id,
+        \SplFileObject|string $body,
+        \SplFileObject|string|null $x_qubrics_upload_token = null,
         ?string $x_sendmux_upload_token = null,
         string $contentType = self::contentTypes['sendingCompleteAttachmentUpload'][0]
     ): array {
@@ -383,10 +383,10 @@ class AttachmentsApi
      * @return PromiseInterface
      */
     public function sendingCompleteAttachmentUploadAsync(
-        int $content_length,
-        string $upload_id,
-        \SplFileObject $body,
-        ?string $x_qubrics_upload_token = null,
+        int|string $content_length,
+        string|int $upload_id,
+        \SplFileObject|string $body,
+        \SplFileObject|string|null $x_qubrics_upload_token = null,
         ?string $x_sendmux_upload_token = null,
         string $contentType = self::contentTypes['sendingCompleteAttachmentUpload'][0]
     ): PromiseInterface {
@@ -421,10 +421,10 @@ class AttachmentsApi
      * @return PromiseInterface
      */
     public function sendingCompleteAttachmentUploadAsyncWithHttpInfo(
-        int $content_length,
-        string $upload_id,
-        \SplFileObject $body,
-        ?string $x_qubrics_upload_token = null,
+        int|string $content_length,
+        string|int $upload_id,
+        \SplFileObject|string $body,
+        \SplFileObject|string|null $x_qubrics_upload_token = null,
         ?string $x_sendmux_upload_token = null,
         string $contentType = self::contentTypes['sendingCompleteAttachmentUpload'][0]
     ): PromiseInterface {
@@ -491,13 +491,27 @@ class AttachmentsApi
      * @return \GuzzleHttp\Psr7\Request
      */
     public function sendingCompleteAttachmentUploadRequest(
-        int $content_length,
-        string $upload_id,
-        \SplFileObject $body,
-        ?string $x_qubrics_upload_token = null,
+        int|string $content_length,
+        string|int $upload_id,
+        \SplFileObject|string $body,
+        \SplFileObject|string|null $x_qubrics_upload_token = null,
         ?string $x_sendmux_upload_token = null,
         string $contentType = self::contentTypes['sendingCompleteAttachmentUpload'][0]
     ): Request {
+        if ($x_qubrics_upload_token instanceof \SplFileObject && is_string($body)) {
+            [$content_length, $upload_id, $body, $x_sendmux_upload_token, $contentType] = [
+                $upload_id, $body, $x_qubrics_upload_token, (string) $content_length,
+                $x_sendmux_upload_token ?? $contentType,
+            ];
+            $x_qubrics_upload_token = null;
+        }
+        // Reapply the original parameter types after normalising the legacy positional form.
+        [$content_length, $upload_id, $body, $x_qubrics_upload_token] = (
+            static fn (int $length, string $id, \SplFileObject $file, ?string $token): array => [
+                $length, $id, $file, $token,
+            ]
+        )($content_length, $upload_id, $body, $x_qubrics_upload_token);
+
 
         // verify the required parameter 'content_length' is set
         if ($content_length === null || (is_array($content_length) && count($content_length) === 0)) {

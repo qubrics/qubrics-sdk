@@ -16,8 +16,7 @@ export default class AuthLogout extends SendmuxCommand {
     const { args } = await this.parse(AuthLogout);
     const name =
       args.name ??
-      process.env.QUBRICS_PROFILE ??
-      process.env.SENDMUX_PROFILE ??
+      (process.env.QUBRICS_PROFILE || process.env.SENDMUX_PROFILE) ??
       (await readCliConfig(this.config.configDir)).defaultProfile;
     if (!name) this.error("Choose an OAuth profile to log out.", { exit: 2 });
     const data = await logoutOAuth(this.config.configDir, name);

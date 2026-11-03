@@ -195,6 +195,39 @@ Once those fakes reached the real code, both original update tests failed `2 !==
 
 One initial static invocation omitted `OPENAPI_INPUT_DIR` and therefore read stale default docs; its log correctly rejected missing DELETE and stale matrix. Supplying the canonical input corrected the invocation without a source, assertion or metadata change. Fresh independent reviews included all ten staged/working files against `2e3f4b8`: Standards 0 hard violations / 0 heuristic findings; Spec 0 findings / 0 unresolved leads. Both explicitly inspected fake extensions, scoped event counts, title restoration and physical-resource versus snapshot assertions. Final required remote CI is still pending; these results do not qualify publication, deployment or production journeys.
 
+## Compatibility review batch after 6a350342
+
+Candidate reopened under source-only approval: nine source-proven defects block A17 legacy calls, empty-Qubrics fallback and retained-event field presence. Owner README corrections `5bb29fc` were integrated with main normally as `1619498c`; no README was rewritten. Existing floors, versions and manifests remain unchanged. Prior exact `6a350342` CI [41581583297](https://github.com/qubrics/qubrics-sdk/actions/runs/41581583297) is green but does not qualify this new candidate.
+
+Canonical fixes remain at their origins: shared configuration for environment fallback, generators for native clients and retained-event decoding. Empty Qubrics values fall back to existing legacy/default semantics; explicit inputs, whitespace and empty legacy values retain their meaning. Go keeps the former keyed `XSendmuxUploadToken string` field and rejects mismatched present twins before authentication. PHP and Ruby retain published positional calls and current forms. Both token headers remain optional alternatives on the wire.
+
+| Public regression | Actual red before fix | Green receipt |
+| --- | --- | --- |
+| TS environment requests | Six authentication failures | `env-model-ts-green.log`: 9 passed, 0 skipped |
+| MCP environment resolution | Empty port reached `int("")` | `env-model-mcp-green.log`: 11 passed |
+| Python environment requests | Six API-key/bearer validation failures | `compat-python-green.log`: 26 passed, including model/MCP cases |
+| Python retained event, direct/nested | Two omitted keys became null; four null/string cases already passed | Same 26-case green includes all six round trips |
+| Ruby environment | Key/token rejected; legacy URL became default | `compat-ruby-green.log`: 35 runs, 234 assertions, 0 skips across related public files |
+| Ruby old four/five upload arguments | Four String-comparison/arity errors | Same Ruby green covers both methods, supplied options and current calls |
+| Go generated upload server | Six conflicting/empty-twin requests returned 201 and invoked authentication/business handlers | `compat-go-green.log`: focused delegated-upload package tests passed |
+| Go legacy keyed field | Four compile errors included the former keyed string literal | Same focused Go green compiled and ran both token families and middleware |
+| PHP five upload variants | 15 TypeErrors among 40 cases; 25 current forms already passed | `compat-php-green.log`: 40 tests, 480 assertions; `compat-php-oauth-green.log`: 6 tests, 26 assertions |
+| PHP non-empty zero env values | Three public factory cases silently selected legacy credentials/URLs | `compat-php-zero-env-green.log`: 6 passed, preserving legacy falsy/default and explicit settings |
+
+Root's adjacent check proved that the actual Go HTTP path normalises padded twin values before the generated handler: `compat-go-whitespace-wire.log` passes without a trim generator change. A single-use verifier then exposed an OR-boundary defect: equal twins returned 401 after two authentication attempts, in direct and middleware cases (`compat-go-single-use-red.log`). The generator now skips the second alternative once the first succeeds; `compat-go-single-use-green.log` passes the whole delegated selection, retaining mismatch/empty-before-provider and missing/invalid-token coverage.
+
+PHP's `?:` lookup additionally discarded non-empty `0`; its generator now tests only false/empty Qubrics values, keeping legacy `?:` semantics and the published Core API. Source survey identified the same empty-value problem in CLI logout and the public Python core helper. Their public reds were implicit logout exit 1 instead of 0 and helper `''` instead of `legacy`. Focused greens: `env-model-cli-profile-green.log` 3 passed/0 skipped; `env-model-core-helper-green.log` 1 passed. CLI `tsc -b` and focused helper mypy exited 0. All original assertions remain. The complete related Python replay, including the helper, is `compat-python-final-green.log`.
+
+Final batch covers nine accepted implementation review findings plus four source-proven siblings: PHP non-empty zero env selection, CLI logout, the public Python helper, and Go OR double validation. The two README findings are fixed only through existing owner history. Remaining Go/Rust env lookups already skip empty Qubrics values and retain non-empty `0`/whitespace (`scripts/generate-go.mjs:597`, `rust/src/core.rs:273`); CLI base/set/operation lookups already use truthy fallback. No new implicit environment surface was added.
+
+Red logs: `env-model-{ts,mcp,python-env,python-model}-red.log`, `ruby-{env,upload}-review-red.log`, `upload-go-php-{go-server,go-keyed,php-arguments}-red.log`. All receipts are under `.claude/artifacts/rebrand-qubrics-904/`.
+
+No original assertion was removed or loosened. PHP's new history fixture needed the same runtime array assertion as `MailboxStreamArgumentsTest.php:51`, because Guzzle's by-reference history annotation also permits ArrayAccess; focused type checking then passed. Ruby's first credential implementation exceeded perceived complexity 9/8; extracting the shared private lookup preserved the two credential tests and cleared lint. An initial Ruby test used the system interpreter; the existing runner's `rbenv exec` corrected it. An initial PHP lint command named the wrong config file; `scripts/check-php.mjs:21` supplied canonical `phpcs.xml`. No dependency, rule, guard or threshold changed.
+
+All four normal native generators exited 0 with canonical docs input. Focused PHP type/lint and RuboCop on six changed handwritten/wrapper files exited 0. First full drift ran all generators/coverage successfully, then staleness rejected only the newly generated MCP config source fingerprint; that exact hash-only output was staged normally and `compat-drift-check-green.log` exited 0. Additional PHP/Go origin changes regenerated normally; final MCP generation exited 0. The mandatory commit hook will re-run full drift on this expanded candidate after its two-axis review. No SDK push/merge, production write, package/Snap publication or deployment performed for this batch.
+
+Fresh independent reviews inspected `git diff 6a350342 --` at HEAD `1619498c`, covering all 37 staged files and the inherited README correction: Standards 0 hard violations / 0 actionable heuristics; Spec 0 missing, unrequested or incorrect behaviours. No implementation changed after review. Final related Python replay passes 27 cases with zero skips; focused mypy passes five source files (`compat-python-final-{green,types}.log`). Expanded-candidate normal commit-hook receipt: `compat-final-normal-commit.log`. Root owns the genuine docs follow-up and subsequent push ordering; publication and production remain held.
+
 ## Cleanup
 
 Owned disposable fixtures are stopped. Command guard rejected the prior cache teardown; no deletion workaround attempted. SDK build/test caches remain listed in `sdk-final-handoff.md` for manual removal. Calendar checkout, venv and dist remain untouched.

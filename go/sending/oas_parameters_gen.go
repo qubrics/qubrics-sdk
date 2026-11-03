@@ -21,7 +21,7 @@ type SendingCompleteAttachmentUploadParams struct {
 	// X-Sendmux-Upload-Token. If both are sent, their values must match.
 	XQubricsUploadToken OptString
 	// Compatibility alias for X-Qubrics-Upload-Token, retained indefinitely.
-	XSendmuxUploadToken OptString
+	XSendmuxUploadToken string
 	// Exact number of bytes in the binary request body.
 	ContentLength int64
 	// Upload intent ID returned by POST /emails/attachment-uploads.
@@ -44,7 +44,7 @@ func unpackSendingCompleteAttachmentUploadParams(packed middleware.Parameters) (
 			In:   "header",
 		}
 		if v, ok := packed[key]; ok {
-			params.XSendmuxUploadToken = v.(OptString)
+			params.XSendmuxUploadToken = v.(string)
 		}
 	}
 	{
@@ -130,7 +130,7 @@ func decodeSendingCompleteAttachmentUploadParams(args [1]string, argsEscaped boo
 				}(); err != nil {
 					return err
 				}
-				params.XSendmuxUploadToken.SetTo(paramsDotXSendmuxUploadTokenVal)
+				params.XSendmuxUploadToken = paramsDotXSendmuxUploadTokenVal
 				return nil
 			}); err != nil {
 				return err

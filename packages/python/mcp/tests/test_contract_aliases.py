@@ -39,6 +39,36 @@ def test_qubrics_environment_precedes_legacy_and_explicit_key_precedes_both(monk
     assert config_from_env(api_key="smx_mbx_explicit").api_key == "smx_mbx_explicit"
 
 
+def test_empty_qubrics_configuration_preserves_legacy_values_and_defaults(monkeypatch: pytest.MonkeyPatch) -> None:
+    legacy = {
+        "API_KEY": "smx_mbx_legacy",
+        "MAILBOX_API_KEY": "smx_mbx_legacy_surface",
+        "MCP_PORT": "9000",
+        "MCP_SURFACES": "mailbox,sending",
+        "APP_BASE_URL": "https://legacy.fixture.test/api/v1",
+        "MCP_TIMEOUT_SECONDS": "12",
+        "MCP_STATELESS_HTTP": "",
+    }
+    for suffix, value in legacy.items():
+        monkeypatch.setenv(f"SENDMUX_{suffix}", value)
+        monkeypatch.setenv(f"QUBRICS_{suffix}", "")
+    monkeypatch.delenv("SENDMUX_MCP_HOST", raising=False)
+    monkeypatch.setenv("QUBRICS_MCP_HOST", "")
+    config = config_from_env()
+    assert config.api_key == "smx_mbx_legacy"
+    assert config.api_keys["mailbox"] == "smx_mbx_legacy_surface"
+    assert config.port == 9000
+    assert config.surfaces == ("mailbox", "sending")
+    assert config.app_base_url == "https://legacy.fixture.test/api/v1"
+    assert config.timeout_seconds == 12
+    assert config.host == "127.0.0.1"
+    assert config.stateless_http is False
+    assert config_from_env(api_key="").api_key == "smx_mbx_legacy"
+    monkeypatch.setenv("QUBRICS_MCP_PORT", " ")
+    with pytest.raises(ValueError, match="invalid literal"):
+        config_from_env()
+
+
 @pytest.mark.parametrize("surface,path", [("mailbox", "/api/v1/mailbox/connection"), ("management", "/api/v1/me"), ("sending", "/api/v1/me")])
 def test_mcp_lists_and_calls_both_names_with_identical_contracts(surface: Surface, path: str) -> None:
     async def scenario() -> None:

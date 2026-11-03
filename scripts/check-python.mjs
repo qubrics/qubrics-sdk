@@ -28,6 +28,7 @@ const sharedTests = [
   "test_mcp_retry.py",
   "test_oauth_retry.py",
   "test_sending_delivery_group.py",
+  "test_webhook_event_compatibility.py",
 ];
 const nativeTests = sharedTests.filter((name) => name !== "test_langchain.py");
 const env = { ...process.env, PYTHONPATH: "", PYTHONHOME: "", PYTHONNOUSERSITE: "1" };

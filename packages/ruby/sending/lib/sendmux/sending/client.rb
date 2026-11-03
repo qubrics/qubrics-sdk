@@ -42,11 +42,13 @@ module Sendmux
       attr_reader :api_client, :configuration
 
       def initialize(api_key: nil, access_token: nil, base_url: nil, retry_options: nil)
+        qubrics_base_url = ENV.fetch('QUBRICS_BASE_URL', nil)
+        qubrics_base_url = nil if qubrics_base_url&.empty?
         @configuration = Sendmux::Core::Auth.configure_bearer(
           Generated::Configuration.new,
           api_key,
           Sendmux::Core::ApiKeySurface::SENDING,
-          base_url: base_url || ENV.fetch('QUBRICS_BASE_URL', ENV.fetch('SENDMUX_BASE_URL', DEFAULT_BASE_URL)),
+          base_url: base_url || qubrics_base_url || ENV.fetch('SENDMUX_BASE_URL', DEFAULT_BASE_URL),
           access_token: access_token
         )
         Sendmux::Core::Retry.configure(@configuration, retry_options)

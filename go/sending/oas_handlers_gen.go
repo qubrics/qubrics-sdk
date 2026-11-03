@@ -106,6 +106,17 @@ func (s *Server) handleSendingCompleteAttachmentUploadRequest(args [1]string, ar
 			ID:   "sendingCompleteAttachmentUpload",
 		}
 	)
+	qubricsTokens := r.Header.Values("X-Qubrics-Upload-Token")
+	sendmuxTokens := r.Header.Values("X-Sendmux-Upload-Token")
+	if len(qubricsTokens) > 0 && len(sendmuxTokens) > 0 && qubricsTokens[0] != sendmuxTokens[0] {
+		err = &ogenerrors.SecurityError{
+			OperationContext: opErrContext,
+			Err: ogenerrors.ErrSecurityRequirementIsNotSatisfied,
+		}
+		defer recordError("Security", err)
+		s.cfg.ErrorHandler(ctx, w, r, err)
+		return
+	}
 	{
 		type bitset = [1]uint8
 		var satisfied bitset
@@ -126,7 +137,7 @@ func (s *Server) handleSendingCompleteAttachmentUploadRequest(args [1]string, ar
 				ctx = sctx
 			}
 		}
-		{
+		if satisfied[0] == 0 {
 			sctx, ok, err := s.securityUploadTokenSendmux(ctx, SendingCompleteAttachmentUploadOperation, r)
 			if err != nil {
 				err = &ogenerrors.SecurityError{
