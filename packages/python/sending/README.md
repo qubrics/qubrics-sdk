@@ -35,7 +35,7 @@ import os
 from sendmux_sending import MetaApi, create_sending_client
 
 with create_sending_client(api_key=os.environ["QUBRICS_SENDING_API_KEY"]) as client:
-    connection = MetaApi(client).qubrics_sending_get_connection()
+    connection = MetaApi(client).sending_get_connection()
     print(connection.data.label)
 ```
 
@@ -63,7 +63,7 @@ from sendmux_sending import Address, EmailSendRequest, EmailsApi, create_sending
 client = create_sending_client(api_key=os.environ["QUBRICS_SENDING_API_KEY"])
 api = EmailsApi(client)
 
-response = api.qubrics_sending_send_email(
+response = api.sending_send_email(
     EmailSendRequest(
         var_from=Address(email="sender@example.com"),
         to=Address(email="recipient@example.com"),
@@ -118,7 +118,7 @@ from sendmux_sending import EmailSendRequest, EmailsApi, create_sending_client, 
 client = create_sending_client(api_key=os.environ["QUBRICS_SENDING_API_KEY"])
 attachment = upload_attachment_from_file(client, file_path="./report.pdf")
 
-EmailsApi(client).qubrics_sending_send_email(
+EmailsApi(client).sending_send_email(
     EmailSendRequest.from_dict({
         "from": {"email": "sender@example.com"},
         "to": {"email": "recipient@example.com"},

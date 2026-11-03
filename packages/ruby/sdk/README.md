@@ -74,7 +74,7 @@ fields keeps working.
    variables. Update hand-built detail fixtures to include `variables: {}` when
    no variables are set.
 
-2. `qubrics_mailbox_list_thread_messages` returns
+2. `mailbox_list_thread_messages` returns
    `MailboxThreadMessageSummaryCursorListResponse` instead of
    `MailboxMessageSummaryCursorListResponse`: its `meta` is
    `MailboxThreadMessagesMeta`, whose `thread_id` is required and whose
@@ -98,7 +98,7 @@ fields keeps working.
    end
    ```
 
-   Ordinary `qubrics_mailbox_list_messages` results remain
+   Ordinary `mailbox_list_messages` results remain
    `MailboxMessageSummaryCursorListResponse` and have no thread identity. The
    other Mailbox list families replace the generic `ResponseMeta` with typed
    metadata whose `request_id` is unchanged and whose new fields are optional.
@@ -178,7 +178,7 @@ management = Sendmux::SDK.management(
 )
 
 pager = Sendmux::Core.each_cursor(lambda do |opts|
-  management.mailboxes.qubrics_management_list_mailboxes(opts.merge(limit: 50))
+  management.mailboxes.management_list_mailboxes(opts.merge(limit: 50))
 end)
 
 pager.each { |mailbox| puts mailbox.id }

@@ -49,7 +49,7 @@ from sendmux_mailbox import MailboxAPIApi, create_mailbox_client, iter_mailbox_e
 client = create_mailbox_client(api_key=os.environ["QUBRICS_MAILBOX_API_KEY"])
 api = MailboxAPIApi(client)
 
-messages = api.qubrics_mailbox_list_messages(limit=25)
+messages = api.mailbox_list_messages(limit=25)
 
 for message in messages.data:
     print(message.id, message.subject)
@@ -69,7 +69,7 @@ Check the current credential before choosing a mailbox:
 
 ```python
 with create_mailbox_client(api_key=os.environ["QUBRICS_MAILBOX_API_KEY"]) as client:
-    connection = MailboxAPIApi(client).qubrics_mailbox_get_connection()
+    connection = MailboxAPIApi(client).mailbox_get_connection()
     print(connection.data.label)
 ```
 
@@ -77,7 +77,7 @@ The result includes team and credential details, permissions and authorised mail
 
 ## Attachments
 
-Message and event attachment metadata includes `download_url`, a short-lived presigned URL for that single attachment. Prefer `download_mailbox_attachment()` or `read_mailbox_text_attachment()` when you already have an authenticated client. Plain HTTP clients can fetch `download_url` promptly with no `Authorization` header; if it expires, call `qubrics_mailbox_get_message()` or list/search messages again to receive fresh metadata.
+Message and event attachment metadata includes `download_url`, a short-lived presigned URL for that single attachment. Prefer `download_mailbox_attachment()` or `read_mailbox_text_attachment()` when you already have an authenticated client. Plain HTTP clients can fetch `download_url` promptly with no `Authorization` header; if it expires, call `mailbox_get_message()` or list/search messages again to receive fresh metadata.
 
 Mailbox direct uploads, presigned uploads, and file helpers share the mailbox attachment cap, currently `7,500,000` bytes per attachment. Presigned uploads also pin the exact declared byte length and content type.
 
@@ -90,7 +90,7 @@ from sendmux_mailbox import MailboxAPIApi, create_mailbox_client, read_mailbox_t
 client = create_mailbox_client(api_key=os.environ["QUBRICS_MAILBOX_API_KEY"])
 api = MailboxAPIApi(client)
 
-message = api.qubrics_mailbox_get_message("msg_123")
+message = api.mailbox_get_message("msg_123")
 attachment = message.data.attachments[0]
 content = urllib.request.urlopen(attachment.download_url, timeout=30).read()
 text = read_mailbox_text_attachment(
@@ -99,13 +99,13 @@ text = read_mailbox_text_attachment(
     attachment_id=attachment.id,
 )
 
-upload = api.qubrics_mailbox_upload_attachment(
+upload = api.mailbox_upload_attachment(
     body=b"hello\n",
     filename="hello.txt",
     _headers={"Content-Type": "text/plain"},
 )
 
-api.qubrics_mailbox_send_message(
+api.mailbox_send_message(
     send_mailbox_message_body={
         "to": [{"email": "recipient@example.com", "name": None}],
         "subject": "Attachment",
@@ -168,13 +168,13 @@ from sendmux_mailbox import MailboxAPIApi, create_mailbox_client
 client = create_mailbox_client(api_key=os.environ["QUBRICS_MAILBOX_API_KEY"])
 api = MailboxAPIApi(client)
 
-for message in iter_cursor_pages(lambda cursor: api.qubrics_mailbox_list_messages(cursor=cursor, limit=50)):
+for message in iter_cursor_pages(lambda cursor: api.mailbox_list_messages(cursor=cursor, limit=50)):
     print(message.id)
 ```
 
 ## Migrate from 1.x to 2.0
 
-If you annotate or construct thread-message list results (fixtures, mocks, or wrappers typed with the operation's result model), add the thread identity when upgrading to 2.0. `qubrics_mailbox_list_thread_messages` returns `MailboxThreadMessageSummaryCursorListResponse` instead of `MailboxMessageSummaryCursorListResponse`: its `meta` is `MailboxThreadMessagesMeta`, whose `thread_id` is required and whose `sync_state` is an optional string. Code that only reads thread-message results keeps working.
+If you annotate or construct thread-message list results (fixtures, mocks, or wrappers typed with the operation's result model), add the thread identity when upgrading to 2.0. `mailbox_list_thread_messages` returns `MailboxThreadMessageSummaryCursorListResponse` instead of `MailboxMessageSummaryCursorListResponse`: its `meta` is `MailboxThreadMessagesMeta`, whose `thread_id` is required and whose `sync_state` is an optional string. Code that only reads thread-message results keeps working.
 
 1. Update thread-message annotations and type checks to the thread-specific result model:
 
@@ -202,7 +202,7 @@ If you annotate or construct thread-message list results (fixtures, mocks, or wr
    )
    ```
 
-   Ordinary `qubrics_mailbox_list_messages` results remain `MailboxMessageSummaryCursorListResponse`: they have no thread identity and their `meta` is `MailboxSyncMeta` with an optional `sync_state`. Identity, submission, quota, and thread list responses likewise carry `MailboxIdentityListMeta` or `MailboxQueryMeta` with optional `identity_state` or `query_state`; no new field is required there.
+   Ordinary `mailbox_list_messages` results remain `MailboxMessageSummaryCursorListResponse`: they have no thread identity and their `meta` is `MailboxSyncMeta` with an optional `sync_state`. Identity, submission, quota, and thread list responses likewise carry `MailboxIdentityListMeta` or `MailboxQueryMeta` with optional `identity_state` or `query_state`; no new field is required there.
 
 3. Run your tests and `mypy`. A constructed thread-message result without `thread_id` fails validation with `meta.thread_id  Field required`.
 

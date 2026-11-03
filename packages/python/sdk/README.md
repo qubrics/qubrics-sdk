@@ -42,7 +42,7 @@ from sendmux_sdk import management
 with management.create_management_client(
     api_key=os.environ["QUBRICS_MANAGEMENT_API_KEY"]
 ) as client:
-    connection = management.ConnectionApi(client).qubrics_management_get_connection()
+    connection = management.ConnectionApi(client).management_get_connection()
     print(connection.data.label, connection.data.team.id)
 ```
 
@@ -51,9 +51,9 @@ identifier. Each API surface has its own connection operation:
 
 | Surface | API class | Method |
 | --- | --- | --- |
-| Management | `management.ConnectionApi` | `qubrics_management_get_connection()` |
-| Mailbox | `mailbox.MailboxAPIApi` | `qubrics_mailbox_get_connection()` |
-| Sending | `sending.MetaApi` | `qubrics_sending_get_connection()` |
+| Management | `management.ConnectionApi` | `management_get_connection()` |
+| Mailbox | `mailbox.MailboxAPIApi` | `mailbox_get_connection()` |
+| Sending | `sending.MetaApi` | `sending_get_connection()` |
 
 Create each client with the credential for that surface.
 
@@ -81,7 +81,7 @@ from sendmux_sdk import sending
 client = sending.create_sending_client(api_key=os.environ["QUBRICS_SENDING_API_KEY"])
 api = sending.EmailsApi(client)
 
-response = api.qubrics_sending_send_email(
+response = api.sending_send_email(
     sending.EmailSendRequest(
         var_from=sending.Address(email="sender@example.com"),
         to=sending.Address(email="recipient@example.com"),

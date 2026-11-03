@@ -64,7 +64,7 @@ conditional = Sendmux::Core::Headers.conditional(if_none_match: 'W/"cached"')
 
 ```ruby
 pager = Sendmux::Core.each_cursor(lambda do |opts|
-  mailbox_client.mailbox_api.qubrics_mailbox_list_messages(opts.merge(limit: 50))
+  mailbox_client.mailbox_api.mailbox_list_messages(opts.merge(limit: 50))
 end)
 
 pager.each do |message|
