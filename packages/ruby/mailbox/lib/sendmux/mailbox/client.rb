@@ -8,16 +8,7 @@ module Sendmux
       def update_params_for_auth!(header_params, query_params, auth_names)
         auth_names = Array(auth_names)
         if !auth_names.empty? && (auth_names - %w[UploadTokenQubrics UploadTokenSendmux]).empty?
-          upload_headers = %w[X-Qubrics-Upload-Token X-Sendmux-Upload-Token]
-          return if upload_headers.any? { |header| header_params[header] || header_params[header.to_sym] }
-
-          upload_headers.each do |header|
-            token = config.api_key_with_prefix(header)
-            next if token.nil? || token.empty?
-
-            header_params[header] = token
-            break
-          end
+          apply_upload_token_auth!(header_params)
           return
         end
         return super unless config.access_token_getter && !auth_names.empty?
@@ -29,6 +20,21 @@ module Sendmux
         super
       rescue Generated::ApiError => e
         raise Sendmux::Core::ErrorMapper.map(e)
+      end
+
+      private
+
+      def apply_upload_token_auth!(header_params)
+        upload_headers = %w[X-Qubrics-Upload-Token X-Sendmux-Upload-Token]
+        return if upload_headers.any? { |header| header_params[header] || header_params[header.to_sym] }
+
+        upload_headers.each do |header|
+          token = config.api_key_with_prefix(header)
+          next if token.nil? || token.empty?
+
+          header_params[header] = token
+          break
+        end
       end
     end
 

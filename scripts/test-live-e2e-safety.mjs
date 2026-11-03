@@ -34,7 +34,7 @@ async function withApi(handler, run, runtimeOptions = {}) {
     for await (const chunk of req) body += chunk;
     requests.push({ method: req.method, url: req.url, body });
     const result = handler(req, body);
-    res.writeHead(result.status ?? 200, { "Content-Type": result.contentType ?? "application/json" });
+    res.writeHead(result.status ?? 200, { "Content-Type": result.contentType ?? "application/json", ...result.headers });
     res.end(result.contentType === "text/plain" ? result.body : JSON.stringify(result.body));
   });
   await new Promise(resolve => server.listen(0, "127.0.0.1", resolve));
@@ -61,6 +61,126 @@ const connection = (team = "team_expected", mailboxes = [{ id: "mbx_expected", e
   envelope({ team: { id: team, name: "Local fixture" }, mailboxes, credential: { id: "key_test", type: "api_key", name: null }, permissions: [], label: "Local fixture" });
 const expected = { teamId: "team_expected", mailboxId: "mbx_expected", mailboxEmail: "fixture@example.test" };
 
+test("calendar GET retains the actual response ETag without changing the public body", async () => {
+  const body = envelope({ id: "calendar_owned", name: "Owned calendar", mailbox_id: expected.mailboxId, etag: 'W/"calendar-version"' });
+  await withApi(req => req.url.endsWith("/calendar_owned")
+    ? { body, headers: { ETag: 'W/"calendar-version"' } }
+    : { body: connection() }, async ({ runtime }) => {
+    await runtime.preflight(expected);
+    const response = await runtime.runOperationWithResponse({ operationId: "mailboxGetCalendar", request: { path: { calendar_id: "calendar_owned" } } });
+    assert.equal(sdk.core.responseEtag(response.response), 'W/"calendar-version"');
+    assert.deepEqual(response.data, body);
+    assert.equal(Object.hasOwn(response.data.data, "etag"), true);
+  });
+});
+
+for (const operationId of ["mailboxCreateCalendar", "mailboxDeleteCalendar"]) {
+test(`calendar container lifecycle ${operationId} deletes only its owned empty calendar using the GET ETag`, async () => {
+  let owned;
+  const removed = [];
+  await withEnv({ SENDMUX_LIVE_E2E_DEDICATED_MAILBOX_ID: expected.mailboxId }, () => withApi((req, body) => {
+    const url = new URL(req.url, "http://localhost");
+    if (url.pathname.endsWith("/me") || url.pathname.endsWith("/mailbox/connection")) return { body: connection() };
+    if (req.method === "POST" && url.pathname.endsWith("/mailbox/calendars")) {
+      const input = JSON.parse(body || "{}");
+      if (!input.name || !input.time_zone) return { status: 422, body: { ok: false, error: { code: "validation_error", message: "Missing calendar input", retryable: false }, meta: { request_id: "req_invalid" } } };
+      assert.deepEqual(Object.keys(input).sort(), ["name", "time_zone"]);
+      owned = { ...input, id: "calendar_owned", mailbox_id: expected.mailboxId };
+      return { status: 201, body: envelope(owned) };
+    }
+    if (url.pathname.endsWith("/mailbox/calendars/calendar_owned")) {
+      if (!owned) return { status: 404, body: { ok: false, error: { code: "not_found", message: "Calendar absent", retryable: false }, meta: { request_id: "req_absent" } } };
+      if (req.method === "DELETE") {
+        assert.equal(req.headers["if-match"], 'W/"calendar-current"');
+        removed.push(owned.id);
+        owned = undefined;
+        return { body: envelope({ id: "calendar_owned", deleted: true }) };
+      }
+      return { body: envelope({ ...owned, is_default: false }), headers: { ETag: 'W/"calendar-current"' } };
+    }
+    return { status: 422, body: { ok: false, error: { code: "validation_error", message: "Unexpected calendar request", retryable: false }, meta: { request_id: "req_invalid" } } };
+  }, async ({ baseUrl, runtime, requests }) => {
+    await runtime.preflight(expected);
+    const [result] = await runAdapterStep({ adapter: "typescript", credentials: { mailboxApiKey: "smx_mbx_test", appBaseUrl: baseUrl }, fixtureRuntime: runtime, fixtures, operation: operations.find(item => item.operationId === operationId), sdk });
+    assert.equal(result.status, "passed", JSON.stringify(result));
+    await runtime.teardown();
+    assert.deepEqual(removed, ["calendar_owned"]);
+    assert.equal(owned, undefined);
+    assert.equal(requests.filter(request => request.method === "POST").length, 1);
+    assert.equal(runtime.ledger.resources[0].status, "absent");
+    validateRecoveryLedger(runtime.ledger, { runId: runtime.runId, sourceSha: "a".repeat(40) });
+  }));
+});
+}
+
+for (const operationId of ["mailboxCreateCalendar", "mailboxDeleteCalendar"]) {
+  test(`calendar container lifecycle ${operationId} requires the dedicated verified mailbox before mutation`, async () => {
+    await withEnv({ SENDMUX_LIVE_E2E_DEDICATED_MAILBOX_ID: "" }, () => withApi(() => ({ body: connection() }), async ({ baseUrl, runtime, requests }) => {
+      await runtime.preflight(expected);
+      const [result] = await runAdapterStep({ adapter: "typescript", credentials: { mailboxApiKey: "smx_mbx_test", appBaseUrl: baseUrl }, fixtureRuntime: runtime, fixtures, operation: operations.find(item => item.operationId === operationId), sdk });
+      assert.equal(result.status, "failed");
+      assert.match(result.error, /dedicated preflight-verified mailbox ID/);
+      assert.equal(requests.some(request => ["POST", "DELETE"].includes(request.method)), false);
+      await runtime.teardown();
+      assert.deepEqual(runtime.ledger.resources, []);
+    }));
+  });
+}
+
+for (const operationId of ["mailboxCreateCalendar", "mailboxDeleteCalendar"]) {
+for (const failure of ["uncertain_create", "foreign_id", "foreign_name", "foreign_mailbox", "default_calendar", "missing_etag", "nonempty_calendar"]) {
+  test(`calendar container lifecycle ${operationId} ${failure} never claims cleanup or deletes an unowned calendar`, async () => {
+    let owned;
+    const removed = [];
+    const errors = {
+      uncertain_create: /Calendar create remains uncertain/,
+      foreign_id: /Calendar cleanup ID mismatch/,
+      foreign_name: /Calendar cleanup name mismatch/,
+      foreign_mailbox: /Calendar cleanup mailbox mismatch/,
+      default_calendar: /must not remove the default calendar/,
+      missing_etag: /requires the GET response ETag/,
+      nonempty_calendar: /API error conflict/,
+    };
+    await withEnv({ SENDMUX_LIVE_E2E_DEDICATED_MAILBOX_ID: expected.mailboxId }, () => withApi((req, body) => {
+      const url = new URL(req.url, "http://localhost");
+      if (url.pathname.endsWith("/me") || url.pathname.endsWith("/mailbox/connection")) return { body: connection() };
+      if (req.method === "POST" && url.pathname.endsWith("/mailbox/calendars")) {
+        const input = JSON.parse(body || "{}");
+        if (!input.name || !input.time_zone) return { status: 422, body: { ok: false, error: { code: "validation_error", message: "Missing calendar input", retryable: false }, meta: { request_id: "req_invalid" } } };
+        owned = { ...input, id: "calendar_owned", mailbox_id: expected.mailboxId };
+        if (failure === "uncertain_create") return { status: 503, body: { ok: false, error: { code: "service_unavailable", message: "Create result lost", retryable: true }, meta: { request_id: "req_uncertain" } } };
+        return { status: 201, body: envelope(owned) };
+      }
+      if (url.pathname.endsWith("/mailbox/calendars/calendar_owned")) {
+        if (req.method === "DELETE") {
+          if (failure === "nonempty_calendar") return { status: 409, body: { ok: false, error: { code: "conflict", message: "Calendar is not empty.", retryable: false }, meta: { request_id: "req_conflict" } } };
+          removed.push("calendar_owned");
+          return { body: envelope({ id: "calendar_owned", deleted: true }) };
+        }
+        return {
+          body: envelope({ ...owned, id: failure === "foreign_id" ? "calendar_foreign" : owned.id, name: failure === "foreign_name" ? "Foreign calendar" : owned.name, mailbox_id: failure === "foreign_mailbox" ? "mailbox_foreign" : owned.mailbox_id, is_default: failure === "default_calendar" }),
+          headers: failure === "missing_etag" ? {} : { ETag: 'W/"calendar-current"' },
+        };
+      }
+      return { status: 404, body: { ok: false, error: { code: "not_found", message: "Calendar absent", retryable: false }, meta: { request_id: "req_absent" } } };
+    }, async ({ baseUrl, runtime, requests }) => {
+      await runtime.preflight(expected);
+      const [result] = await runAdapterStep({ adapter: "typescript", credentials: { mailboxApiKey: "smx_mbx_test", appBaseUrl: baseUrl }, fixtureRuntime: runtime, fixtures, operation: operations.find(item => item.operationId === operationId), sdk });
+      assert.equal(result.status, failure === "uncertain_create" || operationId === "mailboxDeleteCalendar" ? "failed" : "passed", JSON.stringify(result));
+      if (operationId === "mailboxDeleteCalendar" && failure !== "uncertain_create") assert.match(result.error, errors[failure]);
+      await assert.rejects(runtime.teardown(), errors[failure]);
+      assert.equal(requests.filter(request => request.method === "POST").length, 1);
+      assert.equal(requests.filter(request => request.method === "DELETE").length, failure === "nonempty_calendar" ? operationId === "mailboxDeleteCalendar" ? 2 : 1 : 0);
+      assert.deepEqual(removed, []);
+      assert.ok(owned);
+      assert.equal(runtime.ledger.resources.some(resource => resource.status === "absent"), false);
+      if (failure !== "uncertain_create") assert.equal(runtime.ledger.resources[0].status, "failed");
+      validateRecoveryLedger(runtime.ledger, { runId: runtime.runId, sourceSha: "a".repeat(40) });
+    }));
+  });
+}
+}
+
 for (const { operationId, failedUpdate = false, adapter = "typescript" } of [
   { operationId: "mailboxCreateCalendarEvent" },
   { operationId: "mailboxCreateCalendarEvent", adapter: "python" },
@@ -70,13 +190,27 @@ for (const { operationId, failedUpdate = false, adapter = "typescript" } of [
 ]) {
   test(`calendar lifecycle ${adapter} ${operationId}${failedUpdate ? " failed update" : ""} changes only its owned event and verifies cleanup`, async () => {
     let owned;
+    let calendar;
     let revision = 1;
     const titles = [];
     const removed = [];
     await withEnv({ SENDMUX_LIVE_E2E_DEDICATED_MAILBOX_ID: expected.mailboxId }, () => withApi((req, body) => {
       const url = new URL(req.url, "http://localhost");
       if (url.pathname.endsWith("/me") || url.pathname.endsWith("/mailbox/connection")) return { body: connection() };
-      if (url.pathname.endsWith("/mailbox/calendars")) return { body: envelope([{ id: "calendar_fixture" }]) };
+      if (req.method === "POST" && url.pathname.endsWith("/mailbox/calendars")) {
+        calendar = { ...JSON.parse(body), id: "calendar_fixture", mailbox_id: expected.mailboxId, is_default: false };
+        return { status: 201, body: envelope(calendar) };
+      }
+      if (url.pathname.endsWith("/mailbox/calendars/calendar_fixture")) {
+        if (!calendar) return { status: 404, body: { ok: false, error: { code: "not_found", message: "Calendar absent", retryable: false }, meta: { request_id: "req_absent" } } };
+        if (req.method === "DELETE") {
+          assert.equal(owned, undefined, "Parent cleanup must wait for event absence");
+          assert.equal(req.headers["if-match"], 'W/"calendar-current"');
+          calendar = undefined;
+          return { body: envelope({ id: "calendar_fixture", deleted: true }) };
+        }
+        return { body: envelope(calendar), headers: { ETag: 'W/"calendar-current"' } };
+      }
       if (req.method === "POST" && url.pathname.endsWith("/mailbox/calendar-events")) {
         const input = JSON.parse(body || "{}");
         if (!input.uid) return { status: 422, body: { ok: false, error: { code: "validation_error", message: "Missing UID", retryable: false }, meta: { request_id: "req_invalid" } } };
@@ -113,14 +247,14 @@ for (const { operationId, failedUpdate = false, adapter = "typescript" } of [
       await runtime.teardown();
       assert.deepEqual(removed, ["event_owned"]);
       assert.equal(owned, undefined);
-      assert.equal(requests.filter(request => request.method === "POST").length, 1);
-      assert.equal(runtime.ledger.resources[0].status, "absent");
+      assert.equal(requests.filter(request => request.method === "POST" && request.url.endsWith("/mailbox/calendar-events")).length, 1);
+      assert.equal(runtime.ledger.resources.find(resource => resource.kind === "calendar_event").status, "absent");
       validateRecoveryLedger(runtime.ledger, { runId: runtime.runId, sourceSha: "a".repeat(40) });
       if (operationId === "mailboxUpdateCalendarEvent") {
         assert.equal(titles.length, 3);
         assert.notEqual(titles[1], titles[0]);
         assert.equal(titles[2], titles[0]);
-        assert.equal(runtime.ledger.resources[1].status, "restored");
+        assert.equal(runtime.ledger.resources.find(resource => resource.kind === "calendarEvent").status, "restored");
       }
     }));
   });
@@ -129,11 +263,19 @@ for (const { operationId, failedUpdate = false, adapter = "typescript" } of [
 for (const failure of ["uncertain_create", "foreign_uid"]) {
   test(`calendar lifecycle ${failure} never repeats a create or deletes an unowned event`, async () => {
     let uid;
+    let calendar;
     const mutations = [];
     await withEnv({ SENDMUX_LIVE_E2E_DEDICATED_MAILBOX_ID: expected.mailboxId }, () => withApi((req, body) => {
       const url = new URL(req.url, "http://localhost");
       if (url.pathname.endsWith("/me") || url.pathname.endsWith("/mailbox/connection")) return { body: connection() };
-      if (url.pathname.endsWith("/mailbox/calendars")) return { body: envelope([{ id: "calendar_fixture" }]) };
+      if (req.method === "POST" && url.pathname.endsWith("/mailbox/calendars")) {
+        calendar = { ...JSON.parse(body), id: "calendar_fixture", mailbox_id: expected.mailboxId, is_default: false };
+        return { status: 201, body: envelope(calendar) };
+      }
+      if (url.pathname.endsWith("/mailbox/calendars/calendar_fixture")) {
+        assert.equal(req.method, "GET", "Parent cleanup must wait for verified event absence");
+        return { body: envelope(calendar), headers: { ETag: 'W/"calendar-current"' } };
+      }
       if (req.method === "POST") {
         mutations.push(req.method);
         uid = JSON.parse(body || "{}").uid;
@@ -1406,7 +1548,7 @@ test("Calendar lifecycle fixtures delete only run-owned events before their empt
   const events = new Map();
   let nextId = 0;
   const absent = { status: 404, body: { ok: false, error: { code: "not_found", message: "Absent", retryable: false }, meta: { request_id: "req_calendar_absent" } } };
-  await withApi((req, raw) => {
+  await withEnv({ SENDMUX_LIVE_E2E_DEDICATED_MAILBOX_ID: expected.mailboxId }, () => withApi((req, raw) => {
     const url = new URL(req.url, "http://localhost");
     if (url.pathname.endsWith("/connection") || url.pathname.endsWith("/me")) return { body: connection() };
     const isEvent = url.pathname.includes("calendar-events");
@@ -1430,7 +1572,7 @@ test("Calendar lifecycle fixtures delete only run-owned events before their empt
     if (!row) return absent;
     if (req.method === "GET") {
       row.etag = `"fresh-${++nextId}"`;
-      return { body: envelope(row) };
+      return { body: envelope(row), headers: { ETag: row.etag } };
     }
     assert.equal(req.headers["if-match"], row.etag, "conditional writes must use the most recent GET token");
     if (req.method === "PATCH") {
@@ -1452,9 +1594,12 @@ test("Calendar lifecycle fixtures delete only run-owned events before their empt
     assert.equal(events.size, 0);
     assert.equal(calendars.size, 0);
     assert.ok(runtime.ledger.resources.length >= 8);
-    assert.ok(runtime.ledger.resources.every(entry => entry.status === "absent" && entry.verification === "get_not_found"));
+    assert.ok(runtime.ledger.resources.every(entry => entry.kind === "calendarEvent"
+      ? entry.status === "restored"
+      : entry.status === "absent" && entry.verification === "get_not_found"));
+    assert.equal(runtime.ledger.resources.filter(entry => entry.kind === "calendarEvent" && entry.status === "restored").length, 1);
     validateRecoveryLedger(runtime.ledger, { runId: "local-safety-test", sourceSha: "a".repeat(40) });
-  });
+  }));
 });
 
 test("Calendar uncertain creates persist UID before dispatch, never replay, and fail unresolved child and parent cleanup", async () => {
