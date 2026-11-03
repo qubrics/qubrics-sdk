@@ -55,7 +55,8 @@ export function verifyRegistryVersion(packageDir = mcpPackageDir, npmPackageDir 
   assert.equal(contract.package.version, packageVersion, "MCP contract version must match native project version");
   assert.equal(registry.$schema, "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json", "MCP Registry schema");
   assert.equal(registry.name, `io.github.Sendmux/${contract.package.identity}`, "MCP Registry identity");
-  assert.deepEqual(registry.remotes, contract.hosted.transports.map((type) => ({ type, url: contract.hosted.resource })), "MCP Registry resource/transport must match the package contract");
+  const hostedResources = [contract.hosted.resource, ...(contract.hosted.resource_aliases ?? [])];
+  assert.deepEqual(registry.remotes, hostedResources.flatMap((url) => contract.hosted.transports.map((type) => ({ type, url }))), "MCP Registry resource/transport must match the package contract");
   assert.equal(packageEntry?.identifier, contract.package.identity, "MCP Registry package identity");
   assert.equal(packageEntry?.transport?.type, contract.local.default_transport, "MCP Registry local transport");
 

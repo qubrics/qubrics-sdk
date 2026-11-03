@@ -35,7 +35,7 @@ from sendmux_mcp.server import SENDMUX_MCP_VERSION, create_server
 from sendmux_mcp.specs import load_spec, prepare_for_fastmcp
 
 HOSTED_SURFACES: tuple[Surface, ...] = ("mailbox", "management", "sending")
-DEFAULT_MCP_RESOURCE_BASE_URL = "https://mcp.sendmux.ai"
+DEFAULT_MCP_RESOURCE_BASE_URL = "https://mcp.qubrics.com"
 DEFAULT_MCP_APP_ORIGIN = "https://app.sendmux.ai"
 DEFAULT_MCP_PATH = "/mcp"
 HOSTED_CORS_ALLOWED_HEADERS = (
@@ -54,7 +54,7 @@ HOSTED_CORS_ALLOWED_METHODS = ("GET", "POST", "DELETE", "OPTIONS")
 
 @dataclass(frozen=True)
 class HostedServerRuntimeConfig:
-    issuer: str
+    issuer: str | list[str]
     authorization_servers: tuple[str, ...]
     jwks_uri: str
     resource_base_url: str
@@ -74,8 +74,9 @@ def hosted_runtime_config_from_env() -> HostedServerRuntimeConfig:
     )
     resource_base_url = env_value("SENDMUX_MCP_RESOURCE_BASE_URL", DEFAULT_MCP_RESOURCE_BASE_URL)
     mcp_path = env_value("SENDMUX_MCP_PATH", DEFAULT_MCP_PATH)
-    issuer = env_value("SENDMUX_MCP_OAUTH_ISSUER", app_origin)
-    authorization_servers = parse_csv(env_value("SENDMUX_MCP_AUTHORIZATION_SERVERS")) or (issuer,)
+    issuers = parse_csv(env_value("SENDMUX_MCP_OAUTH_ISSUER")) or (app_origin,)
+    issuer: str | list[str] = issuers[0] if len(issuers) == 1 else list(issuers)
+    authorization_servers = parse_csv(env_value("SENDMUX_MCP_AUTHORIZATION_SERVERS")) or issuers
     jwks_uri = env_value("SENDMUX_MCP_JWKS_URI", f"{app_origin}/.well-known/jwks.json")
     proxy_url = env_value("SENDMUX_MCP_PROXY_URL", f"{app_origin}/api/internal/mcp/proxy")
     allowed_origins = normalise_hosted_allowed_origins(

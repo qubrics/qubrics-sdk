@@ -21,6 +21,12 @@ PACKAGE_DIR = Path(__file__).resolve().parents[1]
 CONTRACT_PATH = PACKAGE_DIR / "sendmux_mcp" / "mcp-contract.json"
 
 
+def test_contract_advertises_qubrics_resource_and_permanent_legacy_alias() -> None:
+    hosted = build_contract()["hosted"]
+    assert hosted["resource"] == "https://mcp.qubrics.com/mcp"
+    assert hosted["resource_aliases"] == ["https://mcp.sendmux.ai/mcp"]
+
+
 def test_checked_in_contract_matches_the_public_mcp_factory() -> None:
     """A changed tool, endpoint, protocol, or upload limit must stale the shipped contract."""
     assert json.loads(CONTRACT_PATH.read_text()) == build_contract()

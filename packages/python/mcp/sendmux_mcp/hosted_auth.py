@@ -10,6 +10,7 @@ from pydantic import AnyHttpUrl, TypeAdapter, UrlConstraints
 
 AuthorizationServerUrl = Annotated[AnyHttpUrl, UrlConstraints(preserve_empty_path=True)]
 AUTHORIZATION_SERVER_URL_ADAPTER: TypeAdapter[AnyHttpUrl] = TypeAdapter(AuthorizationServerUrl)
+HOSTED_MCP_RESOURCE_URLS = ("https://mcp.qubrics.com/mcp", "https://mcp.sendmux.ai/mcp")
 HOSTED_MCP_DISCOVERY_SCOPES = (
     "analytics.read",
     "billing.read",
@@ -31,7 +32,7 @@ HOSTED_MCP_DISCOVERY_SCOPES = (
 
 @dataclass(frozen=True)
 class HostedAuthConfig:
-    issuer: str
+    issuer: str | list[str]
     authorization_servers: tuple[str, ...]
     jwks_uri: str
     resource_base_url: str
@@ -57,7 +58,7 @@ def create_remote_auth_provider(config: HostedAuthConfig) -> RemoteAuthProvider:
     token_verifier = JWTVerifier(
         jwks_uri=config.jwks_uri,
         issuer=config.issuer,
-        audience=audience,
+        audience=list(HOSTED_MCP_RESOURCE_URLS) if audience in HOSTED_MCP_RESOURCE_URLS else audience,
     )
 
     return RemoteAuthProvider(

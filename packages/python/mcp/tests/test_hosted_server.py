@@ -6,9 +6,11 @@ from importlib.metadata import version
 from urllib.parse import urlparse
 
 import httpx
+import httpx2
 import pytest
 from fastmcp.server.auth import RemoteAuthProvider
-from fastmcp.server.auth.providers.jwt import JWTVerifier
+from fastmcp.server.auth.providers.jwt import JWTVerifier, RSAKeyPair
+from joserfc import jwk
 
 from sendmux_mcp.curation import MAILBOX_TOOLS
 from sendmux_mcp.hosted import (
@@ -359,7 +361,9 @@ def test_hosted_prm_jwt_and_proxy_share_exact_mounted_resource(mcp_path: str) ->
         assert response.json()["resource"] == expected
         assert isinstance(server.auth, RemoteAuthProvider)
         assert isinstance(server.auth.token_verifier, JWTVerifier)
-        assert server.auth.token_verifier.audience == expected
+        assert server.auth.token_verifier.audience == (
+            ["https://mcp.qubrics.com/mcp", "https://mcp.sendmux.ai/mcp"] if mcp_path == "/mcp" else expected
+        )
         assert hosted_mcp_proxy_config(runtime, hosted_surface_config("mailbox", runtime)).resource == expected
 
     asyncio.run(run())
@@ -490,6 +494,78 @@ def test_hosted_runtime_config_uses_public_resource_and_internal_proxy_env(
     assert config.internal_bearer_token == "internal-service-token"
     assert config.scopes_supported == ("mailbox.read", "email.send")
     assert config.allowed_origins == ("https://app.sendmux.ai", "http://localhost:6274")
+
+
+@pytest.mark.parametrize("issuer_env", ["SENDMUX_MCP_OAUTH_ISSUER", "QUBRICS_MCP_OAUTH_ISSUER"])
+@pytest.mark.parametrize("mcp_origin", ["https://mcp.sendmux.ai", "https://mcp.qubrics.com"])
+def test_hosted_auth_accepts_both_issuers_with_shared_jwks(
+    monkeypatch: pytest.MonkeyPatch,
+    issuer_env: str,
+    mcp_origin: str,
+) -> None:
+    issuers = ("https://app.sendmux.ai", "https://app.qubrics.com")
+    mcp_audiences = ("https://mcp.sendmux.ai/mcp", "https://mcp.qubrics.com/mcp")
+    a2a_audience = "https://a2a.sendmux.ai/a2a/v1"
+    keys = RSAKeyPair.generate()
+    public_key = jwk.import_key(keys.public_key, "RSA", {"kid": "dual-issuer-test"}).as_dict()
+    jwks_uri = "https://app.sendmux.ai/.well-known/jwks.json"
+    monkeypatch.setenv(issuer_env, ",".join(issuers))
+    monkeypatch.setenv("SENDMUX_MCP_RESOURCE_BASE_URL", mcp_origin)
+    monkeypatch.setenv("SENDMUX_MCP_JWKS_URI", jwks_uri)
+
+    async def fetch_jwks(_client: httpx2.AsyncClient, url: str) -> httpx2.Response:
+        assert url == jwks_uri
+        return httpx2.Response(200, json={"keys": [public_key]}, request=httpx2.Request("GET", url))
+
+    monkeypatch.setattr(httpx2.AsyncClient, "get", fetch_jwks)
+
+    async def run() -> None:
+        runtime = hosted_runtime_config_from_env()
+        server = create_hosted_server(runtime)
+        assert isinstance(server.auth, RemoteAuthProvider)
+        verifier = server.auth.token_verifier
+        app = create_hosted_http_app(runtime)
+        async with httpx.AsyncClient(
+            transport=httpx.ASGITransport(app=app),
+            base_url="https://a2a.sendmux.ai",
+        ) as client:
+            for issuer in issuers:
+                for mcp_audience in mcp_audiences:
+                    mcp_token = keys.create_token(issuer=issuer, audience=mcp_audience, kid="dual-issuer-test")
+                    assert await verifier.verify_token(mcp_token) is not None
+                a2a_token = keys.create_token(issuer=issuer, audience=a2a_audience, kid="dual-issuer-test")
+                assert await verifier.verify_token(a2a_token) is None
+                response = await client.post(
+                    "/a2a/v1/message:send",
+                    content=b"{}",
+                    headers={
+                        "Authorization": f"Bearer {a2a_token}",
+                        "A2A-Version": "0.3",
+                        "Content-Type": "application/a2a+json",
+                    },
+                )
+                assert response.status_code == 400
+                assert response.json()["error"]["details"][0]["reason"] == "VERSION_NOT_SUPPORTED"
+
+            unknown_issuer = keys.create_token(
+                issuer="https://attacker.example", audience=mcp_audiences[0], kid="dual-issuer-test",
+            )
+            assert await verifier.verify_token(unknown_issuer) is None
+            unknown_resource = keys.create_token(
+                issuer=issuers[0], audience="https://mcp.qubrics.com/custom", kid="dual-issuer-test",
+            )
+            assert await verifier.verify_token(unknown_resource) is None
+            for issuer, audience in [
+                ("https://attacker.example", a2a_audience),
+                *((issuers[0], mcp_audience) for mcp_audience in mcp_audiences),
+            ]:
+                token = keys.create_token(issuer=issuer, audience=audience, kid="dual-issuer-test")
+                rejected = await client.post(
+                    "/a2a/v1/message:send", json={}, headers={"Authorization": f"Bearer {token}"},
+                )
+                assert rejected.status_code == 401
+
+    asyncio.run(run())
 
 
 def test_hosted_runtime_config_defaults_to_app_origin_only(monkeypatch: pytest.MonkeyPatch) -> None:

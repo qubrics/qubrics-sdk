@@ -4,7 +4,10 @@
     "sending": "https://smtp.sendmux.ai/api/v1"
   },
   "hosted": {
-    "resource": "https://mcp.sendmux.ai/mcp",
+    "resource": "https://mcp.qubrics.com/mcp",
+    "resource_aliases": [
+      "https://mcp.sendmux.ai/mcp"
+    ],
     "transports": [
       "streamable-http"
     ]
@@ -43,10 +46,10 @@
       "a2a.py": "5418b21a2756e3ca3a52220388da8ade3ca8f016ca05a6b2ee22216393eeb761",
       "cli.py": "17b54de9a43c97bb0aef25b69f399eb8bceafe2fa37cb30b23f6096982895096",
       "config.py": "c0c09b4b649bc2f983ecbce5ddef1e6c49cc2afb1e90566746f2c71a2fa0aab0",
-      "contract.py": "8be5dcf207fd771774beddf433cad3734a9250284a26e57d9d3f607c670395c3",
+      "contract.py": "97515e8bd780354a8767cfbd6dd24773367c5edb3bcd90d48020b0d5f23d5153",
       "curation.py": "2aa82e2282e56502ed8d55a151069688a226748d7826c41a2de5b208fd9471a6",
-      "hosted.py": "055394dbf74ce9ea122fff18fdf310780930323a9a360b255e920ce137dbe345",
-      "hosted_auth.py": "3e7e8452d02e764b3e4f680948c2215254a5372692429bb3a2946a6401254ffe",
+      "hosted.py": "1724e00096bdb05b6156d28120e072de18fcd2c0a4190e06439023dd72aedaed",
+      "hosted_auth.py": "29f22da6e52396fe9217566d30b9dccad902b16806659c82a90b8984645e4e14",
       "hosted_proxy.py": "c54f9e98f3e23c86e3a8dbfe11780b5ce1e2a871564ac684b97e631d823d6dac",
       "live_e2e.py": "714b1ad5a70d694f0c8907037e937f24354ee12c9eb42bde13ed070cd38ce93b",
       "observability.py": "c39911894d5575f0faaa0f86b190849528bd1014a8790ca90df40730ff200f7d",
