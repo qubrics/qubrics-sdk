@@ -47,6 +47,18 @@ class WebhookEventPayload implements ModelInterface, ArrayAccess, JsonSerializab
 {
     public const DISCRIMINATOR = 'type';
 
+    public const DISCRIMINATOR_MAPPING = [
+        'calendar.changed' => CalendarWebhookEventPayload::class,
+        'message.bounced' => MailWebhookEventPayload::class,
+        'message.complained' => MailWebhookEventPayload::class,
+        'message.delivered' => MailWebhookEventPayload::class,
+        'message.delivery_delayed' => MailWebhookEventPayload::class,
+        'message.received' => MailWebhookEventPayload::class,
+        'message.received.spam' => MailWebhookEventPayload::class,
+        'message.rejected' => MailWebhookEventPayload::class,
+        'sendmux.test' => MailWebhookEventPayload::class,
+    ];
+
     /**
      * The original name of the model.
      *
@@ -234,15 +246,16 @@ class WebhookEventPayload implements ModelInterface, ArrayAccess, JsonSerializab
         return self::$openAPIModelName;
     }
 
-    public const TYPE_CALENDAR / CHANGED = 'calendar.changed';
-    public const TYPE_MESSAGE / BOUNCED = 'message.bounced';
-    public const TYPE_MESSAGE / COMPLAINED = 'message.complained';
-    public const TYPE_MESSAGE / DELIVERED = 'message.delivered';
-    public const TYPE_MESSAGE / DELIVERY_DELAYED = 'message.delivery_delayed';
-    public const TYPE_MESSAGE / RECEIVED = 'message.received';
-    public const TYPE_MESSAGE / RECEIVED / SPAM = 'message.received.spam';
-    public const TYPE_MESSAGE / REJECTED = 'message.rejected';
-    public const TYPE_SENDMUX / TEST = 'sendmux.test';
+    public const TYPE_MESSAGE_DELIVERED = 'message.delivered';
+    public const TYPE_MESSAGE_BOUNCED = 'message.bounced';
+    public const TYPE_MESSAGE_COMPLAINED = 'message.complained';
+    public const TYPE_MESSAGE_REJECTED = 'message.rejected';
+    public const TYPE_MESSAGE_DELIVERY_DELAYED = 'message.delivery_delayed';
+    public const TYPE_MESSAGE_RECEIVED = 'message.received';
+    public const TYPE_MESSAGE_RECEIVED_SPAM = 'message.received.spam';
+    public const TYPE_SENDMUX_TEST = 'sendmux.test';
+    public const TYPE_CALENDAR_CHANGED = 'calendar.changed';
+    public const TYPE_UNKNOWN_DEFAULT_OPEN_API = 'unknown_default_open_api';
 
     /**
      * Gets allowable values of the enum
@@ -252,15 +265,16 @@ class WebhookEventPayload implements ModelInterface, ArrayAccess, JsonSerializab
     public static function getTypeAllowableValues()
     {
         return [
-            self::TYPE_CALENDAR / CHANGED,
-            self::TYPE_MESSAGE / BOUNCED,
-            self::TYPE_MESSAGE / COMPLAINED,
-            self::TYPE_MESSAGE / DELIVERED,
-            self::TYPE_MESSAGE / DELIVERY_DELAYED,
-            self::TYPE_MESSAGE / RECEIVED,
-            self::TYPE_MESSAGE / RECEIVED / SPAM,
-            self::TYPE_MESSAGE / REJECTED,
-            self::TYPE_SENDMUX / TEST,
+            self::TYPE_MESSAGE_DELIVERED,
+            self::TYPE_MESSAGE_BOUNCED,
+            self::TYPE_MESSAGE_COMPLAINED,
+            self::TYPE_MESSAGE_REJECTED,
+            self::TYPE_MESSAGE_DELIVERY_DELAYED,
+            self::TYPE_MESSAGE_RECEIVED,
+            self::TYPE_MESSAGE_RECEIVED_SPAM,
+            self::TYPE_SENDMUX_TEST,
+            self::TYPE_CALENDAR_CHANGED,
+            self::TYPE_UNKNOWN_DEFAULT_OPEN_API,
         ];
     }
 

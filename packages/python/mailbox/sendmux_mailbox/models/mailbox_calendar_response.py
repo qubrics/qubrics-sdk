@@ -19,7 +19,7 @@ import json
 
 from pydantic import BaseModel, ConfigDict, StrictBool
 from typing import Any, ClassVar, Dict, List
-from sendmux_mailbox.models.mailbox_calendar import MailboxCalendar
+from sendmux_mailbox.models.mailbox_calendar_with_etag import MailboxCalendarWithEtag
 from sendmux_mailbox.models.response_meta import ResponseMeta
 from typing import Optional, Set
 from typing_extensions import Self
@@ -31,7 +31,7 @@ class MailboxCalendarResponse(BaseModel):
     """ # noqa: E501
     meta: ResponseMeta
     ok: StrictBool
-    data: MailboxCalendar
+    data: MailboxCalendarWithEtag
     __properties: ClassVar[List[str]] = ["meta", "ok", "data"]
 
     model_config = ConfigDict(
@@ -93,6 +93,6 @@ class MailboxCalendarResponse(BaseModel):
         _obj = cls.model_validate({
             "meta": ResponseMeta.from_dict(obj["meta"]) if obj.get("meta") is not None else None,
             "ok": obj.get("ok"),
-            "data": MailboxCalendar.from_dict(obj["data"]) if obj.get("data") is not None else None
+            "data": MailboxCalendarWithEtag.from_dict(obj["data"]) if obj.get("data") is not None else None
         })
         return _obj

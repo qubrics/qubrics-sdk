@@ -5330,7 +5330,7 @@ type MailboxCalendarResponse struct {
 	// Merged property.
 	Meta MailboxCalendarResponseMeta `json:"meta"`
 	Ok   MailboxCalendarResponseOk   `json:"ok"`
-	Data MailboxCalendar             `json:"data"`
+	Data MailboxCalendarWithEtag     `json:"data"`
 }
 
 // GetMeta returns the value of Meta.
@@ -5344,7 +5344,7 @@ func (s *MailboxCalendarResponse) GetOk() MailboxCalendarResponseOk {
 }
 
 // GetData returns the value of Data.
-func (s *MailboxCalendarResponse) GetData() MailboxCalendar {
+func (s *MailboxCalendarResponse) GetData() MailboxCalendarWithEtag {
 	return s.Data
 }
 
@@ -5359,7 +5359,7 @@ func (s *MailboxCalendarResponse) SetOk(val MailboxCalendarResponseOk) {
 }
 
 // SetData sets the value of Data.
-func (s *MailboxCalendarResponse) SetData(val MailboxCalendar) {
+func (s *MailboxCalendarResponse) SetData(val MailboxCalendarWithEtag) {
 	s.Data = val
 }
 
@@ -5439,6 +5439,80 @@ func (MailboxCalendarResponseOk) AllValues() []MailboxCalendarResponseOk {
 	return []MailboxCalendarResponseOk{
 		MailboxCalendarResponseOkTrue,
 	}
+}
+
+// Ref: #/components/schemas/MailboxCalendarWithEtag
+type MailboxCalendarWithEtag struct {
+	// Current calendar version, matching the ETag response header. Use this value in If-Match to delete
+	// an empty calendar.
+	Etag string `json:"etag"`
+	// Opaque identifier scoped to the selected mailbox.
+	ID string `json:"id"`
+	// Whether this is the mailbox's current default calendar.
+	IsDefault bool      `json:"is_default"`
+	MailboxID string    `json:"mailbox_id"`
+	Name      string    `json:"name"`
+	TimeZone  NilString `json:"time_zone"`
+}
+
+// GetEtag returns the value of Etag.
+func (s *MailboxCalendarWithEtag) GetEtag() string {
+	return s.Etag
+}
+
+// GetID returns the value of ID.
+func (s *MailboxCalendarWithEtag) GetID() string {
+	return s.ID
+}
+
+// GetIsDefault returns the value of IsDefault.
+func (s *MailboxCalendarWithEtag) GetIsDefault() bool {
+	return s.IsDefault
+}
+
+// GetMailboxID returns the value of MailboxID.
+func (s *MailboxCalendarWithEtag) GetMailboxID() string {
+	return s.MailboxID
+}
+
+// GetName returns the value of Name.
+func (s *MailboxCalendarWithEtag) GetName() string {
+	return s.Name
+}
+
+// GetTimeZone returns the value of TimeZone.
+func (s *MailboxCalendarWithEtag) GetTimeZone() NilString {
+	return s.TimeZone
+}
+
+// SetEtag sets the value of Etag.
+func (s *MailboxCalendarWithEtag) SetEtag(val string) {
+	s.Etag = val
+}
+
+// SetID sets the value of ID.
+func (s *MailboxCalendarWithEtag) SetID(val string) {
+	s.ID = val
+}
+
+// SetIsDefault sets the value of IsDefault.
+func (s *MailboxCalendarWithEtag) SetIsDefault(val bool) {
+	s.IsDefault = val
+}
+
+// SetMailboxID sets the value of MailboxID.
+func (s *MailboxCalendarWithEtag) SetMailboxID(val string) {
+	s.MailboxID = val
+}
+
+// SetName sets the value of Name.
+func (s *MailboxCalendarWithEtag) SetName(val string) {
+	s.Name = val
+}
+
+// SetTimeZone sets the value of TimeZone.
+func (s *MailboxCalendarWithEtag) SetTimeZone(val NilString) {
+	s.TimeZone = val
 }
 
 // Ref: #/components/schemas/MailboxChanges

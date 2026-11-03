@@ -1,6 +1,6 @@
 {
   "sources": {
-    "openapi-app.json": "70cb2afda691acce48f15f4a20edfd4eacac2096886d2be51ac4a872f5d7a834",
+    "openapi-app.json": "a2e51172a77475009a355060de64a2ecb93dbbbf590bee5de817a32564a08ced",
     "openapi-sending.json": "c1f82f9b8944026571d9e66ae84d4bef90e6c575cc8a57127afcdc6e90aa7b0e"
   },
   "operations": [

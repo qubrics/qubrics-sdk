@@ -51,7 +51,7 @@
       "live_e2e.py": "714b1ad5a70d694f0c8907037e937f24354ee12c9eb42bde13ed070cd38ce93b",
       "observability.py": "c15ac702f237bdf4f00b46a431e97d3e5d4ed41a0a1c20643bd7c07805728427",
       "openapi/__init__.py": "04a300726f2d3f551c88591fa171ed8bd7c7caa6f3257f438e52884ba782fdb1",
-      "openapi/openapi-app.json": "70cb2afda691acce48f15f4a20edfd4eacac2096886d2be51ac4a872f5d7a834",
+      "openapi/openapi-app.json": "a2e51172a77475009a355060de64a2ecb93dbbbf590bee5de817a32564a08ced",
       "openapi/openapi-sending.json": "c1f82f9b8944026571d9e66ae84d4bef90e6c575cc8a57127afcdc6e90aa7b0e",
       "permissions.py": "ab82598020c7f057b2ea48156d0ccc7e75b77f3ddea38feb139b71afb5ff83ab",
       "response_ownership.py": "eff042d51d3d158438e05fd131e0e993fa76706a2895838e84114fb0c488ef83",
@@ -3749,6 +3749,10 @@
                       "data": {
                         "additionalProperties": false,
                         "properties": {
+                          "etag": {
+                            "description": "Current calendar version, matching the ETag response header. Use this value in If-Match to delete an empty calendar.",
+                            "type": "string"
+                          },
                           "id": {
                             "description": "Opaque identifier scoped to the selected mailbox.",
                             "maxLength": 4096,
@@ -3778,7 +3782,8 @@
                           "mailbox_id",
                           "name",
                           "time_zone",
-                          "is_default"
+                          "is_default",
+                          "etag"
                         ],
                         "type": "object"
                       },

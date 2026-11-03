@@ -545,9 +545,9 @@ class WebhookDeliveryPayload implements ModelInterface, ArrayAccess, JsonSeriali
     /**
      * Gets payload
      *
-     * @return \Sendmux\Management\Model\WebhookEventPayload
+     * @return \Sendmux\Management\Model\WebhookEventPayload|\Sendmux\Management\Model\CalendarWebhookEventPayload|\Sendmux\Management\Model\MailWebhookEventPayload
      */
-    public function getPayload(): \Sendmux\Management\Model\WebhookEventPayload
+    public function getPayload(): \Sendmux\Management\Model\WebhookEventPayload|\Sendmux\Management\Model\CalendarWebhookEventPayload|\Sendmux\Management\Model\MailWebhookEventPayload
     {
         return $this->container['payload'];
     }
@@ -555,11 +555,11 @@ class WebhookDeliveryPayload implements ModelInterface, ArrayAccess, JsonSeriali
     /**
      * Sets payload
      *
-     * @param \Sendmux\Management\Model\WebhookEventPayload $payload payload
+     * @param \Sendmux\Management\Model\WebhookEventPayload|\Sendmux\Management\Model\CalendarWebhookEventPayload|\Sendmux\Management\Model\MailWebhookEventPayload $payload payload
      *
      * @return $this
      */
-    public function setPayload(\Sendmux\Management\Model\WebhookEventPayload $payload): static
+    public function setPayload(\Sendmux\Management\Model\WebhookEventPayload|\Sendmux\Management\Model\CalendarWebhookEventPayload|\Sendmux\Management\Model\MailWebhookEventPayload $payload): static
     {
         if (is_null($payload)) {
             throw new InvalidArgumentException('non-nullable payload cannot be null');

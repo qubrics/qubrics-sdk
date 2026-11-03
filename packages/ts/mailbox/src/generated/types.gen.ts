@@ -1279,9 +1279,33 @@ export type MailboxChangesResponse = SuccessEnvelope & {
     meta?: ResponseMeta;
 };
 
+export type MailboxCalendarWithEtag = {
+    /**
+     * Current calendar version, matching the ETag response header. Use this value in If-Match to delete an empty calendar.
+     */
+    etag: string;
+    /**
+     * Opaque identifier scoped to the selected mailbox.
+     */
+    id: string;
+    /**
+     * Whether this is the mailbox's current default calendar.
+     */
+    is_default: boolean;
+    mailbox_id: string;
+    name: string;
+    time_zone: string | null;
+};
+
 export type MailboxCalendarResponse = SuccessEnvelope & {
-    data: MailboxCalendar;
+    data: MailboxCalendarWithEtag;
     meta?: ResponseMeta;
+};
+
+export type MailboxCalendarListResponse = SuccessEnvelope & {
+    data: Array<MailboxCalendar>;
+    meta?: ResponseMeta;
+    pagination: CursorPagination;
 };
 
 export type MailboxCalendar = {
@@ -1296,12 +1320,6 @@ export type MailboxCalendar = {
     mailbox_id: string;
     name: string;
     time_zone: string | null;
-};
-
-export type MailboxCalendarListResponse = SuccessEnvelope & {
-    data: Array<MailboxCalendar>;
-    meta?: ResponseMeta;
-    pagination: CursorPagination;
 };
 
 export type MailboxCalendarEventWithEtag = {

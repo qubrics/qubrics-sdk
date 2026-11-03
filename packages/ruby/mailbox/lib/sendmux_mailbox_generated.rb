@@ -80,6 +80,7 @@ require 'sendmux_mailbox_generated/models/mailbox_calendar_event_updated_respons
 require 'sendmux_mailbox_generated/models/mailbox_calendar_event_with_etag'
 require 'sendmux_mailbox_generated/models/mailbox_calendar_list_response'
 require 'sendmux_mailbox_generated/models/mailbox_calendar_response'
+require 'sendmux_mailbox_generated/models/mailbox_calendar_with_etag'
 require 'sendmux_mailbox_generated/models/mailbox_changes'
 require 'sendmux_mailbox_generated/models/mailbox_changes_response'
 require 'sendmux_mailbox_generated/models/mailbox_content_headers'

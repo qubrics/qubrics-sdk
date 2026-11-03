@@ -90,6 +90,7 @@ __all__ = [
     "MailboxCalendarEventWithEtag",
     "MailboxCalendarListResponse",
     "MailboxCalendarResponse",
+    "MailboxCalendarWithEtag",
     "MailboxChanges",
     "MailboxChangesResponse",
     "MailboxContentHeaders",
@@ -281,6 +282,7 @@ from sendmux_mailbox.models.mailbox_calendar_event_updated_response_all_of_data 
 from sendmux_mailbox.models.mailbox_calendar_event_with_etag import MailboxCalendarEventWithEtag as MailboxCalendarEventWithEtag
 from sendmux_mailbox.models.mailbox_calendar_list_response import MailboxCalendarListResponse as MailboxCalendarListResponse
 from sendmux_mailbox.models.mailbox_calendar_response import MailboxCalendarResponse as MailboxCalendarResponse
+from sendmux_mailbox.models.mailbox_calendar_with_etag import MailboxCalendarWithEtag as MailboxCalendarWithEtag
 from sendmux_mailbox.models.mailbox_changes import MailboxChanges as MailboxChanges
 from sendmux_mailbox.models.mailbox_changes_response import MailboxChangesResponse as MailboxChangesResponse
 from sendmux_mailbox.models.mailbox_content_headers import MailboxContentHeaders as MailboxContentHeaders
