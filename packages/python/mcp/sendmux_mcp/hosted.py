@@ -23,6 +23,7 @@ from sendmux_mcp.config import DEFAULT_APP_BASE_URL, ServerConfig, Surface, conf
 from sendmux_mcp.a2a import A2A_RESOURCE_URL, A2ATokenVerifier, build_a2a_http_components
 from sendmux_mcp.hosted_auth import (
     HOSTED_MCP_DISCOVERY_SCOPES,
+    HOSTED_MCP_RESOURCE_URLS,
     HostedAuthConfig,
     create_remote_auth_provider,
     hosted_mcp_resource_url,
@@ -182,6 +183,11 @@ def create_hosted_http_app(
     )
     mcp_hostname = urlparse(runtime.resource_base_url).hostname
     assert mcp_hostname is not None
+    mcp_hostnames = (
+        {urlparse(resource).hostname for resource in HOSTED_MCP_RESOURCE_URLS}
+        if hosted_mcp_resource_url(runtime.resource_base_url, runtime.mcp_path) in HOSTED_MCP_RESOURCE_URLS
+        else {mcp_hostname}
+    )
 
     manifests = []
     for surface in HOSTED_SURFACES:
@@ -211,7 +217,7 @@ def create_hosted_http_app(
     )
 
     async def root_resource_metadata(request: Request) -> ASGIApp:
-        if request.url.hostname == mcp_hostname:
+        if request.url.hostname in mcp_hostnames:
             return mcp_metadata_route.handle
         return a2a_metadata_route.handle
 

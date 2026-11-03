@@ -345,6 +345,24 @@ def test_hosted_root_metadata_uses_configured_mcp_host(resource_base_url: str, m
     asyncio.run(run())
 
 
+@pytest.mark.parametrize("mcp_origin", ["https://mcp.sendmux.ai", "https://mcp.qubrics.com"])
+def test_hosted_root_metadata_recognises_both_mcp_aliases(mcp_origin: str) -> None:
+    async def run() -> None:
+        runtime = replace(runtime_config(), resource_base_url=mcp_origin)
+        app = create_hosted_http_app(runtime)
+        metadata_path = "/.well-known/oauth-protected-resource"
+        async with httpx.AsyncClient(transport=httpx.ASGITransport(app=app)) as client:
+            for origin in ("https://mcp.sendmux.ai", "https://mcp.qubrics.com"):
+                metadata = await client.get(f"{origin}{metadata_path}")
+                assert metadata.status_code == 200
+                assert metadata.json()["resource"] == f"{mcp_origin}/mcp"
+                assert metadata.json()["resource_name"] == "Sendmux MCP"
+            a2a = await client.get(f"https://a2a.sendmux.ai{metadata_path}")
+            assert a2a.json()["resource"] == "https://a2a.sendmux.ai/a2a/v1"
+
+    asyncio.run(run())
+
+
 @pytest.mark.parametrize("mcp_path", ["/mcp", "/custom", "/custom/"])
 def test_hosted_prm_jwt_and_proxy_share_exact_mounted_resource(mcp_path: str) -> None:
     async def run() -> None:

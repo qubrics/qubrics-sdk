@@ -28,6 +28,15 @@ The JWT tests sign real RSA tokens and obtain the public key through one mocked 
 
 Other local checks: mypy reports no issues in 34 source files (`mypy.log`); registry contract tests report 11 passed (`registry-contract.log`); `python -m sendmux_mcp.contract --check` exits 0 (`contract-check.log`); `git diff --check` exits 0. No tests were removed or skipped. Two existing audience assertions now expect the explicitly approved finite alias pair; custom-path assertions retain their exact original resource.
 
+## Review repairs
+
+Candidate reopened for two confirmed alias-path blockers found in the parent session's combined Standards/Spec review:
+
+1. `create_remote_auth_provider()` accepted both MCP audiences, but `hosted_mcp_proxy_config()` fixed the outbound proxy resource to the runtime URL. `HostedProxyTransport._proxy_request()` copied that URL into the envelope. The application's `grantAllowsOperation()` requires the envelope resource to equal the stored grant resource, so a token for the opposite alias passed JWT authentication and failed the tool call. The transport now preserves the verified access token's scalar `aud` only when both it and the configured resource are members of the finite MCP alias set and the protocol is MCP. The application's exact grant/resource check stays intact. Custom resources and A2A keep their existing paths.
+2. Root protected-resource metadata recognised only the configured MCP hostname; the opposite advertised MCP alias received A2A metadata. For standard MCP resource configurations, the router now recognises both exact MCP hostnames. Custom resources retain their configured-host behaviour, and A2A discovery stays separate.
+
+`proxy-resource-red.log` shows both alias directions failing with the wrong envelope resource; `proxy-resource-green.log` reports 17 proxy tests passed. `metadata-alias-red.log` shows both configured origins returning the A2A resource on the opposite MCP host; `metadata-alias-green.log` reports seven metadata/custom-mount tests passed. The combined follow-up selection reports 63 passed and 16 deselected in `followup-focused-green.log`; the unchanged installed-reader/source-copy fixture selection is left to full CI. Every new test was seen red. The packaged contract was regenerated after the repairs; `followup-contract-check.log` exits 0, and `followup-mypy.log` reports no issues in 34 source files. No app isolation checks were relaxed.
+
 Actual installed contract-reader output (`contract-cli-output.json`), after the official producer CLI regenerated the packaged artifact:
 
 ```json
