@@ -5,7 +5,7 @@
   "description": "AI email inbox and sending tools with attachments, search, live events, and webhooks.",
   "websiteUrl": "https://sendmux.ai/docs/guides/mcp",
   "repository": {
-    "url": "https://github.com/Sendmux/sendmux-sdk",
+    "url": "https://github.com/qubrics/qubrics-sdk",
     "source": "github",
     "id": "1253958043",
     "subfolder": "packages/python/mcp"

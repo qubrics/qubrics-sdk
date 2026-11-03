@@ -11,7 +11,7 @@ const execute = promisify(execFile);
 const controlRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 export const snapshotPath = "packages/python/mcp/sendmux_mcp/openapi";
 const snapshots = ["openapi-app.json", "openapi-sending.json"];
-const repository = "Sendmux/sendmux-sdk";
+const repository = "qubrics/qubrics-sdk";
 const actionPin = "0dfd8538845b8e92600d271a895a5372865d4062";
 const bundleHash = "a0aa8451ba5d9666bebc2c21e2bcbabcc942fe0a6ee6752886ebebdf0234f3fb";
 const digest = (bytes) => createHash("sha256").update(bytes).digest("hex");
@@ -212,7 +212,7 @@ async function buildOfficialReleases(prefixes) {
   let reads = 0;
   let pullPages = 0;
   const started = Date.now();
-  const client = await GitHub.create({ owner: "Sendmux", repo: "sendmux-sdk", defaultBranch: "main", token: process.env.GITHUB_TOKEN,
+  const client = await GitHub.create({ owner: "qubrics", repo: "qubrics-sdk", defaultBranch: "main", token: process.env.GITHUB_TOKEN,
     fetch: async (input, options = {}) => {
       const url = new URL(input);
       if ((options.method ?? "GET").toUpperCase() !== "GET" || url.origin !== "https://api.github.com"
@@ -340,11 +340,13 @@ async function checkSnap(repo) {
   if (provenance?.length !== 1) throw new Error("Missing unambiguous npm producer provenance");
   const statement = JSON.parse(Buffer.from(provenance[0].bundle?.dsseEnvelope?.payload ?? "", "base64"));
   const definition = statement.predicate?.buildDefinition;
+  const producerRepository = definition?.externalParameters?.workflow?.repository;
+  // Published npm attestations retain the repository identity from before the rename.
   if (statement.predicateType !== "https://slsa.dev/provenance/v1"
     || statement.subject?.length !== 1 || statement.subject[0].name !== `pkg:npm/%40sendmux/cli@${version}` || statement.subject[0].digest?.sha512 !== checksum
-    || definition?.externalParameters?.workflow?.repository !== "https://github.com/Sendmux/sendmux-sdk"
+    || ![`https://github.com/${repository}`, "https://github.com/Sendmux/sendmux-sdk"].includes(producerRepository)
     || definition.externalParameters.workflow.path !== ".github/workflows/release-please.yml"
-    || !definition.resolvedDependencies?.some((item) => item.uri.startsWith("git+https://github.com/Sendmux/sendmux-sdk@") && item.digest?.gitCommit === release.sha)) throw new Error("Snap npm provenance does not identify the CLI producer commit");
+    || !definition.resolvedDependencies?.some((item) => item.uri.startsWith(`git+${producerRepository}@`) && item.digest?.gitCommit === release.sha)) throw new Error("Snap npm provenance does not identify the CLI producer commit");
   const checked = await checkSource({ sha: release.sha, read: (file) => remoteFile({ sha: release.sha, file }), repo });
   console.log(JSON.stringify({ release, checksum, checked, checkedAt: new Date().toISOString() }));
 }

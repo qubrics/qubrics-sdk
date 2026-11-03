@@ -31,7 +31,7 @@ const assetName = basename(assetPath);
 const downloadUrl =
   args.url ??
   envValue("SENDMUX_CHOCOLATEY_DOWNLOAD_URL") ??
-  `https://github.com/Sendmux/sendmux-sdk/releases/download/${releaseTag}/${assetName}`;
+  `https://github.com/qubrics/qubrics-sdk/releases/download/${releaseTag}/${assetName}`;
 const sourceRef =
   args.sourceRef ??
   envValue("SENDMUX_CHOCOLATEY_SOURCE_REF") ??
@@ -43,7 +43,7 @@ const replacements = {
   CHECKSUM64: checksum,
   CHECKSUM_TYPE: "sha256",
   DOWNLOAD_URL: downloadUrl,
-  PACKAGE_SOURCE_URL: `https://github.com/Sendmux/sendmux-sdk/tree/${sourceRef}/packaging/chocolatey`,
+  PACKAGE_SOURCE_URL: `https://github.com/qubrics/qubrics-sdk/tree/${sourceRef}/packaging/chocolatey`,
   RELEASE_TAG: releaseTag,
   VERSION: version,
 };

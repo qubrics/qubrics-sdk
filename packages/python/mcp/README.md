@@ -3,7 +3,7 @@
 [![PyPI version](https://img.shields.io/pypi/v/sendmux-mcp)](https://pypi.org/project/sendmux-mcp/)
 [![Python versions](https://img.shields.io/pypi/pyversions/sendmux-mcp)](https://pypi.org/project/sendmux-mcp/)
 [![PyPI downloads](https://img.shields.io/pypi/dm/sendmux-mcp)](https://pypi.org/project/sendmux-mcp/)
-[![Licence](https://img.shields.io/pypi/l/sendmux-mcp)](https://github.com/Sendmux/sendmux-sdk/blob/main/LICENSE)
+[![Licence](https://img.shields.io/pypi/l/sendmux-mcp)](https://github.com/qubrics/qubrics-sdk/blob/main/LICENSE)
 
 Email inbox API, inbound mail, and outbound sending MCP and A2A servers for AI agents, with inbound email, clean JSON parsing, webhooks, and multi-provider routing through Sendmux.
 
@@ -17,7 +17,7 @@ This package is the Sendmux MCP. Keep it separate from any documentation-search 
 - Management API reference: [sendmux.ai/docs/api/introduction](https://sendmux.ai/docs/api/introduction)
 - Mailbox API reference: [sendmux.ai/docs/mailbox-api/introduction](https://sendmux.ai/docs/mailbox-api/introduction)
 - Sending API reference: [sendmux.ai/docs/sending-api/introduction](https://sendmux.ai/docs/sending-api/introduction)
-- Source repository: [Sendmux/sendmux-sdk](https://github.com/Sendmux/sendmux-sdk)
+- Source repository: [qubrics/qubrics-sdk](https://github.com/qubrics/qubrics-sdk)
 
 ## Requirements
 
@@ -59,27 +59,27 @@ pip install sendmux-mcp
 Run a single local server with the per-surface commands.
 
 ```sh
-SENDMUX_API_KEY=smx_mbx_... sendmux-mcp-mailbox
-SENDMUX_API_KEY=smx_root_... sendmux-mcp-management
-SENDMUX_API_KEY=smx_mbx_... sendmux-mcp-sending
+QUBRICS_API_KEY=smx_mbx_... sendmux-mcp-mailbox
+QUBRICS_API_KEY=smx_root_... sendmux-mcp-management
+QUBRICS_API_KEY=smx_mbx_... sendmux-mcp-sending
 ```
 
 Run a combined local server with `sendmux-mcp`.
 
 ```sh
-SENDMUX_MCP_SURFACES=mailbox,sending \
-SENDMUX_MAILBOX_API_KEY=smx_mbx_... \
-SENDMUX_SENDING_API_KEY=smx_mbx_... \
+QUBRICS_MCP_SURFACES=mailbox,sending \
+QUBRICS_MAILBOX_API_KEY=smx_mbx_... \
+QUBRICS_SENDING_API_KEY=smx_mbx_... \
 sendmux-mcp
 ```
 
 Run all three local surfaces when you have both key types.
 
 ```sh
-SENDMUX_MCP_SURFACES=mailbox,management,sending \
-SENDMUX_MAILBOX_API_KEY=smx_mbx_... \
-SENDMUX_MANAGEMENT_API_KEY=smx_root_... \
-SENDMUX_SENDING_API_KEY=smx_mbx_... \
+QUBRICS_MCP_SURFACES=mailbox,management,sending \
+QUBRICS_MAILBOX_API_KEY=smx_mbx_... \
+QUBRICS_MANAGEMENT_API_KEY=smx_root_... \
+QUBRICS_SENDING_API_KEY=smx_mbx_... \
 sendmux-mcp
 ```
 
@@ -90,14 +90,14 @@ The generic `sendmux-mcp` command also accepts `--surface` or `--surfaces`. The 
 `stdio` is the default transport for local agent clients.
 
 ```sh
-SENDMUX_API_KEY=smx_mbx_... sendmux-mcp-mailbox --transport stdio
+QUBRICS_API_KEY=smx_mbx_... sendmux-mcp-mailbox --transport stdio
 ```
 
 `http` and `streamable-http` expose the MCP endpoint over HTTP. HTTP mode defaults to `127.0.0.1:8765/mcp` and requires a separate MCP bearer token unless you explicitly opt out.
 
 ```sh
-SENDMUX_API_KEY=smx_mbx_... \
-SENDMUX_MCP_HTTP_BEARER_TOKEN=local-mcp-token \
+QUBRICS_API_KEY=smx_mbx_... \
+QUBRICS_MCP_HTTP_BEARER_TOKEN=local-mcp-token \
 sendmux-mcp-mailbox --transport http --host 127.0.0.1 --port 8765 --path /mcp
 ```
 
@@ -138,26 +138,26 @@ The A2A endpoint is immediate and stateless: streaming, push notifications, pers
 
 | Setting | Environment | Default |
 | --- | --- | --- |
-| Tool surfaces | `SENDMUX_MCP_SURFACES` | required for `sendmux-mcp`; wrapper commands select one surface |
-| API key fallback | `SENDMUX_API_KEY` | accepted for compatible single-key setups |
-| Mailbox API key | `SENDMUX_MAILBOX_API_KEY` | required when mailbox is selected unless a compatible fallback is provided |
-| Management API key | `SENDMUX_MANAGEMENT_API_KEY` | required when management is selected unless a compatible fallback is provided |
-| Sending API key | `SENDMUX_SENDING_API_KEY` | required when sending is selected unless the fallback key is a send-capable `smx_mbx_*` key or owner-approved Sending-resource `smx_agent_*` token |
-| App API base URL | `SENDMUX_APP_BASE_URL` | `https://app.sendmux.ai/api/v1` |
-| Sending API base URL | `SENDMUX_SENDING_BASE_URL` | `https://smtp.sendmux.ai/api/v1` |
-| Transport | `SENDMUX_MCP_TRANSPORT` | `stdio` |
-| HTTP host | `SENDMUX_MCP_HOST` | `127.0.0.1` |
-| HTTP port | `SENDMUX_MCP_PORT` | `8765` |
-| HTTP path | `SENDMUX_MCP_PATH` | `/mcp` |
-| HTTP bearer token | `SENDMUX_MCP_HTTP_BEARER_TOKEN` | required for HTTP unless opt-out is enabled |
-| Allow unauthenticated HTTP | `SENDMUX_MCP_ALLOW_UNAUTHENTICATED_HTTP` | `false` |
-| Allowed browser origins | `SENDMUX_MCP_ALLOWED_ORIGINS` | no browser origins |
-| Snapshot directory override | `SENDMUX_MCP_OPENAPI_INPUT_DIR` or `OPENAPI_INPUT_DIR` | packaged snapshots |
-| App snapshot override | `SENDMUX_MCP_APP_OPENAPI` | packaged app snapshot |
-| Sending snapshot override | `SENDMUX_MCP_SENDING_OPENAPI` | packaged sending snapshot |
-| Request timeout | `SENDMUX_MCP_TIMEOUT_SECONDS` | `30` |
-| Retry attempts | `SENDMUX_MCP_RETRY_MAX_ATTEMPTS` | `3` |
-| Retry time budget, in seconds | `SENDMUX_MCP_RETRY_MAX_ELAPSED_SECONDS` | unset |
+| Tool surfaces | `QUBRICS_MCP_SURFACES` | required for `sendmux-mcp`; wrapper commands select one surface |
+| API key fallback | `QUBRICS_API_KEY` | accepted for compatible single-key setups |
+| Mailbox API key | `QUBRICS_MAILBOX_API_KEY` | required when mailbox is selected unless a compatible fallback is provided |
+| Management API key | `QUBRICS_MANAGEMENT_API_KEY` | required when management is selected unless a compatible fallback is provided |
+| Sending API key | `QUBRICS_SENDING_API_KEY` | required when sending is selected unless the fallback key is a send-capable `smx_mbx_*` key or owner-approved Sending-resource `smx_agent_*` token |
+| App API base URL | `QUBRICS_APP_BASE_URL` | `https://app.sendmux.ai/api/v1` |
+| Sending API base URL | `QUBRICS_SENDING_BASE_URL` | `https://smtp.sendmux.ai/api/v1` |
+| Transport | `QUBRICS_MCP_TRANSPORT` | `stdio` |
+| HTTP host | `QUBRICS_MCP_HOST` | `127.0.0.1` |
+| HTTP port | `QUBRICS_MCP_PORT` | `8765` |
+| HTTP path | `QUBRICS_MCP_PATH` | `/mcp` |
+| HTTP bearer token | `QUBRICS_MCP_HTTP_BEARER_TOKEN` | required for HTTP unless opt-out is enabled |
+| Allow unauthenticated HTTP | `QUBRICS_MCP_ALLOW_UNAUTHENTICATED_HTTP` | `false` |
+| Allowed browser origins | `QUBRICS_MCP_ALLOWED_ORIGINS` | no browser origins |
+| Snapshot directory override | `QUBRICS_MCP_OPENAPI_INPUT_DIR` or `OPENAPI_INPUT_DIR` | packaged snapshots |
+| App snapshot override | `QUBRICS_MCP_APP_OPENAPI` | packaged app snapshot |
+| Sending snapshot override | `QUBRICS_MCP_SENDING_OPENAPI` | packaged sending snapshot |
+| Request timeout | `QUBRICS_MCP_TIMEOUT_SECONDS` | `30` |
+| Retry attempts | `QUBRICS_MCP_RETRY_MAX_ATTEMPTS` | `3` |
+| Retry time budget, in seconds | `QUBRICS_MCP_RETRY_MAX_ELAPSED_SECONDS` | unset |
 
 Retries honour `Retry-After` and `X-RateLimit-Reset` without applying the local backoff ceiling, and stop for `retryable: false`. Set the optional retry budget with `RetryConfig(max_elapsed_seconds=30)`, the environment variable above, or `--retry-max-elapsed-seconds 30`. A retry that would exceed the remaining budget returns the original error; in-flight requests keep their normal HTTP timeouts.
 
@@ -192,25 +192,25 @@ From the repository root, `pnpm generate:mcp` refreshes native editable metadata
 
 ## Attachment Workflow For Agents
 
-Use `mailbox_wait_for_message` when a user asks an agent to wait for new mail. The tool is bounded; if it returns `matched=false`, call it again rather than holding an MCP tool call open indefinitely.
+Use `qubrics_mailbox_wait_for_message` when a user asks an agent to wait for new mail. The tool is bounded; if it returns `matched=false`, call it again rather than holding an MCP tool call open indefinitely.
 
 When a message has attachments:
 
-1. Call `mailbox_read_attachment` with `message_id` and `attachment_id` when you need the attachment contents.
+1. Call `qubrics_mailbox_read_attachment` with `message_id` and `attachment_id` when you need the attachment contents.
 2. For small text-like attachments, read the returned `text`.
 3. For binary or oversized attachments, use the returned `resource_link` / `download_url` promptly outside model context.
-4. Use `mailbox_get_attachment` only when metadata is enough or you need to refresh the link.
+4. Use `qubrics_mailbox_get_attachment` only when metadata is enough or you need to refresh the link.
 
-Use `mailbox_upload_attachment` for outbound attachments over MCP. It accepts exactly one input mode:
+Use `qubrics_mailbox_upload_attachment` for outbound attachments over MCP. It accepts exactly one input mode:
 
 - `presign_upload_url=true` for hosted MCP or shell-capable agents; upload the file to the returned URL with exact headers and no API key, then send with the returned `blob_id`.
 - `content_base64` only for tiny agent-authored files, capped at `32 KiB` decoded. If it is too large, switch to a presigned upload, CLI `--attach`, or SDK file helpers.
 
 Presigned uploads use the mailbox attachment cap, currently `7,500,000` bytes per attachment, and pin the exact declared byte length and content type.
 
-For mailbox sends, `mailbox_send_message` accepts either tiny inline base64 attachment objects (`content`, `filename`, `content_type`) or uploaded attachment references (`blob_id`, `filename`, `content_type`).
+For mailbox sends, `qubrics_mailbox_send_message` accepts either tiny inline base64 attachment objects (`content`, `filename`, `content_type`) or uploaded attachment references (`blob_id`, `filename`, `content_type`).
 
-For Sending API sends, use `sending_upload_attachment` only for tiny inline content, or call `sending_create_attachment_upload` and PUT bytes outside model context. Then pass `{"attachment_id": "att_..."}` in `sending_send_email.attachments[]`.
+For Sending API sends, use `qubrics_sending_upload_attachment` only for tiny inline content, or call `qubrics_sending_create_attachment_upload` and PUT bytes outside model context. Then pass `{"attachment_id": "att_..."}` in `qubrics_sending_send_email.attachments[]`.
 
 ## Console Scripts
 
@@ -222,8 +222,8 @@ For Sending API sends, use `sending_upload_attachment` only for tiny inline cont
 
 ## Support
 
-Open an issue in [Sendmux/sendmux-sdk](https://github.com/Sendmux/sendmux-sdk/issues) with the package name, version, command, transport, and request ID from any API error.
+Open an issue in [qubrics/qubrics-sdk](https://github.com/qubrics/qubrics-sdk/issues) with the package name, version, command, transport, and request ID from any API error.
 
 ## Licence
 
-MIT. See the [licence file](https://github.com/Sendmux/sendmux-sdk/blob/main/LICENSE).
+MIT. See the [licence file](https://github.com/qubrics/qubrics-sdk/blob/main/LICENSE).

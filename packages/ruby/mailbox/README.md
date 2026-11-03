@@ -1,8 +1,8 @@
 # sendmux-mailbox
 
 [![Gem Version](https://badge.fury.io/rb/sendmux-mailbox.svg)](https://rubygems.org/gems/sendmux-mailbox)
-[![CI](https://github.com/Sendmux/sendmux-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/Sendmux/sendmux-sdk/actions/workflows/ci.yml)
-[![Licence: MIT](https://img.shields.io/badge/licence-MIT-blue.svg)](https://github.com/Sendmux/sendmux-sdk/blob/main/LICENSE)
+[![CI](https://github.com/qubrics/qubrics-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/qubrics/qubrics-sdk/actions/workflows/ci.yml)
+[![Licence: MIT](https://img.shields.io/badge/licence-MIT-blue.svg)](https://github.com/qubrics/qubrics-sdk/blob/main/LICENSE)
 
 Ruby SDK package for the Sendmux Mailbox API.
 
@@ -10,8 +10,8 @@ Ruby SDK package for the Sendmux Mailbox API.
 
 - Ruby SDK guide: https://sendmux.ai/docs/sdks/ruby
 - Mailbox API reference: https://sendmux.ai/docs/mailbox-api
-- Source: https://github.com/Sendmux/sendmux-sdk/tree/main/packages/ruby/mailbox
-- Changelog: https://github.com/Sendmux/sendmux-sdk/blob/main/packages/ruby/mailbox/CHANGELOG.md
+- Source: https://github.com/qubrics/qubrics-sdk/tree/main/packages/ruby/mailbox
+- Changelog: https://github.com/qubrics/qubrics-sdk/blob/main/packages/ruby/mailbox/CHANGELOG.md
 
 ## Requirements
 
@@ -99,7 +99,7 @@ Pass either `api_key:` or `access_token:`. `access_token:` accepts a bare token 
 require "sendmux/mailbox"
 
 client = Sendmux::Mailbox::Client.new(
-  access_token: -> { ENV.fetch("SENDMUX_ACCESS_TOKEN") }
+  access_token: -> { ENV.fetch("QUBRICS_ACCESS_TOKEN") }
 )
 ```
 
@@ -111,7 +111,7 @@ Create a mailbox client with a mailbox key or scoped agent token for the API-key
 require "sendmux/mailbox"
 
 client = Sendmux::Mailbox::Client.new(
-  api_key: ENV.fetch("SENDMUX_MAILBOX_KEY")
+  api_key: ENV.fetch("QUBRICS_MAILBOX_KEY")
 )
 
 me = client.mailbox_api.mailbox_get_me
@@ -178,4 +178,4 @@ end
 
 ## Licence
 
-MIT licence. See https://github.com/Sendmux/sendmux-sdk/blob/main/LICENSE.
+MIT licence. See https://github.com/qubrics/qubrics-sdk/blob/main/LICENSE.

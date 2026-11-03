@@ -1,16 +1,16 @@
 # @sendmux/management
 
 [![npm version](https://img.shields.io/npm/v/@sendmux%2Fmanagement)](https://www.npmjs.com/package/@sendmux/management)
-[![CI](https://github.com/Sendmux/sendmux-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/Sendmux/sendmux-sdk/actions/workflows/ci.yml)
+[![CI](https://github.com/qubrics/qubrics-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/qubrics/qubrics-sdk/actions/workflows/ci.yml)
 [![npm downloads](https://img.shields.io/npm/dm/@sendmux%2Fmanagement)](https://www.npmjs.com/package/@sendmux/management)
-[![Licence](https://img.shields.io/npm/l/@sendmux%2Fmanagement)](https://github.com/Sendmux/sendmux-sdk/blob/main/LICENSE)
+[![Licence](https://img.shields.io/npm/l/@sendmux%2Fmanagement)](https://github.com/qubrics/qubrics-sdk/blob/main/LICENSE)
 
 Generated TypeScript client for the Sendmux Management API.
 
 ## Documentation
 
 - Management API reference: [sendmux.ai/docs/api/introduction](https://sendmux.ai/docs/api/introduction)
-- Source repository: [Sendmux/sendmux-sdk](https://github.com/Sendmux/sendmux-sdk)
+- Source repository: [qubrics/qubrics-sdk](https://github.com/qubrics/qubrics-sdk)
 
 ## Requirements
 
@@ -71,7 +71,7 @@ Pass `accessToken` instead of `apiKey` for a REST OAuth token or synchronous/asy
 import { createManagementClient } from "@sendmux/management";
 
 const client = createManagementClient({
-  accessToken: () => process.env.SENDMUX_ACCESS_TOKEN!,
+  accessToken: () => process.env.QUBRICS_ACCESS_TOKEN!,
 });
 ```
 
@@ -86,7 +86,7 @@ import {
 } from "@sendmux/management";
 
 const client = createManagementClient({
-  apiKey: process.env.SENDMUX_API_KEY!,
+  apiKey: process.env.QUBRICS_API_KEY!,
 });
 
 const domains = await managementListDomains({ client });
@@ -112,7 +112,7 @@ import {
 } from "@sendmux/management";
 
 const client = createManagementClient({
-  apiKey: process.env.SENDMUX_API_KEY!,
+  apiKey: process.env.QUBRICS_API_KEY!,
 });
 
 const domain = await managementGetDomain({
@@ -126,8 +126,8 @@ console.log(domain.data);
 
 ## Support
 
-Open an issue in [Sendmux/sendmux-sdk](https://github.com/Sendmux/sendmux-sdk/issues) with the package name, version, and request ID from any API error.
+Open an issue in [qubrics/qubrics-sdk](https://github.com/qubrics/qubrics-sdk/issues) with the package name, version, and request ID from any API error.
 
 ## Licence
 
-MIT. See the [licence file](https://github.com/Sendmux/sendmux-sdk/blob/main/LICENSE).
+MIT. See the [licence file](https://github.com/qubrics/qubrics-sdk/blob/main/LICENSE).

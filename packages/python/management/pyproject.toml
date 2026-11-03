@@ -27,7 +27,7 @@ dependencies = [
 ]
 
 [project.urls]
-Repository = "https://github.com/Sendmux/sendmux-sdk"
+Repository = "https://github.com/qubrics/qubrics-sdk"
 
 [tool.hatch.build.targets.sdist]
 core-metadata-version = "2.4"

@@ -27,7 +27,7 @@
   ],
   "provenance": {
     "build_inputs": {
-      "pyproject.toml": "f6ddf639c450805939964c024be15a841b991c0cad77d7095e21ae28820e8d15",
+      "pyproject.toml": "114925ee687960f247f7a693fb9f2b1d27055669d36c97c793fc0c4c86e31ee7",
       "scripts/mcp-conformance-required-checks.json": "c82a24f9f893f69c45ab31949e4089f80836230e913d95ca7a05f5933cb788e4"
     },
     "certified_protocols": "scripts/mcp-conformance-required-checks.json",

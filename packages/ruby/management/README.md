@@ -1,8 +1,8 @@
 # sendmux-management
 
 [![Gem Version](https://badge.fury.io/rb/sendmux-management.svg)](https://rubygems.org/gems/sendmux-management)
-[![CI](https://github.com/Sendmux/sendmux-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/Sendmux/sendmux-sdk/actions/workflows/ci.yml)
-[![Licence: MIT](https://img.shields.io/badge/licence-MIT-blue.svg)](https://github.com/Sendmux/sendmux-sdk/blob/main/LICENSE)
+[![CI](https://github.com/qubrics/qubrics-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/qubrics/qubrics-sdk/actions/workflows/ci.yml)
+[![Licence: MIT](https://img.shields.io/badge/licence-MIT-blue.svg)](https://github.com/qubrics/qubrics-sdk/blob/main/LICENSE)
 
 Ruby SDK package for the Sendmux Management API.
 
@@ -10,8 +10,8 @@ Ruby SDK package for the Sendmux Management API.
 
 - Ruby SDK guide: https://sendmux.ai/docs/sdks/ruby
 - Management API reference: https://sendmux.ai/docs/api
-- Source: https://github.com/Sendmux/sendmux-sdk/tree/main/packages/ruby/management
-- Changelog: https://github.com/Sendmux/sendmux-sdk/blob/main/packages/ruby/management/CHANGELOG.md
+- Source: https://github.com/qubrics/qubrics-sdk/tree/main/packages/ruby/management
+- Changelog: https://github.com/qubrics/qubrics-sdk/blob/main/packages/ruby/management/CHANGELOG.md
 
 ## Requirements
 
@@ -76,7 +76,7 @@ Pass either `api_key:` or `access_token:`. `access_token:` accepts a bare token 
 require "sendmux/management"
 
 client = Sendmux::Management::Client.new(
-  access_token: -> { ENV.fetch("SENDMUX_ACCESS_TOKEN") }
+  access_token: -> { ENV.fetch("QUBRICS_ACCESS_TOKEN") }
 )
 ```
 
@@ -88,7 +88,7 @@ Create a management client with a root key for the API-key example below.
 require "sendmux/management"
 
 client = Sendmux::Management::Client.new(
-  api_key: ENV.fetch("SENDMUX_ROOT_KEY")
+  api_key: ENV.fetch("QUBRICS_ROOT_KEY")
 )
 
 mailboxes = client.mailboxes.management_list_mailboxes(limit: 25)
@@ -154,4 +154,4 @@ pager.each { |mailbox| puts mailbox.id }
 
 ## Licence
 
-MIT licence. See https://github.com/Sendmux/sendmux-sdk/blob/main/LICENSE.
+MIT licence. See https://github.com/qubrics/qubrics-sdk/blob/main/LICENSE.

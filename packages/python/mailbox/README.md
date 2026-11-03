@@ -3,14 +3,14 @@
 [![PyPI version](https://img.shields.io/pypi/v/sendmux-mailbox)](https://pypi.org/project/sendmux-mailbox/)
 [![Python versions](https://img.shields.io/pypi/pyversions/sendmux-mailbox)](https://pypi.org/project/sendmux-mailbox/)
 [![PyPI downloads](https://img.shields.io/pypi/dm/sendmux-mailbox)](https://pypi.org/project/sendmux-mailbox/)
-[![Licence](https://img.shields.io/pypi/l/sendmux-mailbox)](https://github.com/Sendmux/sendmux-sdk/blob/main/LICENSE)
+[![Licence](https://img.shields.io/pypi/l/sendmux-mailbox)](https://github.com/qubrics/qubrics-sdk/blob/main/LICENSE)
 
 Generated Python client for the Sendmux Mailbox API.
 
 ## Documentation
 
 - Mailbox API reference: [sendmux.ai/docs/mailbox-api/introduction](https://sendmux.ai/docs/mailbox-api/introduction)
-- Source repository: [Sendmux/sendmux-sdk](https://github.com/Sendmux/sendmux-sdk)
+- Source repository: [qubrics/qubrics-sdk](https://github.com/qubrics/qubrics-sdk)
 
 ## Requirements
 
@@ -35,7 +35,7 @@ import os
 from sendmux_mailbox import create_mailbox_client
 
 client = create_mailbox_client(
-    access_token=lambda: os.environ["SENDMUX_ACCESS_TOKEN"]
+    access_token=lambda: os.environ["QUBRICS_ACCESS_TOKEN"]
 )
 ```
 
@@ -46,7 +46,7 @@ import os
 
 from sendmux_mailbox import MailboxAPIApi, create_mailbox_client, iter_mailbox_events
 
-client = create_mailbox_client(api_key=os.environ["SENDMUX_MAILBOX_API_KEY"])
+client = create_mailbox_client(api_key=os.environ["QUBRICS_MAILBOX_API_KEY"])
 api = MailboxAPIApi(client)
 
 messages = api.mailbox_list_messages(limit=25)
@@ -68,7 +68,7 @@ The package exports every generated Mailbox model and API class plus:
 Check the current credential before choosing a mailbox:
 
 ```python
-with create_mailbox_client(api_key=os.environ["SENDMUX_MAILBOX_API_KEY"]) as client:
+with create_mailbox_client(api_key=os.environ["QUBRICS_MAILBOX_API_KEY"]) as client:
     connection = MailboxAPIApi(client).mailbox_get_connection()
     print(connection.data.label)
 ```
@@ -87,7 +87,7 @@ import urllib.request
 
 from sendmux_mailbox import MailboxAPIApi, create_mailbox_client, read_mailbox_text_attachment
 
-client = create_mailbox_client(api_key=os.environ["SENDMUX_MAILBOX_API_KEY"])
+client = create_mailbox_client(api_key=os.environ["QUBRICS_MAILBOX_API_KEY"])
 api = MailboxAPIApi(client)
 
 message = api.mailbox_get_message("msg_123")
@@ -126,7 +126,7 @@ import os
 
 from sendmux_mailbox import create_mailbox_client, send_mailbox_message_with_files
 
-client = create_mailbox_client(api_key=os.environ["SENDMUX_MAILBOX_API_KEY"])
+client = create_mailbox_client(api_key=os.environ["QUBRICS_MAILBOX_API_KEY"])
 
 send_mailbox_message_with_files(
     client,
@@ -165,7 +165,7 @@ import os
 from sendmux_core import iter_cursor_pages
 from sendmux_mailbox import MailboxAPIApi, create_mailbox_client
 
-client = create_mailbox_client(api_key=os.environ["SENDMUX_MAILBOX_API_KEY"])
+client = create_mailbox_client(api_key=os.environ["QUBRICS_MAILBOX_API_KEY"])
 api = MailboxAPIApi(client)
 
 for message in iter_cursor_pages(lambda cursor: api.mailbox_list_messages(cursor=cursor, limit=50)):
@@ -212,8 +212,8 @@ Update `sendmux-mailbox`, its lockfile, and affected annotations or fixtures tog
 
 ## Support
 
-Open an issue in [Sendmux/sendmux-sdk](https://github.com/Sendmux/sendmux-sdk/issues) with the package name, version, and request ID from any API error.
+Open an issue in [qubrics/qubrics-sdk](https://github.com/qubrics/qubrics-sdk/issues) with the package name, version, and request ID from any API error.
 
 ## Licence
 
-MIT. See the [licence file](https://github.com/Sendmux/sendmux-sdk/blob/main/LICENSE).
+MIT. See the [licence file](https://github.com/qubrics/qubrics-sdk/blob/main/LICENSE).

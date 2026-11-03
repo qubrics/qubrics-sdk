@@ -210,7 +210,7 @@ jobs:
         if: ${{ contains(needs.release-please.outputs.paths_released, 'packages/ts/cli') }}
         env:
           GH_TOKEN: ${{ secrets.HOMEBREW_TAP_TOKEN }}
-          SENDMUX_HOMEBREW_TAP_REPO: Sendmux/homebrew-tap
+          SENDMUX_HOMEBREW_TAP_REPO: qubrics/homebrew-tap
         run: node scripts/update-homebrew-tap.mjs
 
   publish-cratesio:
@@ -391,7 +391,7 @@ jobs:
       - name: Update Homebrew tap
         env:
           GH_TOKEN: ${{ secrets.HOMEBREW_TAP_TOKEN }}
-          SENDMUX_HOMEBREW_TAP_REPO: Sendmux/homebrew-tap
+          SENDMUX_HOMEBREW_TAP_REPO: qubrics/homebrew-tap
         run: node scripts/update-homebrew-tap.mjs
 
   recover-ts-management-release:

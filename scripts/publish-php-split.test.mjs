@@ -69,7 +69,7 @@ async function fixture(t, options = {}) {
   const directory = mkdtempSync(join(tmpdir(), "sendmux-php-publish-"));
   const sdk = join(directory, "sdk");
   const split = join(directory, "split");
-  const remote = join(directory, "sendmux-php-mailbox.git");
+  const remote = join(directory, "qubrics-php-mailbox.git");
   const git = (repo, ...args) => {
     assert.ok(resolve(repo).startsWith(`${directory}/`), "PHP Git fixture escaped mkdtemp");
     return execute("git", ["-C", repo, ...args]);
@@ -180,7 +180,7 @@ test("multiple PHP push destinations are rejected before creating any release re
 test("a tagged fetch URL cannot skip publication to the sole validated push destination", async (t) => {
   const candidate = await fixture(t);
   await candidate.run();
-  const second = join(candidate.directory, "second/sendmux-php-mailbox.git");
+  const second = join(candidate.directory, "second/qubrics-php-mailbox.git");
   assert.ok(resolve(second).startsWith(`${candidate.directory}/`), "PHP remote fixture escaped mkdtemp");
   await execute("git", ["init", "--bare", "-q", second]);
   await candidate.git(candidate.split, "remote", "set-url", "--push", "origin", second);
@@ -190,7 +190,7 @@ test("a tagged fetch URL cannot skip publication to the sole validated push dest
 
 test("a conflicting tag on the actual PHP push destination blocks a clean fetch origin", async (t) => {
   const candidate = await fixture(t);
-  const second = join(candidate.directory, "second/sendmux-php-mailbox.git");
+  const second = join(candidate.directory, "second/qubrics-php-mailbox.git");
   assert.ok(resolve(second).startsWith(`${candidate.directory}/`), "PHP remote fixture escaped mkdtemp");
   await execute("git", ["init", "--bare", "-q", second]);
   await candidate.git(candidate.split, "remote", "set-url", "--push", "origin", second);

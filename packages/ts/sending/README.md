@@ -1,16 +1,16 @@
 # @sendmux/sending
 
 [![npm version](https://img.shields.io/npm/v/@sendmux%2Fsending)](https://www.npmjs.com/package/@sendmux/sending)
-[![CI](https://github.com/Sendmux/sendmux-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/Sendmux/sendmux-sdk/actions/workflows/ci.yml)
+[![CI](https://github.com/qubrics/qubrics-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/qubrics/qubrics-sdk/actions/workflows/ci.yml)
 [![npm downloads](https://img.shields.io/npm/dm/@sendmux%2Fsending)](https://www.npmjs.com/package/@sendmux/sending)
-[![Licence](https://img.shields.io/npm/l/@sendmux%2Fsending)](https://github.com/Sendmux/sendmux-sdk/blob/main/LICENSE)
+[![Licence](https://img.shields.io/npm/l/@sendmux%2Fsending)](https://github.com/qubrics/qubrics-sdk/blob/main/LICENSE)
 
 Generated TypeScript client for the Sendmux Sending API.
 
 ## Documentation
 
 - Sending API reference: [sendmux.ai/docs/sending-api/introduction](https://sendmux.ai/docs/sending-api/introduction)
-- Source repository: [Sendmux/sendmux-sdk](https://github.com/Sendmux/sendmux-sdk)
+- Source repository: [qubrics/qubrics-sdk](https://github.com/qubrics/qubrics-sdk)
 
 ## Requirements
 
@@ -31,7 +31,7 @@ Pass `accessToken` instead of `apiKey` for a REST OAuth token or synchronous/asy
 import { createSendingClient } from "@sendmux/sending";
 
 const client = createSendingClient({
-  accessToken: () => process.env.SENDMUX_ACCESS_TOKEN!,
+  accessToken: () => process.env.QUBRICS_ACCESS_TOKEN!,
 });
 ```
 
@@ -46,7 +46,7 @@ import {
 } from "@sendmux/sending";
 
 const client = createSendingClient({
-  apiKey: process.env.SENDMUX_SENDING_API_KEY!,
+  apiKey: process.env.QUBRICS_SENDING_API_KEY!,
 });
 
 const response = await sendingSendEmail({
@@ -78,7 +78,7 @@ For real files, upload bytes first and send with returned `attachment_id` refs. 
 import { createSendingClient } from "@sendmux/sending";
 import { sendEmailWithFiles } from "@sendmux/sending/node";
 
-const client = createSendingClient({ apiKey: process.env.SENDMUX_SENDING_API_KEY! });
+const client = createSendingClient({ apiKey: process.env.QUBRICS_SENDING_API_KEY! });
 
 await sendEmailWithFiles({
   client,
@@ -99,7 +99,7 @@ To upload first and compose the send yourself:
 import { createSendingClient, sendingSendEmail } from "@sendmux/sending";
 import { uploadAttachmentFromFile } from "@sendmux/sending/node";
 
-const client = createSendingClient({ apiKey: process.env.SENDMUX_SENDING_API_KEY! });
+const client = createSendingClient({ apiKey: process.env.QUBRICS_SENDING_API_KEY! });
 const attachment = await uploadAttachmentFromFile({ client, filePath: "./report.pdf" });
 
 await sendingSendEmail({
@@ -123,7 +123,7 @@ import { idempotencyHeaders } from "@sendmux/core";
 import { createSendingClient, sendingSendEmail } from "@sendmux/sending";
 
 const client = createSendingClient({
-  apiKey: process.env.SENDMUX_SENDING_API_KEY!,
+  apiKey: process.env.QUBRICS_SENDING_API_KEY!,
 });
 
 await sendingSendEmail({
@@ -141,8 +141,8 @@ await sendingSendEmail({
 
 ## Support
 
-Open an issue in [Sendmux/sendmux-sdk](https://github.com/Sendmux/sendmux-sdk/issues) with the package name, version, and request ID from any API error.
+Open an issue in [qubrics/qubrics-sdk](https://github.com/qubrics/qubrics-sdk/issues) with the package name, version, and request ID from any API error.
 
 ## Licence
 
-MIT. See the [licence file](https://github.com/Sendmux/sendmux-sdk/blob/main/LICENSE).
+MIT. See the [licence file](https://github.com/qubrics/qubrics-sdk/blob/main/LICENSE).

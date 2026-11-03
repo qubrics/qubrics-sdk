@@ -45,15 +45,15 @@ test("closes an open drift issue after the specs converge", async (t) => {
     env: {
       ...process.env,
       GITHUB_API_URL: githubApiUrl,
-      GITHUB_REPOSITORY: "Sendmux/sendmux-sdk",
+      GITHUB_REPOSITORY: "qubrics/qubrics-sdk",
       GITHUB_TOKEN: "test-token",
     },
   });
 
   assert.match(stdout, /Closed resolved spec drift issue #135/);
   assert.deepEqual(requests.map(({ method, url }) => ({ method, url })), [
-    { method: "GET", url: "/repos/Sendmux/sendmux-sdk/issues?state=open&labels=spec-drift&per_page=100" },
-    { method: "PATCH", url: "/repos/Sendmux/sendmux-sdk/issues/135" },
+    { method: "GET", url: "/repos/qubrics/qubrics-sdk/issues?state=open&labels=spec-drift&per_page=100" },
+    { method: "PATCH", url: "/repos/qubrics/qubrics-sdk/issues/135" },
   ]);
   assert.deepEqual(JSON.parse(requests[1].body), { state: "closed", state_reason: "completed" });
 });

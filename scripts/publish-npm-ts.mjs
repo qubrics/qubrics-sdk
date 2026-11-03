@@ -71,7 +71,7 @@ function assertPublishable(manifest, packageDir) {
     throw new Error(`${packageDir} is still private`);
   }
 
-  if (!manifest.repository?.url?.includes("github.com/Sendmux/sendmux-sdk")) {
+  if (!manifest.repository?.url?.includes("github.com/qubrics/qubrics-sdk")) {
     throw new Error(`${packageDir} must set repository.url to the GitHub SDK repository for npm trusted publishing`);
   }
 
