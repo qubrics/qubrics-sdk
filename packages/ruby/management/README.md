@@ -91,8 +91,8 @@ client = Sendmux::Management::Client.new(
   api_key: ENV.fetch("QUBRICS_ROOT_KEY")
 )
 
-mailboxes = client.mailboxes.qubrics_management_list_mailboxes(limit: 25)
-domains = client.domains.qubrics_management_list_domains(limit: 25)
+mailboxes = client.mailboxes.management_list_mailboxes(limit: 25)
+domains = client.domains.management_list_domains(limit: 25)
 
 puts mailboxes.data.length
 puts domains.data.length
@@ -113,14 +113,14 @@ puts domains.data.length
 - `client.sending_accounts`
 - `client.webhooks`
 
-Each group exposes generated operation methods using the `management_` prefix, such as `qubrics_management_list_mailboxes`, `qubrics_management_create_mailbox`, `qubrics_management_list_domains`, and `qubrics_management_create_webhook`.
+Each group exposes generated operation methods using the `management_` prefix, such as `management_list_mailboxes`, `management_create_mailbox`, `management_list_domains`, and `management_create_webhook`.
 
 ### Idempotency and conditional requests
 
 Mutating generated operations accept option hashes. Use the core header helpers for idempotency and ETag preconditions.
 
 ```ruby
-client.webhooks.qubrics_management_create_webhook(
+client.webhooks.management_create_webhook(
   Sendmux::Core::Headers.idempotency_key("create-webhook-001").merge(
     webhook_create_body: Sendmux::Management::Generated::WebhookCreateBody.new(
       url: "https://example.com/webhook",
@@ -141,7 +141,7 @@ Use `Sendmux::Core.each_cursor` for list operations that return cursor paginatio
 
 ```ruby
 pager = Sendmux::Core.each_cursor(lambda do |opts|
-  client.mailboxes.qubrics_management_list_mailboxes(opts.merge(limit: 50))
+  client.mailboxes.management_list_mailboxes(opts.merge(limit: 50))
 end)
 
 pager.each { |mailbox| puts mailbox.id }

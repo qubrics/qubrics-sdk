@@ -62,7 +62,7 @@ request = Sendmux::Sending::Generated::EmailSendRequest.new(
   text_body: "This message was sent with the Sendmux Ruby SDK."
 )
 
-response = client.emails.qubrics_sending_send_email(
+response = client.emails.sending_send_email(
   request,
   Sendmux::Core::Headers.idempotency_key("send-email-001")
 )
@@ -74,7 +74,7 @@ puts response.data.message_id
 
 `Sendmux::Sending::Client` exposes:
 
-- `client.emails` for `qubrics_sending_send_email` and `qubrics_sending_send_email_batch`.
+- `client.emails` for `sending_send_email` and `sending_send_email_batch`.
 - `client.meta` for `sending_get_open_api_spec`.
 
 Pass `base_url:` only when you are targeting an explicitly provided Sendmux endpoint for a controlled environment.
@@ -84,7 +84,7 @@ Pass `base_url:` only when you are targeting an explicitly provided Sendmux endp
 Mutating sending operations accept the `:idempotency_key` option. Use `Sendmux::Core::Headers.idempotency_key` so retries are safe when a request is replayable.
 
 ```ruby
-client.emails.qubrics_sending_send_email(
+client.emails.sending_send_email(
   request,
   Sendmux::Core::Headers.idempotency_key("send-email-002")
 )
@@ -96,7 +96,7 @@ Generated API errors are mapped to `Sendmux::Core::ApiError`.
 
 ```ruby
 begin
-  client.emails.qubrics_sending_send_email(request)
+  client.emails.sending_send_email(request)
 rescue Sendmux::Core::ApiError => error
   warn "#{error.status} #{error.code}: #{error.message}"
 end

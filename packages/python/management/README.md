@@ -49,7 +49,7 @@ from sendmux_management import DomainsApi, create_management_client
 client = create_management_client(api_key=os.environ["QUBRICS_MANAGEMENT_API_KEY"])
 api = DomainsApi(client)
 
-domains = api.qubrics_management_list_domains(limit=25)
+domains = api.management_list_domains(limit=25)
 
 for domain in domains.data:
     print(domain.id, domain.domain)
@@ -73,7 +73,7 @@ from sendmux_management import DomainsApi, create_management_client
 client = create_management_client(api_key=os.environ["QUBRICS_MANAGEMENT_API_KEY"])
 api = DomainsApi(client)
 
-domain = api.qubrics_management_get_domain(
+domain = api.management_get_domain(
     public_id="mdom_123",
     if_none_match='W/"etag"',
 )
