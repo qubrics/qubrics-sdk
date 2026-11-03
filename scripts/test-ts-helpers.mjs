@@ -50,9 +50,11 @@ for (const [surface, createClient, getConnection] of [
   ["sending", createSendingClient, sendingGetConnection],
 ]) {
   await test(`${surface} resolves Qubrics environment configuration before legacy names`, async (t) => {
+    const names = ["QUBRICS_API_KEY", "SENDMUX_API_KEY", "QUBRICS_ACCESS_TOKEN", "SENDMUX_ACCESS_TOKEN", "QUBRICS_BASE_URL", "SENDMUX_BASE_URL"];
     const original = { ...process.env };
+    for (const name of names) delete process.env[name];
     t.after(() => {
-      for (const name of ["QUBRICS_API_KEY", "SENDMUX_API_KEY", "QUBRICS_BASE_URL", "SENDMUX_BASE_URL"]) {
+      for (const name of names) {
         if (original[name] === undefined) delete process.env[name];
         else process.env[name] = original[name];
       }
@@ -195,7 +197,16 @@ for (const [surface, createClient, getConnection] of [
     assert.equal(providerCalls, 2);
   });
 
-  await test(`${surface} rejects missing, ambiguous or malformed credentials before making a request`, async () => {
+  await test(`${surface} rejects missing, ambiguous or malformed credentials before making a request`, async (t) => {
+    const names = ["QUBRICS_API_KEY", "SENDMUX_API_KEY", "QUBRICS_ACCESS_TOKEN", "SENDMUX_ACCESS_TOKEN", "QUBRICS_BASE_URL", "SENDMUX_BASE_URL"];
+    const original = { ...process.env };
+    for (const name of names) delete process.env[name];
+    t.after(() => {
+      for (const name of names) {
+        if (original[name] === undefined) delete process.env[name];
+        else process.env[name] = original[name];
+      }
+    });
     let requests = 0;
     const fetch = async () => { requests += 1; return Response.json({}); };
     for (const credentials of [

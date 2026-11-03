@@ -72,7 +72,9 @@ func TestDelegatedUploadServerAcceptsWhitespaceNormalisedTwinsOnWire(t *testing.
 	if err != nil {
 		t.Fatal(err)
 	}
-	response.Body.Close()
+	if err := response.Body.Close(); err != nil {
+		t.Fatal(err)
+	}
 	fixture.Close()
 	if response.StatusCode != http.StatusCreated || security.checks != 1 || handler.calls != 1 || handler.params.XSendmuxUploadToken != "upload-token" || handler.params.XQubricsUploadToken.Value != "upload-token" {
 		t.Fatalf("normalised upload status=%d checks=%d calls=%d params=%+v", response.StatusCode, security.checks, handler.calls, handler.params)

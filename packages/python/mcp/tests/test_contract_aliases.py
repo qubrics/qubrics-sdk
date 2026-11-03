@@ -14,6 +14,9 @@ from sendmux_mcp.server import create_server
 
 @pytest.mark.parametrize("prefix", ["QUBRICS", "SENDMUX"])
 def test_configuration_accepts_both_environment_families(monkeypatch: pytest.MonkeyPatch, prefix: str) -> None:
+    other_prefix = "SENDMUX" if prefix == "QUBRICS" else "QUBRICS"
+    for suffix in ("API_KEY", "MCP_SURFACES", "APP_BASE_URL", "MCP_TIMEOUT_SECONDS"):
+        monkeypatch.delenv(f"{other_prefix}_{suffix}", raising=False)
     monkeypatch.setenv(f"{prefix}_API_KEY", "smx_mbx_fixture")
     monkeypatch.setenv(f"{prefix}_MCP_SURFACES", "mailbox,sending")
     monkeypatch.setenv(f"{prefix}_APP_BASE_URL", "https://app.fixture.test/api/v1")

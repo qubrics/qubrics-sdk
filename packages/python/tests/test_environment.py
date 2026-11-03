@@ -4,18 +4,25 @@ from collections.abc import Callable
 from typing import Any
 
 import pytest
-from test_oauth_retry import CLIENTS, endpoint
 
 from sendmux_core.environment import env_value
-from sendmux_mailbox import create_mailbox_client
-from sendmux_management import create_management_client
-from sendmux_sending import create_sending_client
+from sendmux_mailbox import MailboxAPIApi, create_mailbox_client
+from sendmux_management import ConnectionApi, create_management_client
+from sendmux_sending import MetaApi, create_sending_client
+
+
+CLIENTS: list[tuple[Callable[..., Any], Callable[[Any], Any]]] = [
+    (create_management_client, lambda client: ConnectionApi(client).management_get_connection_without_preload_content()),
+    (create_sending_client, lambda client: MetaApi(client).sending_get_connection_without_preload_content()),
+    (create_mailbox_client, lambda client: MailboxAPIApi(client).mailbox_get_connection_without_preload_content()),
+]
 
 
 @pytest.mark.parametrize("create,key", [(create_mailbox_client, "smx_mbx_"), (create_management_client, "smx_root_"), (create_sending_client, "smx_mbx_")])
 def test_clients_use_legacy_env_then_qubrics_env_then_explicit_configuration(monkeypatch: pytest.MonkeyPatch, create: Callable[..., Any], key: str) -> None:
-    monkeypatch.delenv("QUBRICS_API_KEY", raising=False)
-    monkeypatch.delenv("QUBRICS_BASE_URL", raising=False)
+    for prefix in ("QUBRICS", "SENDMUX"):
+        for suffix in ("API_KEY", "ACCESS_TOKEN", "BASE_URL"):
+            monkeypatch.delenv(f"{prefix}_{suffix}", raising=False)
     monkeypatch.setenv("SENDMUX_API_KEY", key + "legacy")
     monkeypatch.setenv("SENDMUX_BASE_URL", "https://legacy.fixture.test/api/v1")
     with create() as client:

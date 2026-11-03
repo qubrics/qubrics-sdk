@@ -128,7 +128,7 @@ function checkGeneratedRubyHeaderStringification() {
   );
   for (const expected of [
     "def sending_upload_attachment(content_length, filename, body, opts = {})",
-    "def sending_complete_attachment_upload(content_length, upload_id, body, opts = {})",
+    "def sending_complete_attachment_upload(content_length, upload_id, body, opts = {}, legacy_opts = nil)",
     "header_params[:'X-Qubrics-Upload-Token'] = opts[:'x_qubrics_upload_token']",
     "header_params[:'X-Sendmux-Upload-Token'] = opts[:'x_sendmux_upload_token']",
     "header_params[:'Content-Length'] = content_length",
