@@ -271,7 +271,7 @@ test("draft and usage reads require explicit existing fixtures before selection"
 test("all-gates default selects custom MCP operations with mailbox credential requirements", async () => {
   await withEnv({ SENDMUX_STAGING_SEND: "1", SENDMUX_LIVE_E2E_MUTATIONS: "1", SENDMUX_LIVE_E2E_BINARY: "1", SENDMUX_LIVE_E2E_STREAM: "1", SENDMUX_LIVE_E2E_DRAFT_ID: "draft_existing", SENDMUX_LIVE_E2E_USAGE_START: "2026-10-01T00:00:00.000Z", SENDMUX_LIVE_E2E_USAGE_END: "2026-10-02T00:00:00.000Z" }, () => {
     const selected = selectOperations(buildOperationPlan(operations, scenarios, fixtures), []);
-    assert.equal(selected.length, 120);
+    assert.equal(selected.length, 130);
     for (const id of ["mailboxReadAttachment", "mailboxWaitForMessage"]) assert.equal(selected.find(item => item.operationId === id)?.requiredKeyKind, "mailbox");
   });
 });
@@ -1308,13 +1308,118 @@ test("mailbox teardown accepts the documented deleted tombstone as absence and n
   }
 });
 
+test("Calendar lifecycle fixtures delete only run-owned events before their empty calendars with fresh ETags", async () => {
+  const calendars = new Map();
+  const events = new Map();
+  let nextId = 0;
+  const absent = { status: 404, body: { ok: false, error: { code: "not_found", message: "Absent", retryable: false }, meta: { request_id: "req_calendar_absent" } } };
+  await withApi((req, raw) => {
+    const url = new URL(req.url, "http://localhost");
+    if (url.pathname.endsWith("/connection") || url.pathname.endsWith("/me")) return { body: connection() };
+    const isEvent = url.pathname.includes("calendar-events");
+    const rows = isEvent ? events : calendars;
+    const id = url.pathname.split("/").at(-1);
+    const body = raw ? JSON.parse(raw) : undefined;
+    if (req.method === "POST") {
+      if (!body) return { status: 422, body: { ok: false, error: { code: "validation_error", message: "Body required", retryable: false }, meta: { request_id: "req_calendar_body" } } };
+      const createdId = `${isEvent ? "event" : "calendar"}_${++nextId}`;
+      if (isEvent) {
+        assert.deepEqual(Object.keys(body).sort(), ["calendar_id", "duration", "start", "time_zone", "title", "uid"]);
+        assert.ok(calendars.has(body.calendar_id), "event parent must be created by this run");
+        rows.set(createdId, { ...body, id: createdId, mailbox_id: expected.mailboxId, calendar_ids: [body.calendar_id], etag: '"event-created"' });
+        return { body: envelope({ id: createdId, mailbox_id: expected.mailboxId, uid: body.uid }) };
+      }
+      assert.deepEqual(Object.keys(body).sort(), ["name", "time_zone"]);
+      rows.set(createdId, { ...body, id: createdId, mailbox_id: expected.mailboxId, is_default: false, etag: '"calendar-created"' });
+      return { body: envelope({ ...body, id: createdId, mailbox_id: expected.mailboxId }) };
+    }
+    const row = rows.get(id);
+    if (!row) return absent;
+    if (req.method === "GET") {
+      row.etag = `"fresh-${++nextId}"`;
+      return { body: envelope(row) };
+    }
+    assert.equal(req.headers["if-match"], row.etag, "conditional writes must use the most recent GET token");
+    if (req.method === "PATCH") {
+      assert.deepEqual(Object.keys(body), ["title"]);
+      Object.assign(row, body);
+      return { body: envelope({ id, updated: true }) };
+    }
+    assert.equal(req.method, "DELETE");
+    if (!isEvent) assert.ok([...events.values()].every(event => !event.calendar_ids.includes(id)), "parent deletion must wait for verified child absence");
+    rows.delete(id);
+    return { body: envelope({ id, deleted: true }) };
+  }, async ({ runtime, baseUrl }) => {
+    await runtime.preflight(expected);
+    for (const operationId of ["mailboxCreateCalendar", "mailboxCreateCalendarEvent", "mailboxUpdateCalendarEvent", "mailboxDeleteCalendarEvent", "mailboxDeleteCalendar"]) {
+      const [result] = await runAdapterStep({ adapter: "typescript", credentials: { mailboxApiKey: "smx_mbx_test", appBaseUrl: baseUrl }, fixtureRuntime: runtime, fixtures, operation: operations.find(item => item.operationId === operationId), sdk });
+      assert.equal(result.status, "passed", `${operationId}: ${result.error ?? "failed"}`);
+    }
+    await runtime.teardown();
+    assert.equal(events.size, 0);
+    assert.equal(calendars.size, 0);
+    assert.ok(runtime.ledger.resources.length >= 8);
+    assert.ok(runtime.ledger.resources.every(entry => entry.status === "absent" && entry.verification === "get_not_found"));
+    validateRecoveryLedger(runtime.ledger, { runId: "local-safety-test", sourceSha: "a".repeat(40) });
+  });
+});
+
+test("Calendar uncertain creates persist UID before dispatch, never replay, and fail unresolved child and parent cleanup", async () => {
+  const dir = mkdtempSync(join(tmpdir(), "sendmux-calendar-uncertain-"));
+  const ledgerPath = join(dir, "resources.json");
+  let eventCreates = 0;
+  let calendarName;
+  try {
+    await withApi((req, raw) => {
+      const url = new URL(req.url, "http://localhost");
+      if (url.pathname.endsWith("/connection") || url.pathname.endsWith("/me")) return { body: connection() };
+      const body = raw ? JSON.parse(raw) : undefined;
+      if (req.method === "POST" && url.pathname.endsWith("/calendars")) {
+        calendarName = body.name;
+        return { body: envelope({ id: "calendar_owned", name: calendarName, time_zone: body.time_zone, mailbox_id: expected.mailboxId }) };
+      }
+      if (req.method === "POST") {
+        eventCreates += 1;
+        const persisted = JSON.parse(readFileSync(ledgerPath, "utf8"));
+        const intent = persisted.resources.find(entry => entry.uid === body.uid);
+        assert.equal(intent?.calendar_id, "calendar_owned");
+        assert.equal(intent?.status, "pending");
+        assert.equal(intent?.path.event_id, undefined);
+        assert.equal(req.headers["idempotency-key"], undefined, "uncertain create must not enable automatic transport replay");
+        return { status: 503, body: { ok: false, error: { code: "service_unavailable", message: "Outcome unknown", retryable: true }, meta: { request_id: "req_calendar_unknown" } } };
+      }
+      if (url.pathname.endsWith("/calendar-events")) {
+        assert.ok(url.searchParams.get("uid"));
+        assert.equal(url.searchParams.get("calendar_id"), "calendar_owned");
+        assert.equal(url.searchParams.get("limit"), "2");
+        return { body: envelope([]) };
+      }
+      return { body: envelope({ id: "calendar_owned", name: calendarName, is_default: false, mailbox_id: expected.mailboxId, etag: '"calendar-current"' }) };
+    }, async ({ runtime, requests }) => {
+      await runtime.preflight(expected);
+      await runtime.runOperation("mailboxCreateCalendar", { body: { name: runtime.resourceLabel("calendar"), time_zone: "Australia/Melbourne" } });
+      const request = { body: { calendar_id: "calendar_owned", uid: runtime.resourceLabel("event"), title: "Owned", start: "2026-11-02T10:00:00", time_zone: "Australia/Melbourne", duration: "PT1H" } };
+      await assert.rejects(runtime.runOperation("mailboxCreateCalendarEvent", request), /Outcome unknown/);
+      await assert.rejects(runtime.runOperation("mailboxCreateCalendarEvent", request), /never repeat/);
+      assert.equal(eventCreates, 1, "ambiguous dispatch must never create again");
+      for (const [operationId, path] of [["mailboxDeleteCalendar", { calendar_id: "calendar_external" }], ["mailboxDeleteCalendarEvent", { event_id: "event_external" }], ["mailboxUpdateCalendarEvent", { event_id: "event_external" }], ["mailboxDeleteCalendarEvent", {}]]) {
+        await assert.rejects(runtime.runOperation(operationId, { path, headers: { "If-Match": '"external"' }, body: { title: "Unsafe" } }), /run-owned/);
+      }
+      await assert.rejects(runtime.teardown(), /Uncertain Calendar event create remains unresolved/);
+      assert.ok(runtime.ledger.resources.every(entry => entry.status === "failed"));
+      assert.ok(requests.every(request => !["DELETE", "PATCH"].includes(request.method)));
+      validateRecoveryLedger(runtime.ledger, { runId: "local-safety-test", sourceSha: "a".repeat(40) });
+    }, { ledgerPath });
+  } finally { rmSync(dir, { recursive: true }); }
+});
+
 test("JSON plans bind explicit selection to exactly its applicable pairs", () => {
   const result = spawnSync(process.execPath, ["scripts/run-live-e2e.mjs", "--plan", "--json", "--adapter", "typescript", "--operation", "managementGetConnection"], { encoding: "utf8" });
   assert.equal(result.status, 0, result.stderr);
   const plan = JSON.parse(result.stdout);
   assert.deepEqual(plan.selectedOperationIds, ["managementGetConnection"]);
   assert.deepEqual(plan.applicablePairs, [{ adapter: "typescript", operationId: "managementGetConnection" }]);
-  assert.equal(plan.summary.total, 120);
+  assert.equal(plan.summary.total, 130);
 });
 
 test("mailbox key cleanup verifies the exact revocation receipt without inventing a read endpoint", async () => {

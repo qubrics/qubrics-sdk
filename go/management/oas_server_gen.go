@@ -98,14 +98,14 @@ type Handler interface {
 	ManagementDeactivateProvider(ctx context.Context, params ManagementDeactivateProviderParams) (ManagementDeactivateProviderRes, error)
 	// ManagementDeleteDomain implements managementDeleteDomain operation.
 	//
-	// Removes a domain from our mail platform, Amazon SES, and Sendmux. Blocked if any active mailbox
+	// Removes a domain from our mail platform, Amazon SES, and Qubrics. Blocked if any active mailbox
 	// still uses the domain — delete those mailboxes first.
 	//
 	// DELETE /domains/{public_id}
 	ManagementDeleteDomain(ctx context.Context, params ManagementDeleteDomainParams) (ManagementDeleteDomainRes, error)
 	// ManagementDeleteMailbox implements managementDeleteMailbox operation.
 	//
-	// Removes a mailbox from our mail platform, Amazon SES (for `@myagent.mx` addresses), and Sendmux.
+	// Removes a mailbox from our mail platform, Amazon SES (for `@myagent.mx` addresses), and Qubrics.
 	// All associated API keys are revoked.
 	//
 	// DELETE /mailboxes/{public_id}

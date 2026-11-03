@@ -1,7 +1,7 @@
 =begin
-#Sendmux API
+#Qubrics API
 
-#Programmatic access to your Sendmux email infrastructure.
+#Programmatic access to your Qubrics email infrastructure.
 
 The version of the OpenAPI document: 1.0.0
 
@@ -54,7 +54,7 @@ module Sendmux::Management::Generated
     # Sender/envelope-from address when available.
     attr_accessor :sender
 
-    # Sendmux message correlation ID for outbound sending feedback when available.
+    # Qubrics message correlation ID for outbound sending feedback when available.
     attr_accessor :sendmux_message_id
 
     # Target webhook ID for synthetic `sendmux.test` payloads.

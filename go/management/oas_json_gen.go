@@ -1334,6 +1334,511 @@ func (s *BalanceResponseOk) UnmarshalJSON(data []byte) error {
 }
 
 // Encode implements json.Marshaler.
+func (s *CalendarWebhookEventData) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *CalendarWebhookEventData) encodeFields(e *jx.Encoder) {
+	{
+		e.FieldStart("created")
+		e.ArrStart()
+		for _, elem := range s.Created {
+			e.Str(elem)
+		}
+		e.ArrEnd()
+	}
+	{
+		e.FieldStart("destroyed")
+		e.ArrStart()
+		for _, elem := range s.Destroyed {
+			e.Str(elem)
+		}
+		e.ArrEnd()
+	}
+	{
+		e.FieldStart("has_more")
+		e.Bool(s.HasMore)
+	}
+	{
+		e.FieldStart("mailbox_id")
+		e.Str(s.MailboxID)
+	}
+	{
+		e.FieldStart("new_state")
+		e.Str(s.NewState)
+	}
+	{
+		e.FieldStart("old_state")
+		e.Str(s.OldState)
+	}
+	{
+		e.FieldStart("resource")
+		s.Resource.Encode(e)
+	}
+	{
+		e.FieldStart("sync_required")
+		e.Bool(s.SyncRequired)
+	}
+	{
+		e.FieldStart("updated")
+		e.ArrStart()
+		for _, elem := range s.Updated {
+			e.Str(elem)
+		}
+		e.ArrEnd()
+	}
+}
+
+var jsonFieldsNameOfCalendarWebhookEventData = [9]string{
+	0: "created",
+	1: "destroyed",
+	2: "has_more",
+	3: "mailbox_id",
+	4: "new_state",
+	5: "old_state",
+	6: "resource",
+	7: "sync_required",
+	8: "updated",
+}
+
+// Decode decodes CalendarWebhookEventData from json.
+func (s *CalendarWebhookEventData) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode CalendarWebhookEventData to nil")
+	}
+	var requiredBitSet [2]uint8
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "created":
+			requiredBitSet[0] |= 1 << 0
+			if err := func() error {
+				s.Created = make([]string, 0)
+				if err := d.Arr(func(d *jx.Decoder) error {
+					var elem string
+					v, err := d.Str()
+					elem = string(v)
+					if err != nil {
+						return err
+					}
+					s.Created = append(s.Created, elem)
+					return nil
+				}); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"created\"")
+			}
+		case "destroyed":
+			requiredBitSet[0] |= 1 << 1
+			if err := func() error {
+				s.Destroyed = make([]string, 0)
+				if err := d.Arr(func(d *jx.Decoder) error {
+					var elem string
+					v, err := d.Str()
+					elem = string(v)
+					if err != nil {
+						return err
+					}
+					s.Destroyed = append(s.Destroyed, elem)
+					return nil
+				}); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"destroyed\"")
+			}
+		case "has_more":
+			requiredBitSet[0] |= 1 << 2
+			if err := func() error {
+				v, err := d.Bool()
+				s.HasMore = bool(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"has_more\"")
+			}
+		case "mailbox_id":
+			requiredBitSet[0] |= 1 << 3
+			if err := func() error {
+				v, err := d.Str()
+				s.MailboxID = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"mailbox_id\"")
+			}
+		case "new_state":
+			requiredBitSet[0] |= 1 << 4
+			if err := func() error {
+				v, err := d.Str()
+				s.NewState = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"new_state\"")
+			}
+		case "old_state":
+			requiredBitSet[0] |= 1 << 5
+			if err := func() error {
+				v, err := d.Str()
+				s.OldState = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"old_state\"")
+			}
+		case "resource":
+			requiredBitSet[0] |= 1 << 6
+			if err := func() error {
+				if err := s.Resource.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"resource\"")
+			}
+		case "sync_required":
+			requiredBitSet[0] |= 1 << 7
+			if err := func() error {
+				v, err := d.Bool()
+				s.SyncRequired = bool(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"sync_required\"")
+			}
+		case "updated":
+			requiredBitSet[1] |= 1 << 0
+			if err := func() error {
+				s.Updated = make([]string, 0)
+				if err := d.Arr(func(d *jx.Decoder) error {
+					var elem string
+					v, err := d.Str()
+					elem = string(v)
+					if err != nil {
+						return err
+					}
+					s.Updated = append(s.Updated, elem)
+					return nil
+				}); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"updated\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode CalendarWebhookEventData")
+	}
+	// Validate required fields.
+	var failures []validate.FieldError
+	for i, mask := range [2]uint8{
+		0b11111111,
+		0b00000001,
+	} {
+		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
+			// Mask only required fields and check equality to mask using XOR.
+			//
+			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
+			// Bits of fields which would be set are actually bits of missed fields.
+			missed := bits.OnesCount8(result)
+			for bitN := 0; bitN < missed; bitN++ {
+				bitIdx := bits.TrailingZeros8(result)
+				fieldIdx := i*8 + bitIdx
+				var name string
+				if fieldIdx < len(jsonFieldsNameOfCalendarWebhookEventData) {
+					name = jsonFieldsNameOfCalendarWebhookEventData[fieldIdx]
+				} else {
+					name = strconv.Itoa(fieldIdx)
+				}
+				failures = append(failures, validate.FieldError{
+					Name:  name,
+					Error: validate.ErrFieldRequired,
+				})
+				// Reset bit.
+				result &^= 1 << bitIdx
+			}
+		}
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *CalendarWebhookEventData) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *CalendarWebhookEventData) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes CalendarWebhookEventDataResource as json.
+func (s CalendarWebhookEventDataResource) Encode(e *jx.Encoder) {
+	e.Str(string(s))
+}
+
+// Decode decodes CalendarWebhookEventDataResource from json.
+func (s *CalendarWebhookEventDataResource) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode CalendarWebhookEventDataResource to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch CalendarWebhookEventDataResource(v) {
+	case CalendarWebhookEventDataResourceCalendar:
+		*s = CalendarWebhookEventDataResourceCalendar
+	case CalendarWebhookEventDataResourceEvent:
+		*s = CalendarWebhookEventDataResourceEvent
+	default:
+		*s = CalendarWebhookEventDataResource(v)
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s CalendarWebhookEventDataResource) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *CalendarWebhookEventDataResource) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *CalendarWebhookEventPayload) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *CalendarWebhookEventPayload) encodeFields(e *jx.Encoder) {
+	{
+		e.FieldStart("data")
+		s.Data.Encode(e)
+	}
+	{
+		e.FieldStart("id")
+		e.Str(s.ID)
+	}
+	{
+		e.FieldStart("occurred_at")
+		e.Str(s.OccurredAt)
+	}
+	{
+		e.FieldStart("team_public_id")
+		e.Str(s.TeamPublicID)
+	}
+	{
+		e.FieldStart("type")
+		s.Type.Encode(e)
+	}
+}
+
+var jsonFieldsNameOfCalendarWebhookEventPayload = [5]string{
+	0: "data",
+	1: "id",
+	2: "occurred_at",
+	3: "team_public_id",
+	4: "type",
+}
+
+// Decode decodes CalendarWebhookEventPayload from json.
+func (s *CalendarWebhookEventPayload) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode CalendarWebhookEventPayload to nil")
+	}
+	var requiredBitSet [1]uint8
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "data":
+			requiredBitSet[0] |= 1 << 0
+			if err := func() error {
+				if err := s.Data.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"data\"")
+			}
+		case "id":
+			requiredBitSet[0] |= 1 << 1
+			if err := func() error {
+				v, err := d.Str()
+				s.ID = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"id\"")
+			}
+		case "occurred_at":
+			requiredBitSet[0] |= 1 << 2
+			if err := func() error {
+				v, err := d.Str()
+				s.OccurredAt = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"occurred_at\"")
+			}
+		case "team_public_id":
+			requiredBitSet[0] |= 1 << 3
+			if err := func() error {
+				v, err := d.Str()
+				s.TeamPublicID = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"team_public_id\"")
+			}
+		case "type":
+			requiredBitSet[0] |= 1 << 4
+			if err := func() error {
+				if err := s.Type.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"type\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode CalendarWebhookEventPayload")
+	}
+	// Validate required fields.
+	var failures []validate.FieldError
+	for i, mask := range [1]uint8{
+		0b00011111,
+	} {
+		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
+			// Mask only required fields and check equality to mask using XOR.
+			//
+			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
+			// Bits of fields which would be set are actually bits of missed fields.
+			missed := bits.OnesCount8(result)
+			for bitN := 0; bitN < missed; bitN++ {
+				bitIdx := bits.TrailingZeros8(result)
+				fieldIdx := i*8 + bitIdx
+				var name string
+				if fieldIdx < len(jsonFieldsNameOfCalendarWebhookEventPayload) {
+					name = jsonFieldsNameOfCalendarWebhookEventPayload[fieldIdx]
+				} else {
+					name = strconv.Itoa(fieldIdx)
+				}
+				failures = append(failures, validate.FieldError{
+					Name:  name,
+					Error: validate.ErrFieldRequired,
+				})
+				// Reset bit.
+				result &^= 1 << bitIdx
+			}
+		}
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *CalendarWebhookEventPayload) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *CalendarWebhookEventPayload) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes CalendarWebhookEventPayloadType as json.
+func (s CalendarWebhookEventPayloadType) Encode(e *jx.Encoder) {
+	e.Str(string(s))
+}
+
+// Decode decodes CalendarWebhookEventPayloadType from json.
+func (s *CalendarWebhookEventPayloadType) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode CalendarWebhookEventPayloadType to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch CalendarWebhookEventPayloadType(v) {
+	case CalendarWebhookEventPayloadTypeCalendarChanged:
+		*s = CalendarWebhookEventPayloadTypeCalendarChanged
+	default:
+		*s = CalendarWebhookEventPayloadType(v)
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s CalendarWebhookEventPayloadType) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *CalendarWebhookEventPayloadType) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
 func (s *Connection) Encode(e *jx.Encoder) {
 	e.ObjStart()
 	s.encodeFields(e)
@@ -9004,6 +9509,218 @@ func (s IncomingLogItemResponseOk) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *IncomingLogItemResponseOk) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *MailWebhookEventPayload) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *MailWebhookEventPayload) encodeFields(e *jx.Encoder) {
+	{
+		e.FieldStart("data")
+		s.Data.Encode(e)
+	}
+	{
+		e.FieldStart("id")
+		e.Str(s.ID)
+	}
+	{
+		e.FieldStart("occurred_at")
+		e.Str(s.OccurredAt)
+	}
+	{
+		e.FieldStart("team_public_id")
+		e.Str(s.TeamPublicID)
+	}
+	{
+		e.FieldStart("type")
+		s.Type.Encode(e)
+	}
+}
+
+var jsonFieldsNameOfMailWebhookEventPayload = [5]string{
+	0: "data",
+	1: "id",
+	2: "occurred_at",
+	3: "team_public_id",
+	4: "type",
+}
+
+// Decode decodes MailWebhookEventPayload from json.
+func (s *MailWebhookEventPayload) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode MailWebhookEventPayload to nil")
+	}
+	var requiredBitSet [1]uint8
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "data":
+			requiredBitSet[0] |= 1 << 0
+			if err := func() error {
+				if err := s.Data.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"data\"")
+			}
+		case "id":
+			requiredBitSet[0] |= 1 << 1
+			if err := func() error {
+				v, err := d.Str()
+				s.ID = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"id\"")
+			}
+		case "occurred_at":
+			requiredBitSet[0] |= 1 << 2
+			if err := func() error {
+				v, err := d.Str()
+				s.OccurredAt = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"occurred_at\"")
+			}
+		case "team_public_id":
+			requiredBitSet[0] |= 1 << 3
+			if err := func() error {
+				v, err := d.Str()
+				s.TeamPublicID = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"team_public_id\"")
+			}
+		case "type":
+			requiredBitSet[0] |= 1 << 4
+			if err := func() error {
+				if err := s.Type.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"type\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode MailWebhookEventPayload")
+	}
+	// Validate required fields.
+	var failures []validate.FieldError
+	for i, mask := range [1]uint8{
+		0b00011111,
+	} {
+		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
+			// Mask only required fields and check equality to mask using XOR.
+			//
+			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
+			// Bits of fields which would be set are actually bits of missed fields.
+			missed := bits.OnesCount8(result)
+			for bitN := 0; bitN < missed; bitN++ {
+				bitIdx := bits.TrailingZeros8(result)
+				fieldIdx := i*8 + bitIdx
+				var name string
+				if fieldIdx < len(jsonFieldsNameOfMailWebhookEventPayload) {
+					name = jsonFieldsNameOfMailWebhookEventPayload[fieldIdx]
+				} else {
+					name = strconv.Itoa(fieldIdx)
+				}
+				failures = append(failures, validate.FieldError{
+					Name:  name,
+					Error: validate.ErrFieldRequired,
+				})
+				// Reset bit.
+				result &^= 1 << bitIdx
+			}
+		}
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *MailWebhookEventPayload) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *MailWebhookEventPayload) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes MailWebhookEventPayloadType as json.
+func (s MailWebhookEventPayloadType) Encode(e *jx.Encoder) {
+	e.Str(string(s))
+}
+
+// Decode decodes MailWebhookEventPayloadType from json.
+func (s *MailWebhookEventPayloadType) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode MailWebhookEventPayloadType to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch MailWebhookEventPayloadType(v) {
+	case MailWebhookEventPayloadTypeMessageDelivered:
+		*s = MailWebhookEventPayloadTypeMessageDelivered
+	case MailWebhookEventPayloadTypeMessageBounced:
+		*s = MailWebhookEventPayloadTypeMessageBounced
+	case MailWebhookEventPayloadTypeMessageComplained:
+		*s = MailWebhookEventPayloadTypeMessageComplained
+	case MailWebhookEventPayloadTypeMessageRejected:
+		*s = MailWebhookEventPayloadTypeMessageRejected
+	case MailWebhookEventPayloadTypeMessageDeliveryDelayed:
+		*s = MailWebhookEventPayloadTypeMessageDeliveryDelayed
+	case MailWebhookEventPayloadTypeMessageReceived:
+		*s = MailWebhookEventPayloadTypeMessageReceived
+	case MailWebhookEventPayloadTypeMessageReceivedSpam:
+		*s = MailWebhookEventPayloadTypeMessageReceivedSpam
+	case MailWebhookEventPayloadTypeSendmuxTest:
+		*s = MailWebhookEventPayloadTypeSendmuxTest
+	default:
+		*s = MailWebhookEventPayloadType(v)
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s MailWebhookEventPayloadType) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *MailWebhookEventPayloadType) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
@@ -31542,6 +32259,8 @@ func (s *WebhookCreateBodyEventTypesItem) Decode(d *jx.Decoder) error {
 		*s = WebhookCreateBodyEventTypesItemMessageReceived
 	case WebhookCreateBodyEventTypesItemMessageReceivedSpam:
 		*s = WebhookCreateBodyEventTypesItemMessageReceivedSpam
+	case WebhookCreateBodyEventTypesItemCalendarChanged:
+		*s = WebhookCreateBodyEventTypesItemCalendarChanged
 	case WebhookCreateBodyEventTypesItemSendmuxTest:
 		*s = WebhookCreateBodyEventTypesItemSendmuxTest
 	default:
@@ -32868,6 +33587,8 @@ func (s *WebhookDeliveryAttemptEventType) Decode(d *jx.Decoder) error {
 		*s = WebhookDeliveryAttemptEventTypeMessageReceived
 	case WebhookDeliveryAttemptEventTypeMessageReceivedSpam:
 		*s = WebhookDeliveryAttemptEventTypeMessageReceivedSpam
+	case WebhookDeliveryAttemptEventTypeCalendarChanged:
+		*s = WebhookDeliveryAttemptEventTypeCalendarChanged
 	case WebhookDeliveryAttemptEventTypeSendmuxTest:
 		*s = WebhookDeliveryAttemptEventTypeSendmuxTest
 	default:
@@ -33158,6 +33879,8 @@ func (s *WebhookDeliveryPayloadEventType) Decode(d *jx.Decoder) error {
 		*s = WebhookDeliveryPayloadEventTypeMessageReceived
 	case WebhookDeliveryPayloadEventTypeMessageReceivedSpam:
 		*s = WebhookDeliveryPayloadEventTypeMessageReceivedSpam
+	case WebhookDeliveryPayloadEventTypeCalendarChanged:
+		*s = WebhookDeliveryPayloadEventTypeCalendarChanged
 	case WebhookDeliveryPayloadEventTypeSendmuxTest:
 		*s = WebhookDeliveryPayloadEventTypeSendmuxTest
 	default:
@@ -33910,43 +34633,84 @@ func (s *WebhookEventDataMessageIDKind) UnmarshalJSON(data []byte) error {
 	return s.Decode(d)
 }
 
-// Encode implements json.Marshaler.
-func (s *WebhookEventPayload) Encode(e *jx.Encoder) {
+// Encode encodes WebhookEventPayload as json.
+func (s WebhookEventPayload) Encode(e *jx.Encoder) {
 	e.ObjStart()
 	s.encodeFields(e)
 	e.ObjEnd()
 }
 
-// encodeFields encodes fields.
-func (s *WebhookEventPayload) encodeFields(e *jx.Encoder) {
-	{
-		e.FieldStart("data")
-		s.Data.Encode(e)
-	}
-	{
-		e.FieldStart("id")
-		e.Str(s.ID)
-	}
-	{
-		e.FieldStart("occurred_at")
-		e.Str(s.OccurredAt)
-	}
-	{
-		e.FieldStart("team_public_id")
-		e.Str(s.TeamPublicID)
-	}
-	{
+func (s WebhookEventPayload) encodeFields(e *jx.Encoder) {
+	switch s.Type {
+	case WebhookEventPayloadMessageBouncedWebhookEventPayload, WebhookEventPayloadMessageComplainedWebhookEventPayload, WebhookEventPayloadMessageDeliveredWebhookEventPayload, WebhookEventPayloadMessageDeliveryDelayedWebhookEventPayload, WebhookEventPayloadMessageReceivedWebhookEventPayload, WebhookEventPayloadMessageReceivedSpamWebhookEventPayload, WebhookEventPayloadMessageRejectedWebhookEventPayload, WebhookEventPayloadSendmuxTestWebhookEventPayload:
+		switch s.Type {
+		case WebhookEventPayloadMessageBouncedWebhookEventPayload:
+			e.FieldStart("type")
+			e.Str("message.bounced")
+		case WebhookEventPayloadMessageComplainedWebhookEventPayload:
+			e.FieldStart("type")
+			e.Str("message.complained")
+		case WebhookEventPayloadMessageDeliveredWebhookEventPayload:
+			e.FieldStart("type")
+			e.Str("message.delivered")
+		case WebhookEventPayloadMessageDeliveryDelayedWebhookEventPayload:
+			e.FieldStart("type")
+			e.Str("message.delivery_delayed")
+		case WebhookEventPayloadMessageReceivedWebhookEventPayload:
+			e.FieldStart("type")
+			e.Str("message.received")
+		case WebhookEventPayloadMessageReceivedSpamWebhookEventPayload:
+			e.FieldStart("type")
+			e.Str("message.received.spam")
+		case WebhookEventPayloadMessageRejectedWebhookEventPayload:
+			e.FieldStart("type")
+			e.Str("message.rejected")
+		case WebhookEventPayloadSendmuxTestWebhookEventPayload:
+			e.FieldStart("type")
+			e.Str("sendmux.test")
+		}
+		{
+			s := s.MailWebhookEventPayload
+			{
+				e.FieldStart("data")
+				s.Data.Encode(e)
+			}
+			{
+				e.FieldStart("id")
+				e.Str(s.ID)
+			}
+			{
+				e.FieldStart("occurred_at")
+				e.Str(s.OccurredAt)
+			}
+			{
+				e.FieldStart("team_public_id")
+				e.Str(s.TeamPublicID)
+			}
+		}
+	case CalendarWebhookEventPayloadWebhookEventPayload:
 		e.FieldStart("type")
-		s.Type.Encode(e)
+		e.Str("calendar.changed")
+		{
+			s := s.CalendarWebhookEventPayload
+			{
+				e.FieldStart("data")
+				s.Data.Encode(e)
+			}
+			{
+				e.FieldStart("id")
+				e.Str(s.ID)
+			}
+			{
+				e.FieldStart("occurred_at")
+				e.Str(s.OccurredAt)
+			}
+			{
+				e.FieldStart("team_public_id")
+				e.Str(s.TeamPublicID)
+			}
+		}
 	}
-}
-
-var jsonFieldsNameOfWebhookEventPayload = [5]string{
-	0: "data",
-	1: "id",
-	2: "occurred_at",
-	3: "team_public_id",
-	4: "type",
 }
 
 // Decode decodes WebhookEventPayload from json.
@@ -33954,111 +34718,81 @@ func (s *WebhookEventPayload) Decode(d *jx.Decoder) error {
 	if s == nil {
 		return errors.New("invalid: unable to decode WebhookEventPayload to nil")
 	}
-	var requiredBitSet [1]uint8
+	// Sum type discriminator.
+	if typ := d.Next(); typ != jx.Object {
+		return errors.Errorf("unexpected json type %q", typ)
+	}
 
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "data":
-			requiredBitSet[0] |= 1 << 0
-			if err := func() error {
-				if err := s.Data.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"data\"")
+	var found bool
+	if err := d.Capture(func(d *jx.Decoder) error {
+		return d.ObjBytes(func(d *jx.Decoder, key []byte) error {
+			if found {
+				return d.Skip()
 			}
-		case "id":
-			requiredBitSet[0] |= 1 << 1
-			if err := func() error {
-				v, err := d.Str()
-				s.ID = string(v)
+			switch string(key) {
+			case "type":
+				typ, err := d.Str()
 				if err != nil {
 					return err
 				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"id\"")
-			}
-		case "occurred_at":
-			requiredBitSet[0] |= 1 << 2
-			if err := func() error {
-				v, err := d.Str()
-				s.OccurredAt = string(v)
-				if err != nil {
-					return err
+				switch typ {
+				case "message.bounced":
+					s.Type = WebhookEventPayloadMessageBouncedWebhookEventPayload
+					found = true
+				case "message.complained":
+					s.Type = WebhookEventPayloadMessageComplainedWebhookEventPayload
+					found = true
+				case "message.delivered":
+					s.Type = WebhookEventPayloadMessageDeliveredWebhookEventPayload
+					found = true
+				case "message.delivery_delayed":
+					s.Type = WebhookEventPayloadMessageDeliveryDelayedWebhookEventPayload
+					found = true
+				case "message.received":
+					s.Type = WebhookEventPayloadMessageReceivedWebhookEventPayload
+					found = true
+				case "message.received.spam":
+					s.Type = WebhookEventPayloadMessageReceivedSpamWebhookEventPayload
+					found = true
+				case "message.rejected":
+					s.Type = WebhookEventPayloadMessageRejectedWebhookEventPayload
+					found = true
+				case "sendmux.test":
+					s.Type = WebhookEventPayloadSendmuxTestWebhookEventPayload
+					found = true
+				case "calendar.changed":
+					s.Type = CalendarWebhookEventPayloadWebhookEventPayload
+					found = true
+				default:
+					return errors.Errorf("unknown type %s", typ)
 				}
 				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"occurred_at\"")
 			}
-		case "team_public_id":
-			requiredBitSet[0] |= 1 << 3
-			if err := func() error {
-				v, err := d.Str()
-				s.TeamPublicID = string(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"team_public_id\"")
-			}
-		case "type":
-			requiredBitSet[0] |= 1 << 4
-			if err := func() error {
-				if err := s.Type.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"type\"")
-			}
-		default:
 			return d.Skip()
-		}
-		return nil
+		})
 	}); err != nil {
-		return errors.Wrap(err, "decode WebhookEventPayload")
+		return errors.Wrap(err, "capture")
 	}
-	// Validate required fields.
-	var failures []validate.FieldError
-	for i, mask := range [1]uint8{
-		0b00011111,
-	} {
-		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
-			// Mask only required fields and check equality to mask using XOR.
-			//
-			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
-			// Bits of fields which would be set are actually bits of missed fields.
-			missed := bits.OnesCount8(result)
-			for bitN := 0; bitN < missed; bitN++ {
-				bitIdx := bits.TrailingZeros8(result)
-				fieldIdx := i*8 + bitIdx
-				var name string
-				if fieldIdx < len(jsonFieldsNameOfWebhookEventPayload) {
-					name = jsonFieldsNameOfWebhookEventPayload[fieldIdx]
-				} else {
-					name = strconv.Itoa(fieldIdx)
-				}
-				failures = append(failures, validate.FieldError{
-					Name:  name,
-					Error: validate.ErrFieldRequired,
-				})
-				// Reset bit.
-				result &^= 1 << bitIdx
-			}
+	if !found {
+		return errors.New("unable to detect sum type variant")
+	}
+	switch s.Type {
+	case WebhookEventPayloadMessageBouncedWebhookEventPayload, WebhookEventPayloadMessageComplainedWebhookEventPayload, WebhookEventPayloadMessageDeliveredWebhookEventPayload, WebhookEventPayloadMessageDeliveryDelayedWebhookEventPayload, WebhookEventPayloadMessageReceivedWebhookEventPayload, WebhookEventPayloadMessageReceivedSpamWebhookEventPayload, WebhookEventPayloadMessageRejectedWebhookEventPayload, WebhookEventPayloadSendmuxTestWebhookEventPayload:
+		if err := s.MailWebhookEventPayload.Decode(d); err != nil {
+			return err
 		}
+	case CalendarWebhookEventPayloadWebhookEventPayload:
+		if err := s.CalendarWebhookEventPayload.Decode(d); err != nil {
+			return err
+		}
+	default:
+		return errors.Errorf("inferred invalid type: %s", s.Type)
 	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
-	}
-
 	return nil
 }
 
 // MarshalJSON implements stdjson.Marshaler.
-func (s *WebhookEventPayload) MarshalJSON() ([]byte, error) {
+func (s WebhookEventPayload) MarshalJSON() ([]byte, error) {
 	e := jx.Encoder{}
 	s.Encode(&e)
 	return e.Bytes(), nil
@@ -34066,58 +34800,6 @@ func (s *WebhookEventPayload) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *WebhookEventPayload) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode encodes WebhookEventPayloadType as json.
-func (s WebhookEventPayloadType) Encode(e *jx.Encoder) {
-	e.Str(string(s))
-}
-
-// Decode decodes WebhookEventPayloadType from json.
-func (s *WebhookEventPayloadType) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode WebhookEventPayloadType to nil")
-	}
-	v, err := d.StrBytes()
-	if err != nil {
-		return err
-	}
-	// Try to use constant string.
-	switch WebhookEventPayloadType(v) {
-	case WebhookEventPayloadTypeMessageDelivered:
-		*s = WebhookEventPayloadTypeMessageDelivered
-	case WebhookEventPayloadTypeMessageBounced:
-		*s = WebhookEventPayloadTypeMessageBounced
-	case WebhookEventPayloadTypeMessageComplained:
-		*s = WebhookEventPayloadTypeMessageComplained
-	case WebhookEventPayloadTypeMessageRejected:
-		*s = WebhookEventPayloadTypeMessageRejected
-	case WebhookEventPayloadTypeMessageDeliveryDelayed:
-		*s = WebhookEventPayloadTypeMessageDeliveryDelayed
-	case WebhookEventPayloadTypeMessageReceived:
-		*s = WebhookEventPayloadTypeMessageReceived
-	case WebhookEventPayloadTypeMessageReceivedSpam:
-		*s = WebhookEventPayloadTypeMessageReceivedSpam
-	case WebhookEventPayloadTypeSendmuxTest:
-		*s = WebhookEventPayloadTypeSendmuxTest
-	default:
-		*s = WebhookEventPayloadType(v)
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s WebhookEventPayloadType) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *WebhookEventPayloadType) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
@@ -34855,6 +35537,8 @@ func (s *WebhookSubscriptionEventTypesItem) Decode(d *jx.Decoder) error {
 		*s = WebhookSubscriptionEventTypesItemMessageReceived
 	case WebhookSubscriptionEventTypesItemMessageReceivedSpam:
 		*s = WebhookSubscriptionEventTypesItemMessageReceivedSpam
+	case WebhookSubscriptionEventTypesItemCalendarChanged:
+		*s = WebhookSubscriptionEventTypesItemCalendarChanged
 	case WebhookSubscriptionEventTypesItemSendmuxTest:
 		*s = WebhookSubscriptionEventTypesItemSendmuxTest
 	default:
@@ -35492,6 +36176,8 @@ func (s *WebhookSubscriptionWithSecretEventTypesItem) Decode(d *jx.Decoder) erro
 		*s = WebhookSubscriptionWithSecretEventTypesItemMessageReceived
 	case WebhookSubscriptionWithSecretEventTypesItemMessageReceivedSpam:
 		*s = WebhookSubscriptionWithSecretEventTypesItemMessageReceivedSpam
+	case WebhookSubscriptionWithSecretEventTypesItemCalendarChanged:
+		*s = WebhookSubscriptionWithSecretEventTypesItemCalendarChanged
 	case WebhookSubscriptionWithSecretEventTypesItemSendmuxTest:
 		*s = WebhookSubscriptionWithSecretEventTypesItemSendmuxTest
 	default:
@@ -36111,6 +36797,8 @@ func (s *WebhookUpdateBodyEventTypesItem) Decode(d *jx.Decoder) error {
 		*s = WebhookUpdateBodyEventTypesItemMessageReceived
 	case WebhookUpdateBodyEventTypesItemMessageReceivedSpam:
 		*s = WebhookUpdateBodyEventTypesItemMessageReceivedSpam
+	case WebhookUpdateBodyEventTypesItemCalendarChanged:
+		*s = WebhookUpdateBodyEventTypesItemCalendarChanged
 	case WebhookUpdateBodyEventTypesItemSendmuxTest:
 		*s = WebhookUpdateBodyEventTypesItemSendmuxTest
 	default:

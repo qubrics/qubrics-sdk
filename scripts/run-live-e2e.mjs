@@ -79,6 +79,11 @@ const customMcpOperations = [
   },
 ];
 const operationRequestFactories = {
+  mailboxCreateCalendar: prepareMailboxCreateCalendar,
+  mailboxCreateCalendarEvent: prepareMailboxCreateCalendarEvent,
+  mailboxDeleteCalendar: prepareOwnedCalendarDelete,
+  mailboxDeleteCalendarEvent: prepareOwnedCalendarEventDelete,
+  mailboxUpdateCalendarEvent: prepareOwnedCalendarEventUpdate,
   mailboxControlDraftSchedule: prepareOwnedDraftSchedule,
   mailboxCreateDraft: prepareMailboxCreateDraft,
   mailboxDeleteDraft: prepareOwnedDraftDelete,
@@ -1103,6 +1108,106 @@ function defaultQueryFor(operation) {
   }
   return query;
 }
+
+/* CD14 START - Run-owned non-sending Calendar lifecycle fixtures. */
+async function prepareMailboxCreateCalendar({ fixtureRuntime }) {
+  return { cleanupSelectors: ["data.id"], request: { body: { name: fixtureRuntime.resourceLabel("calendar"), time_zone: "Australia/Melbourne" } } };
+}
+
+async function createOwnedCalendar(fixtureRuntime) {
+  const prepared = await prepareMailboxCreateCalendar({ fixtureRuntime });
+  const value = await fixtureRuntime.runOperation("mailboxCreateCalendar", prepared.request);
+  return requireSelectedValue(value, ["data.id"], "owned calendar ID");
+}
+
+async function prepareMailboxCreateCalendarEvent({ fixtureRuntime }) {
+  const calendarId = await createOwnedCalendar(fixtureRuntime);
+  return { cleanupSelectors: ["data.id"], request: { body: {
+    calendar_id: calendarId,
+    uid: `${fixtureRuntime.resourceLabel("calendar-event")}-${randomUUID()}`,
+    title: fixtureRuntime.resourceLabel("event"),
+    start: "2026-11-02T10:00:00",
+    time_zone: "Australia/Melbourne",
+    duration: "PT1H",
+  } } };
+}
+
+async function createOwnedCalendarEvent(fixtureRuntime) {
+  const prepared = await prepareMailboxCreateCalendarEvent({ fixtureRuntime });
+  const value = await fixtureRuntime.runOperation("mailboxCreateCalendarEvent", prepared.request);
+  return requireSelectedValue(value, ["data.id"], "owned calendar event ID");
+}
+
+async function prepareOwnedCalendarDelete({ fixtureRuntime }) {
+  return { request: await ownedCalendarWriteRequest(fixtureRuntime, "calendar", await createOwnedCalendar(fixtureRuntime)) };
+}
+
+async function prepareOwnedCalendarEventDelete({ fixtureRuntime }) {
+  return { request: await ownedCalendarWriteRequest(fixtureRuntime, "calendar_event", await createOwnedCalendarEvent(fixtureRuntime)) };
+}
+
+async function prepareOwnedCalendarEventUpdate({ fixtureRuntime }) {
+  const id = await createOwnedCalendarEvent(fixtureRuntime);
+  const title = fixtureRuntime.resourceLabel("updated-event");
+  return {
+    request: { ...await ownedCalendarWriteRequest(fixtureRuntime, "calendar_event", id), body: { title } },
+    afterResult: async () => {
+      const value = await fixtureRuntime.runOperation("mailboxGetCalendarEvent", { path: { event_id: id } });
+      assert.equal(value.data?.title, title, "Owned event update readback mismatch");
+    },
+  };
+}
+
+function requireOwnedCalendarResource(fixtureRuntime, kind, id) {
+  assert.ok(typeof id === "string" && id.length > 0, "Calendar mutations require a run-owned resource ID");
+  const parameter = kind === "calendar" ? "calendar_id" : "event_id";
+  const entry = fixtureRuntime.ledger.resources.find(item => item.kind === kind && item.path?.[parameter] === id && item.status !== "absent");
+  assert.ok(entry, "Calendar mutations require a run-owned resource ID");
+  return entry;
+}
+
+async function ownedCalendarWriteRequest(fixtureRuntime, kind, id) {
+  const entry = requireOwnedCalendarResource(fixtureRuntime, kind, id);
+  const read = kind === "calendar" ? "mailboxGetCalendar" : "mailboxGetCalendarEvent";
+  const value = await fixtureRuntime.runOperation(read, { path: entry.path });
+  assert.equal(value.data?.id, id, "Owned Calendar readback ID mismatch");
+  assert.equal(value.data?.mailbox_id, fixtureRuntime.proof.mailboxId, "Owned Calendar mailbox mismatch");
+  if (kind === "calendar") {
+    assert.equal(value.data.name, entry.name, "Owned calendar name mismatch");
+    assert.equal(value.data.is_default, false, "Default calendar cannot be an owned cleanup fixture");
+  } else {
+    assert.equal(value.data.uid, entry.uid, "Owned event UID mismatch");
+    assert.deepEqual(value.data.calendar_ids, [entry.calendar_id], "Owned event parent mismatch");
+  }
+  const etag = requireSelectedValue(value, ["data.etag"], "current Calendar ETag");
+  assert.ok(typeof etag === "string" && etag.trim() && etag !== "*", "Invalid Calendar ETag");
+  return { path: entry.path, headers: { "If-Match": etag } };
+}
+
+async function cleanupOwnedCalendarResource(fixtureRuntime, entry) {
+  if (entry.kind === "calendar" && fixtureRuntime.ledger.resources.some(item => item.calendar_id === entry.id && item.status !== "absent")) {
+    throw new UnmetPrecondition("Owned calendar cleanup requires verified child event absence");
+  }
+  if (entry.kind === "calendar_event" && !entry.path.event_id) {
+    const value = await fixtureRuntime.runOperation("mailboxListCalendarEvents", { query: { uid: entry.uid, calendar_id: entry.calendar_id, limit: 2 } });
+    const rows = value.data;
+    if (!Array.isArray(rows) || rows.length !== 1 || value.pagination?.has_more === true || rows[0].uid !== entry.uid || JSON.stringify(rows[0].calendar_ids) !== JSON.stringify([entry.calendar_id])) {
+      throw new UnmetPrecondition("Uncertain Calendar event create remains unresolved; never repeat the create");
+    }
+    fixtureRuntime.observeResult("mailboxCreateCalendarEvent", { body: { uid: entry.uid, calendar_id: entry.calendar_id } }, { data: rows[0] });
+  }
+  const parameter = entry.kind === "calendar" ? "calendar_id" : "event_id";
+  if (!entry.path[parameter]) throw new UnmetPrecondition("Uncertain calendar create has no owned resource ID");
+  const request = await ignoreCleanupErrors(() => ownedCalendarWriteRequest(fixtureRuntime, entry.kind, entry.id));
+  if (request) {
+    await ignoreCleanupErrors(() => fixtureRuntime.runOperation(entry.kind === "calendar" ? "mailboxDeleteCalendar" : "mailboxDeleteCalendarEvent", request));
+    const remaining = await ignoreCleanupErrors(() => fixtureRuntime.runOperation(entry.kind === "calendar" ? "mailboxGetCalendar" : "mailboxGetCalendarEvent", { path: entry.path }));
+    assert.equal(remaining, undefined, "Owned Calendar resource remains after cleanup");
+  }
+  entry.status = "absent";
+  entry.verification = "get_not_found";
+}
+/* CD14 END - Run-owned non-sending Calendar lifecycle fixtures. */
 
 async function prepareMailboxCreateFolder({ fixtureRuntime }) {
   return {
@@ -2722,6 +2827,32 @@ function createFixtureRuntime({ credentials, fixtures, operations, runId, sdk, s
     get ledger() { return cloneJson(ledger); },
     beginOperation(operationId, request) {
       assertSendRequestAllowed(operationId, request);
+      if (["mailboxCreateCalendar", "mailboxCreateCalendarEvent"].includes(operationId)) {
+        assert.ok(proof, "Connection identity preflight must succeed before Calendar mutations");
+        const isEvent = operationId === "mailboxCreateCalendarEvent";
+        const field = isEvent ? "uid" : "name";
+        const identity = request.body?.[field];
+        assert.ok(typeof identity === "string" && identity.startsWith("live-e2e-") && identity.includes(`-${runSlug}-`), "Calendar creates require a run-labelled identity");
+        // An idempotency header enables transport replay; uncertain Calendar creates must never be repeated.
+        assert.ok(!Object.keys(request.headers ?? {}).some(name => name.toLowerCase() === "idempotency-key"), "Calendar fixture creates must not enable automatic retries");
+        if (isEvent) requireOwnedCalendarResource(this, "calendar", request.body.calendar_id);
+        if (ledger.resources.some(item => item.operationId === operationId && item[field] === identity)) {
+          throw new UnmetPrecondition("Calendar create intent was already dispatched; never repeat the create");
+        }
+        const entry = { operationId, kind: isEvent ? "calendar_event" : "calendar", id: identity, [field]: identity, ...(isEvent ? { calendar_id: request.body.calendar_id } : {}), path: {}, status: "pending" };
+        ledger.resources.push(entry);
+        persist();
+        teardowns.push(async () => {
+          try { await cleanupOwnedCalendarResource(this, entry); }
+          catch (error) { entry.status = "failed"; throw error; }
+          finally { persist(); }
+        });
+        return;
+      }
+      if (["mailboxUpdateCalendarEvent", "mailboxDeleteCalendarEvent", "mailboxDeleteCalendar"].includes(operationId)) {
+        const isCalendar = operationId === "mailboxDeleteCalendar";
+        requireOwnedCalendarResource(this, isCalendar ? "calendar" : "calendar_event", request.path?.[isCalendar ? "calendar_id" : "event_id"]);
+      }
       if (!["mailboxSendMessage", "mailboxSendDraft", "sendingSendEmail", "sendingSendEmailBatch"].includes(operationId)) return;
       if (operationId === "mailboxSendDraft" && request.body.scheduled_for) return;
       const messages = operationId === "sendingSendEmailBatch" ? request.body.messages : [operationId === "mailboxSendDraft" ? request.fixtureDraft : request.body];
@@ -2827,6 +2958,24 @@ function createFixtureRuntime({ credentials, fixtures, operations, runId, sdk, s
       }
     },
     observeResult(operationId, request, value, attachmentEvidence, { nestedIdentityOnly = false } = {}) {
+      if (["mailboxCreateCalendar", "mailboxCreateCalendarEvent"].includes(operationId)) {
+        const id = value?.data?.id;
+        if (!id) {
+          assert.notEqual(value?.ok, true, `${operationId} success response omitted data.id`);
+          return;
+        }
+        assert.ok(typeof id === "string" && /^[A-Za-z0-9_-]+$/.test(id), "Invalid owned Calendar ID");
+        const field = operationId === "mailboxCreateCalendar" ? "name" : "uid";
+        const entry = ledger.resources.find(item => item.operationId === operationId && item[field] === request.body?.[field]);
+        assert.ok(entry, "Calendar response has no persisted create intent");
+        const parameter = field === "name" ? "calendar_id" : "event_id";
+        assert.ok(!entry.path[parameter] || entry.id === id, "Conflicting owned Calendar ID");
+        assert.ok(!ledger.resources.some(item => item !== entry && item.kind === entry.kind && item.path?.[parameter] === id), "Calendar response reused another owned ID");
+        entry.id = id;
+        entry.path = { [parameter]: id };
+        persist();
+        return;
+      }
       const retention = {
         mailboxCreateAttachmentUpload: ["data.upload_id", "url_expires_at", "upload_intent"],
         mailboxUploadAttachment: ["data.blob_id", null, "mailbox_blob"],

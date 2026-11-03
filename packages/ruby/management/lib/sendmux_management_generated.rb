@@ -1,7 +1,7 @@
 =begin
-#Sendmux API
+#Qubrics API
 
-#Programmatic access to your Sendmux email infrastructure.
+#Programmatic access to your Qubrics email infrastructure.
 
 The version of the OpenAPI document: 1.0.0
 
@@ -25,6 +25,8 @@ require 'sendmux_management_generated/models/api_error_response'
 require 'sendmux_management_generated/models/balance'
 require 'sendmux_management_generated/models/balance_auto_topup'
 require 'sendmux_management_generated/models/balance_response'
+require 'sendmux_management_generated/models/calendar_webhook_event_data'
+require 'sendmux_management_generated/models/calendar_webhook_event_payload'
 require 'sendmux_management_generated/models/connection'
 require 'sendmux_management_generated/models/connection_credential'
 require 'sendmux_management_generated/models/connection_mailboxes_inner'
@@ -53,6 +55,7 @@ require 'sendmux_management_generated/models/filter_state_response'
 require 'sendmux_management_generated/models/incoming_log_item'
 require 'sendmux_management_generated/models/incoming_log_item_cursor_list_response'
 require 'sendmux_management_generated/models/incoming_log_item_response'
+require 'sendmux_management_generated/models/mail_webhook_event_payload'
 require 'sendmux_management_generated/models/mailbox'
 require 'sendmux_management_generated/models/mailbox_app_password_result'
 require 'sendmux_management_generated/models/mailbox_app_password_result_response'

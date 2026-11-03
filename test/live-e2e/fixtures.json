@@ -1,6 +1,30 @@
 {
   "version": 1,
   "sources": {
+    "mailboxCalendarId": {
+      "operationId": "mailboxListCalendars",
+      "request": {
+        "query": {
+          "limit": 1
+        }
+      },
+      "selectors": [
+        "data.0.id"
+      ],
+      "surface": "mailbox"
+    },
+    "mailboxCalendarEventId": {
+      "operationId": "mailboxListCalendarEvents",
+      "request": {
+        "query": {
+          "limit": 1
+        }
+      },
+      "selectors": [
+        "data.0.id"
+      ],
+      "surface": "mailbox"
+    },
     "mailboxDraftId": {
       "env": "SENDMUX_LIVE_E2E_DRAFT_ID",
       "operationId": "mailboxListDrafts",
@@ -218,6 +242,26 @@
     }
   },
   "operations": {
+    "mailboxGetCalendar": {
+      "inputs": {
+        "path": {
+          "calendar_id": {
+            "source": "mailboxCalendarId"
+          }
+        }
+      },
+      "ownership": "discovered-read"
+    },
+    "mailboxGetCalendarEvent": {
+      "inputs": {
+        "path": {
+          "event_id": {
+            "source": "mailboxCalendarEventId"
+          }
+        }
+      },
+      "ownership": "discovered-read"
+    },
     "mailboxGetDraft": {
       "inputs": {
         "path": {

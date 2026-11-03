@@ -190,6 +190,72 @@
       "mode": "binary_fixture",
       "risk": "binary"
     },
+    "mailboxCreateCalendar": {
+      "adapters": {
+        "cli": true,
+        "mcp": "mailbox_create_calendar",
+        "sdk": [
+          "typescript",
+          "python",
+          "go",
+          "php",
+          "ruby"
+        ]
+      },
+      "assertions": [
+        "ok-envelope",
+        "request-id",
+        "mutation-result"
+      ],
+      "fixture": {
+        "body": "json",
+        "headers": [
+          "Idempotency-Key"
+        ],
+        "pathParams": [],
+        "queryParams": [],
+        "resourceOwnership": "e2e-created"
+      },
+      "gates": [
+        "SENDMUX_LIVE_E2E_MUTATIONS=1",
+        "E2E resource ownership registry"
+      ],
+      "mode": "create_cleanup",
+      "risk": "mutation"
+    },
+    "mailboxCreateCalendarEvent": {
+      "adapters": {
+        "cli": true,
+        "mcp": "mailbox_create_calendar_event",
+        "sdk": [
+          "typescript",
+          "python",
+          "go",
+          "php",
+          "ruby"
+        ]
+      },
+      "assertions": [
+        "ok-envelope",
+        "request-id",
+        "mutation-result"
+      ],
+      "fixture": {
+        "body": "json",
+        "headers": [
+          "Idempotency-Key"
+        ],
+        "pathParams": [],
+        "queryParams": [],
+        "resourceOwnership": "e2e-created"
+      },
+      "gates": [
+        "SENDMUX_LIVE_E2E_MUTATIONS=1",
+        "E2E resource ownership registry"
+      ],
+      "mode": "create_cleanup",
+      "risk": "mutation"
+    },
     "mailboxCreateDraft": {
       "adapters": {
         "cli": true,
@@ -253,6 +319,76 @@
       ],
       "mode": "create_cleanup",
       "risk": "mutation"
+    },
+    "mailboxDeleteCalendar": {
+      "adapters": {
+        "cli": true,
+        "mcp": "mailbox_delete_calendar",
+        "sdk": [
+          "typescript",
+          "python",
+          "go",
+          "php",
+          "ruby"
+        ]
+      },
+      "assertions": [
+        "ok-envelope",
+        "request-id",
+        "mutation-result"
+      ],
+      "fixture": {
+        "body": "none",
+        "headers": [
+          "If-Match"
+        ],
+        "pathParams": [
+          "calendar_id"
+        ],
+        "queryParams": [],
+        "resourceOwnership": "e2e-owned"
+      },
+      "gates": [
+        "SENDMUX_LIVE_E2E_MUTATIONS=1",
+        "E2E resource ownership registry"
+      ],
+      "mode": "destructive_cleanup_only",
+      "risk": "destructive"
+    },
+    "mailboxDeleteCalendarEvent": {
+      "adapters": {
+        "cli": true,
+        "mcp": "mailbox_delete_calendar_event",
+        "sdk": [
+          "typescript",
+          "python",
+          "go",
+          "php",
+          "ruby"
+        ]
+      },
+      "assertions": [
+        "ok-envelope",
+        "request-id",
+        "mutation-result"
+      ],
+      "fixture": {
+        "body": "none",
+        "headers": [
+          "If-Match"
+        ],
+        "pathParams": [
+          "event_id"
+        ],
+        "queryParams": [],
+        "resourceOwnership": "e2e-owned"
+      },
+      "gates": [
+        "SENDMUX_LIVE_E2E_MUTATIONS=1",
+        "E2E resource ownership registry"
+      ],
+      "mode": "destructive_cleanup_only",
+      "risk": "destructive"
     },
     "mailboxDeleteDraft": {
       "adapters": {
@@ -432,6 +568,98 @@
       ],
       "mode": "binary_fixture",
       "risk": "binary"
+    },
+    "mailboxGetCalendar": {
+      "adapters": {
+        "cli": true,
+        "mcp": "mailbox_get_calendar",
+        "sdk": [
+          "typescript",
+          "python",
+          "go",
+          "php",
+          "ruby"
+        ]
+      },
+      "assertions": [
+        "ok-envelope",
+        "request-id",
+        "read-response-shape"
+      ],
+      "fixture": {
+        "body": "none",
+        "headers": [
+          "If-None-Match"
+        ],
+        "pathParams": [
+          "calendar_id"
+        ],
+        "queryParams": [],
+        "resourceOwnership": "fixture"
+      },
+      "gates": [],
+      "mode": "read_fixture",
+      "risk": "read"
+    },
+    "mailboxGetCalendarEvent": {
+      "adapters": {
+        "cli": true,
+        "mcp": "mailbox_get_calendar_event",
+        "sdk": [
+          "typescript",
+          "python",
+          "go",
+          "php",
+          "ruby"
+        ]
+      },
+      "assertions": [
+        "ok-envelope",
+        "request-id",
+        "read-response-shape"
+      ],
+      "fixture": {
+        "body": "none",
+        "headers": [
+          "If-None-Match"
+        ],
+        "pathParams": [
+          "event_id"
+        ],
+        "queryParams": [],
+        "resourceOwnership": "fixture"
+      },
+      "gates": [],
+      "mode": "read_fixture",
+      "risk": "read"
+    },
+    "mailboxGetCalendarEventChanges": {
+      "adapters": {
+        "cli": true,
+        "mcp": "mailbox_get_calendar_event_changes",
+        "sdk": [
+          "typescript",
+          "python",
+          "go",
+          "php",
+          "ruby"
+        ]
+      },
+      "assertions": [
+        "ok-envelope",
+        "request-id",
+        "read-response-shape"
+      ],
+      "fixture": {
+        "body": "none",
+        "headers": [],
+        "pathParams": [],
+        "queryParams": [],
+        "resourceOwnership": "fixture"
+      },
+      "gates": [],
+      "mode": "read",
+      "risk": "read"
     },
     "mailboxGetChanges": {
       "adapters": {
@@ -954,6 +1182,62 @@
       },
       "gates": [],
       "mode": "read_fixture",
+      "risk": "read"
+    },
+    "mailboxListCalendarEvents": {
+      "adapters": {
+        "cli": true,
+        "mcp": "mailbox_list_calendar_events",
+        "sdk": [
+          "typescript",
+          "python",
+          "go",
+          "php",
+          "ruby"
+        ]
+      },
+      "assertions": [
+        "ok-envelope",
+        "request-id",
+        "read-response-shape"
+      ],
+      "fixture": {
+        "body": "none",
+        "headers": [],
+        "pathParams": [],
+        "queryParams": [],
+        "resourceOwnership": "fixture"
+      },
+      "gates": [],
+      "mode": "read",
+      "risk": "read"
+    },
+    "mailboxListCalendars": {
+      "adapters": {
+        "cli": true,
+        "mcp": "mailbox_list_calendars",
+        "sdk": [
+          "typescript",
+          "python",
+          "go",
+          "php",
+          "ruby"
+        ]
+      },
+      "assertions": [
+        "ok-envelope",
+        "request-id",
+        "read-response-shape"
+      ],
+      "fixture": {
+        "body": "none",
+        "headers": [],
+        "pathParams": [],
+        "queryParams": [],
+        "resourceOwnership": "fixture"
+      },
+      "gates": [],
+      "mode": "read",
       "risk": "read"
     },
     "mailboxListContent": {
@@ -1518,6 +1802,41 @@
       ],
       "mode": "stream",
       "risk": "stream"
+    },
+    "mailboxUpdateCalendarEvent": {
+      "adapters": {
+        "cli": true,
+        "mcp": "mailbox_update_calendar_event",
+        "sdk": [
+          "typescript",
+          "python",
+          "go",
+          "php",
+          "ruby"
+        ]
+      },
+      "assertions": [
+        "ok-envelope",
+        "request-id",
+        "mutation-result"
+      ],
+      "fixture": {
+        "body": "json",
+        "headers": [
+          "If-Match"
+        ],
+        "pathParams": [
+          "event_id"
+        ],
+        "queryParams": [],
+        "resourceOwnership": "restore-original"
+      },
+      "gates": [
+        "SENDMUX_LIVE_E2E_MUTATIONS=1",
+        "E2E resource ownership registry"
+      ],
+      "mode": "update_restore",
+      "risk": "mutation"
     },
     "mailboxUpdateDraft": {
       "adapters": {

@@ -292,6 +292,72 @@ export const operations = {
     "requiredKeyKind": "mailbox",
     "surface": "mailbox"
   },
+  mailboxCreateCalendar: {
+    "bodyKind": "json",
+    "command": "mailbox:create-calendar",
+    "description": "Create a private calendar",
+    "headerParams": [
+      {
+        "name": "Idempotency-Key",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        }
+      }
+    ],
+    "method": "post",
+    "operationId": "mailboxCreateCalendar",
+    "path": "/mailbox/calendars",
+    "pathParams": [],
+    "queryParams": [
+      {
+        "name": "mailbox_id",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "responseKind": "json",
+    "requestBodyRequired": true,
+    "requiredKeyKind": "mailbox",
+    "surface": "mailbox"
+  },
+  mailboxCreateCalendarEvent: {
+    "bodyKind": "json",
+    "command": "mailbox:create-calendar-event",
+    "description": "Create a non-sending event",
+    "headerParams": [
+      {
+        "name": "Idempotency-Key",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        }
+      }
+    ],
+    "method": "post",
+    "operationId": "mailboxCreateCalendarEvent",
+    "path": "/mailbox/calendar-events",
+    "pathParams": [],
+    "queryParams": [
+      {
+        "name": "mailbox_id",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "responseKind": "json",
+    "requestBodyRequired": true,
+    "requiredKeyKind": "mailbox",
+    "surface": "mailbox"
+  },
   mailboxCreateDraft: {
     "bodyKind": "json",
     "command": "mailbox:create-draft",
@@ -333,6 +399,92 @@ export const operations = {
     "operationId": "mailboxCreateFolder",
     "path": "/mailbox/folders",
     "pathParams": [],
+    "queryParams": [
+      {
+        "name": "mailbox_id",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "responseKind": "json",
+    "requestBodyRequired": false,
+    "requiredKeyKind": "mailbox",
+    "surface": "mailbox"
+  },
+  mailboxDeleteCalendar: {
+    "bodyKind": "none",
+    "command": "mailbox:delete-calendar",
+    "description": "Delete an empty calendar",
+    "headerParams": [
+      {
+        "name": "If-Match",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    ],
+    "method": "delete",
+    "operationId": "mailboxDeleteCalendar",
+    "path": "/mailbox/calendars/{calendar_id}",
+    "pathParams": [
+      {
+        "name": "calendar_id",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096,
+          "pattern": "^[A-Za-z0-9_-]+$"
+        }
+      }
+    ],
+    "queryParams": [
+      {
+        "name": "mailbox_id",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "responseKind": "json",
+    "requestBodyRequired": false,
+    "requiredKeyKind": "mailbox",
+    "surface": "mailbox"
+  },
+  mailboxDeleteCalendarEvent: {
+    "bodyKind": "none",
+    "command": "mailbox:delete-calendar-event",
+    "description": "Delete a non-sending event",
+    "headerParams": [
+      {
+        "name": "If-Match",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    ],
+    "method": "delete",
+    "operationId": "mailboxDeleteCalendarEvent",
+    "path": "/mailbox/calendar-events/{event_id}",
+    "pathParams": [
+      {
+        "name": "event_id",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096,
+          "pattern": "^[A-Za-z0-9_-]+$"
+        }
+      }
+    ],
     "queryParams": [
       {
         "name": "mailbox_id",
@@ -550,6 +702,132 @@ export const operations = {
           "type": "integer",
           "minimum": 1,
           "maximum": 1048576
+        }
+      },
+      {
+        "name": "mailbox_id",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "responseKind": "json",
+    "requestBodyRequired": false,
+    "requiredKeyKind": "mailbox",
+    "surface": "mailbox"
+  },
+  mailboxGetCalendar: {
+    "bodyKind": "none",
+    "command": "mailbox:get-calendar",
+    "description": "Get a calendar",
+    "headerParams": [
+      {
+        "name": "If-None-Match",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "method": "get",
+    "operationId": "mailboxGetCalendar",
+    "path": "/mailbox/calendars/{calendar_id}",
+    "pathParams": [
+      {
+        "name": "calendar_id",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096,
+          "pattern": "^[A-Za-z0-9_-]+$"
+        }
+      }
+    ],
+    "queryParams": [
+      {
+        "name": "mailbox_id",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "responseKind": "json",
+    "requestBodyRequired": false,
+    "requiredKeyKind": "mailbox",
+    "surface": "mailbox"
+  },
+  mailboxGetCalendarEvent: {
+    "bodyKind": "none",
+    "command": "mailbox:get-calendar-event",
+    "description": "Get a calendar event",
+    "headerParams": [
+      {
+        "name": "If-None-Match",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "method": "get",
+    "operationId": "mailboxGetCalendarEvent",
+    "path": "/mailbox/calendar-events/{event_id}",
+    "pathParams": [
+      {
+        "name": "event_id",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096,
+          "pattern": "^[A-Za-z0-9_-]+$"
+        }
+      }
+    ],
+    "queryParams": [
+      {
+        "name": "mailbox_id",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "responseKind": "json",
+    "requestBodyRequired": false,
+    "requiredKeyKind": "mailbox",
+    "surface": "mailbox"
+  },
+  mailboxGetCalendarEventChanges: {
+    "bodyKind": "none",
+    "command": "mailbox:get-calendar-event-changes",
+    "description": "Get calendar event changes",
+    "headerParams": [],
+    "method": "get",
+    "operationId": "mailboxGetCalendarEventChanges",
+    "path": "/mailbox/calendar-events/changes",
+    "pathParams": [],
+    "queryParams": [
+      {
+        "name": "since_state",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096,
+          "pattern": "^[A-Za-z0-9_-]+$"
+        }
+      },
+      {
+        "name": "limit",
+        "required": false,
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
         }
       },
       {
@@ -1353,6 +1631,109 @@ export const operations = {
           "type": "integer",
           "minimum": 1,
           "maximum": 1000000
+        }
+      },
+      {
+        "name": "mailbox_id",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "responseKind": "json",
+    "requestBodyRequired": false,
+    "requiredKeyKind": "mailbox",
+    "surface": "mailbox"
+  },
+  mailboxListCalendarEvents: {
+    "bodyKind": "none",
+    "command": "mailbox:list-calendar-events",
+    "description": "List calendar events",
+    "headerParams": [],
+    "method": "get",
+    "operationId": "mailboxListCalendarEvents",
+    "path": "/mailbox/calendar-events",
+    "pathParams": [],
+    "queryParams": [
+      {
+        "name": "limit",
+        "required": false,
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        }
+      },
+      {
+        "name": "cursor",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096,
+          "pattern": "^[A-Za-z0-9_-]+$"
+        }
+      },
+      {
+        "name": "uid",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        }
+      },
+      {
+        "name": "calendar_id",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096,
+          "pattern": "^[A-Za-z0-9_-]+$"
+        }
+      },
+      {
+        "name": "mailbox_id",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "responseKind": "json",
+    "requestBodyRequired": false,
+    "requiredKeyKind": "mailbox",
+    "surface": "mailbox"
+  },
+  mailboxListCalendars: {
+    "bodyKind": "none",
+    "command": "mailbox:list-calendars",
+    "description": "List calendars",
+    "headerParams": [],
+    "method": "get",
+    "operationId": "mailboxListCalendars",
+    "path": "/mailbox/calendars",
+    "pathParams": [],
+    "queryParams": [
+      {
+        "name": "limit",
+        "required": false,
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        }
+      },
+      {
+        "name": "cursor",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096,
+          "pattern": "^[A-Za-z0-9_-]+$"
         }
       },
       {
@@ -2824,6 +3205,49 @@ export const operations = {
     "requiredKeyKind": "mailbox",
     "surface": "mailbox"
   },
+  mailboxUpdateCalendarEvent: {
+    "bodyKind": "json",
+    "command": "mailbox:update-calendar-event",
+    "description": "Update a non-sending event",
+    "headerParams": [
+      {
+        "name": "If-Match",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    ],
+    "method": "patch",
+    "operationId": "mailboxUpdateCalendarEvent",
+    "path": "/mailbox/calendar-events/{event_id}",
+    "pathParams": [
+      {
+        "name": "event_id",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096,
+          "pattern": "^[A-Za-z0-9_-]+$"
+        }
+      }
+    ],
+    "queryParams": [
+      {
+        "name": "mailbox_id",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "responseKind": "json",
+    "requestBodyRequired": true,
+    "requiredKeyKind": "mailbox",
+    "surface": "mailbox"
+  },
   mailboxUpdateDraft: {
     "bodyKind": "json",
     "command": "mailbox:update-draft",
@@ -3997,6 +4421,7 @@ export const operations = {
             "message.delivery_delayed",
             "message.received",
             "message.received.spam",
+            "calendar.changed",
             "sendmux.test"
           ]
         }

@@ -260,6 +260,7 @@ def build_hosted_operation_manifest(document: Mapping[str, Any], surface: Surfac
     if missing:
         raise ValueError(f"OpenAPI document is missing hosted proxy operations for {surface}: {', '.join(missing)}")
 
+    routes.sort(key=lambda route: route.path_template.count("{"))
     return HostedOperationManifest(tuple(routes))
 
 

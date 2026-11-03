@@ -86,16 +86,16 @@ export function validateRecoveryLedger(ledger, { runId, sourceSha } = {}) {
   assert.ok(!/smx_(?:root|mbx|agent)_/.test(JSON.stringify(ledger)), "Recovery evidence contains a credential");
   assert.ok(!/https?:\/\//.test(JSON.stringify(ledger)), "Recovery evidence contains a URL");
   for (const resource of ledger.resources) {
-    assertKnownFields(resource, ["operationId", "adapter", "kind", "id", "path", "status", "verification", "public_delete", "storage_cleanup", "url_expires_at", "reference_expires_at", "subject", "expected_count", "received_ids", "filename", "size_bytes", "sha256", "presence_observed_at", "absence_observed_at", "receipt_producer", "receipt_version", "receipt_source_sha"]);
+    assertKnownFields(resource, ["operationId", "adapter", "kind", "id", "path", "status", "verification", "public_delete", "storage_cleanup", "url_expires_at", "reference_expires_at", "subject", "expected_count", "received_ids", "filename", "size_bytes", "sha256", "presence_observed_at", "absence_observed_at", "receipt_producer", "receipt_version", "receipt_source_sha", "name", "uid", "calendar_id"]);
     assert.ok(typeof resource.id === "string" && resource.id.length > 0 && typeof resource.status === "string", "Invalid resource identity/status");
     assert.ok(["pending", "pending_delivery", "unverified_delivery", "unverified_retention", "failed", "absent", "restored", "expiry_only", "captured", "storage_absent"].includes(resource.status), "Invalid resource status");
-    for (const field of ["operationId", "adapter", "kind", "verification", "storage_cleanup", "url_expires_at", "reference_expires_at", "subject", "filename", "sha256", "presence_observed_at", "absence_observed_at", "receipt_producer", "receipt_version", "receipt_source_sha"]) if (resource[field] !== undefined) assert.ok(typeof resource[field] === "string", "Invalid resource metadata field");
+    for (const field of ["operationId", "adapter", "kind", "verification", "storage_cleanup", "url_expires_at", "reference_expires_at", "subject", "filename", "sha256", "presence_observed_at", "absence_observed_at", "receipt_producer", "receipt_version", "receipt_source_sha", "name", "uid", "calendar_id"]) if (resource[field] !== undefined) assert.ok(typeof resource[field] === "string", "Invalid resource metadata field");
     if (resource.size_bytes !== undefined) assert.ok(Number.isInteger(resource.size_bytes) && resource.size_bytes > 0, "Invalid resource byte length");
     if (resource.public_delete !== undefined) assert.ok(resource.public_delete === false, "Invalid public deletion claim");
     if (resource.expected_count !== undefined) assert.ok(Number.isInteger(resource.expected_count) && resource.expected_count > 0, "Invalid delivery count");
     if (resource.received_ids !== undefined) assert.ok(Array.isArray(resource.received_ids) && resource.received_ids.every(id => typeof id === "string" && id.length > 0), "Invalid received-message IDs");
     if (resource.path) {
-      assertKnownFields(resource.path, ["public_id", "key_id", "folder_id", "message_id", "draftId"]);
+      assertKnownFields(resource.path, ["public_id", "key_id", "folder_id", "message_id", "draftId", "calendar_id", "event_id"]);
       assert.ok(Object.values(resource.path).every(value => typeof value === "string"), "Invalid resource path");
     }
   }
