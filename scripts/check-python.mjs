@@ -13,6 +13,7 @@ const root = process.cwd();
 const venv = join(root, ".tmp", "python-venv");
 const python = join(venv, "bin", "python");
 const sharedTests = [
+  "conftest.py",
   "test_attachment_helpers.py",
   "test_core.py",
   "test_datetime_contract.py",
