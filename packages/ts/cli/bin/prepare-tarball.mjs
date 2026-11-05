@@ -10,4 +10,4 @@ writeFileSync(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
 const legacy = new URL("./sendmux", import.meta.url);
 rmSync(legacy, { force: true });
 writeFileSync(legacy, '#!/usr/bin/env sh\necho "sendmux is deprecated. Use qubrics instead." >&2\nexec "$(dirname "$0")/qubrics" "$@"\n', { mode: 0o755 });
-writeFileSync(new URL("./sendmux.cmd", import.meta.url), '@echo off\r\n1>&2 echo sendmux is deprecated. Use qubrics instead.\r\ncall "%~dp0qubrics.cmd" %*\r\nexit /b %errorlevel%\r\n');
+writeFileSync(new URL("./sendmux.cmd", import.meta.url), '@echo off\r\n1>&2 echo sendmux is deprecated. Use qubrics instead.\r\n"%~dp0qubrics.cmd" %*\r\n');
