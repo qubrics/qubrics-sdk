@@ -47,7 +47,7 @@ echo json_encode([$zeroKey, $zeroUrl, $zeroOAuthUrl, $fallback->getAccessToken()
     const { stdout } = await child;
     assert.deepEqual(JSON.parse(stdout), [
       "rejected", "0", "0", `${prefix}legacy`, "https://legacy.fixture.test/api/v1",
-      surface === "Sending" ? "https://smtp.sendmux.ai/api/v1" : "https://app.sendmux.ai/api/v1",
+      surface === "Sending" ? "https://smtp.sendmux.ai/api/v1" : "https://app.qubrics.com/api/v1",
       `${prefix}explicit`, "https://explicit.fixture.test/api/v1",
     ]);
   });
