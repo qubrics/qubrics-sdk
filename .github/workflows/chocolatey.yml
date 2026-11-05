@@ -276,7 +276,7 @@ jobs:
             $legacyVersion = @(& $env:ComSpec /d /s /c 'sendmux --version 2>&1')
             if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
             if ($legacyVersion.Count -lt 2 -or $legacyVersion[0] -ne 'sendmux is deprecated. Use qubrics instead.' -or $legacyVersion[1] -ne $primaryVersion) {
-              throw 'sendmux must print its deprecation before the same version as qubrics.'
+              throw ("sendmux must print its deprecation before the same version as qubrics. Actual: " + ($legacyVersion | ConvertTo-Json -Compress) + "; primary: " + ($primaryVersion | ConvertTo-Json -Compress))
             }
             choco uninstall sendmux.portable -y --no-progress
             if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
@@ -296,7 +296,7 @@ jobs:
             $legacyVersion = @(& $env:ComSpec /d /s /c 'sendmux --version 2>&1')
             if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
             if ($legacyVersion.Count -lt 2 -or $legacyVersion[0] -ne 'sendmux is deprecated. Use qubrics instead.' -or $legacyVersion[1] -ne $primaryVersion) {
-              throw 'sendmux must print its deprecation before the same version as qubrics.'
+              throw ("sendmux must print its deprecation before the same version as qubrics. Actual: " + ($legacyVersion | ConvertTo-Json -Compress) + "; primary: " + ($primaryVersion | ConvertTo-Json -Compress))
             }
             choco uninstall sendmux -y --no-progress
             if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }

@@ -56,7 +56,7 @@ try {
   assert.equal(lstatSync(join(nativeBin, "sendmux")).isSymbolicLink(), false, "native alias must be portable");
   const native = spawnCommandSync(join(nativeBin, process.platform === "win32" ? "sendmux.cmd" : "sendmux"), ["--version", "argument with spaces"], { env, encoding: "utf8" });
   assert.equal(native.status, 7, "native compatibility launcher must preserve the command exit code");
-  assert.equal(native.stderr.trim(), notice);
+  assert.equal(native.stderr, `${notice}${process.platform === "win32" ? "\r\n" : "\n"}`, "native notice must be one exact line");
   assert.deepEqual(JSON.parse(native.stdout), ["--version", "argument with spaces"], "native compatibility launcher must preserve arguments");
 } finally {
   rmSync(directory, { recursive: true, force: true });
