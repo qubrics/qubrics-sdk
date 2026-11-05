@@ -71,7 +71,7 @@ export abstract class SendmuxCommand extends Command {
     if (flags["api-key"] || envApiKey) {
       const apiKey = flags["api-key"] ?? envApiKey;
       if (!apiKey) {
-        throw new Error("Missing Sendmux API key");
+        throw new Error("Missing Qubrics API key");
       }
 
       const baseUrl = flags["base-url"] ?? envBaseUrl;
@@ -90,14 +90,14 @@ export abstract class SendmuxCommand extends Command {
     const config = await readCliConfig(this.config.configDir);
     const profileName = flags.profile ?? envProfile ?? config.defaultProfile;
     if (!profileName) {
-      this.error("No Sendmux profile configured. Run `sendmux profiles:set <name> --api-key <key> --default` or pass --api-key.", {
+      this.error("No Qubrics profile configured. Run `qubrics profiles:set <name> --api-key <key> --default` or pass --api-key.", {
         exit: 2,
       });
     }
 
     const profile = config.profiles[profileName];
     if (!profile) {
-      this.error(`Sendmux profile "${profileName}" was not found. Run \`sendmux profiles:list\` to see configured profiles.`, {
+      this.error(`Qubrics profile "${profileName}" was not found. Run \`qubrics profiles:list\` to see configured profiles.`, {
         exit: 2,
       });
     }
@@ -109,7 +109,7 @@ export abstract class SendmuxCommand extends Command {
 
     if (isAgentProfile(profile)) {
       if (!isActiveAgentProfile(profile)) {
-        this.error(`Sendmux agent profile "${profileName}" has not finished registration. Re-run \`sendmux agent:register ${profileName}\`.`, {
+        this.error(`Qubrics agent profile "${profileName}" has not finished registration. Re-run \`qubrics agent:register ${profileName}\`.`, {
           exit: 2,
         });
       }
@@ -196,7 +196,7 @@ export abstract class SendmuxCommand extends Command {
     try {
       apiKeyKind = inferApiKeyKind(apiKey);
     } catch (error) {
-      this.error(error instanceof Error ? error.message : "Invalid Sendmux API key", { exit: 2 });
+      this.error(error instanceof Error ? error.message : "Invalid Qubrics API key", { exit: 2 });
     }
 
     if (!isApiKeyCompatibleWithKind(apiKey, expectedKind)) {

@@ -28,11 +28,11 @@ for (const surface of surfaces) {
   const declaration = readFileSync(`packages/ts/${surface}/dist/index.d.ts`, "utf8");
 
   if (source.includes("export type * from \"./generated/types.gen.js\"") || source.includes("export type * from './generated/types.gen.js'")) {
-    throw new Error(`@sendmux/${surface} exports the generated type barrel from its public entrypoint.`);
+    throw new Error(`@qubrics/${surface} exports the generated type barrel from its public entrypoint.`);
   }
 
   if (/\b(ApiError|SuccessEnvelope)\b/.test(declaration)) {
-    throw new Error(`@sendmux/${surface} root declaration leaks generated ApiError/SuccessEnvelope names.`);
+    throw new Error(`@qubrics/${surface} root declaration leaks generated ApiError/SuccessEnvelope names.`);
   }
 }
 

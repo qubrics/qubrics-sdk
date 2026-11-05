@@ -1,10 +1,10 @@
 {
-  "name": "@sendmux/ai-sdk",
+  "name": "@qubrics/ai-sdk",
   "version": "0.5.2",
   "license": "MIT",
-  "description": "Vercel AI SDK tools for the Sendmux email API for AI agents - send email and read the agent inbox.",
+  "description": "Vercel AI SDK tools for the Qubrics email API for AI agents - send email and read the agent inbox.",
   "keywords": [
-    "sendmux",
+    "qubrics",
     "email",
     "email-api",
     "ai-agents",
@@ -20,7 +20,7 @@
     "transactional-email",
     "llm"
   ],
-  "homepage": "https://sendmux.ai",
+  "homepage": "https://qubrics.com",
   "type": "module",
   "exports": {
     ".": {
@@ -36,8 +36,8 @@
     "build": "tsc -p tsconfig.json"
   },
   "dependencies": {
-    "@sendmux/mailbox": "workspace:*",
-    "@sendmux/sending": "workspace:*"
+    "@qubrics/mailbox": "workspace:*",
+    "@qubrics/sending": "workspace:*"
   },
   "peerDependencies": {
     "ai": ">=5.0.0",

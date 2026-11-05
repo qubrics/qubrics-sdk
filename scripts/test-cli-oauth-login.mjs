@@ -201,7 +201,7 @@ async function fixture(t, defaultConfigDir) {
           code_challenge_methods_supported: ["S256"],
           token_endpoint_auth_methods_supported: ["none"],
           authorization_response_iss_parameter_supported: true,
-          protected_resources: ["https://sendmux.ai/api"],
+          protected_resources: ["https://qubrics.com/api"],
           scopes_supported: ["mailbox.read", "email.send"],
         }),
       );
@@ -671,9 +671,9 @@ test("native login uses S256, validates the callback and saves a protected profi
   }
   assert.equal(state.registrations[0].application_type, "native");
   assert.equal(state.registrations[0].token_endpoint_auth_method, "none");
-  assert.equal(state.registrations[0].resource, "https://sendmux.ai/api");
+  assert.equal(state.registrations[0].resource, "https://qubrics.com/api");
   assert.equal(state.authorization.get("code_challenge_method"), "S256");
-  assert.equal(state.authorization.get("resource"), "https://sendmux.ai/api");
+  assert.equal(state.authorization.get("resource"), "https://qubrics.com/api");
   assert.ok(!`${result.stdout}${result.stderr}`.includes("native_access_0"));
   assert.ok(!`${result.stdout}${result.stderr}`.includes("native_refresh_0"));
   const shown = await cli(t, state, ["profiles:show", "native", "--json"]);

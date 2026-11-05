@@ -1,2 +1,2 @@
-export * as mailbox from "@sendmux/mailbox/node";
-export * as sending from "@sendmux/sending/node";
+export * as mailbox from "@qubrics/mailbox/node";
+export * as sending from "@qubrics/sending/node";

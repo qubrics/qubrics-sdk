@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
-import { sendmux } from "@sendmux/ai-sdk";
+import { sendmux } from "@qubrics/ai-sdk";
 
 await test("all AI SDK tools resolve the current OAuth token before each request", async (t) => {
   const requests = [];

@@ -1,15 +1,15 @@
-# @sendmux/mailbox
+# @qubrics/mailbox
 
-[![npm version](https://img.shields.io/npm/v/@sendmux%2Fmailbox)](https://www.npmjs.com/package/@sendmux/mailbox)
+[![npm version](https://img.shields.io/npm/v/@qubrics%2Fmailbox)](https://www.npmjs.com/package/@qubrics/mailbox)
 [![CI](https://github.com/qubrics/qubrics-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/qubrics/qubrics-sdk/actions/workflows/ci.yml)
-[![npm downloads](https://img.shields.io/npm/dm/@sendmux%2Fmailbox)](https://www.npmjs.com/package/@sendmux/mailbox)
-[![Licence](https://img.shields.io/npm/l/@sendmux%2Fmailbox)](https://github.com/qubrics/qubrics-sdk/blob/main/LICENSE)
+[![npm downloads](https://img.shields.io/npm/dm/@qubrics%2Fmailbox)](https://www.npmjs.com/package/@qubrics/mailbox)
+[![Licence](https://img.shields.io/npm/l/@qubrics%2Fmailbox)](https://github.com/qubrics/qubrics-sdk/blob/main/LICENSE)
 
-Generated TypeScript client for the Sendmux Mailbox API.
+Generated TypeScript client for the Qubrics Mailbox API.
 
 ## Documentation
 
-- Mailbox API reference: [sendmux.ai/docs/mailbox-api/introduction](https://sendmux.ai/docs/mailbox-api/introduction)
+- Mailbox API reference: [qubrics.com/docs/mailbox-api/introduction](https://qubrics.com/docs/mailbox-api/introduction)
 - Source repository: [qubrics/qubrics-sdk](https://github.com/qubrics/qubrics-sdk)
 
 ## Requirements
@@ -20,14 +20,16 @@ Generated TypeScript client for the Sendmux Mailbox API.
 ## Installation
 
 ```sh
-npm install @sendmux/mailbox
+npm install @qubrics/mailbox
 ```
 
-## Migrate from 1.x to 2.0
+<a id="migrate-from-1x-to-20"></a>
+
+## Result-type migration from earlier releases
 
 If you construct thread-message list results — fixtures, mocks, or wrappers
 annotated with the operation's result type — add the thread identity before
-upgrading to 2.0. `mailboxListThreadMessages` returns
+upgrading from an earlier release. `mailboxListThreadMessages` returns
 `MailboxThreadMessageSummaryCursorListResponse` instead of
 `MailboxMessageSummaryCursorListResponse`: its `meta.thread_id` is required and
 `meta.sync_state` is an optional string. Code that only reads thread-message
@@ -37,7 +39,7 @@ results keeps compiling.
    the generated model names directly:
 
    ```ts
-   import { mailboxListThreadMessages } from "@sendmux/mailbox";
+   import { mailboxListThreadMessages } from "@qubrics/mailbox";
 
    type ThreadMessageList = NonNullable<
      Awaited<ReturnType<typeof mailboxListThreadMessages>>["data"]
@@ -66,7 +68,7 @@ results keeps compiling.
    without `meta.thread_id` fails with `Property 'thread_id' is missing in type
    … but required in type 'MailboxThreadMessagesMeta'`.
 
-Update `@sendmux/mailbox`, its lockfile, and affected result annotations or
+Update `@qubrics/mailbox`, its lockfile, and affected result annotations or
 fixtures together. To roll back, restore those package, lockfile, and call-site
 changes together.
 
@@ -75,14 +77,14 @@ changes together.
 Pass `accessToken` instead of `apiKey` for a REST OAuth token or synchronous/asynchronous provider.
 
 ```ts
-import { createMailboxClient } from "@sendmux/mailbox";
+import { createMailboxClient } from "@qubrics/mailbox";
 
 const client = createMailboxClient({
   accessToken: () => process.env.QUBRICS_ACCESS_TOKEN!,
 });
 ```
 
-The provider runs before each request. Your application owns token storage and refresh; required scopes still apply. See [OAuth setup](https://sendmux.ai/docs/developer-tools/oauth).
+The provider runs before each request. Your application owns token storage and refresh; required scopes still apply. See [OAuth setup](https://qubrics.com/docs/developer-tools/oauth).
 
 ## Usage
 
@@ -91,7 +93,7 @@ import {
   createMailboxClient,
   mailboxListMessages,
   streamMailboxEvents,
-} from "@sendmux/mailbox";
+} from "@qubrics/mailbox";
 
 const client = createMailboxClient({
   apiKey: process.env.QUBRICS_MAILBOX_API_KEY!,
@@ -111,11 +113,11 @@ The package exports every generated Mailbox operation plus:
 - `configureMailbox`
 - `MailboxClient`
 - `streamMailboxEvents`
-- Node-only helpers from `@sendmux/mailbox/node`: `downloadMailboxAttachmentToBuffer`, `readMailboxTextAttachment`, `uploadMailboxAttachmentFromFile`, `createMailboxAttachmentUploadFromFile`, `uploadMailboxAttachmentViaPresignedFile`, and `sendMailboxMessageWithFiles`
+- Node-only helpers from `@qubrics/mailbox/node`: `downloadMailboxAttachmentToBuffer`, `readMailboxTextAttachment`, `uploadMailboxAttachmentFromFile`, `createMailboxAttachmentUploadFromFile`, `uploadMailboxAttachmentViaPresignedFile`, and `sendMailboxMessageWithFiles`
 
 ## Attachments
 
-Message and event attachment metadata includes `download_url`, a short-lived presigned URL for that single attachment. In Node, prefer `downloadMailboxAttachmentToBuffer` or `readMailboxTextAttachment` from `@sendmux/mailbox/node` when you already have an authenticated client. Plain HTTP clients can fetch `download_url` promptly with no `Authorization` header; if it expires, call `mailboxGetMessage` or list/search messages again to receive fresh metadata.
+Message and event attachment metadata includes `download_url`, a short-lived presigned URL for that single attachment. In Node, prefer `downloadMailboxAttachmentToBuffer` or `readMailboxTextAttachment` from `@qubrics/mailbox/node` when you already have an authenticated client. Plain HTTP clients can fetch `download_url` promptly with no `Authorization` header; if it expires, call `mailboxGetMessage` or list/search messages again to receive fresh metadata.
 
 Mailbox direct uploads, presigned uploads, and Node file helpers share the mailbox attachment cap, currently `7,500,000` bytes per attachment. Presigned uploads also pin the exact declared byte length and content type.
 
@@ -125,7 +127,7 @@ import {
   mailboxGetMessage,
   mailboxSendMessage,
   mailboxUploadAttachment,
-} from "@sendmux/mailbox";
+} from "@qubrics/mailbox";
 
 const client = createMailboxClient({
   apiKey: process.env.QUBRICS_MAILBOX_API_KEY!,
@@ -168,8 +170,8 @@ await mailboxSendMessage({
 For local files in Node, use the helper subpath so file bytes stay out of model context and browser bundles:
 
 ```ts
-import { createMailboxClient } from "@sendmux/mailbox";
-import { readMailboxTextAttachment, sendMailboxMessageWithFiles } from "@sendmux/mailbox/node";
+import { createMailboxClient } from "@qubrics/mailbox";
+import { readMailboxTextAttachment, sendMailboxMessageWithFiles } from "@qubrics/mailbox/node";
 
 const client = createMailboxClient({ apiKey: process.env.QUBRICS_MAILBOX_API_KEY! });
 
@@ -208,14 +210,14 @@ for await (const event of streamMailboxEvents({
 
 ## Pagination
 
-Use `paginate` from `@sendmux/core` with list operations that return cursor pagination.
+Use `paginate` from `@qubrics/core` with list operations that return cursor pagination.
 
 ```ts
-import { paginate } from "@sendmux/core";
+import { paginate } from "@qubrics/core";
 import {
   createMailboxClient,
   mailboxListMessages,
-} from "@sendmux/mailbox";
+} from "@qubrics/mailbox";
 
 const client = createMailboxClient({
   apiKey: process.env.QUBRICS_MAILBOX_API_KEY!,

@@ -60,6 +60,8 @@ const connectionEnvelope = {
 };
 
 ensureCliBuilt();
+const renameCheck = spawnSync(process.execPath, ["scripts/test-cli-rename.mjs"], { stdio: "inherit" });
+if (renameCheck.status !== 0) throw new Error("CLI rename verification failed");
 const oauthCheck = spawnSync(process.execPath, ["--test", "scripts/test-cli-oauth.mjs", "scripts/test-cli-oauth-login.mjs"], { stdio: "inherit" });
 if (oauthCheck.status !== 0) throw new Error("CLI OAuth verification failed");
 
@@ -290,7 +292,7 @@ const server = createServer(async (request, response) => {
       form.get("grant_type") !== "urn:ietf:params:oauth:grant-type:token-exchange" ||
       form.get("subject_token") !== durableAgentKey ||
       form.get("subject_token_type") !== "urn:ietf:params:oauth:token-type:access_token" ||
-      form.get("resource") !== "https://smtp.sendmux.ai/api/v1" ||
+      form.get("resource") !== "https://smtp.qubrics.com/api/v1" ||
       form.get("scope") !== "email.send"
     ) {
       response.writeHead(400, { "Content-Type": "application/json" });
@@ -1508,7 +1510,7 @@ try {
   ]);
   assertDeepEqual(truncatedAuthResult.status, 1, "Truncated authentication response must reject registration");
   assertDeepEqual(JSON.parse(truncatedAuthResult.stdout).error.message,
-    "Sendmux agent authentication returned HTTP 201 without a JSON object.",
+    "Qubrics agent authentication returned HTTP 201 without a JSON object.",
     "Truncated authentication response must preserve the safe HTTP error");
 
   assertCliSuccess(await runCli([
@@ -1642,7 +1644,7 @@ function respondToSendingMutation(request, response, cache, fingerprint, status,
 
 function ensureCliBuilt() {
   const command = process.platform === "win32" ? "pnpm.cmd" : "pnpm";
-  const result = spawnCommandSync(command, ["--filter", "@sendmux/cli", "build"], {
+  const result = spawnCommandSync(command, ["--filter", "@qubrics/cli", "build"], {
     encoding: "utf8",
     stdio: "inherit",
   });
@@ -1727,10 +1729,10 @@ function assertCliSuccess(result, label) {
 function assertCliPackageMetadata() {
   const manifest = JSON.parse(readFileSync(cliManifestPath, "utf8"));
   if (manifest.license !== "MIT") {
-    throw new Error('@sendmux/cli package.json must declare "license": "MIT" for npm package metadata');
+    throw new Error('@qubrics/cli package.json must declare "license": "MIT" for npm package metadata');
   }
   if (manifest.repository?.directory !== "packages/ts/cli") {
-    throw new Error('@sendmux/cli package.json must point repository.directory at "packages/ts/cli"');
+    throw new Error('@qubrics/cli package.json must point repository.directory at "packages/ts/cli"');
   }
 }
 

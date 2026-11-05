@@ -7,7 +7,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
 import { promisify } from "node:util";
-import { mailbox } from "@sendmux/sdk";
+import { mailbox } from "@qubrics/sdk";
 
 const populated = {
   origin_address: "origin@example.com",

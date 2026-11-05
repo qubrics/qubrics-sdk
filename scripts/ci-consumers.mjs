@@ -142,7 +142,7 @@ async function packTypescript(directory, names) {
   mkdirSync(packs);
   const candidates = [];
   for (const name of names) {
-    await run("pnpm", ["--filter", `@sendmux/${name}`, "pack", "--pack-destination", packs]);
+    await run("pnpm", ["--filter", `@qubrics/${name}`, "pack", "--pack-destination", packs]);
     candidates.push(packedCandidate(join(root, "packages/ts", name), packs));
   }
   assert.equal(readdirSync(packs).filter((name) => name.endsWith(".tgz")).length, names.length);
@@ -169,7 +169,7 @@ export function newNodeConsumer(directory, candidates) {
 }
 
 export async function nodeProvenance(directory, names) {
-  const packages = names.map((name) => (name.includes("/") ? name : `@sendmux/${name}`));
+  const packages = names.map((name) => (name.includes("/") ? name : `@qubrics/${name}`));
   const scopes = [...new Set(packages.map((name) => name.split("/")[0]))];
   const source = `import assert from 'node:assert/strict';
 import {readFileSync, realpathSync} from 'node:fs'; import {createRequire} from 'node:module'; import {fileURLToPath} from 'node:url'; import {join, sep} from 'node:path';
@@ -200,7 +200,7 @@ export async function nodeConsumer() {
     newNodeConsumer(consumer, candidates);
     await run("pnpm", ["--ignore-workspace", "add", "--save-exact", ...candidates.map(({ archive }) => archive)], { cwd: consumer });
     await nodeProvenance(consumer, names);
-    await run("pnpm", ["exec", "sendmux", "--help"], { cwd: consumer });
+    await run("pnpm", ["exec", "qubrics", "--help"], { cwd: consumer });
   });
 }
 
@@ -224,7 +224,7 @@ export async function aiConsumers(pairs = aiPairs) {
     writeFileSync(join(incompatible, "reject-peer.mjs"), `import assert from 'node:assert/strict';
 import semver from 'semver'; import {readFileSync} from 'node:fs';
 const installed = name => JSON.parse(readFileSync('node_modules/' + name + '/package.json', 'utf8'));
-assert(semver.satisfies(installed('zod').version, installed('@sendmux/ai-sdk').peerDependencies.zod), 'Incompatible installed Zod peer');
+assert(semver.satisfies(installed('zod').version, installed('@qubrics/ai-sdk').peerDependencies.zod), 'Incompatible installed Zod peer');
 `);
     await assert.rejects(run(process.execPath, ["reject-peer.mjs"], { cwd: incompatible }), /exit 1/);
     console.log("Expected negative: installed Zod 3.24.0 consumer rejected by candidate peer contract");
@@ -235,7 +235,7 @@ assert(semver.satisfies(installed('zod').version, installed('@sendmux/ai-sdk').p
       await nodeProvenance(consumer, names);
       writeFileSync(join(consumer, "peers.mjs"), `import assert from 'node:assert/strict';
 import semver from 'semver'; import {readFileSync} from 'node:fs';
-const metadata = JSON.parse(readFileSync('node_modules/@sendmux/ai-sdk/package.json', 'utf8'));
+const metadata = JSON.parse(readFileSync('node_modules/@qubrics/ai-sdk/package.json', 'utf8'));
 assert.equal(semver.satisfies('3.24.0', metadata.peerDependencies.zod), false, 'packed Sendmux peer range accepts unsupported Zod 3.24.0');
 assert(semver.satisfies(${JSON.stringify(zod)}, metadata.peerDependencies.zod));
 assert(semver.satisfies(${JSON.stringify(ai)}, metadata.peerDependencies.ai));

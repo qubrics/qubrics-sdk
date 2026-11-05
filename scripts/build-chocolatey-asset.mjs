@@ -30,7 +30,7 @@ const outFile = envValue("SENDMUX_CHOCOLATEY_ASSET")
 
 if (!tarball) {
   throw new Error(
-    `Missing ${target} CLI tarball. Run SENDMUX_CLI_PACK_TARGETS=${target} pnpm --filter @sendmux/cli pack:tarballs first.`,
+    `Missing ${target} CLI tarball. Run SENDMUX_CLI_PACK_TARGETS=${target} pnpm --filter @qubrics/cli pack:tarballs first.`,
   );
 }
 
@@ -77,13 +77,13 @@ function findTarball({ distDir, target, version }) {
     return null;
   }
 
-  const expected = join(distDir, `sendmux-v${version}-${target}.tar.gz`);
+  const expected = join(distDir, `qubrics-v${version}-${target}.tar.gz`);
   if (existsSync(expected)) {
     return expected;
   }
 
   const matches = readdirSync(distDir)
-    .filter((file) => file.startsWith("sendmux-") && file.endsWith(`-${target}.tar.gz`))
+    .filter((file) => file.startsWith("qubrics-") && file.endsWith(`-${target}.tar.gz`))
     .sort();
 
   return matches.length > 0 ? join(distDir, matches[matches.length - 1]) : null;

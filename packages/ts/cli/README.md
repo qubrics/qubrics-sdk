@@ -1,23 +1,23 @@
-# @sendmux/cli
+# @qubrics/cli
 
-[![npm version](https://img.shields.io/npm/v/@sendmux%2Fcli)](https://www.npmjs.com/package/@sendmux/cli)
+[![npm version](https://img.shields.io/npm/v/@qubrics%2Fcli)](https://www.npmjs.com/package/@qubrics/cli)
 [![CI](https://github.com/qubrics/qubrics-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/qubrics/qubrics-sdk/actions/workflows/ci.yml)
-[![npm downloads](https://img.shields.io/npm/dm/@sendmux%2Fcli)](https://www.npmjs.com/package/@sendmux/cli)
-[![Licence](https://img.shields.io/npm/l/@sendmux%2Fcli)](https://github.com/qubrics/qubrics-sdk/blob/main/LICENSE)
+[![npm downloads](https://img.shields.io/npm/dm/@qubrics%2Fcli)](https://www.npmjs.com/package/@qubrics/cli)
+[![Licence](https://img.shields.io/npm/l/@qubrics%2Fcli)](https://github.com/qubrics/qubrics-sdk/blob/main/LICENSE)
 
-Agent-drivable command line interface for Sendmux.
+Agent-drivable command line interface for Qubrics.
 
 ## Documentation
 
-- Sendmux docs: [sendmux.ai/docs](https://sendmux.ai/docs)
-- Management API reference: [sendmux.ai/docs/api/introduction](https://sendmux.ai/docs/api/introduction)
-- Mailbox API reference: [sendmux.ai/docs/mailbox-api/introduction](https://sendmux.ai/docs/mailbox-api/introduction)
-- Sending API reference: [sendmux.ai/docs/sending-api/introduction](https://sendmux.ai/docs/sending-api/introduction)
+- Qubrics docs: [qubrics.com/docs](https://qubrics.com/docs)
+- Management API reference: [qubrics.com/docs/api/introduction](https://qubrics.com/docs/api/introduction)
+- Mailbox API reference: [qubrics.com/docs/mailbox-api/introduction](https://qubrics.com/docs/mailbox-api/introduction)
+- Sending API reference: [qubrics.com/docs/sending-api/introduction](https://qubrics.com/docs/sending-api/introduction)
 - Source repository: [qubrics/qubrics-sdk](https://github.com/qubrics/qubrics-sdk)
 
 ## Requirements
 
-- No existing Sendmux account or API key is required to register an agent inbox.
+- No existing Qubrics account or API key is required to register an agent inbox.
 - npm global installs, `npx`, or a downloaded release tarball.
 - Management commands require an OAuth profile with the requested permissions or a root `smx_root_*` key.
 - Sending commands require an OAuth profile with `email.send`, a send-capable `smx_mbx_*` key, or an owner-approved agent profile.
@@ -26,18 +26,20 @@ Agent-drivable command line interface for Sendmux.
 ## Installation
 
 ```sh
-npm install -g @sendmux/cli
+npm install -g @qubrics/cli
 ```
 
-The package exposes the `sendmux` binary.
+The package exposes the `qubrics` binary.
+
+For one major release, `sendmux` remains available and prints `sendmux is deprecated. Use qubrics instead.` before running the same command. Existing profiles stay in their current location.
 
 ## Sign in with OAuth
 
 Sign in through your browser and request only the permissions your workflow needs:
 
 ```sh
-sendmux auth:login work --scope mailbox.read
-sendmux mailbox:get-connection --profile work --json
+qubrics auth:login work --scope mailbox.read
+qubrics mailbox:get-connection --profile work --json
 ```
 
 Repeat `--scope` for additional permissions, such as `email.send` or `domain.read`. The consent screen lets you choose the team and mailboxes. A login creates a new profile; it cannot overwrite an existing profile. Use `--no-browser` to print the authorization URL without opening it automatically; open that URL on the same computer so the loopback callback reaches the CLI.
@@ -47,7 +49,7 @@ The CLI uses an authorization code with S256 PKCE and validates the callback sta
 Revoke the connection and remove its profile:
 
 ```sh
-sendmux auth:logout work
+qubrics auth:logout work
 ```
 
 If revocation fails, the profile stays available for another logout attempt. Revocation affects the connection associated with that profile.
@@ -59,7 +61,7 @@ For a headless workflow that already has an access token, supply it through `QUB
 Register an agent inbox and save its durable read credential in a local profile:
 
 ```sh
-sendmux agent:register my-agent \
+qubrics agent:register my-agent \
   --mailbox-local-part my-agent \
   --client-name "My agent" \
   --default \
@@ -71,39 +73,39 @@ The registration result never prints the credential. The profile can read and re
 Read the inbox from any later process:
 
 ```sh
-sendmux mailbox:messages:list --profile my-agent --query limit=25 --json
+qubrics mailbox:messages:list --profile my-agent --query limit=25 --json
 ```
 
 To enable sending, invite the inbox owner either during registration with `--owner-email` or afterward:
 
 ```sh
-sendmux agent:invite-owner owner@example.com --profile my-agent --json
+qubrics agent:invite-owner owner@example.com --profile my-agent --json
 ```
 
 The owner must accept the invitation and approve sending. After approval, Sending API commands automatically exchange the durable read credential for a one-hour `email.send` token and reuse it until it approaches expiry:
 
 ```sh
-sendmux sending:send \
+qubrics sending:send \
   --profile my-agent \
   --idempotency-key "$IDEMPOTENCY_KEY" \
   --body '{"from":{"email":"sender@example.com"},"to":{"email":"recipient@example.com"},"subject":"Hello","text_body":"Hello"}' \
   --json
 ```
 
-Existing Sendmux users can continue creating API-key profiles:
+Existing Qubrics users can continue creating API-key profiles:
 
 ```sh
-sendmux profiles:set default --api-key smx_root_... --default
-sendmux profiles:set mailbox --api-key smx_mbx_...
-sendmux profiles:set sending --api-key smx_mbx_...
+qubrics profiles:set default --api-key smx_root_... --default
+qubrics profiles:set mailbox --api-key smx_mbx_...
+qubrics profiles:set sending --api-key smx_mbx_...
 ```
 
 Run commands with `--json` for machine-readable output.
 
 ```sh
-sendmux management:domains:list --profile default --json
-sendmux mailbox:messages:list --profile mailbox --query limit=25 --json
-sendmux sending:send --profile sending --body '{"from":{"email":"sender@example.com"},"to":{"email":"recipient@example.com"},"subject":"Hello","html_body":"<p>Hello.</p>","text_body":"Hello"}' --json
+qubrics management:domains:list --profile default --json
+qubrics mailbox:messages:list --profile mailbox --query limit=25 --json
+qubrics sending:send --profile sending --body '{"from":{"email":"sender@example.com"},"to":{"email":"recipient@example.com"},"subject":"Hello","html_body":"<p>Hello.</p>","text_body":"Hello"}' --json
 ```
 
 Commands reject mismatched key types before making a network request.
@@ -111,9 +113,9 @@ Commands reject mismatched key types before making a network request.
 Check the selected profile's connection without sending an email:
 
 ```sh
-sendmux management:get-connection --profile default --json
-sendmux mailbox:get-connection --profile mailbox --json
-sendmux sending:get-connection --profile sending --json
+qubrics management:get-connection --profile default --json
+qubrics mailbox:get-connection --profile mailbox --json
+qubrics sending:get-connection --profile sending --json
 ```
 
 Each command returns the team, credential, connection label, permissions, and authorised mailboxes. Mailbox connection checks do not need a mailbox selector.
@@ -123,7 +125,7 @@ Each command returns the team, credential, connection label, permissions, and au
 Send a mailbox message with a local file in one command:
 
 ```sh
-sendmux mailbox:send-message \
+qubrics mailbox:send-message \
   --profile mailbox \
   --idempotency-key "$IDEMPOTENCY_KEY" \
   --attach ./report.md \
@@ -136,7 +138,7 @@ sendmux mailbox:send-message \
 Upload a file first, then use the returned `blob_id` in `mailbox:send-message`:
 
 ```sh
-sendmux mailbox:upload-attachment \
+qubrics mailbox:upload-attachment \
   --profile mailbox \
   --file ./report.md \
   --json
@@ -145,7 +147,7 @@ sendmux mailbox:upload-attachment \
 Use presigned upload when a shell should upload without an API key:
 
 ```sh
-sendmux mailbox:upload-attachment \
+qubrics mailbox:upload-attachment \
   --profile mailbox \
   --file ./report.md \
   --via-presigned \
@@ -157,7 +159,7 @@ Attachment metadata returned from message, search, and event operations includes
 Follow live mailbox events as newline-delimited JSON:
 
 ```sh
-sendmux mailbox:stream-events \
+qubrics mailbox:stream-events \
   --profile mailbox \
   --query event_types=message.received \
   --query close_after=300 \
@@ -177,8 +179,8 @@ The CLI includes `104` generated API operation commands:
 Use command-level help for required path, query, header, and body fields.
 
 ```sh
-sendmux management:domains:get --help
-sendmux sending:send --help
+qubrics management:domains:get --help
+qubrics sending:send --help
 ```
 
 ## Global API flags

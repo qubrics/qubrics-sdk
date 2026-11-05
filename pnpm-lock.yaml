@@ -44,12 +44,12 @@ importers:
       '@openapitools/openapi-generator-cli':
         specifier: 2.32.0
         version: 2.32.0
+      '@qubrics/sdk':
+        specifier: workspace:*
+        version: link:packages/ts/sdk
       '@redocly/cli':
         specifier: 2.53.0
         version: 2.53.0(patch_hash=c75c4bbfba7baa15e64ca506e019be092e3da817a16b356d92f970de73d2002f)
-      '@sendmux/sdk':
-        specifier: workspace:*
-        version: link:packages/ts/sdk
       cross-spawn:
         specifier: 7.0.6
         version: 7.0.6
@@ -65,10 +65,10 @@ importers:
 
   packages/ts/ai-sdk:
     dependencies:
-      '@sendmux/mailbox':
+      '@qubrics/mailbox':
         specifier: workspace:*
         version: link:../mailbox
-      '@sendmux/sending':
+      '@qubrics/sending':
         specifier: workspace:*
         version: link:../sending
     devDependencies:
@@ -87,7 +87,7 @@ importers:
       '@oclif/core':
         specifier: 4.11.4
         version: 4.11.4
-      '@sendmux/sdk':
+      '@qubrics/sdk':
         specifier: workspace:*
         version: link:../sdk
     devDependencies:
@@ -102,7 +102,7 @@ importers:
 
   packages/ts/mailbox:
     dependencies:
-      '@sendmux/core':
+      '@qubrics/core':
         specifier: workspace:*
         version: link:../core
     devDependencies:
@@ -112,7 +112,7 @@ importers:
 
   packages/ts/management:
     dependencies:
-      '@sendmux/core':
+      '@qubrics/core':
         specifier: workspace:*
         version: link:../core
 
@@ -124,16 +124,16 @@ importers:
 
   packages/ts/sdk:
     dependencies:
-      '@sendmux/core':
+      '@qubrics/core':
         specifier: workspace:*
         version: link:../core
-      '@sendmux/mailbox':
+      '@qubrics/mailbox':
         specifier: workspace:*
         version: link:../mailbox
-      '@sendmux/management':
+      '@qubrics/management':
         specifier: workspace:*
         version: link:../management
-      '@sendmux/sending':
+      '@qubrics/sending':
         specifier: workspace:*
         version: link:../sending
     devDependencies:
@@ -143,7 +143,7 @@ importers:
 
   packages/ts/sending:
     dependencies:
-      '@sendmux/core':
+      '@qubrics/core':
         specifier: workspace:*
         version: link:../core
     devDependencies:
