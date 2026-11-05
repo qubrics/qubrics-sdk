@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Sendmux\Tests;
+namespace Qubrics\Tests;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
@@ -11,10 +11,10 @@ use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Sendmux\Mailbox\Api\MailboxAPIApi;
-use Sendmux\Mailbox\ApiException;
-use Sendmux\Mailbox\Model\MailboxChangesResponse;
-use Sendmux\Mailbox\Model\MailboxTypedChangesResponse;
+use Qubrics\Mailbox\Api\MailboxAPIApi;
+use Qubrics\Mailbox\ApiException;
+use Qubrics\Mailbox\Model\MailboxChangesResponse;
+use Qubrics\Mailbox\Model\MailboxTypedChangesResponse;
 use UnexpectedValueException;
 
 final class MailboxChangesResponseTest extends TestCase

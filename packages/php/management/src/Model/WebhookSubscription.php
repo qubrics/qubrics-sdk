@@ -5,7 +5,7 @@
  *
  * PHP version 8.1
  *
- * @package  Sendmux\Management
+ * @package  Qubrics\Management
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
@@ -26,18 +26,18 @@
  * Do not edit the class manually.
  */
 
-namespace Sendmux\Management\Model;
+namespace Qubrics\Management\Model;
 
 use ArrayAccess;
 use JsonSerializable;
 use InvalidArgumentException;
 use ReturnTypeWillChange;
-use Sendmux\Management\ObjectSerializer;
+use Qubrics\Management\ObjectSerializer;
 
 /**
  * WebhookSubscription Class Doc Comment
  *
- * @package  Sendmux\Management
+ * @package  Qubrics\Management
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
@@ -63,7 +63,7 @@ class WebhookSubscription implements ModelInterface, ArrayAccess, JsonSerializab
         'enabled' => 'bool',
         'event_types' => 'string[]',
         'failing' => 'bool',
-        'filters' => '\Sendmux\Management\Model\WebhookFilters',
+        'filters' => '\Qubrics\Management\Model\WebhookFilters',
         'id' => 'string',
         'name' => 'string',
         'updated_at' => 'string',
@@ -498,9 +498,9 @@ class WebhookSubscription implements ModelInterface, ArrayAccess, JsonSerializab
     /**
      * Gets filters
      *
-     * @return \Sendmux\Management\Model\WebhookFilters
+     * @return \Qubrics\Management\Model\WebhookFilters
      */
-    public function getFilters(): \Sendmux\Management\Model\WebhookFilters
+    public function getFilters(): \Qubrics\Management\Model\WebhookFilters
     {
         return $this->container['filters'];
     }
@@ -508,11 +508,11 @@ class WebhookSubscription implements ModelInterface, ArrayAccess, JsonSerializab
     /**
      * Sets filters
      *
-     * @param \Sendmux\Management\Model\WebhookFilters $filters filters
+     * @param \Qubrics\Management\Model\WebhookFilters $filters filters
      *
      * @return $this
      */
-    public function setFilters(\Sendmux\Management\Model\WebhookFilters $filters): static
+    public function setFilters(\Qubrics\Management\Model\WebhookFilters $filters): static
     {
         if (is_null($filters)) {
             throw new InvalidArgumentException('non-nullable filters cannot be null');

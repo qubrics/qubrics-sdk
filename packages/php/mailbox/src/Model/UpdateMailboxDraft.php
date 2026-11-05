@@ -5,7 +5,7 @@
  *
  * PHP version 8.1
  *
- * @package  Sendmux\Mailbox
+ * @package  Qubrics\Mailbox
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
@@ -26,18 +26,18 @@
  * Do not edit the class manually.
  */
 
-namespace Sendmux\Mailbox\Model;
+namespace Qubrics\Mailbox\Model;
 
 use ArrayAccess;
 use JsonSerializable;
 use InvalidArgumentException;
 use ReturnTypeWillChange;
-use Sendmux\Mailbox\ObjectSerializer;
+use Qubrics\Mailbox\ObjectSerializer;
 
 /**
  * UpdateMailboxDraft Class Doc Comment
  *
- * @package  Sendmux\Mailbox
+ * @package  Qubrics\Mailbox
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
@@ -59,17 +59,17 @@ class UpdateMailboxDraft implements ModelInterface, ArrayAccess, JsonSerializabl
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'attachments' => '\Sendmux\Mailbox\Model\CreateMailboxDraftAttachmentsInner[]',
-        'bcc' => '\Sendmux\Mailbox\Model\CreateMailboxDraftBccInner[]',
-        'cc' => '\Sendmux\Mailbox\Model\CreateMailboxDraftBccInner[]',
+        'attachments' => '\Qubrics\Mailbox\Model\CreateMailboxDraftAttachmentsInner[]',
+        'bcc' => '\Qubrics\Mailbox\Model\CreateMailboxDraftBccInner[]',
+        'cc' => '\Qubrics\Mailbox\Model\CreateMailboxDraftBccInner[]',
         'custom_headers' => 'array<string,string>',
         'expected_revision' => 'int',
-        'from' => '\Sendmux\Mailbox\Model\CreateMailboxDraftFrom',
+        'from' => '\Qubrics\Mailbox\Model\CreateMailboxDraftFrom',
         'html_body' => 'string',
-        'reply_to' => '\Sendmux\Mailbox\Model\CreateMailboxDraftBccInner[]',
+        'reply_to' => '\Qubrics\Mailbox\Model\CreateMailboxDraftBccInner[]',
         'subject' => 'string',
         'text_body' => 'string',
-        'to' => '\Sendmux\Mailbox\Model\CreateMailboxDraftBccInner[]'
+        'to' => '\Qubrics\Mailbox\Model\CreateMailboxDraftBccInner[]'
     ];
 
     /**
@@ -376,7 +376,7 @@ class UpdateMailboxDraft implements ModelInterface, ArrayAccess, JsonSerializabl
     /**
      * Gets attachments
      *
-     * @return \Sendmux\Mailbox\Model\CreateMailboxDraftAttachmentsInner[]|null
+     * @return \Qubrics\Mailbox\Model\CreateMailboxDraftAttachmentsInner[]|null
      */
     public function getAttachments(): ?array
     {
@@ -386,7 +386,7 @@ class UpdateMailboxDraft implements ModelInterface, ArrayAccess, JsonSerializabl
     /**
      * Sets attachments
      *
-     * @param \Sendmux\Mailbox\Model\CreateMailboxDraftAttachmentsInner[]|null $attachments Attachments and inline images.
+     * @param \Qubrics\Mailbox\Model\CreateMailboxDraftAttachmentsInner[]|null $attachments Attachments and inline images.
      *
      * @return $this
      */
@@ -407,7 +407,7 @@ class UpdateMailboxDraft implements ModelInterface, ArrayAccess, JsonSerializabl
     /**
      * Gets bcc
      *
-     * @return \Sendmux\Mailbox\Model\CreateMailboxDraftBccInner[]|null
+     * @return \Qubrics\Mailbox\Model\CreateMailboxDraftBccInner[]|null
      */
     public function getBcc(): ?array
     {
@@ -417,7 +417,7 @@ class UpdateMailboxDraft implements ModelInterface, ArrayAccess, JsonSerializabl
     /**
      * Sets bcc
      *
-     * @param \Sendmux\Mailbox\Model\CreateMailboxDraftBccInner[]|null $bcc Hidden copied recipients.
+     * @param \Qubrics\Mailbox\Model\CreateMailboxDraftBccInner[]|null $bcc Hidden copied recipients.
      *
      * @return $this
      */
@@ -438,7 +438,7 @@ class UpdateMailboxDraft implements ModelInterface, ArrayAccess, JsonSerializabl
     /**
      * Gets cc
      *
-     * @return \Sendmux\Mailbox\Model\CreateMailboxDraftBccInner[]|null
+     * @return \Qubrics\Mailbox\Model\CreateMailboxDraftBccInner[]|null
      */
     public function getCc(): ?array
     {
@@ -448,7 +448,7 @@ class UpdateMailboxDraft implements ModelInterface, ArrayAccess, JsonSerializabl
     /**
      * Sets cc
      *
-     * @param \Sendmux\Mailbox\Model\CreateMailboxDraftBccInner[]|null $cc Visible copied recipients.
+     * @param \Qubrics\Mailbox\Model\CreateMailboxDraftBccInner[]|null $cc Visible copied recipients.
      *
      * @return $this
      */
@@ -528,9 +528,9 @@ class UpdateMailboxDraft implements ModelInterface, ArrayAccess, JsonSerializabl
     /**
      * Gets from
      *
-     * @return \Sendmux\Mailbox\Model\CreateMailboxDraftFrom|null
+     * @return \Qubrics\Mailbox\Model\CreateMailboxDraftFrom|null
      */
-    public function getFrom(): ?\Sendmux\Mailbox\Model\CreateMailboxDraftFrom
+    public function getFrom(): ?\Qubrics\Mailbox\Model\CreateMailboxDraftFrom
     {
         return $this->container['from'];
     }
@@ -538,11 +538,11 @@ class UpdateMailboxDraft implements ModelInterface, ArrayAccess, JsonSerializabl
     /**
      * Sets from
      *
-     * @param \Sendmux\Mailbox\Model\CreateMailboxDraftFrom|null $from from
+     * @param \Qubrics\Mailbox\Model\CreateMailboxDraftFrom|null $from from
      *
      * @return $this
      */
-    public function setFrom(?\Sendmux\Mailbox\Model\CreateMailboxDraftFrom $from): static
+    public function setFrom(?\Qubrics\Mailbox\Model\CreateMailboxDraftFrom $from): static
     {
         if (is_null($from)) {
             throw new InvalidArgumentException('non-nullable from cannot be null');
@@ -586,7 +586,7 @@ class UpdateMailboxDraft implements ModelInterface, ArrayAccess, JsonSerializabl
     /**
      * Gets reply_to
      *
-     * @return \Sendmux\Mailbox\Model\CreateMailboxDraftBccInner[]|null
+     * @return \Qubrics\Mailbox\Model\CreateMailboxDraftBccInner[]|null
      */
     public function getReplyTo(): ?array
     {
@@ -596,7 +596,7 @@ class UpdateMailboxDraft implements ModelInterface, ArrayAccess, JsonSerializabl
     /**
      * Sets reply_to
      *
-     * @param \Sendmux\Mailbox\Model\CreateMailboxDraftBccInner[]|null $reply_to Authorised reply addresses; defaults to this inbox.
+     * @param \Qubrics\Mailbox\Model\CreateMailboxDraftBccInner[]|null $reply_to Authorised reply addresses; defaults to this inbox.
      *
      * @return $this
      */
@@ -679,7 +679,7 @@ class UpdateMailboxDraft implements ModelInterface, ArrayAccess, JsonSerializabl
     /**
      * Gets to
      *
-     * @return \Sendmux\Mailbox\Model\CreateMailboxDraftBccInner[]|null
+     * @return \Qubrics\Mailbox\Model\CreateMailboxDraftBccInner[]|null
      */
     public function getTo(): ?array
     {
@@ -689,7 +689,7 @@ class UpdateMailboxDraft implements ModelInterface, ArrayAccess, JsonSerializabl
     /**
      * Sets to
      *
-     * @param \Sendmux\Mailbox\Model\CreateMailboxDraftBccInner[]|null $to Primary recipients; at most 50 total across To, Cc and Bcc.
+     * @param \Qubrics\Mailbox\Model\CreateMailboxDraftBccInner[]|null $to Primary recipients; at most 50 total across To, Cc and Bcc.
      *
      * @return $this
      */

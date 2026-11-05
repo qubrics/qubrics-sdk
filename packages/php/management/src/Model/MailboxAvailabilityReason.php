@@ -5,7 +5,7 @@
  *
  * PHP version 8.1
  *
- * @package  Sendmux\Management
+ * @package  Qubrics\Management
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
@@ -26,12 +26,12 @@
  * Do not edit the class manually.
  */
 
-namespace Sendmux\Management\Model;
+namespace Qubrics\Management\Model;
 
 /**
  * MailboxAvailabilityReason Class Doc Comment
  *
- * @package  Sendmux\Management
+ * @package  Qubrics\Management
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */

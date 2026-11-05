@@ -1144,14 +1144,14 @@ test("Python and PHP changes certification uses typed public JSON results", asyn
       { types: { messages: { created: [], destroyed: [], updated: [], has_more: false, old_state: null, new_state: "state_fixture" } } },
     ]) {
       await withApi(() => ({ body: envelope(data) }), async ({ baseUrl }) => {
-        const code = `require 'vendor/autoload.php'; $api=Sendmux\\Mailbox\\ClientFactory::createMailboxAPIApi(getenv('FIXTURE_KEY'),getenv('FIXTURE_URL')); $value=$api->${async ? "mailboxGetChangesAsync()->wait()" : "mailboxGetChanges()"}; echo json_encode($value);`;
+        const code = `require 'vendor/autoload.php'; $api=Qubrics\\Mailbox\\ClientFactory::createMailboxAPIApi(getenv('FIXTURE_KEY'),getenv('FIXTURE_URL')); $value=$api->${async ? "mailboxGetChangesAsync()->wait()" : "mailboxGetChanges()"}; echo json_encode($value);`;
         const result = await runChildHarness("php", ["-r", code], { env: { ...process.env, FIXTURE_KEY: "smx_mbx_test", FIXTURE_URL: baseUrl }, timeout: 2000 });
         assert.equal(result.status, 0, result.stderr);
         assert.deepEqual(JSON.parse(result.stdout).data, data);
       });
     }
     await withApi(() => ({ status: 400, body: { ok: false, error: { code: "validation_error", message: "Fixture error", retryable: false }, meta: { request_id: "req_error" } } }), async ({ baseUrl }) => {
-      const code = `require 'vendor/autoload.php'; $api=Sendmux\\Mailbox\\ClientFactory::createMailboxAPIApi(getenv('FIXTURE_KEY'),getenv('FIXTURE_URL')); try {$api->${async ? "mailboxGetChangesAsync()->wait()" : "mailboxGetChanges()"}; exit(2);} catch (Sendmux\\Mailbox\\ApiException $e) {echo $e->getCode();}`;
+      const code = `require 'vendor/autoload.php'; $api=Qubrics\\Mailbox\\ClientFactory::createMailboxAPIApi(getenv('FIXTURE_KEY'),getenv('FIXTURE_URL')); try {$api->${async ? "mailboxGetChangesAsync()->wait()" : "mailboxGetChanges()"}; exit(2);} catch (Qubrics\\Mailbox\\ApiException $e) {echo $e->getCode();}`;
       const result = await runChildHarness("php", ["-r", code], { env: { ...process.env, FIXTURE_KEY: "smx_mbx_test", FIXTURE_URL: baseUrl }, timeout: 2000 });
       assert.equal(result.status, 0, result.stderr);
       assert.equal(result.stdout, "400");

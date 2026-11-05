@@ -5,7 +5,7 @@
  *
  * PHP version 8.1
  *
- * @package  Sendmux\Mailbox
+ * @package  Qubrics\Mailbox
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
@@ -26,18 +26,18 @@
  * Do not edit the class manually.
  */
 
-namespace Sendmux\Mailbox\Model;
+namespace Qubrics\Mailbox\Model;
 
 use ArrayAccess;
 use JsonSerializable;
 use InvalidArgumentException;
 use ReturnTypeWillChange;
-use Sendmux\Mailbox\ObjectSerializer;
+use Qubrics\Mailbox\ObjectSerializer;
 
 /**
  * MailboxSearchSnippetsResult Class Doc Comment
  *
- * @package  Sendmux\Mailbox
+ * @package  Qubrics\Mailbox
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
@@ -60,7 +60,7 @@ class MailboxSearchSnippetsResult implements ModelInterface, ArrayAccess, JsonSe
      */
     protected static array $openAPITypes = [
         'not_found' => 'string[]',
-        'snippets' => '\Sendmux\Mailbox\Model\MailboxSearchSnippet[]',
+        'snippets' => '\Qubrics\Mailbox\Model\MailboxSearchSnippet[]',
         'sync_state' => 'string'
     ];
 
@@ -317,7 +317,7 @@ class MailboxSearchSnippetsResult implements ModelInterface, ArrayAccess, JsonSe
     /**
      * Gets snippets
      *
-     * @return \Sendmux\Mailbox\Model\MailboxSearchSnippet[]
+     * @return \Qubrics\Mailbox\Model\MailboxSearchSnippet[]
      */
     public function getSnippets(): array
     {
@@ -327,7 +327,7 @@ class MailboxSearchSnippetsResult implements ModelInterface, ArrayAccess, JsonSe
     /**
      * Sets snippets
      *
-     * @param \Sendmux\Mailbox\Model\MailboxSearchSnippet[] $snippets snippets
+     * @param \Qubrics\Mailbox\Model\MailboxSearchSnippet[] $snippets snippets
      *
      * @return $this
      */

@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+### Qubrics rename
+
+- Publish as `qubrics/core` at 3.0.0 with `Qubrics\` namespaces.
+- Keep existing credential prefixes, OAuth/custom URL configuration and compatibility wire names.
+
 ### Security
 
 - Require Guzzle `^7.15.5` and its maintained PSR7 dependency for HTTP security fixes. If you use a custom persistent cookie jar, follow the [upgrade warning](README.md#installation) before updating.

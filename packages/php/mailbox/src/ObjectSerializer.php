@@ -5,7 +5,7 @@
  *
  * PHP version 8.1
  *
- * @package  Sendmux\Mailbox
+ * @package  Qubrics\Mailbox
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
@@ -26,18 +26,18 @@
  * Do not edit the class manually.
  */
 
-namespace Sendmux\Mailbox;
+namespace Qubrics\Mailbox;
 
 use BackedEnum;
 use DateTimeInterface;
 use DateTime;
 use GuzzleHttp\Psr7\Utils;
-use Sendmux\Mailbox\Model\ModelInterface;
+use Qubrics\Mailbox\Model\ModelInterface;
 
 /**
  * ObjectSerializer Class Doc Comment
  *
- * @package  Sendmux\Mailbox
+ * @package  Qubrics\Mailbox
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
@@ -508,7 +508,7 @@ class ObjectSerializer
             // If a discriminator is defined and points to a valid subclass, use it.
             $discriminator = $class::DISCRIMINATOR;
             if (!empty($discriminator) && isset($data->{$discriminator}) && is_string($data->{$discriminator})) {
-                $subclass = '\Sendmux\Mailbox\Model\\' . $data->{$discriminator};
+                $subclass = '\Qubrics\Mailbox\Model\\' . $data->{$discriminator};
                 $mapping = defined($class . '::DISCRIMINATOR_MAPPING') ? $class::DISCRIMINATOR_MAPPING : [];
                 $subclass = $mapping[$data->{$discriminator}] ?? $subclass;
                 if (isset($mapping[$data->{$discriminator}]) || is_subclass_of($subclass, $class)) {

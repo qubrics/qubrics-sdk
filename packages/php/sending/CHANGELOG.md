@@ -2,13 +2,20 @@
 
 ## Unreleased
 
+### Qubrics rename
+
+- Emit both upload-token header names when either token form is supplied.
+
+- Publish as `qubrics/sending` at 3.0.0 with `Qubrics\` namespaces and Qubrics service defaults.
+- Keep existing credential prefixes, OAuth/custom URL configuration and compatibility wire names.
+
 ### Features
 
 - Add one delivery group or a list of `delivery_group` IDs to email send requests.
 
 ### Security
 
-- Require Guzzle `^7.15.5`, PSR7 `^2.13.1`, and core `^2.1.1` for HTTP security fixes. If you use a custom persistent cookie jar, follow the [upgrade warning](README.md#installation) before updating.
+- Require Guzzle `^7.15.5`, PSR7 `^2.13.1`, and core `^3.0` for HTTP security fixes. If you use a custom persistent cookie jar, follow the [upgrade warning](README.md#installation) before updating.
 
 ## 2.1.0 (2026-09-11)
 

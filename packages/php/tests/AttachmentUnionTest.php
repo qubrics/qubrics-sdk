@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Sendmux\Tests;
+namespace Qubrics\Tests;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Sendmux\Sending\Model\Attachment;
+use Qubrics\Sending\Model\Attachment;
 
 final class AttachmentUnionTest extends TestCase
 {

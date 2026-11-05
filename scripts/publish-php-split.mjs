@@ -57,7 +57,7 @@ async function proveSplit(input) {
       || before.replace("\n## Unreleased\n", `\n${heading[0]}\n`) !== after) throw new Error("Split changelog differs beyond the intended dated heading");
   }
   const composer = JSON.parse(await run(["show", `${target}:composer.json`]));
-  if (composer.name !== `sendmux/${input.package}` || Object.hasOwn(composer, "version")) throw new Error("Split Composer identity/version metadata mismatch");
+  if (composer.name !== `qubrics/${input.package}` || Object.hasOwn(composer, "version")) throw new Error("Split Composer identity/version metadata mismatch");
   const changelog = await run(["show", `${target}:CHANGELOG.md`]);
   if (changelog.match(/^## ([^\n]+)/m)?.[1]?.split(" ")[0] !== input.version) throw new Error("Split changelog does not identify intended version");
   const nativeFile = input.package === "sdk" ? "src/Sdk.php" : "src/Configuration.php";

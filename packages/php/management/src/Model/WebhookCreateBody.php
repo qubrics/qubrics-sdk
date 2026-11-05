@@ -5,7 +5,7 @@
  *
  * PHP version 8.1
  *
- * @package  Sendmux\Management
+ * @package  Qubrics\Management
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
@@ -26,18 +26,18 @@
  * Do not edit the class manually.
  */
 
-namespace Sendmux\Management\Model;
+namespace Qubrics\Management\Model;
 
 use ArrayAccess;
 use JsonSerializable;
 use InvalidArgumentException;
 use ReturnTypeWillChange;
-use Sendmux\Management\ObjectSerializer;
+use Qubrics\Management\ObjectSerializer;
 
 /**
  * WebhookCreateBody Class Doc Comment
  *
- * @package  Sendmux\Management
+ * @package  Qubrics\Management
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
@@ -61,7 +61,7 @@ class WebhookCreateBody implements ModelInterface, ArrayAccess, JsonSerializable
     protected static array $openAPITypes = [
         'enabled' => 'bool',
         'event_types' => 'string[]',
-        'filters' => '\Sendmux\Management\Model\WebhookFilters',
+        'filters' => '\Qubrics\Management\Model\WebhookFilters',
         'name' => 'string',
         'url' => 'string'
     ];
@@ -412,9 +412,9 @@ class WebhookCreateBody implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Gets filters
      *
-     * @return \Sendmux\Management\Model\WebhookFilters|null
+     * @return \Qubrics\Management\Model\WebhookFilters|null
      */
-    public function getFilters(): ?\Sendmux\Management\Model\WebhookFilters
+    public function getFilters(): ?\Qubrics\Management\Model\WebhookFilters
     {
         return $this->container['filters'];
     }
@@ -422,11 +422,11 @@ class WebhookCreateBody implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets filters
      *
-     * @param \Sendmux\Management\Model\WebhookFilters|null $filters Optional delivery scope. Omit or pass an empty mailbox_ids array to receive matching events for all mailboxes in the team.
+     * @param \Qubrics\Management\Model\WebhookFilters|null $filters Optional delivery scope. Omit or pass an empty mailbox_ids array to receive matching events for all mailboxes in the team.
      *
      * @return $this
      */
-    public function setFilters(?\Sendmux\Management\Model\WebhookFilters $filters): static
+    public function setFilters(?\Qubrics\Management\Model\WebhookFilters $filters): static
     {
         if (is_null($filters)) {
             throw new InvalidArgumentException('non-nullable filters cannot be null');

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Sendmux\Tests;
+namespace Qubrics\Tests;
 
-use Sendmux\Management\Model\ManagementCreateMailboxRequest;
-use Sendmux\Management\Model\WebhookEventPayload;
+use Qubrics\Management\Model\ManagementCreateMailboxRequest;
+use Qubrics\Management\Model\WebhookEventPayload;
 use PHPUnit\Framework\TestCase;
 
 final class ManagementValidationTest extends TestCase

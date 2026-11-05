@@ -5,7 +5,7 @@
  *
  * PHP version 8.1
  *
- * @package  Sendmux\Management
+ * @package  Qubrics\Management
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
@@ -26,19 +26,19 @@
  * Do not edit the class manually.
  */
 
-namespace Sendmux\Management\Model;
+namespace Qubrics\Management\Model;
 
 use ArrayAccess;
 use JsonSerializable;
 use InvalidArgumentException;
 use ReturnTypeWillChange;
-use Sendmux\Management\ObjectSerializer;
+use Qubrics\Management\ObjectSerializer;
 
 /**
  * MailboxSendPolicyRecipients Class Doc Comment
  *
  * @description Recipient restrictions applied to every To, Cc and Bcc address.
- * @package  Sendmux\Management
+ * @package  Qubrics\Management
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
@@ -60,8 +60,8 @@ class MailboxSendPolicyRecipients implements ModelInterface, ArrayAccess, JsonSe
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'allow' => '\Sendmux\Management\Model\MailboxSendPolicyRecipientsAllow',
-        'deny' => '\Sendmux\Management\Model\MailboxSendPolicyRecipientsDeny'
+        'allow' => '\Qubrics\Management\Model\MailboxSendPolicyRecipientsAllow',
+        'deny' => '\Qubrics\Management\Model\MailboxSendPolicyRecipientsDeny'
     ];
 
     /**
@@ -275,9 +275,9 @@ class MailboxSendPolicyRecipients implements ModelInterface, ArrayAccess, JsonSe
     /**
      * Gets allow
      *
-     * @return \Sendmux\Management\Model\MailboxSendPolicyRecipientsAllow|null
+     * @return \Qubrics\Management\Model\MailboxSendPolicyRecipientsAllow|null
      */
-    public function getAllow(): ?\Sendmux\Management\Model\MailboxSendPolicyRecipientsAllow
+    public function getAllow(): ?\Qubrics\Management\Model\MailboxSendPolicyRecipientsAllow
     {
         return $this->container['allow'];
     }
@@ -285,11 +285,11 @@ class MailboxSendPolicyRecipients implements ModelInterface, ArrayAccess, JsonSe
     /**
      * Sets allow
      *
-     * @param \Sendmux\Management\Model\MailboxSendPolicyRecipientsAllow|null $allow allow
+     * @param \Qubrics\Management\Model\MailboxSendPolicyRecipientsAllow|null $allow allow
      *
      * @return $this
      */
-    public function setAllow(?\Sendmux\Management\Model\MailboxSendPolicyRecipientsAllow $allow): static
+    public function setAllow(?\Qubrics\Management\Model\MailboxSendPolicyRecipientsAllow $allow): static
     {
         if (is_null($allow)) {
             array_push($this->openAPINullablesSetToNull, 'allow');
@@ -309,9 +309,9 @@ class MailboxSendPolicyRecipients implements ModelInterface, ArrayAccess, JsonSe
     /**
      * Gets deny
      *
-     * @return \Sendmux\Management\Model\MailboxSendPolicyRecipientsDeny|null
+     * @return \Qubrics\Management\Model\MailboxSendPolicyRecipientsDeny|null
      */
-    public function getDeny(): ?\Sendmux\Management\Model\MailboxSendPolicyRecipientsDeny
+    public function getDeny(): ?\Qubrics\Management\Model\MailboxSendPolicyRecipientsDeny
     {
         return $this->container['deny'];
     }
@@ -319,11 +319,11 @@ class MailboxSendPolicyRecipients implements ModelInterface, ArrayAccess, JsonSe
     /**
      * Sets deny
      *
-     * @param \Sendmux\Management\Model\MailboxSendPolicyRecipientsDeny|null $deny deny
+     * @param \Qubrics\Management\Model\MailboxSendPolicyRecipientsDeny|null $deny deny
      *
      * @return $this
      */
-    public function setDeny(?\Sendmux\Management\Model\MailboxSendPolicyRecipientsDeny $deny): static
+    public function setDeny(?\Qubrics\Management\Model\MailboxSendPolicyRecipientsDeny $deny): static
     {
         if (is_null($deny)) {
             throw new InvalidArgumentException('non-nullable deny cannot be null');
