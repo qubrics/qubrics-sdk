@@ -42,8 +42,10 @@ The new public-factory tests first failed for all three surfaces: actual `https:
 | Release-state checks | 32 passed |
 | Full CLI gate | Passed |
 | CLI version, notice ordering, existing profiles and native argv/exit tests | Passed |
+| Rebased public API, release/consumer fixtures and helpers | Passed; 30 fixtures and 50 helpers |
+| Live safety after native runtime preparation | 75 passed, zero failed or skipped |
 
-The native-pack origin regression was observed as `npm error E404` for the renamed SDK before publication. Staging local packed siblings removes that registry prerequisite. Full native packing and real Windows install/uninstall proof remain required in CI.
+The native-pack origin regression was observed as `npm error E404` for the renamed SDK before publication. Staging local packed siblings removes that registry prerequisite. Windows CI run [42022138093](https://github.com/qubrics/qubrics-sdk/actions/runs/42022138093), source `332329891a44912867b2386c727f56241d714572`, built the native archive and reproduced the Chocolatey defect: only `sendmux.exe` was installed, then `qubrics --version` failed with `CommandNotFoundException`. The installer now registers both commands and the uninstaller removes both shims and the actual `qubrics` extraction directory. Green Windows install/uninstall proof remains required.
 
 The packed dependency negative test still rejects a different installed instance. Its old registry fixture could not exist under the new package namespace, so the replacement fixture installs a separate local tarball and preserves the negative and positive assertions.
 
@@ -52,9 +54,9 @@ Raw logs are retained in the task's local artifacts: `ts-default-hosts-{red,gree
 ## Outstanding verification and release boundaries
 
 - Rebased on merged #351 (`388a410`), which owns docs `03210aa9` regeneration and the two PHP default assertions. No duplicate generated edits.
-- Observe the Windows Chocolatey regression through the real install smoke, then fix installation/uninstallation at the templates and verify both commands and cleanup.
+- Verify the Chocolatey template fix through the same real Windows install/uninstall smoke for both package identities, both commands, notice ordering and shim cleanup.
 - Complete required CI and settle review on the final source head. Refresh Skills #34 compatibility acceptance for the renamed CLI metadata against that exact candidate.
-- Fresh-checkout live safety initially passed 65/75. Ten failures traced to missing Python/MCP runtime prerequisites, including `.tmp/python-venv/bin/python`. Prepare the existing prerequisites and obtain a complete green check. No assertion was weakened.
+- Fresh-checkout live safety initially passed 65/75. Ten failures traced to missing native runtime prerequisites. After preparing the existing Python/MCP/PHP/Ruby dependencies, the stable run passed 75/75 with zero skips. An intermediate Python negative-response case overlapped regeneration; its isolated and full stable reruns passed unchanged. No assertion was weakened. Logs: `live-e2e-safety-stable.log`, `live-safety-negative-isolated.log`, `live-safety-generation-overlap.log`.
 - After operator publication, freshly install each exact registry version outside the workspace, verify dependency resolution and default-host calls, then read back all approved old-version deprecation warnings. No send or production mutation is needed for these read-oriented smokes.
 
 Read-only registry inventory found 70 old versions across the seven replacement packages. Only CLI `1.3.0` already had a broken-release warning; the operator packet preserves that warning while adding the replacement pointer. Feedback-widget and unscoped MCP are excluded.

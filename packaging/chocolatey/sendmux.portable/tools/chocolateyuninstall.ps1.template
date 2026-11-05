@@ -1,8 +1,9 @@
 $ErrorActionPreference = 'Stop'
 
 $toolsDir = Split-Path -Parent $MyInvocation.MyCommand.Definition
-$installDir = Join-Path $toolsDir 'sendmux'
+$installDir = Join-Path $toolsDir 'qubrics'
 
+Uninstall-BinFile -Name 'qubrics'
 Uninstall-BinFile -Name 'sendmux'
 
 if (Test-Path $installDir) {
