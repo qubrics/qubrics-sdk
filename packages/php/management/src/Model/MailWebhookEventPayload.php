@@ -5,7 +5,7 @@
  *
  * PHP version 8.1
  *
- * @package  Sendmux\Management
+ * @package  Qubrics\Management
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
@@ -26,18 +26,18 @@
  * Do not edit the class manually.
  */
 
-namespace Sendmux\Management\Model;
+namespace Qubrics\Management\Model;
 
 use ArrayAccess;
 use JsonSerializable;
 use InvalidArgumentException;
 use ReturnTypeWillChange;
-use Sendmux\Management\ObjectSerializer;
+use Qubrics\Management\ObjectSerializer;
 
 /**
  * MailWebhookEventPayload Class Doc Comment
  *
- * @package  Sendmux\Management
+ * @package  Qubrics\Management
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
@@ -59,7 +59,7 @@ class MailWebhookEventPayload implements ModelInterface, ArrayAccess, JsonSerial
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'data' => '\Sendmux\Management\Model\WebhookEventData',
+        'data' => '\Qubrics\Management\Model\WebhookEventData',
         'id' => 'string',
         'occurred_at' => 'string',
         'team_public_id' => 'string',
@@ -348,9 +348,9 @@ class MailWebhookEventPayload implements ModelInterface, ArrayAccess, JsonSerial
     /**
      * Gets data
      *
-     * @return \Sendmux\Management\Model\WebhookEventData
+     * @return \Qubrics\Management\Model\WebhookEventData
      */
-    public function getData(): \Sendmux\Management\Model\WebhookEventData
+    public function getData(): \Qubrics\Management\Model\WebhookEventData
     {
         return $this->container['data'];
     }
@@ -358,11 +358,11 @@ class MailWebhookEventPayload implements ModelInterface, ArrayAccess, JsonSerial
     /**
      * Sets data
      *
-     * @param \Sendmux\Management\Model\WebhookEventData $data data
+     * @param \Qubrics\Management\Model\WebhookEventData $data data
      *
      * @return $this
      */
-    public function setData(\Sendmux\Management\Model\WebhookEventData $data): static
+    public function setData(\Qubrics\Management\Model\WebhookEventData $data): static
     {
         if (is_null($data)) {
             throw new InvalidArgumentException('non-nullable data cannot be null');

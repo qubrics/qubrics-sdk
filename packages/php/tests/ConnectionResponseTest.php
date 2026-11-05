@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Sendmux\Tests;
+namespace Qubrics\Tests;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
@@ -10,8 +10,8 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Sendmux\Sending\Api\MetaApi;
-use Sendmux\Sending\ApiException;
+use Qubrics\Sending\Api\MetaApi;
+use Qubrics\Sending\ApiException;
 
 final class ConnectionResponseTest extends TestCase
 {

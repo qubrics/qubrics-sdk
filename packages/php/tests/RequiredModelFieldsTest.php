@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Sendmux\Tests;
+namespace Qubrics\Tests;
 
 use ErrorException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Sendmux\Management\Model\ManagementCreateMailboxRequest;
-use Sendmux\Sending\Model\AttachmentUploadIntentRequest;
-use Sendmux\Sending\Model\UploadedAttachmentRef;
+use Qubrics\Management\Model\ManagementCreateMailboxRequest;
+use Qubrics\Sending\Model\AttachmentUploadIntentRequest;
+use Qubrics\Sending\Model\UploadedAttachmentRef;
 
 final class RequiredModelFieldsTest extends TestCase
 {

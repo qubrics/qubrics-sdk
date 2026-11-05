@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c72a0998e9728d3d1d6182774a348d13",
+    "content-hash": "e27a0ee20b314e1a0eb35e1d5d3e165a",
     "packages": [],
     "packages-dev": [
         {
@@ -1256,6 +1256,170 @@
             "time": "2023-04-04T09:54:51+00:00"
         },
         {
+            "name": "qubrics/core",
+            "version": "3.0.0",
+            "dist": {
+                "type": "path",
+                "url": "packages/php/core",
+                "reference": "1095d1aa63864a51e2182e56ed0cb8464e052f79"
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^7.15.5",
+                "php": "^8.2",
+                "psr/http-message": "^2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Qubrics\\Core\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "Shared runtime helpers for Qubrics PHP SDK packages.",
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        },
+        {
+            "name": "qubrics/mailbox",
+            "version": "3.0.0",
+            "dist": {
+                "type": "path",
+                "url": "packages/php/mailbox",
+                "reference": "91fc31958d693b67f880c6a9f1fbc30967cd05ff"
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "ext-mbstring": "*",
+                "guzzlehttp/guzzle": "^7.15.5",
+                "guzzlehttp/psr7": "^2.13.1",
+                "php": "^8.2",
+                "qubrics/core": "^3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Qubrics\\Mailbox\\": "src/"
+                }
+            },
+            "scripts": {
+                "test": [
+                    "php tests/public-contract.php"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "Qubrics Mailbox API client for PHP.",
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        },
+        {
+            "name": "qubrics/management",
+            "version": "3.0.0",
+            "dist": {
+                "type": "path",
+                "url": "packages/php/management",
+                "reference": "5904d743a2b47a67f6c4efdb4feb362efcaaf7ff"
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "ext-mbstring": "*",
+                "guzzlehttp/guzzle": "^7.15.5",
+                "guzzlehttp/psr7": "^2.13.1",
+                "php": "^8.2",
+                "qubrics/core": "^3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Qubrics\\Management\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "Qubrics Management API client for PHP.",
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        },
+        {
+            "name": "qubrics/sdk",
+            "version": "3.0.0",
+            "dist": {
+                "type": "path",
+                "url": "packages/php/sdk",
+                "reference": "930ae50abea38b6d3178ea8747af7bcfddbed3b1"
+            },
+            "require": {
+                "php": "^8.2",
+                "qubrics/core": "^3.0",
+                "qubrics/mailbox": "^3.0",
+                "qubrics/management": "^3.0",
+                "qubrics/sending": "^3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Qubrics\\Sdk\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "Umbrella package for Qubrics PHP SDK clients.",
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        },
+        {
+            "name": "qubrics/sending",
+            "version": "3.0.0",
+            "dist": {
+                "type": "path",
+                "url": "packages/php/sending",
+                "reference": "748b9b4928701c2f51ec2ba9584c1babc468b51a"
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "ext-mbstring": "*",
+                "guzzlehttp/guzzle": "^7.15.5",
+                "guzzlehttp/psr7": "^2.13.1",
+                "php": "^8.2",
+                "qubrics/core": "^3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Qubrics\\Sending\\": "src/"
+                }
+            },
+            "scripts": {
+                "test": [
+                    "php tests/public-contract.php"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "Qubrics Sending API client for PHP.",
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        },
+        {
             "name": "ralouphie/getallheaders",
             "version": "3.0.3",
             "source": {
@@ -2284,160 +2448,6 @@
                 }
             ],
             "time": "2024-10-09T05:16:32+00:00"
-        },
-        {
-            "name": "sendmux/core",
-            "version": "2.1.1",
-            "dist": {
-                "type": "path",
-                "url": "packages/php/core",
-                "reference": "58dfe9431f0bc5948c8befb57ebe7c5a75e23573"
-            },
-            "require": {
-                "guzzlehttp/guzzle": "^7.15.5",
-                "php": "^8.2",
-                "psr/http-message": "^2.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Sendmux\\Core\\": "src/"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "description": "Shared runtime helpers for Sendmux PHP SDK packages.",
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
-        },
-        {
-            "name": "sendmux/mailbox",
-            "version": "3.0.0",
-            "dist": {
-                "type": "path",
-                "url": "packages/php/mailbox",
-                "reference": "3386b196ec4e2df4631d30ee5d465bee4f22be09"
-            },
-            "require": {
-                "ext-curl": "*",
-                "ext-json": "*",
-                "ext-mbstring": "*",
-                "guzzlehttp/guzzle": "^7.15.5",
-                "guzzlehttp/psr7": "^2.13.1",
-                "php": "^8.2",
-                "sendmux/core": "^2.1.1"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Sendmux\\Mailbox\\": "src/"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "description": "Sendmux Mailbox API client for PHP.",
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
-        },
-        {
-            "name": "sendmux/management",
-            "version": "2.1.1",
-            "dist": {
-                "type": "path",
-                "url": "packages/php/management",
-                "reference": "c26bb44466d47bdb2977075a7ec62b51db57bdc4"
-            },
-            "require": {
-                "ext-curl": "*",
-                "ext-json": "*",
-                "ext-mbstring": "*",
-                "guzzlehttp/guzzle": "^7.15.5",
-                "guzzlehttp/psr7": "^2.13.1",
-                "php": "^8.2",
-                "sendmux/core": "^2.1.1"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Sendmux\\Management\\": "src/"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "description": "Sendmux Management API client for PHP.",
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
-        },
-        {
-            "name": "sendmux/sdk",
-            "version": "3.0.0",
-            "dist": {
-                "type": "path",
-                "url": "packages/php/sdk",
-                "reference": "abcd384f9c52e1c7ba18419cb387e402db7c1646"
-            },
-            "require": {
-                "php": "^8.2",
-                "sendmux/core": "^2.1.1",
-                "sendmux/mailbox": "^3.0",
-                "sendmux/management": "^2.1.1",
-                "sendmux/sending": "^2.1.1"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Sendmux\\Sdk\\": "src/"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "description": "Umbrella package for Sendmux PHP SDK clients.",
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
-        },
-        {
-            "name": "sendmux/sending",
-            "version": "2.1.1",
-            "dist": {
-                "type": "path",
-                "url": "packages/php/sending",
-                "reference": "4e8074368a2362250a1d5fedb33c10347a8e6852"
-            },
-            "require": {
-                "ext-curl": "*",
-                "ext-json": "*",
-                "ext-mbstring": "*",
-                "guzzlehttp/guzzle": "^7.15.5",
-                "guzzlehttp/psr7": "^2.13.1",
-                "php": "^8.2",
-                "sendmux/core": "^2.1.1"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Sendmux\\Sending\\": "src/"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "description": "Sendmux Sending API client for PHP.",
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
         },
         {
             "name": "squizlabs/php_codesniffer",

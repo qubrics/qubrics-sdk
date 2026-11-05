@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Sendmux\Tests;
+namespace Qubrics\Tests;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
@@ -11,8 +11,8 @@ use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Http\Message\RequestInterface;
-use Sendmux\Core\RetryMiddleware;
-use Sendmux\Core\RetryOptions;
+use Qubrics\Core\RetryMiddleware;
+use Qubrics\Core\RetryOptions;
 
 final class OAuthRetryTest extends TestCase
 {

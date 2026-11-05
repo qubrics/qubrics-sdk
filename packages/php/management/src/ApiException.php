@@ -4,7 +4,7 @@
  * ApiException
  * PHP version 8.1
  *
- * @package  Sendmux\Management
+ * @package  Qubrics\Management
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
@@ -25,7 +25,7 @@
  * Do not edit the class manually.
  */
 
-namespace Sendmux\Management;
+namespace Qubrics\Management;
 
 use Exception;
 use stdClass;
@@ -33,7 +33,7 @@ use stdClass;
 /**
  * ApiException Class Doc Comment
  *
- * @package  Sendmux\Management
+ * @package  Qubrics\Management
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */

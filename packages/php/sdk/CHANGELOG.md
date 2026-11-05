@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+### Qubrics rename
+
+- Publish as `qubrics/sdk` at 3.0.0 with `Qubrics\` namespaces and Qubrics service defaults.
+- Keep existing credential prefixes, OAuth/custom URL configuration and compatibility wire names.
+
 ### Changed
 
 - Breaking: require Mailbox `^3.0` for the corrected changes-response types. Follow the [3.0 migration guide](https://github.com/Sendmux/sendmux-sdk/blob/main/packages/php/UPGRADING-3.0.md) before upgrading.

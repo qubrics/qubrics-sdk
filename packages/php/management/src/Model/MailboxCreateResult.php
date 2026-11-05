@@ -5,7 +5,7 @@
  *
  * PHP version 8.1
  *
- * @package  Sendmux\Management
+ * @package  Qubrics\Management
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
@@ -26,18 +26,18 @@
  * Do not edit the class manually.
  */
 
-namespace Sendmux\Management\Model;
+namespace Qubrics\Management\Model;
 
 use ArrayAccess;
 use JsonSerializable;
 use InvalidArgumentException;
 use ReturnTypeWillChange;
-use Sendmux\Management\ObjectSerializer;
+use Qubrics\Management\ObjectSerializer;
 
 /**
  * MailboxCreateResult Class Doc Comment
  *
- * @package  Sendmux\Management
+ * @package  Qubrics\Management
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
@@ -59,8 +59,8 @@ class MailboxCreateResult implements ModelInterface, ArrayAccess, JsonSerializab
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'credential' => '\Sendmux\Management\Model\MailboxCredential',
-        'mailbox' => '\Sendmux\Management\Model\Mailbox',
+        'credential' => '\Qubrics\Management\Model\MailboxCredential',
+        'mailbox' => '\Qubrics\Management\Model\Mailbox',
         'warning' => 'string'
     ];
 
@@ -290,9 +290,9 @@ class MailboxCreateResult implements ModelInterface, ArrayAccess, JsonSerializab
     /**
      * Gets credential
      *
-     * @return \Sendmux\Management\Model\MailboxCredential|null
+     * @return \Qubrics\Management\Model\MailboxCredential|null
      */
-    public function getCredential(): ?\Sendmux\Management\Model\MailboxCredential
+    public function getCredential(): ?\Qubrics\Management\Model\MailboxCredential
     {
         return $this->container['credential'];
     }
@@ -300,11 +300,11 @@ class MailboxCreateResult implements ModelInterface, ArrayAccess, JsonSerializab
     /**
      * Sets credential
      *
-     * @param \Sendmux\Management\Model\MailboxCredential|null $credential Initial credential for the mailbox. `null` if credential generation failed — call POST /mailboxes/{id}/keys to retry.
+     * @param \Qubrics\Management\Model\MailboxCredential|null $credential Initial credential for the mailbox. `null` if credential generation failed — call POST /mailboxes/{id}/keys to retry.
      *
      * @return $this
      */
-    public function setCredential(?\Sendmux\Management\Model\MailboxCredential $credential): static
+    public function setCredential(?\Qubrics\Management\Model\MailboxCredential $credential): static
     {
         if (is_null($credential)) {
             array_push($this->openAPINullablesSetToNull, 'credential');
@@ -324,9 +324,9 @@ class MailboxCreateResult implements ModelInterface, ArrayAccess, JsonSerializab
     /**
      * Gets mailbox
      *
-     * @return \Sendmux\Management\Model\Mailbox
+     * @return \Qubrics\Management\Model\Mailbox
      */
-    public function getMailbox(): \Sendmux\Management\Model\Mailbox
+    public function getMailbox(): \Qubrics\Management\Model\Mailbox
     {
         return $this->container['mailbox'];
     }
@@ -334,11 +334,11 @@ class MailboxCreateResult implements ModelInterface, ArrayAccess, JsonSerializab
     /**
      * Sets mailbox
      *
-     * @param \Sendmux\Management\Model\Mailbox $mailbox mailbox
+     * @param \Qubrics\Management\Model\Mailbox $mailbox mailbox
      *
      * @return $this
      */
-    public function setMailbox(\Sendmux\Management\Model\Mailbox $mailbox): static
+    public function setMailbox(\Qubrics\Management\Model\Mailbox $mailbox): static
     {
         if (is_null($mailbox)) {
             throw new InvalidArgumentException('non-nullable mailbox cannot be null');

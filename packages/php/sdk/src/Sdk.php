@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Sendmux\Sdk;
+namespace Qubrics\Sdk;
 
 final class Sdk
 {

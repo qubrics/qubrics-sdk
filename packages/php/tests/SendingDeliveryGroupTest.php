@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Sendmux\Tests;
+namespace Qubrics\Tests;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Sendmux\Sending\Model\Address;
-use Sendmux\Sending\Model\Attachment;
-use Sendmux\Sending\Model\BatchSendRequest;
-use Sendmux\Sending\Model\EmailSendRequest;
-use Sendmux\Sending\Model\EmailSendRequestDeliveryGroup;
-use Sendmux\Sending\ObjectSerializer;
+use Qubrics\Sending\Model\Address;
+use Qubrics\Sending\Model\Attachment;
+use Qubrics\Sending\Model\BatchSendRequest;
+use Qubrics\Sending\Model\EmailSendRequest;
+use Qubrics\Sending\Model\EmailSendRequestDeliveryGroup;
+use Qubrics\Sending\ObjectSerializer;
 
 final class SendingDeliveryGroupTest extends TestCase
 {

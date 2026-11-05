@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Sendmux\Tests;
+namespace Qubrics\Tests;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
-use Sendmux\Mailbox\Model\MailboxMessageContentResponse;
-use Sendmux\Mailbox\Model\MailboxRawBodyResponse;
-use Sendmux\Mailbox\Model\MailboxSubmissionEnvelope;
-use Sendmux\Mailbox\Model\MailboxThreadContentResponse;
-use Sendmux\Management\Model\MailboxAppPasswordResult;
+use Qubrics\Mailbox\Model\MailboxMessageContentResponse;
+use Qubrics\Mailbox\Model\MailboxRawBodyResponse;
+use Qubrics\Mailbox\Model\MailboxSubmissionEnvelope;
+use Qubrics\Mailbox\Model\MailboxThreadContentResponse;
+use Qubrics\Management\Model\MailboxAppPasswordResult;
 
 final class DeprecatedModelAliasesTest extends TestCase
 {
@@ -28,39 +28,39 @@ final class DeprecatedModelAliasesTest extends TestCase
     public static function compatModelNames(): iterable
     {
         yield 'mailbox message content response data' => [
-            'Sendmux\Mailbox\Model\MailboxMessageContentResponseAllOfData',
-            'Sendmux\Mailbox\Model\MailboxMessageContent',
-            'sendmux/mailbox 4.0',
+            'Qubrics\Mailbox\Model\MailboxMessageContentResponseAllOfData',
+            'Qubrics\Mailbox\Model\MailboxMessageContent',
+            'qubrics/mailbox 4.0',
             MailboxMessageContentResponse::openAPITypes()['data'] ?? null,
         ];
         yield 'mailbox raw body response data' => [
-            'Sendmux\Mailbox\Model\MailboxRawBodyResponseAllOfData',
-            'Sendmux\Mailbox\Model\MailboxRawBody',
-            'sendmux/mailbox 4.0',
+            'Qubrics\Mailbox\Model\MailboxRawBodyResponseAllOfData',
+            'Qubrics\Mailbox\Model\MailboxRawBody',
+            'qubrics/mailbox 4.0',
             MailboxRawBodyResponse::openAPITypes()['data'] ?? null,
         ];
         yield 'mailbox submission envelope recipient' => [
-            'Sendmux\Mailbox\Model\MailboxSubmissionEnvelopeRcptToInner',
-            'Sendmux\Mailbox\Model\MailboxSubmissionEnvelopeAddress',
-            'sendmux/mailbox 4.0',
+            'Qubrics\Mailbox\Model\MailboxSubmissionEnvelopeRcptToInner',
+            'Qubrics\Mailbox\Model\MailboxSubmissionEnvelopeAddress',
+            'qubrics/mailbox 4.0',
             MailboxSubmissionEnvelope::openAPITypes()['rcpt_to'] ?? null,
         ];
         yield 'mailbox thread content response data' => [
-            'Sendmux\Mailbox\Model\MailboxThreadContentResponseAllOfData',
-            'Sendmux\Mailbox\Model\MailboxMessageContent',
-            'sendmux/mailbox 4.0',
+            'Qubrics\Mailbox\Model\MailboxThreadContentResponseAllOfData',
+            'Qubrics\Mailbox\Model\MailboxMessageContent',
+            'qubrics/mailbox 4.0',
             MailboxThreadContentResponse::openAPITypes()['data'] ?? null,
         ];
         yield 'management app password credential' => [
-            'Sendmux\Management\Model\MailboxAppPasswordResultCredential',
-            'Sendmux\Management\Model\MailboxCredential',
-            'sendmux/management 3.0',
+            'Qubrics\Management\Model\MailboxAppPasswordResultCredential',
+            'Qubrics\Management\Model\MailboxCredential',
+            'qubrics/management 3.0',
             MailboxAppPasswordResult::openAPITypes()['credential'] ?? null,
         ];
         yield 'management per-day quota range' => [
-            'Sendmux\Management\Model\ProviderCreateBodyQuotasPerDayAnyOf',
-            'Sendmux\Management\Model\ProviderQuotaRange',
-            'sendmux/management 3.0',
+            'Qubrics\Management\Model\ProviderCreateBodyQuotasPerDayAnyOf',
+            'Qubrics\Management\Model\ProviderQuotaRange',
+            'qubrics/management 3.0',
             null,
         ];
     }

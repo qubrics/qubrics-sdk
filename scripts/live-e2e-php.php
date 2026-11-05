@@ -67,27 +67,27 @@ function main(): void
 function createApis(string $surface): array
 {
     if ($surface === 'mailbox') {
-        return [Sendmux\Mailbox\ClientFactory::createMailboxAPIApi(mailboxApiKey(), appBaseUrl())];
+        return [Qubrics\Mailbox\ClientFactory::createMailboxAPIApi(mailboxApiKey(), appBaseUrl())];
     }
     if ($surface === 'sending') {
         return [
-            Sendmux\Sending\ClientFactory::createAttachmentsApi(mailboxApiKey(), sendingBaseUrl()),
-            Sendmux\Sending\ClientFactory::createEmailsApi(mailboxApiKey(), sendingBaseUrl()),
-            Sendmux\Sending\ClientFactory::createMetaApi(mailboxApiKey(), sendingBaseUrl()),
+            Qubrics\Sending\ClientFactory::createAttachmentsApi(mailboxApiKey(), sendingBaseUrl()),
+            Qubrics\Sending\ClientFactory::createEmailsApi(mailboxApiKey(), sendingBaseUrl()),
+            Qubrics\Sending\ClientFactory::createMetaApi(mailboxApiKey(), sendingBaseUrl()),
         ];
     }
     if ($surface === 'management') {
         return [
-            Sendmux\Management\ClientFactory::createBillingApi(rootApiKey(), appBaseUrl()),
-            Sendmux\Management\ClientFactory::createConnectionApi(rootApiKey(), appBaseUrl()),
-            Sendmux\Management\ClientFactory::createDomainFiltersApi(rootApiKey(), appBaseUrl()),
-            Sendmux\Management\ClientFactory::createDomainsApi(rootApiKey(), appBaseUrl()),
-            Sendmux\Management\ClientFactory::createEmailsApi(rootApiKey(), appBaseUrl()),
-            Sendmux\Management\ClientFactory::createInboxesApi(rootApiKey(), appBaseUrl()),
-            Sendmux\Management\ClientFactory::createMailboxFiltersApi(rootApiKey(), appBaseUrl()),
-            Sendmux\Management\ClientFactory::createMailboxesApi(rootApiKey(), appBaseUrl()),
-            Sendmux\Management\ClientFactory::createSendingAccountsApi(rootApiKey(), appBaseUrl()),
-            Sendmux\Management\ClientFactory::createWebhooksApi(rootApiKey(), appBaseUrl()),
+            Qubrics\Management\ClientFactory::createBillingApi(rootApiKey(), appBaseUrl()),
+            Qubrics\Management\ClientFactory::createConnectionApi(rootApiKey(), appBaseUrl()),
+            Qubrics\Management\ClientFactory::createDomainFiltersApi(rootApiKey(), appBaseUrl()),
+            Qubrics\Management\ClientFactory::createDomainsApi(rootApiKey(), appBaseUrl()),
+            Qubrics\Management\ClientFactory::createEmailsApi(rootApiKey(), appBaseUrl()),
+            Qubrics\Management\ClientFactory::createInboxesApi(rootApiKey(), appBaseUrl()),
+            Qubrics\Management\ClientFactory::createMailboxFiltersApi(rootApiKey(), appBaseUrl()),
+            Qubrics\Management\ClientFactory::createMailboxesApi(rootApiKey(), appBaseUrl()),
+            Qubrics\Management\ClientFactory::createSendingAccountsApi(rootApiKey(), appBaseUrl()),
+            Qubrics\Management\ClientFactory::createWebhooksApi(rootApiKey(), appBaseUrl()),
         ];
     }
     throw new RuntimeException("Unknown surface: {$surface}");
@@ -370,12 +370,12 @@ function parameterName(string $source, string $value): string
 
 function appBaseUrl(): string
 {
-    return getenv('SENDMUX_LIVE_E2E_APP_BASE_URL') ?: (getenv('SENDMUX_STAGING_APP_BASE_URL') ?: 'https://app.sendmux.ai/api/v1');
+    return getenv('SENDMUX_LIVE_E2E_APP_BASE_URL') ?: (getenv('SENDMUX_STAGING_APP_BASE_URL') ?: 'https://app.qubrics.com/api/v1');
 }
 
 function sendingBaseUrl(): string
 {
-    return getenv('SENDMUX_LIVE_E2E_SENDING_BASE_URL') ?: (getenv('SENDMUX_STAGING_SMTP_BASE_URL') ?: 'https://smtp.sendmux.ai/api/v1');
+    return getenv('SENDMUX_LIVE_E2E_SENDING_BASE_URL') ?: (getenv('SENDMUX_STAGING_SMTP_BASE_URL') ?: 'https://smtp.qubrics.com/api/v1');
 }
 
 function rootApiKey(): string

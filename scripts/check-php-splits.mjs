@@ -7,11 +7,11 @@ const splitRoot = join(root, ".tmp", "php-splits");
 const consumerRoot = join(root, ".tmp", "php-split-consumer");
 // Local path versions are fixture inputs; public versions belong to split tags.
 const packages = [
-  { name: "core", composer: "sendmux/core", repo: "sendmux-php-core", fixtureVersion: "2.1.1" },
-  { name: "sending", composer: "sendmux/sending", repo: "sendmux-php-sending", fixtureVersion: "2.1.1" },
-  { name: "mailbox", composer: "sendmux/mailbox", repo: "sendmux-php-mailbox", fixtureVersion: "3.0.0" },
-  { name: "management", composer: "sendmux/management", repo: "sendmux-php-management", fixtureVersion: "2.1.1" },
-  { name: "sdk", composer: "sendmux/sdk", repo: "sendmux-php-sdk", fixtureVersion: "3.0.0" },
+  { name: "core", composer: "qubrics/core", repo: "qubrics-php-core", fixtureVersion: "3.0.0" },
+  { name: "sending", composer: "qubrics/sending", repo: "qubrics-php-sending", fixtureVersion: "3.0.0" },
+  { name: "mailbox", composer: "qubrics/mailbox", repo: "qubrics-php-mailbox", fixtureVersion: "3.0.0" },
+  { name: "management", composer: "qubrics/management", repo: "qubrics-php-management", fixtureVersion: "3.0.0" },
+  { name: "sdk", composer: "qubrics/sdk", repo: "qubrics-php-sdk", fixtureVersion: "3.0.0" },
 ];
 
 rmSync(splitRoot, { force: true, recursive: true });
@@ -53,7 +53,7 @@ writeFileSync(
   join(consumerRoot, "composer.json"),
   `${JSON.stringify(
     {
-      name: "sendmux/php-split-consumer",
+      name: "qubrics/php-split-consumer",
       type: "project",
       repositories: packages.map((pkg) => ({
         type: "path",
@@ -66,7 +66,7 @@ writeFileSync(
         },
       })),
       require: {
-        "sendmux/sdk": packages.find((pkg) => pkg.name === "sdk").fixtureVersion,
+        "qubrics/sdk": packages.find((pkg) => pkg.name === "sdk").fixtureVersion,
       },
       config: {
         "sort-packages": true,
@@ -82,6 +82,7 @@ for (const pkg of packages) {
   const target = join(splitRoot, pkg.repo);
   run("composer", ["install", "--no-interaction", "--no-progress", "--prefer-dist"], { cwd: target });
   run("composer", ["check-platform-reqs"], { cwd: target });
+  run("php", ["tests/public-contract.php"], { cwd: target });
 }
 run("composer", ["check-platform-reqs"], { cwd: consumerRoot });
 console.log(`PHP split dry-run verified in ${splitRoot}`);

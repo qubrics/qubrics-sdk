@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Sendmux\Tests;
+namespace Qubrics\Tests;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Sendmux\Management\Model\CalendarWebhookEventData;
-use Sendmux\Management\Model\CalendarWebhookEventPayload;
-use Sendmux\Management\Model\MailWebhookEventPayload;
-use Sendmux\Management\Model\WebhookDeliveryPayload;
-use Sendmux\Management\Model\WebhookEventData;
-use Sendmux\Management\Model\WebhookEventPayload;
-use Sendmux\Management\ObjectSerializer;
+use Qubrics\Management\Model\CalendarWebhookEventData;
+use Qubrics\Management\Model\CalendarWebhookEventPayload;
+use Qubrics\Management\Model\MailWebhookEventPayload;
+use Qubrics\Management\Model\WebhookDeliveryPayload;
+use Qubrics\Management\Model\WebhookEventData;
+use Qubrics\Management\Model\WebhookEventPayload;
+use Qubrics\Management\ObjectSerializer;
 
 final class WebhookEventPayloadTest extends TestCase
 {
