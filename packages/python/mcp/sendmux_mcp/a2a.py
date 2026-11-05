@@ -5,6 +5,7 @@ import json
 import re
 from binascii import Error as Base64DecodeError
 from dataclasses import dataclass
+from functools import partial
 from importlib.metadata import version
 from typing import Any, Protocol
 from urllib.parse import quote, urlencode
@@ -46,11 +47,11 @@ from sendmux_mcp.hosted_proxy import (
 from sendmux_mcp.permissions import api_key_has_permission
 
 A2A_RESOURCE_URL = "https://a2a.sendmux.ai/a2a/v1"
+A2A_IDENTITIES = {
+    A2A_RESOURCE_URL: ("Sendmux", "https://app.sendmux.ai"),
+    "https://a2a.qubrics.com/a2a/v1": ("Qubrics", "https://app.qubrics.com"),
+}
 A2A_AGENT_CARD_URL = "https://a2a.sendmux.ai/.well-known/agent-card.json"
-OAUTH_METADATA_URL = "https://app.sendmux.ai/.well-known/oauth-authorization-server"
-OAUTH_AUTHORIZE_URL = "https://app.sendmux.ai/mcp/oauth/authorize"
-OAUTH_TOKEN_URL = "https://app.sendmux.ai/mcp/oauth/token"
-OAUTH_PROTECTED_RESOURCE_METADATA_URL = "https://a2a.sendmux.ai/.well-known/oauth-protected-resource"
 A2A_PATH_PREFIX = "/a2a/v1"
 A2A_PROTOCOL_VERSION = "1.0"
 A2A_HSTS_HEADER = "max-age=63072000; includeSubDomains"
@@ -226,7 +227,8 @@ def build_a2a_http_components(
     proxy_config: HostedProxyConfig,
     proxy_transport: httpx.AsyncBaseTransport | None = None,
 ) -> A2AHttpComponents:
-    card = build_a2a_agent_card()
+    resource_url = proxy_config.resource or A2A_RESOURCE_URL
+    card = build_a2a_agent_card(resource_url=resource_url)
     proxy = A2AHostedProxy(proxy_config, catalog=A2AOperationCatalog(manifests), inner=proxy_transport)
     request_handler = DefaultRequestHandler(
         agent_executor=SendmuxA2AExecutor(proxy),
@@ -245,10 +247,10 @@ def build_a2a_http_components(
         *cacheable_agent_card_routes(card),
         Route(
             "/.well-known/oauth-protected-resource",
-            endpoint=a2a_protected_resource_metadata,
+            endpoint=partial(a2a_protected_resource_metadata, resource_url=resource_url),
             methods=["GET"],
         ),
-        protected_a2a_route(message_route, token_verifier),
+        protected_a2a_route(message_route, token_verifier, resource_url=resource_url),
     ]
     return A2AHttpComponents(routes=routes, request_handler=request_handler, proxy=proxy)
 
@@ -256,7 +258,7 @@ def build_a2a_http_components(
 def cacheable_agent_card_routes(card: AgentCard) -> list[BaseRoute]:
     card_route = create_agent_card_routes(card)[0]
     card_endpoint = card_route.endpoint
-    etag = f'"{card.version}"'
+    etag = f'"{card.version}"' if card.name == "Sendmux A2A" else f'"{card.version}-qubrics"'
     cache_headers = {
         "Cache-Control": "public, max-age=300",
         "ETag": etag,
@@ -274,7 +276,11 @@ def cacheable_agent_card_routes(card: AgentCard) -> list[BaseRoute]:
     return [Route(card_route.path, endpoint=endpoint, methods=["GET"])]
 
 
-def protected_a2a_route(route: Route, token_verifier: A2ATokenVerifier) -> Route:
+def protected_a2a_route(
+    route: Route, token_verifier: A2ATokenVerifier, *, resource_url: str = A2A_RESOURCE_URL,
+) -> Route:
+    metadata_url = f"{resource_url.removesuffix(A2A_PATH_PREFIX)}/.well-known/oauth-protected-resource"
+
     async def endpoint(request: Request) -> Response:
         authorization = request.headers.get("authorization", "")
         scheme, _, token = authorization.partition(" ")
@@ -285,7 +291,7 @@ def protected_a2a_route(route: Route, token_verifier: A2ATokenVerifier) -> Route
                 status_code=401,
                 headers={
                     "Content-Type": "application/a2a+json",
-                    "WWW-Authenticate": f'Bearer resource_metadata="{OAUTH_PROTECTED_RESOURCE_METADATA_URL}"',
+                    "WWW-Authenticate": f'Bearer resource_metadata="{metadata_url}"',
                     "Strict-Transport-Security": A2A_HSTS_HEADER,
                 },
             )
@@ -298,14 +304,17 @@ def protected_a2a_route(route: Route, token_verifier: A2ATokenVerifier) -> Route
     return Route(route.path, endpoint=endpoint, methods=["POST"])
 
 
-async def a2a_protected_resource_metadata(_request: Request) -> JSONResponse:
+async def a2a_protected_resource_metadata(
+    _request: Request, *, resource_url: str = A2A_RESOURCE_URL,
+) -> JSONResponse:
+    brand, app_origin = A2A_IDENTITIES[resource_url]
     return JSONResponse(
         {
-            "resource": A2A_RESOURCE_URL,
-            "authorization_servers": ["https://app.sendmux.ai"],
+            "resource": resource_url,
+            "authorization_servers": [app_origin],
             "scopes_supported": list(HOSTED_MCP_DISCOVERY_SCOPES),
             "bearer_methods_supported": ["header"],
-            "resource_name": "Sendmux A2A",
+            "resource_name": f"{brand} A2A",
         },
         headers={
             "Cache-Control": "public, max-age=300",
@@ -365,29 +374,30 @@ def operation_headers(operation: A2AOperationRequest, body: bytes) -> dict[str, 
     return headers
 
 
-def build_a2a_agent_card() -> AgentCard:
+def build_a2a_agent_card(*, resource_url: str = A2A_RESOURCE_URL) -> AgentCard:
+    brand, app_origin = A2A_IDENTITIES[resource_url]
     oauth_flow = AuthorizationCodeOAuthFlow(
-        authorization_url=OAUTH_AUTHORIZE_URL,
-        token_url=OAUTH_TOKEN_URL,
-        refresh_url=OAUTH_TOKEN_URL,
-        scopes={scope: f"Sendmux permission: {scope}" for scope in HOSTED_MCP_DISCOVERY_SCOPES},
+        authorization_url=f"{app_origin}/mcp/oauth/authorize",
+        token_url=f"{app_origin}/mcp/oauth/token",
+        refresh_url=f"{app_origin}/mcp/oauth/token",
+        scopes={scope: f"{brand} permission: {scope}" for scope in HOSTED_MCP_DISCOVERY_SCOPES},
         pkce_required=True,
     )
     oauth_scheme = SecurityScheme(
         oauth2_security_scheme=OAuth2SecurityScheme(
             description="OAuth 2.0 authorization-code flow with PKCE.",
             flows=OAuthFlows(authorization_code=oauth_flow),
-            oauth2_metadata_url=OAUTH_METADATA_URL,
+            oauth2_metadata_url=f"{app_origin}/.well-known/oauth-authorization-server",
         )
     )
 
     return AgentCard(
-        name="Sendmux A2A",
+        name=f"{brand} A2A",
         version=version("sendmux-mcp"),
-        description="Deterministic agent access to Sendmux mailbox, management, and sending operations.",
+        description=f"Deterministic agent access to {brand} mailbox, management, and sending operations.",
         supported_interfaces=[
             AgentInterface(
-                url=A2A_RESOURCE_URL,
+                url=resource_url,
                 protocol_binding="HTTP+JSON",
                 protocol_version=A2A_PROTOCOL_VERSION,
             )
@@ -405,19 +415,19 @@ def build_a2a_agent_card() -> AgentCard:
             AgentSkill(
                 id="mailbox",
                 name="Mailbox",
-                description="Read, search, organise, and send mail through granted Sendmux mailboxes.",
+                description=f"Read, search, organise, and send mail through granted {brand} mailboxes.",
                 tags=["email", "mailbox"],
             ),
             AgentSkill(
                 id="management",
                 name="Management",
-                description="Manage Sendmux domains, mailboxes, logs, metrics, billing, and webhooks.",
+                description=f"Manage {brand} domains, mailboxes, logs, metrics, billing, and webhooks.",
                 tags=["email", "management"],
             ),
             AgentSkill(
                 id="sending",
                 name="Sending",
-                description="Send email and manage outbound attachments through Sendmux sending routes.",
+                description=f"Send email and manage outbound attachments through {brand} sending routes.",
                 tags=["email", "sending"],
             ),
         ],
