@@ -12,8 +12,9 @@ jobs:
   evidence:
     strategy:
       fail-fast: false
+      max-parallel: 16
       matrix:
-        batch: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
+        batch: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]
     runs-on: windows-latest
     timeout-minutes: 45
     env:
@@ -29,7 +30,7 @@ jobs:
         with:
           version: 10.22.0
       - run: pnpm install --frozen-lockfile
-      - name: Install Microsoft Sysinternals Handle
+      - name: Install signed Microsoft Sysinternals capture tools
         shell: pwsh
         run: |
           $ErrorActionPreference = 'Stop'
@@ -49,24 +50,112 @@ jobs:
           & $handle -accepteula -nobanner -p $PID | Set-Content .tmp/handle-preflight.txt
           if ($LASTEXITCODE -ne 0) { throw "Handle preflight failed: $LASTEXITCODE" }
           "WINDOWS_HANDLE_EXE=$handle" >> $env:GITHUB_ENV
-      - name: Run at most fifteen unchanged sensitivity suites
+          # Procmon captures opens before teardown, not just handles after an error.
+          # https://learn.microsoft.com/en-us/sysinternals/downloads/procmon
+          $archive = Join-Path $env:RUNNER_TEMP 'ProcessMonitor.zip'
+          $tools = Join-Path $env:RUNNER_TEMP 'php4-procmon'
+          Invoke-WebRequest https://download.sysinternals.com/files/ProcessMonitor.zip -OutFile $archive
+          Expand-Archive -LiteralPath $archive -DestinationPath $tools
+          $procmon = Join-Path $tools 'Procmon64.exe'
+          $signature = Get-AuthenticodeSignature -LiteralPath $procmon
+          if ($signature.Status -ne 'Valid' -or $signature.SignerCertificate.Subject -notmatch 'O=Microsoft Corporation') {
+            throw 'Procmon must have a valid Microsoft signature'
+          }
+          @{ hash = (Get-FileHash -LiteralPath $procmon); version = (Get-Item -LiteralPath $procmon).VersionInfo.FileVersion } |
+            ConvertTo-Json -Depth 4 | Set-Content .tmp/handle-procmon-provenance.json
+          "WINDOWS_PROCMON_EXE=$procmon" >> $env:GITHUB_ENV
+      - name: Trace at most fifteen unchanged sensitivity suites
         shell: pwsh
         run: |
           $ErrorActionPreference = 'Stop'
           node --version
-          # Retained Node 22 rate: 4 / 4777 target removals. 16 * 15 * 15 = 3600;
-          # plug-in IID P(no event) = (1 - 4/4777)^3600 = 0.04901.
+          $traceRoot = Join-Path $env:WINDOWS_OWNERSHIP_EVIDENCE 'traces'
+          New-Item -ItemType Directory -Path $traceRoot -Force | Out-Null
+          $procmon = $env:WINDOWS_PROCMON_EXE
+          function Invoke-Procmon([string[]] $arguments) {
+            $tool = Start-Process -FilePath $procmon -ArgumentList $arguments -PassThru -Wait
+            if ($tool.ExitCode -ne 0) { throw "Procmon failed ($($tool.ExitCode)): $arguments" }
+          }
+          function Save-RunnerState([string] $name) {
+            $state = [ordered]@{ at = [DateTimeOffset]::UtcNow.ToString('o'); image = $env:ImageOS; image_version = $env:ImageVersion }
+            $failures = @()
+            foreach ($read in @('Get-MpComputerStatus', 'Get-MpPreference', 'Get-CimInstance')) {
+              try {
+                if ($read -eq 'Get-CimInstance') {
+                  $state[$read] = Get-CimInstance Win32_Process | Select-Object ProcessId,ParentProcessId,Name,CreationDate,ExecutablePath,CommandLine
+                } else { $state[$read] = & $read }
+              } catch {
+                $state[$read] = @{ error = $_.ToString() }
+                $failures += $_.ToString()
+              }
+            }
+            $state | ConvertTo-Json -Depth 8 | Set-Content (Join-Path $traceRoot "$name.json")
+            if ($failures.Count) { throw "Runner-state capture incomplete: $($failures -join '; ')" }
+          }
+          Save-RunnerState 'before'
+          $previousTrace = @()
+          # 22 * 15 * 15 = 4950 targets; pooled p=5/8212 gives E=3.013882, P0=.049056.
           for ($iteration = 1; $iteration -le 15; $iteration++) {
+            if ([DateTimeOffset]::UtcNow -ge [DateTimeOffset]::Parse('2026-11-05T20:00:00Z')) {
+              throw '07:00 AEDT evidence boundary reached; suite count incomplete'
+            }
             Write-Output "Batch ${{ matrix.batch }}, suite $iteration of 15"
-            node scripts/test-windows-consumer-sensitivity.mjs
-            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+            $prefix = Join-Path $traceRoot "suite-$iteration"
+            $pml = "$prefix.pml"
+            $csv = "$prefix.csv"
+            $startMarker = "$prefix-start.marker"
+            $endMarker = "$prefix-end.marker"
+            $capture = $null
+            $nodeExit = $null
+            $captureError = $null
+            try {
+              $capture = Start-Process -FilePath $procmon -ArgumentList @('/AcceptEula', '/Quiet', '/Minimized', '/NoFilter', '/BackingFile', "`"$pml`"") -PassThru
+              Invoke-Procmon @('/AcceptEula', '/Quiet', '/WaitForIdle')
+              [DateTimeOffset]::UtcNow.ToString('o') | Set-Content -LiteralPath $startMarker
+              node scripts/test-windows-consumer-sensitivity.mjs
+              $nodeExit = $LASTEXITCODE
+            } catch {
+              $captureError = $_.ToString()
+            } finally {
+              if ($capture) {
+                try {
+                  [DateTimeOffset]::UtcNow.ToString('o') | Set-Content -LiteralPath $endMarker
+                  Invoke-Procmon @('/AcceptEula', '/Quiet', '/Terminate')
+                  Invoke-Procmon @('/AcceptEula', '/Quiet', '/NoFilter', '/OpenLog', "`"$pml`"", '/SaveAs', "`"$csv`"")
+                  $markers = @(Import-Csv -LiteralPath $csv | Where-Object { $_.Path -eq $startMarker -or $_.Path -eq $endMarker } | Select-Object -ExpandProperty Path -Unique)
+                  if ($markers.Count -ne 2) { throw 'Trace does not contain both suite boundary markers' }
+                } catch {
+                  $captureError = @($captureError, $_.ToString()) -join '; '
+                }
+              }
+              $receipt = [ordered]@{ suite = $iteration; node_exit = $nodeExit; capture_error = $captureError; at = [DateTimeOffset]::UtcNow.ToString('o') }
+              foreach ($traceFile in @($pml, $csv)) {
+                if (Test-Path -LiteralPath $traceFile) { $receipt[$traceFile] = (Get-Item -LiteralPath $traceFile).Length }
+              }
+              $receipt | ConvertTo-Json | Set-Content "$prefix.json"
+              Write-Output ($receipt | ConvertTo-Json -Compress)
+            }
+            if ($captureError) { Write-Output "::error::Native capture incomplete: $captureError" }
+            if ($null -ne $nodeExit -and $nodeExit -ne 0) {
+              try { Save-RunnerState "after-failure-$iteration" }
+              catch { Write-Output "::error::$_" }
+              exit $nodeExit
+            }
+            if ($captureError) { throw $captureError }
+            if ($null -eq $nodeExit) { throw 'Sensitivity suite did not record its native exit' }
+            # Keep only the current successful suite and its replacement until validated.
+            foreach ($oldTrace in $previousTrace) { Remove-Item -LiteralPath $oldTrace }
+            $previousTrace = @($pml, $csv)
           }
       - name: Upload failure-point handles, process lists and fixture receipts
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: windows-node22-lock-evidence-${{ matrix.batch }}
-          path: .tmp/windows-evidence/**/*.json
+          path: |
+            .tmp/windows-evidence/**/*.json
+            .tmp/windows-evidence/**/*.pml
+            .tmp/windows-evidence/**/*.csv
           if-no-files-found: error
           retention-days: 7
       - name: Upload Handle provenance and preflight
@@ -75,5 +164,6 @@ jobs:
         with:
           name: windows-handle-provenance-${{ matrix.batch }}
           path: .tmp/handle-*
+          include-hidden-files: true
           if-no-files-found: error
           retention-days: 7

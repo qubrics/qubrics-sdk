@@ -191,10 +191,13 @@ exit 0`;
       if (invocation) await invocation;
       if (directory && existsSync(directory)) await rm(directory, { recursive: true, maxRetries: 3, retryDelay: 100 });
       assert(!directory || !existsSync(directory));
+      row.fixture_rm_started_at = new Date().toISOString();
       await rm(fixture, { recursive: true, maxRetries: 3, retryDelay: 100 });
+      row.fixture_rm_completed_at = new Date().toISOString();
       assert(!existsSync(fixture));
       row.paths_absent = true;
     } catch (error) {
+      row.cleanup_error_at = new Date().toISOString();
       row.cleanup_error = error.message;
       if (process.env.WINDOWS_HANDLE_EXE) {
         const lockedPath = error.path ?? fixture;
