@@ -10,11 +10,6 @@ permissions:
 
 jobs:
   evidence:
-    strategy:
-      fail-fast: false
-      max-parallel: 16
-      matrix:
-        batch: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]
     runs-on: windows-latest
     timeout-minutes: 45
     env:
@@ -64,17 +59,33 @@ jobs:
           @{ hash = (Get-FileHash -LiteralPath $procmon); version = (Get-Item -LiteralPath $procmon).VersionInfo.FileVersion } |
             ConvertTo-Json -Depth 4 | Set-Content .tmp/handle-procmon-provenance.json
           "WINDOWS_PROCMON_EXE=$procmon" >> $env:GITHUB_ENV
-      - name: Trace at most fifteen unchanged sensitivity suites
+      - name: Trace one unchanged sensitivity suite with independent WPR
         shell: pwsh
         run: |
           $ErrorActionPreference = 'Stop'
           node --version
+          if ($LASTEXITCODE -ne 0) { throw 'Node version read failed' }
           $traceRoot = Join-Path $env:WINDOWS_OWNERSHIP_EVIDENCE 'traces'
           New-Item -ItemType Directory -Path $traceRoot -Force | Out-Null
           $procmon = $env:WINDOWS_PROCMON_EXE
+          $wpr = (Get-Command wpr.exe -ErrorAction Stop).Source
+          $tracerpt = (Get-Command tracerpt.exe -ErrorAction Stop).Source
+          $stopFile = Join-Path $traceRoot 'observer-stop'
+          $resourceFailure = Join-Path $traceRoot 'resource-failure.json'
+          $clock = [ordered]@{ frequency = [Diagnostics.Stopwatch]::Frequency; utc = [DateTimeOffset]::UtcNow.ToString('o'); ticks = [Diagnostics.Stopwatch]::GetTimestamp() }
+          $commands = [Collections.Generic.List[object]]::new()
+          function Assert-Resource {
+            if (Test-Path -LiteralPath $resourceFailure) { throw 'INCOMPLETE: resource stop; see resource-failure.json' }
+          }
           function Invoke-Procmon([string[]] $arguments) {
+            $begin = [Diagnostics.Stopwatch]::GetTimestamp()
             $tool = Start-Process -FilePath $procmon -ArgumentList $arguments -PassThru -Wait
+            $commands.Add(@{ arguments = $arguments; pid = $tool.Id; begin = $begin; end = [Diagnostics.Stopwatch]::GetTimestamp(); exit = $tool.ExitCode })
             if ($tool.ExitCode -ne 0) { throw "Procmon failed ($($tool.ExitCode)): $arguments" }
+          }
+          function Invoke-Wpr([string[]] $arguments, [string] $receipt) {
+            & $wpr @arguments 2>&1 | Set-Content (Join-Path $traceRoot $receipt)
+            if ($LASTEXITCODE -ne 0) { throw "WPR failed ($LASTEXITCODE): $arguments" }
           }
           function Save-RunnerState([string] $name) {
             $state = [ordered]@{ at = [DateTimeOffset]::UtcNow.ToString('o'); image = $env:ImageOS; image_version = $env:ImageVersion }
@@ -93,14 +104,61 @@ jobs:
             if ($failures.Count) { throw "Runner-state capture incomplete: $($failures -join '; ')" }
           }
           Save-RunnerState 'before'
-          $previousTrace = @()
-          # 22 * 15 * 15 = 4950 targets; pooled p=5/8212 gives E=3.013882, P0=.049056.
-          for ($iteration = 1; $iteration -le 15; $iteration++) {
-            if ([DateTimeOffset]::UtcNow -ge [DateTimeOffset]::Parse('2026-11-05T20:00:00Z')) {
-              throw '07:00 AEDT evidence boundary reached; suite count incomplete'
+          # Vendor commands: https://learn.microsoft.com/en-us/windows-hardware/test/wpt/wpr-command-line-options
+          Invoke-Wpr @('-status') 'wpr-before.txt'
+          if ((Get-Content (Join-Path $traceRoot 'wpr-before.txt') -Raw) -notmatch 'not recording') { throw 'Existing WPR recording; leave it alone' }
+          if (Get-Process Procmon* -ErrorAction SilentlyContinue) { throw 'Existing Procmon instance; leave it alone' }
+          Invoke-Wpr @('-profiles') 'wpr-profiles.txt'
+          Invoke-Wpr @('-profiledetails', 'GeneralProfile+FileIO', '-filemode') 'wpr-profile-details.txt'
+          $exportedProfile = Join-Path $traceRoot 'builtin.wprp'
+          Invoke-Wpr @('-exportprofile', 'GeneralProfile+FileIO', $exportedProfile, '-filemode') 'wpr-profile-export.txt'
+          $definition = Get-Content -LiteralPath $exportedProfile -Raw
+          foreach ($keyword in @('ProcessThread', 'FileIO', 'FileIOInit')) {
+            if ($definition -notmatch ('"' + $keyword + '"')) { throw "Built-in profiles lack $keyword coverage" }
+          }
+          foreach ($native in @($wpr, $tracerpt)) {
+            @{ path = $native; hash = Get-FileHash -LiteralPath $native; version = (Get-Item -LiteralPath $native).VersionInfo.FileVersion; signature = (Get-AuthenticodeSignature -LiteralPath $native).Status.ToString() } |
+              ConvertTo-Json -Depth 4 | Add-Content (Join-Path $traceRoot 'wpr-tools.jsonl')
+          }
+          $wprTemp = Join-Path $traceRoot 'wpr-temp'
+          New-Item -ItemType Directory -Path $wprTemp -Force | Out-Null
+          $free = [IO.DriveInfo]::new([IO.Path]::GetPathRoot($traceRoot)).AvailableFreeSpace
+          if ($free -lt 22GB) { throw "INCOMPLETE: need 10 GiB physical budget plus 12 GiB runner floor; available=$free" }
+          $observer = Start-Job -ArgumentList $PID,$traceRoot,$env:GITHUB_WORKSPACE,$resourceFailure,$stopFile -ScriptBlock {
+            param($controller, $traceRoot, $workspace, $failure, $stop)
+            $ErrorActionPreference = 'Stop'
+            try {
+              while (!(Test-Path -LiteralPath $stop)) {
+                $files = @(Get-ChildItem -LiteralPath (Join-Path $workspace '.tmp') -File -Recurse -Force)
+                $procBytes = ($files | Where-Object { $_.Extension -in '.pml','.csv' -and $_.FullName -notmatch 'wpr' } | Measure-Object Length -Sum).Sum
+                $wprTempBytes = ($files | Where-Object { $_.FullName -like "$(Join-Path $traceRoot 'wpr-temp')*" } | Measure-Object Length -Sum).Sum
+                $wprBytes = ($files | Where-Object { $_.FullName -match 'wpr' -and $_.FullName -notlike "$(Join-Path $traceRoot 'wpr-temp')*" } | Measure-Object Length -Sum).Sum
+                $total = ($files | Measure-Object Length -Sum).Sum
+                $free = [IO.DriveInfo]::new([IO.Path]::GetPathRoot($traceRoot)).AvailableFreeSpace
+                $row = @{ at = [DateTimeOffset]::UtcNow.ToString('o'); procmon_bytes = $procBytes; wpr_bytes = $wprBytes; wpr_temp_bytes = $wprTempBytes; physical_bytes = $total; free_bytes = $free }
+                $row | ConvertTo-Json -Compress | Add-Content (Join-Path $traceRoot 'resources.jsonl')
+                if ($procBytes -gt 6GB -or $wprBytes -gt 2GB -or $wprTempBytes -gt 2GB -or $total -gt 10GB -or $free -lt 12GB) { throw ($row | ConvertTo-Json -Compress) }
+                Start-Sleep -Seconds 2
+              }
+            } catch {
+              @{ error = $_.ToString(); at = [DateTimeOffset]::UtcNow.ToString('o') } | ConvertTo-Json | Set-Content -LiteralPath $failure
+              # Stop only this controller's experiment children; preserve files and return original failures.
+              Get-CimInstance Win32_Process -Filter "ParentProcessId=$controller" |
+                Where-Object { $_.Name -match '^(node|Procmon64|tracerpt)\.exe$' } |
+                ForEach-Object { & taskkill.exe /PID $_.ProcessId /T /F }
+              throw
             }
-            Write-Output "Batch ${{ matrix.batch }}, suite $iteration of 15"
-            $prefix = Join-Path $traceRoot "suite-$iteration"
+          }
+          # One suite: 45 fixtures, 15 leader-exit targets, 2 workspace-lock controls.
+          # E=15*5/8212=.00913298; P(event)=.00909415. No automatic expansion.
+          $iteration = 1
+          $wprStarted = $false
+          try {
+            while (!(Test-Path -LiteralPath (Join-Path $traceRoot 'resources.jsonl'))) {
+              if ($observer.State -eq 'Failed') { throw 'INCOMPLETE: resource observer failed before capture' }
+              Start-Sleep -Milliseconds 100
+            }
+            $prefix = Join-Path $traceRoot 'suite-1'
             $pml = "$prefix.pml"
             $csv = "$prefix.csv"
             $startMarker = "$prefix-start.marker"
@@ -108,10 +166,18 @@ jobs:
             $capture = $null
             $nodeExit = $null
             $captureError = $null
+            $markerTimes = [ordered]@{}
             try {
+              Assert-Resource
+              Invoke-Wpr @('-start', 'GeneralProfile', '-start', 'FileIO', '-filemode', '-recordtempto', $wprTemp) 'wpr-start.txt'
+              $wprStarted = $true
               $capture = Start-Process -FilePath $procmon -ArgumentList @('/AcceptEula', '/Quiet', '/Minimized', '/NoFilter', '/BackingFile', "`"$pml`"") -PassThru
               Invoke-Procmon @('/AcceptEula', '/Quiet', '/WaitForIdle')
-              [DateTimeOffset]::UtcNow.ToString('o') | Set-Content -LiteralPath $startMarker
+              $markerTimes.start_before = [Diagnostics.Stopwatch]::GetTimestamp()
+              $markerTimes.start_utc = [DateTimeOffset]::UtcNow.ToString('o')
+              $markerTimes.start_utc | Set-Content -LiteralPath $startMarker
+              $markerTimes.start_after = [Diagnostics.Stopwatch]::GetTimestamp()
+              Assert-Resource
               node scripts/test-windows-consumer-sensitivity.mjs
               $nodeExit = $LASTEXITCODE
             } catch {
@@ -119,15 +185,48 @@ jobs:
             } finally {
               if ($capture) {
                 try {
-                  [DateTimeOffset]::UtcNow.ToString('o') | Set-Content -LiteralPath $endMarker
+                  Assert-Resource
+                  $markerTimes.end_before = [Diagnostics.Stopwatch]::GetTimestamp()
+                  $markerTimes.end_utc = [DateTimeOffset]::UtcNow.ToString('o')
+                  $markerTimes.end_utc | Set-Content -LiteralPath $endMarker
+                  $markerTimes.end_after = [Diagnostics.Stopwatch]::GetTimestamp()
                   Invoke-Procmon @('/AcceptEula', '/Quiet', '/Terminate')
+                  $markerTimes.capture_exited_at_terminate_return = $capture.HasExited
                   Invoke-Procmon @('/AcceptEula', '/Quiet', '/NoFilter', '/OpenLog', "`"$pml`"", '/SaveAs', "`"$csv`"")
+                  # Persist observations only after the unchanged marker -> terminate -> export sequence.
+                  @{ clock = $clock; markers = $markerTimes; capture_pid = $capture.Id; commands = $commands } |
+                    ConvertTo-Json -Depth 8 | Set-Content "$prefix-timeline.json"
                   $markers = @(Import-Csv -LiteralPath $csv | Where-Object { $_.Path -eq $startMarker -or $_.Path -eq $endMarker } | Select-Object -ExpandProperty Path -Unique)
                   if ($markers.Count -ne 2) { throw 'Trace does not contain both suite boundary markers' }
                 } catch {
                   $captureError = @($captureError, $_.ToString()) -join '; '
                 }
               }
+              if ($wprStarted) {
+                try {
+                  Invoke-Wpr @('-status', 'collectors', '-details') 'wpr-before-stop.txt'
+                } catch { $captureError = @($captureError, $_.ToString()) -join '; ' }
+                try {
+                  $wprStarted = $false
+                  Invoke-Wpr @('-stop', "$prefix-wpr.etl") 'wpr-stop.txt'
+                  Assert-Resource
+                  & $tracerpt "$prefix-wpr.etl" -o "$prefix-wpr.csv" -of CSV -summary "$prefix-wpr-summary.txt" -report "$prefix-wpr-report.xml" -y
+                  if ($LASTEXITCODE -ne 0) { throw "tracerpt failed: $LASTEXITCODE" }
+                  $loss = Get-Content (Join-Path $traceRoot 'wpr-before-stop.txt') -Raw
+                  if ($loss -notmatch 'Events Lost\s*:\s*0' -or $loss -match '(?im)(?:Events Lost|Dropped event|Buffers Lost)\s*:\s*[1-9]') { throw 'INCOMPLETE: WPR loss absent or nonzero; inspect retained reports' }
+                  $startName = [IO.Path]::GetFileName($startMarker)
+                  $endName = [IO.Path]::GetFileName($endMarker)
+                  $etlMarkers = @(Select-String -LiteralPath "$prefix-wpr.csv" -SimpleMatch -Pattern $startName,$endName)
+                  $etlMarkers.Line | Set-Content "$prefix-wpr-markers.txt"
+                  if (!($etlMarkers.Line -match [regex]::Escape($startName)) -or !($etlMarkers.Line -match [regex]::Escape($endName))) { throw 'INCOMPLETE: independent WPR boundary missing or undecodable' }
+                } catch { $captureError = @($captureError, $_.ToString()) -join '; ' }
+              }
+              @{ clock = $clock; markers = $markerTimes; capture_pid = $capture.Id; commands = $commands } |
+                ConvertTo-Json -Depth 8 | Set-Content "$prefix-timeline.json"
+              try { Save-RunnerState 'after' }
+              catch { $captureError = @($captureError, $_.ToString()) -join '; ' }
+              Get-ChildItem -LiteralPath $traceRoot -File -Recurse -Force | Select-Object FullName,Length,LastWriteTimeUtc |
+                ConvertTo-Json -Depth 4 | Set-Content "$prefix-inventory.json"
               $receipt = [ordered]@{ suite = $iteration; node_exit = $nodeExit; capture_error = $captureError; at = [DateTimeOffset]::UtcNow.ToString('o') }
               foreach ($traceFile in @($pml, $csv)) {
                 if (Test-Path -LiteralPath $traceFile) { $receipt[$traceFile] = (Get-Item -LiteralPath $traceFile).Length }
@@ -137,32 +236,37 @@ jobs:
             }
             if ($captureError) { Write-Output "::error::Native capture incomplete: $captureError" }
             if ($null -ne $nodeExit -and $nodeExit -ne 0) {
-              try { Save-RunnerState "after-failure-$iteration" }
-              catch { Write-Output "::error::$_" }
               exit $nodeExit
             }
             if ($captureError) { throw $captureError }
             if ($null -eq $nodeExit) { throw 'Sensitivity suite did not record its native exit' }
-            # Keep only the current successful suite and its replacement until validated.
-            foreach ($oldTrace in $previousTrace) { Remove-Item -LiteralPath $oldTrace }
-            $previousTrace = @($pml, $csv)
+          } finally {
+            if ($wprStarted) {
+              # Close only the recorder started here, including an interrupted capture.
+              Invoke-Wpr @('-stop', (Join-Path $traceRoot 'incomplete-wpr.etl')) 'wpr-emergency-stop.txt'
+            }
+            New-Item -ItemType File -Path $stopFile -Force | Out-Null
+            Wait-Job $observer | Out-Null
+            Receive-Job $observer -ErrorAction Continue
+            if ($observer.State -ne 'Completed') { throw 'INCOMPLETE: resource observer failed' }
+            Assert-Resource
+            $finalBytes = (Get-ChildItem -LiteralPath $env:WINDOWS_OWNERSHIP_EVIDENCE -File -Recurse -Force | Measure-Object Length -Sum).Sum
+            if ($finalBytes -gt 8GB) { throw "INCOMPLETE: final evidence exceeds 8 GiB: $finalBytes" }
           }
       - name: Upload failure-point handles, process lists and fixture receipts
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
-          name: windows-node22-lock-evidence-${{ matrix.batch }}
-          path: |
-            .tmp/windows-evidence/**/*.json
-            .tmp/windows-evidence/**/*.pml
-            .tmp/windows-evidence/**/*.csv
+          name: windows-node22-lock-evidence-1a
+          path: .tmp/windows-evidence/
+          include-hidden-files: true
           if-no-files-found: error
           retention-days: 7
       - name: Upload Handle provenance and preflight
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
-          name: windows-handle-provenance-${{ matrix.batch }}
+          name: windows-handle-provenance-1a
           path: .tmp/handle-*
           include-hidden-files: true
           if-no-files-found: error
