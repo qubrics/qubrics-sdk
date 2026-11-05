@@ -17,6 +17,7 @@ Goal: A11 PHP rename released through all five Composer packages, with A17 compa
 - Generator-origin upload-header red: corrected A17 expectations failed 35 of 40 existing public call forms. Legacy and current parameter forms now emit both headers. Configured-key forms are covered too. The new configured-key fixture initially leaked default configuration across cases; each case now receives its own Configuration.
 - Publisher red: a Qubrics Composer identity was rejected as `Split Composer identity/version metadata mismatch`.
 - Release-state red: `packages/php/core Composer identity`, actual `qubrics/core`, expected `sendmux/core`. Corrected only PHP identity assertions.
+- First PR CI exposed a stale negative-test mutation at `scripts/release-state-fixtures.test.mjs:68`: deleting nonexistent `sendmux/mailbox` left the renamed umbrella unchanged. The assertion correctly failed. Per Ops, it now deletes required `qubrics/sending`, with the assertion unchanged. The focused three PHP mutations went from two passing/one failing to all three passing. Ownership line 65 and identity line 67 were already real rejecting mutations; no changes needed.
 - PHP suite: 141 tests, 1084 assertions, exit 0.
 - OAuth/environment tests: 16 tests, exit 0.
 - Five actual Composer path installs and all five split public contracts: exit 0. These are local fixtures, not public Packagist resolution.
@@ -26,6 +27,8 @@ Goal: A11 PHP rename released through all five Composer packages, with A17 compa
 - Docs: fresh-reader critique corrected API-key environment guidance so it cannot imply OAuth tokens are optional. One humanise pass preserved identifiers, URLs, versions and migration requirements.
 
 Raw logs: SDK MAIN `.claude/artifacts/rebrand-qubrics-php4-canonical/` (`packages-red.log`, `upload-red.log`, `publisher-red.log`, `release-state-red.log`, `phpunit.log`, `oauth-env.log`, `split-contracts.log`, `publisher-green.log`, `phpstan.log`, `phpcs.log`).
+
+CI failure and fixture proof: `ci-verify-job.log:5238-5260`, `release-fixtures-red.log`, `release-fixtures-green.log`. Fix changes the stale fixture at its origin, with no assertion or release-guard relaxation.
 
 ## Publication limits
 

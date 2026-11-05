@@ -65,7 +65,7 @@ const mutations = {
   "php release ownership": (root) => editJson(join(root, "release-please-config.json"), (c) => { c.packages["packages/php/core"] = { "package-name": "sendmux/core" }; }),
   "php invented version": (root) => editJson(join(root, "packages/php/core/composer.json"), (c) => { c.version = "2.1.0"; }),
   "php identity": (root) => editJson(join(root, "packages/php/core/composer.json"), (c) => { c.name = "wrong/core"; }),
-  "php missing umbrella dependency": (root) => editJson(join(root, "packages/php/sdk/composer.json"), (c) => { delete c.require["sendmux/mailbox"]; }),
+  "php missing umbrella dependency": (root) => editJson(join(root, "packages/php/sdk/composer.json"), (c) => { delete c.require["qubrics/sending"]; }),
 };
 
 for (const [name, mutate] of Object.entries(mutations)) {
