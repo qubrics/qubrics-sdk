@@ -2678,7 +2678,7 @@ class MailboxesApi
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
             $start,
             'start', // param base name
-            'string', // openApiType
+            '\DateTime', // openApiType
             'form', // style
             true, // explode
             true // required
@@ -2687,7 +2687,7 @@ class MailboxesApi
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
             $end,
             'end', // param base name
-            'string', // openApiType
+            '\DateTime', // openApiType
             'form', // style
             true, // explode
             true // required

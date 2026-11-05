@@ -24,7 +24,7 @@ Until then, retain your existing Composer constraint.
 composer require qubrics/management:^3.0
 ```
 
-Upgrading from 1.x? Read the [PHP 2.0 migration guide](https://github.com/qubrics/qubrics-sdk/blob/main/packages/php/UPGRADING.md) before changing your Composer constraint.
+Before upgrading from 2.x, read the [PHP 3.0 migration guide](https://github.com/qubrics/qubrics-sdk/blob/main/packages/php/UPGRADING-3.0.md) for Composer package and PHP namespace changes, provider-list response types, webhook fixtures, and removed model aliases. If you use 1.x, apply the [PHP 2.0 migration guide](https://github.com/qubrics/qubrics-sdk/blob/main/packages/php/UPGRADING.md) first.
 
 If your custom Guzzle client uses `FileCookieJar` or `SessionCookieJar`, back up its state and re-authenticate into a fresh jar when upgrading. Guzzle rejects old records without a boolean `HostOnly`; do not guess that value. Default Qubrics API clients do not enable cookies. See the [upstream migration warning](https://github.com/guzzle/guzzle/security/advisories/GHSA-wm3w-8rrp-j577).
 
@@ -40,19 +40,19 @@ require __DIR__ . '/vendor/autoload.php';
 use Qubrics\Management\ClientFactory;
 
 $connection = ClientFactory::createConnectionApi(
-    getenv('QUBRICS_ROOT_API_KEY') ?: ''
+    getenv('QUBRICS_ROOT_API_KEY') ?: getenv('SENDMUX_ROOT_API_KEY') ?: null
 );
 
 $mailboxes = ClientFactory::createMailboxesApi(
-    getenv('QUBRICS_ROOT_API_KEY') ?: ''
+    getenv('QUBRICS_ROOT_API_KEY') ?: getenv('SENDMUX_ROOT_API_KEY') ?: null
 );
 
 $domains = ClientFactory::createDomainsApi(
-    getenv('QUBRICS_ROOT_API_KEY') ?: ''
+    getenv('QUBRICS_ROOT_API_KEY') ?: getenv('SENDMUX_ROOT_API_KEY') ?: null
 );
 
 $webhooks = ClientFactory::createWebhooksApi(
-    getenv('QUBRICS_ROOT_API_KEY') ?: ''
+    getenv('QUBRICS_ROOT_API_KEY') ?: getenv('SENDMUX_ROOT_API_KEY') ?: null
 );
 ```
 
@@ -66,7 +66,7 @@ The factory also exposes clients for billing, domain filters, emails, inboxes, m
 
 ```php
 $client = ClientFactory::createConnectionApiWithAccessToken(
-    static fn (): string => getenv('QUBRICS_ACCESS_TOKEN') ?: ''
+    static fn (): string => getenv('QUBRICS_ACCESS_TOKEN') ?: getenv('SENDMUX_ACCESS_TOKEN') ?: ''
 );
 ```
 

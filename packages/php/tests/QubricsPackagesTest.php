@@ -26,12 +26,31 @@ final class QubricsPackagesTest extends TestCase
         self::assertSame('3.0.0', Sdk::VERSION);
         self::assertTrue(class_exists(QubricsApiError::class));
         Auth::assertApiKeySurface('smx_root_test', ApiKeySurface::Root);
-        self::assertSame('https://smtp.qubrics.com/api/v1', SendingFactory::configuration('smx_mbx_test')->getHost());
-        self::assertSame('https://app.qubrics.com/api/v1', MailboxFactory::configuration('smx_mbx_test')->getHost());
-        self::assertSame(
-            'https://app.qubrics.com/api/v1',
-            ManagementFactory::configuration('smx_root_test')->getHost()
-        );
+        $baseUrls = [
+            'QUBRICS_BASE_URL' => getenv('QUBRICS_BASE_URL'),
+            'SENDMUX_BASE_URL' => getenv('SENDMUX_BASE_URL'),
+        ];
+        try {
+            foreach ($baseUrls as $name => $_) {
+                putenv($name);
+            }
+            self::assertSame(
+                'https://smtp.qubrics.com/api/v1',
+                SendingFactory::configuration('smx_mbx_test')->getHost()
+            );
+            self::assertSame(
+                'https://app.qubrics.com/api/v1',
+                MailboxFactory::configuration('smx_mbx_test')->getHost()
+            );
+            self::assertSame(
+                'https://app.qubrics.com/api/v1',
+                ManagementFactory::configuration('smx_root_test')->getHost()
+            );
+        } finally {
+            foreach ($baseUrls as $name => $value) {
+                putenv($value === false ? $name : "$name=$value");
+            }
+        }
     }
 
     public function testBothMessageIdContractsSurviveNamespaceRename(): void

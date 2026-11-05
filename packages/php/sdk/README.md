@@ -42,15 +42,15 @@ use Qubrics\Management\ClientFactory as ManagementFactory;
 use Qubrics\Sending\ClientFactory as SendingFactory;
 
 $sending = SendingFactory::createEmailsApi(
-    getenv('QUBRICS_MAILBOX_API_KEY') ?: ''
+    getenv('QUBRICS_MAILBOX_API_KEY') ?: getenv('SENDMUX_MAILBOX_API_KEY') ?: null
 );
 
 $mailbox = MailboxFactory::createMailboxAPIApi(
-    getenv('QUBRICS_MAILBOX_API_KEY') ?: ''
+    getenv('QUBRICS_MAILBOX_API_KEY') ?: getenv('SENDMUX_MAILBOX_API_KEY') ?: null
 );
 
 $management = ManagementFactory::createMailboxesApi(
-    getenv('QUBRICS_ROOT_API_KEY') ?: ''
+    getenv('QUBRICS_ROOT_API_KEY') ?: getenv('SENDMUX_ROOT_API_KEY') ?: null
 );
 ```
 
