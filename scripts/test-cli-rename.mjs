@@ -54,10 +54,11 @@ try {
   assert.equal(prepared.status, 0, prepared.stderr);
   assert.deepEqual(JSON.parse(readFileSync(join(directory, "package.json"), "utf8")), { dependencies: { "@qubrics/sdk": "3.0.0" } }, "native archive metadata must remove local candidate paths");
   assert.equal(lstatSync(join(nativeBin, "sendmux")).isSymbolicLink(), false, "native alias must be portable");
-  const native = spawnCommandSync(join(nativeBin, process.platform === "win32" ? "sendmux.cmd" : "sendmux"), ["--version", "argument with spaces"], { env, encoding: "utf8" });
+  const nativeArguments = ["--version", "argument with spaces", "literal %COMSPEC%", "a&b"];
+  const native = spawnCommandSync(join(nativeBin, process.platform === "win32" ? "sendmux.cmd" : "sendmux"), nativeArguments, { env, encoding: "utf8" });
   assert.equal(native.status, 7, "native compatibility launcher must preserve the command exit code");
   assert.equal(native.stderr, `${notice}${process.platform === "win32" ? "\r\n" : "\n"}`, "native notice must be one exact line");
-  assert.deepEqual(JSON.parse(native.stdout), ["--version", "argument with spaces"], "native compatibility launcher must preserve arguments");
+  assert.deepEqual(JSON.parse(native.stdout), nativeArguments, "native compatibility launcher must preserve arguments");
 } finally {
   rmSync(directory, { recursive: true, force: true });
 }
