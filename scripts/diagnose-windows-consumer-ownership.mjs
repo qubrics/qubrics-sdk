@@ -1,9 +1,9 @@
 import assert from "node:assert/strict";
-import { spawn } from "node:child_process";
+import { spawn, spawnSync } from "node:child_process";
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { join, resolve } from "node:path";
+import { basename, join, resolve } from "node:path";
 import { setTimeout as delay } from "node:timers/promises";
 import { mock } from "node:test";
 import { run, workspace } from "./ci-consumers.mjs";
@@ -196,6 +196,21 @@ exit 0`;
       row.paths_absent = true;
     } catch (error) {
       row.cleanup_error = error.message;
+      if (process.env.WINDOWS_HANDLE_EXE) {
+        const lockedPath = error.path ?? fixture;
+        row.native_evidence = { lockedPath, node: process.version, context: process.env.WINDOWS_OWNERSHIP_CASE };
+        // Microsoft Handle searches name fragments, avoiding short/long Windows path mismatches.
+        // https://learn.microsoft.com/en-us/sysinternals/downloads/handle
+        for (const [name, command, args] of [
+          ["handles", process.env.WINDOWS_HANDLE_EXE, ["-accepteula", "-nobanner", "-a", basename(lockedPath)]],
+          ["processes", powershell, ["-NoProfile", "-NonInteractive", "-Command", "Get-CimInstance Win32_Process | Select-Object ProcessId,ParentProcessId,Name,CreationDate,ExecutablePath,CommandLine | ConvertTo-Json -Depth 3"]],
+        ]) {
+          const at = new Date().toISOString();
+          const snapshot = spawnSync(command, args, { encoding: "utf8" });
+          const receipt = { at, ...row.native_evidence, command, args, status: snapshot.status, signal: snapshot.signal, error: snapshot.error?.message, stdout: snapshot.stdout, stderr: snapshot.stderr };
+          writeFileSync(join(evidence, `${kind}-cleanup-${name}.json`), JSON.stringify(receipt, null, 2));
+        }
+      }
       throw error;
     } finally {
       writeFileSync(join(evidence, "results.json"), JSON.stringify(results, null, 2));

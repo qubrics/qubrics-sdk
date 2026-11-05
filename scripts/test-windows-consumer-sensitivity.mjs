@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { copyFileSync, existsSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { rm } from "node:fs/promises";
-import { dirname, join, resolve } from "node:path";
+import { basename, dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { run } from "./ci-consumers.mjs";
 
@@ -51,8 +51,12 @@ for (const mutation of ["cold-controller-start", "started-never-ready", "complet
       writeFileSync(diagnostic, withHandshake.replace(actualReadyWrite, exitAfterStartup));
       assert.notEqual(readFileSync(diagnostic, "utf8"), original);
     }
-    const evidence = join(directory, "evidence");
-    const command = run(process.execPath, [join(directory, "diagnose-windows-consumer-ownership.mjs"), evidence]);
+    const evidence = process.env.WINDOWS_OWNERSHIP_EVIDENCE
+      ? join(resolve(process.env.WINDOWS_OWNERSHIP_EVIDENCE), basename(directory))
+      : join(directory, "evidence");
+    const command = run(process.execPath, [join(directory, "diagnose-windows-consumer-ownership.mjs"), evidence], {
+      env: { ...process.env, WINDOWS_OWNERSHIP_CASE: mutation },
+    });
     if (mutation === "cold-controller-start") await command;
     else await assert.rejects(command, /exit 1/);
     const rows = JSON.parse(readFileSync(join(evidence, "results.json"), "utf8"));
@@ -113,8 +117,12 @@ for (const mutation of Array.from({ length: 4 }, (_, iteration) => mutations.map
       writeFileSync(bridge, original.replace(mutation.from, mutation.to));
       assert.notEqual(readFileSync(bridge, "utf8"), original);
     }
-    const evidence = join(directory, "evidence");
-    const command = run(process.execPath, [join(directory, "diagnose-windows-consumer-ownership.mjs"), evidence]);
+    const evidence = process.env.WINDOWS_OWNERSHIP_EVIDENCE
+      ? join(resolve(process.env.WINDOWS_OWNERSHIP_EVIDENCE), basename(directory))
+      : join(directory, "evidence");
+    const command = run(process.execPath, [join(directory, "diagnose-windows-consumer-ownership.mjs"), evidence], {
+      env: { ...process.env, WINDOWS_OWNERSHIP_CASE: `${mutation.name}-${mutation.iteration}` },
+    });
     if (mutation.from) await assert.rejects(command, /exit 1/);
     else await command;
     const rows = JSON.parse(readFileSync(join(evidence, "results.json"), "utf8"));
@@ -159,7 +167,9 @@ for (const mutation of Array.from({ length: 4 }, (_, iteration) => mutations.map
     assert.equal(original.split(removal).length, 2, "Mutation must change exactly one real workspace cleanup");
     writeFileSync(helper, original.replace(removal, swallowed));
     assert.notEqual(readFileSync(helper, "utf8"), original);
-    const evidence = join(directory, "evidence");
+    const evidence = process.env.WINDOWS_OWNERSHIP_EVIDENCE
+      ? join(resolve(process.env.WINDOWS_OWNERSHIP_EVIDENCE), basename(directory))
+      : join(directory, "evidence");
     await assert.rejects(run(process.execPath, [join(directory, "test-windows-workspace-cleanup.mjs"), evidence]), /exit 1/);
     const rows = JSON.parse(readFileSync(join(evidence, "results.json"), "utf8"));
     assert.equal(rows.length, 2);
