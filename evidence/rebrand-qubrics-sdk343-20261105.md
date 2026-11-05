@@ -49,6 +49,8 @@ The native-pack origin regression was observed as `npm error E404` for the renam
 
 The packed dependency negative test still rejects a different installed instance. Its old registry fixture could not exist under the new package namespace, so the replacement fixture installs a separate local tarball and preserves the negative and positive assertions.
 
+The second Windows run (`42023117627`, source `cb3424dad8b728aa7409591d64544013bafe93c8`) installed both shims, then exposed an exact-notice mismatch. A strict native stderr assertion in source `9c678f898897f96cd8edc5ea78c0cae19a949d16` reproduced the actual bytes on Windows Node 22, 24 and 26 (CI `42024277084`) and Chocolatey (`42024277020`): actual `'sendmux is deprecated. Use qubrics instead. \r\n'`, expected `'sendmux is deprecated. Use qubrics instead.\r\n'`. The generator placed a space before `1>&2`; Windows `echo` preserves that space, per [Microsoft's command-redirection explanation](https://devblogs.microsoft.com/oldnewthing/20170801-00/?p=96725). The origin fix prefixes `1>&2 echo` so redirection adds no message whitespace. The strict assertion remains unchanged. Logs: `windows-fixed-run-red.log`, `windows-notice-probe-red.log`, `windows-notice-node{22,24,26}-red.log`.
+
 Raw logs are retained in the task's local artifacts: `ts-default-hosts-{red,green}.log`, `ts-helpers-green.log`, `ts-ai-sdk-green.log`, `consumer-rename-{red,green}.log`, `connection-defaults-green.log`, `release-state-current.log`, `check-cli-current.log`, `cli-rename-current.log` and `cli-pack-red.log`.
 
 ## Outstanding verification and release boundaries
@@ -64,3 +66,5 @@ Read-only registry inventory found 70 old versions across the seven replacement 
 Publication has no true rollback: npm name/version pairs cannot be overwritten. Existing packages remain available, and fixes require a separately approved forward release. Deprecation metadata can be restored by the operator from the captured baseline under separate authorisation.
 
 Independent Standards review found no actionable issue. Spec review identified the Windows shim gap described above; its real Windows proof remains open. Snap remains on its existing package pin; migrating that separate distribution requires preserving its npm provenance checks.
+
+Ops hold received during qualification: canonical Release Please `42020582253` fails at publication-guard before tags because live app `servers[0].url` is still legacy. qubrics/qubrics#972 owns the origin fix and app deploy after #927, not before the 6 Nov 09:00 window ends. Source qualification continues; all canonical releases and npm publication remain blocked. No bypass or guard rerun is part of this change. The exact-version operator packet stays a draft until the origin hold clears and version-final candidates exist.
