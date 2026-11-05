@@ -5,6 +5,11 @@ declare(strict_types=1);
 require dirname(__DIR__) . '/vendor/autoload.php';
 
 $baseUrls = ['QUBRICS_BASE_URL' => getenv('QUBRICS_BASE_URL'), 'SENDMUX_BASE_URL' => getenv('SENDMUX_BASE_URL')];
+register_shutdown_function(static function () use ($baseUrls): void {
+    foreach ($baseUrls as $name => $value) {
+        putenv($value === false ? $name : "$name=$value");
+    }
+});
 foreach ($baseUrls as $name => $_) {
     putenv($name);
 }
@@ -40,9 +45,5 @@ $expect($management->getConfig()->getAccessToken() === 'smx_root_example', 'Mana
 
 $oauth = SendingFactory::createMetaApiWithAccessToken('oauth-token');
 $expect($oauth->getConfig()->getHost() === 'https://smtp.qubrics.com/api/v1', 'OAuth uses the Qubrics host');
-
-foreach ($baseUrls as $name => $value) {
-    putenv($value === false ? $name : "$name=$value");
-}
 
 echo "Qubrics SDK public contract passed\n";

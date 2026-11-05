@@ -17,6 +17,11 @@ use Qubrics\Mailbox\ObjectSerializer;
 require dirname(__DIR__) . '/vendor/autoload.php';
 
 $baseUrls = ['QUBRICS_BASE_URL' => getenv('QUBRICS_BASE_URL'), 'SENDMUX_BASE_URL' => getenv('SENDMUX_BASE_URL')];
+register_shutdown_function(static function () use ($baseUrls): void {
+    foreach ($baseUrls as $name => $value) {
+        putenv($value === false ? $name : "$name=$value");
+    }
+});
 foreach ($baseUrls as $name => $_) {
     putenv($name);
 }
@@ -107,9 +112,5 @@ foreach ([[], ['X-Project' => 'fixture']] as $headers) {
 }
 $omitted = ObjectSerializer::sanitizeForSerialization(new UpdateMailboxDraft(['expected_revision' => 1]));
 $expect(!property_exists($omitted, 'custom_headers'), 'Omitted custom headers remain omitted');
-
-foreach ($baseUrls as $name => $value) {
-    putenv($value === false ? $name : "$name=$value");
-}
 
 fwrite(STDOUT, "Mailbox public contract passed\n");

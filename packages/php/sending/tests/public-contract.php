@@ -16,6 +16,11 @@ use Qubrics\Sending\ObjectSerializer;
 require dirname(__DIR__) . '/vendor/autoload.php';
 
 $baseUrls = ['QUBRICS_BASE_URL' => getenv('QUBRICS_BASE_URL'), 'SENDMUX_BASE_URL' => getenv('SENDMUX_BASE_URL')];
+register_shutdown_function(static function () use ($baseUrls): void {
+    foreach ($baseUrls as $name => $value) {
+        putenv($value === false ? $name : "$name=$value");
+    }
+});
 foreach ($baseUrls as $name => $_) {
     putenv($name);
 }
@@ -114,9 +119,5 @@ $emptyMap = ObjectSerializer::sanitizeForSerialization([], 'array<string,string>
 $expect(json_encode($emptyMap, JSON_THROW_ON_ERROR) === '{}', 'Empty declared maps encode as JSON objects');
 $expect(ObjectSerializer::sanitizeForSerialization([]) === [], 'Untyped empty lists remain arrays');
 $expect(ObjectSerializer::sanitizeForSerialization(null, 'array<string,string>') === null, 'Null maps remain null');
-
-foreach ($baseUrls as $name => $value) {
-    putenv($value === false ? $name : "$name=$value");
-}
 
 fwrite(STDOUT, "Sending public contract passed\n");
