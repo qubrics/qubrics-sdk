@@ -60,12 +60,6 @@ const surfaces = [
       "Webhooks",
     ],
     keySurface: "Root",
-    // Dropped once the API publishes nullable references as anyOf: [{ $ref }, { type: "null" }];
-    // see the mailbox table for the mechanism.
-    deprecatedModelAliases: [
-      { deprecated: "MailboxAppPasswordResultCredential", replacement: "MailboxCredential", removedIn: "qubrics/management 3.0" },
-      { deprecated: "ProviderCreateBodyQuotasPerDayAnyOf", replacement: "ProviderQuotaRange", removedIn: "qubrics/management 3.0" },
-    ],
   },
 ];
 
@@ -352,6 +346,17 @@ function patchSerializer(surface, packageDir) {
                 if (isset($mapping[$data->{$discriminator}]) || is_subclass_of($subclass, $class)) {`,
     serializerPath,
   );
+  serializer = replaceOnce(
+    serializer,
+    `        if (is_array($data)) {
+            foreach ($data as $property => $value) {`,
+    String.raw`        if (is_array($data)) {
+            if ($data === [] && $type !== null && preg_match('/^(array<|map\[)/', $type)) {
+                return (object) [];
+            }
+            foreach ($data as $property => $value) {`,
+    serializerPath,
+  );
   if (surface.name !== "sending") {
     writeFileSync(serializerPath, serializer);
     return;
@@ -383,7 +388,13 @@ function patchSerializer(surface, packageDir) {
             return null;
         }
 
-        if ($class === \\Qubrics\\Sending\\Model\\EmailSendRequestDeliveryGroup::class) {
+        if (ltrim($class, '\\\\') === \\Qubrics\\Sending\\Model\\EmailSendRequestDeliveryGroup::class) {
+            if (is_string($data)) {
+                $decoded = json_decode($data);
+                if (json_last_error() === JSON_ERROR_NONE) {
+                    $data = $decoded;
+                }
+            }
             return new \\Qubrics\\Sending\\Model\\EmailSendRequestDeliveryGroup($data);
         }
 `,

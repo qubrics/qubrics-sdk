@@ -51,18 +51,6 @@ final class DeprecatedModelAliasesTest extends TestCase
             'qubrics/mailbox 4.0',
             MailboxThreadContentResponse::openAPITypes()['data'] ?? null,
         ];
-        yield 'management app password credential' => [
-            'Qubrics\Management\Model\MailboxAppPasswordResultCredential',
-            'Qubrics\Management\Model\MailboxCredential',
-            'qubrics/management 3.0',
-            MailboxAppPasswordResult::openAPITypes()['credential'] ?? null,
-        ];
-        yield 'management per-day quota range' => [
-            'Qubrics\Management\Model\ProviderCreateBodyQuotasPerDayAnyOf',
-            'Qubrics\Management\Model\ProviderQuotaRange',
-            'qubrics/management 3.0',
-            null,
-        ];
     }
 
     #[DataProvider('compatModelNames')]

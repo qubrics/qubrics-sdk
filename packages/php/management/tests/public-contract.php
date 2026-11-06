@@ -4,11 +4,22 @@ declare(strict_types=1);
 
 require dirname(__DIR__) . '/vendor/autoload.php';
 
+$baseUrls = ['QUBRICS_BASE_URL' => getenv('QUBRICS_BASE_URL'), 'SENDMUX_BASE_URL' => getenv('SENDMUX_BASE_URL')];
+register_shutdown_function(static function () use ($baseUrls): void {
+    foreach ($baseUrls as $name => $value) {
+        putenv($value === false ? $name : "$name=$value");
+    }
+});
+foreach ($baseUrls as $name => $_) {
+    putenv($name);
+}
+
 use Composer\InstalledVersions;
 use Qubrics\Management\ClientFactory;
 use Qubrics\Management\Configuration;
 use Qubrics\Management\Model\Connection;
 use Qubrics\Management\Model\ConnectionResponse;
+use Qubrics\Management\Model\ProviderUpdateBody;
 use Qubrics\Management\Model\WebhookEventData;
 use Qubrics\Management\ObjectSerializer;
 
@@ -69,5 +80,29 @@ $expect(
     ObjectSerializer::sanitizeForSerialization($event)->sendmux_message_id === 'message-456',
     'Legacy message-ID setter preserves its wire key'
 );
+
+$start = new DateTime('2026-11-01T00:00:00+00:00');
+$end = new DateTime('2026-11-02T00:00:00+00:00');
+$usage = ClientFactory::createMailboxesApi('smx_root_example')->managementGetMailboxCostUsageRequest(
+    'mailbox_fixture',
+    $start,
+    $end,
+    'revision.fixture'
+);
+parse_str($usage->getUri()->getQuery(), $query);
+$expect($query === [
+    'start' => '2026-11-01T00:00:00+00:00',
+    'end' => '2026-11-02T00:00:00+00:00',
+], 'Cost usage dates encode as RFC3339 query strings');
+$expect($usage->getHeaderLine('If-None-Match') === 'revision.fixture', 'Conditional query requests retain headers');
+
+foreach ([[], ['project' => 'fixture']] as $variables) {
+    $provider = new ProviderUpdateBody(['variables' => $variables]);
+    $wire = json_decode(json_encode(ObjectSerializer::sanitizeForSerialization($provider), JSON_THROW_ON_ERROR));
+    $expect($wire->variables instanceof stdClass, 'Provider variables encode as a JSON object, including empty maps');
+    $expect((array) $wire->variables === $variables, 'Provider variables retain their values');
+}
+$omitted = ObjectSerializer::sanitizeForSerialization(new ProviderUpdateBody());
+$expect(!property_exists($omitted, 'variables'), 'Omitted provider variables remain omitted');
 
 echo "Qubrics Management public contract passed\n";

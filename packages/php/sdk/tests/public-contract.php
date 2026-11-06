@@ -4,6 +4,16 @@ declare(strict_types=1);
 
 require dirname(__DIR__) . '/vendor/autoload.php';
 
+$baseUrls = ['QUBRICS_BASE_URL' => getenv('QUBRICS_BASE_URL'), 'SENDMUX_BASE_URL' => getenv('SENDMUX_BASE_URL')];
+register_shutdown_function(static function () use ($baseUrls): void {
+    foreach ($baseUrls as $name => $value) {
+        putenv($value === false ? $name : "$name=$value");
+    }
+});
+foreach ($baseUrls as $name => $_) {
+    putenv($name);
+}
+
 use Composer\InstalledVersions;
 use Qubrics\Mailbox\ClientFactory as MailboxFactory;
 use Qubrics\Management\ClientFactory as ManagementFactory;

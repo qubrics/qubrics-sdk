@@ -86,6 +86,9 @@ class ObjectSerializer
         }
 
         if (is_array($data)) {
+            if ($data === [] && $type !== null && preg_match('/^(array<|map\[)/', $type)) {
+                return (object) [];
+            }
             foreach ($data as $property => $value) {
                 $data[$property] = self::sanitizeForSerialization($value);
             }
@@ -398,7 +401,13 @@ class ObjectSerializer
             return null;
         }
 
-        if ($class === \Qubrics\Sending\Model\EmailSendRequestDeliveryGroup::class) {
+        if (ltrim($class, '\\') === \Qubrics\Sending\Model\EmailSendRequestDeliveryGroup::class) {
+            if (is_string($data)) {
+                $decoded = json_decode($data);
+                if (json_last_error() === JSON_ERROR_NONE) {
+                    $data = $decoded;
+                }
+            }
             return new \Qubrics\Sending\Model\EmailSendRequestDeliveryGroup($data);
         }
 
