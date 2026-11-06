@@ -3,15 +3,20 @@ from __future__ import annotations
 import asyncio
 import json
 import re
+from dataclasses import replace
 from pathlib import Path
 
 import httpx
+import httpx2
+import pytest
 from a2a.client import ClientConfig, ClientFactory
 from a2a.client.card_resolver import A2ACardResolver
 from a2a.helpers import get_data_parts, new_data_message
 from a2a.server.request_handlers.response_helpers import agent_card_to_dict
 from a2a.types import Role, SendMessageRequest
 from fastmcp.server.auth import AccessToken
+from fastmcp.server.auth.providers.jwt import RSAKeyPair
+from joserfc import jwk
 
 from sendmux_mcp.a2a import (
     A2A_RESOURCE_URL,
@@ -273,6 +278,158 @@ def test_official_a2a_client_discovers_and_executes_without_task_routes() -> Non
         assert envelope["resource"] == A2A_RESOURCE_URL
         assert envelope["protocol"] == "a2a"
         assert envelope["operation_id"] == "managementListDomains"
+
+    asyncio.run(run())
+
+
+def test_qubrics_a2a_client_discovers_and_executes_with_its_resource(monkeypatch: pytest.MonkeyPatch) -> None:
+    keys = RSAKeyPair.generate()
+    public_key = jwk.import_key(keys.public_key, "RSA", {"kid": "a2a-rebrand-test"}).as_dict()
+    resource = "https://a2a.qubrics.com/a2a/v1"
+
+    async def fetch_jwks(_client: httpx2.AsyncClient, url: str) -> httpx2.Response:
+        assert url == "https://app.sendmux.ai/.well-known/jwks.json"
+        return httpx2.Response(200, json={"keys": [public_key]}, request=httpx2.Request("GET", url))
+
+    monkeypatch.setattr(httpx2.AsyncClient, "get", fetch_jwks)
+
+    async def run() -> None:
+        captured: list[httpx.Request] = []
+
+        async def proxy_handler(request: httpx.Request) -> httpx.Response:
+            captured.append(request)
+            return httpx.Response(200, json={"ok": True, "data": []}, request=request)
+
+        app = create_hosted_http_app(
+            replace(hosted_runtime(), issuer=["https://app.sendmux.ai", "https://app.qubrics.com"]),
+            a2a_proxy_transport=httpx.MockTransport(proxy_handler),
+        )
+        token = keys.create_token(
+            issuer="https://app.qubrics.com",
+            audience=resource,
+            scopes=["domain.read"],
+            additional_claims={
+                "grant_id": "a2a_grant_public",
+                "permissions": ["domain.read"],
+                "surface": ["management"],
+            },
+            kid="a2a-rebrand-test",
+        )
+        async with app.router.lifespan_context(app):
+            async with httpx.AsyncClient(
+                transport=httpx.ASGITransport(app=app),
+                base_url="https://a2a.qubrics.com",
+                headers={"Authorization": f"Bearer {token}"},
+            ) as http_client:
+                response = await http_client.get("/.well-known/agent-card.json")
+                assert response.status_code == 200
+                assert response.headers["content-type"].startswith("application/json")
+                card_json = response.json()
+                assert card_json["name"] == "Qubrics A2A"
+                assert "Sendmux" not in response.text
+                assert "sendmux.ai" not in response.text
+                assert card_json["supportedInterfaces"] == [
+                    {"url": resource, "protocolBinding": "HTTP+JSON", "protocolVersion": "1.0"},
+                ]
+                oauth = card_json["securitySchemes"]["oauth2"]["oauth2SecurityScheme"]
+                assert oauth["oauth2MetadataUrl"] == "https://app.qubrics.com/.well-known/oauth-authorization-server"
+                assert oauth["flows"]["authorizationCode"]["authorizationUrl"] == (
+                    "https://app.qubrics.com/mcp/oauth/authorize"
+                )
+                assert oauth["flows"]["authorizationCode"]["tokenUrl"] == "https://app.qubrics.com/mcp/oauth/token"
+                metadata = await http_client.get("/.well-known/oauth-protected-resource")
+                assert metadata.status_code == 200
+                assert metadata.json()["resource"] == resource
+                assert metadata.json()["resource_name"] == "Qubrics A2A"
+                assert metadata.json()["authorization_servers"] == ["https://app.qubrics.com"]
+                unauthenticated = await http_client.post(
+                    "/a2a/v1/message:send", json={}, headers={"Authorization": ""},
+                )
+                assert unauthenticated.status_code == 401
+                assert 'resource_metadata="https://a2a.qubrics.com/.well-known/oauth-protected-resource"' in (
+                    unauthenticated.headers["www-authenticate"]
+                )
+
+                card = await A2ACardResolver(http_client, "https://a2a.qubrics.com").get_agent_card()
+                client = ClientFactory(
+                    ClientConfig(
+                        streaming=False,
+                        httpx_client=http_client,
+                        supported_protocol_bindings=["HTTP+JSON"],
+                        accepted_output_modes=["application/json"],
+                    )
+                ).create(card)
+                request = SendMessageRequest(
+                    message=new_data_message(
+                        {"operationId": "managementListDomains", "query": {"limit": 10}},
+                        media_type="application/json",
+                        role=Role.ROLE_USER,
+                    )
+                )
+                responses = [response async for response in client.send_message(request)]
+                assert len(responses) == 1
+                assert get_data_parts(responses[0].message.parts)[0]["status"] == 200
+
+                for audience in ("https://mcp.qubrics.com/mcp", "https://a2a.sendmux.ai/a2a/v1"):
+                    wrong_token = keys.create_token(
+                        issuer="https://app.qubrics.com", audience=audience, kid="a2a-rebrand-test",
+                    )
+                    rejected = await http_client.post(
+                        "/a2a/v1/message:send", json={}, headers={"Authorization": f"Bearer {wrong_token}"},
+                    )
+                    assert rejected.status_code == 401
+
+        assert len(captured) == 1
+        envelope = json.loads((await captured[0].aread()).decode())
+        assert envelope["resource"] == resource
+        assert envelope["protocol"] == "a2a"
+        assert envelope["grant_id"] == "a2a_grant_public"
+        assert envelope["operation_id"] == "managementListDomains"
+
+    asyncio.run(run())
+
+
+def test_a2a_discovery_separates_host_identities_and_cache_validators() -> None:
+    async def run() -> None:
+        app = create_hosted_http_app(hosted_runtime())
+        async with app.router.lifespan_context(app):
+            async with httpx.AsyncClient(transport=httpx.ASGITransport(app=app)) as client:
+                path = "/.well-known/agent-card.json"
+                legacy = await client.get(f"https://a2a.sendmux.ai{path}")
+                qubrics = await client.get(f"https://a2a.qubrics.com{path}")
+                assert legacy.status_code == qubrics.status_code == 200
+                assert legacy.json()["name"] == "Sendmux A2A"
+                assert legacy.json()["supportedInterfaces"][0]["url"] == "https://a2a.sendmux.ai/a2a/v1"
+                assert legacy.headers["etag"] != qubrics.headers["etag"]
+
+                for origin, response in (("https://a2a.sendmux.ai", legacy), ("https://a2a.qubrics.com", qubrics)):
+                    assert response.headers["access-control-allow-origin"] == "*"
+                    assert response.headers["strict-transport-security"].startswith("max-age=")
+                    cached = await client.get(f"{origin}{path}", headers={"If-None-Match": response.headers["etag"]})
+                    assert cached.status_code == 304
+                    assert cached.content == b""
+                    other_etag = qubrics.headers["etag"] if response is legacy else legacy.headers["etag"]
+                    fresh = await client.get(f"{origin}{path}", headers={"If-None-Match": other_etag})
+                    assert fresh.status_code == 200
+                    assert fresh.content == response.content
+                    assert (await client.head(f"{origin}{path}")).status_code == 200
+                    assert (await client.post(f"{origin}{path}")).status_code == 405
+
+                mixed_case = await client.get(
+                    f"https://a2a.qubrics.com{path}", headers={"Host": "A2A.QUBRICS.COM"},
+                )
+                assert mixed_case.content == qubrics.content
+                for host in ("a2a.qubrics.com.evil.example", "a2a.qubrics.com:8443", "unrecognised.example"):
+                    unrecognised = await client.get(f"https://{host}{path}")
+                    assert unrecognised.status_code == 200
+                    assert unrecognised.content == legacy.content
+                    metadata = await client.get(f"https://{host}/.well-known/oauth-protected-resource")
+                    assert metadata.json()["resource"] == "https://a2a.sendmux.ai/a2a/v1"
+                    challenge = await client.post(f"https://{host}/a2a/v1/message:send", json={})
+                    assert challenge.status_code == 401
+                    assert 'resource_metadata="https://a2a.sendmux.ai/.well-known/oauth-protected-resource"' in (
+                        challenge.headers["www-authenticate"]
+                    )
 
     asyncio.run(run())
 

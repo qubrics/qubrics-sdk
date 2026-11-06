@@ -23,7 +23,7 @@ from starlette.types import ASGIApp
 from starlette.applications import Starlette
 
 from sendmux_mcp.config import DEFAULT_APP_BASE_URL, ServerConfig, Surface, config_from_env, env_value, parse_csv
-from sendmux_mcp.a2a import A2A_RESOURCE_URL, A2ATokenVerifier, build_a2a_http_components
+from sendmux_mcp.a2a import A2A_IDENTITIES, A2A_RESOURCE_URL, A2ATokenVerifier, build_a2a_http_components
 from sendmux_mcp.hosted_auth import (
     HOSTED_MCP_DISCOVERY_SCOPES,
     HOSTED_MCP_RESOURCE_URLS,
@@ -228,25 +228,37 @@ def create_hosted_http_app(
         document = prepare_for_fastmcp(load_spec(surface_config), base_url=surface_config.api_base_url)
         manifests.append(build_hosted_operation_manifest(document, surface))
 
-    verifier = a2a_token_verifier or JWTVerifier(
-        jwks_uri=runtime.jwks_uri,
-        issuer=runtime.issuer,
-        audience=A2A_RESOURCE_URL,
-    )
-    a2a_components = build_a2a_http_components(
-        manifests=tuple(manifests),
-        token_verifier=verifier,
-        proxy_config=HostedProxyConfig(
-            proxy_url=runtime.proxy_url,
-            upstream_base_url=A2A_RESOURCE_URL,
-            internal_bearer_token=runtime.internal_bearer_token,
-            resource=A2A_RESOURCE_URL,
-            protocol="a2a",
-        ),
-        proxy_transport=a2a_proxy_transport,
-    )
+    a2a_components_by_host = {}
+    for resource in A2A_IDENTITIES:
+        a2a_components_by_host[urlparse(resource).netloc] = build_a2a_http_components(
+            manifests=tuple(manifests),
+            token_verifier=a2a_token_verifier or JWTVerifier(
+                jwks_uri=runtime.jwks_uri,
+                issuer=runtime.issuer,
+                audience=resource,
+            ),
+            proxy_config=HostedProxyConfig(
+                proxy_url=runtime.proxy_url,
+                upstream_base_url=resource,
+                internal_bearer_token=runtime.internal_bearer_token,
+                resource=resource,
+                protocol="a2a",
+            ),
+            proxy_transport=a2a_proxy_transport,
+        )
+    legacy_a2a = a2a_components_by_host[urlparse(A2A_RESOURCE_URL).netloc]
+    a2a_routes_by_host = {
+        host: {route.path: route for route in components.routes if isinstance(route, Route)}
+        for host, components in a2a_components_by_host.items()
+    }
+    legacy_a2a_routes = a2a_routes_by_host[urlparse(A2A_RESOURCE_URL).netloc]
+
+    async def a2a_route(request: Request) -> ASGIApp:
+        routes = a2a_routes_by_host.get(request.url.netloc.lower(), legacy_a2a_routes)
+        return routes[request.url.path].handle
+
     a2a_metadata_route = next(
-        route for route in a2a_components.routes if isinstance(route, Route) and route.path == metadata_path
+        route for route in legacy_a2a.routes if isinstance(route, Route) and route.path == metadata_path
     )
 
     async def root_resource_metadata(request: Request) -> ASGIApp:
@@ -254,12 +266,14 @@ def create_hosted_http_app(
             return await mcp_resource_metadata(request)
         if not metadata_routes_by_host and request.url.hostname == mcp_hostname:
             return mcp_metadata_route.handle
-        return a2a_metadata_route.handle
+        return await a2a_route(request)
 
     # Let the selected resource route own method validation and its Allow header.
     root_metadata_route = Route(metadata_path, endpoint=root_resource_metadata, methods=[])
     app.router.routes[0:0] = [
-        root_metadata_route if route is a2a_metadata_route else route for route in a2a_components.routes
+        root_metadata_route if route is a2a_metadata_route else Route(route.path, endpoint=a2a_route, methods=[])
+        for route in legacy_a2a.routes
+        if isinstance(route, Route)
     ]
 
     original_lifespan = app.router.lifespan_context
@@ -270,8 +284,9 @@ def create_hosted_http_app(
             async with original_lifespan(application):
                 yield
         finally:
-            await a2a_components.request_handler.aclose()
-            await a2a_components.proxy.aclose()
+            for components in a2a_components_by_host.values():
+                await components.request_handler.aclose()
+                await components.proxy.aclose()
 
     app.router.lifespan_context = hosted_lifespan
     return app
