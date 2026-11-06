@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Sendmux\Core;
+namespace Qubrics\Core;
 
 use DateTimeImmutable;
 use DateTimeInterface;

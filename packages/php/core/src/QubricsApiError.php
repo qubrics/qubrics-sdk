@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Sendmux\Core;
+namespace Qubrics\Core;
 
 use RuntimeException;
 
-final class SendmuxApiError extends RuntimeException
+final class QubricsApiError extends RuntimeException
 {
     /**
      * @param array<string, list<string>|string> $headers

@@ -2,25 +2,25 @@
 
 declare(strict_types=1);
 
-namespace Sendmux\Management;
+namespace Qubrics\Management;
 
-use Sendmux\Management\Api\BillingApi;
-use Sendmux\Management\Api\ConnectionApi;
-use Sendmux\Management\Api\DomainFiltersApi;
-use Sendmux\Management\Api\DomainsApi;
-use Sendmux\Management\Api\EmailsApi;
-use Sendmux\Management\Api\InboxesApi;
-use Sendmux\Management\Api\MailboxFiltersApi;
-use Sendmux\Management\Api\MailboxesApi;
-use Sendmux\Management\Api\SendingAccountsApi;
-use Sendmux\Management\Api\WebhooksApi;
+use Qubrics\Management\Api\BillingApi;
+use Qubrics\Management\Api\ConnectionApi;
+use Qubrics\Management\Api\DomainFiltersApi;
+use Qubrics\Management\Api\DomainsApi;
+use Qubrics\Management\Api\EmailsApi;
+use Qubrics\Management\Api\InboxesApi;
+use Qubrics\Management\Api\MailboxFiltersApi;
+use Qubrics\Management\Api\MailboxesApi;
+use Qubrics\Management\Api\SendingAccountsApi;
+use Qubrics\Management\Api\WebhooksApi;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\HandlerStack;
-use Sendmux\Core\ApiKeySurface;
-use Sendmux\Core\Auth;
-use Sendmux\Core\RetryMiddleware;
-use Sendmux\Core\RetryOptions;
+use Qubrics\Core\ApiKeySurface;
+use Qubrics\Core\Auth;
+use Qubrics\Core\RetryMiddleware;
+use Qubrics\Core\RetryOptions;
 
 final class ClientFactory
 {

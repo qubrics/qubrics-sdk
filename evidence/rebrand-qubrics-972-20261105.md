@@ -30,3 +30,11 @@ Named rollback image: `privregistry.jaa.nz/sendmux/sendmux-mcp:v1.0.17@sha256:15
 Live runtime still has singleton `https://app.sendmux.ai` issuer/authorization-server/allowed-origin values, whereas already-reviewed infrastructure source contains both app hosts. Forward deployment requires the approved image and those three dual-host values; rollback restores the named image and singleton values. Parent owns exact source/tag/CI pin, image build, Ops slot approval, merge, rollout, before/after reads and SITE verification. No DNS, Custom Domain, Worker route/rule, credentials or package/tag publication is included in this source PR.
 
 Acceptance remains open until deployment and fresh candidate/legacy readbacks. This source PR must not auto-close #972.
+
+## Normal main integration, 6 November
+
+Ops authorised update and qualification only. Main `73bedb8b0005e96e580e39cca4aac6bd030753a5` merged normally into the existing PR branch, preserving its history; no rebase or force-push. The PR's A2A runtime and test files are byte-for-byte unchanged from original head `909ddb5f00c43642fcaeffd594bd8a48eb889756`. Diff against current main remains the same five-file slice; the contract differs only in its two A2A source hashes.
+
+Fresh focused qualification after integration: contract `--check` exits 0, the same public A2A/hosted/auth tests pass 42/42, and mypy reports no issues in 34 files. Current docs main remains `03210aa92d7a81e1ca207f0a35102172696a1f1c`; normal commit drift checks use that clean canonical input. Required CI and renewed review must qualify the pushed exact head before a merge request.
+
+App v1.8.342 is deployed and its public OpenAPI now matches SDK snapshots. Required published-skills compatibility evidence is separately owned by rebrand-qubrics-php4 in a source-only qubrics/skills PR; this branch does not change that evidence or guard. PR merge, image build/tag/push, SDK publication, Release Please rerun and service rollout remain held; no slot is allocated. Rollback above remains unchanged.

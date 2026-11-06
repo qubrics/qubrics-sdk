@@ -4,7 +4,7 @@
  * Configuration
  * PHP version 8.1
  *
- * @package  Sendmux\Mailbox
+ * @package  Qubrics\Mailbox
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
@@ -25,14 +25,14 @@
  * Do not edit the class manually.
  */
 
-namespace Sendmux\Mailbox;
+namespace Qubrics\Mailbox;
 
 use InvalidArgumentException;
 
 /**
  * Configuration Class Doc Comment
  *
- * @package  Sendmux\Mailbox
+ * @package  Qubrics\Mailbox
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
@@ -93,7 +93,7 @@ class Configuration
      *
      * @var string
      */
-    protected string $host = 'https://app.sendmux.ai/api/v1';
+    protected string $host = 'https://app.qubrics.com/api/v1';
 
     /**
      * User agent of the HTTP request, set to "OpenAPI-Generator/{version}/PHP" by default
@@ -425,7 +425,7 @@ class Configuration
      */
     public static function toDebugReport(): string
     {
-        $report  = 'PHP SDK (Sendmux\Mailbox) Debug Report:' . PHP_EOL;
+        $report  = 'PHP SDK (Qubrics\Mailbox) Debug Report:' . PHP_EOL;
         $report .= '    OS: ' . php_uname() . PHP_EOL;
         $report .= '    PHP Version: ' . PHP_VERSION . PHP_EOL;
         $report .= '    The version of the OpenAPI document: 1.0.0' . PHP_EOL;
@@ -469,8 +469,8 @@ class Configuration
     {
         return [
             [
-                "url" => "https://app.sendmux.ai/api/v1",
-                "description" => "API v1",
+                "url" => "https://app.qubrics.com/api/v1",
+                "description" => "No description provided",
             ]
         ];
     }

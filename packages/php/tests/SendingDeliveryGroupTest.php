@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Sendmux\Tests;
+namespace Qubrics\Tests;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Sendmux\Sending\Model\Address;
-use Sendmux\Sending\Model\Attachment;
-use Sendmux\Sending\Model\BatchSendRequest;
-use Sendmux\Sending\Model\EmailSendRequest;
-use Sendmux\Sending\Model\EmailSendRequestDeliveryGroup;
-use Sendmux\Sending\ObjectSerializer;
+use Qubrics\Sending\Model\Address;
+use Qubrics\Sending\Model\Attachment;
+use Qubrics\Sending\Model\BatchSendRequest;
+use Qubrics\Sending\Model\EmailSendRequest;
+use Qubrics\Sending\Model\EmailSendRequestDeliveryGroup;
+use Qubrics\Sending\ObjectSerializer;
 
 final class SendingDeliveryGroupTest extends TestCase
 {
@@ -119,6 +119,44 @@ final class SendingDeliveryGroupTest extends TestCase
                 'messages'
             )['delivery_group']
         );
+    }
+
+    /** @param string|list<string> $deliveryGroup */
+    #[DataProvider('validDeliveryGroups')]
+    public function testObjectSerializerDeserializesJsonDeliveryGroup(string|array $deliveryGroup): void
+    {
+        $union = ObjectSerializer::deserialize(
+            json_encode($deliveryGroup, JSON_THROW_ON_ERROR),
+            EmailSendRequestDeliveryGroup::class
+        );
+
+        self::assertInstanceOf(EmailSendRequestDeliveryGroup::class, $union);
+        self::assertSame($deliveryGroup, ObjectSerializer::sanitizeForSerialization($union));
+    }
+
+    /** @param string|list<string> $deliveryGroup */
+    #[DataProvider('validDeliveryGroups')]
+    public function testObjectSerializerDeserializesFullyQualifiedDeliveryGroups(string|array $deliveryGroup): void
+    {
+        $class = '\\' . EmailSendRequestDeliveryGroup::class;
+        $union = ObjectSerializer::deserialize($deliveryGroup, $class);
+
+        self::assertInstanceOf(EmailSendRequestDeliveryGroup::class, $union);
+        self::assertSame($deliveryGroup, ObjectSerializer::sanitizeForSerialization($union));
+        self::assertSame(
+            [$deliveryGroup],
+            ObjectSerializer::sanitizeForSerialization(ObjectSerializer::deserialize(
+                json_encode([$deliveryGroup], JSON_THROW_ON_ERROR),
+                $class . '[]'
+            ))
+        );
+    }
+
+    public function testObjectSerializerRejectsJsonDeliveryGroupWithInvalidId(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        ObjectSerializer::deserialize('"transactional"', EmailSendRequestDeliveryGroup::class);
     }
 
     /** @return iterable<string, array{string|list<string>}> */

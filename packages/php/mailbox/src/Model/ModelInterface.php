@@ -5,7 +5,7 @@
  *
  * PHP version 8.1
  *
- * @package  Sendmux\Mailbox\Model
+ * @package  Qubrics\Mailbox\Model
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
@@ -26,12 +26,12 @@
  * Do not edit the class manually.
  */
 
-namespace Sendmux\Mailbox\Model;
+namespace Qubrics\Mailbox\Model;
 
 /**
  * Interface abstracting model access.
  *
- * @package Sendmux\Mailbox\Model
+ * @package Qubrics\Mailbox\Model
  * @author  OpenAPI Generator team
  */
 interface ModelInterface

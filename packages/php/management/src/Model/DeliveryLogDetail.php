@@ -5,7 +5,7 @@
  *
  * PHP version 8.1
  *
- * @package  Sendmux\Management
+ * @package  Qubrics\Management
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
@@ -26,18 +26,18 @@
  * Do not edit the class manually.
  */
 
-namespace Sendmux\Management\Model;
+namespace Qubrics\Management\Model;
 
 use ArrayAccess;
 use JsonSerializable;
 use InvalidArgumentException;
 use ReturnTypeWillChange;
-use Sendmux\Management\ObjectSerializer;
+use Qubrics\Management\ObjectSerializer;
 
 /**
  * DeliveryLogDetail Class Doc Comment
  *
- * @package  Sendmux\Management
+ * @package  Qubrics\Management
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
@@ -69,7 +69,7 @@ class DeliveryLogDetail implements ModelInterface, ArrayAccess, JsonSerializable
         'provider_id' => 'string',
         'provider_name' => 'string',
         'recipient_count' => 'int',
-        'recipients' => '\Sendmux\Management\Model\DeliveryLogRecipient[]',
+        'recipients' => '\Qubrics\Management\Model\DeliveryLogRecipient[]',
         'rejected_recipient_count' => 'int',
         'sent_at' => 'string',
         'sent_from_email' => 'string',
@@ -858,7 +858,7 @@ class DeliveryLogDetail implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Gets recipients
      *
-     * @return \Sendmux\Management\Model\DeliveryLogRecipient[]|null
+     * @return \Qubrics\Management\Model\DeliveryLogRecipient[]|null
      */
     public function getRecipients(): ?array
     {
@@ -868,7 +868,7 @@ class DeliveryLogDetail implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets recipients
      *
-     * @param \Sendmux\Management\Model\DeliveryLogRecipient[]|null $recipients Ordered recipient outcome snapshot for this send, or null when no snapshot exists
+     * @param \Qubrics\Management\Model\DeliveryLogRecipient[]|null $recipients Ordered recipient outcome snapshot for this send, or null when no snapshot exists
      *
      * @return $this
      */

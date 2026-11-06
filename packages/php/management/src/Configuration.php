@@ -4,7 +4,7 @@
  * Configuration
  * PHP version 8.1
  *
- * @package  Sendmux\Management
+ * @package  Qubrics\Management
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
@@ -25,14 +25,14 @@
  * Do not edit the class manually.
  */
 
-namespace Sendmux\Management;
+namespace Qubrics\Management;
 
 use InvalidArgumentException;
 
 /**
  * Configuration Class Doc Comment
  *
- * @package  Sendmux\Management
+ * @package  Qubrics\Management
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
@@ -93,14 +93,14 @@ class Configuration
      *
      * @var string
      */
-    protected string $host = 'https://app.sendmux.ai/api/v1';
+    protected string $host = 'https://app.qubrics.com/api/v1';
 
     /**
      * User agent of the HTTP request, set to "OpenAPI-Generator/{version}/PHP" by default
      *
      * @var string
      */
-    protected string $userAgent = 'OpenAPI-Generator/2.1.1/PHP';
+    protected string $userAgent = 'OpenAPI-Generator/3.0.0/PHP';
 
     /**
      * Debug switch (default set to false)
@@ -425,11 +425,11 @@ class Configuration
      */
     public static function toDebugReport(): string
     {
-        $report  = 'PHP SDK (Sendmux\Management) Debug Report:' . PHP_EOL;
+        $report  = 'PHP SDK (Qubrics\Management) Debug Report:' . PHP_EOL;
         $report .= '    OS: ' . php_uname() . PHP_EOL;
         $report .= '    PHP Version: ' . PHP_VERSION . PHP_EOL;
         $report .= '    The version of the OpenAPI document: 1.0.0' . PHP_EOL;
-        $report .= '    SDK Package Version: 2.1.1' . PHP_EOL;
+        $report .= '    SDK Package Version: 3.0.0' . PHP_EOL;
         $report .= '    Temp Folder Path: ' . self::getDefaultConfiguration()->getTempFolderPath() . PHP_EOL;
 
         return $report;
@@ -469,8 +469,8 @@ class Configuration
     {
         return [
             [
-                "url" => "https://app.sendmux.ai/api/v1",
-                "description" => "API v1",
+                "url" => "https://app.qubrics.com/api/v1",
+                "description" => "No description provided",
             ]
         ];
     }

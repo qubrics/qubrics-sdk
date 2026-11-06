@@ -5,7 +5,7 @@
  *
  * PHP version 8.1
  *
- * @package  Sendmux\Mailbox
+ * @package  Qubrics\Mailbox
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
@@ -26,18 +26,18 @@
  * Do not edit the class manually.
  */
 
-namespace Sendmux\Mailbox\Model;
+namespace Qubrics\Mailbox\Model;
 
 use ArrayAccess;
 use JsonSerializable;
 use InvalidArgumentException;
 use ReturnTypeWillChange;
-use Sendmux\Mailbox\ObjectSerializer;
+use Qubrics\Mailbox\ObjectSerializer;
 
 /**
  * MailboxCalendarEventListResponse Class Doc Comment
  *
- * @package  Sendmux\Mailbox
+ * @package  Qubrics\Mailbox
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
@@ -59,10 +59,10 @@ class MailboxCalendarEventListResponse implements ModelInterface, ArrayAccess, J
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'meta' => '\Sendmux\Mailbox\Model\ResponseMeta',
+        'meta' => '\Qubrics\Mailbox\Model\ResponseMeta',
         'ok' => 'bool',
-        'data' => '\Sendmux\Mailbox\Model\MailboxCalendarEvent[]',
-        'pagination' => '\Sendmux\Mailbox\Model\CursorPagination'
+        'data' => '\Qubrics\Mailbox\Model\MailboxCalendarEvent[]',
+        'pagination' => '\Qubrics\Mailbox\Model\CursorPagination'
     ];
 
     /**
@@ -300,9 +300,9 @@ class MailboxCalendarEventListResponse implements ModelInterface, ArrayAccess, J
     /**
      * Gets meta
      *
-     * @return \Sendmux\Mailbox\Model\ResponseMeta
+     * @return \Qubrics\Mailbox\Model\ResponseMeta
      */
-    public function getMeta(): \Sendmux\Mailbox\Model\ResponseMeta
+    public function getMeta(): \Qubrics\Mailbox\Model\ResponseMeta
     {
         return $this->container['meta'];
     }
@@ -310,11 +310,11 @@ class MailboxCalendarEventListResponse implements ModelInterface, ArrayAccess, J
     /**
      * Sets meta
      *
-     * @param \Sendmux\Mailbox\Model\ResponseMeta $meta meta
+     * @param \Qubrics\Mailbox\Model\ResponseMeta $meta meta
      *
      * @return $this
      */
-    public function setMeta(\Sendmux\Mailbox\Model\ResponseMeta $meta): static
+    public function setMeta(\Qubrics\Mailbox\Model\ResponseMeta $meta): static
     {
         if (is_null($meta)) {
             throw new InvalidArgumentException('non-nullable meta cannot be null');
@@ -354,7 +354,7 @@ class MailboxCalendarEventListResponse implements ModelInterface, ArrayAccess, J
     /**
      * Gets data
      *
-     * @return \Sendmux\Mailbox\Model\MailboxCalendarEvent[]
+     * @return \Qubrics\Mailbox\Model\MailboxCalendarEvent[]
      */
     public function getData(): array
     {
@@ -364,7 +364,7 @@ class MailboxCalendarEventListResponse implements ModelInterface, ArrayAccess, J
     /**
      * Sets data
      *
-     * @param \Sendmux\Mailbox\Model\MailboxCalendarEvent[] $data data
+     * @param \Qubrics\Mailbox\Model\MailboxCalendarEvent[] $data data
      *
      * @return $this
      */
@@ -381,9 +381,9 @@ class MailboxCalendarEventListResponse implements ModelInterface, ArrayAccess, J
     /**
      * Gets pagination
      *
-     * @return \Sendmux\Mailbox\Model\CursorPagination
+     * @return \Qubrics\Mailbox\Model\CursorPagination
      */
-    public function getPagination(): \Sendmux\Mailbox\Model\CursorPagination
+    public function getPagination(): \Qubrics\Mailbox\Model\CursorPagination
     {
         return $this->container['pagination'];
     }
@@ -391,11 +391,11 @@ class MailboxCalendarEventListResponse implements ModelInterface, ArrayAccess, J
     /**
      * Sets pagination
      *
-     * @param \Sendmux\Mailbox\Model\CursorPagination $pagination pagination
+     * @param \Qubrics\Mailbox\Model\CursorPagination $pagination pagination
      *
      * @return $this
      */
-    public function setPagination(\Sendmux\Mailbox\Model\CursorPagination $pagination): static
+    public function setPagination(\Qubrics\Mailbox\Model\CursorPagination $pagination): static
     {
         if (is_null($pagination)) {
             throw new InvalidArgumentException('non-nullable pagination cannot be null');

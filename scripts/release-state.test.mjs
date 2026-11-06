@@ -79,19 +79,19 @@ for (const path of owners) {
 }
 
 const phpPaths = packagePaths("php", "composer.json");
-const phpNames = new Set(phpPaths.map((path) => `sendmux/${path.split("/").at(-1)}`));
+const phpNames = new Set(phpPaths.map((path) => `qubrics/${path.split("/").at(-1)}`));
 for (const path of phpPaths) {
   const composer = readJson(`${path}/composer.json`);
-  assert.equal(composer.name, `sendmux/${path.split("/").at(-1)}`, `${path} Composer identity`);
+  assert.equal(composer.name, `qubrics/${path.split("/").at(-1)}`, `${path} Composer identity`);
   assert.equal(Object.hasOwn(composer, "version"), false, `${path} versions belong to split-repository tags, not composer.version`);
   for (const [dependency, constraint] of Object.entries(composer.require ?? {})) {
-    if (!dependency.startsWith("sendmux/")) continue;
-    assert.ok(phpNames.has(dependency), `${path} unknown Sendmux dependency ${dependency}`);
+    if (!dependency.startsWith("qubrics/")) continue;
+    assert.ok(phpNames.has(dependency), `${path} unknown Qubrics dependency ${dependency}`);
     assert.equal(typeof constraint, "string", `${path} Composer constraint must be a string`);
     assert.ok(constraint.trim(), `${path} Composer constraint must not be empty`);
   }
-  if (composer.name === "sendmux/sdk") {
-    assert.deepEqual(Object.keys(composer.require).filter((name) => name.startsWith("sendmux/")).sort(), [...phpNames].filter((name) => name !== "sendmux/sdk").sort(), "PHP umbrella must require every split package");
+  if (composer.name === "qubrics/sdk") {
+    assert.deepEqual(Object.keys(composer.require).filter((name) => name.startsWith("qubrics/")).sort(), [...phpNames].filter((name) => name !== "qubrics/sdk").sort(), "PHP umbrella must require every split package");
   }
 }
 console.log(`Native release state matches ${owners.length} release-please owners; ${phpPaths.length} PHP packages retain manual split-tag versioning. Go published tags and PHP published versions are not checked here.`);

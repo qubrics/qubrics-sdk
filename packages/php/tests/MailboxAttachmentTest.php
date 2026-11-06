@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Sendmux\Tests;
+namespace Qubrics\Tests;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
@@ -13,7 +13,7 @@ use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
-use Sendmux\Mailbox\Api\MailboxAPIApi;
+use Qubrics\Mailbox\Api\MailboxAPIApi;
 
 final class MailboxAttachmentTest extends TestCase
 {

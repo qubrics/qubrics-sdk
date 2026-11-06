@@ -5,7 +5,7 @@
  *
  * PHP version 8.1
  *
- * @package  Sendmux\Management
+ * @package  Qubrics\Management
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
@@ -26,18 +26,18 @@
  * Do not edit the class manually.
  */
 
-namespace Sendmux\Management\Model;
+namespace Qubrics\Management\Model;
 
 use ArrayAccess;
 use JsonSerializable;
 use InvalidArgumentException;
 use ReturnTypeWillChange;
-use Sendmux\Management\ObjectSerializer;
+use Qubrics\Management\ObjectSerializer;
 
 /**
  * ProviderCreateBody Class Doc Comment
  *
- * @package  Sendmux\Management
+ * @package  Qubrics\Management
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
@@ -63,7 +63,7 @@ class ProviderCreateBody implements ModelInterface, ArrayAccess, JsonSerializabl
         'from_name' => 'string',
         'name' => 'string',
         'percentage' => 'int',
-        'quotas' => '\Sendmux\Management\Model\ProviderCreateBodyQuotas',
+        'quotas' => '\Qubrics\Management\Model\ProviderCreateBodyQuotas',
         'reply_to_email' => 'string',
         'reply_to_name' => 'string',
         'smtp_host' => 'string',
@@ -623,9 +623,9 @@ class ProviderCreateBody implements ModelInterface, ArrayAccess, JsonSerializabl
     /**
      * Gets quotas
      *
-     * @return \Sendmux\Management\Model\ProviderCreateBodyQuotas|null
+     * @return \Qubrics\Management\Model\ProviderCreateBodyQuotas|null
      */
-    public function getQuotas(): ?\Sendmux\Management\Model\ProviderCreateBodyQuotas
+    public function getQuotas(): ?\Qubrics\Management\Model\ProviderCreateBodyQuotas
     {
         return $this->container['quotas'];
     }
@@ -633,11 +633,11 @@ class ProviderCreateBody implements ModelInterface, ArrayAccess, JsonSerializabl
     /**
      * Sets quotas
      *
-     * @param \Sendmux\Management\Model\ProviderCreateBodyQuotas|null $quotas quotas
+     * @param \Qubrics\Management\Model\ProviderCreateBodyQuotas|null $quotas quotas
      *
      * @return $this
      */
-    public function setQuotas(?\Sendmux\Management\Model\ProviderCreateBodyQuotas $quotas): static
+    public function setQuotas(?\Qubrics\Management\Model\ProviderCreateBodyQuotas $quotas): static
     {
         if (is_null($quotas)) {
             throw new InvalidArgumentException('non-nullable quotas cannot be null');

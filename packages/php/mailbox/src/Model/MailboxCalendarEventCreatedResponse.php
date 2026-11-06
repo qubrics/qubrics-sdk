@@ -5,7 +5,7 @@
  *
  * PHP version 8.1
  *
- * @package  Sendmux\Mailbox
+ * @package  Qubrics\Mailbox
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
@@ -26,18 +26,18 @@
  * Do not edit the class manually.
  */
 
-namespace Sendmux\Mailbox\Model;
+namespace Qubrics\Mailbox\Model;
 
 use ArrayAccess;
 use JsonSerializable;
 use InvalidArgumentException;
 use ReturnTypeWillChange;
-use Sendmux\Mailbox\ObjectSerializer;
+use Qubrics\Mailbox\ObjectSerializer;
 
 /**
  * MailboxCalendarEventCreatedResponse Class Doc Comment
  *
- * @package  Sendmux\Mailbox
+ * @package  Qubrics\Mailbox
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
@@ -59,9 +59,9 @@ class MailboxCalendarEventCreatedResponse implements ModelInterface, ArrayAccess
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'meta' => '\Sendmux\Mailbox\Model\ResponseMeta',
+        'meta' => '\Qubrics\Mailbox\Model\ResponseMeta',
         'ok' => 'bool',
-        'data' => '\Sendmux\Mailbox\Model\MailboxCalendarEventCreated'
+        'data' => '\Qubrics\Mailbox\Model\MailboxCalendarEventCreated'
     ];
 
     /**
@@ -290,9 +290,9 @@ class MailboxCalendarEventCreatedResponse implements ModelInterface, ArrayAccess
     /**
      * Gets meta
      *
-     * @return \Sendmux\Mailbox\Model\ResponseMeta
+     * @return \Qubrics\Mailbox\Model\ResponseMeta
      */
-    public function getMeta(): \Sendmux\Mailbox\Model\ResponseMeta
+    public function getMeta(): \Qubrics\Mailbox\Model\ResponseMeta
     {
         return $this->container['meta'];
     }
@@ -300,11 +300,11 @@ class MailboxCalendarEventCreatedResponse implements ModelInterface, ArrayAccess
     /**
      * Sets meta
      *
-     * @param \Sendmux\Mailbox\Model\ResponseMeta $meta meta
+     * @param \Qubrics\Mailbox\Model\ResponseMeta $meta meta
      *
      * @return $this
      */
-    public function setMeta(\Sendmux\Mailbox\Model\ResponseMeta $meta): static
+    public function setMeta(\Qubrics\Mailbox\Model\ResponseMeta $meta): static
     {
         if (is_null($meta)) {
             throw new InvalidArgumentException('non-nullable meta cannot be null');
@@ -344,9 +344,9 @@ class MailboxCalendarEventCreatedResponse implements ModelInterface, ArrayAccess
     /**
      * Gets data
      *
-     * @return \Sendmux\Mailbox\Model\MailboxCalendarEventCreated
+     * @return \Qubrics\Mailbox\Model\MailboxCalendarEventCreated
      */
-    public function getData(): \Sendmux\Mailbox\Model\MailboxCalendarEventCreated
+    public function getData(): \Qubrics\Mailbox\Model\MailboxCalendarEventCreated
     {
         return $this->container['data'];
     }
@@ -354,11 +354,11 @@ class MailboxCalendarEventCreatedResponse implements ModelInterface, ArrayAccess
     /**
      * Sets data
      *
-     * @param \Sendmux\Mailbox\Model\MailboxCalendarEventCreated $data data
+     * @param \Qubrics\Mailbox\Model\MailboxCalendarEventCreated $data data
      *
      * @return $this
      */
-    public function setData(\Sendmux\Mailbox\Model\MailboxCalendarEventCreated $data): static
+    public function setData(\Qubrics\Mailbox\Model\MailboxCalendarEventCreated $data): static
     {
         if (is_null($data)) {
             throw new InvalidArgumentException('non-nullable data cannot be null');

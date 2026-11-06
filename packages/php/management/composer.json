@@ -1,6 +1,6 @@
 {
-  "name": "sendmux/management",
-  "description": "Sendmux Management API client for PHP.",
+  "name": "qubrics/management",
+  "description": "Qubrics Management API client for PHP.",
   "type": "library",
   "license": "MIT",
   "require": {
@@ -10,11 +10,11 @@
     "ext-mbstring": "*",
     "guzzlehttp/guzzle": "^7.15.5",
     "guzzlehttp/psr7": "^2.13.1",
-    "sendmux/core": "^2.1.1"
+    "qubrics/core": "^3.0"
   },
   "autoload": {
     "psr-4": {
-      "Sendmux\\Management\\": "src/"
+      "Qubrics\\Management\\": "src/"
     }
   }
 }

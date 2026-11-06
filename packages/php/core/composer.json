@@ -1,6 +1,6 @@
 {
-  "name": "sendmux/core",
-  "description": "Shared runtime helpers for Sendmux PHP SDK packages.",
+  "name": "qubrics/core",
+  "description": "Shared runtime helpers for Qubrics PHP SDK packages.",
   "type": "library",
   "license": "MIT",
   "require": {
@@ -10,7 +10,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Sendmux\\Core\\": "src/"
+      "Qubrics\\Core\\": "src/"
     }
   }
 }

@@ -5,7 +5,7 @@
  *
  * PHP version 8.1
  *
- * @package  Sendmux\Management\Model
+ * @package  Qubrics\Management\Model
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
@@ -26,12 +26,12 @@
  * Do not edit the class manually.
  */
 
-namespace Sendmux\Management\Model;
+namespace Qubrics\Management\Model;
 
 /**
  * Interface abstracting model access.
  *
- * @package Sendmux\Management\Model
+ * @package Qubrics\Management\Model
  * @author  OpenAPI Generator team
  */
 interface ModelInterface

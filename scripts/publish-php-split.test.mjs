@@ -86,7 +86,7 @@ async function fixture(t, options = {}) {
   }
   mkdirSync(join(sdk, "packages/php/mailbox"), { recursive: true });
   mkdirSync(join(sdk, "packages/python/mcp/sendmux_mcp/openapi"), { recursive: true });
-  const files = { "composer.json": JSON.stringify({ name: "sendmux/mailbox", type: "library" }), "CHANGELOG.md": "# Changelog\n\n## Unreleased\n\nFix\n", "src/Configuration.php": `<?php // SDK Package Version: ${options.wrongVersion ? "3.1.0" : "3.0.0"}\n` };
+  const files = { "composer.json": JSON.stringify({ name: options.legacyIdentity ? "sendmux/mailbox" : "qubrics/mailbox", type: "library" }), "CHANGELOG.md": "# Changelog\n\n## Unreleased\n\nFix\n", "src/Configuration.php": `<?php // SDK Package Version: ${options.wrongVersion ? "3.1.0" : "3.0.0"}\n` };
   for (const [name, content] of Object.entries(files)) {
     for (const base of [join(sdk, "packages/php/mailbox"), split]) { mkdirSync(join(base, name, ".."), { recursive: true }); writeFileSync(join(base, name), content); }
   }
@@ -120,6 +120,7 @@ async function fixture(t, options = {}) {
 }
 
 for (const [name, options, pattern] of [
+  ["legacy Composer identity leaves refs absent", { legacyIdentity: true }, /Composer identity/],
   ["live mismatch leaves local and remote refs absent", { mismatch: true }, /differs/],
   ["wrong SDK-to-split mapping leaves refs absent", { wrongSource: true }, /split.*differ|version/i],
   ["unmatched Markdown is not ignored", { extra: true }, /file set|unmatched/i],

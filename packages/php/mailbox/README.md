@@ -1,12 +1,12 @@
-# sendmux/mailbox
+# qubrics/mailbox
 
-[![Packagist version](https://img.shields.io/packagist/v/sendmux/mailbox.svg)](https://packagist.org/packages/sendmux/mailbox)
-[![PHP version](https://img.shields.io/packagist/dependency-v/sendmux/mailbox/php.svg)](https://packagist.org/packages/sendmux/mailbox)
-[![License](https://img.shields.io/packagist/l/sendmux/mailbox.svg)](https://packagist.org/packages/sendmux/mailbox)
+[![Packagist version](https://img.shields.io/packagist/v/qubrics/mailbox.svg)](https://packagist.org/packages/qubrics/mailbox)
+[![PHP version](https://img.shields.io/packagist/dependency-v/qubrics/mailbox/php.svg)](https://packagist.org/packages/qubrics/mailbox)
+[![License](https://img.shields.io/packagist/l/qubrics/mailbox.svg)](https://packagist.org/packages/qubrics/mailbox)
 
-Sendmux Mailbox API client for PHP.
+Qubrics Mailbox API client for PHP.
 
-Read the PHP SDK guide at [sendmux.ai/docs/sdks/php](https://sendmux.ai/docs/sdks/php).
+Read the PHP SDK guide at [qubrics.com/docs/sdks/php](https://qubrics.com/docs/sdks/php).
 
 ## Requirements
 
@@ -17,16 +17,16 @@ Read the PHP SDK guide at [sendmux.ai/docs/sdks/php](https://sendmux.ai/docs/sdk
 ## Installation
 
 Run this command only after
-[Packagist lists `sendmux/mailbox` version 3.0.0](https://packagist.org/packages/sendmux/mailbox).
+[Packagist lists `qubrics/mailbox` version 3.0.0](https://packagist.org/packages/qubrics/mailbox).
 Until then, retain your existing Composer constraint.
 
 ```bash
-composer require sendmux/mailbox:^3.0
+composer require qubrics/mailbox:^3.0
 ```
 
 Before upgrading from 2.x, read the [Mailbox 3.0 migration guide](https://github.com/qubrics/qubrics-sdk/blob/main/packages/php/UPGRADING-3.0.md) for changes-response return types, the distinct thread-message list response, and operation-specific metadata getter/setter types. Update typed wrappers and manually constructed metadata. If you use 1.x, apply the [PHP 2.0 migration guide](https://github.com/qubrics/qubrics-sdk/blob/main/packages/php/UPGRADING.md) first.
 
-If your custom Guzzle client uses `FileCookieJar` or `SessionCookieJar`, back up its state and re-authenticate into a fresh jar when upgrading. Guzzle rejects old records without a boolean `HostOnly`; do not guess that value. Default Sendmux API clients do not enable cookies. See the [upstream migration warning](https://github.com/guzzle/guzzle/security/advisories/GHSA-wm3w-8rrp-j577).
+If your custom Guzzle client uses `FileCookieJar` or `SessionCookieJar`, back up its state and re-authenticate into a fresh jar when upgrading. Guzzle rejects old records without a boolean `HostOnly`; do not guess that value. Default Qubrics API clients do not enable cookies. See the [upstream migration warning](https://github.com/guzzle/guzzle/security/advisories/GHSA-wm3w-8rrp-j577).
 
 ## Usage
 
@@ -37,10 +37,10 @@ Create the Mailbox API client with a mailbox-scoped key or scoped agent token.
 
 require __DIR__ . '/vendor/autoload.php';
 
-use Sendmux\Mailbox\ClientFactory;
+use Qubrics\Mailbox\ClientFactory;
 
 $mailboxApi = ClientFactory::createMailboxAPIApi(
-    getenv('QUBRICS_MAILBOX_API_KEY') ?: ''
+    getenv('QUBRICS_MAILBOX_API_KEY') ?: getenv('SENDMUX_MAILBOX_API_KEY') ?: null
 );
 ```
 
@@ -62,17 +62,22 @@ Use `mailboxUploadAttachment()` to upload bytes and pass the returned `blob_id` 
 
 ```php
 $client = ClientFactory::createMailboxAPIApiWithAccessToken(
-    static fn (): string => getenv('QUBRICS_ACCESS_TOKEN') ?: ''
+    static fn (): string => getenv('QUBRICS_ACCESS_TOKEN') ?: getenv('SENDMUX_ACCESS_TOKEN') ?: ''
 );
 ```
 
-See [OAuth setup and lifecycle](https://sendmux.ai/docs/developer-tools/oauth).
+See [OAuth setup and lifecycle](https://qubrics.com/docs/developer-tools/oauth).
+
+For API-key authentication, omit `apiKey` to read `QUBRICS_API_KEY`.
+Omit `baseUrl` to read `QUBRICS_BASE_URL`.
+Nonempty Qubrics values take precedence over `SENDMUX_API_KEY` and
+`SENDMUX_BASE_URL`. Explicit arguments take precedence over environment values.
 
 ## Features
 
 - Validates `smx_mbx_` keys or scoped `smx_agent_` tokens before configuring the client.
-- Uses `https://app.sendmux.ai/api/v1` by default.
-- Adds retry and rate-limit backoff behaviour through `sendmux/core`.
+- Uses `https://app.qubrics.com/api/v1` by default.
+- Adds retry and rate-limit backoff behaviour through `qubrics/core`.
 - Covers mailbox identity, folders, messages, attachments, submissions, threads, quota, usage, and event streams.
 - Includes generated models for Mailbox API requests and responses.
 
@@ -80,18 +85,18 @@ See [OAuth setup and lifecycle](https://sendmux.ai/docs/developer-tools/oauth).
 
 | Package | Use it for |
 | --- | --- |
-| [`sendmux/core`](https://packagist.org/packages/sendmux/core) | Shared helpers for auth, headers, retries, pagination, and errors. |
-| [`sendmux/sending`](https://packagist.org/packages/sendmux/sending) | Sending API client. |
-| [`sendmux/management`](https://packagist.org/packages/sendmux/management) | Management API client. |
-| [`sendmux/sdk`](https://packagist.org/packages/sendmux/sdk) | Umbrella package that installs all PHP SDK surfaces. |
+| [`qubrics/core`](https://packagist.org/packages/qubrics/core) | Shared helpers for auth, headers, retries, pagination, and errors. |
+| [`qubrics/sending`](https://packagist.org/packages/qubrics/sending) | Sending API client. |
+| [`qubrics/management`](https://packagist.org/packages/qubrics/management) | Management API client. |
+| [`qubrics/sdk`](https://packagist.org/packages/qubrics/sdk) | Umbrella package that installs all PHP SDK surfaces. |
 
 ## Support
 
 For help, include the package name, version, API surface, and sanitised request details. Do not include API keys, tokens, passwords, webhook secrets, customer data, or private account details.
 
-- PHP SDK guide: [sendmux.ai/docs/sdks/php](https://sendmux.ai/docs/sdks/php)
-- Mailbox API reference: [sendmux.ai/docs/mailbox-api/introduction](https://sendmux.ai/docs/mailbox-api/introduction)
-- API keys guide: [sendmux.ai/docs/guides/api-keys](https://sendmux.ai/docs/guides/api-keys)
+- PHP SDK guide: [qubrics.com/docs/sdks/php](https://qubrics.com/docs/sdks/php)
+- Mailbox API reference: [qubrics.com/docs/mailbox-api/introduction](https://qubrics.com/docs/mailbox-api/introduction)
+- API keys guide: [qubrics.com/docs/guides/api-keys](https://qubrics.com/docs/guides/api-keys)
 - Source repository: [github.com/qubrics/qubrics-sdk](https://github.com/qubrics/qubrics-sdk)
 
 ## License

@@ -54,7 +54,7 @@
       "live_e2e.py": "714b1ad5a70d694f0c8907037e937f24354ee12c9eb42bde13ed070cd38ce93b",
       "observability.py": "c39911894d5575f0faaa0f86b190849528bd1014a8790ca90df40730ff200f7d",
       "openapi/__init__.py": "04a300726f2d3f551c88591fa171ed8bd7c7caa6f3257f438e52884ba782fdb1",
-      "openapi/openapi-app.json": "28f2fc773b1470057b5ff5bab9c4e00f6d4a34925dbee91e3b57bc0057355656",
+      "openapi/openapi-app.json": "1d49dc00e00b86837041b76cdb0676d96c68317ec74354d6a5acf4cf2ff0e73c",
       "openapi/openapi-sending.json": "3138c5f27e3c0ab8475d1ccaf7378815c12e12918c30a90e77e2115642bc3647",
       "permissions.py": "aca9c97a2834ff6463c210eb9528e1da20d3a174b28e7ac0c112b205a91c9673",
       "response_ownership.py": "eff042d51d3d158438e05fd131e0e993fa76706a2895838e84114fb0c488ef83",
@@ -393,7 +393,7 @@
                                               },
                                               "download_url": {
                                                 "description": "Short-lived URL for this exact attachment. Fetch it promptly; if it expires, call the message or attachment metadata endpoint again to receive a fresh URL.",
-                                                "example": "https://app.sendmux.ai/api/v1/mailbox/messages/msg_123/attachment-downloads/attref_abc123?download_token=...",
+                                                "example": "https://app.qubrics.com/api/v1/mailbox/messages/msg_123/attachment-downloads/attref_abc123?download_token=...",
                                                 "type": "string"
                                               },
                                               "filename": {
@@ -869,7 +869,7 @@
                                           },
                                           "download_url": {
                                             "description": "Short-lived URL for this exact attachment. Fetch it promptly; if it expires, call the message or attachment metadata endpoint again to receive a fresh URL.",
-                                            "example": "https://app.sendmux.ai/api/v1/mailbox/messages/msg_123/attachment-downloads/attref_abc123?download_token=...",
+                                            "example": "https://app.qubrics.com/api/v1/mailbox/messages/msg_123/attachment-downloads/attref_abc123?download_token=...",
                                             "type": "string"
                                           },
                                           "filename": {
@@ -3390,7 +3390,7 @@
                       },
                       "download_url": {
                         "description": "Short-lived URL for this exact attachment. Fetch it promptly; if it expires, call the message or attachment metadata endpoint again to receive a fresh URL.",
-                        "example": "https://app.sendmux.ai/api/v1/mailbox/messages/msg_123/attachment-downloads/attref_abc123?download_token=...",
+                        "example": "https://app.qubrics.com/api/v1/mailbox/messages/msg_123/attachment-downloads/attref_abc123?download_token=...",
                         "type": "string"
                       },
                       "filename": {
@@ -5702,7 +5702,7 @@
                                 },
                                 "download_url": {
                                   "description": "Short-lived URL for this exact attachment. Fetch it promptly; if it expires, call the message or attachment metadata endpoint again to receive a fresh URL.",
-                                  "example": "https://app.sendmux.ai/api/v1/mailbox/messages/msg_123/attachment-downloads/attref_abc123?download_token=...",
+                                  "example": "https://app.qubrics.com/api/v1/mailbox/messages/msg_123/attachment-downloads/attref_abc123?download_token=...",
                                   "type": "string"
                                 },
                                 "filename": {
@@ -6946,7 +6946,7 @@
                                         },
                                         "download_url": {
                                           "description": "Short-lived URL for this exact attachment. Fetch it promptly; if it expires, call the message or attachment metadata endpoint again to receive a fresh URL.",
-                                          "example": "https://app.sendmux.ai/api/v1/mailbox/messages/msg_123/attachment-downloads/attref_abc123?download_token=...",
+                                          "example": "https://app.qubrics.com/api/v1/mailbox/messages/msg_123/attachment-downloads/attref_abc123?download_token=...",
                                           "type": "string"
                                         },
                                         "filename": {
@@ -7961,7 +7961,7 @@
                                 },
                                 "download_url": {
                                   "description": "Short-lived URL for this exact attachment. Fetch it promptly; if it expires, call the message or attachment metadata endpoint again to receive a fresh URL.",
-                                  "example": "https://app.sendmux.ai/api/v1/mailbox/messages/msg_123/attachment-downloads/attref_abc123?download_token=...",
+                                  "example": "https://app.qubrics.com/api/v1/mailbox/messages/msg_123/attachment-downloads/attref_abc123?download_token=...",
                                   "type": "string"
                                 },
                                 "filename": {
@@ -9521,7 +9521,7 @@
                                   },
                                   "download_url": {
                                     "description": "Short-lived URL for this exact attachment. Fetch it promptly; if it expires, call the message or attachment metadata endpoint again to receive a fresh URL.",
-                                    "example": "https://app.sendmux.ai/api/v1/mailbox/messages/msg_123/attachment-downloads/attref_abc123?download_token=...",
+                                    "example": "https://app.qubrics.com/api/v1/mailbox/messages/msg_123/attachment-downloads/attref_abc123?download_token=...",
                                     "type": "string"
                                   },
                                   "filename": {
@@ -9917,7 +9917,7 @@
                                   },
                                   "download_url": {
                                     "description": "Short-lived URL for this exact attachment. Fetch it promptly; if it expires, call the message or attachment metadata endpoint again to receive a fresh URL.",
-                                    "example": "https://app.sendmux.ai/api/v1/mailbox/messages/msg_123/attachment-downloads/attref_abc123?download_token=...",
+                                    "example": "https://app.qubrics.com/api/v1/mailbox/messages/msg_123/attachment-downloads/attref_abc123?download_token=...",
                                     "type": "string"
                                   },
                                   "filename": {
@@ -10357,7 +10357,7 @@
                                           },
                                           "download_url": {
                                             "description": "Short-lived URL for this exact attachment. Fetch it promptly; if it expires, call the message or attachment metadata endpoint again to receive a fresh URL.",
-                                            "example": "https://app.sendmux.ai/api/v1/mailbox/messages/msg_123/attachment-downloads/attref_abc123?download_token=...",
+                                            "example": "https://app.qubrics.com/api/v1/mailbox/messages/msg_123/attachment-downloads/attref_abc123?download_token=...",
                                             "type": "string"
                                           },
                                           "filename": {
@@ -10814,7 +10814,7 @@
                           },
                           "download_url": {
                             "description": "Short-lived URL for this exact attachment. Fetch it promptly; if it expires, call the message or attachment metadata endpoint again to receive a fresh URL.",
-                            "example": "https://app.sendmux.ai/api/v1/mailbox/messages/msg_123/attachment-downloads/attref_abc123?download_token=...",
+                            "example": "https://app.qubrics.com/api/v1/mailbox/messages/msg_123/attachment-downloads/attref_abc123?download_token=...",
                             "type": "string"
                           },
                           "filename": {
@@ -10873,7 +10873,7 @@
                           },
                           "download_url": {
                             "description": "Short-lived URL for this exact attachment. Fetch it promptly; if it expires, call the message or attachment metadata endpoint again to receive a fresh URL.",
-                            "example": "https://app.sendmux.ai/api/v1/mailbox/messages/msg_123/attachment-downloads/attref_abc123?download_token=...",
+                            "example": "https://app.qubrics.com/api/v1/mailbox/messages/msg_123/attachment-downloads/attref_abc123?download_token=...",
                             "type": "string"
                           },
                           "filename": {
@@ -10941,7 +10941,7 @@
                           },
                           "download_url": {
                             "description": "Short-lived URL for this exact attachment. Fetch it promptly; if it expires, call the message or attachment metadata endpoint again to receive a fresh URL.",
-                            "example": "https://app.sendmux.ai/api/v1/mailbox/messages/msg_123/attachment-downloads/attref_abc123?download_token=...",
+                            "example": "https://app.qubrics.com/api/v1/mailbox/messages/msg_123/attachment-downloads/attref_abc123?download_token=...",
                             "type": "string"
                           },
                           "filename": {
@@ -13319,7 +13319,7 @@
                           },
                           "upload_url": {
                             "description": "Short-lived signed PUT URL for this exact attachment. Upload promptly; if it expires, create a new upload URL.",
-                            "example": "https://app.sendmux.ai/api/v1/mailbox/attachment-uploads/upl_123?upload_token=...",
+                            "example": "https://app.qubrics.com/api/v1/mailbox/attachment-uploads/upl_123?upload_token=...",
                             "type": "string"
                           }
                         },
@@ -13588,7 +13588,7 @@
                                     },
                                     "download_url": {
                                       "description": "Short-lived URL for this exact attachment. Fetch it promptly; if it expires, call the message or attachment metadata endpoint again to receive a fresh URL.",
-                                      "example": "https://app.sendmux.ai/api/v1/mailbox/messages/msg_123/attachment-downloads/attref_abc123?download_token=...",
+                                      "example": "https://app.qubrics.com/api/v1/mailbox/messages/msg_123/attachment-downloads/attref_abc123?download_token=...",
                                       "type": "string"
                                     },
                                     "filename": {
@@ -14077,7 +14077,7 @@
                                               },
                                               "download_url": {
                                                 "description": "Short-lived URL for this exact attachment. Fetch it promptly; if it expires, call the message or attachment metadata endpoint again to receive a fresh URL.",
-                                                "example": "https://app.sendmux.ai/api/v1/mailbox/messages/msg_123/attachment-downloads/attref_abc123?download_token=...",
+                                                "example": "https://app.qubrics.com/api/v1/mailbox/messages/msg_123/attachment-downloads/attref_abc123?download_token=...",
                                                 "type": "string"
                                               },
                                               "filename": {
@@ -14553,7 +14553,7 @@
                                           },
                                           "download_url": {
                                             "description": "Short-lived URL for this exact attachment. Fetch it promptly; if it expires, call the message or attachment metadata endpoint again to receive a fresh URL.",
-                                            "example": "https://app.sendmux.ai/api/v1/mailbox/messages/msg_123/attachment-downloads/attref_abc123?download_token=...",
+                                            "example": "https://app.qubrics.com/api/v1/mailbox/messages/msg_123/attachment-downloads/attref_abc123?download_token=...",
                                             "type": "string"
                                           },
                                           "filename": {
@@ -17074,7 +17074,7 @@
                       },
                       "download_url": {
                         "description": "Short-lived URL for this exact attachment. Fetch it promptly; if it expires, call the message or attachment metadata endpoint again to receive a fresh URL.",
-                        "example": "https://app.sendmux.ai/api/v1/mailbox/messages/msg_123/attachment-downloads/attref_abc123?download_token=...",
+                        "example": "https://app.qubrics.com/api/v1/mailbox/messages/msg_123/attachment-downloads/attref_abc123?download_token=...",
                         "type": "string"
                       },
                       "filename": {
@@ -19386,7 +19386,7 @@
                                 },
                                 "download_url": {
                                   "description": "Short-lived URL for this exact attachment. Fetch it promptly; if it expires, call the message or attachment metadata endpoint again to receive a fresh URL.",
-                                  "example": "https://app.sendmux.ai/api/v1/mailbox/messages/msg_123/attachment-downloads/attref_abc123?download_token=...",
+                                  "example": "https://app.qubrics.com/api/v1/mailbox/messages/msg_123/attachment-downloads/attref_abc123?download_token=...",
                                   "type": "string"
                                 },
                                 "filename": {
@@ -20630,7 +20630,7 @@
                                         },
                                         "download_url": {
                                           "description": "Short-lived URL for this exact attachment. Fetch it promptly; if it expires, call the message or attachment metadata endpoint again to receive a fresh URL.",
-                                          "example": "https://app.sendmux.ai/api/v1/mailbox/messages/msg_123/attachment-downloads/attref_abc123?download_token=...",
+                                          "example": "https://app.qubrics.com/api/v1/mailbox/messages/msg_123/attachment-downloads/attref_abc123?download_token=...",
                                           "type": "string"
                                         },
                                         "filename": {
@@ -21645,7 +21645,7 @@
                                 },
                                 "download_url": {
                                   "description": "Short-lived URL for this exact attachment. Fetch it promptly; if it expires, call the message or attachment metadata endpoint again to receive a fresh URL.",
-                                  "example": "https://app.sendmux.ai/api/v1/mailbox/messages/msg_123/attachment-downloads/attref_abc123?download_token=...",
+                                  "example": "https://app.qubrics.com/api/v1/mailbox/messages/msg_123/attachment-downloads/attref_abc123?download_token=...",
                                   "type": "string"
                                 },
                                 "filename": {
@@ -23205,7 +23205,7 @@
                                   },
                                   "download_url": {
                                     "description": "Short-lived URL for this exact attachment. Fetch it promptly; if it expires, call the message or attachment metadata endpoint again to receive a fresh URL.",
-                                    "example": "https://app.sendmux.ai/api/v1/mailbox/messages/msg_123/attachment-downloads/attref_abc123?download_token=...",
+                                    "example": "https://app.qubrics.com/api/v1/mailbox/messages/msg_123/attachment-downloads/attref_abc123?download_token=...",
                                     "type": "string"
                                   },
                                   "filename": {
@@ -23601,7 +23601,7 @@
                                   },
                                   "download_url": {
                                     "description": "Short-lived URL for this exact attachment. Fetch it promptly; if it expires, call the message or attachment metadata endpoint again to receive a fresh URL.",
-                                    "example": "https://app.sendmux.ai/api/v1/mailbox/messages/msg_123/attachment-downloads/attref_abc123?download_token=...",
+                                    "example": "https://app.qubrics.com/api/v1/mailbox/messages/msg_123/attachment-downloads/attref_abc123?download_token=...",
                                     "type": "string"
                                   },
                                   "filename": {
@@ -24041,7 +24041,7 @@
                                           },
                                           "download_url": {
                                             "description": "Short-lived URL for this exact attachment. Fetch it promptly; if it expires, call the message or attachment metadata endpoint again to receive a fresh URL.",
-                                            "example": "https://app.sendmux.ai/api/v1/mailbox/messages/msg_123/attachment-downloads/attref_abc123?download_token=...",
+                                            "example": "https://app.qubrics.com/api/v1/mailbox/messages/msg_123/attachment-downloads/attref_abc123?download_token=...",
                                             "type": "string"
                                           },
                                           "filename": {
@@ -24498,7 +24498,7 @@
                           },
                           "download_url": {
                             "description": "Short-lived URL for this exact attachment. Fetch it promptly; if it expires, call the message or attachment metadata endpoint again to receive a fresh URL.",
-                            "example": "https://app.sendmux.ai/api/v1/mailbox/messages/msg_123/attachment-downloads/attref_abc123?download_token=...",
+                            "example": "https://app.qubrics.com/api/v1/mailbox/messages/msg_123/attachment-downloads/attref_abc123?download_token=...",
                             "type": "string"
                           },
                           "filename": {
@@ -24557,7 +24557,7 @@
                           },
                           "download_url": {
                             "description": "Short-lived URL for this exact attachment. Fetch it promptly; if it expires, call the message or attachment metadata endpoint again to receive a fresh URL.",
-                            "example": "https://app.sendmux.ai/api/v1/mailbox/messages/msg_123/attachment-downloads/attref_abc123?download_token=...",
+                            "example": "https://app.qubrics.com/api/v1/mailbox/messages/msg_123/attachment-downloads/attref_abc123?download_token=...",
                             "type": "string"
                           },
                           "filename": {
@@ -24625,7 +24625,7 @@
                           },
                           "download_url": {
                             "description": "Short-lived URL for this exact attachment. Fetch it promptly; if it expires, call the message or attachment metadata endpoint again to receive a fresh URL.",
-                            "example": "https://app.sendmux.ai/api/v1/mailbox/messages/msg_123/attachment-downloads/attref_abc123?download_token=...",
+                            "example": "https://app.qubrics.com/api/v1/mailbox/messages/msg_123/attachment-downloads/attref_abc123?download_token=...",
                             "type": "string"
                           },
                           "filename": {
@@ -27003,7 +27003,7 @@
                           },
                           "upload_url": {
                             "description": "Short-lived signed PUT URL for this exact attachment. Upload promptly; if it expires, create a new upload URL.",
-                            "example": "https://app.sendmux.ai/api/v1/mailbox/attachment-uploads/upl_123?upload_token=...",
+                            "example": "https://app.qubrics.com/api/v1/mailbox/attachment-uploads/upl_123?upload_token=...",
                             "type": "string"
                           }
                         },
@@ -27272,7 +27272,7 @@
                                     },
                                     "download_url": {
                                       "description": "Short-lived URL for this exact attachment. Fetch it promptly; if it expires, call the message or attachment metadata endpoint again to receive a fresh URL.",
-                                      "example": "https://app.sendmux.ai/api/v1/mailbox/messages/msg_123/attachment-downloads/attref_abc123?download_token=...",
+                                      "example": "https://app.qubrics.com/api/v1/mailbox/messages/msg_123/attachment-downloads/attref_abc123?download_token=...",
                                       "type": "string"
                                     },
                                     "filename": {
@@ -27746,7 +27746,7 @@
                                       "type": "integer"
                                     },
                                     "target": {
-                                      "example": "mail.sendmux.ai",
+                                      "example": "mail.qubrics.com",
                                       "type": "string"
                                     }
                                   },
@@ -28091,7 +28091,7 @@
                                   },
                                   "server": {
                                     "description": "Mailbox server name",
-                                    "example": "mail.sendmux.ai",
+                                    "example": "mail.qubrics.com",
                                     "type": "string"
                                   },
                                   "smtp_port": {
@@ -28342,7 +28342,7 @@
                               },
                               "server": {
                                 "description": "Mailbox server name",
-                                "example": "mail.sendmux.ai",
+                                "example": "mail.qubrics.com",
                                 "type": "string"
                               },
                               "smtp_port": {
@@ -29117,7 +29117,7 @@
                                       "type": "integer"
                                     },
                                     "target": {
-                                      "example": "mail.sendmux.ai",
+                                      "example": "mail.qubrics.com",
                                       "type": "string"
                                     }
                                   },
@@ -30643,7 +30643,7 @@
                                         "type": "integer"
                                       },
                                       "target": {
-                                        "example": "mail.sendmux.ai",
+                                        "example": "mail.qubrics.com",
                                         "type": "string"
                                       }
                                     },
@@ -32688,7 +32688,7 @@
                                       "type": "integer"
                                     },
                                     "target": {
-                                      "example": "mail.sendmux.ai",
+                                      "example": "mail.qubrics.com",
                                       "type": "string"
                                     }
                                   },
@@ -33033,7 +33033,7 @@
                                   },
                                   "server": {
                                     "description": "Mailbox server name",
-                                    "example": "mail.sendmux.ai",
+                                    "example": "mail.qubrics.com",
                                     "type": "string"
                                   },
                                   "smtp_port": {
@@ -33284,7 +33284,7 @@
                               },
                               "server": {
                                 "description": "Mailbox server name",
-                                "example": "mail.sendmux.ai",
+                                "example": "mail.qubrics.com",
                                 "type": "string"
                               },
                               "smtp_port": {
@@ -34059,7 +34059,7 @@
                                       "type": "integer"
                                     },
                                     "target": {
-                                      "example": "mail.sendmux.ai",
+                                      "example": "mail.qubrics.com",
                                       "type": "string"
                                     }
                                   },
@@ -35585,7 +35585,7 @@
                                         "type": "integer"
                                       },
                                       "target": {
-                                        "example": "mail.sendmux.ai",
+                                        "example": "mail.qubrics.com",
                                         "type": "string"
                                       }
                                     },

@@ -1,14 +1,21 @@
-# Migrate PHP Mailbox and SDK from 2.x to 3.0
+# Migrate the PHP SDK from 2.x to 3.0
 
-This guide is for PHP applications that use `sendmux/mailbox` or the
-`sendmux/sdk` umbrella package. Version 3.0 changes the successful response
+Update your dependencies and PHP imports. Version 3.0 replaces the five
+`sendmux/*` Composer packages with `qubrics/*`, so change each directly required
+package name in `composer.json` and replace `Sendmux\` with `Qubrics\` in your
+PHP code. Rename `SendmuxApiError` to `QubricsApiError`.
+
+Keep your existing `smx_*` credentials. Both `X-Sendmux-*` headers and
+`sendmux_message_id` remain supported.
+
+For Mailbox and the umbrella SDK, version 3.0 also changes the successful response
 models for `mailboxGetChanges()` so both legacy and typed changes retain
 their data. It also separates thread-message list responses and replaces
 generic list metadata with operation-specific models. Update your Composer
 constraint, response type declarations, and manually constructed metadata.
 
-The core, Sending, and Management packages use `^2.1.1` dependency
-constraints for maintained HTTP security fixes. They remain on 2.x.
+All five Qubrics packages start at 3.0.0 and use `^3.0` sibling dependency
+constraints. Their maintained HTTP security constraints remain in place.
 
 ## Before you begin
 
@@ -16,55 +23,57 @@ constraints for maintained HTTP security fixes. They remain on 2.x.
 - Commit your application, `composer.json`, and `composer.lock` so you can
   restore them together if you need to roll back.
 - Before updating Mailbox directly, confirm that Packagist lists
-  [`sendmux/mailbox` version 3.0.0](https://packagist.org/packages/sendmux/mailbox)
-  and [`sendmux/core` version 2.1.1](https://packagist.org/packages/sendmux/core).
+  [`qubrics/mailbox` version 3.0.0](https://packagist.org/packages/qubrics/mailbox)
+  and [`qubrics/core` version 3.0.0](https://packagist.org/packages/qubrics/core).
   Before updating the umbrella SDK, confirm that Packagist lists
-  [`sendmux/sdk` version 3.0.0](https://packagist.org/packages/sendmux/sdk),
-  [`sendmux/mailbox` version 3.0.0](https://packagist.org/packages/sendmux/mailbox),
-  and version 2.1.1 of [`sendmux/core`](https://packagist.org/packages/sendmux/core),
-  [`sendmux/sending`](https://packagist.org/packages/sendmux/sending), and
-  [`sendmux/management`](https://packagist.org/packages/sendmux/management).
+  [`qubrics/sdk` version 3.0.0](https://packagist.org/packages/qubrics/sdk),
+  [`qubrics/mailbox` version 3.0.0](https://packagist.org/packages/qubrics/mailbox),
+  and version 3.0.0 of [`qubrics/core`](https://packagist.org/packages/qubrics/core),
+  [`qubrics/sending`](https://packagist.org/packages/qubrics/sending), and
+  [`qubrics/management`](https://packagist.org/packages/qubrics/management).
   Until Packagist lists every version required for your installation path,
   retain your existing Composer constraints.
 - If you use 1.x, apply the [PHP 2.0 migration guide](UPGRADING.md) first.
 - If your custom Guzzle client uses `FileCookieJar` or `SessionCookieJar`,
   back up its state and re-authenticate into a fresh jar when upgrading.
   Guzzle rejects old records without a boolean `HostOnly`; do not guess
-  that value. Default Sendmux clients do not enable cookies. See the
+  that value. Default Qubrics clients do not enable cookies. See the
   [upstream migration warning](https://github.com/guzzle/guzzle/security/advisories/GHSA-wm3w-8rrp-j577).
 
 ## Upgrade your application
 
-1. In your application directory, update the package you install directly.
+1. In your application directory, replace directly required `sendmux/*`
+   names in `composer.json` with their `qubrics/*` equivalents and `^3.0`
+   constraints. Then update the package you install directly.
    For the umbrella SDK, run:
 
    ```bash
-   composer require sendmux/sdk:^3.0 --with-all-dependencies
+   composer require qubrics/sdk:^3.0 --with-all-dependencies
    ```
 
    If you install only Mailbox, run this command instead:
 
    ```bash
-   composer require sendmux/mailbox:^3.0 --with-all-dependencies
+   composer require qubrics/mailbox:^3.0 --with-all-dependencies
    ```
 
    If both packages are direct dependencies, update both in one command:
 
    ```bash
-   composer require sendmux/sdk:^3.0 sendmux/mailbox:^3.0 \
+   composer require qubrics/sdk:^3.0 qubrics/mailbox:^3.0 \
      --with-all-dependencies
    ```
 
    Composer resolves Mailbox and the umbrella SDK, when installed, to 3.x.
-   The umbrella SDK keeps core, Sending, and Management on 2.x.
+   The umbrella SDK requires all four Qubrics packages on 3.x.
 
 2. Replace assumptions about `MailboxGetChanges200Response` in your imports,
    type declarations, subclasses, and response handling. For example, a
    wrapper that previously expected only the typed data model looked like:
 
    ```php
-   use Sendmux\Mailbox\Model\MailboxGetChanges200Response;
-   use Sendmux\Mailbox\Model\MailboxTypedChanges;
+   use Qubrics\Mailbox\Model\MailboxGetChanges200Response;
+   use Qubrics\Mailbox\Model\MailboxTypedChanges;
 
    function changesData(
        MailboxGetChanges200Response $response
@@ -76,10 +85,10 @@ constraints for maintained HTTP security fixes. They remain on 2.x.
    Accept both successful response models and their corresponding data:
 
    ```php
-   use Sendmux\Mailbox\Model\MailboxChanges;
-   use Sendmux\Mailbox\Model\MailboxChangesResponse;
-   use Sendmux\Mailbox\Model\MailboxTypedChanges;
-   use Sendmux\Mailbox\Model\MailboxTypedChangesResponse;
+   use Qubrics\Mailbox\Model\MailboxChanges;
+   use Qubrics\Mailbox\Model\MailboxChangesResponse;
+   use Qubrics\Mailbox\Model\MailboxTypedChanges;
+   use Qubrics\Mailbox\Model\MailboxTypedChangesResponse;
 
    function changesData(
        MailboxChangesResponse|MailboxTypedChangesResponse $response
@@ -119,7 +128,7 @@ constraints for maintained HTTP security fixes. They remain on 2.x.
    For example, replace the old wrapper declaration:
 
    ```php
-   use Sendmux\Mailbox\Model\MailboxMessageSummaryCursorListResponse;
+   use Qubrics\Mailbox\Model\MailboxMessageSummaryCursorListResponse;
 
    function threadRequestId(
        MailboxMessageSummaryCursorListResponse $response
@@ -131,7 +140,7 @@ constraints for maintained HTTP security fixes. They remain on 2.x.
    Use the distinct thread response instead:
 
    ```php
-   use Sendmux\Mailbox\Model\MailboxThreadMessageSummaryCursorListResponse;
+   use Qubrics\Mailbox\Model\MailboxThreadMessageSummaryCursorListResponse;
 
    function threadRequestId(
        MailboxThreadMessageSummaryCursorListResponse $response
@@ -146,7 +155,7 @@ constraints for maintained HTTP security fixes. They remain on 2.x.
 4. Replace `ResponseMeta` in typed metadata consumers and in manually
    constructed response fixtures. For these five existing response classes,
    both `getMeta()` and `setMeta()` change from `ResponseMeta` to the listed
-   class in `Sendmux\Mailbox\Model`:
+   class in `Qubrics\Mailbox\Model`:
 
    | Response class | 3.0 metadata class | Optional state field |
    | --- | --- | --- |
@@ -171,9 +180,9 @@ constraints for maintained HTTP security fixes. They remain on 2.x.
    API call and prints `request_example thread_example`:
 
    ```php
-   use Sendmux\Mailbox\Model\CursorPagination;
-   use Sendmux\Mailbox\Model\MailboxThreadMessageSummaryCursorListResponse;
-   use Sendmux\Mailbox\Model\MailboxThreadMessagesMeta;
+   use Qubrics\Mailbox\Model\CursorPagination;
+   use Qubrics\Mailbox\Model\MailboxThreadMessageSummaryCursorListResponse;
+   use Qubrics\Mailbox\Model\MailboxThreadMessagesMeta;
 
    $meta = new MailboxThreadMessagesMeta([
        'request_id' => 'request_example',
@@ -196,19 +205,42 @@ constraints for maintained HTTP security fixes. They remain on 2.x.
    `MailboxRealtimeMessage::getBody()` returns the renamed class and
    `setBody()` accepts it; the `text`, `html`, `is_truncated`, and
    `max_bytes` accessors are unchanged. Remove any reference to
-   `Sendmux\Mailbox\Model\Mailbox`, which no mailbox operation returned;
+   `Qubrics\Mailbox\Model\Mailbox`, which no mailbox operation returned;
    `mailboxGetMe()` still returns `MailboxMeItemResponse` with `MailboxMe` data.
+
+6. Update your Management provider-list wrappers and fixtures to accept
+   `ProviderListItem[]` from `ProviderItemCursorListResponse::getData()` and
+   pass that type to `setData()`. The response envelope keeps its name.
+   List items have no `variables` field or `getVariables()` method.
+   Call `managementGetProvider()` to read variables from its detail response:
+   `ProviderItemResponse::getData()` returns `ProviderItem`, which exposes
+   `getVariables()`.
+
+7. Use concrete webhook payload models when constructing Management events.
+   For mail events, use `MailWebhookEventPayload` with `WebhookEventData`.
+   Calendar events use `CalendarWebhookEventPayload` with
+   `CalendarWebhookEventData`. All four classes are in
+   `Qubrics\Management\Model`. The base `WebhookEventPayload::setData()`
+   accepts `CalendarWebhookEventData`, so move any mail fixtures using that
+   base class to `MailWebhookEventPayload`. Schema-supported mail and
+   calendar payloads still deserialise through their concrete models.
+
+8. Replace the two Management model aliases scheduled for removal in 3.0.
+   Both are in `Qubrics\Management\Model`:
+   `MailboxAppPasswordResultCredential` becomes `MailboxCredential`, and
+   `ProviderCreateBodyQuotasPerDayAnyOf` becomes `ProviderQuotaRange`.
+   Update imports, type declarations, and constructor calls. The deprecated
+   names no longer load.
 
 ## Verify the migration
 
 Run this command in your application directory:
 
 ```bash
-composer show 'sendmux/*'
+composer show 'qubrics/*'
 ```
 
-Confirm that Mailbox and the umbrella SDK, if installed, are 3.x, while
-core, Sending, and Management remain 2.x. Run your application's type checks
+Confirm that every installed Qubrics package is 3.x. Run your application's type checks
 and tests for legacy changes, typed changes, thread-message lists, metadata
 construction, and failed requests. Successful responses must preserve the
 matching data model. Test empty ordinary and thread-message lists with absent
@@ -217,11 +249,15 @@ Malformed JSON and non-success requests must still follow your `ApiException`
 handling; unmatched valid JSON, including `null`, must follow your
 `UnexpectedValueException` handling.
 
+For Management consumers, also test provider-list wrappers, provider detail
+variables, and manually constructed mail and calendar webhook events. Confirm
+that no application code refers to either removed Management model alias.
+
 ## Roll back
 
 Restore the application code, `composer.json`, and `composer.lock` from the
 same pre-upgrade revision, then run `composer install`. This package change
-does not migrate server data; returning to 2.x also returns to its previous
-changes-response behavior.
+does not migrate server data. Returning to the previous packages also restores
+their previous changes-response behaviour.
 
 For client setup and API methods, see the [Mailbox package guide](mailbox/README.md).

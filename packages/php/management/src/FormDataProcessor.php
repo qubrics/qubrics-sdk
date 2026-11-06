@@ -5,7 +5,7 @@
  * PHP version 8.1
  *
  * @category Class
- * @package  Sendmux\Management
+ * @package  Qubrics\Management
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
@@ -26,14 +26,14 @@
  * Do not edit the class manually.
  */
 
-namespace Sendmux\Management;
+namespace Qubrics\Management;
 
 use ArrayAccess;
 use DateTime;
 use GuzzleHttp\Psr7\Utils;
 use Psr\Http\Message\StreamInterface;
 use SplFileObject;
-use Sendmux\Management\Model\ModelInterface;
+use Qubrics\Management\Model\ModelInterface;
 
 class FormDataProcessor
 {

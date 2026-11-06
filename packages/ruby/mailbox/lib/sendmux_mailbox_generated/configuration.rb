@@ -157,7 +157,7 @@ module Sendmux::Mailbox::Generated
 
     def initialize
       @scheme = 'https'
-      @host = 'app.sendmux.ai'
+      @host = 'app.qubrics.com'
       @base_path = '/api/v1'
       @server_index = nil
       @server_operation_index = {}
@@ -270,7 +270,7 @@ module Sendmux::Mailbox::Generated
     def server_settings
       [
         {
-          url: "https://app.sendmux.ai/api/v1",
+          url: "https://app.qubrics.com/api/v1",
           description: "API v1",
         }
       ]
