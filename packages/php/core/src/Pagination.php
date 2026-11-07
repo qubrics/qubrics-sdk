@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Sendmux\Core;
+namespace Qubrics\Core;
 
 use Generator;
 use RuntimeException;
@@ -33,7 +33,7 @@ final class Pagination
 
             $nextCursor = self::stringValue($pagination, 'getNextCursor', 'next_cursor');
             if ($nextCursor === null || $nextCursor === '' || $nextCursor === $cursor) {
-                throw new RuntimeException('Sendmux cursor pagination did not return a new next_cursor');
+                throw new RuntimeException('Qubrics cursor pagination did not return a new next_cursor');
             }
 
             $cursor = $nextCursor;
@@ -46,12 +46,12 @@ final class Pagination
     private static function data(object $response): iterable
     {
         if (!method_exists($response, 'getData')) {
-            throw new RuntimeException('Sendmux cursor response is missing getData()');
+            throw new RuntimeException('Qubrics cursor response is missing getData()');
         }
 
         $data = $response->getData();
         if (!is_iterable($data)) {
-            throw new RuntimeException('Sendmux cursor response data is not iterable');
+            throw new RuntimeException('Qubrics cursor response data is not iterable');
         }
 
         return $data;
@@ -60,12 +60,12 @@ final class Pagination
     private static function pagination(object $response): object
     {
         if (!method_exists($response, 'getPagination')) {
-            throw new RuntimeException('Sendmux cursor response is missing getPagination()');
+            throw new RuntimeException('Qubrics cursor response is missing getPagination()');
         }
 
         $pagination = $response->getPagination();
         if (!is_object($pagination)) {
-            throw new RuntimeException('Sendmux cursor response pagination is not an object');
+            throw new RuntimeException('Qubrics cursor response pagination is not an object');
         }
 
         return $pagination;

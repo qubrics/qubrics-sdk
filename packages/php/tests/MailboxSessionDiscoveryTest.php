@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Sendmux\Tests;
+namespace Qubrics\Tests;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
-use Sendmux\Mailbox\Api\MailboxAPIApi;
-use Sendmux\Mailbox\Model\MailboxSessionResponse;
+use Qubrics\Mailbox\Api\MailboxAPIApi;
+use Qubrics\Mailbox\Model\MailboxSessionResponse;
 
 final class MailboxSessionDiscoveryTest extends TestCase
 {

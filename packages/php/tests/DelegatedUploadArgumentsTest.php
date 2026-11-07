@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Sendmux\Tests;
+namespace Qubrics\Tests;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
@@ -13,8 +13,9 @@ use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
-use Sendmux\Sending\Api\AttachmentsApi;
-use Sendmux\Sending\ApiException;
+use Qubrics\Sending\Api\AttachmentsApi;
+use Qubrics\Sending\ApiException;
+use Qubrics\Sending\Configuration;
 
 final class DelegatedUploadArgumentsTest extends TestCase
 {
@@ -24,6 +25,7 @@ final class DelegatedUploadArgumentsTest extends TestCase
         $forms = [
             'legacy', 'legacy-content-type', 'numeric-token', 'current', 'coercible-length',
             'named-sendmux', 'named-qubrics', 'named-both',
+            'configured-sendmux', 'configured-qubrics',
         ];
         foreach (['', 'WithHttpInfo', 'Async', 'AsyncWithHttpInfo', 'Request'] as $suffix) {
             foreach ($forms as $form) {
@@ -38,7 +40,11 @@ final class DelegatedUploadArgumentsTest extends TestCase
         $history = [];
         $handler = HandlerStack::create(new MockHandler([new Response(401)]));
         $handler->push(Middleware::history($history));
-        $api = new AttachmentsApi(new Client(['handler' => $handler]));
+        $api = new AttachmentsApi(new Client(['handler' => $handler]), new Configuration());
+        if (str_starts_with($form, 'configured-')) {
+            $header = $form === 'configured-sendmux' ? 'X-Sendmux-Upload-Token' : 'X-Qubrics-Upload-Token';
+            $api->getConfig()->setApiKey($header, 'upload-token');
+        }
         $file = new \SplTempFileObject();
         $file->fwrite('test');
         $file->rewind();
@@ -50,6 +56,7 @@ final class DelegatedUploadArgumentsTest extends TestCase
             'legacy-content-type' => [$token, 4, $uploadId, $file, $contentType],
             'current' => [4, $uploadId, $file, $token],
             'coercible-length' => ['4', $uploadId, $file, $token],
+            'configured-sendmux', 'configured-qubrics' => [4, $uploadId, $file],
             default => [
                 'content_length' => 4,
                 'upload_id' => $uploadId,
@@ -90,10 +97,7 @@ final class DelegatedUploadArgumentsTest extends TestCase
         self::assertSame($contentType, $request->getHeaderLine('Content-Type'));
         self::assertSame('test', $request->getBody()->getContents());
         self::assertSame('', $request->getHeaderLine('Authorization'));
-        $hasSendmuxToken = str_starts_with($form, 'legacy') || $form === 'numeric-token'
-            || in_array($form, ['named-sendmux', 'named-both'], true);
-        $hasQubricsToken = in_array($form, ['current', 'coercible-length', 'named-qubrics', 'named-both'], true);
-        self::assertSame($hasSendmuxToken ? $token : '', $request->getHeaderLine('X-Sendmux-Upload-Token'));
-        self::assertSame($hasQubricsToken ? $token : '', $request->getHeaderLine('X-Qubrics-Upload-Token'));
+        self::assertSame($token, $request->getHeaderLine('X-Sendmux-Upload-Token'));
+        self::assertSame($token, $request->getHeaderLine('X-Qubrics-Upload-Token'));
     }
 }

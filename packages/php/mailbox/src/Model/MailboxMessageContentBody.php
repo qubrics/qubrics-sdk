@@ -5,7 +5,7 @@
  *
  * PHP version 8.1
  *
- * @package  Sendmux\Mailbox
+ * @package  Qubrics\Mailbox
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
@@ -26,18 +26,18 @@
  * Do not edit the class manually.
  */
 
-namespace Sendmux\Mailbox\Model;
+namespace Qubrics\Mailbox\Model;
 
 use ArrayAccess;
 use JsonSerializable;
 use InvalidArgumentException;
 use ReturnTypeWillChange;
-use Sendmux\Mailbox\ObjectSerializer;
+use Qubrics\Mailbox\ObjectSerializer;
 
 /**
  * MailboxMessageContentBody Class Doc Comment
  *
- * @package  Sendmux\Mailbox
+ * @package  Qubrics\Mailbox
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
@@ -63,7 +63,7 @@ class MailboxMessageContentBody implements ModelInterface, ArrayAccess, JsonSeri
         'extracted_links' => 'string[]',
         'format' => 'string',
         'html' => 'string',
-        'html_cleaning' => '\Sendmux\Mailbox\Model\MailboxMessageContentBodyHtmlCleaning',
+        'html_cleaning' => '\Qubrics\Mailbox\Model\MailboxMessageContentBodyHtmlCleaning',
         'is_truncated' => 'bool',
         'quotes_stripped' => 'bool',
         'signature_stripped' => 'bool',
@@ -519,9 +519,9 @@ class MailboxMessageContentBody implements ModelInterface, ArrayAccess, JsonSeri
     /**
      * Gets html_cleaning
      *
-     * @return \Sendmux\Mailbox\Model\MailboxMessageContentBodyHtmlCleaning|null
+     * @return \Qubrics\Mailbox\Model\MailboxMessageContentBodyHtmlCleaning|null
      */
-    public function getHtmlCleaning(): ?\Sendmux\Mailbox\Model\MailboxMessageContentBodyHtmlCleaning
+    public function getHtmlCleaning(): ?\Qubrics\Mailbox\Model\MailboxMessageContentBodyHtmlCleaning
     {
         return $this->container['html_cleaning'];
     }
@@ -529,11 +529,11 @@ class MailboxMessageContentBody implements ModelInterface, ArrayAccess, JsonSeri
     /**
      * Sets html_cleaning
      *
-     * @param \Sendmux\Mailbox\Model\MailboxMessageContentBodyHtmlCleaning|null $html_cleaning html_cleaning
+     * @param \Qubrics\Mailbox\Model\MailboxMessageContentBodyHtmlCleaning|null $html_cleaning html_cleaning
      *
      * @return $this
      */
-    public function setHtmlCleaning(?\Sendmux\Mailbox\Model\MailboxMessageContentBodyHtmlCleaning $html_cleaning): static
+    public function setHtmlCleaning(?\Qubrics\Mailbox\Model\MailboxMessageContentBodyHtmlCleaning $html_cleaning): static
     {
         if (is_null($html_cleaning)) {
             array_push($this->openAPINullablesSetToNull, 'html_cleaning');

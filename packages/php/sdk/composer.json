@@ -1,18 +1,18 @@
 {
-  "name": "sendmux/sdk",
-  "description": "Umbrella package for Sendmux PHP SDK clients.",
+  "name": "qubrics/sdk",
+  "description": "Umbrella package for Qubrics PHP SDK clients.",
   "type": "library",
   "license": "MIT",
   "require": {
     "php": "^8.2",
-    "sendmux/core": "^2.1.1",
-    "sendmux/mailbox": "^3.0",
-    "sendmux/management": "^2.1.1",
-    "sendmux/sending": "^2.1.1"
+    "qubrics/core": "^3.0",
+    "qubrics/mailbox": "^3.0",
+    "qubrics/management": "^3.0",
+    "qubrics/sending": "^3.0"
   },
   "autoload": {
     "psr-4": {
-      "Sendmux\\Sdk\\": "src/"
+      "Qubrics\\Sdk\\": "src/"
     }
   }
 }

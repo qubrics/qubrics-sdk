@@ -5,7 +5,7 @@
  *
  * PHP version 8.1
  *
- * @package  Sendmux\Mailbox
+ * @package  Qubrics\Mailbox
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
@@ -26,18 +26,18 @@
  * Do not edit the class manually.
  */
 
-namespace Sendmux\Mailbox\Model;
+namespace Qubrics\Mailbox\Model;
 
 use ArrayAccess;
 use JsonSerializable;
 use InvalidArgumentException;
 use ReturnTypeWillChange;
-use Sendmux\Mailbox\ObjectSerializer;
+use Qubrics\Mailbox\ObjectSerializer;
 
 /**
  * MailboxSenderChoices Class Doc Comment
  *
- * @package  Sendmux\Mailbox
+ * @package  Qubrics\Mailbox
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
@@ -59,9 +59,9 @@ class MailboxSenderChoices implements ModelInterface, ArrayAccess, JsonSerializa
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'from' => '\Sendmux\Mailbox\Model\MailboxSenderChoicesFrom',
+        'from' => '\Qubrics\Mailbox\Model\MailboxSenderChoicesFrom',
         'origin_address' => 'string',
-        'reply_to' => '\Sendmux\Mailbox\Model\MailboxSenderChoicesReplyTo'
+        'reply_to' => '\Qubrics\Mailbox\Model\MailboxSenderChoicesReplyTo'
     ];
 
     /**
@@ -290,9 +290,9 @@ class MailboxSenderChoices implements ModelInterface, ArrayAccess, JsonSerializa
     /**
      * Gets from
      *
-     * @return \Sendmux\Mailbox\Model\MailboxSenderChoicesFrom
+     * @return \Qubrics\Mailbox\Model\MailboxSenderChoicesFrom
      */
-    public function getFrom(): \Sendmux\Mailbox\Model\MailboxSenderChoicesFrom
+    public function getFrom(): \Qubrics\Mailbox\Model\MailboxSenderChoicesFrom
     {
         return $this->container['from'];
     }
@@ -300,11 +300,11 @@ class MailboxSenderChoices implements ModelInterface, ArrayAccess, JsonSerializa
     /**
      * Sets from
      *
-     * @param \Sendmux\Mailbox\Model\MailboxSenderChoicesFrom $from from
+     * @param \Qubrics\Mailbox\Model\MailboxSenderChoicesFrom $from from
      *
      * @return $this
      */
-    public function setFrom(\Sendmux\Mailbox\Model\MailboxSenderChoicesFrom $from): static
+    public function setFrom(\Qubrics\Mailbox\Model\MailboxSenderChoicesFrom $from): static
     {
         if (is_null($from)) {
             throw new InvalidArgumentException('non-nullable from cannot be null');
@@ -344,9 +344,9 @@ class MailboxSenderChoices implements ModelInterface, ArrayAccess, JsonSerializa
     /**
      * Gets reply_to
      *
-     * @return \Sendmux\Mailbox\Model\MailboxSenderChoicesReplyTo
+     * @return \Qubrics\Mailbox\Model\MailboxSenderChoicesReplyTo
      */
-    public function getReplyTo(): \Sendmux\Mailbox\Model\MailboxSenderChoicesReplyTo
+    public function getReplyTo(): \Qubrics\Mailbox\Model\MailboxSenderChoicesReplyTo
     {
         return $this->container['reply_to'];
     }
@@ -354,11 +354,11 @@ class MailboxSenderChoices implements ModelInterface, ArrayAccess, JsonSerializa
     /**
      * Sets reply_to
      *
-     * @param \Sendmux\Mailbox\Model\MailboxSenderChoicesReplyTo $reply_to reply_to
+     * @param \Qubrics\Mailbox\Model\MailboxSenderChoicesReplyTo $reply_to reply_to
      *
      * @return $this
      */
-    public function setReplyTo(\Sendmux\Mailbox\Model\MailboxSenderChoicesReplyTo $reply_to): static
+    public function setReplyTo(\Qubrics\Mailbox\Model\MailboxSenderChoicesReplyTo $reply_to): static
     {
         if (is_null($reply_to)) {
             throw new InvalidArgumentException('non-nullable reply_to cannot be null');

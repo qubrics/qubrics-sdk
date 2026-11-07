@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Sendmux\Sending;
+namespace Qubrics\Sending;
 
-use Sendmux\Sending\Api\AttachmentsApi;
-use Sendmux\Sending\Api\EmailsApi;
-use Sendmux\Sending\Api\MetaApi;
+use Qubrics\Sending\Api\AttachmentsApi;
+use Qubrics\Sending\Api\EmailsApi;
+use Qubrics\Sending\Api\MetaApi;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\HandlerStack;
-use Sendmux\Core\ApiKeySurface;
-use Sendmux\Core\Auth;
-use Sendmux\Core\RetryMiddleware;
-use Sendmux\Core\RetryOptions;
+use Qubrics\Core\ApiKeySurface;
+use Qubrics\Core\Auth;
+use Qubrics\Core\RetryMiddleware;
+use Qubrics\Core\RetryOptions;
 
 final class ClientFactory
 {

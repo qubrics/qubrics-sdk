@@ -1,12 +1,12 @@
-# sendmux/core
+# qubrics/core
 
-[![Packagist version](https://img.shields.io/packagist/v/sendmux/core.svg)](https://packagist.org/packages/sendmux/core)
-[![PHP version](https://img.shields.io/packagist/dependency-v/sendmux/core/php.svg)](https://packagist.org/packages/sendmux/core)
-[![License](https://img.shields.io/packagist/l/sendmux/core.svg)](https://packagist.org/packages/sendmux/core)
+[![Packagist version](https://img.shields.io/packagist/v/qubrics/core.svg)](https://packagist.org/packages/qubrics/core)
+[![PHP version](https://img.shields.io/packagist/dependency-v/qubrics/core/php.svg)](https://packagist.org/packages/qubrics/core)
+[![License](https://img.shields.io/packagist/l/qubrics/core.svg)](https://packagist.org/packages/qubrics/core)
 
-Shared runtime helpers for Sendmux PHP SDK packages.
+Shared runtime helpers for Qubrics PHP SDK packages.
 
-Read the PHP SDK guide at [sendmux.ai/docs/sdks/php](https://sendmux.ai/docs/sdks/php).
+Read the PHP SDK guide at [qubrics.com/docs/sdks/php](https://qubrics.com/docs/sdks/php).
 
 ## Requirements
 
@@ -16,32 +16,32 @@ Read the PHP SDK guide at [sendmux.ai/docs/sdks/php](https://sendmux.ai/docs/sdk
 ## Installation
 
 Run this command only after
-[Packagist lists `sendmux/core` version 2.1.1](https://packagist.org/packages/sendmux/core).
+[Packagist lists `qubrics/core` version 3.0.0](https://packagist.org/packages/qubrics/core).
 Until then, retain your existing Composer constraint.
 
 ```bash
-composer require sendmux/core:^2.1.1
+composer require qubrics/core:^3.0
 ```
 
-Upgrading from 1.x? Read the [PHP 2.0 migration guide](https://github.com/qubrics/qubrics-sdk/blob/main/packages/php/UPGRADING.md) before changing your Composer constraint.
+Before upgrading from 2.x, read the [PHP 3.0 migration guide](https://github.com/qubrics/qubrics-sdk/blob/main/packages/php/UPGRADING-3.0.md) for Composer package and PHP namespace changes. If you use 1.x, apply the [PHP 2.0 migration guide](https://github.com/qubrics/qubrics-sdk/blob/main/packages/php/UPGRADING.md) first.
 
-If your custom Guzzle client uses `FileCookieJar` or `SessionCookieJar`, back up its state and re-authenticate into a fresh jar when upgrading. Guzzle rejects old records without a boolean `HostOnly`; do not guess that value. Default Sendmux API clients do not enable cookies. See the [upstream migration warning](https://github.com/guzzle/guzzle/security/advisories/GHSA-wm3w-8rrp-j577).
+If your custom Guzzle client uses `FileCookieJar` or `SessionCookieJar`, back up its state and re-authenticate into a fresh jar when upgrading. Guzzle rejects old records without a boolean `HostOnly`; do not guess that value. Default Qubrics API clients do not enable cookies. See the [upstream migration warning](https://github.com/guzzle/guzzle/security/advisories/GHSA-wm3w-8rrp-j577).
 
 ## Usage
 
-Use `sendmux/core` directly when you need the shared helper layer without a generated API client.
+Use `qubrics/core` directly when you need the shared helper layer without a generated API client.
 
 ```php
 <?php
 
 require __DIR__ . '/vendor/autoload.php';
 
-use Sendmux\Core\ApiKeySurface;
-use Sendmux\Core\Auth;
-use Sendmux\Core\Headers;
-use Sendmux\Core\RetryOptions;
+use Qubrics\Core\ApiKeySurface;
+use Qubrics\Core\Auth;
+use Qubrics\Core\Headers;
+use Qubrics\Core\RetryOptions;
 
-$apiKey = getenv('QUBRICS_MAILBOX_API_KEY') ?: '';
+$apiKey = getenv('QUBRICS_MAILBOX_API_KEY') ?: getenv('SENDMUX_MAILBOX_API_KEY') ?: '';
 
 Auth::assertApiKeySurface($apiKey, ApiKeySurface::Mailbox);
 
@@ -60,23 +60,23 @@ $retryOptions = new RetryOptions(maxAttempts: 3);
 - `Pagination::iterate()` streams cursor-paginated responses.
 - `Auth::accessTokenMiddleware()` validates a bare OAuth token or callable provider and adds the bearer header per attempt.
 - `RetryMiddleware` honours `Retry-After`, `X-RateLimit-Reset` and explicit `error.retryable: false`. `maxDelayMilliseconds` caps local backoff only; `RetryOptions(maxElapsedMilliseconds: 5000)` stops retries that would exceed the budget and returns the last response with its retry metadata. The budget does not interrupt an in-flight request; configure transport timeouts separately.
-- `ErrorMapper` maps generated exceptions into `SendmuxApiError`.
+- `ErrorMapper` maps generated exceptions into `QubricsApiError`.
 
 ## Package map
 
 | Package | Use it for |
 | --- | --- |
-| [`sendmux/sending`](https://packagist.org/packages/sendmux/sending) | Sending API client. |
-| [`sendmux/mailbox`](https://packagist.org/packages/sendmux/mailbox) | Mailbox API client. |
-| [`sendmux/management`](https://packagist.org/packages/sendmux/management) | Management API client. |
-| [`sendmux/sdk`](https://packagist.org/packages/sendmux/sdk) | Umbrella package that installs all PHP SDK surfaces. |
+| [`qubrics/sending`](https://packagist.org/packages/qubrics/sending) | Sending API client. |
+| [`qubrics/mailbox`](https://packagist.org/packages/qubrics/mailbox) | Mailbox API client. |
+| [`qubrics/management`](https://packagist.org/packages/qubrics/management) | Management API client. |
+| [`qubrics/sdk`](https://packagist.org/packages/qubrics/sdk) | Umbrella package that installs all PHP SDK surfaces. |
 
 ## Support
 
 For help, include the package name, version, API surface, and sanitised request details. Do not include API keys, tokens, passwords, webhook secrets, customer data, or private account details.
 
-- SDK docs: [sendmux.ai/docs/sdks/php](https://sendmux.ai/docs/sdks/php)
-- API keys guide: [sendmux.ai/docs/guides/api-keys](https://sendmux.ai/docs/guides/api-keys)
+- SDK docs: [qubrics.com/docs/sdks/php](https://qubrics.com/docs/sdks/php)
+- API keys guide: [qubrics.com/docs/guides/api-keys](https://qubrics.com/docs/guides/api-keys)
 - Source repository: [github.com/qubrics/qubrics-sdk](https://github.com/qubrics/qubrics-sdk)
 
 ## License

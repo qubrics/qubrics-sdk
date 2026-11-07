@@ -5,7 +5,7 @@
  *
  * PHP version 8.1
  *
- * @package  Sendmux\Management
+ * @package  Qubrics\Management
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
@@ -26,18 +26,18 @@
  * Do not edit the class manually.
  */
 
-namespace Sendmux\Management\Model;
+namespace Qubrics\Management\Model;
 
 use ArrayAccess;
 use JsonSerializable;
 use InvalidArgumentException;
 use ReturnTypeWillChange;
-use Sendmux\Management\ObjectSerializer;
+use Qubrics\Management\ObjectSerializer;
 
 /**
  * ProviderItemCursorListResponse Class Doc Comment
  *
- * @package  Sendmux\Management
+ * @package  Qubrics\Management
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
@@ -59,10 +59,10 @@ class ProviderItemCursorListResponse implements ModelInterface, ArrayAccess, Jso
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'meta' => '\Sendmux\Management\Model\ResponseMeta',
+        'meta' => '\Qubrics\Management\Model\ResponseMeta',
         'ok' => 'bool',
-        'data' => '\Sendmux\Management\Model\ProviderListItem[]',
-        'pagination' => '\Sendmux\Management\Model\CursorPagination'
+        'data' => '\Qubrics\Management\Model\ProviderListItem[]',
+        'pagination' => '\Qubrics\Management\Model\CursorPagination'
     ];
 
     /**
@@ -300,9 +300,9 @@ class ProviderItemCursorListResponse implements ModelInterface, ArrayAccess, Jso
     /**
      * Gets meta
      *
-     * @return \Sendmux\Management\Model\ResponseMeta
+     * @return \Qubrics\Management\Model\ResponseMeta
      */
-    public function getMeta(): \Sendmux\Management\Model\ResponseMeta
+    public function getMeta(): \Qubrics\Management\Model\ResponseMeta
     {
         return $this->container['meta'];
     }
@@ -310,11 +310,11 @@ class ProviderItemCursorListResponse implements ModelInterface, ArrayAccess, Jso
     /**
      * Sets meta
      *
-     * @param \Sendmux\Management\Model\ResponseMeta $meta meta
+     * @param \Qubrics\Management\Model\ResponseMeta $meta meta
      *
      * @return $this
      */
-    public function setMeta(\Sendmux\Management\Model\ResponseMeta $meta): static
+    public function setMeta(\Qubrics\Management\Model\ResponseMeta $meta): static
     {
         if (is_null($meta)) {
             throw new InvalidArgumentException('non-nullable meta cannot be null');
@@ -354,7 +354,7 @@ class ProviderItemCursorListResponse implements ModelInterface, ArrayAccess, Jso
     /**
      * Gets data
      *
-     * @return \Sendmux\Management\Model\ProviderListItem[]
+     * @return \Qubrics\Management\Model\ProviderListItem[]
      */
     public function getData(): array
     {
@@ -364,7 +364,7 @@ class ProviderItemCursorListResponse implements ModelInterface, ArrayAccess, Jso
     /**
      * Sets data
      *
-     * @param \Sendmux\Management\Model\ProviderListItem[] $data data
+     * @param \Qubrics\Management\Model\ProviderListItem[] $data data
      *
      * @return $this
      */
@@ -381,9 +381,9 @@ class ProviderItemCursorListResponse implements ModelInterface, ArrayAccess, Jso
     /**
      * Gets pagination
      *
-     * @return \Sendmux\Management\Model\CursorPagination
+     * @return \Qubrics\Management\Model\CursorPagination
      */
-    public function getPagination(): \Sendmux\Management\Model\CursorPagination
+    public function getPagination(): \Qubrics\Management\Model\CursorPagination
     {
         return $this->container['pagination'];
     }
@@ -391,11 +391,11 @@ class ProviderItemCursorListResponse implements ModelInterface, ArrayAccess, Jso
     /**
      * Sets pagination
      *
-     * @param \Sendmux\Management\Model\CursorPagination $pagination pagination
+     * @param \Qubrics\Management\Model\CursorPagination $pagination pagination
      *
      * @return $this
      */
-    public function setPagination(\Sendmux\Management\Model\CursorPagination $pagination): static
+    public function setPagination(\Qubrics\Management\Model\CursorPagination $pagination): static
     {
         if (is_null($pagination)) {
             throw new InvalidArgumentException('non-nullable pagination cannot be null');

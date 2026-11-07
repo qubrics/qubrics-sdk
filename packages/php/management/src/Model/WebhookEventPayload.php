@@ -5,7 +5,7 @@
  *
  * PHP version 8.1
  *
- * @package  Sendmux\Management
+ * @package  Qubrics\Management
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
@@ -26,19 +26,19 @@
  * Do not edit the class manually.
  */
 
-namespace Sendmux\Management\Model;
+namespace Qubrics\Management\Model;
 
 use ArrayAccess;
 use JsonSerializable;
 use InvalidArgumentException;
 use ReturnTypeWillChange;
-use Sendmux\Management\ObjectSerializer;
+use Qubrics\Management\ObjectSerializer;
 
 /**
  * WebhookEventPayload Class Doc Comment
  *
  * @description The JSON request body delivered to the webhook endpoint.
- * @package  Sendmux\Management
+ * @package  Qubrics\Management
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
@@ -72,7 +72,7 @@ class WebhookEventPayload implements ModelInterface, ArrayAccess, JsonSerializab
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'data' => '\Sendmux\Management\Model\CalendarWebhookEventData',
+        'data' => '\Qubrics\Management\Model\CalendarWebhookEventData',
         'id' => 'string',
         'occurred_at' => 'string',
         'team_public_id' => 'string',
@@ -366,9 +366,9 @@ class WebhookEventPayload implements ModelInterface, ArrayAccess, JsonSerializab
     /**
      * Gets data
      *
-     * @return \Sendmux\Management\Model\CalendarWebhookEventData
+     * @return \Qubrics\Management\Model\CalendarWebhookEventData
      */
-    public function getData(): \Sendmux\Management\Model\CalendarWebhookEventData
+    public function getData(): \Qubrics\Management\Model\CalendarWebhookEventData
     {
         return $this->container['data'];
     }
@@ -376,11 +376,11 @@ class WebhookEventPayload implements ModelInterface, ArrayAccess, JsonSerializab
     /**
      * Sets data
      *
-     * @param \Sendmux\Management\Model\CalendarWebhookEventData $data data
+     * @param \Qubrics\Management\Model\CalendarWebhookEventData $data data
      *
      * @return $this
      */
-    public function setData(\Sendmux\Management\Model\CalendarWebhookEventData $data): static
+    public function setData(\Qubrics\Management\Model\CalendarWebhookEventData $data): static
     {
         if (is_null($data)) {
             throw new InvalidArgumentException('non-nullable data cannot be null');

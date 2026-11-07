@@ -4,7 +4,7 @@
  * MailboxAPIApi
  * PHP version 8.1
  *
- * @package  Sendmux\Mailbox
+ * @package  Qubrics\Mailbox
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
@@ -25,7 +25,7 @@
  * Do not edit the class manually.
  */
 
-namespace Sendmux\Mailbox\Api;
+namespace Qubrics\Mailbox\Api;
 
 use InvalidArgumentException;
 use GuzzleHttp\Client;
@@ -38,16 +38,16 @@ use GuzzleHttp\RequestOptions;
 use GuzzleHttp\Promise\PromiseInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Sendmux\Mailbox\ApiException;
-use Sendmux\Mailbox\Configuration;
-use Sendmux\Mailbox\HeaderSelector;
-use Sendmux\Mailbox\FormDataProcessor;
-use Sendmux\Mailbox\ObjectSerializer;
+use Qubrics\Mailbox\ApiException;
+use Qubrics\Mailbox\Configuration;
+use Qubrics\Mailbox\HeaderSelector;
+use Qubrics\Mailbox\FormDataProcessor;
+use Qubrics\Mailbox\ObjectSerializer;
 
 /**
  * MailboxAPIApi Class Doc Comment
  *
- * @package  Sendmux\Mailbox
+ * @package  Qubrics\Mailbox
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
@@ -317,19 +317,19 @@ class MailboxAPIApi
      *
      * Batch delete mailbox messages
      *
-     * @param  \Sendmux\Mailbox\Model\BatchDeleteMailboxMessagesBody|null $batch_delete_mailbox_messages_body batch_delete_mailbox_messages_body (optional)
+     * @param  \Qubrics\Mailbox\Model\BatchDeleteMailboxMessagesBody|null $batch_delete_mailbox_messages_body batch_delete_mailbox_messages_body (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxBatchDeleteMessages'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Sendmux\Mailbox\Model\MailboxBatchDeleteMessagesResultResponse|\Sendmux\Mailbox\Model\ApiError
+     * @return \Qubrics\Mailbox\Model\MailboxBatchDeleteMessagesResultResponse|\Qubrics\Mailbox\Model\ApiError
      */
     public function mailboxBatchDeleteMessages(
-        ?\Sendmux\Mailbox\Model\BatchDeleteMailboxMessagesBody $batch_delete_mailbox_messages_body = null,
+        ?\Qubrics\Mailbox\Model\BatchDeleteMailboxMessagesBody $batch_delete_mailbox_messages_body = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxBatchDeleteMessages'][0]
-    ): \Sendmux\Mailbox\Model\MailboxBatchDeleteMessagesResultResponse|\Sendmux\Mailbox\Model\ApiError {
+    ): \Qubrics\Mailbox\Model\MailboxBatchDeleteMessagesResultResponse|\Qubrics\Mailbox\Model\ApiError {
         list($response) = $this->mailboxBatchDeleteMessagesWithHttpInfo(
             $batch_delete_mailbox_messages_body,
             $mailbox_id,
@@ -343,16 +343,16 @@ class MailboxAPIApi
      *
      * Batch delete mailbox messages
      *
-     * @param  \Sendmux\Mailbox\Model\BatchDeleteMailboxMessagesBody|null $batch_delete_mailbox_messages_body batch_delete_mailbox_messages_body (optional)
+     * @param  \Qubrics\Mailbox\Model\BatchDeleteMailboxMessagesBody|null $batch_delete_mailbox_messages_body batch_delete_mailbox_messages_body (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxBatchDeleteMessages'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Sendmux\Mailbox\Model\MailboxBatchDeleteMessagesResultResponse|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Qubrics\Mailbox\Model\MailboxBatchDeleteMessagesResultResponse|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
      */
     public function mailboxBatchDeleteMessagesWithHttpInfo(
-        ?\Sendmux\Mailbox\Model\BatchDeleteMailboxMessagesBody $batch_delete_mailbox_messages_body = null,
+        ?\Qubrics\Mailbox\Model\BatchDeleteMailboxMessagesBody $batch_delete_mailbox_messages_body = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxBatchDeleteMessages'][0]
     ): array {
@@ -387,25 +387,25 @@ class MailboxAPIApi
             switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\MailboxBatchDeleteMessagesResultResponse',
+                        '\Qubrics\Mailbox\Model\MailboxBatchDeleteMessagesResultResponse',
                         $request,
                         $response,
                     );
                 case 400:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 409:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 413:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
@@ -426,7 +426,7 @@ class MailboxAPIApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Sendmux\Mailbox\Model\MailboxBatchDeleteMessagesResultResponse',
+                '\Qubrics\Mailbox\Model\MailboxBatchDeleteMessagesResultResponse',
                 $request,
                 $response,
             );
@@ -435,7 +435,7 @@ class MailboxAPIApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\MailboxBatchDeleteMessagesResultResponse',
+                        '\Qubrics\Mailbox\Model\MailboxBatchDeleteMessagesResultResponse',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -443,7 +443,7 @@ class MailboxAPIApi
                 case 400:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -451,7 +451,7 @@ class MailboxAPIApi
                 case 409:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -459,7 +459,7 @@ class MailboxAPIApi
                 case 413:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -475,7 +475,7 @@ class MailboxAPIApi
      *
      * Batch delete mailbox messages
      *
-     * @param  \Sendmux\Mailbox\Model\BatchDeleteMailboxMessagesBody|null $batch_delete_mailbox_messages_body batch_delete_mailbox_messages_body (optional)
+     * @param  \Qubrics\Mailbox\Model\BatchDeleteMailboxMessagesBody|null $batch_delete_mailbox_messages_body batch_delete_mailbox_messages_body (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxBatchDeleteMessages'] to see the possible values for this operation
      *
@@ -483,7 +483,7 @@ class MailboxAPIApi
      * @return PromiseInterface
      */
     public function mailboxBatchDeleteMessagesAsync(
-        ?\Sendmux\Mailbox\Model\BatchDeleteMailboxMessagesBody $batch_delete_mailbox_messages_body = null,
+        ?\Qubrics\Mailbox\Model\BatchDeleteMailboxMessagesBody $batch_delete_mailbox_messages_body = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxBatchDeleteMessages'][0]
     ): PromiseInterface {
@@ -504,7 +504,7 @@ class MailboxAPIApi
      *
      * Batch delete mailbox messages
      *
-     * @param  \Sendmux\Mailbox\Model\BatchDeleteMailboxMessagesBody|null $batch_delete_mailbox_messages_body batch_delete_mailbox_messages_body (optional)
+     * @param  \Qubrics\Mailbox\Model\BatchDeleteMailboxMessagesBody|null $batch_delete_mailbox_messages_body batch_delete_mailbox_messages_body (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxBatchDeleteMessages'] to see the possible values for this operation
      *
@@ -512,11 +512,11 @@ class MailboxAPIApi
      * @return PromiseInterface
      */
     public function mailboxBatchDeleteMessagesAsyncWithHttpInfo(
-        ?\Sendmux\Mailbox\Model\BatchDeleteMailboxMessagesBody $batch_delete_mailbox_messages_body = null,
+        ?\Qubrics\Mailbox\Model\BatchDeleteMailboxMessagesBody $batch_delete_mailbox_messages_body = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxBatchDeleteMessages'][0]
     ): PromiseInterface {
-        $returnType = '\Sendmux\Mailbox\Model\MailboxBatchDeleteMessagesResultResponse';
+        $returnType = '\Qubrics\Mailbox\Model\MailboxBatchDeleteMessagesResultResponse';
         $request = $this->mailboxBatchDeleteMessagesRequest(
             $batch_delete_mailbox_messages_body,
             $mailbox_id,
@@ -565,7 +565,7 @@ class MailboxAPIApi
     /**
      * Create request for operation 'mailboxBatchDeleteMessages'
      *
-     * @param  \Sendmux\Mailbox\Model\BatchDeleteMailboxMessagesBody|null $batch_delete_mailbox_messages_body batch_delete_mailbox_messages_body (optional)
+     * @param  \Qubrics\Mailbox\Model\BatchDeleteMailboxMessagesBody|null $batch_delete_mailbox_messages_body batch_delete_mailbox_messages_body (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxBatchDeleteMessages'] to see the possible values for this operation
      *
@@ -573,7 +573,7 @@ class MailboxAPIApi
      * @return \GuzzleHttp\Psr7\Request
      */
     public function mailboxBatchDeleteMessagesRequest(
-        ?\Sendmux\Mailbox\Model\BatchDeleteMailboxMessagesBody $batch_delete_mailbox_messages_body = null,
+        ?\Qubrics\Mailbox\Model\BatchDeleteMailboxMessagesBody $batch_delete_mailbox_messages_body = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxBatchDeleteMessages'][0]
     ): Request {
@@ -674,19 +674,19 @@ class MailboxAPIApi
      *
      * Batch get mailbox messages
      *
-     * @param  \Sendmux\Mailbox\Model\MailboxBatchGetBody|null $mailbox_batch_get_body mailbox_batch_get_body (optional)
+     * @param  \Qubrics\Mailbox\Model\MailboxBatchGetBody|null $mailbox_batch_get_body mailbox_batch_get_body (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxBatchGetMessages'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Sendmux\Mailbox\Model\MailboxBatchGetResultResponse|\Sendmux\Mailbox\Model\ApiError
+     * @return \Qubrics\Mailbox\Model\MailboxBatchGetResultResponse|\Qubrics\Mailbox\Model\ApiError
      */
     public function mailboxBatchGetMessages(
-        ?\Sendmux\Mailbox\Model\MailboxBatchGetBody $mailbox_batch_get_body = null,
+        ?\Qubrics\Mailbox\Model\MailboxBatchGetBody $mailbox_batch_get_body = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxBatchGetMessages'][0]
-    ): \Sendmux\Mailbox\Model\MailboxBatchGetResultResponse|\Sendmux\Mailbox\Model\ApiError {
+    ): \Qubrics\Mailbox\Model\MailboxBatchGetResultResponse|\Qubrics\Mailbox\Model\ApiError {
         list($response) = $this->mailboxBatchGetMessagesWithHttpInfo(
             $mailbox_batch_get_body,
             $mailbox_id,
@@ -700,16 +700,16 @@ class MailboxAPIApi
      *
      * Batch get mailbox messages
      *
-     * @param  \Sendmux\Mailbox\Model\MailboxBatchGetBody|null $mailbox_batch_get_body mailbox_batch_get_body (optional)
+     * @param  \Qubrics\Mailbox\Model\MailboxBatchGetBody|null $mailbox_batch_get_body mailbox_batch_get_body (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxBatchGetMessages'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Sendmux\Mailbox\Model\MailboxBatchGetResultResponse|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Qubrics\Mailbox\Model\MailboxBatchGetResultResponse|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
      */
     public function mailboxBatchGetMessagesWithHttpInfo(
-        ?\Sendmux\Mailbox\Model\MailboxBatchGetBody $mailbox_batch_get_body = null,
+        ?\Qubrics\Mailbox\Model\MailboxBatchGetBody $mailbox_batch_get_body = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxBatchGetMessages'][0]
     ): array {
@@ -744,25 +744,25 @@ class MailboxAPIApi
             switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\MailboxBatchGetResultResponse',
+                        '\Qubrics\Mailbox\Model\MailboxBatchGetResultResponse',
                         $request,
                         $response,
                     );
                 case 400:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 404:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 413:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
@@ -783,7 +783,7 @@ class MailboxAPIApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Sendmux\Mailbox\Model\MailboxBatchGetResultResponse',
+                '\Qubrics\Mailbox\Model\MailboxBatchGetResultResponse',
                 $request,
                 $response,
             );
@@ -792,7 +792,7 @@ class MailboxAPIApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\MailboxBatchGetResultResponse',
+                        '\Qubrics\Mailbox\Model\MailboxBatchGetResultResponse',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -800,7 +800,7 @@ class MailboxAPIApi
                 case 400:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -808,7 +808,7 @@ class MailboxAPIApi
                 case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -816,7 +816,7 @@ class MailboxAPIApi
                 case 413:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -832,7 +832,7 @@ class MailboxAPIApi
      *
      * Batch get mailbox messages
      *
-     * @param  \Sendmux\Mailbox\Model\MailboxBatchGetBody|null $mailbox_batch_get_body mailbox_batch_get_body (optional)
+     * @param  \Qubrics\Mailbox\Model\MailboxBatchGetBody|null $mailbox_batch_get_body mailbox_batch_get_body (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxBatchGetMessages'] to see the possible values for this operation
      *
@@ -840,7 +840,7 @@ class MailboxAPIApi
      * @return PromiseInterface
      */
     public function mailboxBatchGetMessagesAsync(
-        ?\Sendmux\Mailbox\Model\MailboxBatchGetBody $mailbox_batch_get_body = null,
+        ?\Qubrics\Mailbox\Model\MailboxBatchGetBody $mailbox_batch_get_body = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxBatchGetMessages'][0]
     ): PromiseInterface {
@@ -861,7 +861,7 @@ class MailboxAPIApi
      *
      * Batch get mailbox messages
      *
-     * @param  \Sendmux\Mailbox\Model\MailboxBatchGetBody|null $mailbox_batch_get_body mailbox_batch_get_body (optional)
+     * @param  \Qubrics\Mailbox\Model\MailboxBatchGetBody|null $mailbox_batch_get_body mailbox_batch_get_body (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxBatchGetMessages'] to see the possible values for this operation
      *
@@ -869,11 +869,11 @@ class MailboxAPIApi
      * @return PromiseInterface
      */
     public function mailboxBatchGetMessagesAsyncWithHttpInfo(
-        ?\Sendmux\Mailbox\Model\MailboxBatchGetBody $mailbox_batch_get_body = null,
+        ?\Qubrics\Mailbox\Model\MailboxBatchGetBody $mailbox_batch_get_body = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxBatchGetMessages'][0]
     ): PromiseInterface {
-        $returnType = '\Sendmux\Mailbox\Model\MailboxBatchGetResultResponse';
+        $returnType = '\Qubrics\Mailbox\Model\MailboxBatchGetResultResponse';
         $request = $this->mailboxBatchGetMessagesRequest(
             $mailbox_batch_get_body,
             $mailbox_id,
@@ -922,7 +922,7 @@ class MailboxAPIApi
     /**
      * Create request for operation 'mailboxBatchGetMessages'
      *
-     * @param  \Sendmux\Mailbox\Model\MailboxBatchGetBody|null $mailbox_batch_get_body mailbox_batch_get_body (optional)
+     * @param  \Qubrics\Mailbox\Model\MailboxBatchGetBody|null $mailbox_batch_get_body mailbox_batch_get_body (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxBatchGetMessages'] to see the possible values for this operation
      *
@@ -930,7 +930,7 @@ class MailboxAPIApi
      * @return \GuzzleHttp\Psr7\Request
      */
     public function mailboxBatchGetMessagesRequest(
-        ?\Sendmux\Mailbox\Model\MailboxBatchGetBody $mailbox_batch_get_body = null,
+        ?\Qubrics\Mailbox\Model\MailboxBatchGetBody $mailbox_batch_get_body = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxBatchGetMessages'][0]
     ): Request {
@@ -1031,19 +1031,19 @@ class MailboxAPIApi
      *
      * Batch update mailbox messages
      *
-     * @param  \Sendmux\Mailbox\Model\BatchUpdateMailboxMessagesBody|null $batch_update_mailbox_messages_body batch_update_mailbox_messages_body (optional)
+     * @param  \Qubrics\Mailbox\Model\BatchUpdateMailboxMessagesBody|null $batch_update_mailbox_messages_body batch_update_mailbox_messages_body (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxBatchUpdateMessages'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Sendmux\Mailbox\Model\MailboxBatchUpdateMessagesResultResponse|\Sendmux\Mailbox\Model\ApiError
+     * @return \Qubrics\Mailbox\Model\MailboxBatchUpdateMessagesResultResponse|\Qubrics\Mailbox\Model\ApiError
      */
     public function mailboxBatchUpdateMessages(
-        ?\Sendmux\Mailbox\Model\BatchUpdateMailboxMessagesBody $batch_update_mailbox_messages_body = null,
+        ?\Qubrics\Mailbox\Model\BatchUpdateMailboxMessagesBody $batch_update_mailbox_messages_body = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxBatchUpdateMessages'][0]
-    ): \Sendmux\Mailbox\Model\MailboxBatchUpdateMessagesResultResponse|\Sendmux\Mailbox\Model\ApiError {
+    ): \Qubrics\Mailbox\Model\MailboxBatchUpdateMessagesResultResponse|\Qubrics\Mailbox\Model\ApiError {
         list($response) = $this->mailboxBatchUpdateMessagesWithHttpInfo(
             $batch_update_mailbox_messages_body,
             $mailbox_id,
@@ -1057,16 +1057,16 @@ class MailboxAPIApi
      *
      * Batch update mailbox messages
      *
-     * @param  \Sendmux\Mailbox\Model\BatchUpdateMailboxMessagesBody|null $batch_update_mailbox_messages_body batch_update_mailbox_messages_body (optional)
+     * @param  \Qubrics\Mailbox\Model\BatchUpdateMailboxMessagesBody|null $batch_update_mailbox_messages_body batch_update_mailbox_messages_body (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxBatchUpdateMessages'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Sendmux\Mailbox\Model\MailboxBatchUpdateMessagesResultResponse|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Qubrics\Mailbox\Model\MailboxBatchUpdateMessagesResultResponse|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
      */
     public function mailboxBatchUpdateMessagesWithHttpInfo(
-        ?\Sendmux\Mailbox\Model\BatchUpdateMailboxMessagesBody $batch_update_mailbox_messages_body = null,
+        ?\Qubrics\Mailbox\Model\BatchUpdateMailboxMessagesBody $batch_update_mailbox_messages_body = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxBatchUpdateMessages'][0]
     ): array {
@@ -1101,25 +1101,25 @@ class MailboxAPIApi
             switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\MailboxBatchUpdateMessagesResultResponse',
+                        '\Qubrics\Mailbox\Model\MailboxBatchUpdateMessagesResultResponse',
                         $request,
                         $response,
                     );
                 case 400:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 409:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 413:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
@@ -1140,7 +1140,7 @@ class MailboxAPIApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Sendmux\Mailbox\Model\MailboxBatchUpdateMessagesResultResponse',
+                '\Qubrics\Mailbox\Model\MailboxBatchUpdateMessagesResultResponse',
                 $request,
                 $response,
             );
@@ -1149,7 +1149,7 @@ class MailboxAPIApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\MailboxBatchUpdateMessagesResultResponse',
+                        '\Qubrics\Mailbox\Model\MailboxBatchUpdateMessagesResultResponse',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -1157,7 +1157,7 @@ class MailboxAPIApi
                 case 400:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -1165,7 +1165,7 @@ class MailboxAPIApi
                 case 409:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -1173,7 +1173,7 @@ class MailboxAPIApi
                 case 413:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -1189,7 +1189,7 @@ class MailboxAPIApi
      *
      * Batch update mailbox messages
      *
-     * @param  \Sendmux\Mailbox\Model\BatchUpdateMailboxMessagesBody|null $batch_update_mailbox_messages_body batch_update_mailbox_messages_body (optional)
+     * @param  \Qubrics\Mailbox\Model\BatchUpdateMailboxMessagesBody|null $batch_update_mailbox_messages_body batch_update_mailbox_messages_body (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxBatchUpdateMessages'] to see the possible values for this operation
      *
@@ -1197,7 +1197,7 @@ class MailboxAPIApi
      * @return PromiseInterface
      */
     public function mailboxBatchUpdateMessagesAsync(
-        ?\Sendmux\Mailbox\Model\BatchUpdateMailboxMessagesBody $batch_update_mailbox_messages_body = null,
+        ?\Qubrics\Mailbox\Model\BatchUpdateMailboxMessagesBody $batch_update_mailbox_messages_body = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxBatchUpdateMessages'][0]
     ): PromiseInterface {
@@ -1218,7 +1218,7 @@ class MailboxAPIApi
      *
      * Batch update mailbox messages
      *
-     * @param  \Sendmux\Mailbox\Model\BatchUpdateMailboxMessagesBody|null $batch_update_mailbox_messages_body batch_update_mailbox_messages_body (optional)
+     * @param  \Qubrics\Mailbox\Model\BatchUpdateMailboxMessagesBody|null $batch_update_mailbox_messages_body batch_update_mailbox_messages_body (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxBatchUpdateMessages'] to see the possible values for this operation
      *
@@ -1226,11 +1226,11 @@ class MailboxAPIApi
      * @return PromiseInterface
      */
     public function mailboxBatchUpdateMessagesAsyncWithHttpInfo(
-        ?\Sendmux\Mailbox\Model\BatchUpdateMailboxMessagesBody $batch_update_mailbox_messages_body = null,
+        ?\Qubrics\Mailbox\Model\BatchUpdateMailboxMessagesBody $batch_update_mailbox_messages_body = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxBatchUpdateMessages'][0]
     ): PromiseInterface {
-        $returnType = '\Sendmux\Mailbox\Model\MailboxBatchUpdateMessagesResultResponse';
+        $returnType = '\Qubrics\Mailbox\Model\MailboxBatchUpdateMessagesResultResponse';
         $request = $this->mailboxBatchUpdateMessagesRequest(
             $batch_update_mailbox_messages_body,
             $mailbox_id,
@@ -1279,7 +1279,7 @@ class MailboxAPIApi
     /**
      * Create request for operation 'mailboxBatchUpdateMessages'
      *
-     * @param  \Sendmux\Mailbox\Model\BatchUpdateMailboxMessagesBody|null $batch_update_mailbox_messages_body batch_update_mailbox_messages_body (optional)
+     * @param  \Qubrics\Mailbox\Model\BatchUpdateMailboxMessagesBody|null $batch_update_mailbox_messages_body batch_update_mailbox_messages_body (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxBatchUpdateMessages'] to see the possible values for this operation
      *
@@ -1287,7 +1287,7 @@ class MailboxAPIApi
      * @return \GuzzleHttp\Psr7\Request
      */
     public function mailboxBatchUpdateMessagesRequest(
-        ?\Sendmux\Mailbox\Model\BatchUpdateMailboxMessagesBody $batch_update_mailbox_messages_body = null,
+        ?\Qubrics\Mailbox\Model\BatchUpdateMailboxMessagesBody $batch_update_mailbox_messages_body = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxBatchUpdateMessages'][0]
     ): Request {
@@ -1389,22 +1389,22 @@ class MailboxAPIApi
      * Reschedule or cancel a saved draft send
      *
      * @param  string $draft_id Stable draft ID. (required)
-     * @param  \Sendmux\Mailbox\Model\ControlMailboxDraftSchedule $control_mailbox_draft_schedule control_mailbox_draft_schedule (required)
+     * @param  \Qubrics\Mailbox\Model\ControlMailboxDraftSchedule $control_mailbox_draft_schedule control_mailbox_draft_schedule (required)
      * @param  string|null $if_match Current draft ETag; both revision and schedule version remain required. (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxControlDraftSchedule'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Sendmux\Mailbox\Model\MailboxDraftResponse|\Sendmux\Mailbox\Model\ApiError
+     * @return \Qubrics\Mailbox\Model\MailboxDraftResponse|\Qubrics\Mailbox\Model\ApiError
      */
     public function mailboxControlDraftSchedule(
         string $draft_id,
-        \Sendmux\Mailbox\Model\ControlMailboxDraftSchedule $control_mailbox_draft_schedule,
+        \Qubrics\Mailbox\Model\ControlMailboxDraftSchedule $control_mailbox_draft_schedule,
         ?string $if_match = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxControlDraftSchedule'][0]
-    ): \Sendmux\Mailbox\Model\MailboxDraftResponse|\Sendmux\Mailbox\Model\ApiError {
+    ): \Qubrics\Mailbox\Model\MailboxDraftResponse|\Qubrics\Mailbox\Model\ApiError {
         list($response) = $this->mailboxControlDraftScheduleWithHttpInfo(
             $draft_id,
             $control_mailbox_draft_schedule,
@@ -1421,18 +1421,18 @@ class MailboxAPIApi
      * Reschedule or cancel a saved draft send
      *
      * @param  string $draft_id Stable draft ID. (required)
-     * @param  \Sendmux\Mailbox\Model\ControlMailboxDraftSchedule $control_mailbox_draft_schedule control_mailbox_draft_schedule (required)
+     * @param  \Qubrics\Mailbox\Model\ControlMailboxDraftSchedule $control_mailbox_draft_schedule control_mailbox_draft_schedule (required)
      * @param  string|null $if_match Current draft ETag; both revision and schedule version remain required. (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxControlDraftSchedule'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Sendmux\Mailbox\Model\MailboxDraftResponse|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Qubrics\Mailbox\Model\MailboxDraftResponse|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
      */
     public function mailboxControlDraftScheduleWithHttpInfo(
         string $draft_id,
-        \Sendmux\Mailbox\Model\ControlMailboxDraftSchedule $control_mailbox_draft_schedule,
+        \Qubrics\Mailbox\Model\ControlMailboxDraftSchedule $control_mailbox_draft_schedule,
         ?string $if_match = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxControlDraftSchedule'][0]
@@ -1470,67 +1470,67 @@ class MailboxAPIApi
             switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\MailboxDraftResponse',
+                        '\Qubrics\Mailbox\Model\MailboxDraftResponse',
                         $request,
                         $response,
                     );
                 case 400:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 401:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 403:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 404:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 409:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 413:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 422:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 429:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 500:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 503:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
@@ -1551,7 +1551,7 @@ class MailboxAPIApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Sendmux\Mailbox\Model\MailboxDraftResponse',
+                '\Qubrics\Mailbox\Model\MailboxDraftResponse',
                 $request,
                 $response,
             );
@@ -1560,7 +1560,7 @@ class MailboxAPIApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\MailboxDraftResponse',
+                        '\Qubrics\Mailbox\Model\MailboxDraftResponse',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -1568,7 +1568,7 @@ class MailboxAPIApi
                 case 400:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -1576,7 +1576,7 @@ class MailboxAPIApi
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -1584,7 +1584,7 @@ class MailboxAPIApi
                 case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -1592,7 +1592,7 @@ class MailboxAPIApi
                 case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -1600,7 +1600,7 @@ class MailboxAPIApi
                 case 409:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -1608,7 +1608,7 @@ class MailboxAPIApi
                 case 413:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -1616,7 +1616,7 @@ class MailboxAPIApi
                 case 422:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -1624,7 +1624,7 @@ class MailboxAPIApi
                 case 429:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -1632,7 +1632,7 @@ class MailboxAPIApi
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -1640,7 +1640,7 @@ class MailboxAPIApi
                 case 503:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -1657,7 +1657,7 @@ class MailboxAPIApi
      * Reschedule or cancel a saved draft send
      *
      * @param  string $draft_id Stable draft ID. (required)
-     * @param  \Sendmux\Mailbox\Model\ControlMailboxDraftSchedule $control_mailbox_draft_schedule control_mailbox_draft_schedule (required)
+     * @param  \Qubrics\Mailbox\Model\ControlMailboxDraftSchedule $control_mailbox_draft_schedule control_mailbox_draft_schedule (required)
      * @param  string|null $if_match Current draft ETag; both revision and schedule version remain required. (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxControlDraftSchedule'] to see the possible values for this operation
@@ -1667,7 +1667,7 @@ class MailboxAPIApi
      */
     public function mailboxControlDraftScheduleAsync(
         string $draft_id,
-        \Sendmux\Mailbox\Model\ControlMailboxDraftSchedule $control_mailbox_draft_schedule,
+        \Qubrics\Mailbox\Model\ControlMailboxDraftSchedule $control_mailbox_draft_schedule,
         ?string $if_match = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxControlDraftSchedule'][0]
@@ -1692,7 +1692,7 @@ class MailboxAPIApi
      * Reschedule or cancel a saved draft send
      *
      * @param  string $draft_id Stable draft ID. (required)
-     * @param  \Sendmux\Mailbox\Model\ControlMailboxDraftSchedule $control_mailbox_draft_schedule control_mailbox_draft_schedule (required)
+     * @param  \Qubrics\Mailbox\Model\ControlMailboxDraftSchedule $control_mailbox_draft_schedule control_mailbox_draft_schedule (required)
      * @param  string|null $if_match Current draft ETag; both revision and schedule version remain required. (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxControlDraftSchedule'] to see the possible values for this operation
@@ -1702,12 +1702,12 @@ class MailboxAPIApi
      */
     public function mailboxControlDraftScheduleAsyncWithHttpInfo(
         string $draft_id,
-        \Sendmux\Mailbox\Model\ControlMailboxDraftSchedule $control_mailbox_draft_schedule,
+        \Qubrics\Mailbox\Model\ControlMailboxDraftSchedule $control_mailbox_draft_schedule,
         ?string $if_match = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxControlDraftSchedule'][0]
     ): PromiseInterface {
-        $returnType = '\Sendmux\Mailbox\Model\MailboxDraftResponse';
+        $returnType = '\Qubrics\Mailbox\Model\MailboxDraftResponse';
         $request = $this->mailboxControlDraftScheduleRequest(
             $draft_id,
             $control_mailbox_draft_schedule,
@@ -1759,7 +1759,7 @@ class MailboxAPIApi
      * Create request for operation 'mailboxControlDraftSchedule'
      *
      * @param  string $draft_id Stable draft ID. (required)
-     * @param  \Sendmux\Mailbox\Model\ControlMailboxDraftSchedule $control_mailbox_draft_schedule control_mailbox_draft_schedule (required)
+     * @param  \Qubrics\Mailbox\Model\ControlMailboxDraftSchedule $control_mailbox_draft_schedule control_mailbox_draft_schedule (required)
      * @param  string|null $if_match Current draft ETag; both revision and schedule version remain required. (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxControlDraftSchedule'] to see the possible values for this operation
@@ -1769,7 +1769,7 @@ class MailboxAPIApi
      */
     public function mailboxControlDraftScheduleRequest(
         string $draft_id,
-        \Sendmux\Mailbox\Model\ControlMailboxDraftSchedule $control_mailbox_draft_schedule,
+        \Qubrics\Mailbox\Model\ControlMailboxDraftSchedule $control_mailbox_draft_schedule,
         ?string $if_match = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxControlDraftSchedule'][0]
@@ -1921,7 +1921,7 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Sendmux\Mailbox\Model\MailboxMessageCountResponse|\Sendmux\Mailbox\Model\ApiError
+     * @return \Qubrics\Mailbox\Model\MailboxMessageCountResponse|\Qubrics\Mailbox\Model\ApiError
      */
     public function mailboxCountMessages(
         ?string $folder_id = null,
@@ -1945,7 +1945,7 @@ class MailboxAPIApi
         ?bool $is_unread = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxCountMessages'][0]
-    ): \Sendmux\Mailbox\Model\MailboxMessageCountResponse|\Sendmux\Mailbox\Model\ApiError {
+    ): \Qubrics\Mailbox\Model\MailboxMessageCountResponse|\Qubrics\Mailbox\Model\ApiError {
         list($response) = $this->mailboxCountMessagesWithHttpInfo(
             $folder_id,
             $thread_id,
@@ -2001,7 +2001,7 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Sendmux\Mailbox\Model\MailboxMessageCountResponse|\Sendmux\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Qubrics\Mailbox\Model\MailboxMessageCountResponse|\Qubrics\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
      */
     public function mailboxCountMessagesWithHttpInfo(
         ?string $folder_id = null,
@@ -2075,13 +2075,13 @@ class MailboxAPIApi
             switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\MailboxMessageCountResponse',
+                        '\Qubrics\Mailbox\Model\MailboxMessageCountResponse',
                         $request,
                         $response,
                     );
                 case 400:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
@@ -2102,7 +2102,7 @@ class MailboxAPIApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Sendmux\Mailbox\Model\MailboxMessageCountResponse',
+                '\Qubrics\Mailbox\Model\MailboxMessageCountResponse',
                 $request,
                 $response,
             );
@@ -2111,7 +2111,7 @@ class MailboxAPIApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\MailboxMessageCountResponse',
+                        '\Qubrics\Mailbox\Model\MailboxMessageCountResponse',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -2119,7 +2119,7 @@ class MailboxAPIApi
                 case 400:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -2266,7 +2266,7 @@ class MailboxAPIApi
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxCountMessages'][0]
     ): PromiseInterface {
-        $returnType = '\Sendmux\Mailbox\Model\MailboxMessageCountResponse';
+        $returnType = '\Qubrics\Mailbox\Model\MailboxMessageCountResponse';
         $request = $this->mailboxCountMessagesRequest(
             $folder_id,
             $thread_id,
@@ -2666,19 +2666,19 @@ class MailboxAPIApi
      *
      * Create a presigned mailbox attachment upload
      *
-     * @param  \Sendmux\Mailbox\Model\MailboxAttachmentUploadIntentBody|null $mailbox_attachment_upload_intent_body mailbox_attachment_upload_intent_body (optional)
+     * @param  \Qubrics\Mailbox\Model\MailboxAttachmentUploadIntentBody|null $mailbox_attachment_upload_intent_body mailbox_attachment_upload_intent_body (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxCreateAttachmentUpload'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Sendmux\Mailbox\Model\MailboxAttachmentUploadIntentResultResponse|\Sendmux\Mailbox\Model\ApiError
+     * @return \Qubrics\Mailbox\Model\MailboxAttachmentUploadIntentResultResponse|\Qubrics\Mailbox\Model\ApiError
      */
     public function mailboxCreateAttachmentUpload(
-        ?\Sendmux\Mailbox\Model\MailboxAttachmentUploadIntentBody $mailbox_attachment_upload_intent_body = null,
+        ?\Qubrics\Mailbox\Model\MailboxAttachmentUploadIntentBody $mailbox_attachment_upload_intent_body = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxCreateAttachmentUpload'][0]
-    ): \Sendmux\Mailbox\Model\MailboxAttachmentUploadIntentResultResponse|\Sendmux\Mailbox\Model\ApiError {
+    ): \Qubrics\Mailbox\Model\MailboxAttachmentUploadIntentResultResponse|\Qubrics\Mailbox\Model\ApiError {
         list($response) = $this->mailboxCreateAttachmentUploadWithHttpInfo(
             $mailbox_attachment_upload_intent_body,
             $mailbox_id,
@@ -2692,16 +2692,16 @@ class MailboxAPIApi
      *
      * Create a presigned mailbox attachment upload
      *
-     * @param  \Sendmux\Mailbox\Model\MailboxAttachmentUploadIntentBody|null $mailbox_attachment_upload_intent_body mailbox_attachment_upload_intent_body (optional)
+     * @param  \Qubrics\Mailbox\Model\MailboxAttachmentUploadIntentBody|null $mailbox_attachment_upload_intent_body mailbox_attachment_upload_intent_body (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxCreateAttachmentUpload'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Sendmux\Mailbox\Model\MailboxAttachmentUploadIntentResultResponse|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Qubrics\Mailbox\Model\MailboxAttachmentUploadIntentResultResponse|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
      */
     public function mailboxCreateAttachmentUploadWithHttpInfo(
-        ?\Sendmux\Mailbox\Model\MailboxAttachmentUploadIntentBody $mailbox_attachment_upload_intent_body = null,
+        ?\Qubrics\Mailbox\Model\MailboxAttachmentUploadIntentBody $mailbox_attachment_upload_intent_body = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxCreateAttachmentUpload'][0]
     ): array {
@@ -2736,25 +2736,25 @@ class MailboxAPIApi
             switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\MailboxAttachmentUploadIntentResultResponse',
+                        '\Qubrics\Mailbox\Model\MailboxAttachmentUploadIntentResultResponse',
                         $request,
                         $response,
                     );
                 case 400:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 413:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 503:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
@@ -2775,7 +2775,7 @@ class MailboxAPIApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Sendmux\Mailbox\Model\MailboxAttachmentUploadIntentResultResponse',
+                '\Qubrics\Mailbox\Model\MailboxAttachmentUploadIntentResultResponse',
                 $request,
                 $response,
             );
@@ -2784,7 +2784,7 @@ class MailboxAPIApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\MailboxAttachmentUploadIntentResultResponse',
+                        '\Qubrics\Mailbox\Model\MailboxAttachmentUploadIntentResultResponse',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -2792,7 +2792,7 @@ class MailboxAPIApi
                 case 400:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -2800,7 +2800,7 @@ class MailboxAPIApi
                 case 413:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -2808,7 +2808,7 @@ class MailboxAPIApi
                 case 503:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -2824,7 +2824,7 @@ class MailboxAPIApi
      *
      * Create a presigned mailbox attachment upload
      *
-     * @param  \Sendmux\Mailbox\Model\MailboxAttachmentUploadIntentBody|null $mailbox_attachment_upload_intent_body mailbox_attachment_upload_intent_body (optional)
+     * @param  \Qubrics\Mailbox\Model\MailboxAttachmentUploadIntentBody|null $mailbox_attachment_upload_intent_body mailbox_attachment_upload_intent_body (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxCreateAttachmentUpload'] to see the possible values for this operation
      *
@@ -2832,7 +2832,7 @@ class MailboxAPIApi
      * @return PromiseInterface
      */
     public function mailboxCreateAttachmentUploadAsync(
-        ?\Sendmux\Mailbox\Model\MailboxAttachmentUploadIntentBody $mailbox_attachment_upload_intent_body = null,
+        ?\Qubrics\Mailbox\Model\MailboxAttachmentUploadIntentBody $mailbox_attachment_upload_intent_body = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxCreateAttachmentUpload'][0]
     ): PromiseInterface {
@@ -2853,7 +2853,7 @@ class MailboxAPIApi
      *
      * Create a presigned mailbox attachment upload
      *
-     * @param  \Sendmux\Mailbox\Model\MailboxAttachmentUploadIntentBody|null $mailbox_attachment_upload_intent_body mailbox_attachment_upload_intent_body (optional)
+     * @param  \Qubrics\Mailbox\Model\MailboxAttachmentUploadIntentBody|null $mailbox_attachment_upload_intent_body mailbox_attachment_upload_intent_body (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxCreateAttachmentUpload'] to see the possible values for this operation
      *
@@ -2861,11 +2861,11 @@ class MailboxAPIApi
      * @return PromiseInterface
      */
     public function mailboxCreateAttachmentUploadAsyncWithHttpInfo(
-        ?\Sendmux\Mailbox\Model\MailboxAttachmentUploadIntentBody $mailbox_attachment_upload_intent_body = null,
+        ?\Qubrics\Mailbox\Model\MailboxAttachmentUploadIntentBody $mailbox_attachment_upload_intent_body = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxCreateAttachmentUpload'][0]
     ): PromiseInterface {
-        $returnType = '\Sendmux\Mailbox\Model\MailboxAttachmentUploadIntentResultResponse';
+        $returnType = '\Qubrics\Mailbox\Model\MailboxAttachmentUploadIntentResultResponse';
         $request = $this->mailboxCreateAttachmentUploadRequest(
             $mailbox_attachment_upload_intent_body,
             $mailbox_id,
@@ -2914,7 +2914,7 @@ class MailboxAPIApi
     /**
      * Create request for operation 'mailboxCreateAttachmentUpload'
      *
-     * @param  \Sendmux\Mailbox\Model\MailboxAttachmentUploadIntentBody|null $mailbox_attachment_upload_intent_body mailbox_attachment_upload_intent_body (optional)
+     * @param  \Qubrics\Mailbox\Model\MailboxAttachmentUploadIntentBody|null $mailbox_attachment_upload_intent_body mailbox_attachment_upload_intent_body (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxCreateAttachmentUpload'] to see the possible values for this operation
      *
@@ -2922,7 +2922,7 @@ class MailboxAPIApi
      * @return \GuzzleHttp\Psr7\Request
      */
     public function mailboxCreateAttachmentUploadRequest(
-        ?\Sendmux\Mailbox\Model\MailboxAttachmentUploadIntentBody $mailbox_attachment_upload_intent_body = null,
+        ?\Qubrics\Mailbox\Model\MailboxAttachmentUploadIntentBody $mailbox_attachment_upload_intent_body = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxCreateAttachmentUpload'][0]
     ): Request {
@@ -3023,21 +3023,21 @@ class MailboxAPIApi
      *
      * Create a private calendar
      *
-     * @param  \Sendmux\Mailbox\Model\CreateCalendarBody $create_calendar_body create_calendar_body (required)
+     * @param  \Qubrics\Mailbox\Model\CreateCalendarBody $create_calendar_body create_calendar_body (required)
      * @param  string|null $idempotency_key idempotency_key (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxCreateCalendar'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Sendmux\Mailbox\Model\MailboxCalendarCreatedResponse|\Sendmux\Mailbox\Model\ApiError
+     * @return \Qubrics\Mailbox\Model\MailboxCalendarCreatedResponse|\Qubrics\Mailbox\Model\ApiError
      */
     public function mailboxCreateCalendar(
-        \Sendmux\Mailbox\Model\CreateCalendarBody $create_calendar_body,
+        \Qubrics\Mailbox\Model\CreateCalendarBody $create_calendar_body,
         ?string $idempotency_key = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxCreateCalendar'][0]
-    ): \Sendmux\Mailbox\Model\MailboxCalendarCreatedResponse|\Sendmux\Mailbox\Model\ApiError {
+    ): \Qubrics\Mailbox\Model\MailboxCalendarCreatedResponse|\Qubrics\Mailbox\Model\ApiError {
         list($response) = $this->mailboxCreateCalendarWithHttpInfo(
             $create_calendar_body,
             $idempotency_key,
@@ -3052,17 +3052,17 @@ class MailboxAPIApi
      *
      * Create a private calendar
      *
-     * @param  \Sendmux\Mailbox\Model\CreateCalendarBody $create_calendar_body create_calendar_body (required)
+     * @param  \Qubrics\Mailbox\Model\CreateCalendarBody $create_calendar_body create_calendar_body (required)
      * @param  string|null $idempotency_key idempotency_key (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxCreateCalendar'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Sendmux\Mailbox\Model\MailboxCalendarCreatedResponse|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Qubrics\Mailbox\Model\MailboxCalendarCreatedResponse|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
      */
     public function mailboxCreateCalendarWithHttpInfo(
-        \Sendmux\Mailbox\Model\CreateCalendarBody $create_calendar_body,
+        \Qubrics\Mailbox\Model\CreateCalendarBody $create_calendar_body,
         ?string $idempotency_key = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxCreateCalendar'][0]
@@ -3099,67 +3099,67 @@ class MailboxAPIApi
             switch ($statusCode) {
                 case 201:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\MailboxCalendarCreatedResponse',
+                        '\Qubrics\Mailbox\Model\MailboxCalendarCreatedResponse',
                         $request,
                         $response,
                     );
                 case 400:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 401:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 403:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 404:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 409:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 413:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 422:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 429:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 500:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 503:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
@@ -3180,7 +3180,7 @@ class MailboxAPIApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Sendmux\Mailbox\Model\MailboxCalendarCreatedResponse',
+                '\Qubrics\Mailbox\Model\MailboxCalendarCreatedResponse',
                 $request,
                 $response,
             );
@@ -3189,7 +3189,7 @@ class MailboxAPIApi
                 case 201:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\MailboxCalendarCreatedResponse',
+                        '\Qubrics\Mailbox\Model\MailboxCalendarCreatedResponse',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -3197,7 +3197,7 @@ class MailboxAPIApi
                 case 400:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -3205,7 +3205,7 @@ class MailboxAPIApi
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -3213,7 +3213,7 @@ class MailboxAPIApi
                 case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -3221,7 +3221,7 @@ class MailboxAPIApi
                 case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -3229,7 +3229,7 @@ class MailboxAPIApi
                 case 409:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -3237,7 +3237,7 @@ class MailboxAPIApi
                 case 413:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -3245,7 +3245,7 @@ class MailboxAPIApi
                 case 422:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -3253,7 +3253,7 @@ class MailboxAPIApi
                 case 429:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -3261,7 +3261,7 @@ class MailboxAPIApi
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -3269,7 +3269,7 @@ class MailboxAPIApi
                 case 503:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -3285,7 +3285,7 @@ class MailboxAPIApi
      *
      * Create a private calendar
      *
-     * @param  \Sendmux\Mailbox\Model\CreateCalendarBody $create_calendar_body create_calendar_body (required)
+     * @param  \Qubrics\Mailbox\Model\CreateCalendarBody $create_calendar_body create_calendar_body (required)
      * @param  string|null $idempotency_key idempotency_key (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxCreateCalendar'] to see the possible values for this operation
@@ -3294,7 +3294,7 @@ class MailboxAPIApi
      * @return PromiseInterface
      */
     public function mailboxCreateCalendarAsync(
-        \Sendmux\Mailbox\Model\CreateCalendarBody $create_calendar_body,
+        \Qubrics\Mailbox\Model\CreateCalendarBody $create_calendar_body,
         ?string $idempotency_key = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxCreateCalendar'][0]
@@ -3317,7 +3317,7 @@ class MailboxAPIApi
      *
      * Create a private calendar
      *
-     * @param  \Sendmux\Mailbox\Model\CreateCalendarBody $create_calendar_body create_calendar_body (required)
+     * @param  \Qubrics\Mailbox\Model\CreateCalendarBody $create_calendar_body create_calendar_body (required)
      * @param  string|null $idempotency_key idempotency_key (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxCreateCalendar'] to see the possible values for this operation
@@ -3326,12 +3326,12 @@ class MailboxAPIApi
      * @return PromiseInterface
      */
     public function mailboxCreateCalendarAsyncWithHttpInfo(
-        \Sendmux\Mailbox\Model\CreateCalendarBody $create_calendar_body,
+        \Qubrics\Mailbox\Model\CreateCalendarBody $create_calendar_body,
         ?string $idempotency_key = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxCreateCalendar'][0]
     ): PromiseInterface {
-        $returnType = '\Sendmux\Mailbox\Model\MailboxCalendarCreatedResponse';
+        $returnType = '\Qubrics\Mailbox\Model\MailboxCalendarCreatedResponse';
         $request = $this->mailboxCreateCalendarRequest(
             $create_calendar_body,
             $idempotency_key,
@@ -3381,7 +3381,7 @@ class MailboxAPIApi
     /**
      * Create request for operation 'mailboxCreateCalendar'
      *
-     * @param  \Sendmux\Mailbox\Model\CreateCalendarBody $create_calendar_body create_calendar_body (required)
+     * @param  \Qubrics\Mailbox\Model\CreateCalendarBody $create_calendar_body create_calendar_body (required)
      * @param  string|null $idempotency_key idempotency_key (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxCreateCalendar'] to see the possible values for this operation
@@ -3390,7 +3390,7 @@ class MailboxAPIApi
      * @return \GuzzleHttp\Psr7\Request
      */
     public function mailboxCreateCalendarRequest(
-        \Sendmux\Mailbox\Model\CreateCalendarBody $create_calendar_body,
+        \Qubrics\Mailbox\Model\CreateCalendarBody $create_calendar_body,
         ?string $idempotency_key = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxCreateCalendar'][0]
@@ -3509,21 +3509,21 @@ class MailboxAPIApi
      *
      * Create a non-sending event
      *
-     * @param  \Sendmux\Mailbox\Model\CreateCalendarEventBody $create_calendar_event_body create_calendar_event_body (required)
+     * @param  \Qubrics\Mailbox\Model\CreateCalendarEventBody $create_calendar_event_body create_calendar_event_body (required)
      * @param  string|null $idempotency_key idempotency_key (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxCreateCalendarEvent'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Sendmux\Mailbox\Model\MailboxCalendarEventCreatedResponse|\Sendmux\Mailbox\Model\ApiError
+     * @return \Qubrics\Mailbox\Model\MailboxCalendarEventCreatedResponse|\Qubrics\Mailbox\Model\ApiError
      */
     public function mailboxCreateCalendarEvent(
-        \Sendmux\Mailbox\Model\CreateCalendarEventBody $create_calendar_event_body,
+        \Qubrics\Mailbox\Model\CreateCalendarEventBody $create_calendar_event_body,
         ?string $idempotency_key = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxCreateCalendarEvent'][0]
-    ): \Sendmux\Mailbox\Model\MailboxCalendarEventCreatedResponse|\Sendmux\Mailbox\Model\ApiError {
+    ): \Qubrics\Mailbox\Model\MailboxCalendarEventCreatedResponse|\Qubrics\Mailbox\Model\ApiError {
         list($response) = $this->mailboxCreateCalendarEventWithHttpInfo(
             $create_calendar_event_body,
             $idempotency_key,
@@ -3538,17 +3538,17 @@ class MailboxAPIApi
      *
      * Create a non-sending event
      *
-     * @param  \Sendmux\Mailbox\Model\CreateCalendarEventBody $create_calendar_event_body create_calendar_event_body (required)
+     * @param  \Qubrics\Mailbox\Model\CreateCalendarEventBody $create_calendar_event_body create_calendar_event_body (required)
      * @param  string|null $idempotency_key idempotency_key (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxCreateCalendarEvent'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Sendmux\Mailbox\Model\MailboxCalendarEventCreatedResponse|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Qubrics\Mailbox\Model\MailboxCalendarEventCreatedResponse|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
      */
     public function mailboxCreateCalendarEventWithHttpInfo(
-        \Sendmux\Mailbox\Model\CreateCalendarEventBody $create_calendar_event_body,
+        \Qubrics\Mailbox\Model\CreateCalendarEventBody $create_calendar_event_body,
         ?string $idempotency_key = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxCreateCalendarEvent'][0]
@@ -3585,67 +3585,67 @@ class MailboxAPIApi
             switch ($statusCode) {
                 case 201:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\MailboxCalendarEventCreatedResponse',
+                        '\Qubrics\Mailbox\Model\MailboxCalendarEventCreatedResponse',
                         $request,
                         $response,
                     );
                 case 400:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 401:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 403:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 404:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 409:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 413:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 422:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 429:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 500:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 503:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
@@ -3666,7 +3666,7 @@ class MailboxAPIApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Sendmux\Mailbox\Model\MailboxCalendarEventCreatedResponse',
+                '\Qubrics\Mailbox\Model\MailboxCalendarEventCreatedResponse',
                 $request,
                 $response,
             );
@@ -3675,7 +3675,7 @@ class MailboxAPIApi
                 case 201:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\MailboxCalendarEventCreatedResponse',
+                        '\Qubrics\Mailbox\Model\MailboxCalendarEventCreatedResponse',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -3683,7 +3683,7 @@ class MailboxAPIApi
                 case 400:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -3691,7 +3691,7 @@ class MailboxAPIApi
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -3699,7 +3699,7 @@ class MailboxAPIApi
                 case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -3707,7 +3707,7 @@ class MailboxAPIApi
                 case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -3715,7 +3715,7 @@ class MailboxAPIApi
                 case 409:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -3723,7 +3723,7 @@ class MailboxAPIApi
                 case 413:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -3731,7 +3731,7 @@ class MailboxAPIApi
                 case 422:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -3739,7 +3739,7 @@ class MailboxAPIApi
                 case 429:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -3747,7 +3747,7 @@ class MailboxAPIApi
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -3755,7 +3755,7 @@ class MailboxAPIApi
                 case 503:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -3771,7 +3771,7 @@ class MailboxAPIApi
      *
      * Create a non-sending event
      *
-     * @param  \Sendmux\Mailbox\Model\CreateCalendarEventBody $create_calendar_event_body create_calendar_event_body (required)
+     * @param  \Qubrics\Mailbox\Model\CreateCalendarEventBody $create_calendar_event_body create_calendar_event_body (required)
      * @param  string|null $idempotency_key idempotency_key (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxCreateCalendarEvent'] to see the possible values for this operation
@@ -3780,7 +3780,7 @@ class MailboxAPIApi
      * @return PromiseInterface
      */
     public function mailboxCreateCalendarEventAsync(
-        \Sendmux\Mailbox\Model\CreateCalendarEventBody $create_calendar_event_body,
+        \Qubrics\Mailbox\Model\CreateCalendarEventBody $create_calendar_event_body,
         ?string $idempotency_key = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxCreateCalendarEvent'][0]
@@ -3803,7 +3803,7 @@ class MailboxAPIApi
      *
      * Create a non-sending event
      *
-     * @param  \Sendmux\Mailbox\Model\CreateCalendarEventBody $create_calendar_event_body create_calendar_event_body (required)
+     * @param  \Qubrics\Mailbox\Model\CreateCalendarEventBody $create_calendar_event_body create_calendar_event_body (required)
      * @param  string|null $idempotency_key idempotency_key (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxCreateCalendarEvent'] to see the possible values for this operation
@@ -3812,12 +3812,12 @@ class MailboxAPIApi
      * @return PromiseInterface
      */
     public function mailboxCreateCalendarEventAsyncWithHttpInfo(
-        \Sendmux\Mailbox\Model\CreateCalendarEventBody $create_calendar_event_body,
+        \Qubrics\Mailbox\Model\CreateCalendarEventBody $create_calendar_event_body,
         ?string $idempotency_key = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxCreateCalendarEvent'][0]
     ): PromiseInterface {
-        $returnType = '\Sendmux\Mailbox\Model\MailboxCalendarEventCreatedResponse';
+        $returnType = '\Qubrics\Mailbox\Model\MailboxCalendarEventCreatedResponse';
         $request = $this->mailboxCreateCalendarEventRequest(
             $create_calendar_event_body,
             $idempotency_key,
@@ -3867,7 +3867,7 @@ class MailboxAPIApi
     /**
      * Create request for operation 'mailboxCreateCalendarEvent'
      *
-     * @param  \Sendmux\Mailbox\Model\CreateCalendarEventBody $create_calendar_event_body create_calendar_event_body (required)
+     * @param  \Qubrics\Mailbox\Model\CreateCalendarEventBody $create_calendar_event_body create_calendar_event_body (required)
      * @param  string|null $idempotency_key idempotency_key (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxCreateCalendarEvent'] to see the possible values for this operation
@@ -3876,7 +3876,7 @@ class MailboxAPIApi
      * @return \GuzzleHttp\Psr7\Request
      */
     public function mailboxCreateCalendarEventRequest(
-        \Sendmux\Mailbox\Model\CreateCalendarEventBody $create_calendar_event_body,
+        \Qubrics\Mailbox\Model\CreateCalendarEventBody $create_calendar_event_body,
         ?string $idempotency_key = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxCreateCalendarEvent'][0]
@@ -3995,21 +3995,21 @@ class MailboxAPIApi
      *
      * Create a saved draft
      *
-     * @param  \Sendmux\Mailbox\Model\CreateMailboxDraft $create_mailbox_draft create_mailbox_draft (required)
+     * @param  \Qubrics\Mailbox\Model\CreateMailboxDraft $create_mailbox_draft create_mailbox_draft (required)
      * @param  string|null $idempotency_key Reuse this key when retrying the same create request. (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxCreateDraft'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Sendmux\Mailbox\Model\MailboxDraftResponse|\Sendmux\Mailbox\Model\ApiError
+     * @return \Qubrics\Mailbox\Model\MailboxDraftResponse|\Qubrics\Mailbox\Model\ApiError
      */
     public function mailboxCreateDraft(
-        \Sendmux\Mailbox\Model\CreateMailboxDraft $create_mailbox_draft,
+        \Qubrics\Mailbox\Model\CreateMailboxDraft $create_mailbox_draft,
         ?string $idempotency_key = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxCreateDraft'][0]
-    ): \Sendmux\Mailbox\Model\MailboxDraftResponse|\Sendmux\Mailbox\Model\ApiError {
+    ): \Qubrics\Mailbox\Model\MailboxDraftResponse|\Qubrics\Mailbox\Model\ApiError {
         list($response) = $this->mailboxCreateDraftWithHttpInfo(
             $create_mailbox_draft,
             $idempotency_key,
@@ -4024,17 +4024,17 @@ class MailboxAPIApi
      *
      * Create a saved draft
      *
-     * @param  \Sendmux\Mailbox\Model\CreateMailboxDraft $create_mailbox_draft create_mailbox_draft (required)
+     * @param  \Qubrics\Mailbox\Model\CreateMailboxDraft $create_mailbox_draft create_mailbox_draft (required)
      * @param  string|null $idempotency_key Reuse this key when retrying the same create request. (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxCreateDraft'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Sendmux\Mailbox\Model\MailboxDraftResponse|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Qubrics\Mailbox\Model\MailboxDraftResponse|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
      */
     public function mailboxCreateDraftWithHttpInfo(
-        \Sendmux\Mailbox\Model\CreateMailboxDraft $create_mailbox_draft,
+        \Qubrics\Mailbox\Model\CreateMailboxDraft $create_mailbox_draft,
         ?string $idempotency_key = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxCreateDraft'][0]
@@ -4071,67 +4071,67 @@ class MailboxAPIApi
             switch ($statusCode) {
                 case 201:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\MailboxDraftResponse',
+                        '\Qubrics\Mailbox\Model\MailboxDraftResponse',
                         $request,
                         $response,
                     );
                 case 400:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 401:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 403:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 404:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 409:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 413:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 422:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 429:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 500:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 503:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
@@ -4152,7 +4152,7 @@ class MailboxAPIApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Sendmux\Mailbox\Model\MailboxDraftResponse',
+                '\Qubrics\Mailbox\Model\MailboxDraftResponse',
                 $request,
                 $response,
             );
@@ -4161,7 +4161,7 @@ class MailboxAPIApi
                 case 201:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\MailboxDraftResponse',
+                        '\Qubrics\Mailbox\Model\MailboxDraftResponse',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -4169,7 +4169,7 @@ class MailboxAPIApi
                 case 400:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -4177,7 +4177,7 @@ class MailboxAPIApi
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -4185,7 +4185,7 @@ class MailboxAPIApi
                 case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -4193,7 +4193,7 @@ class MailboxAPIApi
                 case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -4201,7 +4201,7 @@ class MailboxAPIApi
                 case 409:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -4209,7 +4209,7 @@ class MailboxAPIApi
                 case 413:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -4217,7 +4217,7 @@ class MailboxAPIApi
                 case 422:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -4225,7 +4225,7 @@ class MailboxAPIApi
                 case 429:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -4233,7 +4233,7 @@ class MailboxAPIApi
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -4241,7 +4241,7 @@ class MailboxAPIApi
                 case 503:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -4257,7 +4257,7 @@ class MailboxAPIApi
      *
      * Create a saved draft
      *
-     * @param  \Sendmux\Mailbox\Model\CreateMailboxDraft $create_mailbox_draft create_mailbox_draft (required)
+     * @param  \Qubrics\Mailbox\Model\CreateMailboxDraft $create_mailbox_draft create_mailbox_draft (required)
      * @param  string|null $idempotency_key Reuse this key when retrying the same create request. (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxCreateDraft'] to see the possible values for this operation
@@ -4266,7 +4266,7 @@ class MailboxAPIApi
      * @return PromiseInterface
      */
     public function mailboxCreateDraftAsync(
-        \Sendmux\Mailbox\Model\CreateMailboxDraft $create_mailbox_draft,
+        \Qubrics\Mailbox\Model\CreateMailboxDraft $create_mailbox_draft,
         ?string $idempotency_key = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxCreateDraft'][0]
@@ -4289,7 +4289,7 @@ class MailboxAPIApi
      *
      * Create a saved draft
      *
-     * @param  \Sendmux\Mailbox\Model\CreateMailboxDraft $create_mailbox_draft create_mailbox_draft (required)
+     * @param  \Qubrics\Mailbox\Model\CreateMailboxDraft $create_mailbox_draft create_mailbox_draft (required)
      * @param  string|null $idempotency_key Reuse this key when retrying the same create request. (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxCreateDraft'] to see the possible values for this operation
@@ -4298,12 +4298,12 @@ class MailboxAPIApi
      * @return PromiseInterface
      */
     public function mailboxCreateDraftAsyncWithHttpInfo(
-        \Sendmux\Mailbox\Model\CreateMailboxDraft $create_mailbox_draft,
+        \Qubrics\Mailbox\Model\CreateMailboxDraft $create_mailbox_draft,
         ?string $idempotency_key = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxCreateDraft'][0]
     ): PromiseInterface {
-        $returnType = '\Sendmux\Mailbox\Model\MailboxDraftResponse';
+        $returnType = '\Qubrics\Mailbox\Model\MailboxDraftResponse';
         $request = $this->mailboxCreateDraftRequest(
             $create_mailbox_draft,
             $idempotency_key,
@@ -4353,7 +4353,7 @@ class MailboxAPIApi
     /**
      * Create request for operation 'mailboxCreateDraft'
      *
-     * @param  \Sendmux\Mailbox\Model\CreateMailboxDraft $create_mailbox_draft create_mailbox_draft (required)
+     * @param  \Qubrics\Mailbox\Model\CreateMailboxDraft $create_mailbox_draft create_mailbox_draft (required)
      * @param  string|null $idempotency_key Reuse this key when retrying the same create request. (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxCreateDraft'] to see the possible values for this operation
@@ -4362,7 +4362,7 @@ class MailboxAPIApi
      * @return \GuzzleHttp\Psr7\Request
      */
     public function mailboxCreateDraftRequest(
-        \Sendmux\Mailbox\Model\CreateMailboxDraft $create_mailbox_draft,
+        \Qubrics\Mailbox\Model\CreateMailboxDraft $create_mailbox_draft,
         ?string $idempotency_key = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxCreateDraft'][0]
@@ -4478,19 +4478,19 @@ class MailboxAPIApi
      *
      * Create a mailbox folder
      *
-     * @param  \Sendmux\Mailbox\Model\CreateMailboxFolderBody|null $create_mailbox_folder_body create_mailbox_folder_body (optional)
+     * @param  \Qubrics\Mailbox\Model\CreateMailboxFolderBody|null $create_mailbox_folder_body create_mailbox_folder_body (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxCreateFolder'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Sendmux\Mailbox\Model\MailboxFolderResponse|\Sendmux\Mailbox\Model\ApiError
+     * @return \Qubrics\Mailbox\Model\MailboxFolderResponse|\Qubrics\Mailbox\Model\ApiError
      */
     public function mailboxCreateFolder(
-        ?\Sendmux\Mailbox\Model\CreateMailboxFolderBody $create_mailbox_folder_body = null,
+        ?\Qubrics\Mailbox\Model\CreateMailboxFolderBody $create_mailbox_folder_body = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxCreateFolder'][0]
-    ): \Sendmux\Mailbox\Model\MailboxFolderResponse|\Sendmux\Mailbox\Model\ApiError {
+    ): \Qubrics\Mailbox\Model\MailboxFolderResponse|\Qubrics\Mailbox\Model\ApiError {
         list($response) = $this->mailboxCreateFolderWithHttpInfo(
             $create_mailbox_folder_body,
             $mailbox_id,
@@ -4504,16 +4504,16 @@ class MailboxAPIApi
      *
      * Create a mailbox folder
      *
-     * @param  \Sendmux\Mailbox\Model\CreateMailboxFolderBody|null $create_mailbox_folder_body create_mailbox_folder_body (optional)
+     * @param  \Qubrics\Mailbox\Model\CreateMailboxFolderBody|null $create_mailbox_folder_body create_mailbox_folder_body (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxCreateFolder'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Sendmux\Mailbox\Model\MailboxFolderResponse|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Qubrics\Mailbox\Model\MailboxFolderResponse|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
      */
     public function mailboxCreateFolderWithHttpInfo(
-        ?\Sendmux\Mailbox\Model\CreateMailboxFolderBody $create_mailbox_folder_body = null,
+        ?\Qubrics\Mailbox\Model\CreateMailboxFolderBody $create_mailbox_folder_body = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxCreateFolder'][0]
     ): array {
@@ -4548,25 +4548,25 @@ class MailboxAPIApi
             switch ($statusCode) {
                 case 201:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\MailboxFolderResponse',
+                        '\Qubrics\Mailbox\Model\MailboxFolderResponse',
                         $request,
                         $response,
                     );
                 case 400:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 413:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 422:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
@@ -4587,7 +4587,7 @@ class MailboxAPIApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Sendmux\Mailbox\Model\MailboxFolderResponse',
+                '\Qubrics\Mailbox\Model\MailboxFolderResponse',
                 $request,
                 $response,
             );
@@ -4596,7 +4596,7 @@ class MailboxAPIApi
                 case 201:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\MailboxFolderResponse',
+                        '\Qubrics\Mailbox\Model\MailboxFolderResponse',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -4604,7 +4604,7 @@ class MailboxAPIApi
                 case 400:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -4612,7 +4612,7 @@ class MailboxAPIApi
                 case 413:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -4620,7 +4620,7 @@ class MailboxAPIApi
                 case 422:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -4636,7 +4636,7 @@ class MailboxAPIApi
      *
      * Create a mailbox folder
      *
-     * @param  \Sendmux\Mailbox\Model\CreateMailboxFolderBody|null $create_mailbox_folder_body create_mailbox_folder_body (optional)
+     * @param  \Qubrics\Mailbox\Model\CreateMailboxFolderBody|null $create_mailbox_folder_body create_mailbox_folder_body (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxCreateFolder'] to see the possible values for this operation
      *
@@ -4644,7 +4644,7 @@ class MailboxAPIApi
      * @return PromiseInterface
      */
     public function mailboxCreateFolderAsync(
-        ?\Sendmux\Mailbox\Model\CreateMailboxFolderBody $create_mailbox_folder_body = null,
+        ?\Qubrics\Mailbox\Model\CreateMailboxFolderBody $create_mailbox_folder_body = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxCreateFolder'][0]
     ): PromiseInterface {
@@ -4665,7 +4665,7 @@ class MailboxAPIApi
      *
      * Create a mailbox folder
      *
-     * @param  \Sendmux\Mailbox\Model\CreateMailboxFolderBody|null $create_mailbox_folder_body create_mailbox_folder_body (optional)
+     * @param  \Qubrics\Mailbox\Model\CreateMailboxFolderBody|null $create_mailbox_folder_body create_mailbox_folder_body (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxCreateFolder'] to see the possible values for this operation
      *
@@ -4673,11 +4673,11 @@ class MailboxAPIApi
      * @return PromiseInterface
      */
     public function mailboxCreateFolderAsyncWithHttpInfo(
-        ?\Sendmux\Mailbox\Model\CreateMailboxFolderBody $create_mailbox_folder_body = null,
+        ?\Qubrics\Mailbox\Model\CreateMailboxFolderBody $create_mailbox_folder_body = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxCreateFolder'][0]
     ): PromiseInterface {
-        $returnType = '\Sendmux\Mailbox\Model\MailboxFolderResponse';
+        $returnType = '\Qubrics\Mailbox\Model\MailboxFolderResponse';
         $request = $this->mailboxCreateFolderRequest(
             $create_mailbox_folder_body,
             $mailbox_id,
@@ -4726,7 +4726,7 @@ class MailboxAPIApi
     /**
      * Create request for operation 'mailboxCreateFolder'
      *
-     * @param  \Sendmux\Mailbox\Model\CreateMailboxFolderBody|null $create_mailbox_folder_body create_mailbox_folder_body (optional)
+     * @param  \Qubrics\Mailbox\Model\CreateMailboxFolderBody|null $create_mailbox_folder_body create_mailbox_folder_body (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxCreateFolder'] to see the possible values for this operation
      *
@@ -4734,7 +4734,7 @@ class MailboxAPIApi
      * @return \GuzzleHttp\Psr7\Request
      */
     public function mailboxCreateFolderRequest(
-        ?\Sendmux\Mailbox\Model\CreateMailboxFolderBody $create_mailbox_folder_body = null,
+        ?\Qubrics\Mailbox\Model\CreateMailboxFolderBody $create_mailbox_folder_body = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxCreateFolder'][0]
     ): Request {
@@ -4842,14 +4842,14 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Sendmux\Mailbox\Model\MailboxCalendarDeletedResponse|\Sendmux\Mailbox\Model\ApiError
+     * @return \Qubrics\Mailbox\Model\MailboxCalendarDeletedResponse|\Qubrics\Mailbox\Model\ApiError
      */
     public function mailboxDeleteCalendar(
         string $calendar_id,
         string $if_match,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxDeleteCalendar'][0]
-    ): \Sendmux\Mailbox\Model\MailboxCalendarDeletedResponse|\Sendmux\Mailbox\Model\ApiError {
+    ): \Qubrics\Mailbox\Model\MailboxCalendarDeletedResponse|\Qubrics\Mailbox\Model\ApiError {
         list($response) = $this->mailboxDeleteCalendarWithHttpInfo(
             $calendar_id,
             $if_match,
@@ -4871,7 +4871,7 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Sendmux\Mailbox\Model\MailboxCalendarDeletedResponse|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Qubrics\Mailbox\Model\MailboxCalendarDeletedResponse|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
      */
     public function mailboxDeleteCalendarWithHttpInfo(
         string $calendar_id,
@@ -4911,67 +4911,67 @@ class MailboxAPIApi
             switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\MailboxCalendarDeletedResponse',
+                        '\Qubrics\Mailbox\Model\MailboxCalendarDeletedResponse',
                         $request,
                         $response,
                     );
                 case 400:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 401:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 403:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 404:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 409:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 413:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 422:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 429:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 500:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 503:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
@@ -4992,7 +4992,7 @@ class MailboxAPIApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Sendmux\Mailbox\Model\MailboxCalendarDeletedResponse',
+                '\Qubrics\Mailbox\Model\MailboxCalendarDeletedResponse',
                 $request,
                 $response,
             );
@@ -5001,7 +5001,7 @@ class MailboxAPIApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\MailboxCalendarDeletedResponse',
+                        '\Qubrics\Mailbox\Model\MailboxCalendarDeletedResponse',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -5009,7 +5009,7 @@ class MailboxAPIApi
                 case 400:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -5017,7 +5017,7 @@ class MailboxAPIApi
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -5025,7 +5025,7 @@ class MailboxAPIApi
                 case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -5033,7 +5033,7 @@ class MailboxAPIApi
                 case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -5041,7 +5041,7 @@ class MailboxAPIApi
                 case 409:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -5049,7 +5049,7 @@ class MailboxAPIApi
                 case 413:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -5057,7 +5057,7 @@ class MailboxAPIApi
                 case 422:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -5065,7 +5065,7 @@ class MailboxAPIApi
                 case 429:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -5073,7 +5073,7 @@ class MailboxAPIApi
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -5081,7 +5081,7 @@ class MailboxAPIApi
                 case 503:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -5143,7 +5143,7 @@ class MailboxAPIApi
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxDeleteCalendar'][0]
     ): PromiseInterface {
-        $returnType = '\Sendmux\Mailbox\Model\MailboxCalendarDeletedResponse';
+        $returnType = '\Qubrics\Mailbox\Model\MailboxCalendarDeletedResponse';
         $request = $this->mailboxDeleteCalendarRequest(
             $calendar_id,
             $if_match,
@@ -5341,14 +5341,14 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Sendmux\Mailbox\Model\MailboxCalendarEventDeletedResponse|\Sendmux\Mailbox\Model\ApiError
+     * @return \Qubrics\Mailbox\Model\MailboxCalendarEventDeletedResponse|\Qubrics\Mailbox\Model\ApiError
      */
     public function mailboxDeleteCalendarEvent(
         string $event_id,
         string $if_match,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxDeleteCalendarEvent'][0]
-    ): \Sendmux\Mailbox\Model\MailboxCalendarEventDeletedResponse|\Sendmux\Mailbox\Model\ApiError {
+    ): \Qubrics\Mailbox\Model\MailboxCalendarEventDeletedResponse|\Qubrics\Mailbox\Model\ApiError {
         list($response) = $this->mailboxDeleteCalendarEventWithHttpInfo(
             $event_id,
             $if_match,
@@ -5370,7 +5370,7 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Sendmux\Mailbox\Model\MailboxCalendarEventDeletedResponse|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Qubrics\Mailbox\Model\MailboxCalendarEventDeletedResponse|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
      */
     public function mailboxDeleteCalendarEventWithHttpInfo(
         string $event_id,
@@ -5410,67 +5410,67 @@ class MailboxAPIApi
             switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\MailboxCalendarEventDeletedResponse',
+                        '\Qubrics\Mailbox\Model\MailboxCalendarEventDeletedResponse',
                         $request,
                         $response,
                     );
                 case 400:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 401:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 403:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 404:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 409:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 413:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 422:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 429:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 500:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 503:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
@@ -5491,7 +5491,7 @@ class MailboxAPIApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Sendmux\Mailbox\Model\MailboxCalendarEventDeletedResponse',
+                '\Qubrics\Mailbox\Model\MailboxCalendarEventDeletedResponse',
                 $request,
                 $response,
             );
@@ -5500,7 +5500,7 @@ class MailboxAPIApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\MailboxCalendarEventDeletedResponse',
+                        '\Qubrics\Mailbox\Model\MailboxCalendarEventDeletedResponse',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -5508,7 +5508,7 @@ class MailboxAPIApi
                 case 400:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -5516,7 +5516,7 @@ class MailboxAPIApi
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -5524,7 +5524,7 @@ class MailboxAPIApi
                 case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -5532,7 +5532,7 @@ class MailboxAPIApi
                 case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -5540,7 +5540,7 @@ class MailboxAPIApi
                 case 409:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -5548,7 +5548,7 @@ class MailboxAPIApi
                 case 413:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -5556,7 +5556,7 @@ class MailboxAPIApi
                 case 422:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -5564,7 +5564,7 @@ class MailboxAPIApi
                 case 429:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -5572,7 +5572,7 @@ class MailboxAPIApi
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -5580,7 +5580,7 @@ class MailboxAPIApi
                 case 503:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -5642,7 +5642,7 @@ class MailboxAPIApi
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxDeleteCalendarEvent'][0]
     ): PromiseInterface {
-        $returnType = '\Sendmux\Mailbox\Model\MailboxCalendarEventDeletedResponse';
+        $returnType = '\Qubrics\Mailbox\Model\MailboxCalendarEventDeletedResponse';
         $request = $this->mailboxDeleteCalendarEventRequest(
             $event_id,
             $if_match,
@@ -5840,14 +5840,14 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Sendmux\Mailbox\Model\MailboxDraftDeleteResponse|\Sendmux\Mailbox\Model\ApiError
+     * @return \Qubrics\Mailbox\Model\MailboxDraftDeleteResponse|\Qubrics\Mailbox\Model\ApiError
      */
     public function mailboxDeleteDraft(
         string $draft_id,
         ?string $if_match = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxDeleteDraft'][0]
-    ): \Sendmux\Mailbox\Model\MailboxDraftDeleteResponse|\Sendmux\Mailbox\Model\ApiError {
+    ): \Qubrics\Mailbox\Model\MailboxDraftDeleteResponse|\Qubrics\Mailbox\Model\ApiError {
         list($response) = $this->mailboxDeleteDraftWithHttpInfo(
             $draft_id,
             $if_match,
@@ -5869,7 +5869,7 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Sendmux\Mailbox\Model\MailboxDraftDeleteResponse|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Qubrics\Mailbox\Model\MailboxDraftDeleteResponse|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
      */
     public function mailboxDeleteDraftWithHttpInfo(
         string $draft_id,
@@ -5909,67 +5909,67 @@ class MailboxAPIApi
             switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\MailboxDraftDeleteResponse',
+                        '\Qubrics\Mailbox\Model\MailboxDraftDeleteResponse',
                         $request,
                         $response,
                     );
                 case 400:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 401:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 403:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 404:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 409:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 413:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 422:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 429:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 500:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 503:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
@@ -5990,7 +5990,7 @@ class MailboxAPIApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Sendmux\Mailbox\Model\MailboxDraftDeleteResponse',
+                '\Qubrics\Mailbox\Model\MailboxDraftDeleteResponse',
                 $request,
                 $response,
             );
@@ -5999,7 +5999,7 @@ class MailboxAPIApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\MailboxDraftDeleteResponse',
+                        '\Qubrics\Mailbox\Model\MailboxDraftDeleteResponse',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -6007,7 +6007,7 @@ class MailboxAPIApi
                 case 400:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -6015,7 +6015,7 @@ class MailboxAPIApi
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -6023,7 +6023,7 @@ class MailboxAPIApi
                 case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -6031,7 +6031,7 @@ class MailboxAPIApi
                 case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -6039,7 +6039,7 @@ class MailboxAPIApi
                 case 409:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -6047,7 +6047,7 @@ class MailboxAPIApi
                 case 413:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -6055,7 +6055,7 @@ class MailboxAPIApi
                 case 422:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -6063,7 +6063,7 @@ class MailboxAPIApi
                 case 429:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -6071,7 +6071,7 @@ class MailboxAPIApi
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -6079,7 +6079,7 @@ class MailboxAPIApi
                 case 503:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -6141,7 +6141,7 @@ class MailboxAPIApi
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxDeleteDraft'][0]
     ): PromiseInterface {
-        $returnType = '\Sendmux\Mailbox\Model\MailboxDraftDeleteResponse';
+        $returnType = '\Qubrics\Mailbox\Model\MailboxDraftDeleteResponse';
         $request = $this->mailboxDeleteDraftRequest(
             $draft_id,
             $if_match,
@@ -6321,14 +6321,14 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Sendmux\Mailbox\Model\MailboxFolderDeletedResponse|\Sendmux\Mailbox\Model\ApiError
+     * @return \Qubrics\Mailbox\Model\MailboxFolderDeletedResponse|\Qubrics\Mailbox\Model\ApiError
      */
     public function mailboxDeleteFolder(
         string $folder_id,
         ?string $if_match = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxDeleteFolder'][0]
-    ): \Sendmux\Mailbox\Model\MailboxFolderDeletedResponse|\Sendmux\Mailbox\Model\ApiError {
+    ): \Qubrics\Mailbox\Model\MailboxFolderDeletedResponse|\Qubrics\Mailbox\Model\ApiError {
         list($response) = $this->mailboxDeleteFolderWithHttpInfo(
             $folder_id,
             $if_match,
@@ -6350,7 +6350,7 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Sendmux\Mailbox\Model\MailboxFolderDeletedResponse|\Sendmux\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Qubrics\Mailbox\Model\MailboxFolderDeletedResponse|\Qubrics\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
      */
     public function mailboxDeleteFolderWithHttpInfo(
         string $folder_id,
@@ -6390,13 +6390,13 @@ class MailboxAPIApi
             switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\MailboxFolderDeletedResponse',
+                        '\Qubrics\Mailbox\Model\MailboxFolderDeletedResponse',
                         $request,
                         $response,
                     );
                 case 409:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
@@ -6417,7 +6417,7 @@ class MailboxAPIApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Sendmux\Mailbox\Model\MailboxFolderDeletedResponse',
+                '\Qubrics\Mailbox\Model\MailboxFolderDeletedResponse',
                 $request,
                 $response,
             );
@@ -6426,7 +6426,7 @@ class MailboxAPIApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\MailboxFolderDeletedResponse',
+                        '\Qubrics\Mailbox\Model\MailboxFolderDeletedResponse',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -6434,7 +6434,7 @@ class MailboxAPIApi
                 case 409:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -6496,7 +6496,7 @@ class MailboxAPIApi
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxDeleteFolder'][0]
     ): PromiseInterface {
-        $returnType = '\Sendmux\Mailbox\Model\MailboxFolderDeletedResponse';
+        $returnType = '\Qubrics\Mailbox\Model\MailboxFolderDeletedResponse';
         $request = $this->mailboxDeleteFolderRequest(
             $folder_id,
             $if_match,
@@ -6677,7 +6677,7 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Sendmux\Mailbox\Model\MailboxMessageDeletedResponse|\Sendmux\Mailbox\Model\ApiError
+     * @return \Qubrics\Mailbox\Model\MailboxMessageDeletedResponse|\Qubrics\Mailbox\Model\ApiError
      */
     public function mailboxDeleteMessage(
         string $message_id,
@@ -6685,7 +6685,7 @@ class MailboxAPIApi
         ?string $if_match = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxDeleteMessage'][0]
-    ): \Sendmux\Mailbox\Model\MailboxMessageDeletedResponse|\Sendmux\Mailbox\Model\ApiError {
+    ): \Qubrics\Mailbox\Model\MailboxMessageDeletedResponse|\Qubrics\Mailbox\Model\ApiError {
         list($response) = $this->mailboxDeleteMessageWithHttpInfo(
             $message_id,
             $permanent,
@@ -6709,7 +6709,7 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Sendmux\Mailbox\Model\MailboxMessageDeletedResponse|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Qubrics\Mailbox\Model\MailboxMessageDeletedResponse|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
      */
     public function mailboxDeleteMessageWithHttpInfo(
         string $message_id,
@@ -6751,19 +6751,19 @@ class MailboxAPIApi
             switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\MailboxMessageDeletedResponse',
+                        '\Qubrics\Mailbox\Model\MailboxMessageDeletedResponse',
                         $request,
                         $response,
                     );
                 case 404:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 409:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
@@ -6784,7 +6784,7 @@ class MailboxAPIApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Sendmux\Mailbox\Model\MailboxMessageDeletedResponse',
+                '\Qubrics\Mailbox\Model\MailboxMessageDeletedResponse',
                 $request,
                 $response,
             );
@@ -6793,7 +6793,7 @@ class MailboxAPIApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\MailboxMessageDeletedResponse',
+                        '\Qubrics\Mailbox\Model\MailboxMessageDeletedResponse',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -6801,7 +6801,7 @@ class MailboxAPIApi
                 case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -6809,7 +6809,7 @@ class MailboxAPIApi
                 case 409:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -6876,7 +6876,7 @@ class MailboxAPIApi
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxDeleteMessage'][0]
     ): PromiseInterface {
-        $returnType = '\Sendmux\Mailbox\Model\MailboxMessageDeletedResponse';
+        $returnType = '\Qubrics\Mailbox\Model\MailboxMessageDeletedResponse';
         $request = $this->mailboxDeleteMessageRequest(
             $message_id,
             $permanent,
@@ -7069,14 +7069,14 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \SplFileObject|\Sendmux\Mailbox\Model\ApiError|null
+     * @return \SplFileObject|\Qubrics\Mailbox\Model\ApiError|null
      */
     public function mailboxDownloadRawMessage(
         string $message_id,
         ?string $if_none_match = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxDownloadRawMessage'][0]
-    ): \SplFileObject|\Sendmux\Mailbox\Model\ApiError|null {
+    ): \SplFileObject|\Qubrics\Mailbox\Model\ApiError|null {
         list($response) = $this->mailboxDownloadRawMessageWithHttpInfo(
             $message_id,
             $if_none_match,
@@ -7098,7 +7098,7 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \SplFileObject|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \SplFileObject|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
      */
     public function mailboxDownloadRawMessageWithHttpInfo(
         string $message_id,
@@ -7146,37 +7146,37 @@ class MailboxAPIApi
                     return [null, $response->getStatusCode(), $response->getHeaders()];
                 case 401:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 403:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 404:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 429:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 500:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 503:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
@@ -7214,7 +7214,7 @@ class MailboxAPIApi
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -7222,7 +7222,7 @@ class MailboxAPIApi
                 case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -7230,7 +7230,7 @@ class MailboxAPIApi
                 case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -7238,7 +7238,7 @@ class MailboxAPIApi
                 case 429:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -7246,7 +7246,7 @@ class MailboxAPIApi
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -7254,7 +7254,7 @@ class MailboxAPIApi
                 case 503:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -7502,7 +7502,7 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Sendmux\Mailbox\Model\MailboxAttachmentTextResponse|\Sendmux\Mailbox\Model\ApiError|null
+     * @return \Qubrics\Mailbox\Model\MailboxAttachmentTextResponse|\Qubrics\Mailbox\Model\ApiError|null
      */
     public function mailboxGetAttachmentText(
         string $message_id,
@@ -7511,7 +7511,7 @@ class MailboxAPIApi
         ?string $if_none_match = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxGetAttachmentText'][0]
-    ): \Sendmux\Mailbox\Model\MailboxAttachmentTextResponse|\Sendmux\Mailbox\Model\ApiError|null {
+    ): \Qubrics\Mailbox\Model\MailboxAttachmentTextResponse|\Qubrics\Mailbox\Model\ApiError|null {
         list($response) = $this->mailboxGetAttachmentTextWithHttpInfo(
             $message_id,
             $attachment_id,
@@ -7537,7 +7537,7 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Sendmux\Mailbox\Model\MailboxAttachmentTextResponse|\Sendmux\Mailbox\Model\MailboxAttachmentTextResponse|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Qubrics\Mailbox\Model\MailboxAttachmentTextResponse|\Qubrics\Mailbox\Model\MailboxAttachmentTextResponse|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
      */
     public function mailboxGetAttachmentTextWithHttpInfo(
         string $message_id,
@@ -7581,13 +7581,13 @@ class MailboxAPIApi
             switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\MailboxAttachmentTextResponse',
+                        '\Qubrics\Mailbox\Model\MailboxAttachmentTextResponse',
                         $request,
                         $response,
                     );
                 case 202:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\MailboxAttachmentTextResponse',
+                        '\Qubrics\Mailbox\Model\MailboxAttachmentTextResponse',
                         $request,
                         $response,
                     );
@@ -7595,43 +7595,43 @@ class MailboxAPIApi
                     return [null, $response->getStatusCode(), $response->getHeaders()];
                 case 400:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 401:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 403:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 404:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 429:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 500:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 503:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
@@ -7652,7 +7652,7 @@ class MailboxAPIApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Sendmux\Mailbox\Model\MailboxAttachmentTextResponse',
+                '\Qubrics\Mailbox\Model\MailboxAttachmentTextResponse',
                 $request,
                 $response,
             );
@@ -7661,7 +7661,7 @@ class MailboxAPIApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\MailboxAttachmentTextResponse',
+                        '\Qubrics\Mailbox\Model\MailboxAttachmentTextResponse',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -7669,7 +7669,7 @@ class MailboxAPIApi
                 case 202:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\MailboxAttachmentTextResponse',
+                        '\Qubrics\Mailbox\Model\MailboxAttachmentTextResponse',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -7677,7 +7677,7 @@ class MailboxAPIApi
                 case 400:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -7685,7 +7685,7 @@ class MailboxAPIApi
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -7693,7 +7693,7 @@ class MailboxAPIApi
                 case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -7701,7 +7701,7 @@ class MailboxAPIApi
                 case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -7709,7 +7709,7 @@ class MailboxAPIApi
                 case 429:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -7717,7 +7717,7 @@ class MailboxAPIApi
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -7725,7 +7725,7 @@ class MailboxAPIApi
                 case 503:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -7797,7 +7797,7 @@ class MailboxAPIApi
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxGetAttachmentText'][0]
     ): PromiseInterface {
-        $returnType = '\Sendmux\Mailbox\Model\MailboxAttachmentTextResponse';
+        $returnType = '\Qubrics\Mailbox\Model\MailboxAttachmentTextResponse';
         $request = $this->mailboxGetAttachmentTextRequest(
             $message_id,
             $attachment_id,
@@ -8018,14 +8018,14 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Sendmux\Mailbox\Model\MailboxCalendarResponse|\Sendmux\Mailbox\Model\ApiError|null
+     * @return \Qubrics\Mailbox\Model\MailboxCalendarResponse|\Qubrics\Mailbox\Model\ApiError|null
      */
     public function mailboxGetCalendar(
         string $calendar_id,
         ?string $if_none_match = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxGetCalendar'][0]
-    ): \Sendmux\Mailbox\Model\MailboxCalendarResponse|\Sendmux\Mailbox\Model\ApiError|null {
+    ): \Qubrics\Mailbox\Model\MailboxCalendarResponse|\Qubrics\Mailbox\Model\ApiError|null {
         list($response) = $this->mailboxGetCalendarWithHttpInfo(
             $calendar_id,
             $if_none_match,
@@ -8047,7 +8047,7 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Sendmux\Mailbox\Model\MailboxCalendarResponse|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Qubrics\Mailbox\Model\MailboxCalendarResponse|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
      */
     public function mailboxGetCalendarWithHttpInfo(
         string $calendar_id,
@@ -8087,7 +8087,7 @@ class MailboxAPIApi
             switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\MailboxCalendarResponse',
+                        '\Qubrics\Mailbox\Model\MailboxCalendarResponse',
                         $request,
                         $response,
                     );
@@ -8095,61 +8095,61 @@ class MailboxAPIApi
                     return [null, $response->getStatusCode(), $response->getHeaders()];
                 case 400:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 401:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 403:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 404:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 409:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 413:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 422:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 429:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 500:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 503:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
@@ -8170,7 +8170,7 @@ class MailboxAPIApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Sendmux\Mailbox\Model\MailboxCalendarResponse',
+                '\Qubrics\Mailbox\Model\MailboxCalendarResponse',
                 $request,
                 $response,
             );
@@ -8179,7 +8179,7 @@ class MailboxAPIApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\MailboxCalendarResponse',
+                        '\Qubrics\Mailbox\Model\MailboxCalendarResponse',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -8187,7 +8187,7 @@ class MailboxAPIApi
                 case 400:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -8195,7 +8195,7 @@ class MailboxAPIApi
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -8203,7 +8203,7 @@ class MailboxAPIApi
                 case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -8211,7 +8211,7 @@ class MailboxAPIApi
                 case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -8219,7 +8219,7 @@ class MailboxAPIApi
                 case 409:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -8227,7 +8227,7 @@ class MailboxAPIApi
                 case 413:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -8235,7 +8235,7 @@ class MailboxAPIApi
                 case 422:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -8243,7 +8243,7 @@ class MailboxAPIApi
                 case 429:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -8251,7 +8251,7 @@ class MailboxAPIApi
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -8259,7 +8259,7 @@ class MailboxAPIApi
                 case 503:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -8321,7 +8321,7 @@ class MailboxAPIApi
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxGetCalendar'][0]
     ): PromiseInterface {
-        $returnType = '\Sendmux\Mailbox\Model\MailboxCalendarResponse';
+        $returnType = '\Qubrics\Mailbox\Model\MailboxCalendarResponse';
         $request = $this->mailboxGetCalendarRequest(
             $calendar_id,
             $if_none_match,
@@ -8514,14 +8514,14 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Sendmux\Mailbox\Model\MailboxCalendarEventResponse|\Sendmux\Mailbox\Model\ApiError|null
+     * @return \Qubrics\Mailbox\Model\MailboxCalendarEventResponse|\Qubrics\Mailbox\Model\ApiError|null
      */
     public function mailboxGetCalendarEvent(
         string $event_id,
         ?string $if_none_match = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxGetCalendarEvent'][0]
-    ): \Sendmux\Mailbox\Model\MailboxCalendarEventResponse|\Sendmux\Mailbox\Model\ApiError|null {
+    ): \Qubrics\Mailbox\Model\MailboxCalendarEventResponse|\Qubrics\Mailbox\Model\ApiError|null {
         list($response) = $this->mailboxGetCalendarEventWithHttpInfo(
             $event_id,
             $if_none_match,
@@ -8543,7 +8543,7 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Sendmux\Mailbox\Model\MailboxCalendarEventResponse|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Qubrics\Mailbox\Model\MailboxCalendarEventResponse|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
      */
     public function mailboxGetCalendarEventWithHttpInfo(
         string $event_id,
@@ -8583,7 +8583,7 @@ class MailboxAPIApi
             switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\MailboxCalendarEventResponse',
+                        '\Qubrics\Mailbox\Model\MailboxCalendarEventResponse',
                         $request,
                         $response,
                     );
@@ -8591,61 +8591,61 @@ class MailboxAPIApi
                     return [null, $response->getStatusCode(), $response->getHeaders()];
                 case 400:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 401:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 403:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 404:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 409:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 413:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 422:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 429:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 500:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 503:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
@@ -8666,7 +8666,7 @@ class MailboxAPIApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Sendmux\Mailbox\Model\MailboxCalendarEventResponse',
+                '\Qubrics\Mailbox\Model\MailboxCalendarEventResponse',
                 $request,
                 $response,
             );
@@ -8675,7 +8675,7 @@ class MailboxAPIApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\MailboxCalendarEventResponse',
+                        '\Qubrics\Mailbox\Model\MailboxCalendarEventResponse',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -8683,7 +8683,7 @@ class MailboxAPIApi
                 case 400:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -8691,7 +8691,7 @@ class MailboxAPIApi
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -8699,7 +8699,7 @@ class MailboxAPIApi
                 case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -8707,7 +8707,7 @@ class MailboxAPIApi
                 case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -8715,7 +8715,7 @@ class MailboxAPIApi
                 case 409:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -8723,7 +8723,7 @@ class MailboxAPIApi
                 case 413:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -8731,7 +8731,7 @@ class MailboxAPIApi
                 case 422:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -8739,7 +8739,7 @@ class MailboxAPIApi
                 case 429:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -8747,7 +8747,7 @@ class MailboxAPIApi
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -8755,7 +8755,7 @@ class MailboxAPIApi
                 case 503:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -8817,7 +8817,7 @@ class MailboxAPIApi
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxGetCalendarEvent'][0]
     ): PromiseInterface {
-        $returnType = '\Sendmux\Mailbox\Model\MailboxCalendarEventResponse';
+        $returnType = '\Qubrics\Mailbox\Model\MailboxCalendarEventResponse';
         $request = $this->mailboxGetCalendarEventRequest(
             $event_id,
             $if_none_match,
@@ -9010,14 +9010,14 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Sendmux\Mailbox\Model\MailboxCalendarChangesResponse|\Sendmux\Mailbox\Model\ApiError
+     * @return \Qubrics\Mailbox\Model\MailboxCalendarChangesResponse|\Qubrics\Mailbox\Model\ApiError
      */
     public function mailboxGetCalendarEventChanges(
         ?string $since_state = null,
         ?int $limit = 100,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxGetCalendarEventChanges'][0]
-    ): \Sendmux\Mailbox\Model\MailboxCalendarChangesResponse|\Sendmux\Mailbox\Model\ApiError {
+    ): \Qubrics\Mailbox\Model\MailboxCalendarChangesResponse|\Qubrics\Mailbox\Model\ApiError {
         list($response) = $this->mailboxGetCalendarEventChangesWithHttpInfo(
             $since_state,
             $limit,
@@ -9039,7 +9039,7 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Sendmux\Mailbox\Model\MailboxCalendarChangesResponse|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Qubrics\Mailbox\Model\MailboxCalendarChangesResponse|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
      */
     public function mailboxGetCalendarEventChangesWithHttpInfo(
         ?string $since_state = null,
@@ -9079,67 +9079,67 @@ class MailboxAPIApi
             switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\MailboxCalendarChangesResponse',
+                        '\Qubrics\Mailbox\Model\MailboxCalendarChangesResponse',
                         $request,
                         $response,
                     );
                 case 400:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 401:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 403:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 404:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 409:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 413:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 422:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 429:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 500:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 503:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
@@ -9160,7 +9160,7 @@ class MailboxAPIApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Sendmux\Mailbox\Model\MailboxCalendarChangesResponse',
+                '\Qubrics\Mailbox\Model\MailboxCalendarChangesResponse',
                 $request,
                 $response,
             );
@@ -9169,7 +9169,7 @@ class MailboxAPIApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\MailboxCalendarChangesResponse',
+                        '\Qubrics\Mailbox\Model\MailboxCalendarChangesResponse',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -9177,7 +9177,7 @@ class MailboxAPIApi
                 case 400:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -9185,7 +9185,7 @@ class MailboxAPIApi
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -9193,7 +9193,7 @@ class MailboxAPIApi
                 case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -9201,7 +9201,7 @@ class MailboxAPIApi
                 case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -9209,7 +9209,7 @@ class MailboxAPIApi
                 case 409:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -9217,7 +9217,7 @@ class MailboxAPIApi
                 case 413:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -9225,7 +9225,7 @@ class MailboxAPIApi
                 case 422:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -9233,7 +9233,7 @@ class MailboxAPIApi
                 case 429:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -9241,7 +9241,7 @@ class MailboxAPIApi
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -9249,7 +9249,7 @@ class MailboxAPIApi
                 case 503:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -9311,7 +9311,7 @@ class MailboxAPIApi
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxGetCalendarEventChanges'][0]
     ): PromiseInterface {
-        $returnType = '\Sendmux\Mailbox\Model\MailboxCalendarChangesResponse';
+        $returnType = '\Qubrics\Mailbox\Model\MailboxCalendarChangesResponse';
         $request = $this->mailboxGetCalendarEventChangesRequest(
             $since_state,
             $limit,
@@ -9513,7 +9513,7 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Sendmux\Mailbox\Model\MailboxChangesResponse|\Sendmux\Mailbox\Model\MailboxTypedChangesResponse|\Sendmux\Mailbox\Model\ApiError
+     * @return \Qubrics\Mailbox\Model\MailboxChangesResponse|\Qubrics\Mailbox\Model\MailboxTypedChangesResponse|\Qubrics\Mailbox\Model\ApiError
      */
     public function mailboxGetChanges(
         ?string $since_state = null,
@@ -9527,7 +9527,7 @@ class MailboxAPIApi
         ?int $limit = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxGetChanges'][0]
-    ): \Sendmux\Mailbox\Model\MailboxChangesResponse|\Sendmux\Mailbox\Model\MailboxTypedChangesResponse|\Sendmux\Mailbox\Model\ApiError {
+    ): \Qubrics\Mailbox\Model\MailboxChangesResponse|\Qubrics\Mailbox\Model\MailboxTypedChangesResponse|\Qubrics\Mailbox\Model\ApiError {
         list($response) = $this->mailboxGetChangesWithHttpInfo(
             $since_state,
             $types,
@@ -9563,7 +9563,7 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Sendmux\Mailbox\Model\MailboxChangesResponse|\Sendmux\Mailbox\Model\MailboxTypedChangesResponse|\Sendmux\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Qubrics\Mailbox\Model\MailboxChangesResponse|\Qubrics\Mailbox\Model\MailboxTypedChangesResponse|\Qubrics\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
      */
     public function mailboxGetChangesWithHttpInfo(
         ?string $since_state = null,
@@ -9617,13 +9617,13 @@ class MailboxAPIApi
             switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\MailboxChangesResponse|\Sendmux\Mailbox\Model\MailboxTypedChangesResponse',
+                        '\Qubrics\Mailbox\Model\MailboxChangesResponse|\Qubrics\Mailbox\Model\MailboxTypedChangesResponse',
                         $request,
                         $response,
                     );
                 case 400:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
@@ -9644,7 +9644,7 @@ class MailboxAPIApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Sendmux\Mailbox\Model\MailboxChangesResponse|\Sendmux\Mailbox\Model\MailboxTypedChangesResponse',
+                '\Qubrics\Mailbox\Model\MailboxChangesResponse|\Qubrics\Mailbox\Model\MailboxTypedChangesResponse',
                 $request,
                 $response,
             );
@@ -9653,7 +9653,7 @@ class MailboxAPIApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\MailboxGetChanges200Response',
+                        '\Qubrics\Mailbox\Model\MailboxGetChanges200Response',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -9661,7 +9661,7 @@ class MailboxAPIApi
                 case 400:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -9758,7 +9758,7 @@ class MailboxAPIApi
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxGetChanges'][0]
     ): PromiseInterface {
-        $returnType = '\Sendmux\Mailbox\Model\MailboxChangesResponse|\Sendmux\Mailbox\Model\MailboxTypedChangesResponse';
+        $returnType = '\Qubrics\Mailbox\Model\MailboxChangesResponse|\Qubrics\Mailbox\Model\MailboxTypedChangesResponse';
         $request = $this->mailboxGetChangesRequest(
             $since_state,
             $types,
@@ -10033,12 +10033,12 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Sendmux\Mailbox\Model\ConnectionResponse|\Sendmux\Mailbox\Model\ApiError|null
+     * @return \Qubrics\Mailbox\Model\ConnectionResponse|\Qubrics\Mailbox\Model\ApiError|null
      */
     public function mailboxGetConnection(
         ?string $if_none_match = null,
         string $contentType = self::contentTypes['mailboxGetConnection'][0]
-    ): \Sendmux\Mailbox\Model\ConnectionResponse|\Sendmux\Mailbox\Model\ApiError|null {
+    ): \Qubrics\Mailbox\Model\ConnectionResponse|\Qubrics\Mailbox\Model\ApiError|null {
         list($response) = $this->mailboxGetConnectionWithHttpInfo(
             $if_none_match,
             $contentType
@@ -10056,7 +10056,7 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Sendmux\Mailbox\Model\ConnectionResponse|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Qubrics\Mailbox\Model\ConnectionResponse|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
      */
     public function mailboxGetConnectionWithHttpInfo(
         ?string $if_none_match = null,
@@ -10092,7 +10092,7 @@ class MailboxAPIApi
             switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ConnectionResponse',
+                        '\Qubrics\Mailbox\Model\ConnectionResponse',
                         $request,
                         $response,
                     );
@@ -10100,31 +10100,31 @@ class MailboxAPIApi
                     return [null, $response->getStatusCode(), $response->getHeaders()];
                 case 401:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 403:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 429:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 500:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 503:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
@@ -10145,7 +10145,7 @@ class MailboxAPIApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Sendmux\Mailbox\Model\ConnectionResponse',
+                '\Qubrics\Mailbox\Model\ConnectionResponse',
                 $request,
                 $response,
             );
@@ -10154,7 +10154,7 @@ class MailboxAPIApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ConnectionResponse',
+                        '\Qubrics\Mailbox\Model\ConnectionResponse',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -10162,7 +10162,7 @@ class MailboxAPIApi
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -10170,7 +10170,7 @@ class MailboxAPIApi
                 case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -10178,7 +10178,7 @@ class MailboxAPIApi
                 case 429:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -10186,7 +10186,7 @@ class MailboxAPIApi
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -10194,7 +10194,7 @@ class MailboxAPIApi
                 case 503:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -10246,7 +10246,7 @@ class MailboxAPIApi
         ?string $if_none_match = null,
         string $contentType = self::contentTypes['mailboxGetConnection'][0]
     ): PromiseInterface {
-        $returnType = '\Sendmux\Mailbox\Model\ConnectionResponse';
+        $returnType = '\Qubrics\Mailbox\Model\ConnectionResponse';
         $request = $this->mailboxGetConnectionRequest(
             $if_none_match,
             $contentType
@@ -10399,14 +10399,14 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Sendmux\Mailbox\Model\MailboxDraftResponse|\Sendmux\Mailbox\Model\ApiError|null
+     * @return \Qubrics\Mailbox\Model\MailboxDraftResponse|\Qubrics\Mailbox\Model\ApiError|null
      */
     public function mailboxGetDraft(
         string $draft_id,
         ?string $if_none_match = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxGetDraft'][0]
-    ): \Sendmux\Mailbox\Model\MailboxDraftResponse|\Sendmux\Mailbox\Model\ApiError|null {
+    ): \Qubrics\Mailbox\Model\MailboxDraftResponse|\Qubrics\Mailbox\Model\ApiError|null {
         list($response) = $this->mailboxGetDraftWithHttpInfo(
             $draft_id,
             $if_none_match,
@@ -10428,7 +10428,7 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Sendmux\Mailbox\Model\MailboxDraftResponse|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Qubrics\Mailbox\Model\MailboxDraftResponse|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
      */
     public function mailboxGetDraftWithHttpInfo(
         string $draft_id,
@@ -10468,7 +10468,7 @@ class MailboxAPIApi
             switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\MailboxDraftResponse',
+                        '\Qubrics\Mailbox\Model\MailboxDraftResponse',
                         $request,
                         $response,
                     );
@@ -10476,61 +10476,61 @@ class MailboxAPIApi
                     return [null, $response->getStatusCode(), $response->getHeaders()];
                 case 400:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 401:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 403:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 404:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 409:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 413:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 422:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 429:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 500:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 503:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
@@ -10551,7 +10551,7 @@ class MailboxAPIApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Sendmux\Mailbox\Model\MailboxDraftResponse',
+                '\Qubrics\Mailbox\Model\MailboxDraftResponse',
                 $request,
                 $response,
             );
@@ -10560,7 +10560,7 @@ class MailboxAPIApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\MailboxDraftResponse',
+                        '\Qubrics\Mailbox\Model\MailboxDraftResponse',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -10568,7 +10568,7 @@ class MailboxAPIApi
                 case 400:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -10576,7 +10576,7 @@ class MailboxAPIApi
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -10584,7 +10584,7 @@ class MailboxAPIApi
                 case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -10592,7 +10592,7 @@ class MailboxAPIApi
                 case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -10600,7 +10600,7 @@ class MailboxAPIApi
                 case 409:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -10608,7 +10608,7 @@ class MailboxAPIApi
                 case 413:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -10616,7 +10616,7 @@ class MailboxAPIApi
                 case 422:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -10624,7 +10624,7 @@ class MailboxAPIApi
                 case 429:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -10632,7 +10632,7 @@ class MailboxAPIApi
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -10640,7 +10640,7 @@ class MailboxAPIApi
                 case 503:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -10702,7 +10702,7 @@ class MailboxAPIApi
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxGetDraft'][0]
     ): PromiseInterface {
-        $returnType = '\Sendmux\Mailbox\Model\MailboxDraftResponse';
+        $returnType = '\Qubrics\Mailbox\Model\MailboxDraftResponse';
         $request = $this->mailboxGetDraftRequest(
             $draft_id,
             $if_none_match,
@@ -10886,14 +10886,14 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Sendmux\Mailbox\Model\MailboxFolderResponse|\Sendmux\Mailbox\Model\ApiError|null
+     * @return \Qubrics\Mailbox\Model\MailboxFolderResponse|\Qubrics\Mailbox\Model\ApiError|null
      */
     public function mailboxGetFolder(
         string $folder_id,
         ?string $if_none_match = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxGetFolder'][0]
-    ): \Sendmux\Mailbox\Model\MailboxFolderResponse|\Sendmux\Mailbox\Model\ApiError|null {
+    ): \Qubrics\Mailbox\Model\MailboxFolderResponse|\Qubrics\Mailbox\Model\ApiError|null {
         list($response) = $this->mailboxGetFolderWithHttpInfo(
             $folder_id,
             $if_none_match,
@@ -10915,7 +10915,7 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Sendmux\Mailbox\Model\MailboxFolderResponse|\Sendmux\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Qubrics\Mailbox\Model\MailboxFolderResponse|\Qubrics\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
      */
     public function mailboxGetFolderWithHttpInfo(
         string $folder_id,
@@ -10955,7 +10955,7 @@ class MailboxAPIApi
             switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\MailboxFolderResponse',
+                        '\Qubrics\Mailbox\Model\MailboxFolderResponse',
                         $request,
                         $response,
                     );
@@ -10963,7 +10963,7 @@ class MailboxAPIApi
                     return [null, $response->getStatusCode(), $response->getHeaders()];
                 case 404:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
@@ -10984,7 +10984,7 @@ class MailboxAPIApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Sendmux\Mailbox\Model\MailboxFolderResponse',
+                '\Qubrics\Mailbox\Model\MailboxFolderResponse',
                 $request,
                 $response,
             );
@@ -10993,7 +10993,7 @@ class MailboxAPIApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\MailboxFolderResponse',
+                        '\Qubrics\Mailbox\Model\MailboxFolderResponse',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -11001,7 +11001,7 @@ class MailboxAPIApi
                 case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -11063,7 +11063,7 @@ class MailboxAPIApi
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxGetFolder'][0]
     ): PromiseInterface {
-        $returnType = '\Sendmux\Mailbox\Model\MailboxFolderResponse';
+        $returnType = '\Qubrics\Mailbox\Model\MailboxFolderResponse';
         $request = $this->mailboxGetFolderRequest(
             $folder_id,
             $if_none_match,
@@ -11247,14 +11247,14 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Sendmux\Mailbox\Model\MailboxChangesResponse|\Sendmux\Mailbox\Model\ApiError
+     * @return \Qubrics\Mailbox\Model\MailboxChangesResponse|\Qubrics\Mailbox\Model\ApiError
      */
     public function mailboxGetFolderChanges(
         ?string $since_state = null,
         ?int $limit = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxGetFolderChanges'][0]
-    ): \Sendmux\Mailbox\Model\MailboxChangesResponse|\Sendmux\Mailbox\Model\ApiError {
+    ): \Qubrics\Mailbox\Model\MailboxChangesResponse|\Qubrics\Mailbox\Model\ApiError {
         list($response) = $this->mailboxGetFolderChangesWithHttpInfo(
             $since_state,
             $limit,
@@ -11276,7 +11276,7 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Sendmux\Mailbox\Model\MailboxChangesResponse|\Sendmux\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Qubrics\Mailbox\Model\MailboxChangesResponse|\Qubrics\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
      */
     public function mailboxGetFolderChangesWithHttpInfo(
         ?string $since_state = null,
@@ -11316,13 +11316,13 @@ class MailboxAPIApi
             switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\MailboxChangesResponse',
+                        '\Qubrics\Mailbox\Model\MailboxChangesResponse',
                         $request,
                         $response,
                     );
                 case 400:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
@@ -11343,7 +11343,7 @@ class MailboxAPIApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Sendmux\Mailbox\Model\MailboxChangesResponse',
+                '\Qubrics\Mailbox\Model\MailboxChangesResponse',
                 $request,
                 $response,
             );
@@ -11352,7 +11352,7 @@ class MailboxAPIApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\MailboxChangesResponse',
+                        '\Qubrics\Mailbox\Model\MailboxChangesResponse',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -11360,7 +11360,7 @@ class MailboxAPIApi
                 case 400:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -11422,7 +11422,7 @@ class MailboxAPIApi
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxGetFolderChanges'][0]
     ): PromiseInterface {
-        $returnType = '\Sendmux\Mailbox\Model\MailboxChangesResponse';
+        $returnType = '\Qubrics\Mailbox\Model\MailboxChangesResponse';
         $request = $this->mailboxGetFolderChangesRequest(
             $since_state,
             $limit,
@@ -11606,12 +11606,12 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Sendmux\Mailbox\Model\MailboxIdentityResponse|\Sendmux\Mailbox\Model\ApiError
+     * @return \Qubrics\Mailbox\Model\MailboxIdentityResponse|\Qubrics\Mailbox\Model\ApiError
      */
     public function mailboxGetIdentity(
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxGetIdentity'][0]
-    ): \Sendmux\Mailbox\Model\MailboxIdentityResponse|\Sendmux\Mailbox\Model\ApiError {
+    ): \Qubrics\Mailbox\Model\MailboxIdentityResponse|\Qubrics\Mailbox\Model\ApiError {
         list($response) = $this->mailboxGetIdentityWithHttpInfo(
             $mailbox_id,
             $contentType
@@ -11629,7 +11629,7 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Sendmux\Mailbox\Model\MailboxIdentityResponse|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Qubrics\Mailbox\Model\MailboxIdentityResponse|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
      */
     public function mailboxGetIdentityWithHttpInfo(
         ?string $mailbox_id = null,
@@ -11665,25 +11665,25 @@ class MailboxAPIApi
             switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\MailboxIdentityResponse',
+                        '\Qubrics\Mailbox\Model\MailboxIdentityResponse',
                         $request,
                         $response,
                     );
                 case 401:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 403:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 503:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
@@ -11704,7 +11704,7 @@ class MailboxAPIApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Sendmux\Mailbox\Model\MailboxIdentityResponse',
+                '\Qubrics\Mailbox\Model\MailboxIdentityResponse',
                 $request,
                 $response,
             );
@@ -11713,7 +11713,7 @@ class MailboxAPIApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\MailboxIdentityResponse',
+                        '\Qubrics\Mailbox\Model\MailboxIdentityResponse',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -11721,7 +11721,7 @@ class MailboxAPIApi
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -11729,7 +11729,7 @@ class MailboxAPIApi
                 case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -11737,7 +11737,7 @@ class MailboxAPIApi
                 case 503:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -11789,7 +11789,7 @@ class MailboxAPIApi
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxGetIdentity'][0]
     ): PromiseInterface {
-        $returnType = '\Sendmux\Mailbox\Model\MailboxIdentityResponse';
+        $returnType = '\Qubrics\Mailbox\Model\MailboxIdentityResponse';
         $request = $this->mailboxGetIdentityRequest(
             $mailbox_id,
             $contentType
@@ -11942,13 +11942,13 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Sendmux\Mailbox\Model\MailboxMeItemResponse|\Sendmux\Mailbox\Model\ApiError|null
+     * @return \Qubrics\Mailbox\Model\MailboxMeItemResponse|\Qubrics\Mailbox\Model\ApiError|null
      */
     public function mailboxGetMe(
         ?string $if_none_match = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxGetMe'][0]
-    ): \Sendmux\Mailbox\Model\MailboxMeItemResponse|\Sendmux\Mailbox\Model\ApiError|null {
+    ): \Qubrics\Mailbox\Model\MailboxMeItemResponse|\Qubrics\Mailbox\Model\ApiError|null {
         list($response) = $this->mailboxGetMeWithHttpInfo(
             $if_none_match,
             $mailbox_id,
@@ -11968,7 +11968,7 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Sendmux\Mailbox\Model\MailboxMeItemResponse|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Qubrics\Mailbox\Model\MailboxMeItemResponse|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
      */
     public function mailboxGetMeWithHttpInfo(
         ?string $if_none_match = null,
@@ -12006,7 +12006,7 @@ class MailboxAPIApi
             switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\MailboxMeItemResponse',
+                        '\Qubrics\Mailbox\Model\MailboxMeItemResponse',
                         $request,
                         $response,
                     );
@@ -12014,19 +12014,19 @@ class MailboxAPIApi
                     return [null, $response->getStatusCode(), $response->getHeaders()];
                 case 401:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 403:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 404:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
@@ -12047,7 +12047,7 @@ class MailboxAPIApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Sendmux\Mailbox\Model\MailboxMeItemResponse',
+                '\Qubrics\Mailbox\Model\MailboxMeItemResponse',
                 $request,
                 $response,
             );
@@ -12056,7 +12056,7 @@ class MailboxAPIApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\MailboxMeItemResponse',
+                        '\Qubrics\Mailbox\Model\MailboxMeItemResponse',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -12064,7 +12064,7 @@ class MailboxAPIApi
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -12072,7 +12072,7 @@ class MailboxAPIApi
                 case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -12080,7 +12080,7 @@ class MailboxAPIApi
                 case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -12137,7 +12137,7 @@ class MailboxAPIApi
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxGetMe'][0]
     ): PromiseInterface {
-        $returnType = '\Sendmux\Mailbox\Model\MailboxMeItemResponse';
+        $returnType = '\Qubrics\Mailbox\Model\MailboxMeItemResponse';
         $request = $this->mailboxGetMeRequest(
             $if_none_match,
             $mailbox_id,
@@ -12303,14 +12303,14 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Sendmux\Mailbox\Model\MailboxMessageDetailResponse|\Sendmux\Mailbox\Model\ApiError|null
+     * @return \Qubrics\Mailbox\Model\MailboxMessageDetailResponse|\Qubrics\Mailbox\Model\ApiError|null
      */
     public function mailboxGetMessage(
         string $message_id,
         ?string $if_none_match = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxGetMessage'][0]
-    ): \Sendmux\Mailbox\Model\MailboxMessageDetailResponse|\Sendmux\Mailbox\Model\ApiError|null {
+    ): \Qubrics\Mailbox\Model\MailboxMessageDetailResponse|\Qubrics\Mailbox\Model\ApiError|null {
         list($response) = $this->mailboxGetMessageWithHttpInfo(
             $message_id,
             $if_none_match,
@@ -12332,7 +12332,7 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Sendmux\Mailbox\Model\MailboxMessageDetailResponse|\Sendmux\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Qubrics\Mailbox\Model\MailboxMessageDetailResponse|\Qubrics\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
      */
     public function mailboxGetMessageWithHttpInfo(
         string $message_id,
@@ -12372,7 +12372,7 @@ class MailboxAPIApi
             switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\MailboxMessageDetailResponse',
+                        '\Qubrics\Mailbox\Model\MailboxMessageDetailResponse',
                         $request,
                         $response,
                     );
@@ -12380,7 +12380,7 @@ class MailboxAPIApi
                     return [null, $response->getStatusCode(), $response->getHeaders()];
                 case 404:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
@@ -12401,7 +12401,7 @@ class MailboxAPIApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Sendmux\Mailbox\Model\MailboxMessageDetailResponse',
+                '\Qubrics\Mailbox\Model\MailboxMessageDetailResponse',
                 $request,
                 $response,
             );
@@ -12410,7 +12410,7 @@ class MailboxAPIApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\MailboxMessageDetailResponse',
+                        '\Qubrics\Mailbox\Model\MailboxMessageDetailResponse',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -12418,7 +12418,7 @@ class MailboxAPIApi
                 case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -12480,7 +12480,7 @@ class MailboxAPIApi
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxGetMessage'][0]
     ): PromiseInterface {
-        $returnType = '\Sendmux\Mailbox\Model\MailboxMessageDetailResponse';
+        $returnType = '\Qubrics\Mailbox\Model\MailboxMessageDetailResponse';
         $request = $this->mailboxGetMessageRequest(
             $message_id,
             $if_none_match,
@@ -12666,7 +12666,7 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Sendmux\Mailbox\Model\ApiError|null
+     * @return \Qubrics\Mailbox\Model\ApiError|null
      */
     public function mailboxGetMessageAttachment(
         string $message_id,
@@ -12675,7 +12675,7 @@ class MailboxAPIApi
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxGetMessageAttachment'][0],
         ?string $download_token = null
-    ): ?\Sendmux\Mailbox\Model\ApiError {
+    ): ?\Qubrics\Mailbox\Model\ApiError {
         list($response) = $this->mailboxGetMessageAttachmentWithHttpInfo(
             $message_id,
             $attachment_id,
@@ -12749,7 +12749,7 @@ class MailboxAPIApi
                 case 400:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -12757,7 +12757,7 @@ class MailboxAPIApi
                 case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -13040,14 +13040,14 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Sendmux\Mailbox\Model\MailboxChangesResponse|\Sendmux\Mailbox\Model\ApiError
+     * @return \Qubrics\Mailbox\Model\MailboxChangesResponse|\Qubrics\Mailbox\Model\ApiError
      */
     public function mailboxGetQuotaChanges(
         ?string $since_state = null,
         ?int $limit = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxGetQuotaChanges'][0]
-    ): \Sendmux\Mailbox\Model\MailboxChangesResponse|\Sendmux\Mailbox\Model\ApiError {
+    ): \Qubrics\Mailbox\Model\MailboxChangesResponse|\Qubrics\Mailbox\Model\ApiError {
         list($response) = $this->mailboxGetQuotaChangesWithHttpInfo(
             $since_state,
             $limit,
@@ -13069,7 +13069,7 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Sendmux\Mailbox\Model\MailboxChangesResponse|\Sendmux\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Qubrics\Mailbox\Model\MailboxChangesResponse|\Qubrics\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
      */
     public function mailboxGetQuotaChangesWithHttpInfo(
         ?string $since_state = null,
@@ -13109,13 +13109,13 @@ class MailboxAPIApi
             switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\MailboxChangesResponse',
+                        '\Qubrics\Mailbox\Model\MailboxChangesResponse',
                         $request,
                         $response,
                     );
                 case 400:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
@@ -13136,7 +13136,7 @@ class MailboxAPIApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Sendmux\Mailbox\Model\MailboxChangesResponse',
+                '\Qubrics\Mailbox\Model\MailboxChangesResponse',
                 $request,
                 $response,
             );
@@ -13145,7 +13145,7 @@ class MailboxAPIApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\MailboxChangesResponse',
+                        '\Qubrics\Mailbox\Model\MailboxChangesResponse',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -13153,7 +13153,7 @@ class MailboxAPIApi
                 case 400:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -13215,7 +13215,7 @@ class MailboxAPIApi
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxGetQuotaChanges'][0]
     ): PromiseInterface {
-        $returnType = '\Sendmux\Mailbox\Model\MailboxChangesResponse';
+        $returnType = '\Qubrics\Mailbox\Model\MailboxChangesResponse';
         $request = $this->mailboxGetQuotaChangesRequest(
             $since_state,
             $limit,
@@ -13401,14 +13401,14 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Sendmux\Mailbox\Model\MailboxSenderChoicesResponse|\Sendmux\Mailbox\Model\ApiError|null
+     * @return \Qubrics\Mailbox\Model\MailboxSenderChoicesResponse|\Qubrics\Mailbox\Model\ApiError|null
      */
     public function mailboxGetSenderChoices(
         ?array $delivery_group_id = null,
         ?string $if_none_match = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxGetSenderChoices'][0]
-    ): \Sendmux\Mailbox\Model\MailboxSenderChoicesResponse|\Sendmux\Mailbox\Model\ApiError|null {
+    ): \Qubrics\Mailbox\Model\MailboxSenderChoicesResponse|\Qubrics\Mailbox\Model\ApiError|null {
         list($response) = $this->mailboxGetSenderChoicesWithHttpInfo(
             $delivery_group_id,
             $if_none_match,
@@ -13430,7 +13430,7 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Sendmux\Mailbox\Model\MailboxSenderChoicesResponse|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Qubrics\Mailbox\Model\MailboxSenderChoicesResponse|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
      */
     public function mailboxGetSenderChoicesWithHttpInfo(
         ?array $delivery_group_id = null,
@@ -13470,7 +13470,7 @@ class MailboxAPIApi
             switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\MailboxSenderChoicesResponse',
+                        '\Qubrics\Mailbox\Model\MailboxSenderChoicesResponse',
                         $request,
                         $response,
                     );
@@ -13478,43 +13478,43 @@ class MailboxAPIApi
                     return [null, $response->getStatusCode(), $response->getHeaders()];
                 case 400:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 401:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 403:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 404:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 429:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 500:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 503:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
@@ -13535,7 +13535,7 @@ class MailboxAPIApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Sendmux\Mailbox\Model\MailboxSenderChoicesResponse',
+                '\Qubrics\Mailbox\Model\MailboxSenderChoicesResponse',
                 $request,
                 $response,
             );
@@ -13544,7 +13544,7 @@ class MailboxAPIApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\MailboxSenderChoicesResponse',
+                        '\Qubrics\Mailbox\Model\MailboxSenderChoicesResponse',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -13552,7 +13552,7 @@ class MailboxAPIApi
                 case 400:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -13560,7 +13560,7 @@ class MailboxAPIApi
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -13568,7 +13568,7 @@ class MailboxAPIApi
                 case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -13576,7 +13576,7 @@ class MailboxAPIApi
                 case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -13584,7 +13584,7 @@ class MailboxAPIApi
                 case 429:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -13592,7 +13592,7 @@ class MailboxAPIApi
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -13600,7 +13600,7 @@ class MailboxAPIApi
                 case 503:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -13662,7 +13662,7 @@ class MailboxAPIApi
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxGetSenderChoices'][0]
     ): PromiseInterface {
-        $returnType = '\Sendmux\Mailbox\Model\MailboxSenderChoicesResponse';
+        $returnType = '\Qubrics\Mailbox\Model\MailboxSenderChoicesResponse';
         $request = $this->mailboxGetSenderChoicesRequest(
             $delivery_group_id,
             $if_none_match,
@@ -13843,13 +13843,13 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Sendmux\Mailbox\Model\MailboxSessionResponse|\Sendmux\Mailbox\Model\ApiError|null
+     * @return \Qubrics\Mailbox\Model\MailboxSessionResponse|\Qubrics\Mailbox\Model\ApiError|null
      */
     public function mailboxGetSession(
         ?string $if_none_match = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxGetSession'][0]
-    ): \Sendmux\Mailbox\Model\MailboxSessionResponse|\Sendmux\Mailbox\Model\ApiError|null {
+    ): \Qubrics\Mailbox\Model\MailboxSessionResponse|\Qubrics\Mailbox\Model\ApiError|null {
         list($response) = $this->mailboxGetSessionWithHttpInfo(
             $if_none_match,
             $mailbox_id,
@@ -13869,7 +13869,7 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Sendmux\Mailbox\Model\MailboxSessionResponse|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Qubrics\Mailbox\Model\MailboxSessionResponse|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
      */
     public function mailboxGetSessionWithHttpInfo(
         ?string $if_none_match = null,
@@ -13907,7 +13907,7 @@ class MailboxAPIApi
             switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\MailboxSessionResponse',
+                        '\Qubrics\Mailbox\Model\MailboxSessionResponse',
                         $request,
                         $response,
                     );
@@ -13915,19 +13915,19 @@ class MailboxAPIApi
                     return [null, $response->getStatusCode(), $response->getHeaders()];
                 case 401:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 403:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 503:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
@@ -13948,7 +13948,7 @@ class MailboxAPIApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Sendmux\Mailbox\Model\MailboxSessionResponse',
+                '\Qubrics\Mailbox\Model\MailboxSessionResponse',
                 $request,
                 $response,
             );
@@ -13957,7 +13957,7 @@ class MailboxAPIApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\MailboxSessionResponse',
+                        '\Qubrics\Mailbox\Model\MailboxSessionResponse',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -13965,7 +13965,7 @@ class MailboxAPIApi
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -13973,7 +13973,7 @@ class MailboxAPIApi
                 case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -13981,7 +13981,7 @@ class MailboxAPIApi
                 case 503:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -14038,7 +14038,7 @@ class MailboxAPIApi
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxGetSession'][0]
     ): PromiseInterface {
-        $returnType = '\Sendmux\Mailbox\Model\MailboxSessionResponse';
+        $returnType = '\Qubrics\Mailbox\Model\MailboxSessionResponse';
         $request = $this->mailboxGetSessionRequest(
             $if_none_match,
             $mailbox_id,
@@ -14204,14 +14204,14 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Sendmux\Mailbox\Model\MailboxSubmissionResponse|\Sendmux\Mailbox\Model\ApiError|null
+     * @return \Qubrics\Mailbox\Model\MailboxSubmissionResponse|\Qubrics\Mailbox\Model\ApiError|null
      */
     public function mailboxGetSubmission(
         string $submission_id,
         ?string $if_none_match = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxGetSubmission'][0]
-    ): \Sendmux\Mailbox\Model\MailboxSubmissionResponse|\Sendmux\Mailbox\Model\ApiError|null {
+    ): \Qubrics\Mailbox\Model\MailboxSubmissionResponse|\Qubrics\Mailbox\Model\ApiError|null {
         list($response) = $this->mailboxGetSubmissionWithHttpInfo(
             $submission_id,
             $if_none_match,
@@ -14233,7 +14233,7 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Sendmux\Mailbox\Model\MailboxSubmissionResponse|\Sendmux\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Qubrics\Mailbox\Model\MailboxSubmissionResponse|\Qubrics\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
      */
     public function mailboxGetSubmissionWithHttpInfo(
         string $submission_id,
@@ -14273,7 +14273,7 @@ class MailboxAPIApi
             switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\MailboxSubmissionResponse',
+                        '\Qubrics\Mailbox\Model\MailboxSubmissionResponse',
                         $request,
                         $response,
                     );
@@ -14281,7 +14281,7 @@ class MailboxAPIApi
                     return [null, $response->getStatusCode(), $response->getHeaders()];
                 case 404:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
@@ -14302,7 +14302,7 @@ class MailboxAPIApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Sendmux\Mailbox\Model\MailboxSubmissionResponse',
+                '\Qubrics\Mailbox\Model\MailboxSubmissionResponse',
                 $request,
                 $response,
             );
@@ -14311,7 +14311,7 @@ class MailboxAPIApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\MailboxSubmissionResponse',
+                        '\Qubrics\Mailbox\Model\MailboxSubmissionResponse',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -14319,7 +14319,7 @@ class MailboxAPIApi
                 case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -14381,7 +14381,7 @@ class MailboxAPIApi
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxGetSubmission'][0]
     ): PromiseInterface {
-        $returnType = '\Sendmux\Mailbox\Model\MailboxSubmissionResponse';
+        $returnType = '\Qubrics\Mailbox\Model\MailboxSubmissionResponse';
         $request = $this->mailboxGetSubmissionRequest(
             $submission_id,
             $if_none_match,
@@ -14565,14 +14565,14 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Sendmux\Mailbox\Model\MailboxChangesResponse|\Sendmux\Mailbox\Model\ApiError
+     * @return \Qubrics\Mailbox\Model\MailboxChangesResponse|\Qubrics\Mailbox\Model\ApiError
      */
     public function mailboxGetSubmissionChanges(
         ?string $since_state = null,
         ?int $limit = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxGetSubmissionChanges'][0]
-    ): \Sendmux\Mailbox\Model\MailboxChangesResponse|\Sendmux\Mailbox\Model\ApiError {
+    ): \Qubrics\Mailbox\Model\MailboxChangesResponse|\Qubrics\Mailbox\Model\ApiError {
         list($response) = $this->mailboxGetSubmissionChangesWithHttpInfo(
             $since_state,
             $limit,
@@ -14594,7 +14594,7 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Sendmux\Mailbox\Model\MailboxChangesResponse|\Sendmux\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Qubrics\Mailbox\Model\MailboxChangesResponse|\Qubrics\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
      */
     public function mailboxGetSubmissionChangesWithHttpInfo(
         ?string $since_state = null,
@@ -14634,13 +14634,13 @@ class MailboxAPIApi
             switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\MailboxChangesResponse',
+                        '\Qubrics\Mailbox\Model\MailboxChangesResponse',
                         $request,
                         $response,
                     );
                 case 400:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
@@ -14661,7 +14661,7 @@ class MailboxAPIApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Sendmux\Mailbox\Model\MailboxChangesResponse',
+                '\Qubrics\Mailbox\Model\MailboxChangesResponse',
                 $request,
                 $response,
             );
@@ -14670,7 +14670,7 @@ class MailboxAPIApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\MailboxChangesResponse',
+                        '\Qubrics\Mailbox\Model\MailboxChangesResponse',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -14678,7 +14678,7 @@ class MailboxAPIApi
                 case 400:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -14740,7 +14740,7 @@ class MailboxAPIApi
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxGetSubmissionChanges'][0]
     ): PromiseInterface {
-        $returnType = '\Sendmux\Mailbox\Model\MailboxChangesResponse';
+        $returnType = '\Qubrics\Mailbox\Model\MailboxChangesResponse';
         $request = $this->mailboxGetSubmissionChangesRequest(
             $since_state,
             $limit,
@@ -14926,14 +14926,14 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Sendmux\Mailbox\Model\MailboxThreadDetailResponse|\Sendmux\Mailbox\Model\ApiError|null
+     * @return \Qubrics\Mailbox\Model\MailboxThreadDetailResponse|\Qubrics\Mailbox\Model\ApiError|null
      */
     public function mailboxGetThread(
         string $thread_id,
         ?string $if_none_match = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxGetThread'][0]
-    ): \Sendmux\Mailbox\Model\MailboxThreadDetailResponse|\Sendmux\Mailbox\Model\ApiError|null {
+    ): \Qubrics\Mailbox\Model\MailboxThreadDetailResponse|\Qubrics\Mailbox\Model\ApiError|null {
         list($response) = $this->mailboxGetThreadWithHttpInfo(
             $thread_id,
             $if_none_match,
@@ -14955,7 +14955,7 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Sendmux\Mailbox\Model\MailboxThreadDetailResponse|\Sendmux\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Qubrics\Mailbox\Model\MailboxThreadDetailResponse|\Qubrics\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
      */
     public function mailboxGetThreadWithHttpInfo(
         string $thread_id,
@@ -14995,7 +14995,7 @@ class MailboxAPIApi
             switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\MailboxThreadDetailResponse',
+                        '\Qubrics\Mailbox\Model\MailboxThreadDetailResponse',
                         $request,
                         $response,
                     );
@@ -15003,7 +15003,7 @@ class MailboxAPIApi
                     return [null, $response->getStatusCode(), $response->getHeaders()];
                 case 404:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
@@ -15024,7 +15024,7 @@ class MailboxAPIApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Sendmux\Mailbox\Model\MailboxThreadDetailResponse',
+                '\Qubrics\Mailbox\Model\MailboxThreadDetailResponse',
                 $request,
                 $response,
             );
@@ -15033,7 +15033,7 @@ class MailboxAPIApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\MailboxThreadDetailResponse',
+                        '\Qubrics\Mailbox\Model\MailboxThreadDetailResponse',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -15041,7 +15041,7 @@ class MailboxAPIApi
                 case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -15103,7 +15103,7 @@ class MailboxAPIApi
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxGetThread'][0]
     ): PromiseInterface {
-        $returnType = '\Sendmux\Mailbox\Model\MailboxThreadDetailResponse';
+        $returnType = '\Qubrics\Mailbox\Model\MailboxThreadDetailResponse';
         $request = $this->mailboxGetThreadRequest(
             $thread_id,
             $if_none_match,
@@ -15298,7 +15298,7 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Sendmux\Mailbox\Model\MailboxThreadContentResponse|\Sendmux\Mailbox\Model\ApiError|null
+     * @return \Qubrics\Mailbox\Model\MailboxThreadContentResponse|\Qubrics\Mailbox\Model\ApiError|null
      */
     public function mailboxGetThreadContent(
         string $thread_id,
@@ -15316,7 +15316,7 @@ class MailboxAPIApi
         ?string $if_none_match = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxGetThreadContent'][0]
-    ): \Sendmux\Mailbox\Model\MailboxThreadContentResponse|\Sendmux\Mailbox\Model\ApiError|null {
+    ): \Qubrics\Mailbox\Model\MailboxThreadContentResponse|\Qubrics\Mailbox\Model\ApiError|null {
         list($response) = $this->mailboxGetThreadContentWithHttpInfo(
             $thread_id,
             $part,
@@ -15360,7 +15360,7 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Sendmux\Mailbox\Model\MailboxThreadContentResponse|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Qubrics\Mailbox\Model\MailboxThreadContentResponse|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
      */
     public function mailboxGetThreadContentWithHttpInfo(
         string $thread_id,
@@ -15422,7 +15422,7 @@ class MailboxAPIApi
             switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\MailboxThreadContentResponse',
+                        '\Qubrics\Mailbox\Model\MailboxThreadContentResponse',
                         $request,
                         $response,
                     );
@@ -15430,13 +15430,13 @@ class MailboxAPIApi
                     return [null, $response->getStatusCode(), $response->getHeaders()];
                 case 400:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 404:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
@@ -15457,7 +15457,7 @@ class MailboxAPIApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Sendmux\Mailbox\Model\MailboxThreadContentResponse',
+                '\Qubrics\Mailbox\Model\MailboxThreadContentResponse',
                 $request,
                 $response,
             );
@@ -15466,7 +15466,7 @@ class MailboxAPIApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\MailboxThreadContentResponse',
+                        '\Qubrics\Mailbox\Model\MailboxThreadContentResponse',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -15474,7 +15474,7 @@ class MailboxAPIApi
                 case 400:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -15482,7 +15482,7 @@ class MailboxAPIApi
                 case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -15599,7 +15599,7 @@ class MailboxAPIApi
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxGetThreadContent'][0]
     ): PromiseInterface {
-        $returnType = '\Sendmux\Mailbox\Model\MailboxThreadContentResponse';
+        $returnType = '\Qubrics\Mailbox\Model\MailboxThreadContentResponse';
         $request = $this->mailboxGetThreadContentRequest(
             $thread_id,
             $part,
@@ -15940,7 +15940,7 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Sendmux\Mailbox\Model\MailboxRawBodyResponse|\Sendmux\Mailbox\Model\ApiError|null
+     * @return \Qubrics\Mailbox\Model\MailboxRawBodyResponse|\Qubrics\Mailbox\Model\ApiError|null
      */
     public function mailboxListBody(
         string $message_id,
@@ -15949,7 +15949,7 @@ class MailboxAPIApi
         ?string $if_none_match = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxListBody'][0]
-    ): \Sendmux\Mailbox\Model\MailboxRawBodyResponse|\Sendmux\Mailbox\Model\ApiError|null {
+    ): \Qubrics\Mailbox\Model\MailboxRawBodyResponse|\Qubrics\Mailbox\Model\ApiError|null {
         list($response) = $this->mailboxListBodyWithHttpInfo(
             $message_id,
             $part,
@@ -15975,7 +15975,7 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Sendmux\Mailbox\Model\MailboxRawBodyResponse|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Qubrics\Mailbox\Model\MailboxRawBodyResponse|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
      */
     public function mailboxListBodyWithHttpInfo(
         string $message_id,
@@ -16019,7 +16019,7 @@ class MailboxAPIApi
             switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\MailboxRawBodyResponse',
+                        '\Qubrics\Mailbox\Model\MailboxRawBodyResponse',
                         $request,
                         $response,
                     );
@@ -16027,13 +16027,13 @@ class MailboxAPIApi
                     return [null, $response->getStatusCode(), $response->getHeaders()];
                 case 400:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 404:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
@@ -16054,7 +16054,7 @@ class MailboxAPIApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Sendmux\Mailbox\Model\MailboxRawBodyResponse',
+                '\Qubrics\Mailbox\Model\MailboxRawBodyResponse',
                 $request,
                 $response,
             );
@@ -16063,7 +16063,7 @@ class MailboxAPIApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\MailboxRawBodyResponse',
+                        '\Qubrics\Mailbox\Model\MailboxRawBodyResponse',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -16071,7 +16071,7 @@ class MailboxAPIApi
                 case 400:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -16079,7 +16079,7 @@ class MailboxAPIApi
                 case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -16151,7 +16151,7 @@ class MailboxAPIApi
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxListBody'][0]
     ): PromiseInterface {
-        $returnType = '\Sendmux\Mailbox\Model\MailboxRawBodyResponse';
+        $returnType = '\Qubrics\Mailbox\Model\MailboxRawBodyResponse';
         $request = $this->mailboxListBodyRequest(
             $message_id,
             $part,
@@ -16369,7 +16369,7 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Sendmux\Mailbox\Model\MailboxCalendarEventListResponse|\Sendmux\Mailbox\Model\ApiError
+     * @return \Qubrics\Mailbox\Model\MailboxCalendarEventListResponse|\Qubrics\Mailbox\Model\ApiError
      */
     public function mailboxListCalendarEvents(
         ?int $limit = 50,
@@ -16378,7 +16378,7 @@ class MailboxAPIApi
         ?string $calendar_id = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxListCalendarEvents'][0]
-    ): \Sendmux\Mailbox\Model\MailboxCalendarEventListResponse|\Sendmux\Mailbox\Model\ApiError {
+    ): \Qubrics\Mailbox\Model\MailboxCalendarEventListResponse|\Qubrics\Mailbox\Model\ApiError {
         list($response) = $this->mailboxListCalendarEventsWithHttpInfo(
             $limit,
             $cursor,
@@ -16404,7 +16404,7 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Sendmux\Mailbox\Model\MailboxCalendarEventListResponse|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Qubrics\Mailbox\Model\MailboxCalendarEventListResponse|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
      */
     public function mailboxListCalendarEventsWithHttpInfo(
         ?int $limit = 50,
@@ -16448,67 +16448,67 @@ class MailboxAPIApi
             switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\MailboxCalendarEventListResponse',
+                        '\Qubrics\Mailbox\Model\MailboxCalendarEventListResponse',
                         $request,
                         $response,
                     );
                 case 400:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 401:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 403:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 404:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 409:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 413:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 422:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 429:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 500:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 503:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
@@ -16529,7 +16529,7 @@ class MailboxAPIApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Sendmux\Mailbox\Model\MailboxCalendarEventListResponse',
+                '\Qubrics\Mailbox\Model\MailboxCalendarEventListResponse',
                 $request,
                 $response,
             );
@@ -16538,7 +16538,7 @@ class MailboxAPIApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\MailboxCalendarEventListResponse',
+                        '\Qubrics\Mailbox\Model\MailboxCalendarEventListResponse',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -16546,7 +16546,7 @@ class MailboxAPIApi
                 case 400:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -16554,7 +16554,7 @@ class MailboxAPIApi
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -16562,7 +16562,7 @@ class MailboxAPIApi
                 case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -16570,7 +16570,7 @@ class MailboxAPIApi
                 case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -16578,7 +16578,7 @@ class MailboxAPIApi
                 case 409:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -16586,7 +16586,7 @@ class MailboxAPIApi
                 case 413:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -16594,7 +16594,7 @@ class MailboxAPIApi
                 case 422:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -16602,7 +16602,7 @@ class MailboxAPIApi
                 case 429:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -16610,7 +16610,7 @@ class MailboxAPIApi
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -16618,7 +16618,7 @@ class MailboxAPIApi
                 case 503:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -16690,7 +16690,7 @@ class MailboxAPIApi
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxListCalendarEvents'][0]
     ): PromiseInterface {
-        $returnType = '\Sendmux\Mailbox\Model\MailboxCalendarEventListResponse';
+        $returnType = '\Qubrics\Mailbox\Model\MailboxCalendarEventListResponse';
         $request = $this->mailboxListCalendarEventsRequest(
             $limit,
             $cursor,
@@ -16926,14 +16926,14 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Sendmux\Mailbox\Model\MailboxCalendarListResponse|\Sendmux\Mailbox\Model\ApiError
+     * @return \Qubrics\Mailbox\Model\MailboxCalendarListResponse|\Qubrics\Mailbox\Model\ApiError
      */
     public function mailboxListCalendars(
         ?int $limit = 50,
         ?string $cursor = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxListCalendars'][0]
-    ): \Sendmux\Mailbox\Model\MailboxCalendarListResponse|\Sendmux\Mailbox\Model\ApiError {
+    ): \Qubrics\Mailbox\Model\MailboxCalendarListResponse|\Qubrics\Mailbox\Model\ApiError {
         list($response) = $this->mailboxListCalendarsWithHttpInfo(
             $limit,
             $cursor,
@@ -16955,7 +16955,7 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Sendmux\Mailbox\Model\MailboxCalendarListResponse|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Qubrics\Mailbox\Model\MailboxCalendarListResponse|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
      */
     public function mailboxListCalendarsWithHttpInfo(
         ?int $limit = 50,
@@ -16995,67 +16995,67 @@ class MailboxAPIApi
             switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\MailboxCalendarListResponse',
+                        '\Qubrics\Mailbox\Model\MailboxCalendarListResponse',
                         $request,
                         $response,
                     );
                 case 400:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 401:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 403:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 404:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 409:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 413:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 422:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 429:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 500:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 503:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
@@ -17076,7 +17076,7 @@ class MailboxAPIApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Sendmux\Mailbox\Model\MailboxCalendarListResponse',
+                '\Qubrics\Mailbox\Model\MailboxCalendarListResponse',
                 $request,
                 $response,
             );
@@ -17085,7 +17085,7 @@ class MailboxAPIApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\MailboxCalendarListResponse',
+                        '\Qubrics\Mailbox\Model\MailboxCalendarListResponse',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -17093,7 +17093,7 @@ class MailboxAPIApi
                 case 400:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -17101,7 +17101,7 @@ class MailboxAPIApi
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -17109,7 +17109,7 @@ class MailboxAPIApi
                 case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -17117,7 +17117,7 @@ class MailboxAPIApi
                 case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -17125,7 +17125,7 @@ class MailboxAPIApi
                 case 409:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -17133,7 +17133,7 @@ class MailboxAPIApi
                 case 413:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -17141,7 +17141,7 @@ class MailboxAPIApi
                 case 422:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -17149,7 +17149,7 @@ class MailboxAPIApi
                 case 429:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -17157,7 +17157,7 @@ class MailboxAPIApi
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -17165,7 +17165,7 @@ class MailboxAPIApi
                 case 503:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -17227,7 +17227,7 @@ class MailboxAPIApi
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxListCalendars'][0]
     ): PromiseInterface {
-        $returnType = '\Sendmux\Mailbox\Model\MailboxCalendarListResponse';
+        $returnType = '\Qubrics\Mailbox\Model\MailboxCalendarListResponse';
         $request = $this->mailboxListCalendarsRequest(
             $limit,
             $cursor,
@@ -17430,7 +17430,7 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Sendmux\Mailbox\Model\MailboxMessageContentResponse|\Sendmux\Mailbox\Model\ApiError|null
+     * @return \Qubrics\Mailbox\Model\MailboxMessageContentResponse|\Qubrics\Mailbox\Model\ApiError|null
      */
     public function mailboxListContent(
         string $message_id,
@@ -17445,7 +17445,7 @@ class MailboxAPIApi
         ?string $if_none_match = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxListContent'][0]
-    ): \Sendmux\Mailbox\Model\MailboxMessageContentResponse|\Sendmux\Mailbox\Model\ApiError|null {
+    ): \Qubrics\Mailbox\Model\MailboxMessageContentResponse|\Qubrics\Mailbox\Model\ApiError|null {
         list($response) = $this->mailboxListContentWithHttpInfo(
             $message_id,
             $part,
@@ -17483,7 +17483,7 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Sendmux\Mailbox\Model\MailboxMessageContentResponse|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Qubrics\Mailbox\Model\MailboxMessageContentResponse|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
      */
     public function mailboxListContentWithHttpInfo(
         string $message_id,
@@ -17539,7 +17539,7 @@ class MailboxAPIApi
             switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\MailboxMessageContentResponse',
+                        '\Qubrics\Mailbox\Model\MailboxMessageContentResponse',
                         $request,
                         $response,
                     );
@@ -17547,13 +17547,13 @@ class MailboxAPIApi
                     return [null, $response->getStatusCode(), $response->getHeaders()];
                 case 400:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 404:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
@@ -17574,7 +17574,7 @@ class MailboxAPIApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Sendmux\Mailbox\Model\MailboxMessageContentResponse',
+                '\Qubrics\Mailbox\Model\MailboxMessageContentResponse',
                 $request,
                 $response,
             );
@@ -17583,7 +17583,7 @@ class MailboxAPIApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\MailboxMessageContentResponse',
+                        '\Qubrics\Mailbox\Model\MailboxMessageContentResponse',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -17591,7 +17591,7 @@ class MailboxAPIApi
                 case 400:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -17599,7 +17599,7 @@ class MailboxAPIApi
                 case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -17701,7 +17701,7 @@ class MailboxAPIApi
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxListContent'][0]
     ): PromiseInterface {
-        $returnType = '\Sendmux\Mailbox\Model\MailboxMessageContentResponse';
+        $returnType = '\Qubrics\Mailbox\Model\MailboxMessageContentResponse';
         $request = $this->mailboxListContentRequest(
             $message_id,
             $part,
@@ -17995,14 +17995,14 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Sendmux\Mailbox\Model\MailboxDraftListResponse|\Sendmux\Mailbox\Model\ApiError
+     * @return \Qubrics\Mailbox\Model\MailboxDraftListResponse|\Qubrics\Mailbox\Model\ApiError
      */
     public function mailboxListDrafts(
         ?int $limit = null,
         ?string $cursor = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxListDrafts'][0]
-    ): \Sendmux\Mailbox\Model\MailboxDraftListResponse|\Sendmux\Mailbox\Model\ApiError {
+    ): \Qubrics\Mailbox\Model\MailboxDraftListResponse|\Qubrics\Mailbox\Model\ApiError {
         list($response) = $this->mailboxListDraftsWithHttpInfo(
             $limit,
             $cursor,
@@ -18024,7 +18024,7 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Sendmux\Mailbox\Model\MailboxDraftListResponse|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Qubrics\Mailbox\Model\MailboxDraftListResponse|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
      */
     public function mailboxListDraftsWithHttpInfo(
         ?int $limit = null,
@@ -18064,67 +18064,67 @@ class MailboxAPIApi
             switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\MailboxDraftListResponse',
+                        '\Qubrics\Mailbox\Model\MailboxDraftListResponse',
                         $request,
                         $response,
                     );
                 case 400:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 401:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 403:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 404:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 409:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 413:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 422:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 429:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 500:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 503:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
@@ -18145,7 +18145,7 @@ class MailboxAPIApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Sendmux\Mailbox\Model\MailboxDraftListResponse',
+                '\Qubrics\Mailbox\Model\MailboxDraftListResponse',
                 $request,
                 $response,
             );
@@ -18154,7 +18154,7 @@ class MailboxAPIApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\MailboxDraftListResponse',
+                        '\Qubrics\Mailbox\Model\MailboxDraftListResponse',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -18162,7 +18162,7 @@ class MailboxAPIApi
                 case 400:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -18170,7 +18170,7 @@ class MailboxAPIApi
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -18178,7 +18178,7 @@ class MailboxAPIApi
                 case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -18186,7 +18186,7 @@ class MailboxAPIApi
                 case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -18194,7 +18194,7 @@ class MailboxAPIApi
                 case 409:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -18202,7 +18202,7 @@ class MailboxAPIApi
                 case 413:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -18210,7 +18210,7 @@ class MailboxAPIApi
                 case 422:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -18218,7 +18218,7 @@ class MailboxAPIApi
                 case 429:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -18226,7 +18226,7 @@ class MailboxAPIApi
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -18234,7 +18234,7 @@ class MailboxAPIApi
                 case 503:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -18296,7 +18296,7 @@ class MailboxAPIApi
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxListDrafts'][0]
     ): PromiseInterface {
-        $returnType = '\Sendmux\Mailbox\Model\MailboxDraftListResponse';
+        $returnType = '\Qubrics\Mailbox\Model\MailboxDraftListResponse';
         $request = $this->mailboxListDraftsRequest(
             $limit,
             $cursor,
@@ -18482,14 +18482,14 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Sendmux\Mailbox\Model\MailboxFolderCursorListResponse
+     * @return \Qubrics\Mailbox\Model\MailboxFolderCursorListResponse
      */
     public function mailboxListFolders(
         ?string $cursor = null,
         ?int $limit = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxListFolders'][0]
-    ): \Sendmux\Mailbox\Model\MailboxFolderCursorListResponse {
+    ): \Qubrics\Mailbox\Model\MailboxFolderCursorListResponse {
         list($response) = $this->mailboxListFoldersWithHttpInfo(
             $cursor,
             $limit,
@@ -18511,7 +18511,7 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Sendmux\Mailbox\Model\MailboxFolderCursorListResponse, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Qubrics\Mailbox\Model\MailboxFolderCursorListResponse, HTTP status code, HTTP response headers (array of strings)
      */
     public function mailboxListFoldersWithHttpInfo(
         ?string $cursor = null,
@@ -18551,7 +18551,7 @@ class MailboxAPIApi
             switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\MailboxFolderCursorListResponse',
+                        '\Qubrics\Mailbox\Model\MailboxFolderCursorListResponse',
                         $request,
                         $response,
                     );
@@ -18572,7 +18572,7 @@ class MailboxAPIApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Sendmux\Mailbox\Model\MailboxFolderCursorListResponse',
+                '\Qubrics\Mailbox\Model\MailboxFolderCursorListResponse',
                 $request,
                 $response,
             );
@@ -18581,7 +18581,7 @@ class MailboxAPIApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\MailboxFolderCursorListResponse',
+                        '\Qubrics\Mailbox\Model\MailboxFolderCursorListResponse',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -18643,7 +18643,7 @@ class MailboxAPIApi
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxListFolders'][0]
     ): PromiseInterface {
-        $returnType = '\Sendmux\Mailbox\Model\MailboxFolderCursorListResponse';
+        $returnType = '\Qubrics\Mailbox\Model\MailboxFolderCursorListResponse';
         $request = $this->mailboxListFoldersRequest(
             $cursor,
             $limit,
@@ -18829,14 +18829,14 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Sendmux\Mailbox\Model\GrantedMailboxListResponse|\Sendmux\Mailbox\Model\ApiError
+     * @return \Qubrics\Mailbox\Model\GrantedMailboxListResponse|\Qubrics\Mailbox\Model\ApiError
      */
     public function mailboxListGrantedMailboxes(
         ?string $cursor = null,
         ?int $limit = null,
         ?string $q = null,
         string $contentType = self::contentTypes['mailboxListGrantedMailboxes'][0]
-    ): \Sendmux\Mailbox\Model\GrantedMailboxListResponse|\Sendmux\Mailbox\Model\ApiError {
+    ): \Qubrics\Mailbox\Model\GrantedMailboxListResponse|\Qubrics\Mailbox\Model\ApiError {
         list($response) = $this->mailboxListGrantedMailboxesWithHttpInfo(
             $cursor,
             $limit,
@@ -18858,7 +18858,7 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Sendmux\Mailbox\Model\GrantedMailboxListResponse|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Qubrics\Mailbox\Model\GrantedMailboxListResponse|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
      */
     public function mailboxListGrantedMailboxesWithHttpInfo(
         ?string $cursor = null,
@@ -18898,19 +18898,19 @@ class MailboxAPIApi
             switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\GrantedMailboxListResponse',
+                        '\Qubrics\Mailbox\Model\GrantedMailboxListResponse',
                         $request,
                         $response,
                     );
                 case 401:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 403:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
@@ -18931,7 +18931,7 @@ class MailboxAPIApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Sendmux\Mailbox\Model\GrantedMailboxListResponse',
+                '\Qubrics\Mailbox\Model\GrantedMailboxListResponse',
                 $request,
                 $response,
             );
@@ -18940,7 +18940,7 @@ class MailboxAPIApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\GrantedMailboxListResponse',
+                        '\Qubrics\Mailbox\Model\GrantedMailboxListResponse',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -18948,7 +18948,7 @@ class MailboxAPIApi
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -18956,7 +18956,7 @@ class MailboxAPIApi
                 case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -19018,7 +19018,7 @@ class MailboxAPIApi
         ?string $q = null,
         string $contentType = self::contentTypes['mailboxListGrantedMailboxes'][0]
     ): PromiseInterface {
-        $returnType = '\Sendmux\Mailbox\Model\GrantedMailboxListResponse';
+        $returnType = '\Qubrics\Mailbox\Model\GrantedMailboxListResponse';
         $request = $this->mailboxListGrantedMailboxesRequest(
             $cursor,
             $limit,
@@ -19204,14 +19204,14 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Sendmux\Mailbox\Model\MailboxIdentityCursorListResponse|\Sendmux\Mailbox\Model\ApiError
+     * @return \Qubrics\Mailbox\Model\MailboxIdentityCursorListResponse|\Qubrics\Mailbox\Model\ApiError
      */
     public function mailboxListIdentities(
         ?string $cursor = null,
         ?int $limit = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxListIdentities'][0]
-    ): \Sendmux\Mailbox\Model\MailboxIdentityCursorListResponse|\Sendmux\Mailbox\Model\ApiError {
+    ): \Qubrics\Mailbox\Model\MailboxIdentityCursorListResponse|\Qubrics\Mailbox\Model\ApiError {
         list($response) = $this->mailboxListIdentitiesWithHttpInfo(
             $cursor,
             $limit,
@@ -19233,7 +19233,7 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Sendmux\Mailbox\Model\MailboxIdentityCursorListResponse|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Qubrics\Mailbox\Model\MailboxIdentityCursorListResponse|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
      */
     public function mailboxListIdentitiesWithHttpInfo(
         ?string $cursor = null,
@@ -19273,25 +19273,25 @@ class MailboxAPIApi
             switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\MailboxIdentityCursorListResponse',
+                        '\Qubrics\Mailbox\Model\MailboxIdentityCursorListResponse',
                         $request,
                         $response,
                     );
                 case 400:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 401:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 403:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
@@ -19312,7 +19312,7 @@ class MailboxAPIApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Sendmux\Mailbox\Model\MailboxIdentityCursorListResponse',
+                '\Qubrics\Mailbox\Model\MailboxIdentityCursorListResponse',
                 $request,
                 $response,
             );
@@ -19321,7 +19321,7 @@ class MailboxAPIApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\MailboxIdentityCursorListResponse',
+                        '\Qubrics\Mailbox\Model\MailboxIdentityCursorListResponse',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -19329,7 +19329,7 @@ class MailboxAPIApi
                 case 400:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -19337,7 +19337,7 @@ class MailboxAPIApi
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -19345,7 +19345,7 @@ class MailboxAPIApi
                 case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -19407,7 +19407,7 @@ class MailboxAPIApi
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxListIdentities'][0]
     ): PromiseInterface {
-        $returnType = '\Sendmux\Mailbox\Model\MailboxIdentityCursorListResponse';
+        $returnType = '\Qubrics\Mailbox\Model\MailboxIdentityCursorListResponse';
         $request = $this->mailboxListIdentitiesRequest(
             $cursor,
             $limit,
@@ -19614,7 +19614,7 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Sendmux\Mailbox\Model\MailboxMessageSummaryCursorListResponse|\Sendmux\Mailbox\Model\ApiError
+     * @return \Qubrics\Mailbox\Model\MailboxMessageSummaryCursorListResponse|\Qubrics\Mailbox\Model\ApiError
      */
     public function mailboxListMessages(
         ?string $cursor = null,
@@ -19642,7 +19642,7 @@ class MailboxAPIApi
         ?string $sort_direction = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxListMessages'][0]
-    ): \Sendmux\Mailbox\Model\MailboxMessageSummaryCursorListResponse|\Sendmux\Mailbox\Model\ApiError {
+    ): \Qubrics\Mailbox\Model\MailboxMessageSummaryCursorListResponse|\Qubrics\Mailbox\Model\ApiError {
         list($response) = $this->mailboxListMessagesWithHttpInfo(
             $cursor,
             $limit,
@@ -19706,7 +19706,7 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Sendmux\Mailbox\Model\MailboxMessageSummaryCursorListResponse|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Qubrics\Mailbox\Model\MailboxMessageSummaryCursorListResponse|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
      */
     public function mailboxListMessagesWithHttpInfo(
         ?string $cursor = null,
@@ -19788,25 +19788,25 @@ class MailboxAPIApi
             switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\MailboxMessageSummaryCursorListResponse',
+                        '\Qubrics\Mailbox\Model\MailboxMessageSummaryCursorListResponse',
                         $request,
                         $response,
                     );
                 case 400:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 401:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 403:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
@@ -19827,7 +19827,7 @@ class MailboxAPIApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Sendmux\Mailbox\Model\MailboxMessageSummaryCursorListResponse',
+                '\Qubrics\Mailbox\Model\MailboxMessageSummaryCursorListResponse',
                 $request,
                 $response,
             );
@@ -19836,7 +19836,7 @@ class MailboxAPIApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\MailboxMessageSummaryCursorListResponse',
+                        '\Qubrics\Mailbox\Model\MailboxMessageSummaryCursorListResponse',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -19844,7 +19844,7 @@ class MailboxAPIApi
                 case 400:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -19852,7 +19852,7 @@ class MailboxAPIApi
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -19860,7 +19860,7 @@ class MailboxAPIApi
                 case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -20027,7 +20027,7 @@ class MailboxAPIApi
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxListMessages'][0]
     ): PromiseInterface {
-        $returnType = '\Sendmux\Mailbox\Model\MailboxMessageSummaryCursorListResponse';
+        $returnType = '\Qubrics\Mailbox\Model\MailboxMessageSummaryCursorListResponse';
         $request = $this->mailboxListMessagesRequest(
             $cursor,
             $limit,
@@ -20498,7 +20498,7 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Sendmux\Mailbox\Model\MailboxQuotaCursorListResponse|\Sendmux\Mailbox\Model\ApiError
+     * @return \Qubrics\Mailbox\Model\MailboxQuotaCursorListResponse|\Qubrics\Mailbox\Model\ApiError
      */
     public function mailboxListQuotas(
         ?string $cursor = null,
@@ -20511,7 +20511,7 @@ class MailboxAPIApi
         ?string $sort_direction = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxListQuotas'][0]
-    ): \Sendmux\Mailbox\Model\MailboxQuotaCursorListResponse|\Sendmux\Mailbox\Model\ApiError {
+    ): \Qubrics\Mailbox\Model\MailboxQuotaCursorListResponse|\Qubrics\Mailbox\Model\ApiError {
         list($response) = $this->mailboxListQuotasWithHttpInfo(
             $cursor,
             $limit,
@@ -20545,7 +20545,7 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Sendmux\Mailbox\Model\MailboxQuotaCursorListResponse|\Sendmux\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Qubrics\Mailbox\Model\MailboxQuotaCursorListResponse|\Qubrics\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
      */
     public function mailboxListQuotasWithHttpInfo(
         ?string $cursor = null,
@@ -20597,13 +20597,13 @@ class MailboxAPIApi
             switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\MailboxQuotaCursorListResponse',
+                        '\Qubrics\Mailbox\Model\MailboxQuotaCursorListResponse',
                         $request,
                         $response,
                     );
                 case 400:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
@@ -20624,7 +20624,7 @@ class MailboxAPIApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Sendmux\Mailbox\Model\MailboxQuotaCursorListResponse',
+                '\Qubrics\Mailbox\Model\MailboxQuotaCursorListResponse',
                 $request,
                 $response,
             );
@@ -20633,7 +20633,7 @@ class MailboxAPIApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\MailboxQuotaCursorListResponse',
+                        '\Qubrics\Mailbox\Model\MailboxQuotaCursorListResponse',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -20641,7 +20641,7 @@ class MailboxAPIApi
                 case 400:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -20733,7 +20733,7 @@ class MailboxAPIApi
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxListQuotas'][0]
     ): PromiseInterface {
-        $returnType = '\Sendmux\Mailbox\Model\MailboxQuotaCursorListResponse';
+        $returnType = '\Qubrics\Mailbox\Model\MailboxQuotaCursorListResponse';
         $request = $this->mailboxListQuotasRequest(
             $cursor,
             $limit,
@@ -21005,7 +21005,7 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Sendmux\Mailbox\Model\MailboxSubmissionCursorListResponse|\Sendmux\Mailbox\Model\ApiError
+     * @return \Qubrics\Mailbox\Model\MailboxSubmissionCursorListResponse|\Qubrics\Mailbox\Model\ApiError
      */
     public function mailboxListSubmissions(
         ?string $cursor = null,
@@ -21020,7 +21020,7 @@ class MailboxAPIApi
         ?string $sort_direction = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxListSubmissions'][0]
-    ): \Sendmux\Mailbox\Model\MailboxSubmissionCursorListResponse|\Sendmux\Mailbox\Model\ApiError {
+    ): \Qubrics\Mailbox\Model\MailboxSubmissionCursorListResponse|\Qubrics\Mailbox\Model\ApiError {
         list($response) = $this->mailboxListSubmissionsWithHttpInfo(
             $cursor,
             $limit,
@@ -21058,7 +21058,7 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Sendmux\Mailbox\Model\MailboxSubmissionCursorListResponse|\Sendmux\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Qubrics\Mailbox\Model\MailboxSubmissionCursorListResponse|\Qubrics\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
      */
     public function mailboxListSubmissionsWithHttpInfo(
         ?string $cursor = null,
@@ -21114,13 +21114,13 @@ class MailboxAPIApi
             switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\MailboxSubmissionCursorListResponse',
+                        '\Qubrics\Mailbox\Model\MailboxSubmissionCursorListResponse',
                         $request,
                         $response,
                     );
                 case 400:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
@@ -21141,7 +21141,7 @@ class MailboxAPIApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Sendmux\Mailbox\Model\MailboxSubmissionCursorListResponse',
+                '\Qubrics\Mailbox\Model\MailboxSubmissionCursorListResponse',
                 $request,
                 $response,
             );
@@ -21150,7 +21150,7 @@ class MailboxAPIApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\MailboxSubmissionCursorListResponse',
+                        '\Qubrics\Mailbox\Model\MailboxSubmissionCursorListResponse',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -21158,7 +21158,7 @@ class MailboxAPIApi
                 case 400:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -21260,7 +21260,7 @@ class MailboxAPIApi
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxListSubmissions'][0]
     ): PromiseInterface {
-        $returnType = '\Sendmux\Mailbox\Model\MailboxSubmissionCursorListResponse';
+        $returnType = '\Qubrics\Mailbox\Model\MailboxSubmissionCursorListResponse';
         $request = $this->mailboxListSubmissionsRequest(
             $cursor,
             $limit,
@@ -21552,7 +21552,7 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Sendmux\Mailbox\Model\MailboxThreadMessageSummaryCursorListResponse|\Sendmux\Mailbox\Model\ApiError
+     * @return \Qubrics\Mailbox\Model\MailboxThreadMessageSummaryCursorListResponse|\Qubrics\Mailbox\Model\ApiError
      */
     public function mailboxListThreadMessages(
         string $thread_id,
@@ -21561,7 +21561,7 @@ class MailboxAPIApi
         ?string $sort = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxListThreadMessages'][0]
-    ): \Sendmux\Mailbox\Model\MailboxThreadMessageSummaryCursorListResponse|\Sendmux\Mailbox\Model\ApiError {
+    ): \Qubrics\Mailbox\Model\MailboxThreadMessageSummaryCursorListResponse|\Qubrics\Mailbox\Model\ApiError {
         list($response) = $this->mailboxListThreadMessagesWithHttpInfo(
             $thread_id,
             $cursor,
@@ -21587,7 +21587,7 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Sendmux\Mailbox\Model\MailboxThreadMessageSummaryCursorListResponse|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Qubrics\Mailbox\Model\MailboxThreadMessageSummaryCursorListResponse|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
      */
     public function mailboxListThreadMessagesWithHttpInfo(
         string $thread_id,
@@ -21631,19 +21631,19 @@ class MailboxAPIApi
             switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\MailboxThreadMessageSummaryCursorListResponse',
+                        '\Qubrics\Mailbox\Model\MailboxThreadMessageSummaryCursorListResponse',
                         $request,
                         $response,
                     );
                 case 400:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 404:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
@@ -21664,7 +21664,7 @@ class MailboxAPIApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Sendmux\Mailbox\Model\MailboxThreadMessageSummaryCursorListResponse',
+                '\Qubrics\Mailbox\Model\MailboxThreadMessageSummaryCursorListResponse',
                 $request,
                 $response,
             );
@@ -21673,7 +21673,7 @@ class MailboxAPIApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\MailboxThreadMessageSummaryCursorListResponse',
+                        '\Qubrics\Mailbox\Model\MailboxThreadMessageSummaryCursorListResponse',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -21681,7 +21681,7 @@ class MailboxAPIApi
                 case 400:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -21689,7 +21689,7 @@ class MailboxAPIApi
                 case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -21761,7 +21761,7 @@ class MailboxAPIApi
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxListThreadMessages'][0]
     ): PromiseInterface {
-        $returnType = '\Sendmux\Mailbox\Model\MailboxThreadMessageSummaryCursorListResponse';
+        $returnType = '\Qubrics\Mailbox\Model\MailboxThreadMessageSummaryCursorListResponse';
         $request = $this->mailboxListThreadMessagesRequest(
             $thread_id,
             $cursor,
@@ -21986,7 +21986,7 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Sendmux\Mailbox\Model\MailboxThreadSummaryCursorListResponse|\Sendmux\Mailbox\Model\ApiError
+     * @return \Qubrics\Mailbox\Model\MailboxThreadSummaryCursorListResponse|\Qubrics\Mailbox\Model\ApiError
      */
     public function mailboxListThreads(
         ?string $cursor = null,
@@ -22001,7 +22001,7 @@ class MailboxAPIApi
         ?string $sort_direction = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxListThreads'][0]
-    ): \Sendmux\Mailbox\Model\MailboxThreadSummaryCursorListResponse|\Sendmux\Mailbox\Model\ApiError {
+    ): \Qubrics\Mailbox\Model\MailboxThreadSummaryCursorListResponse|\Qubrics\Mailbox\Model\ApiError {
         list($response) = $this->mailboxListThreadsWithHttpInfo(
             $cursor,
             $limit,
@@ -22039,7 +22039,7 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Sendmux\Mailbox\Model\MailboxThreadSummaryCursorListResponse|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Qubrics\Mailbox\Model\MailboxThreadSummaryCursorListResponse|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
      */
     public function mailboxListThreadsWithHttpInfo(
         ?string $cursor = null,
@@ -22095,25 +22095,25 @@ class MailboxAPIApi
             switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\MailboxThreadSummaryCursorListResponse',
+                        '\Qubrics\Mailbox\Model\MailboxThreadSummaryCursorListResponse',
                         $request,
                         $response,
                     );
                 case 400:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 401:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 403:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
@@ -22134,7 +22134,7 @@ class MailboxAPIApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Sendmux\Mailbox\Model\MailboxThreadSummaryCursorListResponse',
+                '\Qubrics\Mailbox\Model\MailboxThreadSummaryCursorListResponse',
                 $request,
                 $response,
             );
@@ -22143,7 +22143,7 @@ class MailboxAPIApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\MailboxThreadSummaryCursorListResponse',
+                        '\Qubrics\Mailbox\Model\MailboxThreadSummaryCursorListResponse',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -22151,7 +22151,7 @@ class MailboxAPIApi
                 case 400:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -22159,7 +22159,7 @@ class MailboxAPIApi
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -22167,7 +22167,7 @@ class MailboxAPIApi
                 case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -22269,7 +22269,7 @@ class MailboxAPIApi
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxListThreads'][0]
     ): PromiseInterface {
-        $returnType = '\Sendmux\Mailbox\Model\MailboxThreadSummaryCursorListResponse';
+        $returnType = '\Qubrics\Mailbox\Model\MailboxThreadSummaryCursorListResponse';
         $request = $this->mailboxListThreadsRequest(
             $cursor,
             $limit,
@@ -22558,13 +22558,13 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Sendmux\Mailbox\Model\MailboxUsageResponse|null
+     * @return \Qubrics\Mailbox\Model\MailboxUsageResponse|null
      */
     public function mailboxListUsage(
         ?string $if_none_match = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxListUsage'][0]
-    ): ?\Sendmux\Mailbox\Model\MailboxUsageResponse {
+    ): ?\Qubrics\Mailbox\Model\MailboxUsageResponse {
         list($response) = $this->mailboxListUsageWithHttpInfo(
             $if_none_match,
             $mailbox_id,
@@ -22584,7 +22584,7 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Sendmux\Mailbox\Model\MailboxUsageResponse, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Qubrics\Mailbox\Model\MailboxUsageResponse, HTTP status code, HTTP response headers (array of strings)
      */
     public function mailboxListUsageWithHttpInfo(
         ?string $if_none_match = null,
@@ -22622,7 +22622,7 @@ class MailboxAPIApi
             switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\MailboxUsageResponse',
+                        '\Qubrics\Mailbox\Model\MailboxUsageResponse',
                         $request,
                         $response,
                     );
@@ -22645,7 +22645,7 @@ class MailboxAPIApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Sendmux\Mailbox\Model\MailboxUsageResponse',
+                '\Qubrics\Mailbox\Model\MailboxUsageResponse',
                 $request,
                 $response,
             );
@@ -22654,7 +22654,7 @@ class MailboxAPIApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\MailboxUsageResponse',
+                        '\Qubrics\Mailbox\Model\MailboxUsageResponse',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -22711,7 +22711,7 @@ class MailboxAPIApi
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxListUsage'][0]
     ): PromiseInterface {
-        $returnType = '\Sendmux\Mailbox\Model\MailboxUsageResponse';
+        $returnType = '\Qubrics\Mailbox\Model\MailboxUsageResponse';
         $request = $this->mailboxListUsageRequest(
             $if_none_match,
             $mailbox_id,
@@ -22877,14 +22877,14 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Sendmux\Mailbox\Model\MailboxFolderQueryChangesResponse|\Sendmux\Mailbox\Model\ApiError
+     * @return \Qubrics\Mailbox\Model\MailboxFolderQueryChangesResponse|\Qubrics\Mailbox\Model\ApiError
      */
     public function mailboxQueryFolderChanges(
         ?string $since_query_state = null,
         ?int $limit = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxQueryFolderChanges'][0]
-    ): \Sendmux\Mailbox\Model\MailboxFolderQueryChangesResponse|\Sendmux\Mailbox\Model\ApiError {
+    ): \Qubrics\Mailbox\Model\MailboxFolderQueryChangesResponse|\Qubrics\Mailbox\Model\ApiError {
         list($response) = $this->mailboxQueryFolderChangesWithHttpInfo(
             $since_query_state,
             $limit,
@@ -22906,7 +22906,7 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Sendmux\Mailbox\Model\MailboxFolderQueryChangesResponse|\Sendmux\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Qubrics\Mailbox\Model\MailboxFolderQueryChangesResponse|\Qubrics\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
      */
     public function mailboxQueryFolderChangesWithHttpInfo(
         ?string $since_query_state = null,
@@ -22946,13 +22946,13 @@ class MailboxAPIApi
             switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\MailboxFolderQueryChangesResponse',
+                        '\Qubrics\Mailbox\Model\MailboxFolderQueryChangesResponse',
                         $request,
                         $response,
                     );
                 case 400:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
@@ -22973,7 +22973,7 @@ class MailboxAPIApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Sendmux\Mailbox\Model\MailboxFolderQueryChangesResponse',
+                '\Qubrics\Mailbox\Model\MailboxFolderQueryChangesResponse',
                 $request,
                 $response,
             );
@@ -22982,7 +22982,7 @@ class MailboxAPIApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\MailboxFolderQueryChangesResponse',
+                        '\Qubrics\Mailbox\Model\MailboxFolderQueryChangesResponse',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -22990,7 +22990,7 @@ class MailboxAPIApi
                 case 400:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -23052,7 +23052,7 @@ class MailboxAPIApi
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxQueryFolderChanges'][0]
     ): PromiseInterface {
-        $returnType = '\Sendmux\Mailbox\Model\MailboxFolderQueryChangesResponse';
+        $returnType = '\Qubrics\Mailbox\Model\MailboxFolderQueryChangesResponse';
         $request = $this->mailboxQueryFolderChangesRequest(
             $since_query_state,
             $limit,
@@ -23260,7 +23260,7 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Sendmux\Mailbox\Model\MailboxMessageQueryChangesResponse|\Sendmux\Mailbox\Model\ApiError
+     * @return \Qubrics\Mailbox\Model\MailboxMessageQueryChangesResponse|\Qubrics\Mailbox\Model\ApiError
      */
     public function mailboxQueryMessageChanges(
         ?string $since_query_state = null,
@@ -23289,7 +23289,7 @@ class MailboxAPIApi
         ?string $sort_direction = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxQueryMessageChanges'][0]
-    ): \Sendmux\Mailbox\Model\MailboxMessageQueryChangesResponse|\Sendmux\Mailbox\Model\ApiError {
+    ): \Qubrics\Mailbox\Model\MailboxMessageQueryChangesResponse|\Qubrics\Mailbox\Model\ApiError {
         list($response) = $this->mailboxQueryMessageChangesWithHttpInfo(
             $since_query_state,
             $limit,
@@ -23355,7 +23355,7 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Sendmux\Mailbox\Model\MailboxMessageQueryChangesResponse|\Sendmux\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Qubrics\Mailbox\Model\MailboxMessageQueryChangesResponse|\Qubrics\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
      */
     public function mailboxQueryMessageChangesWithHttpInfo(
         ?string $since_query_state = null,
@@ -23439,13 +23439,13 @@ class MailboxAPIApi
             switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\MailboxMessageQueryChangesResponse',
+                        '\Qubrics\Mailbox\Model\MailboxMessageQueryChangesResponse',
                         $request,
                         $response,
                     );
                 case 400:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
@@ -23466,7 +23466,7 @@ class MailboxAPIApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Sendmux\Mailbox\Model\MailboxMessageQueryChangesResponse',
+                '\Qubrics\Mailbox\Model\MailboxMessageQueryChangesResponse',
                 $request,
                 $response,
             );
@@ -23475,7 +23475,7 @@ class MailboxAPIApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\MailboxMessageQueryChangesResponse',
+                        '\Qubrics\Mailbox\Model\MailboxMessageQueryChangesResponse',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -23483,7 +23483,7 @@ class MailboxAPIApi
                 case 400:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -23655,7 +23655,7 @@ class MailboxAPIApi
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxQueryMessageChanges'][0]
     ): PromiseInterface {
-        $returnType = '\Sendmux\Mailbox\Model\MailboxMessageQueryChangesResponse';
+        $returnType = '\Qubrics\Mailbox\Model\MailboxMessageQueryChangesResponse';
         $request = $this->mailboxQueryMessageChangesRequest(
             $since_query_state,
             $limit,
@@ -24134,7 +24134,7 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Sendmux\Mailbox\Model\MailboxAttachmentTextResponse|\Sendmux\Mailbox\Model\ApiError
+     * @return \Qubrics\Mailbox\Model\MailboxAttachmentTextResponse|\Qubrics\Mailbox\Model\ApiError
      */
     public function mailboxRequestAttachmentText(
         string $message_id,
@@ -24142,7 +24142,7 @@ class MailboxAPIApi
         ?int $max_bytes = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxRequestAttachmentText'][0]
-    ): \Sendmux\Mailbox\Model\MailboxAttachmentTextResponse|\Sendmux\Mailbox\Model\ApiError {
+    ): \Qubrics\Mailbox\Model\MailboxAttachmentTextResponse|\Qubrics\Mailbox\Model\ApiError {
         list($response) = $this->mailboxRequestAttachmentTextWithHttpInfo(
             $message_id,
             $attachment_id,
@@ -24166,7 +24166,7 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Sendmux\Mailbox\Model\MailboxAttachmentTextResponse|\Sendmux\Mailbox\Model\MailboxAttachmentTextResponse|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Qubrics\Mailbox\Model\MailboxAttachmentTextResponse|\Qubrics\Mailbox\Model\MailboxAttachmentTextResponse|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
      */
     public function mailboxRequestAttachmentTextWithHttpInfo(
         string $message_id,
@@ -24208,55 +24208,55 @@ class MailboxAPIApi
             switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\MailboxAttachmentTextResponse',
+                        '\Qubrics\Mailbox\Model\MailboxAttachmentTextResponse',
                         $request,
                         $response,
                     );
                 case 202:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\MailboxAttachmentTextResponse',
+                        '\Qubrics\Mailbox\Model\MailboxAttachmentTextResponse',
                         $request,
                         $response,
                     );
                 case 400:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 401:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 403:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 404:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 429:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 500:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 503:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
@@ -24277,7 +24277,7 @@ class MailboxAPIApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Sendmux\Mailbox\Model\MailboxAttachmentTextResponse',
+                '\Qubrics\Mailbox\Model\MailboxAttachmentTextResponse',
                 $request,
                 $response,
             );
@@ -24286,7 +24286,7 @@ class MailboxAPIApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\MailboxAttachmentTextResponse',
+                        '\Qubrics\Mailbox\Model\MailboxAttachmentTextResponse',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -24294,7 +24294,7 @@ class MailboxAPIApi
                 case 202:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\MailboxAttachmentTextResponse',
+                        '\Qubrics\Mailbox\Model\MailboxAttachmentTextResponse',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -24302,7 +24302,7 @@ class MailboxAPIApi
                 case 400:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -24310,7 +24310,7 @@ class MailboxAPIApi
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -24318,7 +24318,7 @@ class MailboxAPIApi
                 case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -24326,7 +24326,7 @@ class MailboxAPIApi
                 case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -24334,7 +24334,7 @@ class MailboxAPIApi
                 case 429:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -24342,7 +24342,7 @@ class MailboxAPIApi
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -24350,7 +24350,7 @@ class MailboxAPIApi
                 case 503:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -24417,7 +24417,7 @@ class MailboxAPIApi
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxRequestAttachmentText'][0]
     ): PromiseInterface {
-        $returnType = '\Sendmux\Mailbox\Model\MailboxAttachmentTextResponse';
+        $returnType = '\Qubrics\Mailbox\Model\MailboxAttachmentTextResponse';
         $request = $this->mailboxRequestAttachmentTextRequest(
             $message_id,
             $attachment_id,
@@ -24644,7 +24644,7 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Sendmux\Mailbox\Model\MailboxSearchSnippetsResultResponse|\Sendmux\Mailbox\Model\ApiError
+     * @return \Qubrics\Mailbox\Model\MailboxSearchSnippetsResultResponse|\Qubrics\Mailbox\Model\ApiError
      */
     public function mailboxSearchMessageSnippets(
         string $q,
@@ -24669,7 +24669,7 @@ class MailboxAPIApi
         ?int $limit = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxSearchMessageSnippets'][0]
-    ): \Sendmux\Mailbox\Model\MailboxSearchSnippetsResultResponse|\Sendmux\Mailbox\Model\ApiError {
+    ): \Qubrics\Mailbox\Model\MailboxSearchSnippetsResultResponse|\Qubrics\Mailbox\Model\ApiError {
         list($response) = $this->mailboxSearchMessageSnippetsWithHttpInfo(
             $q,
             $folder_id,
@@ -24727,7 +24727,7 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Sendmux\Mailbox\Model\MailboxSearchSnippetsResultResponse|\Sendmux\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Qubrics\Mailbox\Model\MailboxSearchSnippetsResultResponse|\Qubrics\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
      */
     public function mailboxSearchMessageSnippetsWithHttpInfo(
         string $q,
@@ -24803,13 +24803,13 @@ class MailboxAPIApi
             switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\MailboxSearchSnippetsResultResponse',
+                        '\Qubrics\Mailbox\Model\MailboxSearchSnippetsResultResponse',
                         $request,
                         $response,
                     );
                 case 400:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
@@ -24830,7 +24830,7 @@ class MailboxAPIApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Sendmux\Mailbox\Model\MailboxSearchSnippetsResultResponse',
+                '\Qubrics\Mailbox\Model\MailboxSearchSnippetsResultResponse',
                 $request,
                 $response,
             );
@@ -24839,7 +24839,7 @@ class MailboxAPIApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\MailboxSearchSnippetsResultResponse',
+                        '\Qubrics\Mailbox\Model\MailboxSearchSnippetsResultResponse',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -24847,7 +24847,7 @@ class MailboxAPIApi
                 case 400:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -24999,7 +24999,7 @@ class MailboxAPIApi
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxSearchMessageSnippets'][0]
     ): PromiseInterface {
-        $returnType = '\Sendmux\Mailbox\Model\MailboxSearchSnippetsResultResponse';
+        $returnType = '\Qubrics\Mailbox\Model\MailboxSearchSnippetsResultResponse';
         $request = $this->mailboxSearchMessageSnippetsRequest(
             $q,
             $folder_id,
@@ -25425,22 +25425,22 @@ class MailboxAPIApi
      * Send a saved draft revision
      *
      * @param  string $draft_id Stable draft ID. (required)
-     * @param  \Sendmux\Mailbox\Model\SendMailboxDraft $send_mailbox_draft send_mailbox_draft (required)
+     * @param  \Qubrics\Mailbox\Model\SendMailboxDraft $send_mailbox_draft send_mailbox_draft (required)
      * @param  string|null $if_match Current draft ETag; expected_revision is required. (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxSendDraft'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Sendmux\Mailbox\Model\MailboxDraftResponse|\Sendmux\Mailbox\Model\ApiError
+     * @return \Qubrics\Mailbox\Model\MailboxDraftResponse|\Qubrics\Mailbox\Model\ApiError
      */
     public function mailboxSendDraft(
         string $draft_id,
-        \Sendmux\Mailbox\Model\SendMailboxDraft $send_mailbox_draft,
+        \Qubrics\Mailbox\Model\SendMailboxDraft $send_mailbox_draft,
         ?string $if_match = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxSendDraft'][0]
-    ): \Sendmux\Mailbox\Model\MailboxDraftResponse|\Sendmux\Mailbox\Model\ApiError {
+    ): \Qubrics\Mailbox\Model\MailboxDraftResponse|\Qubrics\Mailbox\Model\ApiError {
         list($response) = $this->mailboxSendDraftWithHttpInfo(
             $draft_id,
             $send_mailbox_draft,
@@ -25457,18 +25457,18 @@ class MailboxAPIApi
      * Send a saved draft revision
      *
      * @param  string $draft_id Stable draft ID. (required)
-     * @param  \Sendmux\Mailbox\Model\SendMailboxDraft $send_mailbox_draft send_mailbox_draft (required)
+     * @param  \Qubrics\Mailbox\Model\SendMailboxDraft $send_mailbox_draft send_mailbox_draft (required)
      * @param  string|null $if_match Current draft ETag; expected_revision is required. (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxSendDraft'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Sendmux\Mailbox\Model\MailboxDraftResponse|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Qubrics\Mailbox\Model\MailboxDraftResponse|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
      */
     public function mailboxSendDraftWithHttpInfo(
         string $draft_id,
-        \Sendmux\Mailbox\Model\SendMailboxDraft $send_mailbox_draft,
+        \Qubrics\Mailbox\Model\SendMailboxDraft $send_mailbox_draft,
         ?string $if_match = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxSendDraft'][0]
@@ -25506,67 +25506,67 @@ class MailboxAPIApi
             switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\MailboxDraftResponse',
+                        '\Qubrics\Mailbox\Model\MailboxDraftResponse',
                         $request,
                         $response,
                     );
                 case 400:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 401:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 403:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 404:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 409:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 413:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 422:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 429:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 500:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 503:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
@@ -25587,7 +25587,7 @@ class MailboxAPIApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Sendmux\Mailbox\Model\MailboxDraftResponse',
+                '\Qubrics\Mailbox\Model\MailboxDraftResponse',
                 $request,
                 $response,
             );
@@ -25596,7 +25596,7 @@ class MailboxAPIApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\MailboxDraftResponse',
+                        '\Qubrics\Mailbox\Model\MailboxDraftResponse',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -25604,7 +25604,7 @@ class MailboxAPIApi
                 case 400:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -25612,7 +25612,7 @@ class MailboxAPIApi
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -25620,7 +25620,7 @@ class MailboxAPIApi
                 case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -25628,7 +25628,7 @@ class MailboxAPIApi
                 case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -25636,7 +25636,7 @@ class MailboxAPIApi
                 case 409:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -25644,7 +25644,7 @@ class MailboxAPIApi
                 case 413:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -25652,7 +25652,7 @@ class MailboxAPIApi
                 case 422:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -25660,7 +25660,7 @@ class MailboxAPIApi
                 case 429:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -25668,7 +25668,7 @@ class MailboxAPIApi
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -25676,7 +25676,7 @@ class MailboxAPIApi
                 case 503:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -25693,7 +25693,7 @@ class MailboxAPIApi
      * Send a saved draft revision
      *
      * @param  string $draft_id Stable draft ID. (required)
-     * @param  \Sendmux\Mailbox\Model\SendMailboxDraft $send_mailbox_draft send_mailbox_draft (required)
+     * @param  \Qubrics\Mailbox\Model\SendMailboxDraft $send_mailbox_draft send_mailbox_draft (required)
      * @param  string|null $if_match Current draft ETag; expected_revision is required. (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxSendDraft'] to see the possible values for this operation
@@ -25703,7 +25703,7 @@ class MailboxAPIApi
      */
     public function mailboxSendDraftAsync(
         string $draft_id,
-        \Sendmux\Mailbox\Model\SendMailboxDraft $send_mailbox_draft,
+        \Qubrics\Mailbox\Model\SendMailboxDraft $send_mailbox_draft,
         ?string $if_match = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxSendDraft'][0]
@@ -25728,7 +25728,7 @@ class MailboxAPIApi
      * Send a saved draft revision
      *
      * @param  string $draft_id Stable draft ID. (required)
-     * @param  \Sendmux\Mailbox\Model\SendMailboxDraft $send_mailbox_draft send_mailbox_draft (required)
+     * @param  \Qubrics\Mailbox\Model\SendMailboxDraft $send_mailbox_draft send_mailbox_draft (required)
      * @param  string|null $if_match Current draft ETag; expected_revision is required. (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxSendDraft'] to see the possible values for this operation
@@ -25738,12 +25738,12 @@ class MailboxAPIApi
      */
     public function mailboxSendDraftAsyncWithHttpInfo(
         string $draft_id,
-        \Sendmux\Mailbox\Model\SendMailboxDraft $send_mailbox_draft,
+        \Qubrics\Mailbox\Model\SendMailboxDraft $send_mailbox_draft,
         ?string $if_match = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxSendDraft'][0]
     ): PromiseInterface {
-        $returnType = '\Sendmux\Mailbox\Model\MailboxDraftResponse';
+        $returnType = '\Qubrics\Mailbox\Model\MailboxDraftResponse';
         $request = $this->mailboxSendDraftRequest(
             $draft_id,
             $send_mailbox_draft,
@@ -25795,7 +25795,7 @@ class MailboxAPIApi
      * Create request for operation 'mailboxSendDraft'
      *
      * @param  string $draft_id Stable draft ID. (required)
-     * @param  \Sendmux\Mailbox\Model\SendMailboxDraft $send_mailbox_draft send_mailbox_draft (required)
+     * @param  \Qubrics\Mailbox\Model\SendMailboxDraft $send_mailbox_draft send_mailbox_draft (required)
      * @param  string|null $if_match Current draft ETag; expected_revision is required. (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxSendDraft'] to see the possible values for this operation
@@ -25805,7 +25805,7 @@ class MailboxAPIApi
      */
     public function mailboxSendDraftRequest(
         string $draft_id,
-        \Sendmux\Mailbox\Model\SendMailboxDraft $send_mailbox_draft,
+        \Qubrics\Mailbox\Model\SendMailboxDraft $send_mailbox_draft,
         ?string $if_match = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxSendDraft'][0]
@@ -25934,20 +25934,20 @@ class MailboxAPIApi
      * Send a mailbox message
      *
      * @param  string|null $idempotency_key idempotency_key (optional)
-     * @param  \Sendmux\Mailbox\Model\SendMailboxMessageBody|null $send_mailbox_message_body send_mailbox_message_body (optional)
+     * @param  \Qubrics\Mailbox\Model\SendMailboxMessageBody|null $send_mailbox_message_body send_mailbox_message_body (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxSendMessage'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Sendmux\Mailbox\Model\MailboxSendResultResponse|\Sendmux\Mailbox\Model\ApiError
+     * @return \Qubrics\Mailbox\Model\MailboxSendResultResponse|\Qubrics\Mailbox\Model\ApiError
      */
     public function mailboxSendMessage(
         ?string $idempotency_key = null,
-        ?\Sendmux\Mailbox\Model\SendMailboxMessageBody $send_mailbox_message_body = null,
+        ?\Qubrics\Mailbox\Model\SendMailboxMessageBody $send_mailbox_message_body = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxSendMessage'][0]
-    ): \Sendmux\Mailbox\Model\MailboxSendResultResponse|\Sendmux\Mailbox\Model\ApiError {
+    ): \Qubrics\Mailbox\Model\MailboxSendResultResponse|\Qubrics\Mailbox\Model\ApiError {
         list($response) = $this->mailboxSendMessageWithHttpInfo(
             $idempotency_key,
             $send_mailbox_message_body,
@@ -25963,17 +25963,17 @@ class MailboxAPIApi
      * Send a mailbox message
      *
      * @param  string|null $idempotency_key idempotency_key (optional)
-     * @param  \Sendmux\Mailbox\Model\SendMailboxMessageBody|null $send_mailbox_message_body send_mailbox_message_body (optional)
+     * @param  \Qubrics\Mailbox\Model\SendMailboxMessageBody|null $send_mailbox_message_body send_mailbox_message_body (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxSendMessage'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Sendmux\Mailbox\Model\MailboxSendResultResponse|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Qubrics\Mailbox\Model\MailboxSendResultResponse|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
      */
     public function mailboxSendMessageWithHttpInfo(
         ?string $idempotency_key = null,
-        ?\Sendmux\Mailbox\Model\SendMailboxMessageBody $send_mailbox_message_body = null,
+        ?\Qubrics\Mailbox\Model\SendMailboxMessageBody $send_mailbox_message_body = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxSendMessage'][0]
     ): array {
@@ -26009,37 +26009,37 @@ class MailboxAPIApi
             switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\MailboxSendResultResponse',
+                        '\Qubrics\Mailbox\Model\MailboxSendResultResponse',
                         $request,
                         $response,
                     );
                 case 400:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 409:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 413:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 422:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 503:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
@@ -26060,7 +26060,7 @@ class MailboxAPIApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Sendmux\Mailbox\Model\MailboxSendResultResponse',
+                '\Qubrics\Mailbox\Model\MailboxSendResultResponse',
                 $request,
                 $response,
             );
@@ -26069,7 +26069,7 @@ class MailboxAPIApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\MailboxSendResultResponse',
+                        '\Qubrics\Mailbox\Model\MailboxSendResultResponse',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -26077,7 +26077,7 @@ class MailboxAPIApi
                 case 400:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -26085,7 +26085,7 @@ class MailboxAPIApi
                 case 409:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -26093,7 +26093,7 @@ class MailboxAPIApi
                 case 413:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -26101,7 +26101,7 @@ class MailboxAPIApi
                 case 422:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -26109,7 +26109,7 @@ class MailboxAPIApi
                 case 503:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -26126,7 +26126,7 @@ class MailboxAPIApi
      * Send a mailbox message
      *
      * @param  string|null $idempotency_key idempotency_key (optional)
-     * @param  \Sendmux\Mailbox\Model\SendMailboxMessageBody|null $send_mailbox_message_body send_mailbox_message_body (optional)
+     * @param  \Qubrics\Mailbox\Model\SendMailboxMessageBody|null $send_mailbox_message_body send_mailbox_message_body (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxSendMessage'] to see the possible values for this operation
      *
@@ -26135,7 +26135,7 @@ class MailboxAPIApi
      */
     public function mailboxSendMessageAsync(
         ?string $idempotency_key = null,
-        ?\Sendmux\Mailbox\Model\SendMailboxMessageBody $send_mailbox_message_body = null,
+        ?\Qubrics\Mailbox\Model\SendMailboxMessageBody $send_mailbox_message_body = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxSendMessage'][0]
     ): PromiseInterface {
@@ -26158,7 +26158,7 @@ class MailboxAPIApi
      * Send a mailbox message
      *
      * @param  string|null $idempotency_key idempotency_key (optional)
-     * @param  \Sendmux\Mailbox\Model\SendMailboxMessageBody|null $send_mailbox_message_body send_mailbox_message_body (optional)
+     * @param  \Qubrics\Mailbox\Model\SendMailboxMessageBody|null $send_mailbox_message_body send_mailbox_message_body (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxSendMessage'] to see the possible values for this operation
      *
@@ -26167,11 +26167,11 @@ class MailboxAPIApi
      */
     public function mailboxSendMessageAsyncWithHttpInfo(
         ?string $idempotency_key = null,
-        ?\Sendmux\Mailbox\Model\SendMailboxMessageBody $send_mailbox_message_body = null,
+        ?\Qubrics\Mailbox\Model\SendMailboxMessageBody $send_mailbox_message_body = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxSendMessage'][0]
     ): PromiseInterface {
-        $returnType = '\Sendmux\Mailbox\Model\MailboxSendResultResponse';
+        $returnType = '\Qubrics\Mailbox\Model\MailboxSendResultResponse';
         $request = $this->mailboxSendMessageRequest(
             $idempotency_key,
             $send_mailbox_message_body,
@@ -26222,7 +26222,7 @@ class MailboxAPIApi
      * Create request for operation 'mailboxSendMessage'
      *
      * @param  string|null $idempotency_key idempotency_key (optional)
-     * @param  \Sendmux\Mailbox\Model\SendMailboxMessageBody|null $send_mailbox_message_body send_mailbox_message_body (optional)
+     * @param  \Qubrics\Mailbox\Model\SendMailboxMessageBody|null $send_mailbox_message_body send_mailbox_message_body (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxSendMessage'] to see the possible values for this operation
      *
@@ -26231,7 +26231,7 @@ class MailboxAPIApi
      */
     public function mailboxSendMessageRequest(
         ?string $idempotency_key = null,
-        ?\Sendmux\Mailbox\Model\SendMailboxMessageBody $send_mailbox_message_body = null,
+        ?\Qubrics\Mailbox\Model\SendMailboxMessageBody $send_mailbox_message_body = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxSendMessage'][0]
     ): Request {
@@ -26350,7 +26350,7 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Sendmux\Mailbox\Model\MailboxRealtimeEvent|\Sendmux\Mailbox\Model\ApiError
+     * @return \Qubrics\Mailbox\Model\MailboxRealtimeEvent|\Qubrics\Mailbox\Model\ApiError
      */
     public function mailboxStreamEvents(
         ?string $event_types = null,
@@ -26360,7 +26360,7 @@ class MailboxAPIApi
         ?string $last_event_id2 = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxStreamEvents'][0]
-    ): \Sendmux\Mailbox\Model\MailboxRealtimeEvent|\Sendmux\Mailbox\Model\ApiError {
+    ): \Qubrics\Mailbox\Model\MailboxRealtimeEvent|\Qubrics\Mailbox\Model\ApiError {
         list($response) = $this->mailboxStreamEventsWithHttpInfo(
             $event_types,
             $last_event_id,
@@ -26388,7 +26388,7 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Sendmux\Mailbox\Model\MailboxRealtimeEvent|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Qubrics\Mailbox\Model\MailboxRealtimeEvent|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
      */
     public function mailboxStreamEventsWithHttpInfo(
         ?string $event_types = null,
@@ -26434,37 +26434,37 @@ class MailboxAPIApi
             switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\MailboxRealtimeEvent',
+                        '\Qubrics\Mailbox\Model\MailboxRealtimeEvent',
                         $request,
                         $response,
                     );
                 case 400:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 401:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 403:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 429:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 503:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
@@ -26485,7 +26485,7 @@ class MailboxAPIApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Sendmux\Mailbox\Model\MailboxRealtimeEvent',
+                '\Qubrics\Mailbox\Model\MailboxRealtimeEvent',
                 $request,
                 $response,
             );
@@ -26494,7 +26494,7 @@ class MailboxAPIApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\MailboxRealtimeEvent',
+                        '\Qubrics\Mailbox\Model\MailboxRealtimeEvent',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -26502,7 +26502,7 @@ class MailboxAPIApi
                 case 400:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -26510,7 +26510,7 @@ class MailboxAPIApi
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -26518,7 +26518,7 @@ class MailboxAPIApi
                 case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -26526,7 +26526,7 @@ class MailboxAPIApi
                 case 429:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -26534,7 +26534,7 @@ class MailboxAPIApi
                 case 503:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -26611,7 +26611,7 @@ class MailboxAPIApi
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxStreamEvents'][0]
     ): PromiseInterface {
-        $returnType = '\Sendmux\Mailbox\Model\MailboxRealtimeEvent';
+        $returnType = '\Qubrics\Mailbox\Model\MailboxRealtimeEvent';
         $request = $this->mailboxStreamEventsRequest(
             $event_types,
             $last_event_id,
@@ -26832,21 +26832,21 @@ class MailboxAPIApi
      *
      * @param  string $event_id event_id (required)
      * @param  string $if_match if_match (required)
-     * @param  \Sendmux\Mailbox\Model\PatchCalendarEventBody $patch_calendar_event_body patch_calendar_event_body (required)
+     * @param  \Qubrics\Mailbox\Model\PatchCalendarEventBody $patch_calendar_event_body patch_calendar_event_body (required)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxUpdateCalendarEvent'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Sendmux\Mailbox\Model\MailboxCalendarEventUpdatedResponse|\Sendmux\Mailbox\Model\ApiError
+     * @return \Qubrics\Mailbox\Model\MailboxCalendarEventUpdatedResponse|\Qubrics\Mailbox\Model\ApiError
      */
     public function mailboxUpdateCalendarEvent(
         string $event_id,
         string $if_match,
-        \Sendmux\Mailbox\Model\PatchCalendarEventBody $patch_calendar_event_body,
+        \Qubrics\Mailbox\Model\PatchCalendarEventBody $patch_calendar_event_body,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxUpdateCalendarEvent'][0]
-    ): \Sendmux\Mailbox\Model\MailboxCalendarEventUpdatedResponse|\Sendmux\Mailbox\Model\ApiError {
+    ): \Qubrics\Mailbox\Model\MailboxCalendarEventUpdatedResponse|\Qubrics\Mailbox\Model\ApiError {
         list($response) = $this->mailboxUpdateCalendarEventWithHttpInfo(
             $event_id,
             $if_match,
@@ -26864,18 +26864,18 @@ class MailboxAPIApi
      *
      * @param  string $event_id event_id (required)
      * @param  string $if_match if_match (required)
-     * @param  \Sendmux\Mailbox\Model\PatchCalendarEventBody $patch_calendar_event_body patch_calendar_event_body (required)
+     * @param  \Qubrics\Mailbox\Model\PatchCalendarEventBody $patch_calendar_event_body patch_calendar_event_body (required)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxUpdateCalendarEvent'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Sendmux\Mailbox\Model\MailboxCalendarEventUpdatedResponse|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Qubrics\Mailbox\Model\MailboxCalendarEventUpdatedResponse|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
      */
     public function mailboxUpdateCalendarEventWithHttpInfo(
         string $event_id,
         string $if_match,
-        \Sendmux\Mailbox\Model\PatchCalendarEventBody $patch_calendar_event_body,
+        \Qubrics\Mailbox\Model\PatchCalendarEventBody $patch_calendar_event_body,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxUpdateCalendarEvent'][0]
     ): array {
@@ -26912,67 +26912,67 @@ class MailboxAPIApi
             switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\MailboxCalendarEventUpdatedResponse',
+                        '\Qubrics\Mailbox\Model\MailboxCalendarEventUpdatedResponse',
                         $request,
                         $response,
                     );
                 case 400:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 401:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 403:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 404:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 409:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 413:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 422:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 429:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 500:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 503:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
@@ -26993,7 +26993,7 @@ class MailboxAPIApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Sendmux\Mailbox\Model\MailboxCalendarEventUpdatedResponse',
+                '\Qubrics\Mailbox\Model\MailboxCalendarEventUpdatedResponse',
                 $request,
                 $response,
             );
@@ -27002,7 +27002,7 @@ class MailboxAPIApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\MailboxCalendarEventUpdatedResponse',
+                        '\Qubrics\Mailbox\Model\MailboxCalendarEventUpdatedResponse',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -27010,7 +27010,7 @@ class MailboxAPIApi
                 case 400:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -27018,7 +27018,7 @@ class MailboxAPIApi
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -27026,7 +27026,7 @@ class MailboxAPIApi
                 case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -27034,7 +27034,7 @@ class MailboxAPIApi
                 case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -27042,7 +27042,7 @@ class MailboxAPIApi
                 case 409:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -27050,7 +27050,7 @@ class MailboxAPIApi
                 case 413:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -27058,7 +27058,7 @@ class MailboxAPIApi
                 case 422:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -27066,7 +27066,7 @@ class MailboxAPIApi
                 case 429:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -27074,7 +27074,7 @@ class MailboxAPIApi
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -27082,7 +27082,7 @@ class MailboxAPIApi
                 case 503:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -27100,7 +27100,7 @@ class MailboxAPIApi
      *
      * @param  string $event_id event_id (required)
      * @param  string $if_match if_match (required)
-     * @param  \Sendmux\Mailbox\Model\PatchCalendarEventBody $patch_calendar_event_body patch_calendar_event_body (required)
+     * @param  \Qubrics\Mailbox\Model\PatchCalendarEventBody $patch_calendar_event_body patch_calendar_event_body (required)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxUpdateCalendarEvent'] to see the possible values for this operation
      *
@@ -27110,7 +27110,7 @@ class MailboxAPIApi
     public function mailboxUpdateCalendarEventAsync(
         string $event_id,
         string $if_match,
-        \Sendmux\Mailbox\Model\PatchCalendarEventBody $patch_calendar_event_body,
+        \Qubrics\Mailbox\Model\PatchCalendarEventBody $patch_calendar_event_body,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxUpdateCalendarEvent'][0]
     ): PromiseInterface {
@@ -27135,7 +27135,7 @@ class MailboxAPIApi
      *
      * @param  string $event_id event_id (required)
      * @param  string $if_match if_match (required)
-     * @param  \Sendmux\Mailbox\Model\PatchCalendarEventBody $patch_calendar_event_body patch_calendar_event_body (required)
+     * @param  \Qubrics\Mailbox\Model\PatchCalendarEventBody $patch_calendar_event_body patch_calendar_event_body (required)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxUpdateCalendarEvent'] to see the possible values for this operation
      *
@@ -27145,11 +27145,11 @@ class MailboxAPIApi
     public function mailboxUpdateCalendarEventAsyncWithHttpInfo(
         string $event_id,
         string $if_match,
-        \Sendmux\Mailbox\Model\PatchCalendarEventBody $patch_calendar_event_body,
+        \Qubrics\Mailbox\Model\PatchCalendarEventBody $patch_calendar_event_body,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxUpdateCalendarEvent'][0]
     ): PromiseInterface {
-        $returnType = '\Sendmux\Mailbox\Model\MailboxCalendarEventUpdatedResponse';
+        $returnType = '\Qubrics\Mailbox\Model\MailboxCalendarEventUpdatedResponse';
         $request = $this->mailboxUpdateCalendarEventRequest(
             $event_id,
             $if_match,
@@ -27202,7 +27202,7 @@ class MailboxAPIApi
      *
      * @param  string $event_id event_id (required)
      * @param  string $if_match if_match (required)
-     * @param  \Sendmux\Mailbox\Model\PatchCalendarEventBody $patch_calendar_event_body patch_calendar_event_body (required)
+     * @param  \Qubrics\Mailbox\Model\PatchCalendarEventBody $patch_calendar_event_body patch_calendar_event_body (required)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxUpdateCalendarEvent'] to see the possible values for this operation
      *
@@ -27212,7 +27212,7 @@ class MailboxAPIApi
     public function mailboxUpdateCalendarEventRequest(
         string $event_id,
         string $if_match,
-        \Sendmux\Mailbox\Model\PatchCalendarEventBody $patch_calendar_event_body,
+        \Qubrics\Mailbox\Model\PatchCalendarEventBody $patch_calendar_event_body,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxUpdateCalendarEvent'][0]
     ): Request {
@@ -27358,22 +27358,22 @@ class MailboxAPIApi
      * Edit a saved draft
      *
      * @param  string $draft_id Stable draft ID. (required)
-     * @param  \Sendmux\Mailbox\Model\UpdateMailboxDraft $update_mailbox_draft update_mailbox_draft (required)
+     * @param  \Qubrics\Mailbox\Model\UpdateMailboxDraft $update_mailbox_draft update_mailbox_draft (required)
      * @param  string|null $if_match Current draft ETag; expected_revision is also required. (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxUpdateDraft'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Sendmux\Mailbox\Model\MailboxDraftResponse|\Sendmux\Mailbox\Model\ApiError
+     * @return \Qubrics\Mailbox\Model\MailboxDraftResponse|\Qubrics\Mailbox\Model\ApiError
      */
     public function mailboxUpdateDraft(
         string $draft_id,
-        \Sendmux\Mailbox\Model\UpdateMailboxDraft $update_mailbox_draft,
+        \Qubrics\Mailbox\Model\UpdateMailboxDraft $update_mailbox_draft,
         ?string $if_match = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxUpdateDraft'][0]
-    ): \Sendmux\Mailbox\Model\MailboxDraftResponse|\Sendmux\Mailbox\Model\ApiError {
+    ): \Qubrics\Mailbox\Model\MailboxDraftResponse|\Qubrics\Mailbox\Model\ApiError {
         list($response) = $this->mailboxUpdateDraftWithHttpInfo(
             $draft_id,
             $update_mailbox_draft,
@@ -27390,18 +27390,18 @@ class MailboxAPIApi
      * Edit a saved draft
      *
      * @param  string $draft_id Stable draft ID. (required)
-     * @param  \Sendmux\Mailbox\Model\UpdateMailboxDraft $update_mailbox_draft update_mailbox_draft (required)
+     * @param  \Qubrics\Mailbox\Model\UpdateMailboxDraft $update_mailbox_draft update_mailbox_draft (required)
      * @param  string|null $if_match Current draft ETag; expected_revision is also required. (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxUpdateDraft'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Sendmux\Mailbox\Model\MailboxDraftResponse|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Qubrics\Mailbox\Model\MailboxDraftResponse|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
      */
     public function mailboxUpdateDraftWithHttpInfo(
         string $draft_id,
-        \Sendmux\Mailbox\Model\UpdateMailboxDraft $update_mailbox_draft,
+        \Qubrics\Mailbox\Model\UpdateMailboxDraft $update_mailbox_draft,
         ?string $if_match = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxUpdateDraft'][0]
@@ -27439,67 +27439,67 @@ class MailboxAPIApi
             switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\MailboxDraftResponse',
+                        '\Qubrics\Mailbox\Model\MailboxDraftResponse',
                         $request,
                         $response,
                     );
                 case 400:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 401:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 403:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 404:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 409:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 413:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 422:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 429:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 500:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 503:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
@@ -27520,7 +27520,7 @@ class MailboxAPIApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Sendmux\Mailbox\Model\MailboxDraftResponse',
+                '\Qubrics\Mailbox\Model\MailboxDraftResponse',
                 $request,
                 $response,
             );
@@ -27529,7 +27529,7 @@ class MailboxAPIApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\MailboxDraftResponse',
+                        '\Qubrics\Mailbox\Model\MailboxDraftResponse',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -27537,7 +27537,7 @@ class MailboxAPIApi
                 case 400:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -27545,7 +27545,7 @@ class MailboxAPIApi
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -27553,7 +27553,7 @@ class MailboxAPIApi
                 case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -27561,7 +27561,7 @@ class MailboxAPIApi
                 case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -27569,7 +27569,7 @@ class MailboxAPIApi
                 case 409:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -27577,7 +27577,7 @@ class MailboxAPIApi
                 case 413:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -27585,7 +27585,7 @@ class MailboxAPIApi
                 case 422:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -27593,7 +27593,7 @@ class MailboxAPIApi
                 case 429:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -27601,7 +27601,7 @@ class MailboxAPIApi
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -27609,7 +27609,7 @@ class MailboxAPIApi
                 case 503:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -27626,7 +27626,7 @@ class MailboxAPIApi
      * Edit a saved draft
      *
      * @param  string $draft_id Stable draft ID. (required)
-     * @param  \Sendmux\Mailbox\Model\UpdateMailboxDraft $update_mailbox_draft update_mailbox_draft (required)
+     * @param  \Qubrics\Mailbox\Model\UpdateMailboxDraft $update_mailbox_draft update_mailbox_draft (required)
      * @param  string|null $if_match Current draft ETag; expected_revision is also required. (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxUpdateDraft'] to see the possible values for this operation
@@ -27636,7 +27636,7 @@ class MailboxAPIApi
      */
     public function mailboxUpdateDraftAsync(
         string $draft_id,
-        \Sendmux\Mailbox\Model\UpdateMailboxDraft $update_mailbox_draft,
+        \Qubrics\Mailbox\Model\UpdateMailboxDraft $update_mailbox_draft,
         ?string $if_match = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxUpdateDraft'][0]
@@ -27661,7 +27661,7 @@ class MailboxAPIApi
      * Edit a saved draft
      *
      * @param  string $draft_id Stable draft ID. (required)
-     * @param  \Sendmux\Mailbox\Model\UpdateMailboxDraft $update_mailbox_draft update_mailbox_draft (required)
+     * @param  \Qubrics\Mailbox\Model\UpdateMailboxDraft $update_mailbox_draft update_mailbox_draft (required)
      * @param  string|null $if_match Current draft ETag; expected_revision is also required. (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxUpdateDraft'] to see the possible values for this operation
@@ -27671,12 +27671,12 @@ class MailboxAPIApi
      */
     public function mailboxUpdateDraftAsyncWithHttpInfo(
         string $draft_id,
-        \Sendmux\Mailbox\Model\UpdateMailboxDraft $update_mailbox_draft,
+        \Qubrics\Mailbox\Model\UpdateMailboxDraft $update_mailbox_draft,
         ?string $if_match = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxUpdateDraft'][0]
     ): PromiseInterface {
-        $returnType = '\Sendmux\Mailbox\Model\MailboxDraftResponse';
+        $returnType = '\Qubrics\Mailbox\Model\MailboxDraftResponse';
         $request = $this->mailboxUpdateDraftRequest(
             $draft_id,
             $update_mailbox_draft,
@@ -27728,7 +27728,7 @@ class MailboxAPIApi
      * Create request for operation 'mailboxUpdateDraft'
      *
      * @param  string $draft_id Stable draft ID. (required)
-     * @param  \Sendmux\Mailbox\Model\UpdateMailboxDraft $update_mailbox_draft update_mailbox_draft (required)
+     * @param  \Qubrics\Mailbox\Model\UpdateMailboxDraft $update_mailbox_draft update_mailbox_draft (required)
      * @param  string|null $if_match Current draft ETag; expected_revision is also required. (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxUpdateDraft'] to see the possible values for this operation
@@ -27738,7 +27738,7 @@ class MailboxAPIApi
      */
     public function mailboxUpdateDraftRequest(
         string $draft_id,
-        \Sendmux\Mailbox\Model\UpdateMailboxDraft $update_mailbox_draft,
+        \Qubrics\Mailbox\Model\UpdateMailboxDraft $update_mailbox_draft,
         ?string $if_match = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxUpdateDraft'][0]
@@ -27868,21 +27868,21 @@ class MailboxAPIApi
      *
      * @param  string $folder_id folder_id (required)
      * @param  string|null $if_match if_match (optional)
-     * @param  \Sendmux\Mailbox\Model\PatchMailboxFolderBody|null $patch_mailbox_folder_body patch_mailbox_folder_body (optional)
+     * @param  \Qubrics\Mailbox\Model\PatchMailboxFolderBody|null $patch_mailbox_folder_body patch_mailbox_folder_body (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxUpdateFolder'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Sendmux\Mailbox\Model\MailboxFolderResponse|\Sendmux\Mailbox\Model\ApiError
+     * @return \Qubrics\Mailbox\Model\MailboxFolderResponse|\Qubrics\Mailbox\Model\ApiError
      */
     public function mailboxUpdateFolder(
         string $folder_id,
         ?string $if_match = null,
-        ?\Sendmux\Mailbox\Model\PatchMailboxFolderBody $patch_mailbox_folder_body = null,
+        ?\Qubrics\Mailbox\Model\PatchMailboxFolderBody $patch_mailbox_folder_body = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxUpdateFolder'][0]
-    ): \Sendmux\Mailbox\Model\MailboxFolderResponse|\Sendmux\Mailbox\Model\ApiError {
+    ): \Qubrics\Mailbox\Model\MailboxFolderResponse|\Qubrics\Mailbox\Model\ApiError {
         list($response) = $this->mailboxUpdateFolderWithHttpInfo(
             $folder_id,
             $if_match,
@@ -27900,18 +27900,18 @@ class MailboxAPIApi
      *
      * @param  string $folder_id folder_id (required)
      * @param  string|null $if_match if_match (optional)
-     * @param  \Sendmux\Mailbox\Model\PatchMailboxFolderBody|null $patch_mailbox_folder_body patch_mailbox_folder_body (optional)
+     * @param  \Qubrics\Mailbox\Model\PatchMailboxFolderBody|null $patch_mailbox_folder_body patch_mailbox_folder_body (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxUpdateFolder'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Sendmux\Mailbox\Model\MailboxFolderResponse|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Qubrics\Mailbox\Model\MailboxFolderResponse|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
      */
     public function mailboxUpdateFolderWithHttpInfo(
         string $folder_id,
         ?string $if_match = null,
-        ?\Sendmux\Mailbox\Model\PatchMailboxFolderBody $patch_mailbox_folder_body = null,
+        ?\Qubrics\Mailbox\Model\PatchMailboxFolderBody $patch_mailbox_folder_body = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxUpdateFolder'][0]
     ): array {
@@ -27948,31 +27948,31 @@ class MailboxAPIApi
             switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\MailboxFolderResponse',
+                        '\Qubrics\Mailbox\Model\MailboxFolderResponse',
                         $request,
                         $response,
                     );
                 case 400:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 404:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 409:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 413:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
@@ -27993,7 +27993,7 @@ class MailboxAPIApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Sendmux\Mailbox\Model\MailboxFolderResponse',
+                '\Qubrics\Mailbox\Model\MailboxFolderResponse',
                 $request,
                 $response,
             );
@@ -28002,7 +28002,7 @@ class MailboxAPIApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\MailboxFolderResponse',
+                        '\Qubrics\Mailbox\Model\MailboxFolderResponse',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -28010,7 +28010,7 @@ class MailboxAPIApi
                 case 400:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -28018,7 +28018,7 @@ class MailboxAPIApi
                 case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -28026,7 +28026,7 @@ class MailboxAPIApi
                 case 409:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -28034,7 +28034,7 @@ class MailboxAPIApi
                 case 413:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -28052,7 +28052,7 @@ class MailboxAPIApi
      *
      * @param  string $folder_id folder_id (required)
      * @param  string|null $if_match if_match (optional)
-     * @param  \Sendmux\Mailbox\Model\PatchMailboxFolderBody|null $patch_mailbox_folder_body patch_mailbox_folder_body (optional)
+     * @param  \Qubrics\Mailbox\Model\PatchMailboxFolderBody|null $patch_mailbox_folder_body patch_mailbox_folder_body (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxUpdateFolder'] to see the possible values for this operation
      *
@@ -28062,7 +28062,7 @@ class MailboxAPIApi
     public function mailboxUpdateFolderAsync(
         string $folder_id,
         ?string $if_match = null,
-        ?\Sendmux\Mailbox\Model\PatchMailboxFolderBody $patch_mailbox_folder_body = null,
+        ?\Qubrics\Mailbox\Model\PatchMailboxFolderBody $patch_mailbox_folder_body = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxUpdateFolder'][0]
     ): PromiseInterface {
@@ -28087,7 +28087,7 @@ class MailboxAPIApi
      *
      * @param  string $folder_id folder_id (required)
      * @param  string|null $if_match if_match (optional)
-     * @param  \Sendmux\Mailbox\Model\PatchMailboxFolderBody|null $patch_mailbox_folder_body patch_mailbox_folder_body (optional)
+     * @param  \Qubrics\Mailbox\Model\PatchMailboxFolderBody|null $patch_mailbox_folder_body patch_mailbox_folder_body (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxUpdateFolder'] to see the possible values for this operation
      *
@@ -28097,11 +28097,11 @@ class MailboxAPIApi
     public function mailboxUpdateFolderAsyncWithHttpInfo(
         string $folder_id,
         ?string $if_match = null,
-        ?\Sendmux\Mailbox\Model\PatchMailboxFolderBody $patch_mailbox_folder_body = null,
+        ?\Qubrics\Mailbox\Model\PatchMailboxFolderBody $patch_mailbox_folder_body = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxUpdateFolder'][0]
     ): PromiseInterface {
-        $returnType = '\Sendmux\Mailbox\Model\MailboxFolderResponse';
+        $returnType = '\Qubrics\Mailbox\Model\MailboxFolderResponse';
         $request = $this->mailboxUpdateFolderRequest(
             $folder_id,
             $if_match,
@@ -28154,7 +28154,7 @@ class MailboxAPIApi
      *
      * @param  string $folder_id folder_id (required)
      * @param  string|null $if_match if_match (optional)
-     * @param  \Sendmux\Mailbox\Model\PatchMailboxFolderBody|null $patch_mailbox_folder_body patch_mailbox_folder_body (optional)
+     * @param  \Qubrics\Mailbox\Model\PatchMailboxFolderBody|null $patch_mailbox_folder_body patch_mailbox_folder_body (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxUpdateFolder'] to see the possible values for this operation
      *
@@ -28164,7 +28164,7 @@ class MailboxAPIApi
     public function mailboxUpdateFolderRequest(
         string $folder_id,
         ?string $if_match = null,
-        ?\Sendmux\Mailbox\Model\PatchMailboxFolderBody $patch_mailbox_folder_body = null,
+        ?\Qubrics\Mailbox\Model\PatchMailboxFolderBody $patch_mailbox_folder_body = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxUpdateFolder'][0]
     ): Request {
@@ -28285,19 +28285,19 @@ class MailboxAPIApi
      *
      * Update mailbox sender identity
      *
-     * @param  \Sendmux\Mailbox\Model\UpdateMailboxIdentityBody|null $update_mailbox_identity_body update_mailbox_identity_body (optional)
+     * @param  \Qubrics\Mailbox\Model\UpdateMailboxIdentityBody|null $update_mailbox_identity_body update_mailbox_identity_body (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxUpdateIdentity'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Sendmux\Mailbox\Model\MailboxIdentityResponse|\Sendmux\Mailbox\Model\ApiError
+     * @return \Qubrics\Mailbox\Model\MailboxIdentityResponse|\Qubrics\Mailbox\Model\ApiError
      */
     public function mailboxUpdateIdentity(
-        ?\Sendmux\Mailbox\Model\UpdateMailboxIdentityBody $update_mailbox_identity_body = null,
+        ?\Qubrics\Mailbox\Model\UpdateMailboxIdentityBody $update_mailbox_identity_body = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxUpdateIdentity'][0]
-    ): \Sendmux\Mailbox\Model\MailboxIdentityResponse|\Sendmux\Mailbox\Model\ApiError {
+    ): \Qubrics\Mailbox\Model\MailboxIdentityResponse|\Qubrics\Mailbox\Model\ApiError {
         list($response) = $this->mailboxUpdateIdentityWithHttpInfo(
             $update_mailbox_identity_body,
             $mailbox_id,
@@ -28311,16 +28311,16 @@ class MailboxAPIApi
      *
      * Update mailbox sender identity
      *
-     * @param  \Sendmux\Mailbox\Model\UpdateMailboxIdentityBody|null $update_mailbox_identity_body update_mailbox_identity_body (optional)
+     * @param  \Qubrics\Mailbox\Model\UpdateMailboxIdentityBody|null $update_mailbox_identity_body update_mailbox_identity_body (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxUpdateIdentity'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Sendmux\Mailbox\Model\MailboxIdentityResponse|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Qubrics\Mailbox\Model\MailboxIdentityResponse|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
      */
     public function mailboxUpdateIdentityWithHttpInfo(
-        ?\Sendmux\Mailbox\Model\UpdateMailboxIdentityBody $update_mailbox_identity_body = null,
+        ?\Qubrics\Mailbox\Model\UpdateMailboxIdentityBody $update_mailbox_identity_body = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxUpdateIdentity'][0]
     ): array {
@@ -28355,43 +28355,43 @@ class MailboxAPIApi
             switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\MailboxIdentityResponse',
+                        '\Qubrics\Mailbox\Model\MailboxIdentityResponse',
                         $request,
                         $response,
                     );
                 case 400:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 401:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 403:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 413:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 422:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 503:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
@@ -28412,7 +28412,7 @@ class MailboxAPIApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Sendmux\Mailbox\Model\MailboxIdentityResponse',
+                '\Qubrics\Mailbox\Model\MailboxIdentityResponse',
                 $request,
                 $response,
             );
@@ -28421,7 +28421,7 @@ class MailboxAPIApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\MailboxIdentityResponse',
+                        '\Qubrics\Mailbox\Model\MailboxIdentityResponse',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -28429,7 +28429,7 @@ class MailboxAPIApi
                 case 400:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -28437,7 +28437,7 @@ class MailboxAPIApi
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -28445,7 +28445,7 @@ class MailboxAPIApi
                 case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -28453,7 +28453,7 @@ class MailboxAPIApi
                 case 413:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -28461,7 +28461,7 @@ class MailboxAPIApi
                 case 422:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -28469,7 +28469,7 @@ class MailboxAPIApi
                 case 503:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -28485,7 +28485,7 @@ class MailboxAPIApi
      *
      * Update mailbox sender identity
      *
-     * @param  \Sendmux\Mailbox\Model\UpdateMailboxIdentityBody|null $update_mailbox_identity_body update_mailbox_identity_body (optional)
+     * @param  \Qubrics\Mailbox\Model\UpdateMailboxIdentityBody|null $update_mailbox_identity_body update_mailbox_identity_body (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxUpdateIdentity'] to see the possible values for this operation
      *
@@ -28493,7 +28493,7 @@ class MailboxAPIApi
      * @return PromiseInterface
      */
     public function mailboxUpdateIdentityAsync(
-        ?\Sendmux\Mailbox\Model\UpdateMailboxIdentityBody $update_mailbox_identity_body = null,
+        ?\Qubrics\Mailbox\Model\UpdateMailboxIdentityBody $update_mailbox_identity_body = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxUpdateIdentity'][0]
     ): PromiseInterface {
@@ -28514,7 +28514,7 @@ class MailboxAPIApi
      *
      * Update mailbox sender identity
      *
-     * @param  \Sendmux\Mailbox\Model\UpdateMailboxIdentityBody|null $update_mailbox_identity_body update_mailbox_identity_body (optional)
+     * @param  \Qubrics\Mailbox\Model\UpdateMailboxIdentityBody|null $update_mailbox_identity_body update_mailbox_identity_body (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxUpdateIdentity'] to see the possible values for this operation
      *
@@ -28522,11 +28522,11 @@ class MailboxAPIApi
      * @return PromiseInterface
      */
     public function mailboxUpdateIdentityAsyncWithHttpInfo(
-        ?\Sendmux\Mailbox\Model\UpdateMailboxIdentityBody $update_mailbox_identity_body = null,
+        ?\Qubrics\Mailbox\Model\UpdateMailboxIdentityBody $update_mailbox_identity_body = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxUpdateIdentity'][0]
     ): PromiseInterface {
-        $returnType = '\Sendmux\Mailbox\Model\MailboxIdentityResponse';
+        $returnType = '\Qubrics\Mailbox\Model\MailboxIdentityResponse';
         $request = $this->mailboxUpdateIdentityRequest(
             $update_mailbox_identity_body,
             $mailbox_id,
@@ -28575,7 +28575,7 @@ class MailboxAPIApi
     /**
      * Create request for operation 'mailboxUpdateIdentity'
      *
-     * @param  \Sendmux\Mailbox\Model\UpdateMailboxIdentityBody|null $update_mailbox_identity_body update_mailbox_identity_body (optional)
+     * @param  \Qubrics\Mailbox\Model\UpdateMailboxIdentityBody|null $update_mailbox_identity_body update_mailbox_identity_body (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxUpdateIdentity'] to see the possible values for this operation
      *
@@ -28583,7 +28583,7 @@ class MailboxAPIApi
      * @return \GuzzleHttp\Psr7\Request
      */
     public function mailboxUpdateIdentityRequest(
-        ?\Sendmux\Mailbox\Model\UpdateMailboxIdentityBody $update_mailbox_identity_body = null,
+        ?\Qubrics\Mailbox\Model\UpdateMailboxIdentityBody $update_mailbox_identity_body = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxUpdateIdentity'][0]
     ): Request {
@@ -28686,21 +28686,21 @@ class MailboxAPIApi
      *
      * @param  string $message_id message_id (required)
      * @param  string|null $if_match if_match (optional)
-     * @param  \Sendmux\Mailbox\Model\PatchMailboxMessageBody|null $patch_mailbox_message_body patch_mailbox_message_body (optional)
+     * @param  \Qubrics\Mailbox\Model\PatchMailboxMessageBody|null $patch_mailbox_message_body patch_mailbox_message_body (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxUpdateMessage'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Sendmux\Mailbox\Model\MailboxMessageDetailResponse|\Sendmux\Mailbox\Model\ApiError
+     * @return \Qubrics\Mailbox\Model\MailboxMessageDetailResponse|\Qubrics\Mailbox\Model\ApiError
      */
     public function mailboxUpdateMessage(
         string $message_id,
         ?string $if_match = null,
-        ?\Sendmux\Mailbox\Model\PatchMailboxMessageBody $patch_mailbox_message_body = null,
+        ?\Qubrics\Mailbox\Model\PatchMailboxMessageBody $patch_mailbox_message_body = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxUpdateMessage'][0]
-    ): \Sendmux\Mailbox\Model\MailboxMessageDetailResponse|\Sendmux\Mailbox\Model\ApiError {
+    ): \Qubrics\Mailbox\Model\MailboxMessageDetailResponse|\Qubrics\Mailbox\Model\ApiError {
         list($response) = $this->mailboxUpdateMessageWithHttpInfo(
             $message_id,
             $if_match,
@@ -28718,18 +28718,18 @@ class MailboxAPIApi
      *
      * @param  string $message_id message_id (required)
      * @param  string|null $if_match if_match (optional)
-     * @param  \Sendmux\Mailbox\Model\PatchMailboxMessageBody|null $patch_mailbox_message_body patch_mailbox_message_body (optional)
+     * @param  \Qubrics\Mailbox\Model\PatchMailboxMessageBody|null $patch_mailbox_message_body patch_mailbox_message_body (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxUpdateMessage'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Sendmux\Mailbox\Model\MailboxMessageDetailResponse|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Qubrics\Mailbox\Model\MailboxMessageDetailResponse|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
      */
     public function mailboxUpdateMessageWithHttpInfo(
         string $message_id,
         ?string $if_match = null,
-        ?\Sendmux\Mailbox\Model\PatchMailboxMessageBody $patch_mailbox_message_body = null,
+        ?\Qubrics\Mailbox\Model\PatchMailboxMessageBody $patch_mailbox_message_body = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxUpdateMessage'][0]
     ): array {
@@ -28766,31 +28766,31 @@ class MailboxAPIApi
             switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\MailboxMessageDetailResponse',
+                        '\Qubrics\Mailbox\Model\MailboxMessageDetailResponse',
                         $request,
                         $response,
                     );
                 case 400:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 404:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 409:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 413:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
@@ -28811,7 +28811,7 @@ class MailboxAPIApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Sendmux\Mailbox\Model\MailboxMessageDetailResponse',
+                '\Qubrics\Mailbox\Model\MailboxMessageDetailResponse',
                 $request,
                 $response,
             );
@@ -28820,7 +28820,7 @@ class MailboxAPIApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\MailboxMessageDetailResponse',
+                        '\Qubrics\Mailbox\Model\MailboxMessageDetailResponse',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -28828,7 +28828,7 @@ class MailboxAPIApi
                 case 400:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -28836,7 +28836,7 @@ class MailboxAPIApi
                 case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -28844,7 +28844,7 @@ class MailboxAPIApi
                 case 409:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -28852,7 +28852,7 @@ class MailboxAPIApi
                 case 413:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -28870,7 +28870,7 @@ class MailboxAPIApi
      *
      * @param  string $message_id message_id (required)
      * @param  string|null $if_match if_match (optional)
-     * @param  \Sendmux\Mailbox\Model\PatchMailboxMessageBody|null $patch_mailbox_message_body patch_mailbox_message_body (optional)
+     * @param  \Qubrics\Mailbox\Model\PatchMailboxMessageBody|null $patch_mailbox_message_body patch_mailbox_message_body (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxUpdateMessage'] to see the possible values for this operation
      *
@@ -28880,7 +28880,7 @@ class MailboxAPIApi
     public function mailboxUpdateMessageAsync(
         string $message_id,
         ?string $if_match = null,
-        ?\Sendmux\Mailbox\Model\PatchMailboxMessageBody $patch_mailbox_message_body = null,
+        ?\Qubrics\Mailbox\Model\PatchMailboxMessageBody $patch_mailbox_message_body = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxUpdateMessage'][0]
     ): PromiseInterface {
@@ -28905,7 +28905,7 @@ class MailboxAPIApi
      *
      * @param  string $message_id message_id (required)
      * @param  string|null $if_match if_match (optional)
-     * @param  \Sendmux\Mailbox\Model\PatchMailboxMessageBody|null $patch_mailbox_message_body patch_mailbox_message_body (optional)
+     * @param  \Qubrics\Mailbox\Model\PatchMailboxMessageBody|null $patch_mailbox_message_body patch_mailbox_message_body (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxUpdateMessage'] to see the possible values for this operation
      *
@@ -28915,11 +28915,11 @@ class MailboxAPIApi
     public function mailboxUpdateMessageAsyncWithHttpInfo(
         string $message_id,
         ?string $if_match = null,
-        ?\Sendmux\Mailbox\Model\PatchMailboxMessageBody $patch_mailbox_message_body = null,
+        ?\Qubrics\Mailbox\Model\PatchMailboxMessageBody $patch_mailbox_message_body = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxUpdateMessage'][0]
     ): PromiseInterface {
-        $returnType = '\Sendmux\Mailbox\Model\MailboxMessageDetailResponse';
+        $returnType = '\Qubrics\Mailbox\Model\MailboxMessageDetailResponse';
         $request = $this->mailboxUpdateMessageRequest(
             $message_id,
             $if_match,
@@ -28972,7 +28972,7 @@ class MailboxAPIApi
      *
      * @param  string $message_id message_id (required)
      * @param  string|null $if_match if_match (optional)
-     * @param  \Sendmux\Mailbox\Model\PatchMailboxMessageBody|null $patch_mailbox_message_body patch_mailbox_message_body (optional)
+     * @param  \Qubrics\Mailbox\Model\PatchMailboxMessageBody|null $patch_mailbox_message_body patch_mailbox_message_body (optional)
      * @param  string|null $mailbox_id Mailbox public ID to target when the credential grants access to more than one mailbox. Omit when the credential is scoped to exactly one mailbox. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['mailboxUpdateMessage'] to see the possible values for this operation
      *
@@ -28982,7 +28982,7 @@ class MailboxAPIApi
     public function mailboxUpdateMessageRequest(
         string $message_id,
         ?string $if_match = null,
-        ?\Sendmux\Mailbox\Model\PatchMailboxMessageBody $patch_mailbox_message_body = null,
+        ?\Qubrics\Mailbox\Model\PatchMailboxMessageBody $patch_mailbox_message_body = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxUpdateMessage'][0]
     ): Request {
@@ -29110,14 +29110,14 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Sendmux\Mailbox\Model\MailboxAttachmentUploadResultResponse|\Sendmux\Mailbox\Model\ApiError
+     * @return \Qubrics\Mailbox\Model\MailboxAttachmentUploadResultResponse|\Qubrics\Mailbox\Model\ApiError
      */
     public function mailboxUploadAttachment(
         string $filename,
         ?\SplFileObject $body = null,
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxUploadAttachment'][0]
-    ): \Sendmux\Mailbox\Model\MailboxAttachmentUploadResultResponse|\Sendmux\Mailbox\Model\ApiError {
+    ): \Qubrics\Mailbox\Model\MailboxAttachmentUploadResultResponse|\Qubrics\Mailbox\Model\ApiError {
         list($response) = $this->mailboxUploadAttachmentWithHttpInfo(
             $filename,
             $body,
@@ -29139,7 +29139,7 @@ class MailboxAPIApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Sendmux\Mailbox\Model\MailboxAttachmentUploadResultResponse|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError|\Sendmux\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Qubrics\Mailbox\Model\MailboxAttachmentUploadResultResponse|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError|\Qubrics\Mailbox\Model\ApiError, HTTP status code, HTTP response headers (array of strings)
      */
     public function mailboxUploadAttachmentWithHttpInfo(
         string $filename,
@@ -29179,25 +29179,25 @@ class MailboxAPIApi
             switch ($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\MailboxAttachmentUploadResultResponse',
+                        '\Qubrics\Mailbox\Model\MailboxAttachmentUploadResultResponse',
                         $request,
                         $response,
                     );
                 case 400:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 413:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
                 case 503:
                     return $this->handleResponseWithDataType(
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $request,
                         $response,
                     );
@@ -29218,7 +29218,7 @@ class MailboxAPIApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Sendmux\Mailbox\Model\MailboxAttachmentUploadResultResponse',
+                '\Qubrics\Mailbox\Model\MailboxAttachmentUploadResultResponse',
                 $request,
                 $response,
             );
@@ -29227,7 +29227,7 @@ class MailboxAPIApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\MailboxAttachmentUploadResultResponse',
+                        '\Qubrics\Mailbox\Model\MailboxAttachmentUploadResultResponse',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -29235,7 +29235,7 @@ class MailboxAPIApi
                 case 400:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -29243,7 +29243,7 @@ class MailboxAPIApi
                 case 413:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -29251,7 +29251,7 @@ class MailboxAPIApi
                 case 503:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Sendmux\Mailbox\Model\ApiError',
+                        '\Qubrics\Mailbox\Model\ApiError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -29313,7 +29313,7 @@ class MailboxAPIApi
         ?string $mailbox_id = null,
         string $contentType = self::contentTypes['mailboxUploadAttachment'][0]
     ): PromiseInterface {
-        $returnType = '\Sendmux\Mailbox\Model\MailboxAttachmentUploadResultResponse';
+        $returnType = '\Qubrics\Mailbox\Model\MailboxAttachmentUploadResultResponse';
         $request = $this->mailboxUploadAttachmentRequest(
             $filename,
             $body,
@@ -29530,7 +29530,7 @@ class MailboxAPIApi
             }
         }
 
-        if ($dataType === '\Sendmux\Mailbox\Model\MailboxChangesResponse|\Sendmux\Mailbox\Model\MailboxTypedChangesResponse') {
+        if ($dataType === '\Qubrics\Mailbox\Model\MailboxChangesResponse|\Qubrics\Mailbox\Model\MailboxTypedChangesResponse') {
             foreach (explode('|', $dataType) as $variant) {
                 try {
                     $value = ObjectSerializer::deserialize($content, $variant, []);

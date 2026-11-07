@@ -5,7 +5,7 @@
  *
  * PHP version 8.1
  *
- * @package  Sendmux\Management
+ * @package  Qubrics\Management
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
@@ -26,18 +26,18 @@
  * Do not edit the class manually.
  */
 
-namespace Sendmux\Management\Model;
+namespace Qubrics\Management\Model;
 
 use ArrayAccess;
 use JsonSerializable;
 use InvalidArgumentException;
 use ReturnTypeWillChange;
-use Sendmux\Management\ObjectSerializer;
+use Qubrics\Management\ObjectSerializer;
 
 /**
  * WebhookDeliveryPayload Class Doc Comment
  *
- * @package  Sendmux\Management
+ * @package  Qubrics\Management
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
@@ -65,7 +65,7 @@ class WebhookDeliveryPayload implements ModelInterface, ArrayAccess, JsonSeriali
         'event_type' => 'string',
         'expires_at' => 'string',
         'id' => 'string',
-        'payload' => '\Sendmux\Management\Model\WebhookEventPayload'
+        'payload' => '\Qubrics\Management\Model\WebhookEventPayload'
     ];
 
     /**
@@ -545,9 +545,9 @@ class WebhookDeliveryPayload implements ModelInterface, ArrayAccess, JsonSeriali
     /**
      * Gets payload
      *
-     * @return \Sendmux\Management\Model\WebhookEventPayload|\Sendmux\Management\Model\CalendarWebhookEventPayload|\Sendmux\Management\Model\MailWebhookEventPayload
+     * @return \Qubrics\Management\Model\WebhookEventPayload|\Qubrics\Management\Model\CalendarWebhookEventPayload|\Qubrics\Management\Model\MailWebhookEventPayload
      */
-    public function getPayload(): \Sendmux\Management\Model\WebhookEventPayload|\Sendmux\Management\Model\CalendarWebhookEventPayload|\Sendmux\Management\Model\MailWebhookEventPayload
+    public function getPayload(): \Qubrics\Management\Model\WebhookEventPayload|\Qubrics\Management\Model\CalendarWebhookEventPayload|\Qubrics\Management\Model\MailWebhookEventPayload
     {
         return $this->container['payload'];
     }
@@ -555,11 +555,11 @@ class WebhookDeliveryPayload implements ModelInterface, ArrayAccess, JsonSeriali
     /**
      * Sets payload
      *
-     * @param \Sendmux\Management\Model\WebhookEventPayload|\Sendmux\Management\Model\CalendarWebhookEventPayload|\Sendmux\Management\Model\MailWebhookEventPayload $payload payload
+     * @param \Qubrics\Management\Model\WebhookEventPayload|\Qubrics\Management\Model\CalendarWebhookEventPayload|\Qubrics\Management\Model\MailWebhookEventPayload $payload payload
      *
      * @return $this
      */
-    public function setPayload(\Sendmux\Management\Model\WebhookEventPayload|\Sendmux\Management\Model\CalendarWebhookEventPayload|\Sendmux\Management\Model\MailWebhookEventPayload $payload): static
+    public function setPayload(\Qubrics\Management\Model\WebhookEventPayload|\Qubrics\Management\Model\CalendarWebhookEventPayload|\Qubrics\Management\Model\MailWebhookEventPayload $payload): static
     {
         if (is_null($payload)) {
             throw new InvalidArgumentException('non-nullable payload cannot be null');

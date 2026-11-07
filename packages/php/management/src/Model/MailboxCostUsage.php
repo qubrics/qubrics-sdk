@@ -5,7 +5,7 @@
  *
  * PHP version 8.1
  *
- * @package  Sendmux\Management
+ * @package  Qubrics\Management
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
@@ -26,18 +26,18 @@
  * Do not edit the class manually.
  */
 
-namespace Sendmux\Management\Model;
+namespace Qubrics\Management\Model;
 
 use ArrayAccess;
 use JsonSerializable;
 use InvalidArgumentException;
 use ReturnTypeWillChange;
-use Sendmux\Management\ObjectSerializer;
+use Qubrics\Management\ObjectSerializer;
 
 /**
  * MailboxCostUsage Class Doc Comment
  *
- * @package  Sendmux\Management
+ * @package  Qubrics\Management
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
@@ -61,13 +61,13 @@ class MailboxCostUsage implements ModelInterface, ArrayAccess, JsonSerializable
     protected static array $openAPITypes = [
         'currency' => 'string',
         'end' => '\DateTime',
-        'incoming' => '\Sendmux\Management\Model\MailboxCostUsageIncoming',
+        'incoming' => '\Qubrics\Management\Model\MailboxCostUsageIncoming',
         'mailbox_id' => 'string',
-        'outgoing' => '\Sendmux\Management\Model\MailboxCostUsageIncoming',
+        'outgoing' => '\Qubrics\Management\Model\MailboxCostUsageIncoming',
         'posted_amount' => 'string',
         'start' => '\DateTime',
         'state' => 'string',
-        'storage' => '\Sendmux\Management\Model\MailboxCostUsageStorage'
+        'storage' => '\Qubrics\Management\Model\MailboxCostUsageStorage'
     ];
 
     /**
@@ -462,9 +462,9 @@ class MailboxCostUsage implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Gets incoming
      *
-     * @return \Sendmux\Management\Model\MailboxCostUsageIncoming
+     * @return \Qubrics\Management\Model\MailboxCostUsageIncoming
      */
-    public function getIncoming(): \Sendmux\Management\Model\MailboxCostUsageIncoming
+    public function getIncoming(): \Qubrics\Management\Model\MailboxCostUsageIncoming
     {
         return $this->container['incoming'];
     }
@@ -472,11 +472,11 @@ class MailboxCostUsage implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets incoming
      *
-     * @param \Sendmux\Management\Model\MailboxCostUsageIncoming $incoming incoming
+     * @param \Qubrics\Management\Model\MailboxCostUsageIncoming $incoming incoming
      *
      * @return $this
      */
-    public function setIncoming(\Sendmux\Management\Model\MailboxCostUsageIncoming $incoming): static
+    public function setIncoming(\Qubrics\Management\Model\MailboxCostUsageIncoming $incoming): static
     {
         if (is_null($incoming)) {
             throw new InvalidArgumentException('non-nullable incoming cannot be null');
@@ -516,9 +516,9 @@ class MailboxCostUsage implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Gets outgoing
      *
-     * @return \Sendmux\Management\Model\MailboxCostUsageIncoming
+     * @return \Qubrics\Management\Model\MailboxCostUsageIncoming
      */
-    public function getOutgoing(): \Sendmux\Management\Model\MailboxCostUsageIncoming
+    public function getOutgoing(): \Qubrics\Management\Model\MailboxCostUsageIncoming
     {
         return $this->container['outgoing'];
     }
@@ -526,11 +526,11 @@ class MailboxCostUsage implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets outgoing
      *
-     * @param \Sendmux\Management\Model\MailboxCostUsageIncoming $outgoing outgoing
+     * @param \Qubrics\Management\Model\MailboxCostUsageIncoming $outgoing outgoing
      *
      * @return $this
      */
-    public function setOutgoing(\Sendmux\Management\Model\MailboxCostUsageIncoming $outgoing): static
+    public function setOutgoing(\Qubrics\Management\Model\MailboxCostUsageIncoming $outgoing): static
     {
         if (is_null($outgoing)) {
             throw new InvalidArgumentException('non-nullable outgoing cannot be null');
@@ -633,9 +633,9 @@ class MailboxCostUsage implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Gets storage
      *
-     * @return \Sendmux\Management\Model\MailboxCostUsageStorage
+     * @return \Qubrics\Management\Model\MailboxCostUsageStorage
      */
-    public function getStorage(): \Sendmux\Management\Model\MailboxCostUsageStorage
+    public function getStorage(): \Qubrics\Management\Model\MailboxCostUsageStorage
     {
         return $this->container['storage'];
     }
@@ -643,11 +643,11 @@ class MailboxCostUsage implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets storage
      *
-     * @param \Sendmux\Management\Model\MailboxCostUsageStorage $storage storage
+     * @param \Qubrics\Management\Model\MailboxCostUsageStorage $storage storage
      *
      * @return $this
      */
-    public function setStorage(\Sendmux\Management\Model\MailboxCostUsageStorage $storage): static
+    public function setStorage(\Qubrics\Management\Model\MailboxCostUsageStorage $storage): static
     {
         if (is_null($storage)) {
             throw new InvalidArgumentException('non-nullable storage cannot be null');

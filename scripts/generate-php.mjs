@@ -13,9 +13,9 @@ const generatedSourceDirs = ["mailbox", "management", "sending"].map((name) =>
 const surfaces = [
   {
     name: "sending",
-    artifactVersion: "2.1.1",
-    composerName: "sendmux/sending",
-    namespace: "Sendmux\\Sending",
+    artifactVersion: "3.0.0",
+    composerName: "qubrics/sending",
+    namespace: "Qubrics\\Sending",
     spec: ".codegen/openapi-sending.openapi-generator.codegen.json",
     tags: ["Attachments", "Emails", "Meta"],
     keySurface: "Sending",
@@ -23,8 +23,8 @@ const surfaces = [
   {
     name: "mailbox",
     artifactVersion: "3.0.0",
-    composerName: "sendmux/mailbox",
-    namespace: "Sendmux\\Mailbox",
+    composerName: "qubrics/mailbox",
+    namespace: "Qubrics\\Mailbox",
     spec: ".codegen/openapi-app.openapi-generator.codegen.json",
     tags: ["Mailbox API"],
     keySurface: "Mailbox",
@@ -33,19 +33,19 @@ const surfaces = [
     // regeneration that drops its class: the alias is written once the class has left the generated
     // output (scripts/deprecated-model-aliases.mjs). Remove an entry when that major ships.
     deprecatedModelAliases: [
-      { deprecated: "MailboxFolderDeletedResponseAllOfData", replacement: "MailboxDraftDeleteResponseAllOfData", removedIn: "sendmux/mailbox 4.0" },
+      { deprecated: "MailboxFolderDeletedResponseAllOfData", replacement: "MailboxDraftDeleteResponseAllOfData", removedIn: "qubrics/mailbox 4.0" },
       // Dropped once the API publishes nullable references as anyOf: [{ $ref }, { type: "null" }].
-      { deprecated: "MailboxMessageContentResponseAllOfData", replacement: "MailboxMessageContent", removedIn: "sendmux/mailbox 4.0" },
-      { deprecated: "MailboxRawBodyResponseAllOfData", replacement: "MailboxRawBody", removedIn: "sendmux/mailbox 4.0" },
-      { deprecated: "MailboxSubmissionEnvelopeRcptToInner", replacement: "MailboxSubmissionEnvelopeAddress", removedIn: "sendmux/mailbox 4.0" },
-      { deprecated: "MailboxThreadContentResponseAllOfData", replacement: "MailboxMessageContent", removedIn: "sendmux/mailbox 4.0" },
+      { deprecated: "MailboxMessageContentResponseAllOfData", replacement: "MailboxMessageContent", removedIn: "qubrics/mailbox 4.0" },
+      { deprecated: "MailboxRawBodyResponseAllOfData", replacement: "MailboxRawBody", removedIn: "qubrics/mailbox 4.0" },
+      { deprecated: "MailboxSubmissionEnvelopeRcptToInner", replacement: "MailboxSubmissionEnvelopeAddress", removedIn: "qubrics/mailbox 4.0" },
+      { deprecated: "MailboxThreadContentResponseAllOfData", replacement: "MailboxMessageContent", removedIn: "qubrics/mailbox 4.0" },
     ],
   },
   {
     name: "management",
-    artifactVersion: "2.1.1",
-    composerName: "sendmux/management",
-    namespace: "Sendmux\\Management",
+    artifactVersion: "3.0.0",
+    composerName: "qubrics/management",
+    namespace: "Qubrics\\Management",
     spec: ".codegen/openapi-app.openapi-generator.codegen.json",
     tags: [
       "Billing",
@@ -60,12 +60,6 @@ const surfaces = [
       "Webhooks",
     ],
     keySurface: "Root",
-    // Dropped once the API publishes nullable references as anyOf: [{ $ref }, { type: "null" }];
-    // see the mailbox table for the mechanism.
-    deprecatedModelAliases: [
-      { deprecated: "MailboxAppPasswordResultCredential", replacement: "MailboxCredential", removedIn: "sendmux/management 3.0" },
-      { deprecated: "ProviderCreateBodyQuotasPerDayAnyOf", replacement: "ProviderQuotaRange", removedIn: "sendmux/management 3.0" },
-    ],
   },
 ];
 
@@ -114,6 +108,9 @@ console.log("Generated PHP SDK packages");
 
 function writeFilteredSpec(surface) {
   const source = JSON.parse(readFileSync(join(root, surface.spec), "utf8"));
+  source.info.title = source.info.title.replaceAll("Sendmux", "Qubrics");
+  source.info.description = source.info.description?.replaceAll("Sendmux", "Qubrics");
+  source.servers = [{ url: surface.name === "sending" ? "https://smtp.qubrics.com/api/v1" : "https://app.qubrics.com/api/v1" }];
   prepareAttachmentUnion(source);
   prepareDeliveryGroupPrimitiveUnion(source, surface);
   prepareDiscriminatorPropertyTypes(source, surface);
@@ -349,6 +346,17 @@ function patchSerializer(surface, packageDir) {
                 if (isset($mapping[$data->{$discriminator}]) || is_subclass_of($subclass, $class)) {`,
     serializerPath,
   );
+  serializer = replaceOnce(
+    serializer,
+    `        if (is_array($data)) {
+            foreach ($data as $property => $value) {`,
+    String.raw`        if (is_array($data)) {
+            if ($data === [] && $type !== null && preg_match('/^(array<|map\[)/', $type)) {
+                return (object) [];
+            }
+            foreach ($data as $property => $value) {`,
+    serializerPath,
+  );
   if (surface.name !== "sending") {
     writeFileSync(serializerPath, serializer);
     return;
@@ -364,7 +372,7 @@ function patchSerializer(surface, packageDir) {
             return $data;
         }
 
-        if ($data instanceof \\Sendmux\\Sending\\Model\\EmailSendRequestDeliveryGroup) {
+        if ($data instanceof \\Qubrics\\Sending\\Model\\EmailSendRequestDeliveryGroup) {
             return $data->jsonSerialize();
         }
 `,
@@ -380,8 +388,14 @@ function patchSerializer(surface, packageDir) {
             return null;
         }
 
-        if ($class === \\Sendmux\\Sending\\Model\\EmailSendRequestDeliveryGroup::class) {
-            return new \\Sendmux\\Sending\\Model\\EmailSendRequestDeliveryGroup($data);
+        if (ltrim($class, '\\\\') === \\Qubrics\\Sending\\Model\\EmailSendRequestDeliveryGroup::class) {
+            if (is_string($data)) {
+                $decoded = json_decode($data);
+                if (json_last_error() === JSON_ERROR_NONE) {
+                    $data = $decoded;
+                }
+            }
+            return new \\Qubrics\\Sending\\Model\\EmailSendRequestDeliveryGroup($data);
         }
 `,
     serializerPath,
@@ -426,6 +440,17 @@ function patchSendingUploadArguments(packageDir) {
 `,
     filePath,
   );
+  const request = source.match(/public function sendingCompleteAttachmentUploadRequest\([\s\S]*?\n    \}/)?.[0];
+  if (!request) throw new Error(`Missing delegated upload request body in ${filePath}`);
+  source = replaceOnce(source, request, replaceOnce(request,
+    "        $operationHost = $this->config->getHost();",
+    String.raw`        $uploadToken = $headers['X-Qubrics-Upload-Token'] ?? $headers['X-Sendmux-Upload-Token'] ?? null;
+        if ($uploadToken !== null) {
+            $headers['X-Qubrics-Upload-Token'] ??= $uploadToken;
+            $headers['X-Sendmux-Upload-Token'] ??= $uploadToken;
+        }
+
+        $operationHost = $this->config->getHost();`, filePath), filePath);
   writeFileSync(filePath, source);
 }
 
@@ -507,10 +532,10 @@ ${useApiClasses}
 use GuzzleHttp\\Client;
 use GuzzleHttp\\ClientInterface;
 use GuzzleHttp\\HandlerStack;
-use Sendmux\\Core\\ApiKeySurface;
-use Sendmux\\Core\\Auth;
-use Sendmux\\Core\\RetryMiddleware;
-use Sendmux\\Core\\RetryOptions;
+use Qubrics\\Core\\ApiKeySurface;
+use Qubrics\\Core\\Auth;
+use Qubrics\\Core\\RetryMiddleware;
+use Qubrics\\Core\\RetryOptions;
 
 final class ClientFactory
 {

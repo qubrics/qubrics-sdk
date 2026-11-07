@@ -5,7 +5,7 @@
  *
  * PHP version 8.1
  *
- * @package  Sendmux\Management
+ * @package  Qubrics\Management
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
@@ -26,18 +26,18 @@
  * Do not edit the class manually.
  */
 
-namespace Sendmux\Management\Model;
+namespace Qubrics\Management\Model;
 
 use ArrayAccess;
 use JsonSerializable;
 use InvalidArgumentException;
 use ReturnTypeWillChange;
-use Sendmux\Management\ObjectSerializer;
+use Qubrics\Management\ObjectSerializer;
 
 /**
  * ReplaceMailboxSendPolicy Class Doc Comment
  *
- * @package  Sendmux\Management
+ * @package  Qubrics\Management
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
@@ -59,7 +59,7 @@ class ReplaceMailboxSendPolicy implements ModelInterface, ArrayAccess, JsonSeria
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'policy' => '\Sendmux\Management\Model\MailboxSendPolicy'
+        'policy' => '\Qubrics\Management\Model\MailboxSendPolicy'
     ];
 
     /**
@@ -270,9 +270,9 @@ class ReplaceMailboxSendPolicy implements ModelInterface, ArrayAccess, JsonSeria
     /**
      * Gets policy
      *
-     * @return \Sendmux\Management\Model\MailboxSendPolicy
+     * @return \Qubrics\Management\Model\MailboxSendPolicy
      */
-    public function getPolicy(): \Sendmux\Management\Model\MailboxSendPolicy
+    public function getPolicy(): \Qubrics\Management\Model\MailboxSendPolicy
     {
         return $this->container['policy'];
     }
@@ -280,11 +280,11 @@ class ReplaceMailboxSendPolicy implements ModelInterface, ArrayAccess, JsonSeria
     /**
      * Sets policy
      *
-     * @param \Sendmux\Management\Model\MailboxSendPolicy $policy Complete replacement policy; omitted settings return to their defaults.
+     * @param \Qubrics\Management\Model\MailboxSendPolicy $policy Complete replacement policy; omitted settings return to their defaults.
      *
      * @return $this
      */
-    public function setPolicy(\Sendmux\Management\Model\MailboxSendPolicy $policy): static
+    public function setPolicy(\Qubrics\Management\Model\MailboxSendPolicy $policy): static
     {
         if (is_null($policy)) {
             throw new InvalidArgumentException('non-nullable policy cannot be null');
