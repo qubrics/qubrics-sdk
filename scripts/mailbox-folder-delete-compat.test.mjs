@@ -12,9 +12,9 @@ function runImport(command, args, env = process.env) {
 test("PHP preserves the old folder-delete model class for existing callers", () => {
   runImport("php", ["-r", String.raw`
 require 'vendor/autoload.php';
-$data = new Sendmux\Mailbox\Model\MailboxFolderDeletedResponseAllOfData(['deleted' => true, 'id' => 'fld_compat']);
-if (!$data instanceof Sendmux\Mailbox\Model\MailboxDraftDeleteResponseAllOfData) throw new RuntimeException('Old model has a different type');
-$response = new Sendmux\Mailbox\Model\MailboxFolderDeletedResponse(['data' => $data]);
+$data = new Qubrics\Mailbox\Model\MailboxFolderDeletedResponseAllOfData(['deleted' => true, 'id' => 'fld_compat']);
+if (!$data instanceof Qubrics\Mailbox\Model\MailboxDraftDeleteResponseAllOfData) throw new RuntimeException('Old model has a different type');
+$response = new Qubrics\Mailbox\Model\MailboxFolderDeletedResponse(['data' => $data]);
 if ($response->getData() !== $data || json_decode(json_encode($data), true) !== ['deleted' => true, 'id' => 'fld_compat']) throw new RuntimeException('Old model no longer round-trips');
 `]);
 });
