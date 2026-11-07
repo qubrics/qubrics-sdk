@@ -6,6 +6,22 @@
 
 * Add one delivery group or a list of `delivery_group` IDs to email send requests.
 
+## [1.6.0](https://github.com/qubrics/qubrics-sdk/compare/ruby-sending/v1.5.0...ruby-sending/v1.6.0) (2026-11-07)
+
+
+### Features
+
+* add compatible Qubrics integration aliases ([dff5cb8](https://github.com/qubrics/qubrics-sdk/commit/dff5cb89bccb5840d55071d23f79ff88c7e58040))
+* **mailbox:** expose durable drafts and agent-email workflows ([bb2f462](https://github.com/qubrics/qubrics-sdk/commit/bb2f462447affd43b3b175b9625068f1a02e3172))
+* preserve integration contracts with Qubrics aliases ([722fbab](https://github.com/qubrics/qubrics-sdk/commit/722fbab2f98248d17b4878dd5149a35a711d5a18))
+
+
+### Bug Fixes
+
+* preserve calendar safety across current contracts ([b53f946](https://github.com/qubrics/qubrics-sdk/commit/b53f9466159caa89892d47641e243442ef993f77))
+* preserve legacy SDK compatibility with dual aliases ([4910037](https://github.com/qubrics/qubrics-sdk/commit/491003792dd742cb2c83e4a09501abdf4f4458c9))
+* **sdk:** preserve timestamps and fixture prerequisites ([894ee58](https://github.com/qubrics/qubrics-sdk/commit/894ee580c8331ac19f80a3778300f265a1a39300))
+
 ## [1.5.0](https://github.com/Sendmux/sendmux-sdk/compare/ruby-sending/v1.4.0...ruby-sending/v1.5.0) (2026-09-19)
 
 
