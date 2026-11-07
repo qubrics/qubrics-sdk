@@ -1,10 +1,11 @@
 {
-  "name": "@sendmux/cli",
+  "name": "@qubrics/cli",
   "version": "1.7.2",
   "license": "MIT",
   "type": "module",
   "bin": {
-    "sendmux": "./bin/run.js"
+    "qubrics": "./bin/run.js",
+    "sendmux": "./bin/sendmux.js"
   },
   "exports": {
     ".": "./dist/index.js"
@@ -19,11 +20,12 @@
   ],
   "scripts": {
     "build": "tsc -b tsconfig.json && oclif manifest",
-    "pack:tarballs": "node ../../../scripts/pack-cli-tarballs.mjs"
+    "pack:tarballs": "node ../../../scripts/pack-cli-tarballs.mjs",
+    "pretarball": "node bin/prepare-tarball.mjs"
   },
   "dependencies": {
     "@oclif/core": "4.11.4",
-    "@sendmux/sdk": "workspace:*"
+    "@qubrics/sdk": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "22.19.19",
@@ -31,7 +33,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Sendmux/sendmux-sdk.git",
+    "url": "git+https://github.com/qubrics/qubrics-sdk.git",
     "directory": "packages/ts/cli"
   },
   "publishConfig": {
@@ -39,7 +41,8 @@
     "registry": "https://registry.npmjs.org/"
   },
   "oclif": {
-    "bin": "sendmux",
+    "bin": "qubrics",
+    "binAliases": ["sendmux"],
     "dirname": "sendmux",
     "commands": "./dist/commands",
     "topicSeparator": ":",
@@ -54,7 +57,7 @@
         "description": "Management API commands"
       },
       "profiles": {
-        "description": "Manage local Sendmux CLI profiles"
+        "description": "Manage local Qubrics CLI profiles"
       },
       "sending": {
         "description": "Sending API commands"

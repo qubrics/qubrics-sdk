@@ -35,7 +35,7 @@ import os
 from langchain_sendmux import SendmuxToolkit
 
 toolkit = SendmuxToolkit(
-    access_token=lambda: os.environ["SENDMUX_ACCESS_TOKEN"],
+    access_token=lambda: os.environ["QUBRICS_ACCESS_TOKEN"],
     default_from="agent@yourdomain.dev",
 )
 tools = toolkit.get_tools()
@@ -53,7 +53,7 @@ from langchain.agents import create_agent
 from langchain_sendmux import SendmuxToolkit
 
 smx = SendmuxToolkit(
-    api_key=os.environ["SENDMUX_API_KEY"],
+    api_key=os.environ["QUBRICS_API_KEY"],
     default_from="agent@yourdomain.dev",
 )
 
@@ -143,4 +143,4 @@ Details: [idempotency](https://sendmux.ai/docs/guides/idempotency).
 
 ## Licence
 
-MIT. See the [licence file](https://github.com/Sendmux/sendmux-sdk/blob/main/LICENSE).
+MIT. See the [licence file](https://github.com/qubrics/qubrics-sdk/blob/main/LICENSE).

@@ -27,7 +27,9 @@ if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1]
   run(bundle, ["exec", "rubocop", "packages/ruby"]);
   run(bundle, ["exec", "ruby", "-Ipackages/ruby/tests", "packages/ruby/tests/test_core.rb"]);
   run(bundle, ["exec", "ruby", "-Ipackages/ruby/tests", "packages/ruby/tests/test_connection.rb"]);
+  run(bundle, ["exec", "ruby", "-Ipackages/ruby/tests", "packages/ruby/tests/test_environment.rb"]);
   run(bundle, ["exec", "ruby", "-Ipackages/ruby/tests", "packages/ruby/tests/test_oauth_retry.rb"]);
+  run(bundle, ["exec", "ruby", "-Ipackages/ruby/tests", "packages/ruby/tests/test_delegated_upload.rb"]);
   run(bundle, ["exec", "ruby", "-Ipackages/ruby/tests", "packages/ruby/tests/test_management_validation.rb"]);
   run(bundle, ["exec", "ruby", "-Ipackages/ruby/tests", "packages/ruby/tests/test_datetime_contract.rb"]);
   run(bundle, ["exec", "ruby", "-Ipackages/ruby/tests", "packages/ruby/tests/test_mailbox_deprecated_aliases.rb"]);
@@ -126,7 +128,9 @@ function checkGeneratedRubyHeaderStringification() {
   );
   for (const expected of [
     "def sending_upload_attachment(content_length, filename, body, opts = {})",
-    "def sending_complete_attachment_upload(x_sendmux_upload_token, content_length, upload_id, body, opts = {})",
+    "def sending_complete_attachment_upload(content_length, upload_id, body, opts = {}, legacy_opts = nil)",
+    "header_params[:'X-Qubrics-Upload-Token'] = opts[:'x_qubrics_upload_token']",
+    "header_params[:'X-Sendmux-Upload-Token'] = opts[:'x_sendmux_upload_token']",
     "header_params[:'Content-Length'] = content_length",
     "content_length < 1",
   ]) {

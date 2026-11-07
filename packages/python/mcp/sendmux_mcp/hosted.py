@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import os
-from collections.abc import AsyncIterator, Sequence
+from collections.abc import AsyncIterator, Mapping, Sequence
 from contextlib import asynccontextmanager
 from dataclasses import dataclass
 from urllib.parse import urlparse
@@ -9,8 +9,11 @@ from urllib.parse import urlparse
 import httpx
 import uvicorn
 from fastmcp import FastMCP
+from fastmcp.server.auth import RemoteAuthProvider
 from fastmcp.server.auth.providers.jwt import JWTVerifier
 from fastmcp.server.middleware import AuthMiddleware
+from mcp.server.auth.routes import build_resource_metadata_url, create_protected_resource_routes
+from pydantic import AnyHttpUrl
 from starlette.middleware import Middleware
 from starlette.middleware.cors import CORSMiddleware
 from starlette.requests import Request
@@ -19,10 +22,11 @@ from starlette.routing import Route
 from starlette.types import ASGIApp
 from starlette.applications import Starlette
 
-from sendmux_mcp.config import DEFAULT_APP_BASE_URL, ServerConfig, Surface, config_from_env, parse_csv
-from sendmux_mcp.a2a import A2A_RESOURCE_URL, A2ATokenVerifier, build_a2a_http_components
+from sendmux_mcp.config import DEFAULT_APP_BASE_URL, ServerConfig, Surface, config_from_env, env_value, parse_csv
+from sendmux_mcp.a2a import A2A_IDENTITIES, A2A_RESOURCE_URL, A2ATokenVerifier, build_a2a_http_components
 from sendmux_mcp.hosted_auth import (
     HOSTED_MCP_DISCOVERY_SCOPES,
+    HOSTED_MCP_RESOURCE_URLS,
     HostedAuthConfig,
     create_remote_auth_provider,
     hosted_mcp_resource_url,
@@ -35,7 +39,7 @@ from sendmux_mcp.server import SENDMUX_MCP_VERSION, create_server
 from sendmux_mcp.specs import load_spec, prepare_for_fastmcp
 
 HOSTED_SURFACES: tuple[Surface, ...] = ("mailbox", "management", "sending")
-DEFAULT_MCP_RESOURCE_BASE_URL = "https://mcp.sendmux.ai"
+DEFAULT_MCP_RESOURCE_BASE_URL = "https://mcp.qubrics.com"
 DEFAULT_MCP_APP_ORIGIN = "https://app.sendmux.ai"
 DEFAULT_MCP_PATH = "/mcp"
 HOSTED_CORS_ALLOWED_HEADERS = (
@@ -54,7 +58,7 @@ HOSTED_CORS_ALLOWED_METHODS = ("GET", "POST", "DELETE", "OPTIONS")
 
 @dataclass(frozen=True)
 class HostedServerRuntimeConfig:
-    issuer: str
+    issuer: str | list[str]
     authorization_servers: tuple[str, ...]
     jwks_uri: str
     resource_base_url: str
@@ -69,17 +73,18 @@ class HostedServerRuntimeConfig:
 
 
 def hosted_runtime_config_from_env() -> HostedServerRuntimeConfig:
-    app_origin = os.environ.get("SENDMUX_MCP_APP_ORIGIN") or origin_from_url(
-        os.environ.get("SENDMUX_APP_BASE_URL", DEFAULT_APP_BASE_URL)
+    app_origin = env_value("SENDMUX_MCP_APP_ORIGIN") or origin_from_url(
+        env_value("SENDMUX_APP_BASE_URL", DEFAULT_APP_BASE_URL)
     )
-    resource_base_url = os.environ.get("SENDMUX_MCP_RESOURCE_BASE_URL", DEFAULT_MCP_RESOURCE_BASE_URL)
-    mcp_path = os.environ.get("SENDMUX_MCP_PATH", DEFAULT_MCP_PATH)
-    issuer = os.environ.get("SENDMUX_MCP_OAUTH_ISSUER", app_origin)
-    authorization_servers = parse_csv(os.environ.get("SENDMUX_MCP_AUTHORIZATION_SERVERS")) or (issuer,)
-    jwks_uri = os.environ.get("SENDMUX_MCP_JWKS_URI", f"{app_origin}/.well-known/jwks.json")
-    proxy_url = os.environ.get("SENDMUX_MCP_PROXY_URL", f"{app_origin}/api/internal/mcp/proxy")
+    resource_base_url = env_value("SENDMUX_MCP_RESOURCE_BASE_URL", DEFAULT_MCP_RESOURCE_BASE_URL)
+    mcp_path = env_value("SENDMUX_MCP_PATH", DEFAULT_MCP_PATH)
+    issuers = parse_csv(env_value("SENDMUX_MCP_OAUTH_ISSUER")) or (app_origin,)
+    issuer: str | list[str] = issuers[0] if len(issuers) == 1 else list(issuers)
+    authorization_servers = parse_csv(env_value("SENDMUX_MCP_AUTHORIZATION_SERVERS")) or issuers
+    jwks_uri = env_value("SENDMUX_MCP_JWKS_URI", f"{app_origin}/.well-known/jwks.json")
+    proxy_url = env_value("SENDMUX_MCP_PROXY_URL", f"{app_origin}/api/internal/mcp/proxy")
     allowed_origins = normalise_hosted_allowed_origins(
-        parse_csv(os.environ.get("SENDMUX_MCP_ALLOWED_ORIGINS")) or default_hosted_allowed_origins(app_origin)
+        parse_csv(env_value("SENDMUX_MCP_ALLOWED_ORIGINS")) or default_hosted_allowed_origins(app_origin)
     )
 
     return HostedServerRuntimeConfig(
@@ -90,10 +95,10 @@ def hosted_runtime_config_from_env() -> HostedServerRuntimeConfig:
         proxy_url=proxy_url,
         internal_bearer_token=os.environ.get("INTERNAL_API_SECRET"),
         mcp_path=mcp_path,
-        host=os.environ.get("SENDMUX_MCP_HOST", "0.0.0.0"),
-        port=int(os.environ.get("SENDMUX_MCP_PORT", "8765")),
+        host=env_value("SENDMUX_MCP_HOST", "0.0.0.0"),
+        port=int(env_value("SENDMUX_MCP_PORT", "8765")),
         stateless_http=True,
-        scopes_supported=parse_csv(os.environ.get("SENDMUX_MCP_SCOPES_SUPPORTED")) or HOSTED_MCP_DISCOVERY_SCOPES,
+        scopes_supported=parse_csv(env_value("SENDMUX_MCP_SCOPES_SUPPORTED")) or HOSTED_MCP_DISCOVERY_SCOPES,
         allowed_origins=allowed_origins,
     )
 
@@ -169,9 +174,23 @@ def create_hosted_http_app(
 ) -> Starlette:
     runtime = runtime or hosted_runtime_config_from_env()
     server = create_hosted_server(runtime)
+    resource_aliases = (
+        HOSTED_MCP_RESOURCE_URLS
+        if hosted_mcp_resource_url(runtime.resource_base_url, runtime.mcp_path) in HOSTED_MCP_RESOURCE_URLS
+        else ()
+    )
+    resource_metadata_urls = {
+        urlparse(resource).netloc: str(build_resource_metadata_url(AnyHttpUrl(resource)))
+        for resource in resource_aliases
+    }
     app = server.http_app(
         path=runtime.mcp_path,
-        middleware=hosted_http_middleware(runtime.allowed_origins, runtime.scopes_supported),
+        middleware=hosted_http_middleware(
+            runtime.allowed_origins,
+            runtime.scopes_supported,
+            resource_metadata_urls=resource_metadata_urls,
+            resource_path=runtime.mcp_path,
+        ),
         stateless_http=runtime.stateless_http,
         transport="http",
     )
@@ -181,6 +200,27 @@ def create_hosted_http_app(
     )
     mcp_hostname = urlparse(runtime.resource_base_url).hostname
     assert mcp_hostname is not None
+    metadata_routes_by_host: dict[str, Route] = {}
+    if resource_aliases:
+        auth = server.auth
+        assert isinstance(auth, RemoteAuthProvider)
+        for resource in resource_aliases:
+            metadata_routes_by_host[urlparse(resource).netloc] = create_protected_resource_routes(
+                resource_url=AnyHttpUrl(resource),
+                authorization_servers=auth.authorization_servers,
+                scopes_supported=auth.scopes_supported,
+                resource_name=auth.resource_name,
+                resource_documentation=auth.resource_documentation,
+            )[0]
+
+    async def mcp_resource_metadata(request: Request) -> ASGIApp:
+        return metadata_routes_by_host.get(request.url.netloc.lower(), mcp_metadata_route).handle
+
+    if metadata_routes_by_host:
+        scoped_metadata_route = Route(mcp_metadata_route.path, endpoint=mcp_resource_metadata, methods=[])
+        app.router.routes = [
+            scoped_metadata_route if route is mcp_metadata_route else route for route in app.router.routes
+        ]
 
     manifests = []
     for surface in HOSTED_SURFACES:
@@ -188,36 +228,52 @@ def create_hosted_http_app(
         document = prepare_for_fastmcp(load_spec(surface_config), base_url=surface_config.api_base_url)
         manifests.append(build_hosted_operation_manifest(document, surface))
 
-    verifier = a2a_token_verifier or JWTVerifier(
-        jwks_uri=runtime.jwks_uri,
-        issuer=runtime.issuer,
-        audience=A2A_RESOURCE_URL,
-    )
-    a2a_components = build_a2a_http_components(
-        manifests=tuple(manifests),
-        token_verifier=verifier,
-        proxy_config=HostedProxyConfig(
-            proxy_url=runtime.proxy_url,
-            upstream_base_url=A2A_RESOURCE_URL,
-            internal_bearer_token=runtime.internal_bearer_token,
-            resource=A2A_RESOURCE_URL,
-            protocol="a2a",
-        ),
-        proxy_transport=a2a_proxy_transport,
-    )
+    a2a_components_by_host = {}
+    for resource in A2A_IDENTITIES:
+        a2a_components_by_host[urlparse(resource).netloc] = build_a2a_http_components(
+            manifests=tuple(manifests),
+            token_verifier=a2a_token_verifier or JWTVerifier(
+                jwks_uri=runtime.jwks_uri,
+                issuer=runtime.issuer,
+                audience=resource,
+            ),
+            proxy_config=HostedProxyConfig(
+                proxy_url=runtime.proxy_url,
+                upstream_base_url=resource,
+                internal_bearer_token=runtime.internal_bearer_token,
+                resource=resource,
+                protocol="a2a",
+            ),
+            proxy_transport=a2a_proxy_transport,
+        )
+    legacy_a2a = a2a_components_by_host[urlparse(A2A_RESOURCE_URL).netloc]
+    a2a_routes_by_host = {
+        host: {route.path: route for route in components.routes if isinstance(route, Route)}
+        for host, components in a2a_components_by_host.items()
+    }
+    legacy_a2a_routes = a2a_routes_by_host[urlparse(A2A_RESOURCE_URL).netloc]
+
+    async def a2a_route(request: Request) -> ASGIApp:
+        routes = a2a_routes_by_host.get(request.url.netloc.lower(), legacy_a2a_routes)
+        return routes[request.url.path].handle
+
     a2a_metadata_route = next(
-        route for route in a2a_components.routes if isinstance(route, Route) and route.path == metadata_path
+        route for route in legacy_a2a.routes if isinstance(route, Route) and route.path == metadata_path
     )
 
     async def root_resource_metadata(request: Request) -> ASGIApp:
-        if request.url.hostname == mcp_hostname:
+        if request.url.netloc.lower() in metadata_routes_by_host:
+            return await mcp_resource_metadata(request)
+        if not metadata_routes_by_host and request.url.hostname == mcp_hostname:
             return mcp_metadata_route.handle
-        return a2a_metadata_route.handle
+        return await a2a_route(request)
 
     # Let the selected resource route own method validation and its Allow header.
     root_metadata_route = Route(metadata_path, endpoint=root_resource_metadata, methods=[])
     app.router.routes[0:0] = [
-        root_metadata_route if route is a2a_metadata_route else route for route in a2a_components.routes
+        root_metadata_route if route is a2a_metadata_route else Route(route.path, endpoint=a2a_route, methods=[])
+        for route in legacy_a2a.routes
+        if isinstance(route, Route)
     ]
 
     original_lifespan = app.router.lifespan_context
@@ -228,8 +284,9 @@ def create_hosted_http_app(
             async with original_lifespan(application):
                 yield
         finally:
-            await a2a_components.request_handler.aclose()
-            await a2a_components.proxy.aclose()
+            for components in a2a_components_by_host.values():
+                await components.request_handler.aclose()
+                await components.proxy.aclose()
 
     app.router.lifespan_context = hosted_lifespan
     return app
@@ -238,6 +295,9 @@ def create_hosted_http_app(
 def hosted_http_middleware(
     allowed_origins: Sequence[str] | None = None,
     challenge_scopes: Sequence[str] = HOSTED_MCP_DISCOVERY_SCOPES,
+    *,
+    resource_metadata_urls: Mapping[str, str] | None = None,
+    resource_path: str = DEFAULT_MCP_PATH,
 ) -> list[Middleware]:
     origins = normalise_hosted_allowed_origins(
         allowed_origins or default_hosted_allowed_origins(DEFAULT_MCP_APP_ORIGIN)
@@ -246,7 +306,12 @@ def hosted_http_middleware(
         posthog_exception_middleware(),
         Middleware(OriginGuardMiddleware, allowed_origins=origins),
         Middleware(MCPHeaderGuardMiddleware, allowed_preflight_headers=HOSTED_CORS_ALLOWED_HEADERS),
-        Middleware(BearerScopeChallengeMiddleware, scopes=challenge_scopes),
+        Middleware(
+            BearerScopeChallengeMiddleware,
+            scopes=challenge_scopes,
+            resource_metadata_urls=resource_metadata_urls,
+            resource_path=resource_path,
+        ),
         Middleware(
             CORSMiddleware,
             allow_origins=list(origins),

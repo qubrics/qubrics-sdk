@@ -69,7 +69,7 @@ async function fixture(t, options = {}) {
   const directory = mkdtempSync(join(tmpdir(), "sendmux-php-publish-"));
   const sdk = join(directory, "sdk");
   const split = join(directory, "split");
-  const remote = join(directory, "sendmux-php-mailbox.git");
+  const remote = join(directory, "qubrics-php-mailbox.git");
   const git = (repo, ...args) => {
     assert.ok(resolve(repo).startsWith(`${directory}/`), "PHP Git fixture escaped mkdtemp");
     return execute("git", ["-C", repo, ...args]);
@@ -86,7 +86,7 @@ async function fixture(t, options = {}) {
   }
   mkdirSync(join(sdk, "packages/php/mailbox"), { recursive: true });
   mkdirSync(join(sdk, "packages/python/mcp/sendmux_mcp/openapi"), { recursive: true });
-  const files = { "composer.json": JSON.stringify({ name: "sendmux/mailbox", type: "library" }), "CHANGELOG.md": "# Changelog\n\n## Unreleased\n\nFix\n", "src/Configuration.php": `<?php // SDK Package Version: ${options.wrongVersion ? "3.1.0" : "3.0.0"}\n` };
+  const files = { "composer.json": JSON.stringify({ name: options.legacyIdentity ? "sendmux/mailbox" : "qubrics/mailbox", type: "library" }), "CHANGELOG.md": "# Changelog\n\n## Unreleased\n\nFix\n", "src/Configuration.php": `<?php // SDK Package Version: ${options.wrongVersion ? "3.1.0" : "3.0.0"}\n` };
   for (const [name, content] of Object.entries(files)) {
     for (const base of [join(sdk, "packages/php/mailbox"), split]) { mkdirSync(join(base, name, ".."), { recursive: true }); writeFileSync(join(base, name), content); }
   }
@@ -120,6 +120,7 @@ async function fixture(t, options = {}) {
 }
 
 for (const [name, options, pattern] of [
+  ["legacy Composer identity leaves refs absent", { legacyIdentity: true }, /Composer identity/],
   ["live mismatch leaves local and remote refs absent", { mismatch: true }, /differs/],
   ["wrong SDK-to-split mapping leaves refs absent", { wrongSource: true }, /split.*differ|version/i],
   ["unmatched Markdown is not ignored", { extra: true }, /file set|unmatched/i],
@@ -180,7 +181,7 @@ test("multiple PHP push destinations are rejected before creating any release re
 test("a tagged fetch URL cannot skip publication to the sole validated push destination", async (t) => {
   const candidate = await fixture(t);
   await candidate.run();
-  const second = join(candidate.directory, "second/sendmux-php-mailbox.git");
+  const second = join(candidate.directory, "second/qubrics-php-mailbox.git");
   assert.ok(resolve(second).startsWith(`${candidate.directory}/`), "PHP remote fixture escaped mkdtemp");
   await execute("git", ["init", "--bare", "-q", second]);
   await candidate.git(candidate.split, "remote", "set-url", "--push", "origin", second);
@@ -190,7 +191,7 @@ test("a tagged fetch URL cannot skip publication to the sole validated push dest
 
 test("a conflicting tag on the actual PHP push destination blocks a clean fetch origin", async (t) => {
   const candidate = await fixture(t);
-  const second = join(candidate.directory, "second/sendmux-php-mailbox.git");
+  const second = join(candidate.directory, "second/qubrics-php-mailbox.git");
   assert.ok(resolve(second).startsWith(`${candidate.directory}/`), "PHP remote fixture escaped mkdtemp");
   await execute("git", ["init", "--bare", "-q", second]);
   await candidate.git(candidate.split, "remote", "set-url", "--push", "origin", second);

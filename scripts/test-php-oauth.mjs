@@ -51,7 +51,7 @@ for (const [surface, api, operation, path] of [
           $token = getenv('TOKEN_MODE') === 'static' ? 'test.token+/_~==' : function () use (&$calls): string {
               return 'test.token.' . ++$calls;
           };
-          $client = Sendmux\\${surface}\\ClientFactory::create${api}WithAccessToken($token, getenv('API_URL'));
+          $client = Qubrics\\${surface}\\ClientFactory::create${api}WithAccessToken($token, getenv('API_URL'));
           echo $client->${operation}()->getData()->getTeam()->getId(), "\\n";
           echo $client->${operation}Async()->wait()->getData()->getTeam()->getId(), "\\n";
           echo $calls;
@@ -77,7 +77,7 @@ test("PHP token provider renews on retry and preserves request identity", async 
   }, async (baseUrl) => {
     const { stdout } = await runPhp(`
       $calls = 0;
-      $client = Sendmux\\Sending\\ClientFactory::createMetaApiWithAccessToken(
+      $client = Qubrics\\Sending\\ClientFactory::createMetaApiWithAccessToken(
           function () use (&$calls): string { return 'test.token.' . ++$calls; }, getenv('API_URL')
       );
       echo $client->sendingGetConnection()->getData()->getTeam()->getId();
@@ -98,9 +98,9 @@ test("PHP OAuth refuses redirects without disclosing tokens to the target", asyn
       response.end();
     }, async (baseUrl) => {
       const { stdout } = await runPhp(`
-        $client = Sendmux\\Sending\\ClientFactory::createMetaApiWithAccessToken('test.token', getenv('API_URL'));
+        $client = Qubrics\\Sending\\ClientFactory::createMetaApiWithAccessToken('test.token', getenv('API_URL'));
         try { $client->sendingGetConnection(); }
-        catch (Sendmux\\Sending\\ApiException $error) { echo $error->getCode(); }
+        catch (Qubrics\\Sending\\ApiException $error) { echo $error->getCode(); }
       `, { API_URL: baseUrl });
       assert.equal(stdout, "302");
       assert.equal(targetCalls, 0);
@@ -120,7 +120,7 @@ for (const mode of ["static", "provider"]) {
         foreach (['', "private token", "private\\r\\nInjected: true", "private\\0token", 'private=token'] as $token) {
             try {
                 $credential = getenv('TOKEN_MODE') === 'static' ? $token : static fn () => $token;
-                $client = Sendmux\\Sending\\ClientFactory::createMetaApiWithAccessToken($credential, getenv('API_URL'));
+                $client = Qubrics\\Sending\\ClientFactory::createMetaApiWithAccessToken($credential, getenv('API_URL'));
                 $client->sendingGetConnection();
                 $results[] = 'accepted';
             } catch (InvalidArgumentException $error) {

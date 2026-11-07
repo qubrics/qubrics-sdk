@@ -77,6 +77,30 @@ def test_operation_manifest_resolves_curated_route_to_operation_id() -> None:
     assert route.permissions == ("domain.read",)
 
 
+def test_calendar_manifest_allows_only_canonical_routes_and_scopes() -> None:
+    config = ServerConfig(surfaces=("mailbox",), api_key="smx_mbx_test")
+    spec = prepare_for_fastmcp(load_spec(config), base_url=config.api_base_url)
+    manifest = build_hosted_operation_manifest(spec, "mailbox")
+    for method, path, operation_id, permission in (
+        ("GET", "/mailbox/calendars", "mailboxListCalendars", "calendar.read"),
+        ("POST", "/mailbox/calendars", "mailboxCreateCalendar", "calendar.write"),
+        ("GET", "/mailbox/calendars/owned", "mailboxGetCalendar", "calendar.read"),
+        ("DELETE", "/mailbox/calendars/owned", "mailboxDeleteCalendar", "calendar.write"),
+        ("GET", "/mailbox/calendar-events", "mailboxListCalendarEvents", "calendar.read"),
+        ("POST", "/mailbox/calendar-events", "mailboxCreateCalendarEvent", "calendar.write"),
+        ("GET", "/mailbox/calendar-events/owned", "mailboxGetCalendarEvent", "calendar.read"),
+        ("PATCH", "/mailbox/calendar-events/owned", "mailboxUpdateCalendarEvent", "calendar.write"),
+        ("DELETE", "/mailbox/calendar-events/owned", "mailboxDeleteCalendarEvent", "calendar.write"),
+        ("GET", "/mailbox/calendar-events/changes", "mailboxGetCalendarEventChanges", "calendar.read"),
+    ):
+        route = manifest.resolve(method, path)
+        assert route is not None
+        assert route.operation_id == operation_id
+        assert route.permissions == (permission,)
+    assert manifest.resolve("PATCH", "/mailbox/calendars/owned") is None
+    assert manifest.resolve("POST", "/mailbox/calendar-events/owned") is None
+
+
 def test_operation_manifest_allows_custom_upload_backing_route() -> None:
     config = ServerConfig(surfaces=("mailbox",), api_key="smx_mbx_test")
     spec = prepare_for_fastmcp(load_spec(config), base_url=config.api_base_url)
@@ -160,6 +184,49 @@ def test_proxy_transport_sends_operation_envelope_without_token_passthrough(
             "headers": {"idempotency-key": "idem_123"},
             "body_base64": None,
         }
+
+    asyncio.run(run())
+
+
+@pytest.mark.parametrize(
+    ("runtime_resource", "token_resource"),
+    [
+        ("https://mcp.sendmux.ai/mcp", "https://mcp.qubrics.com/mcp"),
+        ("https://mcp.qubrics.com/mcp", "https://mcp.sendmux.ai/mcp"),
+    ],
+)
+def test_proxy_transport_preserves_verified_mcp_audience(
+    monkeypatch: pytest.MonkeyPatch, runtime_resource: str, token_resource: str,
+) -> None:
+    async def run() -> None:
+        token = AccessToken(
+            token="verified-mcp-token",
+            client_id="mcp_client_public",
+            scopes=["domain.read"],
+            claims={"grant_id": "mcp_grant_public", "aud": token_resource},
+        )
+        monkeypatch.setattr("sendmux_mcp.hosted_proxy.get_access_token", lambda: token)
+
+        def app_proxy(request: httpx.Request) -> httpx.Response:
+            envelope = json.loads(request.content)
+            assert envelope["resource"] == token_resource
+            assert envelope["protocol"] == "mcp"
+            return httpx.Response(200, json={"ok": True})
+
+        config = ServerConfig(surfaces=("management",), api_key=None)
+        document = prepare_for_fastmcp(load_spec(config), base_url=config.api_base_url)
+        transport = HostedProxyTransport(
+            HostedProxyConfig(
+                proxy_url="https://app.sendmux.ai/api/internal/mcp/proxy",
+                upstream_base_url=config.api_base_url,
+                resource=runtime_resource,
+                protocol="mcp",
+            ),
+            manifest=build_hosted_operation_manifest(document, "management"),
+            inner=httpx.MockTransport(app_proxy),
+        )
+        response = await transport.handle_async_request(httpx.Request("GET", f"{config.api_base_url}/domains"))
+        assert response.status_code == 200
 
     asyncio.run(run())
 

@@ -20,7 +20,7 @@ export class SendmuxApiError extends Error {
     message?: string;
     response?: Response | undefined;
   }) {
-    super(message ?? body?.error.message ?? response?.statusText ?? "Sendmux API request failed", { cause });
+    super(message ?? body?.error.message ?? response?.statusText ?? "Qubrics API request failed", { cause });
     this.name = "SendmuxApiError";
     this.body = body;
     this.code = body?.error.code ?? "request_failed";

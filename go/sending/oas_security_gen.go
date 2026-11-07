@@ -60,6 +60,62 @@ func (s *Server) securityBearerAuth(ctx context.Context, operationName Operation
 	return rctx, true, err
 }
 
+var operationRolesUploadTokenQubrics = map[string][]string{
+	SendingCompleteAttachmentUploadOperation: []string{},
+}
+
+func (s *Server) securityUploadTokenQubrics(ctx context.Context, operationName OperationName, req *http.Request) (context.Context, bool, error) {
+	var t UploadTokenQubrics
+	const parameterName = "X-Qubrics-Upload-Token"
+	value := req.Header.Get(parameterName)
+	if value == "" {
+		return ctx, false, nil
+	}
+	t.APIKey = value
+	t.Roles = operationRolesUploadTokenQubrics[operationName]
+	handler, ok := s.sec.(interface {
+		HandleUploadTokenQubrics(context.Context, OperationName, UploadTokenQubrics) (context.Context, error)
+	})
+	if !ok {
+		return ctx, false, nil
+	}
+	rctx, err := handler.HandleUploadTokenQubrics(ctx, operationName, t)
+	if errors.Is(err, ogenerrors.ErrSkipServerSecurity) {
+		return nil, false, nil
+	} else if err != nil {
+		return nil, false, err
+	}
+	return rctx, true, err
+}
+
+var operationRolesUploadTokenSendmux = map[string][]string{
+	SendingCompleteAttachmentUploadOperation: []string{},
+}
+
+func (s *Server) securityUploadTokenSendmux(ctx context.Context, operationName OperationName, req *http.Request) (context.Context, bool, error) {
+	var t UploadTokenSendmux
+	const parameterName = "X-Sendmux-Upload-Token"
+	value := req.Header.Get(parameterName)
+	if value == "" {
+		return ctx, false, nil
+	}
+	t.APIKey = value
+	t.Roles = operationRolesUploadTokenSendmux[operationName]
+	handler, ok := s.sec.(interface {
+		HandleUploadTokenSendmux(context.Context, OperationName, UploadTokenSendmux) (context.Context, error)
+	})
+	if !ok {
+		return ctx, false, nil
+	}
+	rctx, err := handler.HandleUploadTokenSendmux(ctx, operationName, t)
+	if errors.Is(err, ogenerrors.ErrSkipServerSecurity) {
+		return nil, false, nil
+	} else if err != nil {
+		return nil, false, err
+	}
+	return rctx, true, err
+}
+
 // SecuritySource is provider of security values (tokens, passwords, etc.).
 type SecuritySource interface {
 	// BearerAuth provides BearerAuth security value.
@@ -73,5 +129,51 @@ func (s *Client) securityBearerAuth(ctx context.Context, operationName Operation
 		return errors.Wrap(err, "security source \"BearerAuth\"")
 	}
 	req.Header.Set("Authorization", "Bearer "+t.Token)
+	return nil
+}
+func (s *Client) securityUploadTokenQubrics(ctx context.Context, operationName OperationName, req *http.Request) error {
+	if req.Header.Get("X-Qubrics-Upload-Token") != "" {
+		return nil
+	}
+	if req.Header.Get("X-Sendmux-Upload-Token") != "" {
+		return ogenerrors.ErrSkipClientSecurity
+	}
+	source, ok := s.sec.(interface {
+		UploadTokenQubrics(context.Context, OperationName) (UploadTokenQubrics, error)
+	})
+	if !ok {
+		return ogenerrors.ErrSkipClientSecurity
+	}
+	t, err := source.UploadTokenQubrics(ctx, operationName)
+	if err != nil {
+		return errors.Wrap(err, "security source \"UploadTokenQubrics\"")
+	}
+	if t.APIKey == "" {
+		return ogenerrors.ErrSkipClientSecurity
+	}
+	req.Header.Set("X-Qubrics-Upload-Token", t.APIKey)
+	return nil
+}
+func (s *Client) securityUploadTokenSendmux(ctx context.Context, operationName OperationName, req *http.Request) error {
+	if req.Header.Get("X-Sendmux-Upload-Token") != "" {
+		return nil
+	}
+	if req.Header.Get("X-Qubrics-Upload-Token") != "" {
+		return ogenerrors.ErrSkipClientSecurity
+	}
+	source, ok := s.sec.(interface {
+		UploadTokenSendmux(context.Context, OperationName) (UploadTokenSendmux, error)
+	})
+	if !ok {
+		return ogenerrors.ErrSkipClientSecurity
+	}
+	t, err := source.UploadTokenSendmux(ctx, operationName)
+	if err != nil {
+		return errors.Wrap(err, "security source \"UploadTokenSendmux\"")
+	}
+	if t.APIKey == "" {
+		return ogenerrors.ErrSkipClientSecurity
+	}
+	req.Header.Set("X-Sendmux-Upload-Token", t.APIKey)
 	return nil
 }

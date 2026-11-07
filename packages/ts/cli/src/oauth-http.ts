@@ -1,5 +1,5 @@
-export const OAUTH_RESOURCE = "https://sendmux.ai/api";
-export const DEFAULT_OAUTH_ISSUER = "https://app.sendmux.ai";
+export const OAUTH_RESOURCE = "https://qubrics.com/api";
+export const DEFAULT_OAUTH_ISSUER = "https://app.qubrics.com";
 
 export function oauthUrl(value: string, issuer?: string): URL {
   const url = new URL(value);
@@ -81,7 +81,7 @@ export async function discoverOAuth(issuer: string, scopes: string[]) {
     !scopes.every((scope) => supports("scopes_supported", scope))
   )
     throw new Error(
-      "The issuer does not support the requested Sendmux OAuth connection.",
+      "The issuer does not support the requested Qubrics OAuth connection.",
     );
   const endpoint = (name: string) => {
     const value = metadata[name];

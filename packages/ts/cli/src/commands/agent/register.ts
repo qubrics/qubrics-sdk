@@ -13,7 +13,7 @@ export default class AgentRegister extends SendmuxCommand {
   static description = "Register a durable agent inbox profile.";
   static flags = {
     "base-url": Flags.string({
-      description: "Sendmux app origin. Defaults to https://app.sendmux.ai.",
+      description: "Qubrics app origin. Defaults to https://app.qubrics.com.",
     }),
     "client-name": Flags.string({
       description: "Optional agent client name.",

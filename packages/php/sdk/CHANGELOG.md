@@ -2,14 +2,19 @@
 
 ## Unreleased
 
+### Qubrics rename
+
+- Publish as `qubrics/sdk` at 3.0.0 with `Qubrics\` namespaces and Qubrics service defaults.
+- Keep existing credential prefixes, OAuth/custom URL configuration and compatibility wire names.
+
 ### Changed
 
 - Breaking: require Mailbox `^3.0` for the corrected changes-response types. Follow the [3.0 migration guide](https://github.com/Sendmux/sendmux-sdk/blob/main/packages/php/UPGRADING-3.0.md) before upgrading.
-- Set `Sdk::VERSION` to `3.0.0`; keep core, Sending, and Management on 2.x.
+- Set `Sdk::VERSION` to `3.0.0` and require core, Sending, Mailbox, and Management on 3.x.
 
 ### Security
 
-- Require core, Sending, and Management `^2.1.1` so Composer selects their maintained HTTP dependency floors. If you use a custom persistent cookie jar, follow the [upgrade warning](README.md#installation) before updating.
+- Require core, Sending, and Management `^3.0` so Composer selects their maintained HTTP dependency floors. If you use a custom persistent cookie jar, follow the [upgrade warning](README.md#installation) before updating.
 
 ## 2.1.0 (2026-09-11)
 

@@ -11,6 +11,8 @@ from posthog import Posthog
 from starlette.middleware import Middleware
 from starlette.types import ASGIApp, Receive, Scope, Send
 
+from sendmux_mcp.config import env_value
+
 
 DEFAULT_POSTHOG_HOST = "https://eu.i.posthog.com"
 POSTHOG_TOOL_EVENT = "mcp_tool_call"
@@ -179,7 +181,7 @@ def posthog_config_from_env() -> PostHogConfig | None:
         or clean_env_value(os.environ.get("ENVIRONMENT"))
         or clean_env_value(os.environ.get("NODE_ENV"))
         or "unknown",
-        release=clean_env_value(os.environ.get("SENDMUX_MCP_RELEASE")),
+        release=clean_env_value(env_value("SENDMUX_MCP_RELEASE")),
     )
 
 

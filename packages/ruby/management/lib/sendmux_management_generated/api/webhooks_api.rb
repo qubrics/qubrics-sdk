@@ -1,7 +1,7 @@
 =begin
-#Sendmux API
+#Qubrics API
 
-#Programmatic access to your Sendmux email infrastructure.
+#Programmatic access to your Qubrics email infrastructure.
 
 The version of the OpenAPI document: 1.0.0
 
@@ -327,7 +327,7 @@ module Sendmux::Management::Generated
         fail ArgumentError, 'invalid value for "opts[:"limit"]" when calling WebhooksApi.management_list_delivery, must be greater than or equal to 1.'
       end
 
-      allowable_values = ["message.delivered", "message.bounced", "message.complained", "message.rejected", "message.delivery_delayed", "message.received", "message.received.spam", "sendmux.test", "unknown_default_open_api"]
+      allowable_values = ["message.delivered", "message.bounced", "message.complained", "message.rejected", "message.delivery_delayed", "message.received", "message.received.spam", "calendar.changed", "sendmux.test", "unknown_default_open_api"]
       if @api_client.config.client_side_validation && opts[:'event_type'] && !allowable_values.include?(opts[:'event_type'])
         fail ArgumentError, "invalid value for \"event_type\", must be one of #{allowable_values}"
       end
@@ -521,7 +521,7 @@ module Sendmux::Management::Generated
     end
 
     # Send a synthetic test event
-    # Publishes a synthetic `sendmux.test` event to this webhook subscription. The subscription must include `\"sendmux.test\"` in `event_types`, and mailbox filters do not block the test delivery. Returns the generated `event_id` so you can correlate the `X-Sendmux-Event-Id` header on your endpoint.  Supply an `Idempotency-Key` header to safely retry on network errors — replays under the same key return the original `event_id` rather than publishing a second test event.
+    # Publishes a synthetic `sendmux.test` event to this webhook subscription. The subscription must include `\"sendmux.test\"` in `event_types`, and mailbox filters do not block the test delivery. Returns the generated `event_id` so you can correlate the `X-Qubrics-Event-Id` or `X-Sendmux-Event-Id` header on your endpoint.  Supply an `Idempotency-Key` header to safely retry on network errors — replays under the same key return the original `event_id` rather than publishing a second test event.
     # @param public_id [String]
     # @param [Hash] opts the optional parameters
     # @option opts [String] :idempotency_key
@@ -532,7 +532,7 @@ module Sendmux::Management::Generated
     end
 
     # Send a synthetic test event
-    # Publishes a synthetic &#x60;sendmux.test&#x60; event to this webhook subscription. The subscription must include &#x60;\&quot;sendmux.test\&quot;&#x60; in &#x60;event_types&#x60;, and mailbox filters do not block the test delivery. Returns the generated &#x60;event_id&#x60; so you can correlate the &#x60;X-Sendmux-Event-Id&#x60; header on your endpoint.  Supply an &#x60;Idempotency-Key&#x60; header to safely retry on network errors — replays under the same key return the original &#x60;event_id&#x60; rather than publishing a second test event.
+    # Publishes a synthetic &#x60;sendmux.test&#x60; event to this webhook subscription. The subscription must include &#x60;\&quot;sendmux.test\&quot;&#x60; in &#x60;event_types&#x60;, and mailbox filters do not block the test delivery. Returns the generated &#x60;event_id&#x60; so you can correlate the &#x60;X-Qubrics-Event-Id&#x60; or &#x60;X-Sendmux-Event-Id&#x60; header on your endpoint.  Supply an &#x60;Idempotency-Key&#x60; header to safely retry on network errors — replays under the same key return the original &#x60;event_id&#x60; rather than publishing a second test event.
     # @param public_id [String]
     # @param [Hash] opts the optional parameters
     # @option opts [String] :idempotency_key

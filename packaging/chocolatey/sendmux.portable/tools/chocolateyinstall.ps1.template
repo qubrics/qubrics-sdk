@@ -22,12 +22,14 @@ Get-ChildItem -Path $toolsDir -Recurse |
     New-Item -Path "$($_.FullName).ignore" -ItemType File -Force | Out-Null
   }
 
-$sendmuxCommand = Get-ChildItem -Path $toolsDir -Recurse |
-  Where-Object { -not $_.PSIsContainer -and ($_.Name -eq 'sendmux.cmd' -or $_.Name -eq 'sendmux.exe') } |
-  Select-Object -First 1
+foreach ($commandName in @('qubrics', 'sendmux')) {
+  $command = Get-ChildItem -Path $toolsDir -Recurse |
+    Where-Object { -not $_.PSIsContainer -and ($_.Name -eq "$commandName.cmd" -or $_.Name -eq "$commandName.exe") } |
+    Select-Object -First 1
 
-if (-not $sendmuxCommand) {
-  throw 'sendmux command entrypoint was not found after extraction.'
+  if (-not $command) {
+    throw "$commandName command entrypoint was not found after extraction."
+  }
+
+  Install-BinFile -Name $commandName -Path $command.FullName
 }
-
-Install-BinFile -Name 'sendmux' -Path $sendmuxCommand.FullName

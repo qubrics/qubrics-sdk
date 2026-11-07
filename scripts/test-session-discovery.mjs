@@ -7,7 +7,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
 import { promisify } from "node:util";
-import { mailbox } from "@sendmux/sdk";
+import { mailbox } from "@qubrics/sdk";
 
 const payload = JSON.parse(await readFile(new URL("./fixtures/mailbox-session-discovery.json", import.meta.url), "utf8"));
 

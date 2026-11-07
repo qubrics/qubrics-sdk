@@ -1,26 +1,26 @@
-# @sendmux/core
+# @qubrics/core
 
-[![npm version](https://img.shields.io/npm/v/@sendmux%2Fcore)](https://www.npmjs.com/package/@sendmux/core)
-[![CI](https://github.com/Sendmux/sendmux-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/Sendmux/sendmux-sdk/actions/workflows/ci.yml)
-[![npm downloads](https://img.shields.io/npm/dm/@sendmux%2Fcore)](https://www.npmjs.com/package/@sendmux/core)
-[![Licence](https://img.shields.io/npm/l/@sendmux%2Fcore)](https://github.com/Sendmux/sendmux-sdk/blob/main/LICENSE)
+[![npm version](https://img.shields.io/npm/v/@qubrics%2Fcore)](https://www.npmjs.com/package/@qubrics/core)
+[![CI](https://github.com/qubrics/qubrics-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/qubrics/qubrics-sdk/actions/workflows/ci.yml)
+[![npm downloads](https://img.shields.io/npm/dm/@qubrics%2Fcore)](https://www.npmjs.com/package/@qubrics/core)
+[![Licence](https://img.shields.io/npm/l/@qubrics%2Fcore)](https://github.com/qubrics/qubrics-sdk/blob/main/LICENSE)
 
-Shared runtime helpers and public types for the Sendmux TypeScript SDK packages.
+Shared runtime helpers and public types for the Qubrics TypeScript SDK packages.
 
 ## Documentation
 
-- Sendmux docs: [sendmux.ai/docs](https://sendmux.ai/docs)
-- Source repository: [Sendmux/sendmux-sdk](https://github.com/Sendmux/sendmux-sdk)
+- Qubrics docs: [qubrics.com/docs](https://qubrics.com/docs)
+- Source repository: [qubrics/qubrics-sdk](https://github.com/qubrics/qubrics-sdk)
 
 ## Requirements
 
 - A JavaScript runtime with the standard Fetch API.
-- A surface package such as `@sendmux/sending`, `@sendmux/mailbox`, or `@sendmux/management` for API operations.
+- A surface package such as `@qubrics/sending`, `@qubrics/mailbox`, or `@qubrics/management` for API operations.
 
 ## Installation
 
 ```sh
-npm install @sendmux/core
+npm install @qubrics/core
 ```
 
 ## Usage
@@ -32,9 +32,9 @@ import {
   assertApiKeyKind,
   conditionalHeaders,
   idempotencyHeaders,
-} from "@sendmux/core";
+} from "@qubrics/core";
 
-assertApiKeyKind(process.env.SENDMUX_MAILBOX_API_KEY!, "mailbox");
+assertApiKeyKind(process.env.QUBRICS_MAILBOX_API_KEY!, "mailbox");
 
 const headers = {
   ...idempotencyHeaders("idem_123"),
@@ -45,15 +45,15 @@ const headers = {
 ## Helpers
 
 - `assertApiKeyKind` validates `smx_root_*` prefixes for root clients, send-capable `smx_mbx_*` prefixes or owner-approved Sending-resource `smx_agent_*` tokens for Sending clients, and mailbox-compatible `smx_mbx_*` or `smx_agent_*` prefixes for Mailbox clients.
-- `paginate` iterates cursor-paginated Sendmux list responses.
+- `paginate` iterates cursor-paginated Qubrics list responses.
 - `idempotencyHeaders`, `conditionalHeaders`, and `responseEtag` cover idempotency and conditional requests.
 - `createRetryingFetch` retries safe requests and idempotent `POST` requests with replayable bodies. It honours `retryable: false` and server retry delays; when a delay exceeds the configured deadline or runtime limit, it returns the response instead of retrying early.
 - `SendmuxApiError`, `mapApiError`, and `createErrorInterceptor` normalise API errors.
 
 ## Support
 
-Open an issue in [Sendmux/sendmux-sdk](https://github.com/Sendmux/sendmux-sdk/issues) with the package name and version.
+Open an issue in [qubrics/qubrics-sdk](https://github.com/qubrics/qubrics-sdk/issues) with the package name and version.
 
 ## Licence
 
-MIT. See the [licence file](https://github.com/Sendmux/sendmux-sdk/blob/main/LICENSE).
+MIT. See the [licence file](https://github.com/qubrics/qubrics-sdk/blob/main/LICENSE).

@@ -2,9 +2,18 @@
 
 ## Unreleased
 
+### Qubrics rename
+
+- Emit both upload-token header names when either token form is supplied.
+
+- Publish as `qubrics/sending` at 3.0.0 with `Qubrics\` namespaces and Qubrics service defaults.
+- Keep existing credential prefixes, OAuth/custom URL configuration and compatibility wire names.
+
 ### Features
 
 - Add one delivery group or a list of `delivery_group` IDs to email send requests.
+
+## 2.1.1 (2026-09-16)
 
 ### Security
 

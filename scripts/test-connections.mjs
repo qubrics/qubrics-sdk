@@ -1,11 +1,11 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import * as sendmux from "@sendmux/sdk";
+import * as sendmux from "@qubrics/sdk";
 
 for (const [surface, apiKey, endpoint, host] of [
-  ["management", "smx_root_test", "/me", "app.sendmux.ai"],
-  ["mailbox", "smx_mbx_test", "/mailbox/connection", "app.sendmux.ai"],
-  ["sending", "smx_mbx_test", "/me", "smtp.sendmux.ai"],
+  ["management", "smx_root_test", "/me", "app.qubrics.com"],
+  ["mailbox", "smx_mbx_test", "/mailbox/connection", "app.qubrics.com"],
+  ["sending", "smx_mbx_test", "/me", "smtp.qubrics.com"],
 ]) {
   test(`${surface} connection uses the authenticated GET and returns metadata`, async () => {
     const sdk = sendmux[surface];

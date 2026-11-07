@@ -201,7 +201,7 @@ async function fixture(t, defaultConfigDir) {
           code_challenge_methods_supported: ["S256"],
           token_endpoint_auth_methods_supported: ["none"],
           authorization_response_iss_parameter_supported: true,
-          protected_resources: ["https://sendmux.ai/api"],
+          protected_resources: ["https://qubrics.com/api"],
           scopes_supported: ["mailbox.read", "email.send"],
         }),
       );
@@ -363,6 +363,7 @@ async function cli(t, state, args, authorize = false, options = {}) {
     ...(filesystemFault
       ? { SENDMUX_TEST_PROFILE_FS_FAULT: JSON.stringify(filesystemFault) }
       : {}),
+    ...options.env,
   };
   delete env.SENDMUX_CONFIG_DIR;
   if (state.defaultConfigDir) delete env.XDG_CONFIG_HOME;
@@ -670,9 +671,9 @@ test("native login uses S256, validates the callback and saves a protected profi
   }
   assert.equal(state.registrations[0].application_type, "native");
   assert.equal(state.registrations[0].token_endpoint_auth_method, "none");
-  assert.equal(state.registrations[0].resource, "https://sendmux.ai/api");
+  assert.equal(state.registrations[0].resource, "https://qubrics.com/api");
   assert.equal(state.authorization.get("code_challenge_method"), "S256");
-  assert.equal(state.authorization.get("resource"), "https://sendmux.ai/api");
+  assert.equal(state.authorization.get("resource"), "https://qubrics.com/api");
   assert.ok(!`${result.stdout}${result.stderr}`.includes("native_access_0"));
   assert.ok(!`${result.stdout}${result.stderr}`.includes("native_refresh_0"));
   const shown = await cli(t, state, ["profiles:show", "native", "--json"]);
@@ -1254,6 +1255,44 @@ test("logout retains a failed revocation for retry and removes only the revoked 
   assert.equal(config.profiles.native, undefined);
   assert.notEqual(config.defaultProfile, "native");
   assert.ok(!`${result.stdout}${result.stderr}`.includes("native_refresh_0"));
+});
+
+test("logout skips only empty Qubrics profile environment values", async (t) => {
+  const state = await fixture(t);
+  assert.equal((await login(t, state)).code, 0);
+  for (const profile of ["0", " "]) {
+    const selected = await cli(t, state, ["auth:logout", "--json"], false, {
+      env: { QUBRICS_PROFILE: profile, SENDMUX_PROFILE: "native" },
+    });
+    assert.notEqual(selected.code, 0);
+    assert.equal(state.revoked.length, 0);
+  }
+  const emptyLegacy = await cli(t, state, ["auth:logout", "--json"], false, {
+    env: { QUBRICS_PROFILE: undefined, SENDMUX_PROFILE: "" },
+  });
+  assert.notEqual(emptyLegacy.code, 0);
+  assert.match(`${emptyLegacy.stdout}${emptyLegacy.stderr}`, /Choose an OAuth profile/);
+  assert.equal(state.revoked.length, 0);
+  const legacy = await cli(t, state, ["auth:logout", "--json"], false, {
+    env: { QUBRICS_PROFILE: "", SENDMUX_PROFILE: "native" },
+  });
+  assert.equal(legacy.code, 0, legacy.stderr);
+  assert.equal(JSON.parse(legacy.stdout).data.profile, "native");
+  assert.equal(state.revoked.length, 1);
+  assert.equal((await login(t, state)).code, 0);
+  const configuredDefault = await cli(t, state, ["auth:logout", "--json"], false, {
+    env: { QUBRICS_PROFILE: "", SENDMUX_PROFILE: undefined },
+  });
+  assert.equal(configuredDefault.code, 0, configuredDefault.stderr);
+  assert.equal(JSON.parse(configuredDefault.stdout).data.profile, "native");
+  assert.equal(state.revoked.length, 2);
+  assert.equal((await login(t, state)).code, 0);
+  const explicit = await cli(t, state, ["auth:logout", "native", "--json"], false, {
+    env: { QUBRICS_PROFILE: "0", SENDMUX_PROFILE: "" },
+  });
+  assert.equal(explicit.code, 0, explicit.stderr);
+  assert.equal(JSON.parse(explicit.stdout).data.profile, "native");
+  assert.equal(state.revoked.length, 3);
 });
 
 test("malformed callback targets are rejected without crashing login", async (t) => {

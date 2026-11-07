@@ -36,14 +36,14 @@ classifiers = [
 dependencies = [
   "langchain-core>=1.0.0,<2",
   "sendmux-sending>=1.6.0,<2.0.0",
-  "sendmux-mailbox>=2.0.0,<3.0.0",
+  "sendmux-mailbox>=2.0.2,<3.0.0",
 ]
 
 [project.urls]
 Homepage = "https://sendmux.ai"
 Documentation = "https://sendmux.ai/docs/sdks"
-Repository = "https://github.com/Sendmux/sendmux-sdk"
-Issues = "https://github.com/Sendmux/sendmux-sdk/issues"
+Repository = "https://github.com/qubrics/qubrics-sdk"
+Issues = "https://github.com/qubrics/qubrics-sdk/issues"
 
 [tool.hatch.build.targets.sdist]
 core-metadata-version = "2.4"

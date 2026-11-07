@@ -1,7 +1,7 @@
 =begin
-#Sendmux API
+#Qubrics API
 
-#Programmatic access to your Sendmux email infrastructure.
+#Programmatic access to your Qubrics email infrastructure.
 
 The version of the OpenAPI document: 1.0.0
 
@@ -91,7 +91,7 @@ module Sendmux::Management::Generated
     end
 
     # Delete a mailbox domain
-    # Removes a domain from our mail platform, Amazon SES, and Sendmux. Blocked if any active mailbox still uses the domain — delete those mailboxes first.
+    # Removes a domain from our mail platform, Amazon SES, and Qubrics. Blocked if any active mailbox still uses the domain — delete those mailboxes first.
     # @param public_id [String]
     # @param [Hash] opts the optional parameters
     # @return [DomainDeletedResponse]
@@ -101,7 +101,7 @@ module Sendmux::Management::Generated
     end
 
     # Delete a mailbox domain
-    # Removes a domain from our mail platform, Amazon SES, and Sendmux. Blocked if any active mailbox still uses the domain — delete those mailboxes first.
+    # Removes a domain from our mail platform, Amazon SES, and Qubrics. Blocked if any active mailbox still uses the domain — delete those mailboxes first.
     # @param public_id [String]
     # @param [Hash] opts the optional parameters
     # @return [Array<(DomainDeletedResponse, Integer, Hash)>] DomainDeletedResponse data, response status code and response headers

@@ -1,4 +1,4 @@
-import * as sdk from "@sendmux/sdk";
+import * as sdk from "@qubrics/sdk";
 import { createHash } from "node:crypto";
 import { closeSync, createReadStream, fsyncSync, openSync, writeSync } from "node:fs";
 import { readFile, stat } from "node:fs/promises";
@@ -43,7 +43,7 @@ export async function runSdkOperation(
   let baseUrl: string | undefined;
   let client: ReturnType<(typeof clientFactories)[OperationDefinition["surface"]]> | undefined;
   if (operation.requiredKeyKind === "none") {
-    baseUrl = flags["base-url"] ?? process.env.SENDMUX_BASE_URL;
+    baseUrl = flags["base-url"] ?? (process.env.QUBRICS_BASE_URL || process.env.SENDMUX_BASE_URL);
   } else {
     const auth = await command.resolveAuth(flags, operation.requiredKeyKind);
     baseUrl = auth.baseUrl;
@@ -333,7 +333,7 @@ function journalNestedAttachment({ file, id, nestedOperationId, operationId, ord
   operationId: string;
   ordinal: number;
 }): void {
-  const path = process.env.SENDMUX_LIVE_E2E_ATTACHMENT_JOURNAL;
+  const path = process.env.QUBRICS_LIVE_E2E_ATTACHMENT_JOURNAL || process.env.SENDMUX_LIVE_E2E_ATTACHMENT_JOURNAL;
   if (!path) return;
   const record = {
     adapter: "cli",
@@ -581,7 +581,7 @@ function operationFor(operation: OperationDefinition): SdkOperation {
   const module = surfaceModules[operation.surface] as Record<string, unknown>;
   const sdkOperation = module[operation.operationId];
   if (typeof sdkOperation !== "function") {
-    throw new Error(`SDK operation ${operation.operationId} is not exported by @sendmux/sdk`);
+    throw new Error(`SDK operation ${operation.operationId} is not exported by @qubrics/sdk`);
   }
 
   return sdkOperation as SdkOperation;

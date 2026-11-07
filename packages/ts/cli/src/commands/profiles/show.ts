@@ -19,19 +19,19 @@ export default class ProfilesShow extends SendmuxCommand {
       required: false,
     }),
   };
-  static description = "Show a local Sendmux CLI profile without revealing its key.";
+  static description = "Show a local Qubrics CLI profile without revealing its key.";
 
   async run(): Promise<unknown> {
     const { args } = await this.parse(ProfilesShow);
     const config = await readCliConfig(this.config.configDir);
     const profileName = args.name ?? config.defaultProfile;
     if (!profileName) {
-      this.error("No default Sendmux profile configured.", { exit: 2 });
+      this.error("No default Qubrics profile configured.", { exit: 2 });
     }
 
     const profile = config.profiles[profileName];
     if (!profile) {
-      this.error(`Sendmux profile "${profileName}" was not found.`, { exit: 2 });
+      this.error(`Qubrics profile "${profileName}" was not found.`, { exit: 2 });
     }
 
     const data = isOAuthProfile(profile)

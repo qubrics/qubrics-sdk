@@ -11,10 +11,10 @@ export default class ProfilesSet extends SendmuxCommand {
       required: true,
     }),
   };
-  static description = "Create or update a local Sendmux CLI profile.";
+  static description = "Create or update a local Qubrics CLI profile.";
   static flags = {
     "api-key": Flags.string({
-      description: "Sendmux API key. Defaults to SENDMUX_API_KEY.",
+      description: "API key. Defaults to QUBRICS_API_KEY, then SENDMUX_API_KEY for compatibility.",
       required: false,
     }),
     "base-url": Flags.string({
@@ -27,9 +27,9 @@ export default class ProfilesSet extends SendmuxCommand {
 
   async run(): Promise<unknown> {
     const { args, flags } = await this.parse(ProfilesSet);
-    const apiKey = flags["api-key"] ?? process.env.SENDMUX_API_KEY;
+    const apiKey = flags["api-key"] ?? (process.env.QUBRICS_API_KEY || process.env.SENDMUX_API_KEY);
     if (!apiKey) {
-      this.error("Pass --api-key or set SENDMUX_API_KEY.", { exit: 2 });
+      this.error("Pass --api-key or set QUBRICS_API_KEY (SENDMUX_API_KEY is also supported).", { exit: 2 });
     }
 
     const keyKind = inferApiKeyKind(apiKey);
@@ -57,7 +57,7 @@ export default class ProfilesSet extends SendmuxCommand {
     };
 
     if (!this.jsonEnabled()) {
-      this.log(`Saved Sendmux ${keyKind} profile "${args.name}".`);
+      this.log(`Saved Qubrics ${keyKind} profile "${args.name}".`);
       return result;
     }
 

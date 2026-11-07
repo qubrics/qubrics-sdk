@@ -3,7 +3,7 @@ from __future__ import annotations
 import base64
 import json
 import re
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from time import monotonic
 from typing import Any, Literal, Mapping
 
@@ -12,6 +12,7 @@ from fastmcp.server.dependencies import get_access_token
 
 from sendmux_mcp.config import Surface
 from sendmux_mcp.curation import HOSTED_BACKING_TOOLS_BY_SURFACE, OPENAPI_TOOLS_BY_SURFACE
+from sendmux_mcp.hosted_auth import HOSTED_MCP_RESOURCE_URLS
 from sendmux_mcp.observability import get_posthog_observability
 from sendmux_mcp.permissions import permissions_for_tool
 from sendmux_mcp.response_ownership import close_response, own_response
@@ -173,8 +174,14 @@ class HostedProxyTransport(httpx.AsyncBaseTransport):
         body: bytes,
     ) -> httpx.Request:
         mailbox_id = hosted_mailbox_id(request.url, route)
+        config = self.config
+        token = get_access_token()
+        audience = (token.claims or {}).get("aud") if token is not None else None
+        if config.protocol == "mcp" and config.resource in HOSTED_MCP_RESOURCE_URLS:
+            if isinstance(audience, str) and audience in HOSTED_MCP_RESOURCE_URLS:
+                config = replace(config, resource=audience)
         return build_hosted_proxy_request(
-            config=self.config,
+            config=config,
             route=route,
             grant_id=grant_id,
             relative_path=relative_path,
@@ -260,6 +267,7 @@ def build_hosted_operation_manifest(document: Mapping[str, Any], surface: Surfac
     if missing:
         raise ValueError(f"OpenAPI document is missing hosted proxy operations for {surface}: {', '.join(missing)}")
 
+    routes.sort(key=lambda route: route.path_template.count("{"))
     return HostedOperationManifest(tuple(routes))
 
 

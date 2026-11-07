@@ -57,7 +57,7 @@ async function proveSplit(input) {
       || before.replace("\n## Unreleased\n", `\n${heading[0]}\n`) !== after) throw new Error("Split changelog differs beyond the intended dated heading");
   }
   const composer = JSON.parse(await run(["show", `${target}:composer.json`]));
-  if (composer.name !== `sendmux/${input.package}` || Object.hasOwn(composer, "version")) throw new Error("Split Composer identity/version metadata mismatch");
+  if (composer.name !== `qubrics/${input.package}` || Object.hasOwn(composer, "version")) throw new Error("Split Composer identity/version metadata mismatch");
   const changelog = await run(["show", `${target}:CHANGELOG.md`]);
   if (changelog.match(/^## ([^\n]+)/m)?.[1]?.split(" ")[0] !== input.version) throw new Error("Split changelog does not identify intended version");
   const nativeFile = input.package === "sdk" ? "src/Sdk.php" : "src/Configuration.php";
@@ -69,8 +69,8 @@ async function proveSplit(input) {
   const destinations = (await run(["remote", "get-url", "--push", "--all", "origin"])).trim().split("\n");
   if (destinations.length !== 1 || !destinations[0]) throw new Error("PHP publication requires exactly one push destination");
   const remote = destinations[0];
-  const expected = `sendmux-php-${input.package}`;
-  const official = remote === `git@github.com:Sendmux/${expected}.git` || remote === `https://github.com/Sendmux/${expected}.git` || remote === `https://github.com/Sendmux/${expected}`;
+  const expected = `qubrics-php-${input.package}`;
+  const official = remote === `git@github.com:qubrics/${expected}.git` || remote === `https://github.com/qubrics/${expected}.git` || remote === `https://github.com/qubrics/${expected}`;
   const local = remote.startsWith("/") && basename(remote) === `${expected}.git` && statSync(remote).isDirectory()
     && (await git({ repo: remote, args: ["rev-parse", "--is-bare-repository"] })).trim() === "true";
   if (!official && !local) throw new Error("Split origin does not identify the expected package repository");

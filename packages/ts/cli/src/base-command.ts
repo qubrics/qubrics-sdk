@@ -32,16 +32,16 @@ export type ResolvedAuth = {
 
 export const authFlags = {
   "api-key": Flags.string({
-    description: "Sendmux API key. Defaults to SENDMUX_API_KEY.",
+    description: "API key. Defaults to QUBRICS_API_KEY, then SENDMUX_API_KEY for compatibility.",
     helpGroup: "GLOBAL",
   }),
   "base-url": Flags.string({
-    description: "Override the API base URL. Defaults to the SDK surface default or SENDMUX_BASE_URL.",
+    description: "API base URL. Defaults to QUBRICS_BASE_URL, then SENDMUX_BASE_URL for compatibility, then the SDK surface default.",
     helpGroup: "GLOBAL",
   }),
   profile: Flags.string({
     char: "p",
-    description: "Profile name from the local Sendmux CLI config. Defaults to SENDMUX_PROFILE or the configured default profile.",
+    description: "Local CLI profile. Defaults to QUBRICS_PROFILE, then SENDMUX_PROFILE for compatibility, then the configured default profile.",
     helpGroup: "GLOBAL",
   }),
 };
@@ -50,20 +50,20 @@ export abstract class SendmuxCommand extends Command {
   static enableJsonFlag = true;
 
   async resolveAuth(flags: AuthFlags, expectedKind: RequiredApiKeyKind): Promise<ResolvedAuth> {
-    const envApiKey = process.env.SENDMUX_API_KEY || undefined;
-    const accessToken = process.env.SENDMUX_ACCESS_TOKEN || undefined;
-    const envBaseUrl = process.env.SENDMUX_BASE_URL || undefined;
-    const envProfile = process.env.SENDMUX_PROFILE || undefined;
+    const envApiKey = process.env.QUBRICS_API_KEY || process.env.SENDMUX_API_KEY || undefined;
+    const accessToken = process.env.QUBRICS_ACCESS_TOKEN || process.env.SENDMUX_ACCESS_TOKEN || undefined;
+    const envBaseUrl = process.env.QUBRICS_BASE_URL || process.env.SENDMUX_BASE_URL || undefined;
+    const envProfile = process.env.QUBRICS_PROFILE || process.env.SENDMUX_PROFILE || undefined;
 
     if (accessToken && (flags["api-key"] || envApiKey)) {
-      this.error("Provide exactly one of an API key or SENDMUX_ACCESS_TOKEN.", { exit: 2 });
+      this.error("Provide exactly one of an API key or QUBRICS_ACCESS_TOKEN (SENDMUX_ACCESS_TOKEN is also supported).", { exit: 2 });
     }
     if (accessToken) {
       const baseUrl = flags["base-url"] ?? envBaseUrl;
       return {
         accessToken,
         apiKeyKind: "oauth",
-        source: "SENDMUX_ACCESS_TOKEN",
+        source: process.env.QUBRICS_ACCESS_TOKEN ? "QUBRICS_ACCESS_TOKEN" : "SENDMUX_ACCESS_TOKEN",
         ...(baseUrl ? { baseUrl } : {}),
       };
     }
@@ -71,14 +71,14 @@ export abstract class SendmuxCommand extends Command {
     if (flags["api-key"] || envApiKey) {
       const apiKey = flags["api-key"] ?? envApiKey;
       if (!apiKey) {
-        throw new Error("Missing Sendmux API key");
+        throw new Error("Missing Qubrics API key");
       }
 
       const baseUrl = flags["base-url"] ?? envBaseUrl;
       const input: KeyKindInput = {
         apiKey,
         expectedKind,
-        source: flags["api-key"] ? "--api-key" : "SENDMUX_API_KEY",
+        source: flags["api-key"] ? "--api-key" : process.env.QUBRICS_API_KEY ? "QUBRICS_API_KEY" : "SENDMUX_API_KEY",
       };
       if (baseUrl) {
         input.baseUrl = baseUrl;
@@ -90,14 +90,14 @@ export abstract class SendmuxCommand extends Command {
     const config = await readCliConfig(this.config.configDir);
     const profileName = flags.profile ?? envProfile ?? config.defaultProfile;
     if (!profileName) {
-      this.error("No Sendmux profile configured. Run `sendmux profiles:set <name> --api-key <key> --default` or pass --api-key.", {
+      this.error("No Qubrics profile configured. Run `qubrics profiles:set <name> --api-key <key> --default` or pass --api-key.", {
         exit: 2,
       });
     }
 
     const profile = config.profiles[profileName];
     if (!profile) {
-      this.error(`Sendmux profile "${profileName}" was not found. Run \`sendmux profiles:list\` to see configured profiles.`, {
+      this.error(`Qubrics profile "${profileName}" was not found. Run \`qubrics profiles:list\` to see configured profiles.`, {
         exit: 2,
       });
     }
@@ -109,7 +109,7 @@ export abstract class SendmuxCommand extends Command {
 
     if (isAgentProfile(profile)) {
       if (!isActiveAgentProfile(profile)) {
-        this.error(`Sendmux agent profile "${profileName}" has not finished registration. Re-run \`sendmux agent:register ${profileName}\`.`, {
+        this.error(`Qubrics agent profile "${profileName}" has not finished registration. Re-run \`qubrics agent:register ${profileName}\`.`, {
           exit: 2,
         });
       }
@@ -196,7 +196,7 @@ export abstract class SendmuxCommand extends Command {
     try {
       apiKeyKind = inferApiKeyKind(apiKey);
     } catch (error) {
-      this.error(error instanceof Error ? error.message : "Invalid Sendmux API key", { exit: 2 });
+      this.error(error instanceof Error ? error.message : "Invalid Qubrics API key", { exit: 2 });
     }
 
     if (!isApiKeyCompatibleWithKind(apiKey, expectedKind)) {

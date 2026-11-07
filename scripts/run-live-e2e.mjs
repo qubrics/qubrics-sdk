@@ -79,6 +79,11 @@ const customMcpOperations = [
   },
 ];
 const operationRequestFactories = {
+  mailboxCreateCalendar: prepareMailboxCreateCalendar,
+  mailboxCreateCalendarEvent: prepareMailboxCreateCalendarEvent,
+  mailboxDeleteCalendar: prepareOwnedCalendarDelete,
+  mailboxDeleteCalendarEvent: prepareOwnedCalendarEventDelete,
+  mailboxUpdateCalendarEvent: prepareOwnedCalendarEventUpdate,
   mailboxControlDraftSchedule: prepareOwnedDraftSchedule,
   mailboxCreateDraft: prepareMailboxCreateDraft,
   mailboxDeleteDraft: prepareOwnedDraftDelete,
@@ -172,7 +177,7 @@ assertAdapters(adapters);
 assertAllScenariosExist(selectedOperations, scenarios);
 assertBuiltArtifacts(adapters);
 
-const sdk = await import("@sendmux/sdk");
+const sdk = await import("@qubrics/sdk");
 const credentials = credentialsForRun(sdk, selectedOperations);
 const sourceSha = spawnSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).stdout.trim();
 assert.match(sourceSha, /^[0-9a-f]{40}$/);
@@ -699,7 +704,7 @@ function assertBuiltArtifacts(adapters) {
     throw new Error("Missing TypeScript SDK build output. Run `pnpm build` or `pnpm -r --if-present build` first.");
   }
   if (adapters.includes("cli") && !existsSync("packages/ts/cli/dist/index.js")) {
-    throw new Error("Missing TypeScript CLI build output. Run `pnpm --filter @sendmux/cli build` first.");
+    throw new Error("Missing TypeScript CLI build output. Run `pnpm --filter @qubrics/cli build` first.");
   }
   if (adapters.includes("mcp") && !existsSync(mcpPython)) {
     throw new Error("Missing MCP Python venv. Run `pnpm build:mcp` first.");
@@ -713,10 +718,10 @@ function credentialsForRun(sdk, selectedOperations) {
   const requiredKeyKinds = requiredKeyKindsFor(selectedOperations);
   const rootApiKey = envValue("SENDMUX_LIVE_E2E_ROOT_API_KEY", "SENDMUX_STAGING_ROOT_API_KEY");
   const mailboxApiKey = envValue("SENDMUX_LIVE_E2E_MAILBOX_API_KEY", "SENDMUX_STAGING_MAILBOX_API_KEY");
-  const appBaseUrl = envValue("SENDMUX_LIVE_E2E_APP_BASE_URL", "SENDMUX_STAGING_APP_BASE_URL") ?? "https://app.sendmux.ai/api/v1";
+  const appBaseUrl = envValue("SENDMUX_LIVE_E2E_APP_BASE_URL", "SENDMUX_STAGING_APP_BASE_URL") ?? "https://app.qubrics.com/api/v1";
   const sendingBaseUrl =
     envValue("SENDMUX_LIVE_E2E_SENDING_BASE_URL", "SENDMUX_STAGING_SMTP_BASE_URL") ??
-    "https://smtp.sendmux.ai/api/v1";
+    "https://smtp.qubrics.com/api/v1";
 
   if (requiredKeyKinds.has("root") && !rootApiKey) {
     throw new Error("Missing SENDMUX_LIVE_E2E_ROOT_API_KEY or SENDMUX_STAGING_ROOT_API_KEY.");
@@ -779,11 +784,11 @@ function assertAllowedBaseUrl(label, value, defaults) {
 }
 
 function defaultAllowedAppBaseUrls() {
-  return ["https://app.sendmux.ai/api/v1", "http://127.0.0.1:3000/api/v1", "http://localhost:3000/api/v1"];
+  return ["https://app.qubrics.com/api/v1", "https://app.sendmux.ai/api/v1", "http://127.0.0.1:3000/api/v1", "http://localhost:3000/api/v1"];
 }
 
 function defaultAllowedSendingBaseUrls() {
-  return ["https://smtp.sendmux.ai/api/v1"];
+  return ["https://smtp.qubrics.com/api/v1", "https://smtp.sendmux.ai/api/v1"];
 }
 
 function parseCsv(value) {
@@ -798,7 +803,7 @@ async function runSdkOperation({ credentials, operation, prepared, sdk }) {
     const client = sdkClientFor({ credentials, operation, sdk });
     const module = sdk[operation.surface];
     const sdkOperation = module?.[operation.operationId];
-    assert.equal(typeof sdkOperation, "function", `${operation.operationId} is not exported by @sendmux/sdk`);
+    assert.equal(typeof sdkOperation, "function", `${operation.operationId} is not exported by @qubrics/sdk`);
 
     if (operation.operationId === "mailboxStreamEvents") {
       const { response, value } = await runMailboxStreamSdkOperation({ client, prepared, sdkOperation });
@@ -1103,6 +1108,155 @@ function defaultQueryFor(operation) {
   }
   return query;
 }
+
+/* CD14 START - Run-owned non-sending Calendar lifecycle fixtures. */
+async function prepareMailboxCreateCalendar({ fixtureRuntime }) {
+  fixtureRuntime.requireDedicatedMailbox();
+  const name = fixtureRuntime.resourceLabel("calendar");
+  let confirmed = false;
+  fixtureRuntime.addTeardown(() => {
+    if (!confirmed) throw new UnmetPrecondition("Calendar create remains uncertain; do not repeat it");
+  });
+  return {
+    cleanupSelectors: ["data.id"],
+    request: { body: { name, time_zone: "Australia/Melbourne" } },
+    afterResult: async value => {
+      requireSelectedValue(value, ["data.id"], "created calendar ID");
+      assert.equal(value.data?.name, name, "Calendar create name mismatch");
+      assert.equal(value.data?.mailbox_id, fixtureRuntime.proof.mailboxId, "Calendar create mailbox mismatch");
+      confirmed = true;
+    },
+  };
+}
+
+async function createOwnedCalendar(fixtureRuntime) {
+  const prepared = await prepareMailboxCreateCalendar({ fixtureRuntime });
+  const value = await fixtureRuntime.runOperation("mailboxCreateCalendar", prepared.request);
+  await prepared.afterResult(value);
+  return requireSelectedValue(value, ["data.id"], "owned calendar ID");
+}
+
+async function prepareMailboxCreateCalendarEvent({ fixtureRuntime }) {
+  const calendarId = await createOwnedCalendar(fixtureRuntime);
+  const uid = `${fixtureRuntime.resourceLabel("calendar-event")}-${randomUUID()}`;
+  let confirmed = false;
+  fixtureRuntime.addTeardown(() => {
+    if (!confirmed) throw new UnmetPrecondition("Calendar event create remains uncertain; do not repeat it");
+  });
+  return { cleanupSelectors: ["data.id"], request: { body: {
+    calendar_id: calendarId,
+    uid,
+    title: fixtureRuntime.resourceLabel("event"),
+    start: "2026-11-02T10:00:00",
+    time_zone: "Australia/Melbourne",
+    duration: "PT1H",
+  } }, afterResult: async value => {
+    assert.equal(value.data?.uid, uid, "Calendar create UID mismatch");
+    assert.equal(value.data?.mailbox_id, fixtureRuntime.proof.mailboxId, "Calendar create mailbox mismatch");
+    requireSelectedValue(value, ["data.id"], "created calendar event ID");
+    confirmed = true;
+  } };
+}
+
+async function createOwnedCalendarEvent(fixtureRuntime) {
+  const prepared = await prepareMailboxCreateCalendarEvent({ fixtureRuntime });
+  const value = await fixtureRuntime.runOperation("mailboxCreateCalendarEvent", prepared.request);
+  await prepared.afterResult(value);
+  return requireSelectedValue(value, ["data.id"], "owned calendar event ID");
+}
+
+async function prepareOwnedCalendarDelete({ fixtureRuntime }) {
+  const id = await createOwnedCalendar(fixtureRuntime);
+  return {
+    request: (await ownedCalendarWriteState({ fixtureRuntime, kind: "calendar", id })).request,
+    afterResult: async value => {
+      assert.equal(value.data?.id, id);
+      assert.equal(value.data?.deleted, true);
+    },
+  };
+}
+
+async function prepareOwnedCalendarEventDelete({ fixtureRuntime }) {
+  return { request: (await ownedCalendarWriteState({ fixtureRuntime, kind: "calendar_event", id: await createOwnedCalendarEvent(fixtureRuntime) })).request };
+}
+
+async function prepareOwnedCalendarEventUpdate({ fixtureRuntime }) {
+  const id = await createOwnedCalendarEvent(fixtureRuntime);
+  const original = await ownedCalendarWriteState({ fixtureRuntime, kind: "calendar_event", id });
+  const restore = async () => {
+    const current = await ownedCalendarWriteState({ fixtureRuntime, kind: "calendar_event", id });
+    if (current.value.data.title !== original.value.data.title) {
+      await fixtureRuntime.runOperation("mailboxUpdateCalendarEvent", { ...current.request, body: { title: original.value.data.title } });
+    }
+    const restored = await fixtureRuntime.runOperation("mailboxGetCalendarEvent", { path: { event_id: id } });
+    assert.equal(restored.data?.title, original.value.data.title, "Calendar title restore readback mismatch");
+  };
+  fixtureRuntime.addRestore("calendarEvent", id, { title: original.value.data.title }, restore);
+  const title = fixtureRuntime.resourceLabel("updated-event");
+  return {
+    request: { ...original.request, body: { title } },
+    afterResult: async () => {
+      const value = await fixtureRuntime.runOperation("mailboxGetCalendarEvent", { path: { event_id: id } });
+      assert.equal(value.data?.title, title, "Owned event update readback mismatch");
+      await restore();
+    },
+  };
+}
+
+function requireOwnedCalendarResource(fixtureRuntime, kind, id) {
+  assert.ok(typeof id === "string" && id.length > 0, "Calendar mutations require a run-owned resource ID");
+  const parameter = kind === "calendar" ? "calendar_id" : "event_id";
+  const entry = fixtureRuntime.ledger.resources.find(item => item.kind === kind && item.path?.[parameter] === id && item.status !== "absent");
+  assert.ok(entry, "Calendar mutations require a run-owned resource ID");
+  return entry;
+}
+
+async function ownedCalendarWriteState({ fixtureRuntime, kind, id }) {
+  const entry = requireOwnedCalendarResource(fixtureRuntime, kind, id);
+  const isCalendar = kind === "calendar";
+  const read = isCalendar ? "mailboxGetCalendar" : "mailboxGetCalendarEvent";
+  const result = isCalendar
+    ? await fixtureRuntime.runOperationWithResponse({ operationId: read, request: { path: entry.path } })
+    : { data: await fixtureRuntime.runOperation(read, { path: entry.path }) };
+  const value = result.data;
+  assert.equal(value.data?.id, id, isCalendar ? "Calendar cleanup ID mismatch" : "Owned Calendar readback ID mismatch");
+  assert.equal(value.data?.mailbox_id, fixtureRuntime.proof.mailboxId, isCalendar ? "Calendar cleanup mailbox mismatch" : "Owned Calendar mailbox mismatch");
+  if (isCalendar) {
+    assert.equal(value.data.name, entry.name, "Calendar cleanup name mismatch");
+    assert.equal(value.data.is_default, false, "Calendar cleanup must not remove the default calendar");
+  } else {
+    assert.equal(value.data.uid, entry.uid, "Calendar cleanup UID mismatch");
+    assert.deepEqual(value.data.calendar_ids, [entry.calendar_id], "Owned event parent mismatch");
+  }
+  const etag = isCalendar ? result.response?.headers.get("ETag") : requireSelectedValue(value, ["data.etag"], "current Calendar ETag");
+  assert.ok(typeof etag === "string" && etag.trim() && etag !== "*", isCalendar ? "Calendar cleanup requires the GET response ETag" : "Invalid Calendar ETag");
+  return { value, request: { path: entry.path, headers: { "If-Match": etag } } };
+}
+
+async function cleanupOwnedCalendarResource(fixtureRuntime, entry) {
+  if (entry.kind === "calendar" && fixtureRuntime.ledger.resources.some(item => item.calendar_id === entry.id && item.status !== "absent")) {
+    throw new UnmetPrecondition("Owned calendar cleanup requires verified child event absence");
+  }
+  if (entry.kind === "calendar_event" && !entry.path.event_id) {
+    const value = await fixtureRuntime.runOperation("mailboxListCalendarEvents", { query: { uid: entry.uid, calendar_id: entry.calendar_id, limit: 2 } });
+    const rows = value.data;
+    if (!Array.isArray(rows) || rows.length !== 1 || value.pagination?.has_more === true || rows[0].uid !== entry.uid || JSON.stringify(rows[0].calendar_ids) !== JSON.stringify([entry.calendar_id])) {
+      throw new UnmetPrecondition("Uncertain Calendar event create remains unresolved; never repeat the create");
+    }
+    fixtureRuntime.observeResult("mailboxCreateCalendarEvent", { body: { uid: entry.uid, calendar_id: entry.calendar_id } }, { data: rows[0] });
+  }
+  const parameter = entry.kind === "calendar" ? "calendar_id" : "event_id";
+  if (!entry.path[parameter]) throw new UnmetPrecondition("Uncertain calendar create has no owned resource ID");
+  const state = await ignoreCleanupErrors(() => ownedCalendarWriteState({ fixtureRuntime, kind: entry.kind, id: entry.id }));
+  if (state) {
+    await ignoreCleanupErrors(() => fixtureRuntime.runOperation(entry.kind === "calendar" ? "mailboxDeleteCalendar" : "mailboxDeleteCalendarEvent", state.request));
+    const remaining = await ignoreCleanupErrors(() => fixtureRuntime.runOperation(entry.kind === "calendar" ? "mailboxGetCalendar" : "mailboxGetCalendarEvent", { path: entry.path }));
+    assert.equal(remaining, undefined, "Owned Calendar resource remains after cleanup");
+  }
+  entry.status = "absent";
+  entry.verification = "get_not_found";
+}
+/* CD14 END - Run-owned non-sending Calendar lifecycle fixtures. */
 
 async function prepareMailboxCreateFolder({ fixtureRuntime }) {
   return {
@@ -2722,6 +2876,32 @@ function createFixtureRuntime({ credentials, fixtures, operations, runId, sdk, s
     get ledger() { return cloneJson(ledger); },
     beginOperation(operationId, request) {
       assertSendRequestAllowed(operationId, request);
+      if (["mailboxCreateCalendar", "mailboxCreateCalendarEvent"].includes(operationId)) {
+        assert.ok(proof, "Connection identity preflight must succeed before Calendar mutations");
+        const isEvent = operationId === "mailboxCreateCalendarEvent";
+        const field = isEvent ? "uid" : "name";
+        const identity = request.body?.[field];
+        assert.ok(typeof identity === "string" && identity.startsWith("live-e2e-") && identity.includes(`-${runSlug}-`), "Calendar creates require a run-labelled identity");
+        // An idempotency header enables transport replay; uncertain Calendar creates must never be repeated.
+        assert.ok(!Object.keys(request.headers ?? {}).some(name => name.toLowerCase() === "idempotency-key"), "Calendar fixture creates must not enable automatic retries");
+        if (isEvent) requireOwnedCalendarResource(this, "calendar", request.body.calendar_id);
+        if (ledger.resources.some(item => item.operationId === operationId && item[field] === identity)) {
+          throw new UnmetPrecondition("Calendar create intent was already dispatched; never repeat the create");
+        }
+        const entry = { operationId, kind: isEvent ? "calendar_event" : "calendar", id: identity, [field]: identity, ...(isEvent ? { calendar_id: request.body.calendar_id } : {}), path: {}, status: "pending" };
+        ledger.resources.push(entry);
+        persist();
+        teardowns.push(async () => {
+          try { await cleanupOwnedCalendarResource(this, entry); }
+          catch (error) { entry.status = "failed"; throw error; }
+          finally { persist(); }
+        });
+        return;
+      }
+      if (["mailboxUpdateCalendarEvent", "mailboxDeleteCalendarEvent", "mailboxDeleteCalendar"].includes(operationId)) {
+        const isCalendar = operationId === "mailboxDeleteCalendar";
+        requireOwnedCalendarResource(this, isCalendar ? "calendar" : "calendar_event", request.path?.[isCalendar ? "calendar_id" : "event_id"]);
+      }
       if (!["mailboxSendMessage", "mailboxSendDraft", "sendingSendEmail", "sendingSendEmailBatch"].includes(operationId)) return;
       if (operationId === "mailboxSendDraft" && request.body.scheduled_for) return;
       const messages = operationId === "sendingSendEmailBatch" ? request.body.messages : [operationId === "mailboxSendDraft" ? request.fixtureDraft : request.body];
@@ -2827,6 +3007,24 @@ function createFixtureRuntime({ credentials, fixtures, operations, runId, sdk, s
       }
     },
     observeResult(operationId, request, value, attachmentEvidence, { nestedIdentityOnly = false } = {}) {
+      if (["mailboxCreateCalendar", "mailboxCreateCalendarEvent"].includes(operationId)) {
+        const id = value?.data?.id;
+        if (!id) {
+          assert.notEqual(value?.ok, true, `${operationId} success response omitted data.id`);
+          return;
+        }
+        assert.ok(typeof id === "string" && /^[A-Za-z0-9_-]+$/.test(id), "Invalid owned Calendar ID");
+        const field = operationId === "mailboxCreateCalendar" ? "name" : "uid";
+        const entry = ledger.resources.find(item => item.operationId === operationId && item[field] === request.body?.[field]);
+        assert.ok(entry, "Calendar response has no persisted create intent");
+        const parameter = field === "name" ? "calendar_id" : "event_id";
+        assert.ok(!entry.path[parameter] || entry.id === id, "Conflicting owned Calendar ID");
+        assert.ok(!ledger.resources.some(item => item !== entry && item.kind === entry.kind && item.path?.[parameter] === id), "Calendar response reused another owned ID");
+        entry.id = id;
+        entry.path = { [parameter]: id };
+        persist();
+        return;
+      }
       const retention = {
         mailboxCreateAttachmentUpload: ["data.upload_id", "url_expires_at", "upload_intent"],
         mailboxUploadAttachment: ["data.blob_id", null, "mailbox_blob"],
@@ -2932,6 +3130,10 @@ function createFixtureRuntime({ credentials, fixtures, operations, runId, sdk, s
     },
     runId,
     async runOperation(operationId, request = {}, { attachmentEvidence } = {}) {
+      const response = await this.runOperationWithResponse({ operationId, request, attachmentEvidence });
+      return response.data;
+    },
+    async runOperationWithResponse({ operationId, request = {}, attachmentEvidence }) {
       assert.ok(proof, "Connection identity preflight must succeed before fixture operations");
       this.beginOperation(operationId, request);
       const operation = operationsById.get(operationId);
@@ -2940,11 +3142,11 @@ function createFixtureRuntime({ credentials, fixtures, operations, runId, sdk, s
       }
       const client = sdkClientFor({ credentials, operation, sdk });
       const sdkOperation = sdk[operation.surface]?.[operation.operationId];
-      assert.equal(typeof sdkOperation, "function", `${operation.operationId} is not exported by @sendmux/sdk`);
+      assert.equal(typeof sdkOperation, "function", `${operation.operationId} is not exported by @qubrics/sdk`);
       const response = await runBoundedSdkOperation({ client, operation, request, onResponse: response => this.observeResult(operationId, request, response.data, attachmentEvidence), sdkOperation });
       this.observeResult(operationId, request, response.data, attachmentEvidence);
       assertLiveResponse(response.data, operation);
-      return response.data;
+      return response;
     },
     async runMailboxOperationWithApiKey(apiKey, operationId, request = {}) {
       const operation = operationsById.get(operationId);
@@ -2958,7 +3160,7 @@ function createFixtureRuntime({ credentials, fixtures, operations, runId, sdk, s
         retry: { baseDelayMs: 250, maxAttempts: 2, maxDelayMs: 1_000 },
       });
       const sdkOperation = sdk.mailbox?.[operation.operationId];
-      assert.equal(typeof sdkOperation, "function", `${operation.operationId} is not exported by @sendmux/sdk`);
+      assert.equal(typeof sdkOperation, "function", `${operation.operationId} is not exported by @qubrics/sdk`);
       const response = await runBoundedSdkOperation({ client, operation, request, sdkOperation });
       assertLiveResponse(response.data, operation);
       return response.data;
@@ -3026,7 +3228,7 @@ function createFixtureRuntime({ credentials, fixtures, operations, runId, sdk, s
       const request = await resolveInputObject(this, source.request ?? {});
       const client = sdkClientFor({ credentials, operation, sdk });
       const sdkOperation = sdk[operation.surface]?.[operation.operationId];
-      assert.equal(typeof sdkOperation, "function", `${operation.operationId} is not exported by @sendmux/sdk`);
+      assert.equal(typeof sdkOperation, "function", `${operation.operationId} is not exported by @qubrics/sdk`);
 
       const response = await runBoundedSdkOperation({ client, operation, request, sdkOperation });
       assertLiveResponse(response.data, operation.operationId);

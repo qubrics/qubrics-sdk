@@ -104,7 +104,7 @@ jobs:
         if: ${{ github.event_name != 'release' && inputs.push != true }}
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
-          repository: Sendmux/docs
+          repository: qubrics/docs
           ref: ${{ github.head_ref == 'monid/03-policies-scheduling-signatures-s12' && 'agent/s12-contract-integration-20261012' || 'main' }}
           path: sendmux-docs
 
@@ -149,19 +149,19 @@ jobs:
           pnpm generate:ts
           pnpm generate:cli
           pnpm -r \
-            --filter @sendmux/core \
-            --filter @sendmux/sending \
-            --filter @sendmux/mailbox \
-            --filter @sendmux/management \
-            --filter @sendmux/sdk \
-            --filter @sendmux/cli \
+            --filter @qubrics/core \
+            --filter @qubrics/sending \
+            --filter @qubrics/mailbox \
+            --filter @qubrics/management \
+            --filter @qubrics/sdk \
+            --filter @qubrics/cli \
             build
           pnpm check:cli
 
       - name: Build Windows CLI archive
         shell: bash
         run: |
-          SENDMUX_CLI_PACK_TARGETS=win32-x64 pnpm --filter @sendmux/cli pack:tarballs
+          SENDMUX_CLI_PACK_TARGETS=win32-x64 pnpm --filter @qubrics/cli pack:tarballs
           pnpm check:cli-tarballs
           node scripts/build-chocolatey-asset.mjs
 
@@ -231,6 +231,7 @@ jobs:
           $ErrorActionPreference = 'Stop'
           $source = Resolve-Path .tmp/chocolatey/pkg
           $server = $null
+          $expectedVersion = (Get-Content packages/ts/cli/package.json -Raw | ConvertFrom-Json).version
 
           try {
             if ($env:USE_LOCAL_CHOCOLATEY_ASSET -eq 'true') {
@@ -267,19 +268,45 @@ jobs:
 
             choco install sendmux.portable --source "$source" -y --no-progress
             if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-            sendmux --help
+            $primaryVersion = qubrics --version
             if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+            if ($primaryVersion -notmatch ('^@qubrics/cli/' + [Regex]::Escape($expectedVersion) + '\s')) {
+              throw "qubrics --version did not report the packaged version $expectedVersion."
+            }
+            $legacyVersion = @(& $env:ComSpec /d /s /c 'sendmux --version 2>&1')
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+            if ($legacyVersion.Count -lt 2 -or $legacyVersion[0] -ne 'sendmux is deprecated. Use qubrics instead.' -or $legacyVersion[1] -ne $primaryVersion) {
+              throw ("sendmux must print its deprecation before the same version as qubrics. Actual: " + ($legacyVersion | ConvertTo-Json -Compress) + "; primary: " + ($primaryVersion | ConvertTo-Json -Compress))
+            }
             choco uninstall sendmux.portable -y --no-progress
             if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+            foreach ($command in @('qubrics', 'sendmux')) {
+              if (Get-Command $command -ErrorAction SilentlyContinue) {
+                throw "$command shim remained after uninstalling sendmux.portable."
+              }
+            }
 
             choco install sendmux --source "$source" -y --no-progress
             if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-            sendmux --help
+            $primaryVersion = qubrics --version
             if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+            if ($primaryVersion -notmatch ('^@qubrics/cli/' + [Regex]::Escape($expectedVersion) + '\s')) {
+              throw "qubrics --version did not report the packaged version $expectedVersion."
+            }
+            $legacyVersion = @(& $env:ComSpec /d /s /c 'sendmux --version 2>&1')
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+            if ($legacyVersion.Count -lt 2 -or $legacyVersion[0] -ne 'sendmux is deprecated. Use qubrics instead.' -or $legacyVersion[1] -ne $primaryVersion) {
+              throw ("sendmux must print its deprecation before the same version as qubrics. Actual: " + ($legacyVersion | ConvertTo-Json -Compress) + "; primary: " + ($primaryVersion | ConvertTo-Json -Compress))
+            }
             choco uninstall sendmux -y --no-progress
             if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
             choco uninstall sendmux.portable -y --no-progress
             if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+            foreach ($command in @('qubrics', 'sendmux')) {
+              if (Get-Command $command -ErrorAction SilentlyContinue) {
+                throw "$command shim remained after uninstalling sendmux.portable."
+              }
+            }
           } finally {
             if ($server) {
               Stop-Process -Id $server.Id -Force -ErrorAction SilentlyContinue

@@ -1,6 +1,6 @@
-# @sendmux/ai-sdk
+# @qubrics/ai-sdk
 
-[Vercel AI SDK](https://ai-sdk.dev) tools for [Sendmux](https://sendmux.ai), the email API for AI agents.
+[Vercel AI SDK](https://ai-sdk.dev) tools for [Qubrics](https://qubrics.com), the email API for AI agents.
 
 Gives an agent its own mailbox: it can send email, read what arrives, and reply from its own address.
 
@@ -18,7 +18,7 @@ peer ranges and use the Node.js version required by `ai`.
 
 Before upgrading, retain the prior known-working package manifest, lockfile,
 and corresponding caller changes, including the compatible intersection of
-the Sendmux wrapper, `ai`, and `zod`. To roll back, restore those files together
+the Qubrics wrapper, `ai`, and `zod`. To roll back, restore those files together
 and reinstall dependencies with your project's existing lockfile workflow.
 Run your tool integration checks before resuming agents. Keep peer-dependency
 checks enabled rather than forcing an unsupported combination.
@@ -26,15 +26,15 @@ checks enabled rather than forcing an unsupported combination.
 ## Installation
 
 ```sh
-npm install @sendmux/ai-sdk ai zod
+npm install @qubrics/ai-sdk ai zod
 ```
 
 ## Getting an API key
 
 For API-key authentication, use a key that can both send and receive. Two ways to get one:
 
-- **Dashboard** — create a mailbox and a mailbox-scoped key (`smx_mbx_*`). See [API keys](https://sendmux.ai/docs/guides/api-keys).
-- **Agent self-registration** — the agent claims its own `@myagent.mx` mailbox and gets an `smx_agent_*` token, with no human signup first. See [email for AI agents](https://sendmux.ai/solutions/for-ai-agents/).
+- **Dashboard** — create a mailbox and a mailbox-scoped key (`smx_mbx_*`). See [API keys](https://qubrics.com/docs/guides/api-keys).
+- **Agent self-registration** — the agent claims its own `@myagent.mx` mailbox and gets an `smx_agent_*` token, with no human signup first. See [email for AI agents](https://qubrics.com/solutions/for-ai-agents/).
 
 Note on agent tokens: a freshly self-registered `smx_agent_*` token can read and receive, but **cannot send** until a human owner has been invited and has approved it. Until then `send_email` and `reply` will fail. A dashboard `smx_mbx_*` key with send permission works immediately.
 
@@ -45,15 +45,15 @@ Read the key from the environment. Never hard-code it.
 Set `accessToken` to a bare REST OAuth token or a synchronous or asynchronous provider instead of `apiKey`:
 
 ```ts
-import { sendmux } from "@sendmux/ai-sdk";
+import { sendmux } from "@qubrics/ai-sdk";
 
 const tools = sendmux({
-  accessToken: () => process.env.SENDMUX_ACCESS_TOKEN!,
+  accessToken: () => process.env.QUBRICS_ACCESS_TOKEN!,
   defaultFrom: "agent@yourdomain.dev",
 });
 ```
 
-The provider runs before every tool request. Your application owns protected token storage, expiry checks, and refresh coordination. Request `mailbox.read` and `email.send` to use all three tools, and select one mailbox at consent; these tools do not supply a mailbox selector. See [REST OAuth](https://sendmux.ai/docs/developer-tools/oauth).
+The provider runs before every tool request. Your application owns protected token storage, expiry checks, and refresh coordination. Request `mailbox.read` and `email.send` to use all three tools, and select one mailbox at consent; these tools do not supply a mailbox selector. See [REST OAuth](https://qubrics.com/docs/developer-tools/oauth).
 
 ## Quick start
 
@@ -61,12 +61,12 @@ The provider runs before every tool request. Your application owns protected tok
 import { openai } from "@ai-sdk/openai";
 import { generateText } from "ai";
 
-import { sendmux } from "@sendmux/ai-sdk";
+import { sendmux } from "@qubrics/ai-sdk";
 
 const { text } = await generateText({
   model: openai("gpt-4o"),
   tools: sendmux({
-    apiKey: process.env.SENDMUX_API_KEY!,
+    apiKey: process.env.QUBRICS_API_KEY!,
     defaultFrom: "agent@yourdomain.dev",
   }),
   prompt: "Read the inbox and reply to anyone asking about pricing.",
@@ -127,9 +127,9 @@ sendmux({ apiKey, defaultFrom });
 
 ## Retries and duplicate sends
 
-Agents retry. Pass `idempotencyKey` on `send_email` and `reply` and Sendmux will send once, even if the same call arrives several times inside 24 hours. Any stable string works — a task id, a thread id, a hash of the message.
+Agents retry. Pass `idempotencyKey` on `send_email` and `reply` and Qubrics will send once, even if the same call arrives several times inside 24 hours. Any stable string works — a task id, a thread id, a hash of the message.
 
-Details: [idempotency](https://sendmux.ai/docs/guides/idempotency).
+Details: [idempotency](https://qubrics.com/docs/guides/idempotency).
 
 ## Common errors
 
@@ -141,11 +141,11 @@ Details: [idempotency](https://sendmux.ai/docs/guides/idempotency).
 
 ## Related
 
-- [Quickstart](https://sendmux.ai/docs/guides/quickstart)
-- [Mailboxes](https://sendmux.ai/docs/guides/mailboxes)
-- [All Sendmux SDKs](https://sendmux.ai/docs/sdks)
-- [Pricing](https://sendmux.ai/pricing/) — usage-based, no per-seat or per-mailbox fees
+- [Quickstart](https://qubrics.com/docs/guides/quickstart)
+- [Mailboxes](https://qubrics.com/docs/guides/mailboxes)
+- [All Qubrics SDKs](https://qubrics.com/docs/sdks)
+- [Pricing](https://qubrics.com/pricing/) — usage-based, no per-seat or per-mailbox fees
 
 ## Licence
 
-MIT. See the [licence file](https://github.com/Sendmux/sendmux-sdk/blob/main/LICENSE).
+MIT. See the [licence file](https://github.com/qubrics/qubrics-sdk/blob/main/LICENSE).

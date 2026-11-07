@@ -229,8 +229,8 @@ client helpers live under `sendmux::core`, `sendmux::sending`,
 - Sending API: <https://sendmux.ai/docs/sending-api/introduction>
 - Mailbox API: <https://sendmux.ai/docs/mailbox-api/introduction>
 - Management API: <https://sendmux.ai/docs/api/introduction>
-- GitHub: <https://github.com/Sendmux/sendmux-sdk>
-- Support: <https://github.com/Sendmux/sendmux-sdk/issues>
+- GitHub: <https://github.com/qubrics/qubrics-sdk>
+- Support: <https://github.com/qubrics/qubrics-sdk/issues>
 
 ## Publishing Safety
 

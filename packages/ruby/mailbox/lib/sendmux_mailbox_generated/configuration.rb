@@ -1,7 +1,7 @@
 =begin
-#Sendmux API
+#Qubrics API
 
-#Programmatic access to your Sendmux email infrastructure.
+#Programmatic access to your Qubrics email infrastructure.
 
 The version of the OpenAPI document: 1.0.0
 
@@ -157,7 +157,7 @@ module Sendmux::Mailbox::Generated
 
     def initialize
       @scheme = 'https'
-      @host = 'app.sendmux.ai'
+      @host = 'app.qubrics.com'
       @base_path = '/api/v1'
       @server_index = nil
       @server_operation_index = {}
@@ -270,7 +270,7 @@ module Sendmux::Mailbox::Generated
     def server_settings
       [
         {
-          url: "https://app.sendmux.ai/api/v1",
+          url: "https://app.qubrics.com/api/v1",
           description: "API v1",
         }
       ]

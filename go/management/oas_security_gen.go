@@ -15,7 +15,7 @@ import (
 // SecurityHandler is handler for security parameters.
 type SecurityHandler interface {
 	// HandleBearerAuth handles bearerAuth security.
-	// Sendmux API key. Use a root API key for Management API routes, or a mailbox credential for Mailbox
+	// Qubrics API key. Use a root API key for Management API routes, or a mailbox credential for Mailbox
 	// API routes. Obtain keys from the dashboard under API Keys.
 	HandleBearerAuth(ctx context.Context, operationName OperationName, t BearerAuth) (context.Context, error)
 }
@@ -115,7 +115,7 @@ func (s *Server) securityBearerAuth(ctx context.Context, operationName Operation
 // SecuritySource is provider of security values (tokens, passwords, etc.).
 type SecuritySource interface {
 	// BearerAuth provides bearerAuth security value.
-	// Sendmux API key. Use a root API key for Management API routes, or a mailbox credential for Mailbox
+	// Qubrics API key. Use a root API key for Management API routes, or a mailbox credential for Mailbox
 	// API routes. Obtain keys from the dashboard under API Keys.
 	BearerAuth(ctx context.Context, operationName OperationName) (BearerAuth, error)
 }

@@ -1,5 +1,5 @@
 {
-  "name": "@sendmux/sending",
+  "name": "@qubrics/sending",
   "version": "1.6.0",
   "license": "MIT",
   "type": "module",
@@ -21,14 +21,14 @@
     "build": "tsc -p tsconfig.json"
   },
   "dependencies": {
-    "@sendmux/core": "workspace:*"
+    "@qubrics/core": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "22.19.19"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Sendmux/sendmux-sdk.git",
+    "url": "git+https://github.com/qubrics/qubrics-sdk.git",
     "directory": "packages/ts/sending"
   },
   "publishConfig": {

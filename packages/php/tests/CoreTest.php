@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace Sendmux\Tests;
+namespace Qubrics\Tests;
 
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
-use Sendmux\Core\ApiKeySurface;
-use Sendmux\Core\Auth;
-use Sendmux\Core\ErrorMapper;
-use Sendmux\Core\Headers;
-use Sendmux\Core\Pagination;
-use Sendmux\Core\RetryMiddleware;
-use Sendmux\Core\RetryOptions;
-use Sendmux\Core\SendmuxApiError;
+use Qubrics\Core\ApiKeySurface;
+use Qubrics\Core\Auth;
+use Qubrics\Core\ErrorMapper;
+use Qubrics\Core\Headers;
+use Qubrics\Core\Pagination;
+use Qubrics\Core\RetryMiddleware;
+use Qubrics\Core\RetryOptions;
+use Qubrics\Core\QubricsApiError;
 
 final class CoreTest extends TestCase
 {
@@ -105,7 +105,7 @@ final class CoreTest extends TestCase
             ['X-Request-Id' => ['req_header']]
         );
 
-        self::assertInstanceOf(SendmuxApiError::class, $mapped);
+        self::assertInstanceOf(QubricsApiError::class, $mapped);
         self::assertSame('conflict', $mapped->apiCode);
         self::assertSame('req_model', $mapped->requestId);
         self::assertFalse($mapped->retryable);

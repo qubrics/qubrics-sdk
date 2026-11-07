@@ -1,34 +1,36 @@
-# Sendmux SDKs
+# Qubrics SDKs
 
-[![npm version](https://img.shields.io/npm/v/@sendmux/sdk?label=npm)](https://www.npmjs.com/package/@sendmux/sdk)
+[![npm version](https://img.shields.io/npm/v/@qubrics/sdk?label=npm)](https://www.npmjs.com/package/@qubrics/sdk)
 [![PyPI version](https://img.shields.io/pypi/v/sendmux-sdk?label=pypi)](https://pypi.org/project/sendmux-sdk/)
 [![Go Reference](https://pkg.go.dev/badge/sendmux.ai/go/v3.svg)](https://pkg.go.dev/sendmux.ai/go/v3)
 [![crates.io version](https://img.shields.io/crates/v/sendmux?label=crates.io)](https://crates.io/crates/sendmux)
-[![CI](https://github.com/Sendmux/sendmux-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/Sendmux/sendmux-sdk/actions/workflows/ci.yml)
-[![npm downloads](https://img.shields.io/npm/dm/@sendmux/sdk?label=npm%20downloads)](https://www.npmjs.com/package/@sendmux/sdk)
+[![CI](https://github.com/qubrics/qubrics-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/qubrics/qubrics-sdk/actions/workflows/ci.yml)
+[![npm downloads](https://img.shields.io/npm/dm/@qubrics/sdk?label=npm%20downloads)](https://www.npmjs.com/package/@qubrics/sdk)
 [![Licence: MIT](https://img.shields.io/badge/licence-MIT-blue.svg)](LICENSE)
 
-Official SDK, CLI, and MCP workspace for Sendmux.
+Official SDK, CLI, and MCP workspace for Qubrics.
 
-- Product documentation: [sendmux.ai/docs](https://sendmux.ai/docs)
-- Management API reference: [sendmux.ai/docs/api/introduction](https://sendmux.ai/docs/api/introduction)
-- Mailbox API reference: [sendmux.ai/docs/mailbox-api/introduction](https://sendmux.ai/docs/mailbox-api/introduction)
-- Sending API reference: [sendmux.ai/docs/sending-api/introduction](https://sendmux.ai/docs/sending-api/introduction)
-- MCP guide: [sendmux.ai/docs/ai-integrations/mcp](https://sendmux.ai/docs/ai-integrations/mcp)
+Seven `@qubrics/*` npm packages await publication. Existing `@sendmux/*` releases remain available. Other ecosystems use the published names below until their separate migrations ship.
+
+- Product documentation: [qubrics.com/docs](https://qubrics.com/docs)
+- Management API reference: [qubrics.com/docs/api/introduction](https://qubrics.com/docs/api/introduction)
+- Mailbox API reference: [qubrics.com/docs/mailbox-api/introduction](https://qubrics.com/docs/mailbox-api/introduction)
+- Sending API reference: [qubrics.com/docs/sending-api/introduction](https://qubrics.com/docs/sending-api/introduction)
+- MCP guide: [qubrics.com/docs/ai-integrations/mcp](https://qubrics.com/docs/ai-integrations/mcp)
 
 ## Packages
 
 | Ecosystem | Package | Surface | API-key / hosted auth | Install | Source |
 | --- | --- | --- | --- | --- | --- |
-| npm | `@sendmux/core` | Shared TypeScript helpers | n/a | `npm install @sendmux/core` | [`packages/ts/core`](packages/ts/core) |
-| npm | `@sendmux/sending` | Sending API | `smx_mbx_*` or owner-approved `smx_agent_*` | `npm install @sendmux/sending` | [`packages/ts/sending`](packages/ts/sending) |
-| npm | `@sendmux/mailbox` | Mailbox API | `smx_mbx_*` or `smx_agent_*` | `npm install @sendmux/mailbox` | [`packages/ts/mailbox`](packages/ts/mailbox) |
-| npm | `@sendmux/management` | Management API | `smx_root_*` | `npm install @sendmux/management` | [`packages/ts/management`](packages/ts/management) |
-| npm | `@sendmux/sdk` | TypeScript umbrella package | surface-specific | `npm install @sendmux/sdk` | [`packages/ts/sdk`](packages/ts/sdk) |
-| npm | `@sendmux/cli` | `sendmux` CLI | command/profile-specific | `npm install -g @sendmux/cli` | [`packages/ts/cli`](packages/ts/cli) |
+| npm | `@qubrics/core` | Shared TypeScript helpers | n/a | `npm install @qubrics/core` | [`packages/ts/core`](packages/ts/core) |
+| npm | `@qubrics/sending` | Sending API | `smx_mbx_*` or owner-approved `smx_agent_*` | `npm install @qubrics/sending` | [`packages/ts/sending`](packages/ts/sending) |
+| npm | `@qubrics/mailbox` | Mailbox API | `smx_mbx_*` or `smx_agent_*` | `npm install @qubrics/mailbox` | [`packages/ts/mailbox`](packages/ts/mailbox) |
+| npm | `@qubrics/management` | Management API | `smx_root_*` | `npm install @qubrics/management` | [`packages/ts/management`](packages/ts/management) |
+| npm | `@qubrics/sdk` | TypeScript umbrella package | surface-specific | `npm install @qubrics/sdk` | [`packages/ts/sdk`](packages/ts/sdk) |
+| npm | `@qubrics/cli` | `qubrics` CLI | command/profile-specific | `npm install -g @qubrics/cli` | [`packages/ts/cli`](packages/ts/cli) |
 | npm | `sendmux-mcp` | stdio bridge to hosted MCP | OAuth | `npx -y sendmux-mcp` | [`packages/ts/mcp`](packages/ts/mcp) |
-| npm | `@sendmux/ai-sdk` | Vercel AI SDK tools (agent inbox + sending) | send + receive `smx_mbx_*` or `smx_agent_*` | `npm install @sendmux/ai-sdk` | [`packages/ts/ai-sdk`](packages/ts/ai-sdk) |
-| Homebrew | `sendmux` | `sendmux` CLI | command/profile-specific | `brew install sendmux/tap/sendmux` | [`Sendmux/homebrew-tap`](https://github.com/Sendmux/homebrew-tap) |
+| npm | `@qubrics/ai-sdk` | Vercel AI SDK tools (agent inbox + sending) | send + receive `smx_mbx_*` or `smx_agent_*` | `npm install @qubrics/ai-sdk` | [`packages/ts/ai-sdk`](packages/ts/ai-sdk) |
+| Homebrew | `sendmux` | `sendmux` CLI | command/profile-specific | `brew install qubrics/tap/sendmux` | [`qubrics/homebrew-tap`](https://github.com/qubrics/homebrew-tap) |
 | PyPI | `sendmux-core` | Shared Python helpers | n/a | `pip install sendmux-core` | [`packages/python/core`](packages/python/core) |
 | PyPI | `sendmux-sending` | Sending API | `smx_mbx_*` or owner-approved `smx_agent_*` | `pip install sendmux-sending` | [`packages/python/sending`](packages/python/sending) |
 | PyPI | `sendmux-mailbox` | Mailbox API | `smx_mbx_*` or `smx_agent_*` | `pip install sendmux-mailbox` | [`packages/python/mailbox`](packages/python/mailbox) |
@@ -58,7 +60,7 @@ Official SDK, CLI, and MCP workspace for Sendmux.
 Install only the package for the surface you need.
 
 ```sh
-npm install @sendmux/sending
+npm install @qubrics/sending
 pip install sendmux-sending
 go get sendmux.ai/go/v3@v3.0.0
 cargo add sendmux
@@ -83,21 +85,23 @@ TypeScript, Python, Go, PHP, Ruby, and Rust surface clients accept a bare REST O
 | Ruby | `access_token: token` or a callable. |
 | Rust | `new_with_access_token(token)` or `new_with_token_provider(provider)`; providers return a future. |
 
-Choose one credential source. Your application owns secure storage and refresh coordination. Request `resource=https://sendmux.ai/api`; each API still checks its required scopes and granted surface. The CLI manages browser login and token refresh with `sendmux auth:login`; use `sendmux auth:logout` to revoke its connection.
+Choose one credential source. Your application owns secure storage and refresh coordination. Request `resource=https://qubrics.com/api`; each API still checks its required scopes and granted surface. The CLI manages browser login and token refresh with `qubrics auth:login`; use `qubrics auth:logout` to revoke its connection.
 
-[OAuth setup and lifecycle](https://sendmux.ai/docs/developer-tools/oauth).
+[OAuth setup and lifecycle](https://qubrics.com/docs/developer-tools/oauth).
 
 ## Command-line access
 
 For command-line access, install the CLI:
 
 ```sh
-brew install sendmux/tap/sendmux
-npm install -g @sendmux/cli
-sendmux agent:register my-agent --mailbox-local-part my-agent --default --json
+brew install qubrics/tap/sendmux
+npm install -g @qubrics/cli
+qubrics agent:register my-agent --mailbox-local-part my-agent --default --json
 ```
 
-Agent registration does not require an existing account or API key. It creates a local profile with a durable, revocable credential for reading and receiving mail. To send, invite the owner with `sendmux agent:invite-owner owner@example.com --profile my-agent`; after the owner accepts and approves sending, Sending API commands exchange and cache a one-hour delegated token automatically.
+Agent registration does not require an existing account or API key. It creates a local profile with a durable, revocable credential for reading and receiving mail. To send, invite the owner with `qubrics agent:invite-owner owner@example.com --profile my-agent`; after the owner accepts and approves sending, Sending API commands exchange and cache a one-hour delegated token automatically.
+
+`@qubrics/cli` also provides `sendmux` for one major release. It prints a deprecation line before running the same command. Existing profiles remain available.
 
 For stdio MCP clients, run the hosted OAuth bridge with Node.js 22 or later:
 
@@ -114,14 +118,14 @@ pip install sendmux-mcp
 sendmux-mcp-mailbox --help
 ```
 
-The hosted MCP endpoint is `https://mcp.sendmux.ai/mcp`. Local MCP commands support stdio and HTTP transports; hosted MCP uses OAuth and does not require manual API keys or custom OAuth endpoints.
+The hosted MCP endpoint is `https://mcp.qubrics.com/mcp`. Local MCP commands support stdio and HTTP transports; hosted MCP uses OAuth and does not require manual API keys or custom OAuth endpoints.
 
-For A2A 1.0 clients, discover the hosted HTTP+JSON service from `https://a2a.sendmux.ai/.well-known/agent-card.json`. It exposes the same curated mailbox, management, and sending operations with an OAuth grant bound specifically to `https://a2a.sendmux.ai/a2a/v1`.
+For A2A 1.0 clients, discover the hosted HTTP+JSON service from `https://a2a.qubrics.com/.well-known/agent-card.json`. It exposes the same curated mailbox, management, and sending operations with an OAuth grant bound specifically to `https://a2a.qubrics.com/a2a/v1`.
 
 For AI-agent frameworks, first-party tool wrappers are available:
 
 ```sh
-npm install @sendmux/ai-sdk ai zod   # Vercel AI SDK: sendmux({ apiKey }) returns a ToolSet
+npm install @qubrics/ai-sdk ai zod   # Vercel AI SDK: sendmux({ apiKey }) returns a ToolSet
 pip install langchain-sendmux        # LangChain: SendmuxToolkit(api_key=...).get_tools()
 ```
 
@@ -131,26 +135,26 @@ Both wrap the generated Sending and Mailbox clients, so the OpenAPI spec stays t
 
 Authenticated connection checks for all three API surfaces return the current team, credential identity, connection label, permissions and authorised mailboxes. Mailbox checks need no mailbox selector or provisioned storage; Sending checks require `email.send` without sending an email or checking delivery readiness. Existing `mailboxGetMe` behaviour is unchanged.
 
-Use TypeScript Sending 1.4.0, Mailbox 1.5.0 and Management 1.3.0 (or umbrella SDK 1.4.2), CLI 1.5.0, MCP 1.7.0, Ruby SDK 1.2.0, Rust 0.3.0, Go 1.5.0, PHP 2.0.0, or Python Sending 1.4.0, Mailbox 1.4.0 and Management 1.3.0 (or umbrella SDK 1.1.1).
+For legacy `@sendmux/*` releases, use Sending 1.4.0, Mailbox 1.5.0 and Management 1.3.0 (or `@sendmux/sdk` 1.4.2), or `@sendmux/cli` 1.5.0. Other ecosystems support connection checks from MCP 1.7.0, Ruby SDK 1.2.0, Rust 0.3.0, Go 1.5.0, PHP 2.0.0, or Python Sending 1.4.0, Mailbox 1.4.0 and Management 1.3.0 (or umbrella SDK 1.1.1).
 
 | Surface | TypeScript operation | CLI command | MCP tool |
 | --- | --- | --- | --- |
-| Management | `managementGetConnection` | `management:get-connection` | `management_get_connection` |
-| Mailbox | `mailboxGetConnection` | `mailbox:get-connection` | `mailbox_get_connection` |
-| Sending | `sendingGetConnection` | `sending:get-connection` | `sending_get_connection` |
+| Management | `managementGetConnection` | `management:get-connection` | `qubrics_management_get_connection` |
+| Mailbox | `mailboxGetConnection` | `mailbox:get-connection` | `qubrics_mailbox_get_connection` |
+| Sending | `sendingGetConnection` | `sending:get-connection` | `qubrics_sending_get_connection` |
 
-Use the corresponding client factory and credential. For example, with `SENDMUX_API_KEY` set to a Management key:
+Use the corresponding client factory and credential. For example, with `QUBRICS_API_KEY` set to a Management key:
 
 ```ts
-import { createManagementClient, managementGetConnection } from "@sendmux/sdk";
+import { management } from "@qubrics/sdk";
 
-const client = createManagementClient({ apiKey: process.env.SENDMUX_API_KEY! });
-const response = await managementGetConnection({ client });
+const client = management.createManagementClient({ apiKey: process.env.QUBRICS_API_KEY! });
+const response = await management.managementGetConnection({ client });
 console.log(response.data?.data.label);
 ```
 
 ```sh
-sendmux management:get-connection --json
+qubrics management:get-connection --json
 ```
 
 Each Rust client exposes `get_connection()`, returning `Response<Connection>`. Generated Go, Python, PHP and Ruby references include the corresponding `GetConnection` operation for each surface. Use the released package versions listed above; source code for pending releases is not yet available through package registries.
@@ -161,8 +165,8 @@ Mailbox attachment metadata now includes a short-lived `download_url`. Fetch tha
 
 For outbound files, avoid manually placing base64 in prompts or source strings. Use the zero-context path for your lane:
 
-- CLI: `sendmux mailbox:send-message --attach ./report.pdf` or `sendmux sending:send --attach ./report.pdf`.
-- TypeScript: use `@sendmux/mailbox/node` `sendMailboxMessageWithFiles(...)` or `@sendmux/sending/node` `sendEmailWithFiles(...)`.
+- CLI: `qubrics mailbox:send-message --attach ./report.pdf` or `qubrics sending:send --attach ./report.pdf`.
+- TypeScript: use `@qubrics/mailbox/node` `sendMailboxMessageWithFiles(...)` or `@qubrics/sending/node` `sendEmailWithFiles(...)`.
 - Python: use `sendmux_mailbox.send_mailbox_message_with_files(...)` or `sendmux_sending.send_email_with_files(...)`.
 - MCP: agents can mint a presigned upload URL, `PUT` bytes to it without an API key, then send with the returned `blob_id`.
 
@@ -174,8 +178,8 @@ Live mailbox events are available through idiomatic lanes:
 
 - TypeScript: `streamMailboxEvents(...)` returns an async iterator over typed mailbox realtime events.
 - Python: `iter_mailbox_events(...)` yields typed `MailboxRealtimeEvent` models from the generated mailbox client.
-- CLI: `sendmux mailbox:stream-events --follow` prints one JSON event per line until the stream closes or the process is interrupted.
-- MCP: use `mailbox_wait_for_message` for bounded waits inside agent tool calls, then `mailbox_get_attachment` to renew attachment metadata and fetch `download_url`.
+- CLI: `qubrics mailbox:stream-events --follow` prints one JSON event per line until the stream closes or the process is interrupted.
+- MCP: use `qubrics_mailbox_wait_for_message` for bounded waits inside agent tool calls, then `qubrics_mailbox_get_attachment` to renew attachment metadata and fetch `download_url`.
 
 ## Repository structure
 
@@ -235,17 +239,17 @@ For Rust, run the locked all-target/all-feature and doc tests with `cargo +1.82.
 
 ### Package release boundaries
 
-SDK packages track the Sendmux public API contracts. Patch versions can differ between packages when a fix only affects one ecosystem or runtime.
+SDK packages track the Qubrics public API contracts. Patch versions can differ between packages when a fix only affects one ecosystem or runtime.
 
 Generated clients are built from committed OpenAPI snapshots. Any API contract change must update the snapshots and generated output in the same change.
 
-For help, open a [GitHub issue](https://github.com/Sendmux/sendmux-sdk/issues) with the package name, version, command or import path, and the request ID from any API error response.
+For help, open a [GitHub issue](https://github.com/qubrics/qubrics-sdk/issues) with the package name, version, command or import path, and the request ID from any API error response.
 
 ## Contributing
 
 Open pull requests against this repository. Keep generated output, source snapshots, and verification artefacts together in the same change.
 
-Security issues should be reported through [GitHub Security Advisories](https://github.com/Sendmux/sendmux-sdk/security/advisories).
+Security issues should be reported through [GitHub Security Advisories](https://github.com/qubrics/qubrics-sdk/security/advisories).
 
 ## Licence
 

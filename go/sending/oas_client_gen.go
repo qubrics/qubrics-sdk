@@ -209,11 +209,28 @@ func (c *Client) sendSendingCompleteAttachmentUpload(ctx context.Context, reques
 	h := uri.NewHeaderEncoder(r.Header)
 	{
 		cfg := uri.HeaderParameterEncodingConfig{
+			Name:    "X-Qubrics-Upload-Token",
+			Explode: false,
+		}
+		if err := h.EncodeParam(cfg, func(e uri.Encoder) error {
+			if val, ok := params.XQubricsUploadToken.Get(); ok {
+				return e.EncodeValue(conv.StringToString(val))
+			}
+			return nil
+		}); err != nil {
+			return res, errors.Wrap(err, "encode header")
+		}
+	}
+	{
+		cfg := uri.HeaderParameterEncodingConfig{
 			Name:    "X-Sendmux-Upload-Token",
 			Explode: false,
 		}
 		if err := h.EncodeParam(cfg, func(e uri.Encoder) error {
-			return e.EncodeValue(conv.StringToString(params.XSendmuxUploadToken))
+			if params.XSendmuxUploadToken != "" {
+					return e.EncodeValue(conv.StringToString(params.XSendmuxUploadToken))
+			}
+			return nil
 		}); err != nil {
 			return res, errors.Wrap(err, "encode header")
 		}
@@ -227,6 +244,51 @@ func (c *Client) sendSendingCompleteAttachmentUpload(ctx context.Context, reques
 			return e.EncodeValue(conv.Int64ToString(params.ContentLength))
 		}); err != nil {
 			return res, errors.Wrap(err, "encode header")
+		}
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:UploadTokenQubrics"
+			switch err := c.securityUploadTokenQubrics(ctx, SendingCompleteAttachmentUploadOperation, r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"UploadTokenQubrics\"")
+			}
+		}
+		{
+			stage = "Security:UploadTokenSendmux"
+			switch err := c.securityUploadTokenSendmux(ctx, SendingCompleteAttachmentUploadOperation, r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 1
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"UploadTokenSendmux\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+				{0b00000010},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
 		}
 	}
 

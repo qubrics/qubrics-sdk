@@ -207,6 +207,253 @@ func (s BalanceResponseOk) Validate() error {
 	}
 }
 
+func (s *CalendarWebhookEventData) Validate() error {
+	if s == nil {
+		return validate.ErrNilPointer
+	}
+
+	var failures []validate.FieldError
+	if err := func() error {
+		if s.Created == nil {
+			return errors.New("nil is invalid value")
+		}
+		if err := (validate.Array{
+			MinLength:    0,
+			MinLengthSet: false,
+			MaxLength:    100,
+			MaxLengthSet: true,
+		}).ValidateLength(len(s.Created)); err != nil {
+			return errors.Wrap(err, "array")
+		}
+		var failures []validate.FieldError
+		for i, elem := range s.Created {
+			if err := func() error {
+				if err := (validate.String{
+					MinLength:    1,
+					MinLengthSet: true,
+					MaxLength:    4096,
+					MaxLengthSet: true,
+					Email:        false,
+					Hostname:     false,
+					Regex:        regexMap["^[A-Za-z0-9_-]+$"],
+				}).Validate(string(elem)); err != nil {
+					return errors.Wrap(err, "string")
+				}
+				return nil
+			}(); err != nil {
+				failures = append(failures, validate.FieldError{
+					Name:  fmt.Sprintf("[%d]", i),
+					Error: err,
+				})
+			}
+		}
+		if len(failures) > 0 {
+			return &validate.Error{Fields: failures}
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "created",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if s.Destroyed == nil {
+			return errors.New("nil is invalid value")
+		}
+		if err := (validate.Array{
+			MinLength:    0,
+			MinLengthSet: false,
+			MaxLength:    100,
+			MaxLengthSet: true,
+		}).ValidateLength(len(s.Destroyed)); err != nil {
+			return errors.Wrap(err, "array")
+		}
+		var failures []validate.FieldError
+		for i, elem := range s.Destroyed {
+			if err := func() error {
+				if err := (validate.String{
+					MinLength:    1,
+					MinLengthSet: true,
+					MaxLength:    4096,
+					MaxLengthSet: true,
+					Email:        false,
+					Hostname:     false,
+					Regex:        regexMap["^[A-Za-z0-9_-]+$"],
+				}).Validate(string(elem)); err != nil {
+					return errors.Wrap(err, "string")
+				}
+				return nil
+			}(); err != nil {
+				failures = append(failures, validate.FieldError{
+					Name:  fmt.Sprintf("[%d]", i),
+					Error: err,
+				})
+			}
+		}
+		if len(failures) > 0 {
+			return &validate.Error{Fields: failures}
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "destroyed",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if err := (validate.String{
+			MinLength:    1,
+			MinLengthSet: true,
+			MaxLength:    4096,
+			MaxLengthSet: true,
+			Email:        false,
+			Hostname:     false,
+			Regex:        regexMap["^[A-Za-z0-9_-]+$"],
+		}).Validate(string(s.NewState)); err != nil {
+			return errors.Wrap(err, "string")
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "new_state",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if err := (validate.String{
+			MinLength:    1,
+			MinLengthSet: true,
+			MaxLength:    4096,
+			MaxLengthSet: true,
+			Email:        false,
+			Hostname:     false,
+			Regex:        regexMap["^[A-Za-z0-9_-]+$"],
+		}).Validate(string(s.OldState)); err != nil {
+			return errors.Wrap(err, "string")
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "old_state",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if err := s.Resource.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "resource",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if s.Updated == nil {
+			return errors.New("nil is invalid value")
+		}
+		if err := (validate.Array{
+			MinLength:    0,
+			MinLengthSet: false,
+			MaxLength:    100,
+			MaxLengthSet: true,
+		}).ValidateLength(len(s.Updated)); err != nil {
+			return errors.Wrap(err, "array")
+		}
+		var failures []validate.FieldError
+		for i, elem := range s.Updated {
+			if err := func() error {
+				if err := (validate.String{
+					MinLength:    1,
+					MinLengthSet: true,
+					MaxLength:    4096,
+					MaxLengthSet: true,
+					Email:        false,
+					Hostname:     false,
+					Regex:        regexMap["^[A-Za-z0-9_-]+$"],
+				}).Validate(string(elem)); err != nil {
+					return errors.Wrap(err, "string")
+				}
+				return nil
+			}(); err != nil {
+				failures = append(failures, validate.FieldError{
+					Name:  fmt.Sprintf("[%d]", i),
+					Error: err,
+				})
+			}
+		}
+		if len(failures) > 0 {
+			return &validate.Error{Fields: failures}
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "updated",
+			Error: err,
+		})
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+	return nil
+}
+
+func (s CalendarWebhookEventDataResource) Validate() error {
+	switch s {
+	case "calendar":
+		return nil
+	case "event":
+		return nil
+	default:
+		return errors.Errorf("invalid value: %v", s)
+	}
+}
+
+func (s *CalendarWebhookEventPayload) Validate() error {
+	if s == nil {
+		return validate.ErrNilPointer
+	}
+
+	var failures []validate.FieldError
+	if err := func() error {
+		if err := s.Data.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "data",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if err := s.Type.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "type",
+			Error: err,
+		})
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+	return nil
+}
+
+func (s CalendarWebhookEventPayloadType) Validate() error {
+	switch s {
+	case "calendar.changed":
+		return nil
+	default:
+		return errors.Errorf("invalid value: %v", s)
+	}
+}
+
 func (s *Connection) Validate() error {
 	if s == nil {
 		return validate.ErrNilPointer
@@ -2132,6 +2379,63 @@ func (s *IncomingLogItemResponse) Validate() error {
 func (s IncomingLogItemResponseOk) Validate() error {
 	switch s {
 	case true:
+		return nil
+	default:
+		return errors.Errorf("invalid value: %v", s)
+	}
+}
+
+func (s *MailWebhookEventPayload) Validate() error {
+	if s == nil {
+		return validate.ErrNilPointer
+	}
+
+	var failures []validate.FieldError
+	if err := func() error {
+		if err := s.Data.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "data",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if err := s.Type.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "type",
+			Error: err,
+		})
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+	return nil
+}
+
+func (s MailWebhookEventPayloadType) Validate() error {
+	switch s {
+	case "message.delivered":
+		return nil
+	case "message.bounced":
+		return nil
+	case "message.complained":
+		return nil
+	case "message.rejected":
+		return nil
+	case "message.delivery_delayed":
+		return nil
+	case "message.received":
+		return nil
+	case "message.received.spam":
+		return nil
+	case "sendmux.test":
 		return nil
 	default:
 		return errors.Errorf("invalid value: %v", s)
@@ -5142,6 +5446,8 @@ func (s ManagementListDeliveryEventType) Validate() error {
 	case "message.received":
 		return nil
 	case "message.received.spam":
+		return nil
+	case "calendar.changed":
 		return nil
 	case "sendmux.test":
 		return nil
@@ -10008,6 +10314,8 @@ func (s WebhookCreateBodyEventTypesItem) Validate() error {
 		return nil
 	case "message.received.spam":
 		return nil
+	case "calendar.changed":
+		return nil
 	case "sendmux.test":
 		return nil
 	default:
@@ -10303,6 +10611,8 @@ func (s WebhookDeliveryAttemptEventType) Validate() error {
 		return nil
 	case "message.received.spam":
 		return nil
+	case "calendar.changed":
+		return nil
 	case "sendmux.test":
 		return nil
 	default:
@@ -10394,6 +10704,8 @@ func (s WebhookDeliveryPayloadEventType) Validate() error {
 	case "message.received":
 		return nil
 	case "message.received.spam":
+		return nil
+	case "calendar.changed":
 		return nil
 	case "sendmux.test":
 		return nil
@@ -10528,60 +10840,20 @@ func (s WebhookEventDataMessageIDKind) Validate() error {
 	}
 }
 
-func (s *WebhookEventPayload) Validate() error {
-	if s == nil {
-		return validate.ErrNilPointer
-	}
-
-	var failures []validate.FieldError
-	if err := func() error {
-		if err := s.Data.Validate(); err != nil {
+func (s WebhookEventPayload) Validate() error {
+	switch s.Type {
+	case WebhookEventPayloadMessageBouncedWebhookEventPayload, WebhookEventPayloadMessageComplainedWebhookEventPayload, WebhookEventPayloadMessageDeliveredWebhookEventPayload, WebhookEventPayloadMessageDeliveryDelayedWebhookEventPayload, WebhookEventPayloadMessageReceivedWebhookEventPayload, WebhookEventPayloadMessageReceivedSpamWebhookEventPayload, WebhookEventPayloadMessageRejectedWebhookEventPayload, WebhookEventPayloadSendmuxTestWebhookEventPayload:
+		if err := s.MailWebhookEventPayload.Validate(); err != nil {
 			return err
 		}
 		return nil
-	}(); err != nil {
-		failures = append(failures, validate.FieldError{
-			Name:  "data",
-			Error: err,
-		})
-	}
-	if err := func() error {
-		if err := s.Type.Validate(); err != nil {
+	case CalendarWebhookEventPayloadWebhookEventPayload:
+		if err := s.CalendarWebhookEventPayload.Validate(); err != nil {
 			return err
 		}
-		return nil
-	}(); err != nil {
-		failures = append(failures, validate.FieldError{
-			Name:  "type",
-			Error: err,
-		})
-	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
-	}
-	return nil
-}
-
-func (s WebhookEventPayloadType) Validate() error {
-	switch s {
-	case "message.delivered":
-		return nil
-	case "message.bounced":
-		return nil
-	case "message.complained":
-		return nil
-	case "message.rejected":
-		return nil
-	case "message.delivery_delayed":
-		return nil
-	case "message.received":
-		return nil
-	case "message.received.spam":
-		return nil
-	case "sendmux.test":
 		return nil
 	default:
-		return errors.Errorf("invalid value: %v", s)
+		return errors.Errorf("invalid type %q", s.Type)
 	}
 }
 
@@ -10735,6 +11007,8 @@ func (s WebhookSubscriptionEventTypesItem) Validate() error {
 		return nil
 	case "message.received.spam":
 		return nil
+	case "calendar.changed":
+		return nil
 	case "sendmux.test":
 		return nil
 	default:
@@ -10874,6 +11148,8 @@ func (s WebhookSubscriptionWithSecretEventTypesItem) Validate() error {
 	case "message.received":
 		return nil
 	case "message.received.spam":
+		return nil
+	case "calendar.changed":
 		return nil
 	case "sendmux.test":
 		return nil
@@ -11055,6 +11331,8 @@ func (s WebhookUpdateBodyEventTypesItem) Validate() error {
 	case "message.received":
 		return nil
 	case "message.received.spam":
+		return nil
+	case "calendar.changed":
 		return nil
 	case "sendmux.test":
 		return nil

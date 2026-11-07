@@ -16,7 +16,7 @@ export async function* paginate<TItem, TMeta = ResponseMeta>(
 
     if (page.pagination?.has_more) {
       if (!page.pagination.next_cursor) {
-        throw new Error("Sendmux pagination response had has_more=true without next_cursor");
+        throw new Error("Qubrics pagination response had has_more=true without next_cursor");
       }
 
       cursor = page.pagination.next_cursor;

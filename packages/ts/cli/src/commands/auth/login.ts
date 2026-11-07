@@ -11,7 +11,7 @@ export default class AuthLogin extends SendmuxCommand {
   static flags = {
     issuer: Flags.string({
       default: DEFAULT_OAUTH_ISSUER,
-      description: "Sendmux authorization-server issuer.",
+      description: "Qubrics authorization-server issuer.",
     }),
     scope: Flags.string({
       multiple: true,

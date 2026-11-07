@@ -286,11 +286,12 @@ function surfaceForOperationId(operationId) {
     return "sending";
   }
 
-  throw new Error(`Operation ${operationId} does not use a known Sendmux surface prefix`);
+  throw new Error(`Operation ${operationId} does not use a known Qubrics surface prefix`);
 }
 
 function requiredKeyKindForOperation(operation, surface) {
-  if (Array.isArray(operation.security) && operation.security.length === 0) {
+  if (operation.operationId === "sendingCompleteAttachmentUpload" ||
+      (Array.isArray(operation.security) && operation.security.length === 0)) {
     return "none";
   }
 

@@ -17,7 +17,8 @@
   "packages": {
     "packages/ts/core": {
       "component": "ts-core",
-      "package-name": "@sendmux/core",
+      "package-name": "@qubrics/core",
+      "release-as": "2.0.0",
       "initial-version": "1.0.0",
       "exclude-paths": [
         "evidence"
@@ -25,7 +26,8 @@
     },
     "packages/ts/sending": {
       "component": "ts-sending",
-      "package-name": "@sendmux/sending",
+      "package-name": "@qubrics/sending",
+      "release-as": "2.0.0",
       "initial-version": "1.0.0",
       "exclude-paths": [
         "evidence"
@@ -33,7 +35,8 @@
     },
     "packages/ts/mailbox": {
       "component": "ts-mailbox",
-      "package-name": "@sendmux/mailbox",
+      "package-name": "@qubrics/mailbox",
+      "release-as": "3.0.0",
       "initial-version": "1.0.0",
       "exclude-paths": [
         "evidence"
@@ -41,7 +44,8 @@
     },
     "packages/ts/management": {
       "component": "ts-management",
-      "package-name": "@sendmux/management",
+      "package-name": "@qubrics/management",
+      "release-as": "3.0.0",
       "initial-version": "1.0.0",
       "exclude-paths": [
         "evidence"
@@ -49,7 +53,8 @@
     },
     "packages/ts/sdk": {
       "component": "ts-sdk",
-      "package-name": "@sendmux/sdk",
+      "package-name": "@qubrics/sdk",
+      "release-as": "3.0.0",
       "initial-version": "1.0.0",
       "exclude-paths": [
         "evidence"
@@ -57,7 +62,8 @@
     },
     "packages/ts/cli": {
       "component": "ts-cli",
-      "package-name": "@sendmux/cli",
+      "package-name": "@qubrics/cli",
+      "release-as": "2.0.0",
       "initial-version": "1.0.0",
       "exclude-paths": [
         "evidence"
@@ -65,7 +71,8 @@
     },
     "packages/ts/ai-sdk": {
       "component": "ts-ai-sdk",
-      "package-name": "@sendmux/ai-sdk",
+      "package-name": "@qubrics/ai-sdk",
+      "release-as": "1.0.0",
       "initial-version": "0.1.0",
       "exclude-paths": [
         "evidence"

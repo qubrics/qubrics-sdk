@@ -1,6 +1,6 @@
 {
-  "name": "sendmux/sdk-monorepo",
-  "description": "Development workspace for Sendmux PHP SDK packages.",
+  "name": "qubrics/sdk-monorepo",
+  "description": "Development workspace for Qubrics PHP SDK packages.",
   "type": "project",
   "license": "MIT",
   "require": {
@@ -9,16 +9,16 @@
   "require-dev": {
     "phpstan/phpstan": "^2.1",
     "phpunit/phpunit": "^11.5",
-    "sendmux/core": "2.1.1",
-    "sendmux/mailbox": "3.0.0",
-    "sendmux/management": "2.1.1",
-    "sendmux/sdk": "3.0.0",
-    "sendmux/sending": "2.1.1",
+    "qubrics/core": "3.0.0",
+    "qubrics/mailbox": "3.0.0",
+    "qubrics/management": "3.0.0",
+    "qubrics/sdk": "3.0.0",
+    "qubrics/sending": "3.0.0",
     "squizlabs/php_codesniffer": "^3.13.6"
   },
   "autoload-dev": {
     "psr-4": {
-      "Sendmux\\Tests\\": "packages/php/tests/"
+      "Qubrics\\Tests\\": "packages/php/tests/"
     }
   },
   "repositories": [
@@ -28,7 +28,7 @@
       "options": {
         "symlink": true,
         "versions": {
-          "sendmux/core": "2.1.1"
+          "qubrics/core": "3.0.0"
         }
       }
     },
@@ -38,7 +38,7 @@
       "options": {
         "symlink": true,
         "versions": {
-          "sendmux/sending": "2.1.1"
+          "qubrics/sending": "3.0.0"
         }
       }
     },
@@ -48,7 +48,7 @@
       "options": {
         "symlink": true,
         "versions": {
-          "sendmux/mailbox": "3.0.0"
+          "qubrics/mailbox": "3.0.0"
         }
       }
     },
@@ -58,7 +58,7 @@
       "options": {
         "symlink": true,
         "versions": {
-          "sendmux/management": "2.1.1"
+          "qubrics/management": "3.0.0"
         }
       }
     },
@@ -68,7 +68,7 @@
       "options": {
         "symlink": true,
         "versions": {
-          "sendmux/sdk": "3.0.0"
+          "qubrics/sdk": "3.0.0"
         }
       }
     }

@@ -6,6 +6,7 @@ import {
   copyFileSync,
   cpSync,
   existsSync,
+  mkdirSync,
   mkdtempSync,
   readdirSync,
   readFileSync,
@@ -15,10 +16,10 @@ import {
 import { join, resolve } from "node:path";
 import { tmpdir } from "node:os";
 import { nodeBinCandidates, spawnCommandSync } from "./windows-command-shims.mjs";
+import { candidateOverrides, packedCandidate } from "./ci-consumers.mjs";
 
 const rootDir = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const cliDir = join(rootDir, "packages/ts/cli");
-const sdkPackageJson = join(rootDir, "packages/ts/sdk/package.json");
 const oclifBin = firstExisting(
   nodeBinCandidates("oclif", [
     join(cliDir, "node_modules/.bin"),
@@ -27,7 +28,7 @@ const oclifBin = firstExisting(
   ]),
 );
 const targets =
-  process.env.SENDMUX_CLI_PACK_TARGETS ?? "linux-x64,linux-arm64,darwin-x64,darwin-arm64,win32-x64";
+  process.env.QUBRICS_CLI_PACK_TARGETS ?? process.env.SENDMUX_CLI_PACK_TARGETS ?? "linux-x64,linux-arm64,darwin-x64,darwin-arm64,win32-x64";
 const gitSha = execFileSync("git", ["rev-parse", "--short", "HEAD"], {
   cwd: rootDir,
   encoding: "utf8",
@@ -41,15 +42,15 @@ rmSync(join(cliDir, "tmp"), { force: true, recursive: true });
 const distDir = join(cliDir, "dist");
 if (existsSync(distDir)) {
   for (const file of readdirSync(distDir)) {
-    if (/^sendmux-.*\.tar\.(gz|xz)$/.test(file)) {
+    if (/^qubrics-.*\.tar\.(gz|xz)$/.test(file)) {
       rmSync(join(distDir, file), { force: true });
     }
   }
 }
 
-const stagingParent = mkdtempSync(join(tmpdir(), "sendmux-cli-pack-"));
-const stagingDir = join(stagingParent, "sendmux");
-const keepTmp = process.env.SENDMUX_CLI_KEEP_PACK_TMP === "true";
+const stagingParent = mkdtempSync(join(tmpdir(), "qubrics-cli-pack-"));
+const stagingDir = join(stagingParent, "qubrics");
+const keepTmp = (process.env.QUBRICS_CLI_KEEP_PACK_TMP ?? process.env.SENDMUX_CLI_KEEP_PACK_TMP) === "true";
 
 try {
   stagePackage(stagingDir);
@@ -64,6 +65,7 @@ try {
     "--targets",
     targets,
     "--no-xz",
+    "--prune-lockfiles",
   ], {
     cwd: cliDir,
     env: {
@@ -88,11 +90,21 @@ try {
 
 function stagePackage(stagingDir) {
   const manifest = readJson(join(cliDir, "package.json"));
-  const sdkManifest = readJson(sdkPackageJson);
+  const packs = join(stagingParent, "packs");
+  mkdirSync(packs);
+  const candidates = ["core", "sending", "mailbox", "management", "sdk"].map((name) => {
+    runCommand("pnpm", ["--filter", `@qubrics/${name}`, "pack", "--pack-destination", packs], {
+      cwd: rootDir,
+      stdio: "inherit",
+    });
+    return packedCandidate(join(rootDir, "packages/ts", name), packs);
+  });
+  const sdk = candidates.find(({ name }) => name === "@qubrics/sdk");
   manifest.dependencies = {
     ...manifest.dependencies,
-    "@sendmux/sdk": sdkManifest.version,
+    "@qubrics/sdk": `file:${sdk.archive}`,
   };
+  manifest.overrides = candidateOverrides(candidates.filter(({ name }) => name !== "@qubrics/sdk"));
   delete manifest.devDependencies;
   assertNoWorkspaceDependencies(manifest);
 
@@ -157,7 +169,7 @@ function assertNoWorkspaceDependencies(manifest) {
 
 function cpTarballs(fromDir, toDir) {
   for (const file of readdirSync(fromDir)) {
-    if (/^sendmux-.*\.tar\.(gz|xz)$/.test(file)) {
+    if (/^qubrics-.*\.tar\.(gz|xz)$/.test(file)) {
       copyFileSync(join(fromDir, file), join(toDir, file));
     }
   }

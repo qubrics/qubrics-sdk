@@ -35,7 +35,7 @@ function prepareFixture(directory) {
 $result = [];
 foreach (['sending', 'mailbox', 'management'] as $name) {
     require __DIR__ . '/packages/php/' . $name . '/src/Configuration.php';
-    $class = 'Sendmux\\' . ucfirst($name) . '\\Configuration';
+    $class = 'Qubrics\\' . ucfirst($name) . '\\Configuration';
     preg_match('/SDK Package Version: ([^\r\n]+)/', $class::toDebugReport(), $version);
     $result[$name] = ['userAgent' => (new $class())->getUserAgent(), 'version' => $version[1]];
 }
@@ -72,7 +72,7 @@ await test("Mailbox generation can change version without changing sibling packa
 
 await test("PHP split verification honours independent versions and the aggregate Mailbox range", async () => {
   await workspace("php-split-versions", async (directory) => {
-    const versions = { core: "2.1.1", sending: "2.1.1", mailbox: "3.0.0", management: "2.1.1", sdk: "3.0.0" };
+    const versions = { core: "3.0.0", sending: "3.0.0", mailbox: "3.0.0", management: "3.0.0", sdk: "3.0.0" };
     let checker = readFileSync(join(root, "scripts/check-php-splits.mjs"), "utf8");
     for (const [name, version] of Object.entries(versions)) {
       cpSync(join(root, "packages/php", name), join(directory, "packages/php", name), { recursive: true });
@@ -95,15 +95,15 @@ writeFileSync("split-result.json", JSON.stringify({ status: child.status, stdout
 `);
     const manifestPath = join(directory, "packages/php/sdk/composer.json");
     const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
-    manifest.require["sendmux/mailbox"] = "^2.1";
+    manifest.require["qubrics/mailbox"] = "^2.1";
     writeFileSync(manifestPath, JSON.stringify(manifest));
     await run(process.execPath, ["run-split-check.mjs"], { cwd: directory });
     const rejected = JSON.parse(readFileSync(join(directory, "split-result.json"), "utf8"));
     console.log(JSON.stringify({ legacy_range: rejected }));
     assert.notEqual(rejected.status, 0, "The legacy aggregate range must reject the independently versioned Mailbox");
-    assert.match(rejected.stderr, /requires sendmux\/mailbox \^2\.1/);
+    assert.match(rejected.stderr, /requires qubrics\/mailbox \^2\.1/);
 
-    manifest.require["sendmux/mailbox"] = "^3.0";
+    manifest.require["qubrics/mailbox"] = "^3.0";
     writeFileSync(manifestPath, JSON.stringify(manifest));
     await run(process.execPath, ["run-split-check.mjs"], { cwd: directory });
     const accepted = JSON.parse(readFileSync(join(directory, "split-result.json"), "utf8"));
@@ -112,7 +112,7 @@ writeFileSync("split-result.json", JSON.stringify({ status: child.status, stdout
 require '.tmp/php-split-consumer/vendor/autoload.php';
 $versions = [];
 foreach (['core', 'sending', 'mailbox', 'management', 'sdk'] as $name) {
-    $versions[$name] = ltrim(Composer\InstalledVersions::getPrettyVersion('sendmux/' . $name), 'v');
+    $versions[$name] = ltrim(Composer\InstalledVersions::getPrettyVersion('qubrics/' . $name), 'v');
 }
 echo json_encode($versions, JSON_THROW_ON_ERROR);
 `], { cwd: directory, captureOutput: true }));
@@ -138,7 +138,7 @@ await test("PHP split verification installs every candidate against synthetic si
       const manifestPath = join(packageRoot, "composer.json");
       const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
       for (const dependency of Object.keys(manifest.require)) {
-        const sibling = dependency.match(/^sendmux\/(.+)$/)?.[1];
+        const sibling = dependency.match(/^qubrics\/(.+)$/)?.[1];
         if (sibling) manifest.require[dependency] = `^${versions[sibling]}`;
       }
       writeFileSync(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
@@ -157,13 +157,13 @@ await test("PHP split verification installs every candidate against synthetic si
       sdk: ["core", "sending", "mailbox", "management"],
     };
     for (const [name, dependencies] of Object.entries(internalDependencies)) {
-      const splitRoot = join(directory, ".tmp", "php-splits", `sendmux-php-${name}`);
+      const splitRoot = join(directory, ".tmp", "php-splits", `qubrics-php-${name}`);
       assert(existsSync(join(splitRoot, "vendor", "autoload.php")), `${name} split was not installed independently`);
       const installed = JSON.parse(await run("php", ["-r", String.raw`
 require 'vendor/autoload.php';
 $versions = [];
 foreach (${JSON.stringify(dependencies)} as $name) {
-    $versions[$name] = ltrim(Composer\InstalledVersions::getPrettyVersion('sendmux/' . $name), 'v');
+    $versions[$name] = ltrim(Composer\InstalledVersions::getPrettyVersion('qubrics/' . $name), 'v');
 }
 echo json_encode($versions, JSON_THROW_ON_ERROR);
 `], { cwd: splitRoot, captureOutput: true }));

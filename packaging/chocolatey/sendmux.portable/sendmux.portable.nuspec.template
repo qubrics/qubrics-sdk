@@ -9,10 +9,10 @@
     <authors>Sendmux</authors>
     <projectUrl>https://sendmux.ai</projectUrl>
     <iconUrl>https://sendmux.ai/favicon/favicon.svg</iconUrl>
-    <licenseUrl>https://github.com/Sendmux/sendmux-sdk/blob/main/LICENSE</licenseUrl>
-    <projectSourceUrl>https://github.com/Sendmux/sendmux-sdk</projectSourceUrl>
+    <licenseUrl>https://github.com/qubrics/qubrics-sdk/blob/main/LICENSE</licenseUrl>
+    <projectSourceUrl>https://github.com/qubrics/qubrics-sdk</projectSourceUrl>
     <docsUrl>https://sendmux.ai/docs</docsUrl>
-    <bugTrackerUrl>https://github.com/Sendmux/sendmux-sdk/issues</bugTrackerUrl>
+    <bugTrackerUrl>https://github.com/qubrics/qubrics-sdk/issues</bugTrackerUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <tags>sendmux email cli api mailbox mcp</tags>
     <summary>Command-line access to Sendmux email APIs.</summary>
@@ -28,8 +28,8 @@ sendmux --help
 ```
 
 Documentation: https://sendmux.ai/docs
-Source: https://github.com/Sendmux/sendmux-sdk
+Source: https://github.com/qubrics/qubrics-sdk
 ]]></description>
-    <releaseNotes>https://github.com/Sendmux/sendmux-sdk/releases/tag/{{RELEASE_TAG}}</releaseNotes>
+    <releaseNotes>https://github.com/qubrics/qubrics-sdk/releases/tag/{{RELEASE_TAG}}</releaseNotes>
   </metadata>
 </package>

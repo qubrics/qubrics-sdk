@@ -17,15 +17,29 @@ export function configureGeneratedClient<TClient extends GeneratedSendmuxClient>
   config: SendmuxClientConfig,
   apiKeyKind: ApiKeyKind,
 ): TClient {
+  const env = (globalThis as { process?: { env?: Record<string, string | undefined> } }).process?.env ?? {};
+  if (config.apiKey === undefined && config.accessToken === undefined) {
+    const apiKey = env.QUBRICS_API_KEY || env.SENDMUX_API_KEY;
+    const accessToken = env.QUBRICS_ACCESS_TOKEN || env.SENDMUX_ACCESS_TOKEN;
+    config = { ...config, ...(apiKey ? { apiKey } : {}), ...(accessToken ? { accessToken } : {}) };
+  }
   const replayBodies = replayBodyStoreFor(client);
+  const bearerToken = authToken({ ...config, apiKeyKind });
   const nextConfig: GeneratedSendmuxClientConfig = {
-    auth: authToken({ ...config, apiKeyKind }),
+    auth: (security?: { type: string; name?: string }) => {
+      if (security?.type === "apiKey" &&
+          (security.name === "X-Qubrics-Upload-Token" || security.name === "X-Sendmux-Upload-Token")) {
+        return "";
+      }
+      return bearerToken();
+    },
     fetch: createRetryingFetch(config.retry, config.fetch, replayBodies),
     throwOnError: true,
   };
 
-  if (config.baseUrl) {
-    nextConfig.baseUrl = config.baseUrl;
+  const baseUrl = config.baseUrl ?? (env.QUBRICS_BASE_URL || env.SENDMUX_BASE_URL);
+  if (baseUrl) {
+    nextConfig.baseUrl = baseUrl;
   }
 
   client.setConfig(nextConfig);

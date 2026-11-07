@@ -3,14 +3,14 @@
 [![PyPI version](https://img.shields.io/pypi/v/sendmux-management)](https://pypi.org/project/sendmux-management/)
 [![Python versions](https://img.shields.io/pypi/pyversions/sendmux-management)](https://pypi.org/project/sendmux-management/)
 [![PyPI downloads](https://img.shields.io/pypi/dm/sendmux-management)](https://pypi.org/project/sendmux-management/)
-[![Licence](https://img.shields.io/pypi/l/sendmux-management)](https://github.com/Sendmux/sendmux-sdk/blob/main/LICENSE)
+[![Licence](https://img.shields.io/pypi/l/sendmux-management)](https://github.com/qubrics/qubrics-sdk/blob/main/LICENSE)
 
 Generated Python client for the Sendmux Management API.
 
 ## Documentation
 
 - Management API reference: [sendmux.ai/docs/api/introduction](https://sendmux.ai/docs/api/introduction)
-- Source repository: [Sendmux/sendmux-sdk](https://github.com/Sendmux/sendmux-sdk)
+- Source repository: [qubrics/qubrics-sdk](https://github.com/qubrics/qubrics-sdk)
 
 ## Requirements
 
@@ -35,7 +35,7 @@ import os
 from sendmux_management import create_management_client
 
 client = create_management_client(
-    access_token=lambda: os.environ["SENDMUX_ACCESS_TOKEN"]
+    access_token=lambda: os.environ["QUBRICS_ACCESS_TOKEN"]
 )
 ```
 
@@ -46,7 +46,7 @@ import os
 
 from sendmux_management import DomainsApi, create_management_client
 
-client = create_management_client(api_key=os.environ["SENDMUX_MANAGEMENT_API_KEY"])
+client = create_management_client(api_key=os.environ["QUBRICS_MANAGEMENT_API_KEY"])
 api = DomainsApi(client)
 
 domains = api.management_list_domains(limit=25)
@@ -70,7 +70,7 @@ import os
 
 from sendmux_management import DomainsApi, create_management_client
 
-client = create_management_client(api_key=os.environ["SENDMUX_MANAGEMENT_API_KEY"])
+client = create_management_client(api_key=os.environ["QUBRICS_MANAGEMENT_API_KEY"])
 api = DomainsApi(client)
 
 domain = api.management_get_domain(
@@ -83,8 +83,8 @@ print(domain.data)
 
 ## Support
 
-Open an issue in [Sendmux/sendmux-sdk](https://github.com/Sendmux/sendmux-sdk/issues) with the package name, version, and request ID from any API error.
+Open an issue in [qubrics/qubrics-sdk](https://github.com/qubrics/qubrics-sdk/issues) with the package name, version, and request ID from any API error.
 
 ## Licence
 
-MIT. See the [licence file](https://github.com/Sendmux/sendmux-sdk/blob/main/LICENSE).
+MIT. See the [licence file](https://github.com/qubrics/qubrics-sdk/blob/main/LICENSE).

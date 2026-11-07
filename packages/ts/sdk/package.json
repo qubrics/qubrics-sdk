@@ -1,5 +1,5 @@
 {
-  "name": "@sendmux/sdk",
+  "name": "@qubrics/sdk",
   "version": "2.0.2",
   "license": "MIT",
   "type": "module",
@@ -21,17 +21,17 @@
     "build": "tsc -p tsconfig.json"
   },
   "dependencies": {
-    "@sendmux/core": "workspace:*",
-    "@sendmux/mailbox": "workspace:*",
-    "@sendmux/management": "workspace:*",
-    "@sendmux/sending": "workspace:*"
+    "@qubrics/core": "workspace:*",
+    "@qubrics/mailbox": "workspace:*",
+    "@qubrics/management": "workspace:*",
+    "@qubrics/sending": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "22.19.19"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Sendmux/sendmux-sdk.git",
+    "url": "git+https://github.com/qubrics/qubrics-sdk.git",
     "directory": "packages/ts/sdk"
   },
   "publishConfig": {

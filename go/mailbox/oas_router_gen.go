@@ -127,6 +127,166 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					break
 				}
 				switch elem[0] {
+				case 'a': // Prefix: "alendar"
+
+					if l := len("alendar"); len(elem) >= l && elem[0:l] == "alendar" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						break
+					}
+					switch elem[0] {
+					case '-': // Prefix: "-events"
+
+						if l := len("-events"); len(elem) >= l && elem[0:l] == "-events" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							switch r.Method {
+							case "GET":
+								s.handleMailboxListCalendarEventsRequest([0]string{}, elemIsEscaped, w, r)
+							case "POST":
+								s.handleMailboxCreateCalendarEventRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "GET,POST")
+							}
+
+							return
+						}
+						switch elem[0] {
+						case '/': // Prefix: "/"
+
+							if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								break
+							}
+							switch elem[0] {
+							case 'c': // Prefix: "changes"
+								origElem := elem
+								if l := len("changes"); len(elem) >= l && elem[0:l] == "changes" {
+									elem = elem[l:]
+								} else {
+									break
+								}
+
+								if len(elem) == 0 {
+									// Leaf node.
+									switch r.Method {
+									case "GET":
+										s.handleMailboxGetCalendarEventChangesRequest([0]string{}, elemIsEscaped, w, r)
+									default:
+										s.notAllowed(w, r, "GET")
+									}
+
+									return
+								}
+
+								elem = origElem
+							}
+							// Param: "event_id"
+							// Leaf parameter, slashes are prohibited
+							idx := strings.IndexByte(elem, '/')
+							if idx >= 0 {
+								break
+							}
+							args[0] = elem
+							elem = ""
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "DELETE":
+									s.handleMailboxDeleteCalendarEventRequest([1]string{
+										args[0],
+									}, elemIsEscaped, w, r)
+								case "GET":
+									s.handleMailboxGetCalendarEventRequest([1]string{
+										args[0],
+									}, elemIsEscaped, w, r)
+								case "PATCH":
+									s.handleMailboxUpdateCalendarEventRequest([1]string{
+										args[0],
+									}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "DELETE,GET,PATCH")
+								}
+
+								return
+							}
+
+						}
+
+					case 's': // Prefix: "s"
+
+						if l := len("s"); len(elem) >= l && elem[0:l] == "s" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							switch r.Method {
+							case "GET":
+								s.handleMailboxListCalendarsRequest([0]string{}, elemIsEscaped, w, r)
+							case "POST":
+								s.handleMailboxCreateCalendarRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "GET,POST")
+							}
+
+							return
+						}
+						switch elem[0] {
+						case '/': // Prefix: "/"
+
+							if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							// Param: "calendar_id"
+							// Leaf parameter, slashes are prohibited
+							idx := strings.IndexByte(elem, '/')
+							if idx >= 0 {
+								break
+							}
+							args[0] = elem
+							elem = ""
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "DELETE":
+									s.handleMailboxDeleteCalendarRequest([1]string{
+										args[0],
+									}, elemIsEscaped, w, r)
+								case "GET":
+									s.handleMailboxGetCalendarRequest([1]string{
+										args[0],
+									}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "DELETE,GET")
+								}
+
+								return
+							}
+
+						}
+
+					}
+
 				case 'h': // Prefix: "hanges"
 
 					if l := len("hanges"); len(elem) >= l && elem[0:l] == "hanges" {
@@ -1394,6 +1554,206 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					break
 				}
 				switch elem[0] {
+				case 'a': // Prefix: "alendar"
+
+					if l := len("alendar"); len(elem) >= l && elem[0:l] == "alendar" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						break
+					}
+					switch elem[0] {
+					case '-': // Prefix: "-events"
+
+						if l := len("-events"); len(elem) >= l && elem[0:l] == "-events" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							switch method {
+							case "GET":
+								r.name = MailboxListCalendarEventsOperation
+								r.summary = "List calendar events"
+								r.operationID = "mailboxListCalendarEvents"
+								r.pathPattern = "/mailbox/calendar-events"
+								r.args = args
+								r.count = 0
+								return r, true
+							case "POST":
+								r.name = MailboxCreateCalendarEventOperation
+								r.summary = "Create a non-sending event"
+								r.operationID = "mailboxCreateCalendarEvent"
+								r.pathPattern = "/mailbox/calendar-events"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+						switch elem[0] {
+						case '/': // Prefix: "/"
+
+							if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								break
+							}
+							switch elem[0] {
+							case 'c': // Prefix: "changes"
+								origElem := elem
+								if l := len("changes"); len(elem) >= l && elem[0:l] == "changes" {
+									elem = elem[l:]
+								} else {
+									break
+								}
+
+								if len(elem) == 0 {
+									// Leaf node.
+									switch method {
+									case "GET":
+										r.name = MailboxGetCalendarEventChangesOperation
+										r.summary = "Get calendar event changes"
+										r.operationID = "mailboxGetCalendarEventChanges"
+										r.pathPattern = "/mailbox/calendar-events/changes"
+										r.args = args
+										r.count = 0
+										return r, true
+									default:
+										return
+									}
+								}
+
+								elem = origElem
+							}
+							// Param: "event_id"
+							// Leaf parameter, slashes are prohibited
+							idx := strings.IndexByte(elem, '/')
+							if idx >= 0 {
+								break
+							}
+							args[0] = elem
+							elem = ""
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch method {
+								case "DELETE":
+									r.name = MailboxDeleteCalendarEventOperation
+									r.summary = "Delete a non-sending event"
+									r.operationID = "mailboxDeleteCalendarEvent"
+									r.pathPattern = "/mailbox/calendar-events/{event_id}"
+									r.args = args
+									r.count = 1
+									return r, true
+								case "GET":
+									r.name = MailboxGetCalendarEventOperation
+									r.summary = "Get a calendar event"
+									r.operationID = "mailboxGetCalendarEvent"
+									r.pathPattern = "/mailbox/calendar-events/{event_id}"
+									r.args = args
+									r.count = 1
+									return r, true
+								case "PATCH":
+									r.name = MailboxUpdateCalendarEventOperation
+									r.summary = "Update a non-sending event"
+									r.operationID = "mailboxUpdateCalendarEvent"
+									r.pathPattern = "/mailbox/calendar-events/{event_id}"
+									r.args = args
+									r.count = 1
+									return r, true
+								default:
+									return
+								}
+							}
+
+						}
+
+					case 's': // Prefix: "s"
+
+						if l := len("s"); len(elem) >= l && elem[0:l] == "s" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							switch method {
+							case "GET":
+								r.name = MailboxListCalendarsOperation
+								r.summary = "List calendars"
+								r.operationID = "mailboxListCalendars"
+								r.pathPattern = "/mailbox/calendars"
+								r.args = args
+								r.count = 0
+								return r, true
+							case "POST":
+								r.name = MailboxCreateCalendarOperation
+								r.summary = "Create a private calendar"
+								r.operationID = "mailboxCreateCalendar"
+								r.pathPattern = "/mailbox/calendars"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+						switch elem[0] {
+						case '/': // Prefix: "/"
+
+							if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							// Param: "calendar_id"
+							// Leaf parameter, slashes are prohibited
+							idx := strings.IndexByte(elem, '/')
+							if idx >= 0 {
+								break
+							}
+							args[0] = elem
+							elem = ""
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch method {
+								case "DELETE":
+									r.name = MailboxDeleteCalendarOperation
+									r.summary = "Delete an empty calendar"
+									r.operationID = "mailboxDeleteCalendar"
+									r.pathPattern = "/mailbox/calendars/{calendar_id}"
+									r.args = args
+									r.count = 1
+									return r, true
+								case "GET":
+									r.name = MailboxGetCalendarOperation
+									r.summary = "Get a calendar"
+									r.operationID = "mailboxGetCalendar"
+									r.pathPattern = "/mailbox/calendars/{calendar_id}"
+									r.args = args
+									r.count = 1
+									return r, true
+								default:
+									return
+								}
+							}
+
+						}
+
+					}
+
 				case 'h': // Prefix: "hanges"
 
 					if l := len("hanges"); len(elem) >= l && elem[0:l] == "hanges" {

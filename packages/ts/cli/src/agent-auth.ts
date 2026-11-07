@@ -13,9 +13,9 @@ import {
   updateCliConfig,
 } from "./profiles.js";
 
-const DEFAULT_APP_ORIGIN = "https://app.sendmux.ai";
-const DEFAULT_SENDING_API_BASE_URL = "https://smtp.sendmux.ai/api/v1";
-const SENDING_API_RESOURCE = "https://smtp.sendmux.ai/api/v1";
+const DEFAULT_APP_ORIGIN = "https://app.qubrics.com";
+const DEFAULT_SENDING_API_BASE_URL = "https://smtp.qubrics.com/api/v1";
+const SENDING_API_RESOURCE = "https://smtp.qubrics.com/api/v1";
 const TOKEN_EXCHANGE_GRANT_TYPE = "urn:ietf:params:oauth:grant-type:token-exchange";
 const ACCESS_TOKEN_TYPE = "urn:ietf:params:oauth:token-type:access_token";
 const READINESS_TIMEOUT_MS = 10 * 60 * 1_000;
@@ -60,7 +60,7 @@ export async function registerAgent(input: RegisterAgentInput): Promise<SafeAgen
     activeProfile = await updateCliConfig(input.configDir, (config) => {
       const current = config.profiles[input.profileName];
       if (!current || !isActiveAgentProfile(current)) {
-        throw new Error(`Sendmux agent profile "${input.profileName}" is not active.`);
+        throw new Error(`Qubrics agent profile "${input.profileName}" is not active.`);
       }
       assertMatchingRegistration(current, input);
       if (input.makeDefault || !config.defaultProfile) config.defaultProfile = input.profileName;
@@ -81,10 +81,10 @@ export async function registerAgent(input: RegisterAgentInput): Promise<SafeAgen
       }
       if (current) {
         if (current.type !== "agent" || current.state !== "registering") {
-          throw new Error(`Sendmux profile "${input.profileName}" already exists and is not an agent profile.`);
+          throw new Error(`Qubrics profile "${input.profileName}" already exists and is not an agent profile.`);
         }
         if (current.idempotencyKey !== registering.idempotencyKey) {
-          throw new Error(`Sendmux agent profile "${input.profileName}" belongs to a different registration request.`);
+          throw new Error(`Qubrics agent profile "${input.profileName}" belongs to a different registration request.`);
         }
       }
       config.profiles[input.profileName] = registering;
@@ -112,7 +112,7 @@ export async function registerAgent(input: RegisterAgentInput): Promise<SafeAgen
         const current = config.profiles[input.profileName];
         if (current && isActiveAgentProfile(current)) {
           if (current.idempotencyKey !== registering.idempotencyKey) {
-            throw new Error(`Sendmux agent profile "${input.profileName}" belongs to a different registration request.`);
+            throw new Error(`Qubrics agent profile "${input.profileName}" belongs to a different registration request.`);
           }
           return current;
         }
@@ -122,7 +122,7 @@ export async function registerAgent(input: RegisterAgentInput): Promise<SafeAgen
           current.state !== "registering" ||
           current.idempotencyKey !== registering.idempotencyKey
         ) {
-          throw new Error(`Sendmux agent profile "${input.profileName}" belongs to a different registration request.`);
+          throw new Error(`Qubrics agent profile "${input.profileName}" belongs to a different registration request.`);
         }
         const activated: ActiveAgentCliProfile = {
           ...current,
@@ -236,7 +236,7 @@ export async function resolveAgentSendingToken({
   const accessToken = requiredString(body, "access_token", "token exchange");
   const expiresIn = body.expires_in;
   if (typeof expiresIn !== "number" || !Number.isFinite(expiresIn) || expiresIn <= 0) {
-    throw new Error("Sendmux token exchange returned an invalid expiry.");
+    throw new Error("Qubrics token exchange returned an invalid expiry.");
   }
 
   const updatedProfile = await updateCliConfig(configDir, (latestConfig) => {
@@ -268,13 +268,13 @@ function registrationIntent({
   const urls = agentUrls(input.appOrigin);
   if (existing?.type === "agent") {
     if (existing.state !== "registering") {
-      throw new Error(`Sendmux agent profile "${input.profileName}" is already active.`);
+      throw new Error(`Qubrics agent profile "${input.profileName}" is already active.`);
     }
     assertMatchingRegistration(existing, input);
     return existing;
   }
   if (existing) {
-    throw new Error(`Sendmux profile "${input.profileName}" already exists and is not an agent profile.`);
+    throw new Error(`Qubrics profile "${input.profileName}" already exists and is not an agent profile.`);
   }
   return {
     ...urls,
@@ -292,7 +292,7 @@ function assertMatchingRegistration(profile: AgentCliProfile, input: RegisterAge
     (input.clientName !== undefined && profile.clientName !== input.clientName) ||
     (input.mailboxLocalPart !== undefined && profile.mailboxLocalPart !== input.mailboxLocalPart)
   ) {
-    throw new Error(`Sendmux agent profile "${input.profileName}" belongs to a different registration request.`);
+    throw new Error(`Qubrics agent profile "${input.profileName}" belongs to a different registration request.`);
   }
 }
 
@@ -400,7 +400,7 @@ async function activeAgentProfile(configDir: string, profileName: string): Promi
 function activeAgentProfileFromConfig(config: CliConfig, profileName: string): ActiveAgentCliProfile {
   const profile = config.profiles[profileName];
   if (!profile || !isActiveAgentProfile(profile)) {
-    throw new Error(`Sendmux agent profile "${profileName}" is not active.`);
+    throw new Error(`Qubrics agent profile "${profileName}" is not active.`);
   }
   return profile;
 }
@@ -453,10 +453,10 @@ async function responseJson(response: Response): Promise<Record<string, unknown>
     body = null;
   }
   if (bytes > MAX_AUTH_RESPONSE_BYTES) {
-    throw new Error("Sendmux agent authentication response exceeds the size limit.");
+    throw new Error("Qubrics agent authentication response exceeds the size limit.");
   }
   if (!body || typeof body !== "object" || Array.isArray(body)) {
-    throw new Error(`Sendmux agent authentication returned HTTP ${response.status} without a JSON object.`);
+    throw new Error(`Qubrics agent authentication returned HTTP ${response.status} without a JSON object.`);
   }
   return body as Record<string, unknown>;
 }
@@ -474,21 +474,21 @@ function agentAuthFailureMessage(status: number, body: Record<string, unknown>):
     return "Agent mailbox provisioning did not finish within the allowed time.";
   }
   const description = typeof body.error_description === "string" ? body.error_description : null;
-  return description ?? `Sendmux agent authentication failed with HTTP ${status}.`;
+  return description ?? `Qubrics agent authentication failed with HTTP ${status}.`;
 }
 
 function assertRegistrationResponse(value: AgentRegistrationResponse): void {
   requiredString(value as unknown as Record<string, unknown>, "access_token", "agent registration");
   requiredString(value as unknown as Record<string, unknown>, "registration_id", "agent registration");
   if (!value.mailbox || typeof value.mailbox !== "object" || typeof value.mailbox.email !== "string") {
-    throw new Error("Sendmux agent registration did not return a mailbox email.");
+    throw new Error("Qubrics agent registration did not return a mailbox email.");
   }
 }
 
 function requiredString(record: Record<string, unknown>, field: string, source: string): string {
   const value = record[field];
   if (typeof value !== "string" || value.length === 0) {
-    throw new Error(`Sendmux ${source} did not return ${field}.`);
+    throw new Error(`Qubrics ${source} did not return ${field}.`);
   }
   return value;
 }

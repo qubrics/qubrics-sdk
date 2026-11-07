@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import os
+
 import certifi
 
 from typing import Any, cast
@@ -39,7 +41,11 @@ class SendmuxSendingApiClient(ApiClient):
         body: Any,
         request_auth: Any = None,
     ) -> None:
-        if self._access_token is not None and auth_settings and not request_auth:
+        if (
+            self._access_token is not None
+            and any(name not in ("UploadTokenQubrics", "UploadTokenSendmux") for name in auth_settings or ())
+            and not request_auth
+        ):
             request_auth = {
                 "type": "bearer",
                 "in": "header",
@@ -70,8 +76,11 @@ def create_sending_client(
     base_url: str | None = None,
     retry_options: RetryOptions | None = None,
 ) -> SendmuxSendingApiClient:
+    if api_key is None and access_token is None:
+        api_key = os.environ.get("QUBRICS_API_KEY") or os.environ.get("SENDMUX_API_KEY")
+        access_token = os.environ.get("QUBRICS_ACCESS_TOKEN") or os.environ.get("SENDMUX_ACCESS_TOKEN")
     validate_auth(api_key=api_key, access_token=access_token, surface="sending")
-    configuration = Configuration(host=base_url or DEFAULT_BASE_URL, ssl_ca_cert=certifi.where())
+    configuration = Configuration(host=base_url or os.environ.get("QUBRICS_BASE_URL") or os.environ.get("SENDMUX_BASE_URL") or DEFAULT_BASE_URL, ssl_ca_cert=certifi.where())
     if api_key is not None:
         configure_auth(configuration, api_key=api_key)
     return SendmuxSendingApiClient(configuration, access_token=access_token, retry_options=retry_options)

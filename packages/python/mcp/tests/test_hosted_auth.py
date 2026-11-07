@@ -23,7 +23,7 @@ def test_remote_auth_provider_binds_resource_url_to_jwt_audience() -> None:
     assert isinstance(auth_provider, RemoteAuthProvider)
     assert str(auth_provider._get_resource_url("/mcp")) == "https://mcp.sendmux.ai/mcp"
     assert isinstance(auth_provider.token_verifier, JWTVerifier)
-    assert auth_provider.token_verifier.audience == "https://mcp.sendmux.ai/mcp"
+    assert auth_provider.token_verifier.audience == ["https://mcp.qubrics.com/mcp", "https://mcp.sendmux.ai/mcp"]
     assert auth_provider.token_verifier.issuer == "https://app.sendmux.ai"
     assert auth_provider.token_verifier.jwks_uri == "https://app.sendmux.ai/.well-known/jwks.json"
 

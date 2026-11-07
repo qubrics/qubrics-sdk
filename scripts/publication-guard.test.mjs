@@ -14,7 +14,7 @@ const executeFile = promisify(execFile);
 const execute = (command, args, options = {}) => executeFile(command, args, { ...options, env: command === "git" ? gitEnvironment(options.env) : options.env });
 const guard = process.env.SENDMUX_TEST_PUBLICATION_GUARD ?? resolve("scripts/publication-guard.mjs");
 const specPath = "packages/python/mcp/sendmux_mcp/openapi";
-const repository = "Sendmux/sendmux-sdk";
+const repository = "qubrics/qubrics-sdk";
 const repositoryId = 1253958043;
 const document = { openapi: "3.1.0", paths: { "/mailbox/messages": { get: { operationId: "mailboxList", responses: { 200: { description: "Listed" } } } } }, components: { schemas: { Provider: { required: ["variables", "delivery_group"] } } } };
 const skillsControl = process.env.SENDMUX_TEST_SKILLS_ROOT ?? process.env.SENDMUX_SKILLS_ROOT ?? resolve("../sendmux-skills");
@@ -273,9 +273,10 @@ async function releaseFixture(t, options = {}) {
       tarball: "https://registry.npmjs.org/@sendmux/cli/-/cli-1.2.3.tgz", integrity: `sha512-${Buffer.alloc(64, 1).toString("base64")}`,
     } });
     if (url.pathname.startsWith("/-/npm/v1/attestations/")) {
+      const producerRepository = options.producerRepository ?? `https://github.com/${repository}`;
       const payload = { predicateType: "https://slsa.dev/provenance/v1", subject: [{ name: "pkg:npm/%40sendmux/cli@1.2.3", digest: { sha512: "01".repeat(64) } }],
-        predicate: { buildDefinition: { externalParameters: { workflow: { repository: "https://github.com/Sendmux/sendmux-sdk", path: ".github/workflows/release-please.yml" } },
-          resolvedDependencies: [{ uri: "git+https://github.com/Sendmux/sendmux-sdk@refs/heads/main", digest: { gitCommit: options.wrongProducer ? other : sha } }] } } };
+        predicate: { buildDefinition: { externalParameters: { workflow: { repository: producerRepository, path: ".github/workflows/release-please.yml" } },
+          resolvedDependencies: [{ uri: `git+${options.producerSource ?? producerRepository}@refs/heads/main`, digest: { gitCommit: options.wrongProducer ? other : sha } }] } } };
       return send({ attestations: [{ predicateType: payload.predicateType, bundle: { dsseEnvelope: { payload: Buffer.from(JSON.stringify(payload)).toString("base64") } } }] });
     }
     if (route === "/pulls") {
@@ -330,10 +331,10 @@ async function releaseFixture(t, options = {}) {
     return transport('http://127.0.0.1:${server.address().port}' + url.pathname + url.search, {...options, headers});
   };`);
   const runCommand = (args, env = {}) => execute(process.execPath, [guard, ...args], {
-    env: { ...process.env, ...skills, GITHUB_REPOSITORY: "Sendmux/sendmux-sdk", NODE_OPTIONS: `--import=${preload}`, ...env }, timeout: 20_000,
+    env: { ...process.env, ...skills, GITHUB_REPOSITORY: "qubrics/qubrics-sdk", NODE_OPTIONS: `--import=${preload}`, ...env }, timeout: 20_000,
   });
   const runBoundary = (command, env = {}, cwd = local.repo) => execute("bash", ["-euo", "pipefail", "-c", `${command}\nprintf writer-reached`], {
-    cwd, env: { ...process.env, ...skills, GITHUB_REPOSITORY: "Sendmux/sendmux-sdk", NODE_OPTIONS: `--import=${preload}`, CANDIDATE_SHA: sha, CONTROL_SHA: sha,
+    cwd, env: { ...process.env, ...skills, GITHUB_REPOSITORY: "qubrics/qubrics-sdk", NODE_OPTIONS: `--import=${preload}`, CANDIDATE_SHA: sha, CONTROL_SHA: sha,
       PUBLICATION_RELEASES: "[]", RUNNER_TEMP: local.directory, PRODUCER_TAG: "ts-cli-v1.2.3", ...env }, timeout: 20_000,
   });
   const run = () => runCommand(["preflight", "--repo", local.repo, "--sha", sha, "--receipt", join(local.directory, "receipt.json")]);
@@ -426,8 +427,11 @@ test("recovery resolves a Python package tag commit, emits its released path, an
   assert.equal(outputs.paths_released, '["packages/python/langchain"]');
 });
 
-test("Snap binds checksum and producer source before its write", async (t) => {
-  const candidate = await releaseFixture(t, { tagExists: true });
+for (const [identity, producerRepository] of [
+  ["current", "https://github.com/qubrics/qubrics-sdk"],
+  ["historical", "https://github.com/Sendmux/sendmux-sdk"],
+]) test(`Snap binds checksum and ${identity} producer source before its write`, async (t) => {
+  const candidate = await releaseFixture(t, { tagExists: true, producerRepository });
   let writes = 0;
   await candidate.runCommand(["snap", "--repo", candidate.repo]).then(() => writes++);
   assert.equal(writes, 1);
@@ -438,6 +442,14 @@ test("Snap rejects a matching version and checksum from a different producer com
   let writes = 0;
   await assert.rejects(candidate.runCommand(["snap", "--repo", candidate.repo]).then(() => writes++), (error) => /producer|provenance/.test(error.stderr));
   assert.equal(writes, 0);
+});
+
+for (const [identity, options] of [
+  ["unrecognised repository", { producerRepository: "https://github.com/untrusted/sdk" }],
+  ["mixed repository identities", { producerRepository: "https://github.com/Sendmux/sendmux-sdk", producerSource: "https://github.com/qubrics/qubrics-sdk" }],
+]) test(`Snap rejects provenance with ${identity}`, async (t) => {
+  const candidate = await releaseFixture(t, { tagExists: true, ...options });
+  await assert.rejects(candidate.runCommand(["snap", "--repo", candidate.repo]), (error) => /producer|provenance/.test(error.stderr));
 });
 
 test("post-action verification does not trust output sha over actual tag identity", async (t) => {

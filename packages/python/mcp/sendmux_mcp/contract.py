@@ -14,7 +14,7 @@ from mcp.types.version import HANDSHAKE_PROTOCOL_VERSIONS, MODERN_PROTOCOL_VERSI
 
 from sendmux_mcp.config import DEFAULT_APP_BASE_URL, DEFAULT_SENDING_BASE_URL, SURFACES, ServerConfig, Transport
 from sendmux_mcp.hosted import DEFAULT_MCP_PATH, DEFAULT_MCP_RESOURCE_BASE_URL
-from sendmux_mcp.hosted_auth import hosted_mcp_resource_url
+from sendmux_mcp.hosted_auth import HOSTED_MCP_RESOURCE_URLS, hosted_mcp_resource_url
 from sendmux_mcp.server import (
     MCP_ATTACHMENT_FILE_UPLOAD_MAX_BYTES,
     MCP_ATTACHMENT_INLINE_UPLOAD_MAX_BYTES,
@@ -108,6 +108,7 @@ def build_contract() -> dict[str, Any]:
             },
             "hosted": {
                 "resource": hosted_mcp_resource_url(DEFAULT_MCP_RESOURCE_BASE_URL, DEFAULT_MCP_PATH),
+                "resource_aliases": list(HOSTED_MCP_RESOURCE_URLS[1:]),
                 "transports": ["streamable-http"],
             },
             "local": {"transports": list(get_args(Transport)), "default_transport": ServerConfig().transport},
