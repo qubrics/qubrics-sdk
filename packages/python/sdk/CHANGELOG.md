@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.0.2](https://github.com/qubrics/qubrics-sdk/compare/python-sdk-v3.0.1...python-sdk-v3.0.2) (2026-11-07)
+
+
+### Documentation
+
+* use generated SDK method names in examples ([5bb29fc](https://github.com/qubrics/qubrics-sdk/commit/5bb29fc309bae1013da2802210a5b23ccf9dbfd0))
+
 ## [3.0.1](https://github.com/Sendmux/sendmux-sdk/compare/python-sdk-v3.0.0...python-sdk-v3.0.1) (2026-09-21)
 
 
