@@ -26,7 +26,6 @@
     "packages/ts/sending": {
       "component": "ts-sending",
       "package-name": "@qubrics/sending",
-      "release-as": "2.0.0",
       "initial-version": "1.0.0",
       "exclude-paths": [
         "evidence"

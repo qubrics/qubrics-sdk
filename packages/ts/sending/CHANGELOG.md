@@ -8,6 +8,16 @@
 
 * add Node file attachment helper for Sending API email sends
 
+## [2.0.0](https://github.com/qubrics/qubrics-sdk/compare/ts-sending-v1.6.0...ts-sending-v2.0.0) (2026-11-07)
+
+
+### Features
+
+* add compatible Qubrics integration aliases ([dff5cb8](https://github.com/qubrics/qubrics-sdk/commit/dff5cb89bccb5840d55071d23f79ff88c7e58040))
+* preserve integration contracts with Qubrics aliases ([722fbab](https://github.com/qubrics/qubrics-sdk/commit/722fbab2f98248d17b4878dd5149a35a711d5a18))
+* rename TypeScript packages and CLI to Qubrics ([3eb0997](https://github.com/qubrics/qubrics-sdk/commit/3eb0997b379d94b99659112d3c263ae59db7b14c))
+* rename TypeScript packages and CLI to Qubrics ([3323298](https://github.com/qubrics/qubrics-sdk/commit/332329891a44912867b2386c727f56241d714572))
+
 ## [1.6.0](https://github.com/Sendmux/sendmux-sdk/compare/ts-sending-v1.5.0...ts-sending-v1.6.0) (2026-09-18)
 
 
