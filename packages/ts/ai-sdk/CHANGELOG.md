@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.0.0](https://github.com/qubrics/qubrics-sdk/compare/ts-ai-sdk-v0.5.2...ts-ai-sdk-v1.0.0) (2026-11-07)
+
+
+### Features
+
+* rename TypeScript packages and CLI to Qubrics ([3eb0997](https://github.com/qubrics/qubrics-sdk/commit/3eb0997b379d94b99659112d3c263ae59db7b14c))
+* rename TypeScript packages and CLI to Qubrics ([3323298](https://github.com/qubrics/qubrics-sdk/commit/332329891a44912867b2386c727f56241d714572))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @qubrics/mailbox bumped to 3.0.0
+
 ## [0.5.2](https://github.com/Sendmux/sendmux-sdk/compare/ts-ai-sdk-v0.5.1...ts-ai-sdk-v0.5.2) (2026-09-21)
 
 
