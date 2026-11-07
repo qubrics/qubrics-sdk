@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.1.0](https://github.com/qubrics/qubrics-sdk/compare/ruby-sdk/v2.0.0...ruby-sdk/v2.1.0) (2026-11-07)
+
+
+### Features
+
+* add compatible Qubrics integration aliases ([dff5cb8](https://github.com/qubrics/qubrics-sdk/commit/dff5cb89bccb5840d55071d23f79ff88c7e58040))
+* preserve integration contracts with Qubrics aliases ([722fbab](https://github.com/qubrics/qubrics-sdk/commit/722fbab2f98248d17b4878dd5149a35a711d5a18))
+
+
+### Bug Fixes
+
+* align changed SDK dependency floors with release manifest ([b1c5548](https://github.com/qubrics/qubrics-sdk/commit/b1c5548c1dde8b441b4fa2605253907971c2f5d2))
+* preserve Python environment compatibility with published core ([8f4c78f](https://github.com/qubrics/qubrics-sdk/commit/8f4c78f050725b6d57a6b71d39178dee40c1774e))
+
 ## [2.0.0](https://github.com/Sendmux/sendmux-sdk/compare/ruby-sdk/v1.3.0...ruby-sdk/v2.0.0) (2026-09-19)
 
 
