@@ -18,7 +18,6 @@
     "packages/ts/core": {
       "component": "ts-core",
       "package-name": "@qubrics/core",
-      "release-as": "2.0.0",
       "initial-version": "1.0.0",
       "exclude-paths": [
         "evidence"
