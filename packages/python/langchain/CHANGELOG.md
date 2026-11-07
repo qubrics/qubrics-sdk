@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.4.1](https://github.com/qubrics/qubrics-sdk/compare/python-langchain-v0.4.0...python-langchain-v0.4.1) (2026-11-07)
+
+
+### Bug Fixes
+
+* align changed SDK dependency floors with release manifest ([b1c5548](https://github.com/qubrics/qubrics-sdk/commit/b1c5548c1dde8b441b4fa2605253907971c2f5d2))
+* align LangChain mailbox floor with release manifest ([6a35034](https://github.com/qubrics/qubrics-sdk/commit/6a350342e3f2c62d52ab167d9e580a6dea06ab0f))
+
 ## [0.4.0](https://github.com/Sendmux/sendmux-sdk/compare/python-langchain-v0.3.0...python-langchain-v0.4.0) (2026-09-19)
 
 
