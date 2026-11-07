@@ -130,13 +130,13 @@ test("installed package checks reject missing artifact bytes without falling bac
   await workspace("broken-node-artifact", async (directory) => {
     const packs = join(directory, "packs");
     mkdirSync(packs);
-    await run("pnpm", ["--filter", "@sendmux/core", "pack", "--pack-destination", packs]);
+    await run("pnpm", ["--filter", "@qubrics/core", "pack", "--pack-destination", packs]);
     const archives = readdirSync(packs);
     assert.equal(archives.length, 1);
     writeFileSync(join(directory, "package.json"), '{"name":"artifact-fixture","private":true,"type":"module"}');
     await run("pnpm", ["--ignore-workspace", "add", join(packs, archives[0])], { cwd: directory });
     await nodeProvenance(directory, ["core"]);
-    const entry = realpathSync(join(directory, "node_modules/@sendmux/core/dist/index.js"));
+    const entry = realpathSync(join(directory, "node_modules/@qubrics/core/dist/index.js"));
     const original = readFileSync(entry);
     renameSync(entry, `${entry}.retained`);
     await assert.rejects(nodeProvenance(directory, ["core"]), /exit 1/);
@@ -328,23 +328,26 @@ test("a packed dependent whose range excludes the candidate is not masked", asyn
   });
 });
 
-test("nested candidate edges must be the tarball instance, not a registry copy", async () => {
+test("nested candidate edges must be the candidate tarball instance, not a different installed copy", async () => {
   await workspace("nested-candidate-edge", async (directory) => {
     const packs = join(directory, "packs");
     mkdirSync(packs);
-    await run("pnpm", ["--filter", "@sendmux/core", "pack", "--pack-destination", packs]);
+    await run("pnpm", ["--filter", "@qubrics/core", "pack", "--pack-destination", packs]);
     const core = packedCandidate(fileURLToPath(new URL("../packages/ts/core", import.meta.url)), packs);
+    const otherCore = join(directory, "other-core");
+    fixturePackage(otherCore, { name: core.name, version: "0.0.0-fixture" });
+    const otherArchive = await packFixture(otherCore, packs);
     const dependent = join(directory, "dependent");
-    fixturePackage(dependent, { name: "@sendmux-ci-fixture/dependent", version: "1.0.0", dependencies: { "@sendmux/core": "1.1.0" } });
+    fixturePackage(dependent, { name: "@sendmux-ci-fixture/dependent", version: "1.0.0", dependencies: { [core.name]: `file:${otherArchive.archive}` } });
     const registryEdge = [core, await packFixture(dependent, packs)];
     const registryConsumer = join(directory, "registry-edge");
     newNodeConsumer(registryConsumer, registryEdge);
     await run("pnpm", ["--ignore-workspace", "add", "--save-exact", ...registryEdge.map(({ archive }) => archive)], { cwd: registryConsumer });
     await assert.rejects(nodeProvenance(registryConsumer, registryEdge.map(({ name }) => name)), /exit 1/);
-    console.log("Expected negative: dependent pinned to published @sendmux/core 1.1.0 resolved a registry copy");
+    console.log("Expected negative: dependent pinned to a different tarball resolved a non-candidate copy");
     const candidatePacks = join(directory, "candidate-packs");
     mkdirSync(candidatePacks);
-    fixturePackage(dependent, { name: "@sendmux-ci-fixture/dependent", version: "1.0.0", dependencies: { "@sendmux/core": core.version } });
+    fixturePackage(dependent, { name: "@sendmux-ci-fixture/dependent", version: "1.0.0", dependencies: { [core.name]: core.version } });
     const candidateEdge = [core, await packFixture(dependent, candidatePacks)];
     const candidateConsumer = join(directory, "candidate-edge");
     newNodeConsumer(candidateConsumer, candidateEdge);

@@ -49,6 +49,28 @@ for (const [surface, createClient, getConnection] of [
   ["mailbox", createMailboxClient, mailboxGetConnection],
   ["sending", createSendingClient, sendingGetConnection],
 ]) {
+  await test(`${surface} defaults to Qubrics service hosts`, async (t) => {
+    const names = ["QUBRICS_BASE_URL", "SENDMUX_BASE_URL", "QUBRICS_ACCESS_TOKEN", "SENDMUX_ACCESS_TOKEN"];
+    const original = { ...process.env };
+    for (const name of names) delete process.env[name];
+    t.after(() => {
+      for (const name of names) {
+        if (original[name] === undefined) delete process.env[name];
+        else process.env[name] = original[name];
+      }
+    });
+    let requestedOrigin;
+    const client = createClient({
+      apiKey: surface === "management" ? "smx_root_test" : "smx_mbx_test",
+      fetch: async (request) => {
+        requestedOrigin = new URL(request.url).origin;
+        return Response.json({});
+      },
+    });
+    await getConnection({ client });
+    assert.equal(requestedOrigin, surface === "sending" ? "https://smtp.qubrics.com" : "https://app.qubrics.com");
+  });
+
   await test(`${surface} resolves Qubrics environment configuration before legacy names`, async (t) => {
     const names = ["QUBRICS_API_KEY", "SENDMUX_API_KEY", "QUBRICS_ACCESS_TOKEN", "SENDMUX_ACCESS_TOKEN", "QUBRICS_BASE_URL", "SENDMUX_BASE_URL"];
     const original = { ...process.env };
@@ -220,7 +242,7 @@ for (const [surface, createClient, getConnection] of [
       await assert.rejects(async () => {
         const client = createClient({ ...credentials, fetch });
         await getConnection({ client });
-      }, /Sendmux authentication|access token/);
+      }, /Qubrics authentication|access token/);
     }
     assert.equal(requests, 0);
   });

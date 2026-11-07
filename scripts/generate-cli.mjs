@@ -286,7 +286,7 @@ function surfaceForOperationId(operationId) {
     return "sending";
   }
 
-  throw new Error(`Operation ${operationId} does not use a known Sendmux surface prefix`);
+  throw new Error(`Operation ${operationId} does not use a known Qubrics surface prefix`);
 }
 
 function requiredKeyKindForOperation(operation, surface) {

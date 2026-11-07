@@ -187,7 +187,7 @@ jobs:
 
       - name: Pack CLI tarballs
         if: ${{ contains(needs.release-please.outputs.paths_released, 'packages/ts/cli') }}
-        run: pnpm --filter @sendmux/cli pack:tarballs
+        run: pnpm --filter @qubrics/cli pack:tarballs
 
       - name: Verify CLI tarballs
         if: ${{ contains(needs.release-please.outputs.paths_released, 'packages/ts/cli') }}
@@ -315,7 +315,7 @@ jobs:
           set -euo pipefail
           package_version="$(node -p "require('./packages/ts/cli/package.json').version")"
           if [ "$RECOVER_TS_CLI_VERSION" != "$package_version" ]; then
-            echo "Recovery version $RECOVER_TS_CLI_VERSION does not match @sendmux/cli package version $package_version" >&2
+            echo "Recovery version $RECOVER_TS_CLI_VERSION does not match @qubrics/cli package version $package_version" >&2
             exit 1
           fi
           gh release view "ts-cli-v${RECOVER_TS_CLI_VERSION}" --json tagName --jq .tagName
@@ -369,7 +369,7 @@ jobs:
           SENDMUX_NPM_PUBLISH_PACKAGES: packages/ts/cli
 
       - name: Pack CLI tarballs
-        run: pnpm --filter @sendmux/cli pack:tarballs
+        run: pnpm --filter @qubrics/cli pack:tarballs
 
       - name: Verify CLI tarballs
         run: pnpm check:cli-tarballs
@@ -444,7 +444,7 @@ jobs:
           set -euo pipefail
           package_version="$(node -p "require('./packages/ts/management/package.json').version")"
           if [ "$RECOVER_TS_MANAGEMENT_VERSION" != "$package_version" ]; then
-            echo "Recovery version $RECOVER_TS_MANAGEMENT_VERSION does not match @sendmux/management package version $package_version" >&2
+            echo "Recovery version $RECOVER_TS_MANAGEMENT_VERSION does not match @qubrics/management package version $package_version" >&2
             exit 1
           fi
           gh release view "ts-management-v${RECOVER_TS_MANAGEMENT_VERSION}" --json tagName --jq .tagName

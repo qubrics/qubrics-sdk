@@ -62,7 +62,7 @@ export async function loginOAuth(input: {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        client_name: "Sendmux CLI",
+        client_name: "Qubrics CLI",
         application_type: "native",
         redirect_uris: [callback.redirectUri],
         grant_types: ["authorization_code", "refresh_token"],
@@ -153,7 +153,7 @@ export async function loginOAuth(input: {
         }),
       ).catch(() =>
         input.report(
-          "Could not revoke the interrupted login. Revoke the connection in Sendmux settings.",
+          "Could not revoke the interrupted login. Revoke the connection in Qubrics settings.",
         ),
       );
     }

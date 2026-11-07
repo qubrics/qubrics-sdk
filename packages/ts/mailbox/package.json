@@ -1,5 +1,5 @@
 {
-  "name": "@sendmux/mailbox",
+  "name": "@qubrics/mailbox",
   "version": "2.0.2",
   "license": "MIT",
   "type": "module",
@@ -21,7 +21,7 @@
     "build": "tsc -p tsconfig.json"
   },
   "dependencies": {
-    "@sendmux/core": "workspace:*"
+    "@qubrics/core": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "22.19.19"

@@ -1,32 +1,34 @@
-# @sendmux/management
+# @qubrics/management
 
-[![npm version](https://img.shields.io/npm/v/@sendmux%2Fmanagement)](https://www.npmjs.com/package/@sendmux/management)
+[![npm version](https://img.shields.io/npm/v/@qubrics%2Fmanagement)](https://www.npmjs.com/package/@qubrics/management)
 [![CI](https://github.com/qubrics/qubrics-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/qubrics/qubrics-sdk/actions/workflows/ci.yml)
-[![npm downloads](https://img.shields.io/npm/dm/@sendmux%2Fmanagement)](https://www.npmjs.com/package/@sendmux/management)
-[![Licence](https://img.shields.io/npm/l/@sendmux%2Fmanagement)](https://github.com/qubrics/qubrics-sdk/blob/main/LICENSE)
+[![npm downloads](https://img.shields.io/npm/dm/@qubrics%2Fmanagement)](https://www.npmjs.com/package/@qubrics/management)
+[![Licence](https://img.shields.io/npm/l/@qubrics%2Fmanagement)](https://github.com/qubrics/qubrics-sdk/blob/main/LICENSE)
 
-Generated TypeScript client for the Sendmux Management API.
+Generated TypeScript client for the Qubrics Management API.
 
 ## Documentation
 
-- Management API reference: [sendmux.ai/docs/api/introduction](https://sendmux.ai/docs/api/introduction)
+- Management API reference: [qubrics.com/docs/api/introduction](https://qubrics.com/docs/api/introduction)
 - Source repository: [qubrics/qubrics-sdk](https://github.com/qubrics/qubrics-sdk)
 
 ## Requirements
 
-- A root Sendmux API key with the `smx_root_*` prefix; alternatively, a REST OAuth grant for this surface.
+- A root Qubrics API key with the `smx_root_*` prefix; alternatively, a REST OAuth grant for this surface.
 - A JavaScript runtime with the standard Fetch API.
 
 ## Installation
 
 ```sh
-npm install @sendmux/management
+npm install @qubrics/management
 ```
 
-## Migrate from 1.x to 2.0
+<a id="migrate-from-1x-to-20"></a>
+
+## Result-type migration from earlier releases
 
 If you pass sending-account list entries to code that expects a detail result,
-update those types before upgrading to 2.0. `managementListProviders` returns
+update those types when upgrading from an earlier release. `managementListProviders` returns
 `ProviderListItem` entries without `variables`; `managementGetProvider` returns
 a `ProviderItem` with required `variables`. A list entry no longer satisfies the
 detail type.
@@ -38,7 +40,7 @@ detail type.
    import {
      managementGetProvider,
      managementListProviders,
-   } from "@sendmux/management";
+   } from "@qubrics/management";
 
    type ProviderListItem = NonNullable<
      Awaited<ReturnType<typeof managementListProviders>>["data"]
@@ -68,14 +70,14 @@ detail type.
 Pass `accessToken` instead of `apiKey` for a REST OAuth token or synchronous/asynchronous provider.
 
 ```ts
-import { createManagementClient } from "@sendmux/management";
+import { createManagementClient } from "@qubrics/management";
 
 const client = createManagementClient({
   accessToken: () => process.env.QUBRICS_ACCESS_TOKEN!,
 });
 ```
 
-The provider runs before each request. Your application owns token storage and refresh; required scopes still apply. See [OAuth setup](https://sendmux.ai/docs/developer-tools/oauth).
+The provider runs before each request. Your application owns token storage and refresh; required scopes still apply. See [OAuth setup](https://qubrics.com/docs/developer-tools/oauth).
 
 ## Usage
 
@@ -83,7 +85,7 @@ The provider runs before each request. Your application owns token storage and r
 import {
   createManagementClient,
   managementListDomains,
-} from "@sendmux/management";
+} from "@qubrics/management";
 
 const client = createManagementClient({
   apiKey: process.env.QUBRICS_API_KEY!,
@@ -102,14 +104,14 @@ The package exports every generated Management operation plus:
 
 ## Conditional requests
 
-Use `conditionalHeaders` from `@sendmux/core` for operations that accept `If-Match` or `If-None-Match`.
+Use `conditionalHeaders` from `@qubrics/core` for operations that accept `If-Match` or `If-None-Match`.
 
 ```ts
-import { conditionalHeaders } from "@sendmux/core";
+import { conditionalHeaders } from "@qubrics/core";
 import {
   createManagementClient,
   managementGetDomain,
-} from "@sendmux/management";
+} from "@qubrics/management";
 
 const client = createManagementClient({
   apiKey: process.env.QUBRICS_API_KEY!,

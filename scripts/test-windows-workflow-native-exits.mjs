@@ -74,9 +74,9 @@ const candidates = [
     shell: windowsPowerShell,
     scripts: () => [stepScript(chocolatey, "Test Chocolatey packages")],
     earlyFailure: 1,
-    finalFailure: 7,
+    finalFailure: 9,
     serverCleanup: true,
-    commandCount: 7,
+    commandCount: 9,
   },
   {
     name: "chocolatey-push",
@@ -451,7 +451,8 @@ function prepareFixture(directory, candidate, scenario) {
     writeFileSync(chocolateyConfig, originalChocolateyConfig);
   }
   const nativeCommand = join(directory, "native-command.mjs");
-  writeFileSync(nativeCommand, `import { appendFileSync, existsSync, readFileSync } from "node:fs";
+  writeFileSync(nativeCommand, `import { appendFileSync, existsSync, readFileSync, renameSync } from "node:fs";
+import { join } from "node:path";
 const fixtureCredential = ${JSON.stringify(fixtureCredential)};
 const chocolateyPushSource = ${JSON.stringify(chocolateyPushSource)};
 export function finish(command, args) {
@@ -469,7 +470,22 @@ export function finish(command, args) {
     ...config,
   }) + "\\n");
   if (!serverReady) return 86;
-  return index === Number(process.env.SENDMUX_NATIVE_FAIL_AT) ? 7 : 0;
+  if (index === Number(process.env.SENDMUX_NATIVE_FAIL_AT)) return 7;
+  if (command === "choco" && args[0] === "install" && ["sendmux", "sendmux.portable"].includes(args[1])) {
+    for (const name of ["qubrics", "sendmux"]) {
+      renameSync(join(process.env.SENDMUX_NATIVE_BIN, name + ".cmd.fixture"), join(process.env.SENDMUX_NATIVE_BIN, name + ".cmd"));
+    }
+  }
+  if (command === "choco" && args[0] === "uninstall" && args[1] === "sendmux.portable") {
+    for (const name of ["qubrics", "sendmux"]) {
+      renameSync(join(process.env.SENDMUX_NATIVE_BIN, name + ".cmd"), join(process.env.SENDMUX_NATIVE_BIN, name + ".cmd.fixture"));
+    }
+  }
+  if (["qubrics", "sendmux"].includes(command) && args[0] === "--version") {
+    if (command === "sendmux") console.error("sendmux is deprecated. Use qubrics instead.");
+    console.log("@qubrics/cli/" + process.env.SENDMUX_CHOCOLATEY_VERSION + " fixture");
+  }
+  return 0;
 }
 function inspectChocolateyConfig(command) {
   const file = process.env.SENDMUX_CHOCOLATEY_CONFIG;
@@ -483,8 +499,9 @@ function inspectChocolateyConfig(command) {
 }`);
   const shim = join(directory, "native-shim.mjs");
   writeFileSync(shim, `import {finish} from ${JSON.stringify(pathToFileURL(nativeCommand).href)};const [command,...args]=process.argv.slice(2);process.exitCode=finish(command,args);`);
-  for (const command of ["choco", "pnpm", "sendmux"]) {
-    writeFileSync(join(bin, `${command}.cmd`), `@echo off\r\n"%SENDMUX_NATIVE_NODE%" "%SENDMUX_NATIVE_SHIM%" ${command} %*\r\nexit /b %ERRORLEVEL%\r\n`);
+  for (const command of ["choco", "pnpm", "qubrics", "sendmux"]) {
+    const suffix = ["qubrics", "sendmux"].includes(command) ? ".fixture" : "";
+    writeFileSync(join(bin, `${command}.cmd${suffix}`), `@echo off\r\n"%SENDMUX_NATIVE_NODE%" "%SENDMUX_NATIVE_SHIM%" ${command} %*\r\nexit /b %ERRORLEVEL%\r\n`);
   }
   const nodeFixture = `import {finish} from ${JSON.stringify(pathToFileURL(nativeCommand).href)};process.exitCode=finish("node",process.argv.slice(2));`;
   writeFileSync(join(scripts, "diagnose-windows-consumer-ownership.mjs"), nodeFixture);
@@ -503,6 +520,7 @@ function inspectChocolateyConfig(command) {
   writeFileSync(join(packages, `sendmux.${version}.nupkg`), "fixture");
   const assetDirectory = join(directory, "packages/ts/cli/dist");
   mkdirSync(assetDirectory, { recursive: true });
+  writeFileSync(join(assetDirectory, "../package.json"), JSON.stringify({ name: "@qubrics/cli", version }));
   writeFileSync(join(assetDirectory, `sendmux-v${version}-win32-x64.zip`), "fixture");
   const failAt = scenario === "early" ? (candidate.earlyFailure ?? 0) : scenario === "final" ? candidate.finalFailure : 0;
   return {
@@ -523,6 +541,7 @@ function inspectChocolateyConfig(command) {
       SENDMUX_CHOCOLATEY_VERSION: version,
       SENDMUX_CHOCOLATEY_DOWNLOAD_URL: `http://127.0.0.1:8765/sendmux-v${version}-win32-x64.zip`,
       SENDMUX_NATIVE_COMMANDS: commands,
+      SENDMUX_NATIVE_BIN: bin,
       SENDMUX_NATIVE_FAIL_AT: String(failAt),
       SENDMUX_NATIVE_NODE: process.execPath,
       SENDMUX_NATIVE_SERVER: server,

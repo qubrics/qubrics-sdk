@@ -130,7 +130,7 @@ export async function reserveAgentRegistrationIntent(
   const path = registrationIntentPath(configDir, profileName);
   const releaseLock = await acquireFileLock(
     `${path}.lock`,
-    "Timed out waiting for another Sendmux process to reserve the agent registration.",
+    "Timed out waiting for another Qubrics process to reserve the agent registration.",
   );
 
   try {
@@ -209,7 +209,7 @@ async function writeCliConfigFile(
 async function acquireConfigWriteLock(configDir: string): Promise<() => Promise<void>> {
   return acquireFileLock(
     `${configPath(configDir)}.lock`,
-    "Timed out waiting for another Sendmux process to finish updating the profile config.",
+    "Timed out waiting for another Qubrics process to finish updating the profile config.",
   );
 }
 

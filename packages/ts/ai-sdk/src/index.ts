@@ -5,8 +5,8 @@ import {
   createMailboxClient,
   mailboxListMessages,
   mailboxSendMessage,
-} from "@sendmux/mailbox";
-import { createSendingClient, sendingSendEmail } from "@sendmux/sending";
+} from "@qubrics/mailbox";
+import { createSendingClient, sendingSendEmail } from "@qubrics/sending";
 
 /**
  * Configuration for {@link sendmux}.
@@ -34,18 +34,18 @@ const htmlFromText = (text: string): string =>
     .replace(/\r?\n/g, "<br>")}</p>`;
 
 /**
- * Build a Vercel AI SDK {@link ToolSet} backed by Sendmux, giving an agent
+ * Build a Vercel AI SDK {@link ToolSet} backed by Qubrics, giving an agent
  * three tools: `send_email`, `list_messages`, and `reply`.
  *
  * @example
  * ```ts
  * import { generateText } from "ai";
  * import { openai } from "@ai-sdk/openai";
- * import { sendmux } from "@sendmux/ai-sdk";
+ * import { sendmux } from "@qubrics/ai-sdk";
  *
  * const { text } = await generateText({
  *   model: openai("gpt-4o"),
- *   tools: sendmux({ apiKey: process.env.SENDMUX_API_KEY! }),
+ *   tools: sendmux({ apiKey: process.env.QUBRICS_API_KEY! }),
  *   prompt: "Reply to the latest invoice thread.",
  * });
  * ```
@@ -58,7 +58,7 @@ export function sendmux(config: SendmuxToolsConfig): ToolSet {
   return {
     send_email: tool({
       description:
-        "Send an email through Sendmux to any recipient. Returns the send result including the message id.",
+        "Send an email through Qubrics to any recipient. Returns the send result including the message id.",
       inputSchema: z.object({
         to: z.string().describe("Recipient email address"),
         subject: z.string().describe("Email subject line"),
@@ -108,7 +108,7 @@ export function sendmux(config: SendmuxToolsConfig): ToolSet {
 
     list_messages: tool({
       description:
-        "List recent messages in the agent's Sendmux mailbox, newest first.",
+        "List recent messages in the agent's Qubrics mailbox, newest first.",
       inputSchema: z.object({
         limit: z
           .number()
@@ -129,7 +129,7 @@ export function sendmux(config: SendmuxToolsConfig): ToolSet {
 
     reply: tool({
       description:
-        "Send a message from the agent's own Sendmux mailbox, for example to reply to an incoming sender.",
+        "Send a message from the agent's own Qubrics mailbox, for example to reply to an incoming sender.",
       inputSchema: z.object({
         to: z.string().describe("Recipient email address"),
         subject: z.string().describe("Subject line"),

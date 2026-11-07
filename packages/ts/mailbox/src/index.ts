@@ -1,7 +1,7 @@
 import {
   configureGeneratedClient,
   type SurfaceClientConfig,
-} from "@sendmux/core";
+} from "@qubrics/core";
 
 import {
   createClient,
@@ -12,7 +12,7 @@ export * from "./generated/sdk.gen.js";
 export * from "./events.js";
 export type { Client as MailboxClient } from "./generated/client/index.js";
 
-const DEFAULT_BASE_URL = "https://app.sendmux.ai/api/v1";
+const DEFAULT_BASE_URL = "https://app.qubrics.com/api/v1";
 
 export function createMailboxClient(config: SurfaceClientConfig): Client {
   const client = createClient({ baseUrl: config.baseUrl ?? DEFAULT_BASE_URL });

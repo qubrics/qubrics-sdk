@@ -80,7 +80,7 @@
     "@modelcontextprotocol/conformance": "0.2.0-alpha.11",
     "@openapitools/openapi-generator-cli": "2.32.0",
     "@redocly/cli": "2.53.0",
-    "@sendmux/sdk": "workspace:*",
+    "@qubrics/sdk": "workspace:*",
     "cross-spawn": "7.0.6",
     "esbuild": "0.28.1",
     "release-please": "17.6.0",

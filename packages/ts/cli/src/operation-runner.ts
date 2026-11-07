@@ -1,4 +1,4 @@
-import * as sdk from "@sendmux/sdk";
+import * as sdk from "@qubrics/sdk";
 import { createHash } from "node:crypto";
 import { closeSync, createReadStream, fsyncSync, openSync, writeSync } from "node:fs";
 import { readFile, stat } from "node:fs/promises";
@@ -581,7 +581,7 @@ function operationFor(operation: OperationDefinition): SdkOperation {
   const module = surfaceModules[operation.surface] as Record<string, unknown>;
   const sdkOperation = module[operation.operationId];
   if (typeof sdkOperation !== "function") {
-    throw new Error(`SDK operation ${operation.operationId} is not exported by @sendmux/sdk`);
+    throw new Error(`SDK operation ${operation.operationId} is not exported by @qubrics/sdk`);
   }
 
   return sdkOperation as SdkOperation;

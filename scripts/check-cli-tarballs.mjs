@@ -38,7 +38,7 @@ function findCliTarballs(distDir) {
   }
 
   return readdirSync(distDir)
-    .filter((file) => /^sendmux-v.*\.tar\.gz$/.test(file))
+    .filter((file) => /^(?:qubrics|sendmux)-v.*\.tar\.gz$/.test(file))
     .map((file) => join(distDir, file))
     .sort();
 }

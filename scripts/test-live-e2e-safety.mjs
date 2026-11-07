@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { createServer } from "node:http";
 import { createHash, randomUUID } from "node:crypto";
 import test from "node:test";
-import * as sdk from "@sendmux/sdk";
+import * as sdk from "@qubrics/sdk";
 import { createFixtureRuntime, runAdapterStep, runLanguageSdkOperations, runMcpOperations, fetchWithTimeout, withAbortSignal, runChildHarness, selectOperations, buildOperationPlan, expectedCliErrorMatches, scenarios, operations, fixtures } from "./run-live-e2e.mjs";
 import { copyFileSync, existsSync, mkdirSync, mkdtempSync as createTempDirectory, readFileSync, rmSync as removePath, statSync, symlinkSync, writeFileSync } from "node:fs";
 import { spawnSync } from "node:child_process";
@@ -784,7 +784,7 @@ test("fatal CLI shutdown retains private configuration recovery until the exact 
       writeFileSync(join(dir, "packages/ts/cli/bin/run.js"), `const fs=require('node:fs');fs.writeFileSync(process.env.HOME+'/private-config','private-config-canary');fs.writeFileSync(${JSON.stringify(childPath)},JSON.stringify({pid:process.pid,directory:process.env.HOME}));${mode === "confirmed" ? "console.log(JSON.stringify({openapi:'3.1.0',info:{title:'fixture',version:'1'},paths:{}}));" : "setInterval(()=>{},1000);"}`);
       const moduleUrl = pathToFileURL(join(process.cwd(), "scripts/run-live-e2e.mjs")).href;
       const code = `import {runAdapterStep,createFixtureRuntime,operations,fixtures,finishLiveRun} from ${JSON.stringify(moduleUrl)};
-        import * as sdk from '@sendmux/sdk';import fs from 'node:fs';import {mock} from 'node:test';
+        import * as sdk from '@qubrics/sdk';import fs from 'node:fs';import {mock} from 'node:test';
         process.chdir(${JSON.stringify(dir)});
         const originalTimer=setTimeout,kill=process.kill;
         process.kill=(pid,signal)=>{if(${JSON.stringify(mode)}==='denied'&&pid<0&&signal!==0&&fs.existsSync(${JSON.stringify(childPath)})&&-pid===JSON.parse(fs.readFileSync(${JSON.stringify(childPath)})).pid)throw Object.assign(new Error('private-signal-canary'),{code:'EPERM'});return kill(pid,signal);};

@@ -1,18 +1,18 @@
-# @sendmux/sdk
+# @qubrics/sdk
 
-[![npm version](https://img.shields.io/npm/v/@sendmux%2Fsdk)](https://www.npmjs.com/package/@sendmux/sdk)
+[![npm version](https://img.shields.io/npm/v/@qubrics%2Fsdk)](https://www.npmjs.com/package/@qubrics/sdk)
 [![CI](https://github.com/qubrics/qubrics-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/qubrics/qubrics-sdk/actions/workflows/ci.yml)
-[![npm downloads](https://img.shields.io/npm/dm/@sendmux%2Fsdk)](https://www.npmjs.com/package/@sendmux/sdk)
-[![Licence](https://img.shields.io/npm/l/@sendmux%2Fsdk)](https://github.com/qubrics/qubrics-sdk/blob/main/LICENSE)
+[![npm downloads](https://img.shields.io/npm/dm/@qubrics%2Fsdk)](https://www.npmjs.com/package/@qubrics/sdk)
+[![Licence](https://img.shields.io/npm/l/@qubrics%2Fsdk)](https://github.com/qubrics/qubrics-sdk/blob/main/LICENSE)
 
-Optional umbrella package for the Sendmux TypeScript SDK.
+Optional umbrella package for the Qubrics TypeScript SDK.
 
 ## Documentation
 
-- Sendmux docs: [sendmux.ai/docs](https://sendmux.ai/docs)
-- Management API reference: [sendmux.ai/docs/api/introduction](https://sendmux.ai/docs/api/introduction)
-- Mailbox API reference: [sendmux.ai/docs/mailbox-api/introduction](https://sendmux.ai/docs/mailbox-api/introduction)
-- Sending API reference: [sendmux.ai/docs/sending-api/introduction](https://sendmux.ai/docs/sending-api/introduction)
+- Qubrics docs: [qubrics.com/docs](https://qubrics.com/docs)
+- Management API reference: [qubrics.com/docs/api/introduction](https://qubrics.com/docs/api/introduction)
+- Mailbox API reference: [qubrics.com/docs/mailbox-api/introduction](https://qubrics.com/docs/mailbox-api/introduction)
+- Sending API reference: [qubrics.com/docs/sending-api/introduction](https://qubrics.com/docs/sending-api/introduction)
 - Source repository: [qubrics/qubrics-sdk](https://github.com/qubrics/qubrics-sdk)
 
 ## Requirements
@@ -25,17 +25,19 @@ Optional umbrella package for the Sendmux TypeScript SDK.
 ## Installation
 
 ```sh
-npm install @sendmux/sdk
+npm install @qubrics/sdk
 ```
 
-## Migrate from 1.x to 2.0
+<a id="migrate-from-1x-to-20"></a>
 
-`@sendmux/sdk` 2.0 re-exports `@sendmux/management` 2.0 and `@sendmux/mailbox` 2.0,
-so it carries their two result-type changes; the `sending` and `core` namespaces
-carry no breaking change. If you pass sending-account list entries to code that expects a
+## Result-type migration from earlier releases
+
+`@qubrics/sdk` re-exports `@qubrics/management` and `@qubrics/mailbox`,
+including their result-type changes from earlier releases.
+If you pass sending-account list entries to code that expects a
 detail result, or construct thread-message list results (fixtures, mocks, or
 wrappers annotated with the operation's result type), update those types before
-upgrading to 2.0. Code that only reads results keeps compiling.
+upgrading from an earlier release. Code that only reads results keeps compiling.
 
 1. `management.managementListProviders` returns `ProviderListItem` entries
    without `variables`; `management.managementGetProvider` returns a
@@ -45,7 +47,7 @@ upgrading to 2.0. Code that only reads results keeps compiling.
    directly), and give list-only code the list type:
 
    ```ts
-   import { management } from "@sendmux/sdk";
+   import { management } from "@qubrics/sdk";
 
    type ProviderListItem = NonNullable<
      Awaited<ReturnType<typeof management.managementListProviders>>["data"]
@@ -82,7 +84,7 @@ upgrading to 2.0. Code that only reads results keeps compiling.
    constructed thread-message result:
 
    ```ts
-   import { mailbox } from "@sendmux/sdk";
+   import { mailbox } from "@qubrics/sdk";
 
    type ThreadMessageList = NonNullable<
      Awaited<ReturnType<typeof mailbox.mailboxListThreadMessages>>["data"]
@@ -109,12 +111,12 @@ upgrading to 2.0. Code that only reads results keeps compiling.
    `Property 'thread_id' is missing in type … but required in type
    'MailboxThreadMessagesMeta'`.
 
-Update `@sendmux/sdk`, any directly installed `@sendmux/management` or
-`@sendmux/mailbox`, the lockfile, and affected annotations, fixtures, or call
+Update `@qubrics/sdk`, any directly installed `@qubrics/management` or
+`@qubrics/mailbox`, the lockfile, and affected annotations, fixtures, or call
 sites together. To roll back, restore those package, lockfile, and call-site
 changes together. The per-surface notes are in the
-[`@sendmux/management`](https://github.com/qubrics/qubrics-sdk/blob/main/packages/ts/management/README.md#migrate-from-1x-to-20)
-and [`@sendmux/mailbox`](https://github.com/qubrics/qubrics-sdk/blob/main/packages/ts/mailbox/README.md#migrate-from-1x-to-20)
+[`@qubrics/management`](https://github.com/qubrics/qubrics-sdk/blob/main/packages/ts/management/README.md#migrate-from-1x-to-20)
+and [`@qubrics/mailbox`](https://github.com/qubrics/qubrics-sdk/blob/main/packages/ts/mailbox/README.md#migrate-from-1x-to-20)
 READMEs.
 
 ## OAuth access tokens
@@ -122,19 +124,19 @@ READMEs.
 Each surface client also accepts `accessToken`: a bare token string or a synchronous or asynchronous provider. Pass either `apiKey` or `accessToken`. The provider runs for each authenticated request; your application owns token storage and refresh coordination.
 
 ```ts
-import { management } from "@sendmux/sdk";
+import { management } from "@qubrics/sdk";
 
 const client = management.createManagementClient({
   accessToken: () => process.env.QUBRICS_ACCESS_TOKEN!,
 });
 ```
 
-Use a REST access token with the operation's required scopes and mailbox access. See [OAuth for REST APIs](https://sendmux.ai/docs/developer-tools/oauth).
+Use a REST access token with the operation's required scopes and mailbox access. See [OAuth for REST APIs](https://qubrics.com/docs/developer-tools/oauth).
 
 ## Usage
 
 ```ts
-import { sending } from "@sendmux/sdk";
+import { sending } from "@qubrics/sdk";
 
 const client = sending.createSendingClient({
   apiKey: process.env.QUBRICS_SENDING_API_KEY!,
@@ -145,7 +147,7 @@ const response = await sending.sendingSendEmail({
   body: {
     from: { email: "sender@example.com" },
     to: { email: "recipient@example.com" },
-    subject: "Hello from Sendmux",
+    subject: "Hello from Qubrics",
     html_body: "<p>Hello.</p>",
     text_body: "Hello.",
   },
@@ -156,10 +158,10 @@ console.log(response.data?.data.message_id);
 
 The umbrella package re-exports:
 
-- `core` from `@sendmux/core`
-- `sending` from `@sendmux/sending`
-- `mailbox` from `@sendmux/mailbox`
-- `management` from `@sendmux/management`
+- `core` from `@qubrics/core`
+- `sending` from `@qubrics/sending`
+- `mailbox` from `@qubrics/mailbox`
+- `management` from `@qubrics/management`
 
 Use the per-surface packages directly when an integration only needs one API surface.
 

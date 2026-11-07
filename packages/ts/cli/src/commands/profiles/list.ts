@@ -13,7 +13,7 @@ import {
 } from "../../profiles.js";
 
 export default class ProfilesList extends SendmuxCommand {
-  static description = "List local Sendmux CLI profiles.";
+  static description = "List local Qubrics CLI profiles.";
   static flags = {
     verbose: Flags.boolean({
       description: "Include masked API key prefixes.",

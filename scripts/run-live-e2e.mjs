@@ -177,7 +177,7 @@ assertAdapters(adapters);
 assertAllScenariosExist(selectedOperations, scenarios);
 assertBuiltArtifacts(adapters);
 
-const sdk = await import("@sendmux/sdk");
+const sdk = await import("@qubrics/sdk");
 const credentials = credentialsForRun(sdk, selectedOperations);
 const sourceSha = spawnSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).stdout.trim();
 assert.match(sourceSha, /^[0-9a-f]{40}$/);
@@ -704,7 +704,7 @@ function assertBuiltArtifacts(adapters) {
     throw new Error("Missing TypeScript SDK build output. Run `pnpm build` or `pnpm -r --if-present build` first.");
   }
   if (adapters.includes("cli") && !existsSync("packages/ts/cli/dist/index.js")) {
-    throw new Error("Missing TypeScript CLI build output. Run `pnpm --filter @sendmux/cli build` first.");
+    throw new Error("Missing TypeScript CLI build output. Run `pnpm --filter @qubrics/cli build` first.");
   }
   if (adapters.includes("mcp") && !existsSync(mcpPython)) {
     throw new Error("Missing MCP Python venv. Run `pnpm build:mcp` first.");
@@ -718,10 +718,10 @@ function credentialsForRun(sdk, selectedOperations) {
   const requiredKeyKinds = requiredKeyKindsFor(selectedOperations);
   const rootApiKey = envValue("SENDMUX_LIVE_E2E_ROOT_API_KEY", "SENDMUX_STAGING_ROOT_API_KEY");
   const mailboxApiKey = envValue("SENDMUX_LIVE_E2E_MAILBOX_API_KEY", "SENDMUX_STAGING_MAILBOX_API_KEY");
-  const appBaseUrl = envValue("SENDMUX_LIVE_E2E_APP_BASE_URL", "SENDMUX_STAGING_APP_BASE_URL") ?? "https://app.sendmux.ai/api/v1";
+  const appBaseUrl = envValue("SENDMUX_LIVE_E2E_APP_BASE_URL", "SENDMUX_STAGING_APP_BASE_URL") ?? "https://app.qubrics.com/api/v1";
   const sendingBaseUrl =
     envValue("SENDMUX_LIVE_E2E_SENDING_BASE_URL", "SENDMUX_STAGING_SMTP_BASE_URL") ??
-    "https://smtp.sendmux.ai/api/v1";
+    "https://smtp.qubrics.com/api/v1";
 
   if (requiredKeyKinds.has("root") && !rootApiKey) {
     throw new Error("Missing SENDMUX_LIVE_E2E_ROOT_API_KEY or SENDMUX_STAGING_ROOT_API_KEY.");
@@ -784,11 +784,11 @@ function assertAllowedBaseUrl(label, value, defaults) {
 }
 
 function defaultAllowedAppBaseUrls() {
-  return ["https://app.sendmux.ai/api/v1", "http://127.0.0.1:3000/api/v1", "http://localhost:3000/api/v1"];
+  return ["https://app.qubrics.com/api/v1", "https://app.sendmux.ai/api/v1", "http://127.0.0.1:3000/api/v1", "http://localhost:3000/api/v1"];
 }
 
 function defaultAllowedSendingBaseUrls() {
-  return ["https://smtp.sendmux.ai/api/v1"];
+  return ["https://smtp.qubrics.com/api/v1", "https://smtp.sendmux.ai/api/v1"];
 }
 
 function parseCsv(value) {
@@ -803,7 +803,7 @@ async function runSdkOperation({ credentials, operation, prepared, sdk }) {
     const client = sdkClientFor({ credentials, operation, sdk });
     const module = sdk[operation.surface];
     const sdkOperation = module?.[operation.operationId];
-    assert.equal(typeof sdkOperation, "function", `${operation.operationId} is not exported by @sendmux/sdk`);
+    assert.equal(typeof sdkOperation, "function", `${operation.operationId} is not exported by @qubrics/sdk`);
 
     if (operation.operationId === "mailboxStreamEvents") {
       const { response, value } = await runMailboxStreamSdkOperation({ client, prepared, sdkOperation });
@@ -3142,7 +3142,7 @@ function createFixtureRuntime({ credentials, fixtures, operations, runId, sdk, s
       }
       const client = sdkClientFor({ credentials, operation, sdk });
       const sdkOperation = sdk[operation.surface]?.[operation.operationId];
-      assert.equal(typeof sdkOperation, "function", `${operation.operationId} is not exported by @sendmux/sdk`);
+      assert.equal(typeof sdkOperation, "function", `${operation.operationId} is not exported by @qubrics/sdk`);
       const response = await runBoundedSdkOperation({ client, operation, request, onResponse: response => this.observeResult(operationId, request, response.data, attachmentEvidence), sdkOperation });
       this.observeResult(operationId, request, response.data, attachmentEvidence);
       assertLiveResponse(response.data, operation);
@@ -3160,7 +3160,7 @@ function createFixtureRuntime({ credentials, fixtures, operations, runId, sdk, s
         retry: { baseDelayMs: 250, maxAttempts: 2, maxDelayMs: 1_000 },
       });
       const sdkOperation = sdk.mailbox?.[operation.operationId];
-      assert.equal(typeof sdkOperation, "function", `${operation.operationId} is not exported by @sendmux/sdk`);
+      assert.equal(typeof sdkOperation, "function", `${operation.operationId} is not exported by @qubrics/sdk`);
       const response = await runBoundedSdkOperation({ client, operation, request, sdkOperation });
       assertLiveResponse(response.data, operation);
       return response.data;
@@ -3228,7 +3228,7 @@ function createFixtureRuntime({ credentials, fixtures, operations, runId, sdk, s
       const request = await resolveInputObject(this, source.request ?? {});
       const client = sdkClientFor({ credentials, operation, sdk });
       const sdkOperation = sdk[operation.surface]?.[operation.operationId];
-      assert.equal(typeof sdkOperation, "function", `${operation.operationId} is not exported by @sendmux/sdk`);
+      assert.equal(typeof sdkOperation, "function", `${operation.operationId} is not exported by @qubrics/sdk`);
 
       const response = await runBoundedSdkOperation({ client, operation, request, sdkOperation });
       assertLiveResponse(response.data, operation.operationId);
