@@ -34,7 +34,6 @@
     "packages/ts/mailbox": {
       "component": "ts-mailbox",
       "package-name": "@qubrics/mailbox",
-      "release-as": "3.0.0",
       "initial-version": "1.0.0",
       "exclude-paths": [
         "evidence"
