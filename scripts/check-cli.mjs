@@ -20,6 +20,10 @@ const agentKey = "smx_agent_testkey1234567890";
 const durableAgentKey = "smx_agent_durable_read_testkey1234567890";
 const delegatedAgentSendKey = "smx_agent_delegated_send_testkey1234567890";
 const rootKey = "smx_root_testkey1234567890";
+let releaseConcurrentRegistrationPair;
+const concurrentRegistrationPairReady = new Promise((resolve) => {
+  releaseConcurrentRegistrationPair = resolve;
+});
 // Same authentication response budget as the existing oauth-http.ts transport.
 const oauthResponseByteLimit = 256 * 1024;
 const sendingAttachmentLimit = JSON.parse(readFileSync(
@@ -187,7 +191,11 @@ const server = createServer(async (request, response) => {
       profileName,
     });
     if (profileName === "concurrent-agent") {
-      await new Promise((resolve) => setTimeout(resolve, 100));
+      // Validate both requests before either CLI can activate the shared profile.
+      if (serverState.registrationIdempotencyKeys.filter((entry) => entry.profileName === profileName).length >= 2) {
+        releaseConcurrentRegistrationPair();
+      }
+      await concurrentRegistrationPairReady;
     }
     const accessToken = profileName === "durable-agent" ? durableAgentKey : `${durableAgentKey}_${profileName}`;
     const registrationId = profileName === "durable-agent" ? "areg_cli_durable" : `areg_cli_${profileName}`;
