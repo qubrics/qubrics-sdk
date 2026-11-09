@@ -42,7 +42,6 @@
     "packages/ts/management": {
       "component": "ts-management",
       "package-name": "@qubrics/management",
-      "release-as": "3.0.0",
       "initial-version": "1.0.0",
       "exclude-paths": [
         "evidence"
@@ -51,7 +50,6 @@
     "packages/ts/sdk": {
       "component": "ts-sdk",
       "package-name": "@qubrics/sdk",
-      "release-as": "3.0.0",
       "initial-version": "1.0.0",
       "exclude-paths": [
         "evidence"
