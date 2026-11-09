@@ -18,7 +18,6 @@
     "packages/ts/core": {
       "component": "ts-core",
       "package-name": "@qubrics/core",
-      "release-as": "2.0.0",
       "initial-version": "1.0.0",
       "exclude-paths": [
         "evidence"
@@ -27,7 +26,6 @@
     "packages/ts/sending": {
       "component": "ts-sending",
       "package-name": "@qubrics/sending",
-      "release-as": "2.0.0",
       "initial-version": "1.0.0",
       "exclude-paths": [
         "evidence"
@@ -36,7 +34,6 @@
     "packages/ts/mailbox": {
       "component": "ts-mailbox",
       "package-name": "@qubrics/mailbox",
-      "release-as": "3.0.0",
       "initial-version": "1.0.0",
       "exclude-paths": [
         "evidence"
