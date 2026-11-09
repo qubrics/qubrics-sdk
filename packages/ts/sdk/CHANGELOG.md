@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.0.0](https://github.com/qubrics/qubrics-sdk/compare/ts-sdk-v2.0.2...ts-sdk-v3.0.0) (2026-11-09)
+
+
+### Features
+
+* rename TypeScript packages and CLI to Qubrics ([3eb0997](https://github.com/qubrics/qubrics-sdk/commit/3eb0997b379d94b99659112d3c263ae59db7b14c))
+* rename TypeScript packages and CLI to Qubrics ([3323298](https://github.com/qubrics/qubrics-sdk/commit/332329891a44912867b2386c727f56241d714572))
+
 ## [2.0.2](https://github.com/Sendmux/sendmux-sdk/compare/ts-sdk-v2.0.1...ts-sdk-v2.0.2) (2026-09-21)
 
 
