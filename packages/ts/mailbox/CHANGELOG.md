@@ -1,5 +1,25 @@
 # Changelog
 
+## [3.0.0](https://github.com/qubrics/qubrics-sdk/compare/ts-mailbox-v2.0.2...ts-mailbox-v3.0.0) (2026-11-07)
+
+
+### Features
+
+* **mailbox:** expose durable drafts and agent-email workflows ([bb2f462](https://github.com/qubrics/qubrics-sdk/commit/bb2f462447affd43b3b175b9625068f1a02e3172))
+* **mailbox:** expose durable drafts and agent-email workflows ([7e867c5](https://github.com/qubrics/qubrics-sdk/commit/7e867c5bd7b7c85add27c7c04e036997ae57dbc4))
+* **mailbox:** expose permitted sender choices to consumers ([#317](https://github.com/qubrics/qubrics-sdk/issues/317)) ([7ac3dc1](https://github.com/qubrics/qubrics-sdk/commit/7ac3dc1c08915ec12477171a49edb87b3d482f39))
+* preserve integration contracts with Qubrics aliases ([722fbab](https://github.com/qubrics/qubrics-sdk/commit/722fbab2f98248d17b4878dd5149a35a711d5a18))
+* rename TypeScript packages and CLI to Qubrics ([3eb0997](https://github.com/qubrics/qubrics-sdk/commit/3eb0997b379d94b99659112d3c263ae59db7b14c))
+* rename TypeScript packages and CLI to Qubrics ([3323298](https://github.com/qubrics/qubrics-sdk/commit/332329891a44912867b2386c727f56241d714572))
+
+
+### Bug Fixes
+
+* preserve webhook variants and own calendar lifecycle fixtures ([49d4604](https://github.com/qubrics/qubrics-sdk/commit/49d4604235528b2fd56ac0bb51d55c244a18f771))
+* regenerate SDKs from current calendar and webhook contracts ([276082c](https://github.com/qubrics/qubrics-sdk/commit/276082cb5e525c0a6fb1e521858846cbd21c8714))
+* regenerate SDKs from current calendar and webhook contracts ([d728ea8](https://github.com/qubrics/qubrics-sdk/commit/d728ea87ac3f0aeebdb6380ad3bd515bac63d413))
+* sync generated Qubrics API defaults ([#351](https://github.com/qubrics/qubrics-sdk/issues/351)) ([388a410](https://github.com/qubrics/qubrics-sdk/commit/388a4107d25e6cf94a7c7704b094f8765f851be3))
+
 ## [2.0.2](https://github.com/Sendmux/sendmux-sdk/compare/ts-mailbox-v2.0.1...ts-mailbox-v2.0.2) (2026-09-21)
 
 
