@@ -34,7 +34,7 @@ const sharedTests = [
 const nativeTests = sharedTests.filter((name) => name !== "test_langchain.py");
 const env = { ...process.env, PYTHONPATH: "", PYTHONHOME: "", PYTHONNOUSERSITE: "1" };
 for (const name of Object.keys(env)) {
-  if (name.startsWith("SENDMUX_")) delete env[name];
+  if (name.startsWith("SENDMUX_") || name.startsWith("QUBRICS_")) delete env[name];
 }
 
 checkGeneratedMailboxBodyParamOrder();
@@ -53,7 +53,7 @@ if (!existsSync(python)) {
 
 await run(python, ["-m", "pip", "install", "--upgrade", "pip"], { env });
 await run(python, ["-m", "pip", "install", "-r", "requirements-dev.txt"], { env });
-await run(python, ["-m", "pip", "uninstall", "-y", "sendmux-sdk", "langchain-sendmux"], { env });
+await run(python, ["-m", "pip", "uninstall", "-y", "qubrics-sdk", "langchain-qubrics"], { env });
 const nativeCohort = pythonVerificationCohorts.find(({ name }) => name === "native");
 assert(nativeCohort);
 await run(python, [
@@ -62,7 +62,7 @@ await run(python, [
   "install",
   ...nativeCohort.packages.flatMap(({ name }) => ["-e", `packages/python/${name}`]),
 ], { env });
-await run(python, ["-c", "import importlib.metadata as m; [(lambda name: (_ for _ in ()).throw(AssertionError(name)) if next(iter(m.packages_distributions().get(name, [])), None) else None)(name) for name in ['sendmux_sdk', 'langchain_sendmux']]"], { env });
+await run(python, ["-c", "import importlib.metadata as m; assert all(d.metadata['Name'] not in ['qubrics-sdk', 'langchain-qubrics'] for d in m.distributions())"], { env });
 await run(python, ["-m", "compileall", "-q", "packages/python"], { env });
 
 await workspace("python-source-cohorts", async (directory) => {
@@ -89,6 +89,10 @@ await workspace("python-source-cohorts", async (directory) => {
   for (const cohortName of ["sdk", "langchain"]) {
     const cohort = pythonVerificationCohorts.find(({ name }) => name === cohortName);
     assert(cohort);
+    const sourceCohort = {
+      ...cohort,
+      packages: [...new Map([...nativeCohort.packages.filter(({ name }) => name !== "mcp"), ...cohort.packages].map((entry) => [entry.name, entry])).values()],
+    };
     await workspace(`python-source-${cohortName}`, async (cohortVenv) => {
       const cohortPython = join(cohortVenv, "bin", "python");
       await run("python3", ["-m", "venv", cohortVenv], { cwd: directory, env });
@@ -98,10 +102,10 @@ await workspace("python-source-cohorts", async (directory) => {
         "-m",
         "pip",
         "install",
-        ...cohort.packages.flatMap(({ name }) => ["-e", `packages/python/${name}`]),
+        ...sourceCohort.packages.flatMap(({ name }) => ["-e", `packages/python/${name}`]),
       ], { cwd: root, env });
       const result = {
-        cohort,
+        cohort: sourceCohort,
         python: cohortPython,
         provenanceScript,
         expectedRoot: root,
@@ -155,8 +159,8 @@ for package in packages:
     print(json.dumps({'source_distribution': package['distribution'], 'version': distribution.version, 'module': package['module'], 'location': str(location)}))
 names = {package['name'] for package in packages}
 if 'sdk' in names:
-    from sendmux_sdk import core, mailbox, management, sending
-    assert all(module.__name__.startswith('sendmux_') for module in [core, mailbox, management, sending])
+    from qubrics.sdk import core, mailbox, management, sending
+    assert all(module.__name__.startswith('qubrics.') for module in [core, mailbox, management, sending])
 `, "utf8");
 }
 
@@ -213,7 +217,7 @@ function verifySharedTestCoverage(nativeReceiptPath, langchainReceiptPath) {
 }
 
 function checkGeneratedMailboxBodyParamOrder() {
-  const filePath = join(root, "packages", "python", "mailbox", "sendmux_mailbox", "api", "mailbox_api_api.py");
+  const filePath = join(root, "packages", "python", "mailbox", "qubrics", "mailbox", "api", "mailbox_api_api.py");
   const source = readFileSync(filePath, "utf8");
   const operations = [
     {
@@ -254,7 +258,7 @@ function checkGeneratedMailboxBodyParamOrder() {
 }
 
 function checkGeneratedMailboxTargeting() {
-  const filePath = join(root, "packages", "python", "mailbox", "sendmux_mailbox", "api", "mailbox_api_api.py");
+  const filePath = join(root, "packages", "python", "mailbox", "qubrics", "mailbox", "api", "mailbox_api_api.py");
   const source = readFileSync(filePath, "utf8");
 
   assertMethodContains({
@@ -275,18 +279,18 @@ function checkGeneratedPackageVersions() {
   const generatedPackages = [
     {
       packageDir: join(root, "packages", "python", "sending"),
-      moduleDir: join(root, "packages", "python", "sending", "sendmux_sending"),
-      distributionName: "sendmux-sending",
+      moduleDir: join(root, "packages", "python", "sending", "qubrics", "sending"),
+      distributionName: "qubrics-sending",
     },
     {
       packageDir: join(root, "packages", "python", "mailbox"),
-      moduleDir: join(root, "packages", "python", "mailbox", "sendmux_mailbox"),
-      distributionName: "sendmux-mailbox",
+      moduleDir: join(root, "packages", "python", "mailbox", "qubrics", "mailbox"),
+      distributionName: "qubrics-mailbox",
     },
     {
       packageDir: join(root, "packages", "python", "management"),
-      moduleDir: join(root, "packages", "python", "management", "sendmux_management"),
-      distributionName: "sendmux-management",
+      moduleDir: join(root, "packages", "python", "management", "qubrics", "management"),
+      distributionName: "qubrics-management",
     },
   ];
 

@@ -1,9 +1,9 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.Sendmux/sendmux-mcp",
-  "title": "Email Inbox API + Sending by Sendmux",
+  "title": "Email Inbox API + Sending by Qubrics",
   "description": "AI email inbox and sending tools with attachments, search, live events, and webhooks.",
-  "websiteUrl": "https://sendmux.ai/docs/guides/mcp",
+  "websiteUrl": "https://qubrics.com/docs/guides/mcp",
   "repository": {
     "url": "https://github.com/qubrics/qubrics-sdk",
     "source": "github",
@@ -32,7 +32,7 @@
     },
     {
       "registryType": "pypi",
-      "identifier": "sendmux-mcp",
+      "identifier": "qubrics-mcp",
       "version": "2.2.0",
       "transport": {
         "type": "stdio"
@@ -42,7 +42,7 @@
           "description": "Tool surfaces to run locally.",
           "format": "string",
           "isRequired": true,
-          "name": "SENDMUX_MCP_SURFACES",
+          "name": "QUBRICS_MCP_SURFACES",
           "value": "mailbox,management,sending"
         },
         {
@@ -50,7 +50,7 @@
           "format": "string",
           "isRequired": true,
           "isSecret": true,
-          "name": "SENDMUX_MAILBOX_API_KEY",
+          "name": "QUBRICS_MAILBOX_API_KEY",
           "placeholder": "smx_mbx_..."
         },
         {
@@ -58,7 +58,7 @@
           "format": "string",
           "isRequired": true,
           "isSecret": true,
-          "name": "SENDMUX_MANAGEMENT_API_KEY",
+          "name": "QUBRICS_MANAGEMENT_API_KEY",
           "placeholder": "smx_root_..."
         },
         {
@@ -66,7 +66,7 @@
           "format": "string",
           "isRequired": false,
           "isSecret": true,
-          "name": "SENDMUX_SENDING_API_KEY",
+          "name": "QUBRICS_SENDING_API_KEY",
           "placeholder": "smx_mbx_..."
         }
       ]

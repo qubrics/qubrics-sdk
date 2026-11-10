@@ -59,6 +59,24 @@ Go v4 source for `qubrics.com/go/v4` awaits publication. Use published `sendmux.
 
 ## Quick start
 
+### Python source migration
+
+This checkout uses the shared `qubrics` Python namespace. The replacements below are awaiting publication. The Packages table and registry install commands still show the published Sendmux distributions.
+
+| Published distribution | Replacement and target version | Source import |
+| --- | --- | --- |
+| `sendmux-core` | `qubrics-core` 2.0.0 | `qubrics.core` |
+| `sendmux-sending` | `qubrics-sending` 2.0.0 | `qubrics.sending` |
+| `sendmux-mailbox` | `qubrics-mailbox` 3.0.0 | `qubrics.mailbox` |
+| `sendmux-management` | `qubrics-management` 3.0.0 | `qubrics.management` |
+| `sendmux-sdk` | `qubrics-sdk` 4.0.0 | `qubrics.sdk` |
+| `sendmux-mcp` | `qubrics-mcp` 3.0.0 | `qubrics.mcp` |
+| `langchain-sendmux` | `langchain-qubrics` 1.0.0 | `qubrics.langchain` |
+
+For example, the source Sending client is `from qubrics.sending import create_sending_client`. The source LangChain class is `qubrics.langchain.QubricsToolkit`. All seven distributions share the namespace without installing a separate package named `qubrics`.
+
+### Published packages
+
 Install only the package for the surface you need.
 
 ```sh
@@ -204,7 +222,7 @@ Maintainers: use the [protected live E2E matrix](docs/live-e2e-matrix.md) for cr
 
 ### Maintain package contracts
 
-In a source checkout, maintainers can inspect the generated [MCP package contract](packages/python/mcp/sendmux_mcp/mcp-contract.json) for the actual tool catalogue, schemas, upload workflows, hosted resource, and frozen protocol revisions. It describes this checkout, not the version already available from a package registry. Source hashes and native distribution metadata bind the artifact to its inputs; local transports and upstream API origins are separate from the hosted OAuth resource.
+In a source checkout, maintainers can inspect the generated [MCP package contract](packages/python/mcp/qubrics/mcp/mcp-contract.json) for the actual tool catalogue, schemas, upload workflows, hosted resource, and frozen protocol revisions. It describes this checkout, not the version already available from a package registry. Source hashes and native distribution metadata bind the artifact to its inputs; local transports and upstream API origins are separate from the hosted OAuth resource.
 
 With the workspace dependencies installed and Python 3.10 or newer available, run these commands from the repository root:
 

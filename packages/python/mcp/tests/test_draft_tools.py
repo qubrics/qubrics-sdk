@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import asyncio
 
-from sendmux_mcp.contract import collect_tools
-from sendmux_mcp.permissions import authorised_tool_names
+from qubrics.mcp.contract import collect_tools
+from qubrics.mcp.permissions import authorised_tool_names
 
 
 def test_draft_tools_require_read_and_the_matching_write_or_send_permission() -> None:

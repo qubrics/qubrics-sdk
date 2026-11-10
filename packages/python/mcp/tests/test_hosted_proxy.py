@@ -12,17 +12,17 @@ import httpx
 import pytest
 from fastmcp.server.auth import AccessToken
 
-from sendmux_mcp.config import ServerConfig
-from sendmux_mcp.hosted_proxy import (
+from qubrics.mcp.config import ServerConfig
+from qubrics.mcp.hosted_proxy import (
     HostedProxyConfig,
     HostedProxyTransport,
     build_hosted_operation_manifest,
 )
-from sendmux_mcp.hosted_auth import HostedAuthConfig, create_remote_auth_provider
-from sendmux_mcp.observability import DEFAULT_POSTHOG_HOST, HostedMcpPostHog, PostHogConfig
-from sendmux_mcp.response_ownership import close_response
-from sendmux_mcp.server import create_server
-from sendmux_mcp.specs import load_spec, prepare_for_fastmcp
+from qubrics.mcp.hosted_auth import HostedAuthConfig, create_remote_auth_provider
+from qubrics.mcp.observability import DEFAULT_POSTHOG_HOST, HostedMcpPostHog, PostHogConfig
+from qubrics.mcp.response_ownership import close_response
+from qubrics.mcp.server import create_server
+from qubrics.mcp.specs import load_spec, prepare_for_fastmcp
 
 
 class FakePostHogClient:
@@ -130,7 +130,7 @@ def test_proxy_transport_sends_operation_envelope_without_token_passthrough(
             )
 
         monkeypatch.setattr(
-            "sendmux_mcp.hosted_proxy.get_access_token",
+            "qubrics.mcp.hosted_proxy.get_access_token",
             lambda: AccessToken(
                 token="inbound-mcp-token",
                 client_id="mcp_client_public",
@@ -205,7 +205,7 @@ def test_proxy_transport_preserves_verified_mcp_audience(
             scopes=["domain.read"],
             claims={"grant_id": "mcp_grant_public", "aud": token_resource},
         )
-        monkeypatch.setattr("sendmux_mcp.hosted_proxy.get_access_token", lambda: token)
+        monkeypatch.setattr("qubrics.mcp.hosted_proxy.get_access_token", lambda: token)
 
         def app_proxy(request: httpx.Request) -> httpx.Response:
             envelope = json.loads(request.content)
@@ -242,7 +242,7 @@ def test_proxy_transport_forwards_delivery_groups_for_hosted_sending(
             return httpx.Response(202, json={"ok": True}, request=request)
 
         monkeypatch.setattr(
-            "sendmux_mcp.hosted_proxy.get_access_token",
+            "qubrics.mcp.hosted_proxy.get_access_token",
             lambda: AccessToken(
                 token="inbound-mcp-token",
                 client_id="mcp_client_public",
@@ -294,7 +294,7 @@ def test_proxy_transport_preserves_encoded_response_bytes(
         body = gzip.compress(payload) if compressed else payload
         headers = {"content-encoding": "gzip", "content-length": str(len(body))} if compressed else {}
         monkeypatch.setattr(
-            "sendmux_mcp.hosted_proxy.get_access_token",
+            "qubrics.mcp.hosted_proxy.get_access_token",
             lambda: AccessToken(token="token", client_id="client", scopes=[], claims={"grant_id": "grant"}),
         )
         config = ServerConfig(surfaces=("management",), api_key="smx_root_test")
@@ -318,7 +318,7 @@ def test_proxy_transport_finishes_response_close_during_anyio_cancellation(
 ) -> None:
     async def run() -> None:
         monkeypatch.setattr(
-            "sendmux_mcp.hosted_proxy.get_access_token",
+            "qubrics.mcp.hosted_proxy.get_access_token",
             lambda: AccessToken(token="token", client_id="client", scopes=[], claims={"grant_id": "grant"}),
         )
         config = ServerConfig(surfaces=("management",), api_key="smx_root_test")
@@ -348,7 +348,7 @@ def test_proxy_transport_finishes_response_close_during_anyio_cancellation(
 
 def test_response_close_timeout_is_reported(monkeypatch: pytest.MonkeyPatch) -> None:
     async def run() -> None:
-        monkeypatch.setattr("sendmux_mcp.response_ownership.RESPONSE_CLOSE_TIMEOUT_SECONDS", 0.01)
+        monkeypatch.setattr("qubrics.mcp.response_ownership.RESPONSE_CLOSE_TIMEOUT_SECONDS", 0.01)
         response = httpx.Response(
             200,
             stream=HangingResponseStream(),
@@ -370,7 +370,7 @@ def test_proxy_transport_sends_mailbox_id_for_mailbox_tools(monkeypatch: pytest.
             return httpx.Response(202, json={"ok": True}, request=request)
 
         monkeypatch.setattr(
-            "sendmux_mcp.hosted_proxy.get_access_token",
+            "qubrics.mcp.hosted_proxy.get_access_token",
             lambda: AccessToken(
                 token="inbound-mcp-token",
                 client_id="mcp_client_public",
@@ -420,9 +420,9 @@ def test_proxy_transport_captures_safe_posthog_tool_metadata(monkeypatch: pytest
                 release="v1.0.6",
             ),
         )
-        monkeypatch.setattr("sendmux_mcp.hosted_proxy.get_posthog_observability", lambda: analytics)
+        monkeypatch.setattr("qubrics.mcp.hosted_proxy.get_posthog_observability", lambda: analytics)
         monkeypatch.setattr(
-            "sendmux_mcp.hosted_proxy.get_access_token",
+            "qubrics.mcp.hosted_proxy.get_access_token",
             lambda: AccessToken(
                 token="inbound-mcp-token",
                 client_id="mcp_client_public",
@@ -489,8 +489,8 @@ def test_proxy_transport_captures_safe_posthog_failure_metadata(monkeypatch: pyt
                 release=None,
             ),
         )
-        monkeypatch.setattr("sendmux_mcp.hosted_proxy.get_posthog_observability", lambda: analytics)
-        monkeypatch.setattr("sendmux_mcp.hosted_proxy.get_access_token", lambda: None)
+        monkeypatch.setattr("qubrics.mcp.hosted_proxy.get_posthog_observability", lambda: analytics)
+        monkeypatch.setattr("qubrics.mcp.hosted_proxy.get_access_token", lambda: None)
 
         config = ServerConfig(surfaces=("management",), api_key="smx_root_test")
         spec = prepare_for_fastmcp(load_spec(config), base_url=config.api_base_url)
@@ -547,7 +547,7 @@ def test_hosted_proxy_server_does_not_require_process_upstream_api_key() -> None
 
 def test_proxy_transport_fails_closed_without_grant_claim(monkeypatch: pytest.MonkeyPatch) -> None:
     async def run() -> None:
-        monkeypatch.setattr("sendmux_mcp.hosted_proxy.get_access_token", lambda: None)
+        monkeypatch.setattr("qubrics.mcp.hosted_proxy.get_access_token", lambda: None)
 
         config = ServerConfig(surfaces=("management",), api_key="smx_root_test")
         spec = prepare_for_fastmcp(load_spec(config), base_url=config.api_base_url)
@@ -570,7 +570,7 @@ def test_proxy_transport_fails_closed_without_grant_claim(monkeypatch: pytest.Mo
 def test_proxy_transport_fails_closed_for_non_curated_operation(monkeypatch: pytest.MonkeyPatch) -> None:
     async def run() -> None:
         monkeypatch.setattr(
-            "sendmux_mcp.hosted_proxy.get_access_token",
+            "qubrics.mcp.hosted_proxy.get_access_token",
             lambda: AccessToken(
                 token="inbound-mcp-token",
                 client_id="mcp_client_public",

@@ -12,8 +12,8 @@ from fastmcp.server.auth import RemoteAuthProvider
 from fastmcp.server.auth.providers.jwt import JWTVerifier, RSAKeyPair
 from joserfc import jwk
 
-from sendmux_mcp.curation import MAILBOX_TOOLS
-from sendmux_mcp.hosted import (
+from qubrics.mcp.curation import MAILBOX_TOOLS
+from qubrics.mcp.hosted import (
     HOSTED_MCP_DISCOVERY_SCOPES,
     HOSTED_SURFACES,
     HostedServerRuntimeConfig,
@@ -25,9 +25,9 @@ from sendmux_mcp.hosted import (
     hosted_surface_config,
     origin_from_url,
 )
-from sendmux_mcp.hosted_auth import HostedAuthConfig, create_remote_auth_provider
-from sendmux_mcp.hosted_proxy import HostedProxyConfig
-from sendmux_mcp.server import create_server
+from qubrics.mcp.hosted_auth import HostedAuthConfig, create_remote_auth_provider
+from qubrics.mcp.hosted_proxy import HostedProxyConfig
+from qubrics.mcp.server import create_server
 
 
 def runtime_config() -> HostedServerRuntimeConfig:
@@ -306,12 +306,12 @@ def test_hosted_root_metadata_uses_configured_mcp_host(resource_base_url: str, m
                 root = await client.get(metadata_path)
                 mixed_case = await client.get(metadata_path, headers={"Host": urlparse(resource_base_url).netloc.upper()})
                 scoped = await client.get(f"{metadata_path}{mcp_path}")
-                a2a = await client.get(f"https://a2a.sendmux.ai{metadata_path}")
+                a2a = await client.get(f"https://a2a.qubrics.com{metadata_path}")
                 root_head = await client.head(metadata_path, headers={"Host": urlparse(resource_base_url).netloc.upper()})
                 scoped_head = await client.head(f"{metadata_path}{mcp_path}")
-                a2a_head = await client.head(f"https://a2a.sendmux.ai{metadata_path}")
-                a2a_post = await client.post(f"https://a2a.sendmux.ai{metadata_path}")
-                a2a_options = await client.options(f"https://a2a.sendmux.ai{metadata_path}")
+                a2a_head = await client.head(f"https://a2a.qubrics.com{metadata_path}")
+                a2a_post = await client.post(f"https://a2a.qubrics.com{metadata_path}")
+                a2a_options = await client.options(f"https://a2a.qubrics.com{metadata_path}")
                 other_host = await client.get(f"https://other.example.com{metadata_path}")
                 forbidden = await client.get(metadata_path, headers={"Origin": "https://evil.example"})
                 unauthenticated = await client.post(
@@ -332,8 +332,8 @@ def test_hosted_root_metadata_uses_configured_mcp_host(resource_base_url: str, m
         assert a2a_post.status_code == a2a_options.status_code == 405
         assert set(a2a_post.headers["allow"].split(", ")) == set(a2a_options.headers["allow"].split(", ")) == {"GET", "HEAD"}
         assert a2a.status_code == other_host.status_code == 200
-        assert a2a.json()["resource"] == "https://a2a.sendmux.ai/a2a/v1"
-        assert a2a.json()["resource_name"] == "Sendmux A2A"
+        assert a2a.json()["resource"] == "https://a2a.qubrics.com/a2a/v1"
+        assert a2a.json()["resource_name"] == "Qubrics A2A"
         assert other_host.json() == a2a.json()
         assert forbidden.status_code == 403
         assert forbidden.json()["error"]["code"] == "origin_forbidden"
@@ -357,7 +357,7 @@ def test_hosted_root_metadata_recognises_both_mcp_aliases(mcp_origin: str) -> No
                     metadata = await client.get(f"{origin}{path}")
                     assert metadata.status_code == 200
                     assert metadata.json()["resource"] == f"{origin}/mcp"
-                    assert metadata.json()["resource_name"] == "Sendmux MCP"
+                    assert metadata.json()["resource_name"] == "Qubrics MCP"
                 for headers in ({}, {"Authorization": "Bearer invalid-token"}):
                     unauthorised = await client.post(f"{origin}/mcp", headers=headers)
                     assert unauthorised.status_code == 401
@@ -397,7 +397,7 @@ def test_hosted_prm_jwt_and_proxy_share_exact_mounted_resource(mcp_path: str) ->
 def test_hosted_server_advertises_sendmux_package_version() -> None:
     server = create_hosted_server(runtime_config())
 
-    assert server._mcp_server.server_info.version == version("sendmux-mcp")
+    assert server._mcp_server.server_info.version == version("qubrics-mcp")
 
 
 def test_hosted_surface_config_does_not_require_upstream_api_key(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -593,14 +593,14 @@ def test_hosted_auth_accepts_both_issuers_with_shared_jwks(
     asyncio.run(run())
 
 
-def test_hosted_runtime_config_defaults_to_app_origin_only(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_hosted_runtime_config_defaults_to_recognised_app_origin_twins(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("SENDMUX_MCP_APP_ORIGIN", "https://app.sendmux.ai")
     monkeypatch.delenv("SENDMUX_MCP_ALLOWED_ORIGINS", raising=False)
     monkeypatch.delenv("SENDMUX_MCP_SCOPES_SUPPORTED", raising=False)
 
     config = hosted_runtime_config_from_env()
 
-    assert config.allowed_origins == ("https://app.sendmux.ai",)
+    assert config.allowed_origins == ("https://app.sendmux.ai", "https://app.qubrics.com")
     assert config.scopes_supported == HOSTED_MCP_DISCOVERY_SCOPES
 
 

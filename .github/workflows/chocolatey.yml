@@ -56,7 +56,7 @@ jobs:
       HAS_CHOCOLATEY_API_KEY: ${{ secrets.CHOCOLATEY_API_KEY != '' }}
       USE_LOCAL_CHOCOLATEY_ASSET: ${{ github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && inputs.push != true) }}
       SENDMUX_CHOCOLATEY_VERSION: ${{ inputs.version }}
-      OPENAPI_INPUT_DIR: ${{ (github.event_name == 'release' || inputs.push == true) && 'packages/python/mcp/sendmux_mcp/openapi' || 'sendmux-docs' }}
+      OPENAPI_INPUT_DIR: ${{ (github.event_name == 'release' || inputs.push == true) && 'packages/python/mcp/qubrics/mcp/openapi' || 'sendmux-docs' }}
     steps:
       - name: Check out SDK
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -87,6 +87,13 @@ jobs:
           version="${SENDMUX_CHOCOLATEY_VERSION:-$(node -p "require('./packages/ts/cli/package.json').version")}"
           tag="${RELEASE_TAG:-ts-cli-v${version}}"
           node .publication-guard/scripts/publication-guard.mjs resolve --tag "$tag"
+
+      - name: Select immutable producer OpenAPI snapshots
+        if: ${{ github.event_name == 'release' || inputs.push == true }}
+        shell: bash
+        env:
+          PRODUCER_SNAPSHOT_PATH: ${{ steps.producer.outputs.snapshot_path }}
+        run: echo "OPENAPI_INPUT_DIR=${PRODUCER_SNAPSHOT_PATH}" >> "$GITHUB_ENV"
 
       - name: Check out publishing candidate
         if: ${{ github.event_name == 'release' || inputs.push == true }}

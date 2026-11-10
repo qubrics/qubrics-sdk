@@ -18,22 +18,22 @@ from fastmcp.server.auth import AccessToken
 from fastmcp.server.auth.providers.jwt import RSAKeyPair
 from joserfc import jwk
 
-from sendmux_mcp.a2a import (
+from qubrics.mcp.a2a import (
     A2A_RESOURCE_URL,
     A2AHostedProxy,
     A2AOperationCatalog,
     A2AOperationRequest,
     build_a2a_agent_card,
 )
-from sendmux_mcp.config import ServerConfig
-from sendmux_mcp.curation import HOSTED_BACKING_TOOLS_BY_SURFACE, OPENAPI_TOOLS_BY_SURFACE
-from sendmux_mcp.hosted import (
+from qubrics.mcp.config import ServerConfig
+from qubrics.mcp.curation import HOSTED_BACKING_TOOLS_BY_SURFACE, OPENAPI_TOOLS_BY_SURFACE
+from qubrics.mcp.hosted import (
     HOSTED_MCP_DISCOVERY_SCOPES,
     HostedServerRuntimeConfig,
     create_hosted_http_app,
 )
-from sendmux_mcp.hosted_proxy import HostedProxyConfig, build_hosted_operation_manifest
-from sendmux_mcp.specs import load_spec, prepare_for_fastmcp
+from qubrics.mcp.hosted_proxy import HostedProxyConfig, build_hosted_operation_manifest
+from qubrics.mcp.specs import load_spec, prepare_for_fastmcp
 
 
 def test_agent_card_advertises_a2a_1_0_http_json_and_oauth() -> None:
@@ -42,7 +42,7 @@ def test_agent_card_advertises_a2a_1_0_http_json_and_oauth() -> None:
     project = pyproject.split("[project]", maxsplit=1)[1].split("\n[", maxsplit=1)[0]
     package_version = re.search(r'^version = "([^"]+)"$', project, re.MULTILINE)
 
-    assert card["name"] == "Sendmux A2A"
+    assert card["name"] == "Qubrics A2A"
     assert package_version is not None
     assert card["version"] == package_version.group(1)
     assert card["description"]
@@ -64,11 +64,11 @@ def test_agent_card_advertises_a2a_1_0_http_json_and_oauth() -> None:
     assert all(skill["name"] and skill["description"] and skill["tags"] for skill in card["skills"])
 
     oauth = card["securitySchemes"]["oauth2"]["oauth2SecurityScheme"]
-    assert oauth["oauth2MetadataUrl"] == "https://app.sendmux.ai/.well-known/oauth-authorization-server"
+    assert oauth["oauth2MetadataUrl"] == "https://app.qubrics.com/.well-known/oauth-authorization-server"
     assert oauth["flows"]["authorizationCode"]["authorizationUrl"] == (
-        "https://app.sendmux.ai/mcp/oauth/authorize"
+        "https://app.qubrics.com/mcp/oauth/authorize"
     )
-    assert oauth["flows"]["authorizationCode"]["tokenUrl"] == "https://app.sendmux.ai/mcp/oauth/token"
+    assert oauth["flows"]["authorizationCode"]["tokenUrl"] == "https://app.qubrics.com/mcp/oauth/token"
     assert oauth["flows"]["authorizationCode"]["pkceRequired"] is True
     assert set(oauth["flows"]["authorizationCode"]["scopes"]) == set(HOSTED_MCP_DISCOVERY_SCOPES)
     assert card["securityRequirements"] == [{"schemes": {"oauth2": {}}}]
@@ -188,7 +188,7 @@ def test_official_a2a_client_discovers_and_executes_without_task_routes() -> Non
         transport = httpx.ASGITransport(app=app)
         async with httpx.AsyncClient(
             transport=transport,
-            base_url="https://a2a.sendmux.ai",
+            base_url="https://a2a.qubrics.com",
             headers={"Authorization": "Bearer a2a_access_token"},
         ) as http_client:
             card_response = await http_client.get("/.well-known/agent-card.json")
@@ -239,7 +239,7 @@ def test_official_a2a_client_discovers_and_executes_without_task_routes() -> Non
             assert (await http_client.post("/a2a/v1/message:stream", json={})).status_code == 404
             assert (await http_client.get("/a2a/v1/tasks/task_123")).status_code == 404
 
-            card = await A2ACardResolver(http_client, "https://a2a.sendmux.ai").get_agent_card()
+            card = await A2ACardResolver(http_client, "https://a2a.qubrics.com").get_agent_card()
             client = ClientFactory(
                 ClientConfig(
                     streaming=False,
@@ -400,6 +400,8 @@ def test_a2a_discovery_separates_host_identities_and_cache_validators() -> None:
                 assert legacy.status_code == qubrics.status_code == 200
                 assert legacy.json()["name"] == "Sendmux A2A"
                 assert legacy.json()["supportedInterfaces"][0]["url"] == "https://a2a.sendmux.ai/a2a/v1"
+                assert qubrics.json()["name"] == "Qubrics A2A"
+                assert qubrics.json()["supportedInterfaces"][0]["url"] == "https://a2a.qubrics.com/a2a/v1"
                 assert legacy.headers["etag"] != qubrics.headers["etag"]
 
                 for origin, response in (("https://a2a.sendmux.ai", legacy), ("https://a2a.qubrics.com", qubrics)):
@@ -422,12 +424,12 @@ def test_a2a_discovery_separates_host_identities_and_cache_validators() -> None:
                 for host in ("a2a.qubrics.com.evil.example", "a2a.qubrics.com:8443", "unrecognised.example"):
                     unrecognised = await client.get(f"https://{host}{path}")
                     assert unrecognised.status_code == 200
-                    assert unrecognised.content == legacy.content
+                    assert unrecognised.content == qubrics.content
                     metadata = await client.get(f"https://{host}/.well-known/oauth-protected-resource")
-                    assert metadata.json()["resource"] == "https://a2a.sendmux.ai/a2a/v1"
+                    assert metadata.json()["resource"] == "https://a2a.qubrics.com/a2a/v1"
                     challenge = await client.post(f"https://{host}/a2a/v1/message:send", json={})
                     assert challenge.status_code == 401
-                    assert 'resource_metadata="https://a2a.sendmux.ai/.well-known/oauth-protected-resource"' in (
+                    assert 'resource_metadata="https://a2a.qubrics.com/.well-known/oauth-protected-resource"' in (
                         challenge.headers["www-authenticate"]
                     )
 

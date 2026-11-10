@@ -12,10 +12,10 @@ def replace(path: Path, before: str, after: str) -> None:
 
 mode = sys.argv[1]
 if mode == "validation":
-    replace(root / "packages/python/mcp/sendmux_mcp/server.py", "validate_output=True,", "validate_output=False,")
-    replace(root / "packages/python/mcp/sendmux_mcp/server.py", "middleware: list[Middleware] = [StructuredOutputValidationMiddleware()]", "middleware: list[Middleware] = []")
+    replace(root / "packages/python/mcp/qubrics/mcp/server.py", "validate_output=True,", "validate_output=False,")
+    replace(root / "packages/python/mcp/qubrics/mcp/server.py", "middleware: list[Middleware] = [StructuredOutputValidationMiddleware()]", "middleware: list[Middleware] = []")
 elif mode == "permission":
-    replace(root / "packages/python/mcp/sendmux_mcp/permissions.py", '"mailbox_get_sender_choices": ("email.send",),', '"mailbox_get_sender_choices": (),')
+    replace(root / "packages/python/mcp/qubrics/mcp/permissions.py", '"mailbox_get_sender_choices": ("email.send",),', '"mailbox_get_sender_choices": (),')
 elif mode == "drop-choices":
     path = root / "packages/ts/mailbox/src/generated/sdk.gen.ts"
     source = path.read_text()

@@ -6,12 +6,15 @@ import { isDeepStrictEqual } from "node:util";
 
 const defaultRegistryBaseUrl = "https://registry.modelcontextprotocol.io";
 
-export function isRetryableMcpPublisherError(output) {
+export function isRetryableMcpPublisherError(output, manifest) {
+  const packages = manifest?.packages?.filter((entry) => entry.registryType === "pypi") ?? [];
+  if (packages.length !== 1 || typeof packages[0].identifier !== "string" || packages[0].identifier.length === 0) return false;
+  const identifier = packages[0].identifier;
   return output
     .split(/\r?\n/u)
     .some(
       (line) =>
-        line.includes("PyPI package 'sendmux-mcp'") && line.includes("status: 404"),
+        line.includes(`PyPI package '${identifier}'`) && line.includes("status: 404"),
     );
 }
 
@@ -106,17 +109,17 @@ export async function waitForMcpRegistryVersion({
 }
 
 async function main() {
+  const expectedServer = JSON.parse(readFileSync(process.env.MCP_SERVER_MANIFEST ?? "packages/python/mcp/server.json", "utf8"));
   const retryablePublishLogIndex = process.argv.indexOf("--retryable-publish-log");
   if (retryablePublishLogIndex !== -1) {
     const path = process.argv[retryablePublishLogIndex + 1];
     if (!path) {
       throw new Error("--retryable-publish-log requires a path");
     }
-    process.exitCode = isRetryableMcpPublisherError(readFileSync(path, "utf8")) ? 0 : 1;
+    process.exitCode = isRetryableMcpPublisherError(readFileSync(path, "utf8"), expectedServer) ? 0 : 1;
     return;
   }
 
-  const expectedServer = JSON.parse(readFileSync(process.env.MCP_SERVER_MANIFEST ?? "packages/python/mcp/server.json", "utf8"));
   const name = process.env.MCP_SERVER_NAME ?? expectedServer.name;
   const version = process.env.MCP_SERVER_VERSION ?? expectedServer.version;
 

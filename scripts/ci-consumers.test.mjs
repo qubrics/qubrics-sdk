@@ -20,28 +20,29 @@ import csv, pathlib, sys, zipfile
 
 candidate_dir, dependency_dir = map(pathlib.Path, sys.argv[1:])
 packages = [
-    ("sendmux-core", "sendmux_core", "1.0.0", [], candidate_dir),
-    ("sendmux-sending", "sendmux_sending", "1.0.0", ["sendmux-core>=1,<2"], candidate_dir),
-    ("sendmux-mailbox", "sendmux_mailbox", "2.0.0", ["sendmux-core>=1,<2"], candidate_dir),
-    ("sendmux-management", "sendmux_management", "1.0.0", ["sendmux-core>=1,<2"], candidate_dir),
-    ("sendmux-mcp", "sendmux_mcp", "2.0.0", ["sendmux-core>=1,<2"], candidate_dir),
-    ("sendmux-sdk", "sendmux_sdk", "2.0.0", ["sendmux-core>=1,<2", "sendmux-mailbox>=2,<3", "sendmux-management>=1,<2", "sendmux-sending>=1,<2"], candidate_dir),
-    ("langchain-sendmux", "langchain_sendmux", "0.3.0", ["sendmux-mailbox>=1,<2", "sendmux-sending>=1,<2"], candidate_dir),
-    ("sendmux-mailbox", "sendmux_mailbox", "1.5.1", ["sendmux-core>=1,<2"], dependency_dir),
+    ("qubrics-core", "qubrics.core", "1.0.0", [], candidate_dir),
+    ("qubrics-sending", "qubrics.sending", "1.0.0", ["qubrics-core>=1,<2"], candidate_dir),
+    ("qubrics-mailbox", "qubrics.mailbox", "2.0.0", ["qubrics-core>=1,<2"], candidate_dir),
+    ("qubrics-management", "qubrics.management", "1.0.0", ["qubrics-core>=1,<2"], candidate_dir),
+    ("qubrics-mcp", "qubrics.mcp", "2.0.0", ["qubrics-core>=1,<2"], candidate_dir),
+    ("qubrics-sdk", "qubrics.sdk", "2.0.0", ["qubrics-core>=1,<2", "qubrics-mailbox>=2,<3", "qubrics-management>=1,<2", "qubrics-sending>=1,<2"], candidate_dir),
+    ("langchain-qubrics", "qubrics.langchain", "0.3.0", ["qubrics-mailbox>=1,<2", "qubrics-sending>=1,<2"], candidate_dir),
+    ("qubrics-mailbox", "qubrics.mailbox", "1.5.1", ["qubrics-core>=1,<2"], dependency_dir),
 ]
 
 for distribution, module, version, requirements, output in packages:
+    module_path = module.replace('.', '/')
     wheel_name = f"{distribution.replace('-', '_')}-{version}-py3-none-any.whl"
     dist_info = f"{distribution.replace('-', '_')}-{version}.dist-info"
     files = {
-        f"{module}/__init__.py": f"__version__ = {version!r}\n",
+        f"{module_path}/__init__.py": f"__version__ = {version!r}\n",
         f"{dist_info}/WHEEL": "Wheel-Version: 1.0\nGenerator: sendmux-test\nRoot-Is-Purelib: true\nTag: py3-none-any\n",
         f"{dist_info}/METADATA": "Metadata-Version: 2.1\n" + f"Name: {distribution}\nVersion: {version}\n" + "".join(f"Requires-Dist: {item}\n" for item in requirements),
     }
-    if module == "sendmux_sdk":
-        files[f"{module}/__init__.py"] = "from importlib import import_module\n_MODULES={'core':'sendmux_core','mailbox':'sendmux_mailbox','management':'sendmux_management','sending':'sendmux_sending'}\ndef __getattr__(name):\n module=import_module(_MODULES[name]); globals()[name]=module; return module\n"
-    if module == "sendmux_mcp":
-        files[f"{module}/contract.py"] = "def load_contract(): return {'package': {'identity': 'sendmux-mcp'}}\n"
+    if module == "qubrics.sdk":
+        files[f"{module_path}/__init__.py"] = "from importlib import import_module\n_MODULES={'core':'qubrics.core','mailbox':'qubrics.mailbox','management':'qubrics.management','sending':'qubrics.sending'}\ndef __getattr__(name):\n module=import_module(_MODULES[name]); globals()[name]=module; return module\n"
+    if module == "qubrics.mcp":
+        files[f"{module_path}/contract.py"] = "def load_contract(): return {'package': {'identity': 'qubrics-mcp'}}\n"
     record = f"{dist_info}/RECORD"
     files[record] = "".join(f"{name},,\n" for name in [*files, record])
     with zipfile.ZipFile(output / wheel_name, "w", zipfile.ZIP_DEFLATED) as archive:
@@ -56,13 +57,13 @@ for distribution, module, version, requirements, output in packages:
       runWheelTests: false,
       env: {
         ...process.env,
-        PIP_FIND_LINKS: `${candidates} ${dependencies}`,
+        PIP_FIND_LINKS: dependencies,
         PIP_NO_INDEX: "1",
       },
     };
     await pythonArtifactConsumers(options);
 
-    const sdkWheel = "sendmux_sdk-2.0.0-py3-none-any.whl";
+    const sdkWheel = "qubrics_sdk-2.0.0-py3-none-any.whl";
     const sdkArchive = join(candidates, sdkWheel);
     const retainedArchive = join(directory, sdkWheel);
     renameSync(sdkArchive, retainedArchive);
@@ -81,7 +82,7 @@ import pathlib, sys, zipfile
 archive = pathlib.Path(sys.argv[1])
 with zipfile.ZipFile(archive) as source:
     members = {name: source.read(name) for name in source.namelist()}
-members['sendmux_sdk/__init__.py'] += b"\nfrom pathlib import Path\nPath(__file__).write_text('# changed after installation\\n')\n"
+members['qubrics/sdk/__init__.py'] += b"\nfrom pathlib import Path\nPath(__file__).write_text('# changed after installation\\n')\n"
 with zipfile.ZipFile(archive, 'w', zipfile.ZIP_DEFLATED) as target:
     for name, payload in members.items():
         target.writestr(name, payload)

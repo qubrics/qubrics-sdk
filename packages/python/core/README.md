@@ -1,26 +1,28 @@
-# sendmux-core
+# qubrics-core
 
-[![PyPI version](https://img.shields.io/pypi/v/sendmux-core)](https://pypi.org/project/sendmux-core/)
-[![Python versions](https://img.shields.io/pypi/pyversions/sendmux-core)](https://pypi.org/project/sendmux-core/)
-[![PyPI downloads](https://img.shields.io/pypi/dm/sendmux-core)](https://pypi.org/project/sendmux-core/)
-[![Licence](https://img.shields.io/pypi/l/sendmux-core)](https://github.com/qubrics/qubrics-sdk/blob/main/LICENSE)
+[![PyPI version](https://img.shields.io/pypi/v/qubrics-core)](https://pypi.org/project/qubrics-core/)
+[![Python versions](https://img.shields.io/pypi/pyversions/qubrics-core)](https://pypi.org/project/qubrics-core/)
+[![PyPI downloads](https://img.shields.io/pypi/dm/qubrics-core)](https://pypi.org/project/qubrics-core/)
+[![Licence](https://img.shields.io/pypi/l/qubrics-core)](https://github.com/qubrics/qubrics-sdk/blob/main/LICENSE)
 
-Shared runtime helpers for the Sendmux Python SDK packages.
+Shared runtime helpers for the Qubrics Python SDK packages.
 
 ## Documentation
 
-- Sendmux docs: [sendmux.ai/docs](https://sendmux.ai/docs)
+- Qubrics docs: [qubrics.com/docs](https://qubrics.com/docs)
 - Source repository: [qubrics/qubrics-sdk](https://github.com/qubrics/qubrics-sdk)
 
 ## Requirements
 
 - Python 3.10 or newer.
-- A surface package such as `sendmux-sending`, `sendmux-mailbox`, or `sendmux-management` for API operations.
+- A surface package such as `qubrics-sending`, `qubrics-mailbox`, or `qubrics-management` for API operations.
 
 ## Installation
 
+These commands target the Qubrics release of `qubrics-core`. Until it is published, install `sendmux-core` with its existing import names.
+
 ```sh
-pip install sendmux-core
+pip install qubrics-core
 ```
 
 ## Usage
@@ -30,7 +32,7 @@ Validate an API key prefix and prepare request headers before calling a surface 
 ```python
 import os
 
-from sendmux_core import conditional_headers, idempotency_headers, validate_api_key
+from qubrics.core import conditional_headers, idempotency_headers, validate_api_key
 
 validate_api_key(os.environ["QUBRICS_MAILBOX_API_KEY"], surface="mailbox")
 
@@ -47,7 +49,7 @@ headers = {
 - `idempotency_headers` and `conditional_headers` prepare request headers.
 - `iter_cursor_pages` iterates cursor-paginated list responses.
 - `RetryOptions` configures retry behaviour for generated clients. A single retry layer honours `retryable: false`, server retry delays and the total retry deadline.
-- `SendmuxApiError` normalises API errors and request IDs.
+- `QubricsApiError` normalises API errors and request IDs.
 
 ## Support
 

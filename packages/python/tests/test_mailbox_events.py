@@ -4,10 +4,10 @@ import json
 
 from typing import Any, cast
 
-import sendmux_mailbox.events as events_module
-from sendmux_mailbox.api_client import ApiClient
-from sendmux_mailbox.events import iter_mailbox_events
-from sendmux_mailbox.models.mailbox_realtime_event import MailboxRealtimeEvent
+import qubrics.mailbox.events as events_module
+from qubrics.mailbox.api_client import ApiClient
+from qubrics.mailbox.events import iter_mailbox_events
+from qubrics.mailbox.models.mailbox_realtime_event import MailboxRealtimeEvent
 
 
 EVENT_PAYLOAD = (

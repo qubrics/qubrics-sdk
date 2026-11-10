@@ -13,18 +13,20 @@ import { gitEnvironment } from "./publication-guard.mjs";
 const executeFile = promisify(execFile);
 const execute = (command, args, options = {}) => executeFile(command, args, { ...options, env: command === "git" ? gitEnvironment(options.env) : options.env });
 const guard = process.env.SENDMUX_TEST_PUBLICATION_GUARD ?? resolve("scripts/publication-guard.mjs");
-const specPath = "packages/python/mcp/sendmux_mcp/openapi";
+const mcpRoot = "packages/python/mcp/sendmux_mcp";
+const renamedMcpRoot = "packages/python/mcp/qubrics/mcp";
+const specPath = `${mcpRoot}/openapi`;
 const repository = "qubrics/qubrics-sdk";
 const repositoryId = 1253958043;
 const document = { openapi: "3.1.0", paths: { "/mailbox/messages": { get: { operationId: "mailboxList", responses: { 200: { description: "Listed" } } } } }, components: { schemas: { Provider: { required: ["variables", "delivery_group"] } } } };
 const skillsControl = process.env.SENDMUX_TEST_SKILLS_ROOT ?? process.env.SENDMUX_SKILLS_ROOT ?? resolve("../sendmux-skills");
 const hash = (bytes) => createHash("sha256").update(bytes).digest("hex");
 
-function seedFreshnessSources(repo) {
+function seedFreshnessSources(repo, root = mcpRoot, name = "sendmux-mcp") {
   const write = (file, value) => { mkdirSync(resolve(repo, file, ".."), { recursive: true }); writeFileSync(join(repo, file), value); };
-  write("packages/python/mcp/pyproject.toml", '[project]\nname = "sendmux-mcp"\n');
-  write("packages/python/mcp/sendmux_mcp/server.py", "fixture-server");
-  write("packages/python/mcp/sendmux_mcp/mcp-contract.json", JSON.stringify({ tools: { by_surface: { mailbox: [{ name: "mailbox_list", input_schema: { type: "object" }, description: "List messages" }] } }, provenance: { sources: { "server.py": hash("fixture-server") } } }));
+  write("packages/python/mcp/pyproject.toml", `[project]\nname = "${name}"\nversion = "1.2.3"\n`);
+  write(`${root}/server.py`, "fixture-server");
+  write(`${root}/mcp-contract.json`, JSON.stringify({ tools: { by_surface: { mailbox: [{ name: "mailbox_list", input_schema: { type: "object" }, description: "List messages" }] } }, provenance: { sources: { "server.py": hash("fixture-server") } } }));
   write("packages/ts/cli/src/generated/operations.ts", 'export const operations = {\n  mailboxList: {"command":"mailbox:list","operationId":"mailboxList","surface":"mailbox"}\n} as const satisfies Record<string, OperationDefinition>;\n');
   write("packages/ts/cli/src/base-command.ts", 'export const authFlags = { "api-key": "Sendmux API key" };\n');
 }
@@ -85,6 +87,7 @@ async function foreignGitFixture(t) {
   const [caller, foreign] = ["caller", "foreign"].map((name) => join(directory, name));
   for (const repo of [caller, foreign]) {
     mkdirSync(join(repo, specPath), { recursive: true });
+    writeFileSync(join(repo, "packages/python/mcp/pyproject.toml"), '[project]\nname = "sendmux-mcp"\n');
     for (const name of ["app", "sending"]) writeFileSync(join(repo, specPath, `openapi-${name}.json`), JSON.stringify({ ...document, description: repo }));
     await run("git", ["-C", repo, "init", "-q"]);
     await run("git", ["-C", repo, "add", "."]);
@@ -134,12 +137,14 @@ test("negative diagnostic creates only its owned repository under inherited hook
   assert.equal(existsSync(receipt.directory), false);
 });
 
-async function fixture(t, live = document) {
+async function fixture(t, live = document, { mcpName = "sendmux-mcp", pinnedSkills = true } = {}) {
   const directory = mkdtempSync(join(tmpdir(), "sendmux-guard-git-"));
   const repo = join(directory, "sdk");
-  mkdirSync(join(repo, specPath), { recursive: true });
-  for (const name of ["app", "sending"]) writeFileSync(join(repo, specPath, `openapi-${name}.json`), JSON.stringify(document));
-  seedFreshnessSources(repo);
+  const root = mcpName === "qubrics-mcp" ? renamedMcpRoot : mcpRoot;
+  const snapshots = `${root}/openapi`;
+  mkdirSync(join(repo, snapshots), { recursive: true });
+  for (const name of ["app", "sending"]) writeFileSync(join(repo, snapshots, `openapi-${name}.json`), JSON.stringify(document));
+  seedFreshnessSources(repo, root, mcpName);
   const git = (...args) => { assert.ok(resolve(repo).startsWith(`${directory}/`), "Git fixture escaped mkdtemp"); return execute("git", ["-C", repo, ...args]); };
   await git("init", "--quiet");
   await git("add", ".");
@@ -160,7 +165,9 @@ async function fixture(t, live = document) {
     rmSync(directory, { recursive: true, force: true });
     assert.equal(existsSync(directory), false);
   });
-  const skills = await freshnessFixture(directory, repo, sha);
+  const skills = pinnedSkills ? await freshnessFixture(directory, repo, sha) : {
+    SENDMUX_SKILLS_ROOT: "", SENDMUX_SKILLS_REVISION: "", SENDMUX_SKILL_RECEIPT_DIR: "",
+  };
   const run = (args = [], overrides = {}) => execute(process.execPath, [guard, "candidate", "--repo", repo, "--sha", sha, ...args], {
     env: { ...process.env, ...skills, NODE_OPTIONS: `--import=${preload}`, ...overrides }, timeout: 10_000,
   });
@@ -211,13 +218,47 @@ test("generation cannot silently replace committed candidate snapshots", async (
   await assert.rejects(candidate.run(), (error) => /snapshot.*changed/i.test(error.stderr));
 });
 
+test("renamed MCP source reaches pinned-skill enforcement without legacy snapshots", async (t) => {
+  const candidate = await fixture(t, document, { mcpName: "qubrics-mcp", pinnedSkills: false });
+  await assert.rejects(candidate.run(), (error) => /Missing pinned skill release inputs/.test(error.stderr));
+});
+
+test("renamed MCP source accepts the pinned Skills checker without legacy snapshots", async (t) => {
+  const candidate = await fixture(t, document, { mcpName: "qubrics-mcp" });
+  assert.equal(existsSync(join(candidate.repo, mcpRoot)), false);
+  const result = await candidate.run();
+  assert.match(result.stdout, new RegExp(candidate.sha));
+});
+
+test("renamed MCP source rejects changed snapshots despite matching legacy-path bytes", async (t) => {
+  const candidate = await fixture(t, document, { mcpName: "qubrics-mcp", pinnedSkills: false });
+  mkdirSync(join(candidate.repo, specPath), { recursive: true });
+  writeFileSync(join(candidate.repo, specPath, "openapi-app.json"), JSON.stringify(document));
+  writeFileSync(join(candidate.repo, renamedMcpRoot, "openapi/openapi-app.json"), JSON.stringify({ ...document, description: "new input" }));
+  await assert.rejects(candidate.run(), (error) => /snapshot.*changed/i.test(error.stderr));
+});
+
+test("legacy immutable source ignores newer working-tree package metadata and snapshots", async (t) => {
+  const candidate = await fixture(t);
+  writeFileSync(join(candidate.repo, "packages/python/mcp/pyproject.toml"), '[project]\nname = "qubrics-mcp"\n');
+  mkdirSync(join(candidate.repo, renamedMcpRoot, "openapi"), { recursive: true });
+  writeFileSync(join(candidate.repo, renamedMcpRoot, "openapi/openapi-app.json"), JSON.stringify({ ...document, description: "newer source" }));
+  await candidate.run();
+});
+
+test("unrecognised MCP identity fails before snapshot or skill acceptance", async (t) => {
+  const candidate = await fixture(t, document, { mcpName: "unrecognised", pinnedSkills: false });
+  await assert.rejects(candidate.run(), (error) => /Unsupported source MCP package identity/.test(error.stderr));
+});
+
 async function releaseFixture(t, options = {}) {
-  const local = await fixture(t);
+  const mcpName = options.mcpName ?? "sendmux-mcp";
+  const local = await fixture(t, document, { mcpName, pinnedSkills: options.pinnedSkills });
   const config = { "release-type": "node", "include-component-in-tag": true, "sequential-calls": true,
     "separate-pull-requests": true, packages: { "packages/ts/cli": { component: "ts-cli", "package-name": "@sendmux/cli" } } };
   if (options.customLabels) config.label = "custom pending";
   mkdirSync(join(local.repo, "packages/ts/cli"), { recursive: true });
-  writeFileSync(join(local.repo, "packages/python/mcp/pyproject.toml"), '[project]\nname = "sendmux-mcp"\nversion = "1.2.3"\n');
+  writeFileSync(join(local.repo, "packages/python/mcp/pyproject.toml"), `[project]\nname = "${mcpName}"\nversion = "1.2.3"\n`);
   mkdirSync(join(local.repo, "packages/python/langchain"), { recursive: true });
   writeFileSync(join(local.repo, "packages/python/langchain/pyproject.toml"), '[project]\nname = "langchain-sendmux"\nversion = "1.2.3"\n');
   mkdirSync(join(local.repo, ".github/workflows"), { recursive: true });
@@ -232,7 +273,9 @@ async function releaseFixture(t, options = {}) {
   await local.git("add", ".");
   await local.git("-c", "user.name=Fixture", "-c", "user.email=fixture@example.invalid", "commit", "-qm", "release metadata");
   const sha = (await local.git("rev-parse", "HEAD")).stdout.trim();
-  const skills = await freshnessFixture(local.directory, local.repo, sha);
+  const skills = options.pinnedSkills === false ? {
+    SENDMUX_SKILLS_ROOT: "", SENDMUX_SKILLS_REVISION: "", SENDMUX_SKILL_RECEIPT_DIR: "",
+  } : await freshnessFixture(local.directory, local.repo, sha);
   const other = "b".repeat(40);
   const pull = (number, overrides = {}) => ({ number, merged_at: "2026-09-16T00:00:00Z", updated_at: "2026-09-17T00:00:00Z",
     merge_commit_sha: sha, head: { ref: "release-please--branches--main--components--ts-cli" }, base: { ref: "main" },
@@ -426,6 +469,20 @@ test("recovery resolves a Python package tag commit, emits its released path, an
   assert.match(stdout, /"path":"packages\/python\/langchain"/);
   const outputs = Object.fromEntries(readFileSync(output, "utf8").trim().split("\n").map((line) => line.split("=")));
   assert.equal(outputs.paths_released, '["packages/python/langchain"]');
+  assert.equal(outputs.snapshot_path, specPath);
+});
+
+for (const [mcpName, expectedPath] of [
+  ["sendmux-mcp", specPath],
+  ["qubrics-mcp", `${renamedMcpRoot}/openapi`],
+]) test(`recovery resolves ${mcpName} snapshots from immutable producer metadata`, async (t) => {
+  const candidate = await releaseFixture(t, { tagExists: true, mcpName, pinnedSkills: false });
+  writeFileSync(join(candidate.repo, "packages/python/mcp/pyproject.toml"), '[project]\nname = "unrecognised"\n');
+  const output = join(candidate.directory, "producer-output");
+  await candidate.runCommand(["resolve", "--tag", "python-langchain-v1.2.3"], { GITHUB_OUTPUT: output });
+  const outputs = Object.fromEntries(readFileSync(output, "utf8").trim().split("\n").map((line) => line.split("=")));
+  assert.equal(outputs.snapshot_path, expectedPath);
+  assert.ok(candidate.queries.some((query) => query.url === `/repos/${repository}/contents/packages/python/mcp/pyproject.toml?ref=${candidate.sha}`));
 });
 
 for (const [identity, producerRepository] of [

@@ -3,7 +3,7 @@ from typing import Any
 
 import urllib3
 
-from langchain_sendmux import SendmuxToolkit
+from qubrics.langchain import QubricsToolkit
 
 
 def test_send_email_serializes_scalar_list_and_omitted_delivery_group(
@@ -29,7 +29,7 @@ def test_send_email_serializes_scalar_list_and_omitted_delivery_group(
         )
 
     monkeypatch.setattr(urllib3.PoolManager, "request", request)
-    toolkit = SendmuxToolkit(api_key="smx_mbx_test", default_from="sender@example.test")
+    toolkit = QubricsToolkit(api_key="smx_mbx_test", default_from="sender@example.test")
     send_email = toolkit.get_tools()[0]
     for subject, delivery_group in [
         ("Scalar routing hint", "dgrp_primary"),

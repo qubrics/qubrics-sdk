@@ -12,7 +12,7 @@ export function checkPythonSurfaceDependencyFloors({ root, changedPackages = rea
     checkDependencyFloors({
       source: pyproject,
       sourcePath: pyprojectPath,
-      dependencies: [["sendmux-core", manifest["packages/python/core"]]],
+      dependencies: [["qubrics-core", manifest["packages/python/core"]]],
       enforceManifestFloor: changedPackages.has(surface),
     });
   }
@@ -23,10 +23,10 @@ export function checkPythonSdkDependencyFloors({ root, changedPackages = readCha
   const pyprojectPath = join(root, "packages", "python", "sdk", "pyproject.toml");
   const pyproject = readFileSync(pyprojectPath, "utf8");
   const dependencies = [
-    ["sendmux-core", manifest["packages/python/core"]],
-    ["sendmux-mailbox", manifest["packages/python/mailbox"]],
-    ["sendmux-management", manifest["packages/python/management"]],
-    ["sendmux-sending", manifest["packages/python/sending"]],
+    ["qubrics-core", manifest["packages/python/core"]],
+    ["qubrics-mailbox", manifest["packages/python/mailbox"]],
+    ["qubrics-management", manifest["packages/python/management"]],
+    ["qubrics-sending", manifest["packages/python/sending"]],
   ];
 
   checkDependencyFloors({
@@ -45,7 +45,7 @@ export function checkPythonMcpDependencyFloors({ root, changedPackages = readCha
   checkDependencyFloors({
     source: pyproject,
     sourcePath: pyprojectPath,
-    dependencies: [["sendmux-core", manifest["packages/python/core"]]],
+    dependencies: [["qubrics-core", manifest["packages/python/core"]]],
     enforceManifestFloor: changedPackages.has("mcp"),
   });
 }
@@ -59,8 +59,8 @@ export function checkPythonLangchainDependencyFloors({ root, changedPackages = r
     source: pyproject,
     sourcePath: pyprojectPath,
     dependencies: [
-      ["sendmux-sending", manifest["packages/python/sending"]],
-      ["sendmux-mailbox", manifest["packages/python/mailbox"]],
+      ["qubrics-sending", manifest["packages/python/sending"]],
+      ["qubrics-mailbox", manifest["packages/python/mailbox"]],
     ],
     enforceManifestFloor: changedPackages.has("langchain"),
   });

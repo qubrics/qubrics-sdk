@@ -9,11 +9,12 @@ import re
 from datetime import date, datetime
 from typing import Any
 
-from sendmux_core.errors import SendmuxApiError
+from qubrics.core.errors import QubricsApiError
+from qubrics.core.environment import env_value
 
 
 def main() -> None:
-    plan = json.loads(os.environ["SENDMUX_LIVE_E2E_LANGUAGE_PLAN"])
+    plan = json.loads(require_any_env("SENDMUX_LIVE_E2E_LANGUAGE_PLAN"))
     results: list[dict[str, Any]] = []
     clients: dict[str, Any] = {}
     apis: dict[str, list[Any]] = {}
@@ -44,7 +45,7 @@ def main() -> None:
                     value,
                 )
             )
-        except SendmuxApiError as error:
+        except QubricsApiError as error:
             if error.request_id and error.code in (operation.get("expectedErrorCodes") or []):
                 results.append(
                     {
@@ -63,22 +64,22 @@ def main() -> None:
 
 def create_client(surface: str) -> Any:
     if surface == "mailbox":
-        from sendmux_mailbox.client import create_mailbox_client
+        from qubrics.mailbox.client import create_mailbox_client
 
         return create_mailbox_client(api_key=mailbox_api_key(), base_url=app_base_url())
     if surface == "management":
-        from sendmux_management.client import create_management_client
+        from qubrics.management.client import create_management_client
 
         return create_management_client(api_key=root_api_key(), base_url=app_base_url())
     if surface == "sending":
-        from sendmux_sending.client import create_sending_client
+        from qubrics.sending.client import create_sending_client
 
         return create_sending_client(api_key=mailbox_api_key(), base_url=sending_base_url())
     raise ValueError(f"Unknown surface: {surface}")
 
 
 def discover_api_objects(surface: str, api_client: Any) -> list[Any]:
-    package_name = f"sendmux_{surface}.api"
+    package_name = f"qubrics.{surface}.api"
     package = importlib.import_module(package_name)
     out: list[Any] = []
     for module_info in pkgutil.iter_modules(package.__path__, package_name + "."):
@@ -268,11 +269,11 @@ def snake_case(value: str) -> str:
 
 
 def app_base_url() -> str:
-    return os.environ.get("SENDMUX_LIVE_E2E_APP_BASE_URL") or os.environ.get("SENDMUX_STAGING_APP_BASE_URL") or "https://app.sendmux.ai/api/v1"
+    return env_value("SENDMUX_LIVE_E2E_APP_BASE_URL") or env_value("SENDMUX_STAGING_APP_BASE_URL") or "https://app.qubrics.com/api/v1"
 
 
 def sending_base_url() -> str:
-    return os.environ.get("SENDMUX_LIVE_E2E_SENDING_BASE_URL") or os.environ.get("SENDMUX_STAGING_SMTP_BASE_URL") or "https://smtp.sendmux.ai/api/v1"
+    return env_value("SENDMUX_LIVE_E2E_SENDING_BASE_URL") or env_value("SENDMUX_STAGING_SMTP_BASE_URL") or "https://smtp.qubrics.com/api/v1"
 
 
 def root_api_key() -> str:
@@ -285,7 +286,7 @@ def mailbox_api_key() -> str:
 
 def require_any_env(*names: str) -> str:
     for name in names:
-        value = os.environ.get(name)
+        value = env_value(name)
         if value:
             return value
     raise ValueError(f"Missing required environment variable: {' or '.join(names)}")

@@ -12,8 +12,8 @@ def replace(path: Path, before: str, after: str) -> None:
 
 
 if mode == "validation":
-    replace(root / "packages/python/mcp/sendmux_mcp/server.py", "validate_output=True,", "validate_output=False,")
-    replace(root / "packages/python/mcp/sendmux_mcp/server.py", "middleware: list[Middleware] = [StructuredOutputValidationMiddleware()]", "middleware: list[Middleware] = []")
+    replace(root / "packages/python/mcp/qubrics/mcp/server.py", "validate_output=True,", "validate_output=False,")
+    replace(root / "packages/python/mcp/qubrics/mcp/server.py", "middleware: list[Middleware] = [StructuredOutputValidationMiddleware()]", "middleware: list[Middleware] = []")
 elif mode == "drop-limit":
     path = root / "packages/ts/mailbox/src/generated/sdk.gen.ts"
     source = path.read_text()

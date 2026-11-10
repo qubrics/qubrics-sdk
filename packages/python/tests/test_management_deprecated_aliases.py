@@ -6,12 +6,10 @@ from typing import Any, get_args, get_type_hints
 
 import pytest
 
-import sendmux_management
-import sendmux_management.models
-from sendmux_management.models.mailbox_app_password_result import MailboxAppPasswordResult
-from sendmux_management.models.provider_create_body_quotas_per_day import ProviderCreateBodyQuotasPerDay
-
-REMOVED_IN = "sendmux-management 3.0"
+import qubrics.management
+import qubrics.management.models
+from qubrics.management.models.mailbox_app_password_result import MailboxAppPasswordResult
+from qubrics.management.models.provider_create_body_quotas_per_day import ProviderCreateBodyQuotasPerDay
 
 # Names the nullable-reference schema shape drops from the generated package. Each is a real
 # generated class until that regeneration lands and a deprecated alias of the class that types the
@@ -28,7 +26,7 @@ def innermost_class(annotation: Any) -> Any:
     return annotation
 
 
-@pytest.mark.parametrize("module_name", ["sendmux_management", "sendmux_management.models"])
+@pytest.mark.parametrize("module_name", ["qubrics.management", "qubrics.management.models"])
 @pytest.mark.parametrize("name", sorted(COMPAT_MODEL_NAMES))
 def test_compat_model_name_keeps_resolving(module_name: str, name: str) -> None:
     module = importlib.import_module(module_name)
@@ -41,10 +39,10 @@ def test_compat_model_name_keeps_resolving(module_name: str, name: str) -> None:
         resolved = getattr(module, name)
 
     if name in aliases:
-        assert aliases[name] == (replacement, REMOVED_IN)
+        assert aliases[name] == replacement
         assert resolved is getattr(module, replacement)
         assert [str(warning.message) for warning in captured] == [
-            f"{name} is deprecated; use {replacement}. It will be removed in {REMOVED_IN}."
+            f"{name} is deprecated; use {replacement}."
         ]
         assert exported is None or name not in exported
     else:
@@ -58,12 +56,12 @@ def test_compat_model_name_is_the_class_typing_its_field(name: str) -> None:
     _replacement, owner, field = COMPAT_MODEL_NAMES[name]
     with warnings.catch_warnings():
         warnings.simplefilter("ignore", DeprecationWarning)
-        resolved = getattr(sendmux_management, name)
+        resolved = getattr(qubrics.management, name)
 
     assert innermost_class(get_type_hints(owner)[field]) is resolved
 
 
-@pytest.mark.parametrize("module_name", ["sendmux_management", "sendmux_management.models"])
+@pytest.mark.parametrize("module_name", ["qubrics.management", "qubrics.management.models"])
 def test_unknown_attributes_still_raise_attribute_error(module_name: str) -> None:
     module = importlib.import_module(module_name)
 

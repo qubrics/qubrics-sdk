@@ -5,7 +5,7 @@ from typing import Any
 
 import pytest
 
-from sendmux_mcp.observability import (
+from qubrics.mcp.observability import (
     DEFAULT_POSTHOG_HOST,
     HostedMcpPostHog,
     PostHogConfig,
@@ -78,7 +78,7 @@ def test_init_posthog_from_env_uses_privacy_minimised_client(monkeypatch: pytest
 
     monkeypatch.setenv("POSTHOG_PROJECT_TOKEN", "phc_test")
     monkeypatch.setenv("POSTHOG_HOST", "https://eu.i.posthog.com")
-    monkeypatch.setattr("sendmux_mcp.observability.Posthog", FakePosthog)
+    monkeypatch.setattr("qubrics.mcp.observability.Posthog", FakePosthog)
 
     active = init_posthog_from_env()
 
@@ -96,7 +96,7 @@ def test_init_posthog_from_env_uses_privacy_minimised_client(monkeypatch: pytest
 def test_local_cli_command_does_not_initialise_posthog(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    from sendmux_mcp import cli
+    from qubrics.mcp import cli
 
     clear_posthog_env(monkeypatch)
     monkeypatch.setenv("POSTHOG_PROJECT_TOKEN", "phc_test")
@@ -109,7 +109,7 @@ def test_local_cli_command_does_not_initialise_posthog(
         def __init__(self, **_kwargs: Any) -> None:
             raise AssertionError("local MCP command must not initialise PostHog")
 
-    monkeypatch.setattr("sendmux_mcp.observability.Posthog", FailingPosthog)
+    monkeypatch.setattr("qubrics.mcp.observability.Posthog", FailingPosthog)
     monkeypatch.setattr(cli, "run", fake_run)
 
     assert cli.main_mailbox(["--api-key", "smx_mbx_test"]) == 0
@@ -169,7 +169,7 @@ def test_tool_call_capture_uses_hashed_ids_and_safe_properties_only() -> None:
     assert capture["event"] == "mcp_tool_call"
     assert capture["distinct_id"] == hash_identifier("grant", "mcp_grant_public")
     assert properties == {
-        "service": "sendmux-mcp-hosted",
+        "service": "qubrics-mcp-hosted",
         "environment": "production",
         "method": "GET",
         "success": True,

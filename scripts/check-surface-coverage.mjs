@@ -195,7 +195,7 @@ function loadCliOperations() {
 }
 
 function loadMcpCuration() {
-  const source = readFileSync("packages/python/mcp/sendmux_mcp/curation.py", "utf8");
+  const source = readFileSync("packages/python/mcp/qubrics/mcp/curation.py", "utf8");
   const entries = new Map();
   const customOperationIds = customMcpOperationIds(source);
 

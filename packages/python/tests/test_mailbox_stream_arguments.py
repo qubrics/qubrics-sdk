@@ -8,8 +8,8 @@ from urllib.parse import parse_qs, urlsplit
 
 import pytest
 
-from sendmux_mailbox import MailboxAPIApi, create_mailbox_client
-from sendmux_core import SendmuxApiError
+from qubrics.mailbox import MailboxAPIApi, create_mailbox_client
+from qubrics.core import QubricsApiError
 
 
 @pytest.fixture
@@ -53,7 +53,7 @@ def test_published_positional_arguments_reach_request(method: str, mailbox_id: s
             assert response.status == 401
             response.read()
             response.release_conn()
-        except SendmuxApiError as error:
+        except QubricsApiError as error:
             assert error.status_code == 401
 
     assert len(requests) == 1

@@ -4,28 +4,39 @@ warn_unused_configs = true
 disallow_untyped_defs = true
 no_implicit_optional = true
 strict_equality = true
+namespace_packages = true
+explicit_package_bases = true
+mypy_path = [
+  "$MYPY_CONFIG_FILE_DIR/packages/python/core",
+  "$MYPY_CONFIG_FILE_DIR/packages/python/sending",
+  "$MYPY_CONFIG_FILE_DIR/packages/python/mailbox",
+  "$MYPY_CONFIG_FILE_DIR/packages/python/management",
+  "$MYPY_CONFIG_FILE_DIR/packages/python/sdk",
+  "$MYPY_CONFIG_FILE_DIR/packages/python/mcp",
+  "$MYPY_CONFIG_FILE_DIR/packages/python/langchain",
+]
 exclude = [
-  "packages/python/.*/sendmux_.*/api/.*",
-  "packages/python/.*/sendmux_.*/models/.*",
-  "packages/python/.*/sendmux_.*/api_client.py",
-  "packages/python/.*/sendmux_.*/api_response.py",
-  "packages/python/.*/sendmux_.*/configuration.py",
-  "packages/python/.*/sendmux_.*/exceptions.py",
-  "packages/python/.*/sendmux_.*/rest.py",
+  "packages/python/.*/qubrics/.*/api/.*",
+  "packages/python/.*/qubrics/.*/models/.*",
+  "packages/python/.*/qubrics/.*/api_client.py",
+  "packages/python/.*/qubrics/.*/api_response.py",
+  "packages/python/.*/qubrics/.*/configuration.py",
+  "packages/python/.*/qubrics/.*/exceptions.py",
+  "packages/python/.*/qubrics/.*/rest.py",
 ]
 
 [[tool.mypy.overrides]]
 module = [
-  "sendmux_sending.*",
-  "sendmux_mailbox.*",
-  "sendmux_management.*",
+  "qubrics.sending.*",
+  "qubrics.mailbox.*",
+  "qubrics.management.*",
   "fastmcp.*",
   "posthog.*",
   "starlette.*",
 ]
 ignore_missing_imports = true
 
-# langchain-sendmux installs langchain-core (and its transitive langsmith) into
+# langchain-qubrics installs langchain-core (and its transitive langsmith) into
 # the check-python venv so the toolkit tests can import it. Do not follow mypy
 # into those third-party trees: mypy crashes on langsmith's generated openapi
 # client, and the toolkit is fully checked against the generated sendmux models

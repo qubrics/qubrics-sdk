@@ -3641,7 +3641,7 @@ async function runMcpOperations({ credentials, operations, requests }) {
     return skipped;
   }
 
-  const result = await runChildHarness(mcpPython, ["-m", "sendmux_mcp.live_e2e"], {
+  const result = await runChildHarness(mcpPython, ["-m", "qubrics.mcp.live_e2e"], {
     cwd: process.cwd(),
     env: {
       ...process.env,

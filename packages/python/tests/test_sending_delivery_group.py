@@ -4,7 +4,7 @@ import json
 
 import pytest
 
-from sendmux_sending import EmailSendRequestDeliveryGroup
+from qubrics.sending import EmailSendRequestDeliveryGroup
 
 
 def delivery_group_from_supported_value(
