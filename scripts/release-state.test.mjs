@@ -3,6 +3,13 @@ import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { spawn } from "node:child_process";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import {
+  checkPythonLangchainDependencyFloors,
+  checkPythonMcpDependencyFloors,
+  checkPythonSdkDependencyFloors,
+  checkPythonSurfaceDependencyFloors,
+  pythonPackages,
+} from "./python-release-guardrails.mjs";
 
 const rootIndex = process.argv.indexOf("--root");
 const root = rootIndex < 0 ? resolve(dirname(fileURLToPath(import.meta.url)), "..") : resolve(process.argv[rootIndex + 1]);
@@ -27,6 +34,10 @@ const mismatches = Object.entries(manifest)
 
 assert.equal(mismatches.length, 0, `TypeScript release state mismatch:\n${mismatches.join("\n")}`);
 console.log("TypeScript release state matches package metadata.");
+
+for (const check of [checkPythonSurfaceDependencyFloors, checkPythonSdkDependencyFloors, checkPythonMcpDependencyFloors, checkPythonLangchainDependencyFloors]) {
+  check({ root, changedPackages: new Set(pythonPackages) });
+}
 
 for (const path of owners) {
   const owner = { ...config, ...config.packages[path] };

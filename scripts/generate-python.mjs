@@ -84,6 +84,7 @@ const surfaces = [
   },
 ];
 
+run(process.execPath, ["scripts/sync-python-dependency-floors.mjs"]);
 run("pnpm", ["normalize:codegen"]);
 rmSync(outputRoot, { force: true, recursive: true });
 mkdirSync(outputRoot, { recursive: true });
