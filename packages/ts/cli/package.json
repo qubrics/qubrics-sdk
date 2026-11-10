@@ -1,6 +1,6 @@
 {
   "name": "@qubrics/cli",
-  "version": "1.7.2",
+  "version": "2.0.0",
   "license": "MIT",
   "type": "module",
   "bin": {
@@ -42,7 +42,9 @@
   },
   "oclif": {
     "bin": "qubrics",
-    "binAliases": ["sendmux"],
+    "binAliases": [
+      "sendmux"
+    ],
     "dirname": "sendmux",
     "commands": "./dist/commands",
     "topicSeparator": ":",
