@@ -105,7 +105,8 @@ test("registry rejects duplicate package identities", () => withRegistry((regist
   registry.packages.push(registry.packages[0]);
 }, (check) => assert.throws(check, /exactly one/i)));
 
-test("workspace drift gate rejects changed generated MCP contract", () => {
+for (const relative of ["packages/python/mcp/qubrics/mcp/mcp-contract.json", "packages/python/mcp/pyproject.toml"]) {
+test(`workspace drift gate rejects changed ${relative}`, () => {
   const root = mkdtempSync(join(tmpdir(), "sendmux-contract-git-"));
   const child = (command, args) => {
     const result = spawnSync(command, args, { cwd: root, encoding: "utf8", timeout: 10_000 });
@@ -115,20 +116,28 @@ test("workspace drift gate rejects changed generated MCP contract", () => {
     return result;
   };
   try {
-    const relative = "packages/python/mcp/qubrics/mcp/mcp-contract.json";
     const path = join(root, relative);
     mkdirSync(dirname(path), { recursive: true });
     cpSync(join(repository, relative), path);
+    assert.equal(dirname(root), tmpdir().replace(/\/$/, ""));
     assert.equal(child("git", ["init", "--quiet"]).status, 0);
     assert.equal(child("git", ["add", relative]).status, 0);
     assert.equal(child(process.execPath, [join(repository, "scripts/verify-sdk-staleness.mjs")]).status, 0);
-    const contract = JSON.parse(readFileSync(path, "utf8"));
-    contract.tools.count += 1;
-    writeFileSync(path, JSON.stringify(contract));
-    assert.notEqual(child(process.execPath, [join(repository, "scripts/verify-sdk-staleness.mjs")]).status, 0, "Generated MCP contract drift was ignored");
+    if (relative.endsWith(".json")) {
+      const contract = JSON.parse(readFileSync(path, "utf8"));
+      contract.tools.count += 1;
+      writeFileSync(path, JSON.stringify(contract));
+    } else {
+      const source = readFileSync(path, "utf8");
+      const updated = source.replace(/("qubrics-core>=[^,"]+,)</, "$1=");
+      assert.notEqual(updated, source);
+      writeFileSync(path, updated);
+    }
+    assert.notEqual(child(process.execPath, [join(repository, "scripts/verify-sdk-staleness.mjs")]).status, 0, `${relative} drift was ignored`);
   } finally {
     rmSync(root, { recursive: true, force: true });
     assert.equal(existsSync(root), false);
     console.log(`drift fixture ${root} absent`);
   }
 });
+}
