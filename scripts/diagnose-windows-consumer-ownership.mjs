@@ -3,7 +3,7 @@ import { spawn, spawnSync } from "node:child_process";
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { join, resolve } from "node:path";
+import { basename, join, resolve } from "node:path";
 import { setTimeout as delay } from "node:timers/promises";
 import { mock } from "node:test";
 import { run, workspace } from "./ci-consumers.mjs";
@@ -191,35 +191,33 @@ exit 0`;
       if (invocation) await invocation;
       if (directory && existsSync(directory)) await rm(directory, { recursive: true, maxRetries: 3, retryDelay: 100 });
       assert(!directory || !existsSync(directory));
-      try {
-        await rm(fixture, { recursive: true, maxRetries: 0 });
-      } catch (error) {
-        try {
-          if (error.code === "EBUSY") {
-            const captured = spawnSync(powershell, ["-NoProfile", "-NonInteractive", "-Command",
-              "& $env:SDK343_HANDLE64 -accepteula -nobanner $env:SDK343_LOCKED_FIXTURE; Get-CimInstance Win32_Process | Select-Object ProcessId, Name, ParentProcessId, CommandLine | ConvertTo-Json -Depth 2",
-            ], {
-              env: { ...process.env, SDK343_LOCKED_FIXTURE: fixture },
-              encoding: "utf8",
-              timeout: 15000,
-            });
-            const snapshot = [
-              JSON.stringify({ diagnostic: "sdk343-fixture-lock", fixture, kind, error: error.message }),
-              captured.stdout, captured.stderr,
-              JSON.stringify({ status: captured.status, signal: captured.signal, error: captured.error?.message }),
-            ].join("\n");
-            console.error(snapshot);
-            writeFileSync(join(evidence, `fixture-lock-${kind}.log`), snapshot);
-          }
-        } finally {
-          throw error;
-        }
-      }
+      await rm(fixture, { recursive: true, maxRetries: 0 });
       assert(!existsSync(fixture));
       row.paths_absent = true;
     } catch (error) {
       row.cleanup_error = error.message;
-      throw error;
+      try {
+        if (error.code === "EBUSY") {
+          const lockedPath = error.path ?? fixture;
+          // Match the unique directory name across Windows short/long path aliases.
+          const captured = spawnSync(powershell, ["-NoProfile", "-NonInteractive", "-Command",
+            "& $env:SDK343_HANDLE64 -accepteula -nobanner $env:SDK343_LOCKED_NAME; Get-CimInstance Win32_Process | Select-Object ProcessId, Name, ParentProcessId, CommandLine | ConvertTo-Json -Depth 2",
+          ], {
+            env: { ...process.env, SDK343_LOCKED_NAME: basename(lockedPath) },
+            encoding: "utf8",
+            timeout: 15000,
+          });
+          const snapshot = [
+            JSON.stringify({ diagnostic: "sdk343-fixture-lock", fixture, lockedPath, kind, error: error.message }),
+            captured.stdout, captured.stderr,
+            JSON.stringify({ status: captured.status, signal: captured.signal, error: captured.error?.message }),
+          ].join("\n");
+          console.error(snapshot);
+          writeFileSync(join(evidence, `fixture-lock-${kind}.log`), snapshot);
+        }
+      } finally {
+        throw error;
+      }
     } finally {
       writeFileSync(join(evidence, "results.json"), JSON.stringify(results, null, 2));
       console.log(JSON.stringify({ kind, verdict: row.verdict, recovered: row.recovered, paths_absent: row.paths_absent, cleanup_error: row.cleanup_error, assertion: row.assertion, error: row.error }));
