@@ -9,7 +9,7 @@ import (
 
 	"github.com/ogen-go/ogen/middleware"
 
-	"sendmux.ai/go/v3/sending"
+	"qubrics.com/go/v4/sending"
 )
 
 // Hide the promoted connection method to model a pre-1.5 implementation.

@@ -22,6 +22,7 @@ const hash = (bytes) => createHash("sha256").update(bytes).digest("hex");
 
 function seedFreshnessSources(repo) {
   const write = (file, value) => { mkdirSync(resolve(repo, file, ".."), { recursive: true }); writeFileSync(join(repo, file), value); };
+  write("packages/python/mcp/pyproject.toml", '[project]\nname = "sendmux-mcp"\n');
   write("packages/python/mcp/sendmux_mcp/server.py", "fixture-server");
   write("packages/python/mcp/sendmux_mcp/mcp-contract.json", JSON.stringify({ tools: { by_surface: { mailbox: [{ name: "mailbox_list", input_schema: { type: "object" }, description: "List messages" }] } }, provenance: { sources: { "server.py": hash("fixture-server") } } }));
   write("packages/ts/cli/src/generated/operations.ts", 'export const operations = {\n  mailboxList: {"command":"mailbox:list","operationId":"mailboxList","surface":"mailbox"}\n} as const satisfies Record<string, OperationDefinition>;\n');
@@ -216,7 +217,7 @@ async function releaseFixture(t, options = {}) {
     "separate-pull-requests": true, packages: { "packages/ts/cli": { component: "ts-cli", "package-name": "@sendmux/cli" } } };
   if (options.customLabels) config.label = "custom pending";
   mkdirSync(join(local.repo, "packages/ts/cli"), { recursive: true });
-  writeFileSync(join(local.repo, "packages/python/mcp/pyproject.toml"), '[project]\nversion = "1.2.3"\n');
+  writeFileSync(join(local.repo, "packages/python/mcp/pyproject.toml"), '[project]\nname = "sendmux-mcp"\nversion = "1.2.3"\n');
   mkdirSync(join(local.repo, "packages/python/langchain"), { recursive: true });
   writeFileSync(join(local.repo, "packages/python/langchain/pyproject.toml"), '[project]\nname = "langchain-sendmux"\nversion = "1.2.3"\n');
   mkdirSync(join(local.repo, ".github/workflows"), { recursive: true });

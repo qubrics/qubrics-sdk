@@ -7,7 +7,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"sendmux.ai/go/v3/sending"
+	"qubrics.com/go/v4/sending"
 )
 
 func TestEnvironmentDefaultsPreferQubricsAndPreserveExplicitConfiguration(t *testing.T) {

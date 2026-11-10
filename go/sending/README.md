@@ -1,19 +1,21 @@
-# Sendmux Go sending client
+# Qubrics Go sending client
 
-[![Go Reference](https://pkg.go.dev/badge/sendmux.ai/go/v3/sending.svg)](https://pkg.go.dev/sendmux.ai/go/v3/sending)
+[![Go Reference](https://pkg.go.dev/badge/qubrics.com/go/v4/sending.svg)](https://pkg.go.dev/qubrics.com/go/v4/sending)
 
-Go client for Sendmux email sending.
+Go client for Qubrics email sending.
 
 ## Install
 
+These commands target unpublished v4 source. Use published `sendmux.ai/go/v3@v3.0.0`.
+
 ```sh
-go get sendmux.ai/go/v3@v3.0.0
+go get qubrics.com/go/v4@v4.0.0
 ```
 
 ## Import
 
 ```go
-import "sendmux.ai/go/v3/sending"
+import "qubrics.com/go/v4/sending"
 ```
 
 ## Authentication
@@ -26,11 +28,11 @@ Use `sending.NewWithAccessToken` for a bare token string, or `sending.NewWithTok
 
 ```go
 client, err := sending.NewWithTokenProvider(func(ctx context.Context) (string, error) {
-    return os.Getenv("SENDMUX_ACCESS_TOKEN"), nil
+    return os.Getenv("QUBRICS_ACCESS_TOKEN"), nil
 })
 ```
 
-Use a REST access token with the operation's required scopes and mailbox access. See [OAuth for REST APIs](https://sendmux.ai/docs/developer-tools/oauth).
+Use a REST access token with the operation's required scopes and mailbox access. See [OAuth for REST APIs](https://qubrics.com/docs/developer-tools/oauth).
 
 ## Quickstart
 
@@ -42,13 +44,13 @@ import (
 	"fmt"
 	"os"
 
-	"sendmux.ai/go/v3/sending"
+	"qubrics.com/go/v4/sending"
 )
 
 func main() {
 	ctx := context.Background()
 
-	client, err := sending.New(os.Getenv("SENDMUX_SENDING_API_KEY"))
+	client, err := sending.New(os.Getenv("QUBRICS_SENDING_API_KEY"))
 	if err != nil {
 		panic(err)
 	}
@@ -61,7 +63,7 @@ func main() {
 		To: sending.EmailSendRequestTo{
 			Email: "recipient@example.com",
 		},
-		Subject:  "Hello from Sendmux",
+		Subject:  "Hello from Qubrics",
 		HTMLBody: "<p>Hello.</p>",
 		TextBody: sending.NewOptString("Hello."),
 	}, sending.SendingSendEmailParams{
@@ -91,6 +93,6 @@ func main() {
 
 ## Documentation
 
-- Sending guide: <https://sendmux.ai/docs/guides/sending-via-http>
-- Sending API: <https://sendmux.ai/docs/sending-api/introduction>
-- Go reference: <https://pkg.go.dev/sendmux.ai/go/v3/sending>
+- Sending guide: <https://qubrics.com/docs/guides/sending-via-http>
+- Sending API: <https://qubrics.com/docs/sending-api/introduction>
+- Go reference: <https://pkg.go.dev/qubrics.com/go/v4/sending>

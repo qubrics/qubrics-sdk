@@ -8,7 +8,7 @@ type Page[T any] interface {
 	Pagination() Pagination
 }
 
-// IterateCursor streams items across cursor-paginated Sendmux pages.
+// IterateCursor streams items across cursor-paginated Qubrics pages.
 func IterateCursor[T any](ctx context.Context, fetch func(context.Context, string) (Page[T], error)) func(func(T, error) bool) {
 	return func(yield func(T, error) bool) {
 		var cursor string

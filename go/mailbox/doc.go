@@ -1,4 +1,4 @@
-// Package mailbox contains the Sendmux Mailbox API client.
+// Package mailbox contains the Qubrics Mailbox API client.
 //
 // Create a client with New and an smx_mbx_ key or scoped smx_agent_ token.
 // The client exposes generated methods for mailbox reads, message
@@ -7,5 +7,5 @@
 // mapping through APIErrorFromResponse.
 package mailbox
 
-// DefaultBaseURL is the production Sendmux Mailbox API base URL.
-const DefaultBaseURL = "https://app.sendmux.ai/api/v1"
+// DefaultBaseURL is the production Qubrics Mailbox API base URL.
+const DefaultBaseURL = "https://app.qubrics.com/api/v1"
