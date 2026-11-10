@@ -217,7 +217,7 @@ async function releaseFixture(t, options = {}) {
     "separate-pull-requests": true, packages: { "packages/ts/cli": { component: "ts-cli", "package-name": "@sendmux/cli" } } };
   if (options.customLabels) config.label = "custom pending";
   mkdirSync(join(local.repo, "packages/ts/cli"), { recursive: true });
-  writeFileSync(join(local.repo, "packages/python/mcp/pyproject.toml"), '[project]\nversion = "1.2.3"\n');
+  writeFileSync(join(local.repo, "packages/python/mcp/pyproject.toml"), '[project]\nname = "sendmux-mcp"\nversion = "1.2.3"\n');
   mkdirSync(join(local.repo, "packages/python/langchain"), { recursive: true });
   writeFileSync(join(local.repo, "packages/python/langchain/pyproject.toml"), '[project]\nname = "langchain-sendmux"\nversion = "1.2.3"\n');
   mkdirSync(join(local.repo, ".github/workflows"), { recursive: true });
