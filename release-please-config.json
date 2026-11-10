@@ -145,7 +145,6 @@
       "component": "go",
       "package-name": "qubrics.com/go/v4",
       "release-type": "go",
-      "release-as": "4.0.0",
       "include-component-in-tag": true,
       "include-v-in-tag": true,
       "tag-separator": "/",
