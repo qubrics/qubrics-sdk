@@ -244,6 +244,18 @@ jobs:
           Invoke-WebRequest https://download.sysinternals.com/files/Handle.zip -OutFile $archive
           Expand-Archive -LiteralPath $archive -DestinationPath $directory
           "SDK343_HANDLE64=$(Join-Path $directory 'handle64.exe')" >> $env:GITHUB_ENV
+          $procmonArchive = Join-Path $env:RUNNER_TEMP 'sdk343-procmon.zip'
+          $procmonDirectory = Join-Path $env:RUNNER_TEMP 'sdk343-procmon'
+          Invoke-WebRequest https://download.sysinternals.com/files/ProcessMonitor.zip -OutFile $procmonArchive
+          Expand-Archive -LiteralPath $procmonArchive -DestinationPath $procmonDirectory
+          "SDK343_PROCMON=$(Join-Path $procmonDirectory 'Procmon64.exe')" >> $env:GITHUB_ENV
+      - name: Capture Windows fixture file history
+        if: runner.os == 'Windows'
+        run: |
+          $trace = Join-Path $env:RUNNER_TEMP 'sdk343-fixture-history.pml'
+          Start-Process -FilePath $env:SDK343_PROCMON -ArgumentList @('/AcceptEula', '/Quiet', '/Minimized', '/NoFilter', '/BackingFile', $trace, '/Runtime', '600', '/RingBuffer', '/RingBufferSize', '256')
+          $ready = Start-Process -FilePath $env:SDK343_PROCMON -ArgumentList '/WaitForIdle' -Wait -PassThru
+          if ($ready.ExitCode -ne 0 -or !(Test-Path -LiteralPath $trace)) { throw 'Procmon did not start its bounded fixture capture' }
       - name: Diagnose actual Windows consumer ownership
         if: runner.os == 'Windows'
         run: |
@@ -252,12 +264,31 @@ jobs:
         if: runner.os == 'Windows'
         run: |
           node scripts/test-windows-consumer-sensitivity.mjs
+      - name: Export Windows fixture file history
+        if: always() && runner.os == 'Windows'
+        run: |
+          $trace = Join-Path $env:RUNNER_TEMP 'sdk343-fixture-history.pml'
+          if (!(Test-Path -LiteralPath $trace)) { exit 0 }
+          $stop = Start-Process -FilePath $env:SDK343_PROCMON -ArgumentList @('/Terminate', '/Quiet') -Wait -PassThru
+          if ($stop.ExitCode -ne 0) { throw 'Procmon fixture capture did not stop' }
+          $fullCsv = Join-Path $env:RUNNER_TEMP 'sdk343-fixture-history-full.csv'
+          $export = Start-Process -FilePath $env:SDK343_PROCMON -ArgumentList @('/AcceptEula', '/Quiet', '/OpenLog', $trace, '/SaveAs', $fullCsv) -Wait -PassThru
+          if ($export.ExitCode -ne 0 -or !(Test-Path -LiteralPath $fullCsv)) { throw 'Procmon fixture history export failed' }
+          New-Item -ItemType Directory -Path .tmp/windows-consumer-trace -Force | Out-Null
+          # Process Start includes environment values; never retain those in artifacts.
+          Import-Csv -LiteralPath $fullCsv |
+            Where-Object { $_.Path -like '*sendmux-windows-*' -or $_.Operation -in @('Process Create', 'Process Start', 'Process Exit') } |
+            ForEach-Object { $_.Detail = $_.Detail -replace '(?s)\bEnvironment:.*', 'Environment: <omitted>'; $_ } |
+            Export-Csv -LiteralPath .tmp/windows-consumer-trace/fixture-history.csv -NoTypeInformation
+          Remove-Item -LiteralPath $trace, $fullCsv
       - name: Retain Windows fixture lock snapshots
         if: always() && runner.os == 'Windows'
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: windows-fixture-locks-node-${{ matrix.node }}
-          path: .tmp/**/fixture-lock-*.log
+          path: |
+            .tmp/**/fixture-lock-*.log
+            .tmp/windows-consumer-trace/fixture-history.csv
           include-hidden-files: true
           if-no-files-found: ignore
           retention-days: 14

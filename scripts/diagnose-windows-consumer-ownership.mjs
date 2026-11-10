@@ -163,7 +163,6 @@ exit 0`;
     } catch (error) {
       timerMock?.mock.restore();
       if (!row.result && deadlineCallback) {
-        captureLockOwners({ kind, fixture, directory, handles: readHandles(), phase: "before-readiness-stop" });
         deadlineCallback();
         await invocation;
       }
@@ -175,7 +174,6 @@ exit 0`;
     Object.assign(row, handles, { directory });
     console.log(JSON.stringify({ ...handles, directory, kind }));
     assert(!absent(handles.leader) && !absent(handles.descendant), "Both owned processes must be live before trigger");
-    captureLockOwners({ kind, fixture, directory, handles, phase: "before-trigger" });
     timerMock?.mock.restore();
     if (kind === "powershell-deadline") {
       assert.equal(typeof deadlineCallback, "function");
