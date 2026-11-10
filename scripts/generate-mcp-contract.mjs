@@ -13,7 +13,7 @@ if (!existsSync(python)) {
 
 await run(python, ["-m", "pip", "install", "-r", "requirements-dev.txt"]);
 await run(python, ["-m", "pip", "install", "-e", "packages/python/core", "-e", "packages/python/mcp"]);
-await run(python, ["-m", "sendmux_mcp.contract"]);
+await run(python, ["-m", "qubrics.mcp.contract"]);
 
 async function run(command, args) {
   const child = spawn(command, args, { cwd: root, stdio: "inherit" });

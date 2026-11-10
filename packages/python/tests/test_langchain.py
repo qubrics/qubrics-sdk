@@ -1,4 +1,4 @@
-"""Tests for the langchain-sendmux toolkit."""
+"""Tests for the langchain-qubrics toolkit."""
 
 from __future__ import annotations
 
@@ -9,13 +9,13 @@ from urllib.parse import urlsplit
 import pytest
 import urllib3
 from langchain_core.tools import BaseTool
-from sendmux_sending import EmailSendRequest
+from qubrics.sending import EmailSendRequest
 
-from langchain_sendmux import SendmuxToolkit
+from qubrics.langchain import QubricsToolkit
 
 
 def _tools() -> list[BaseTool]:
-    toolkit = SendmuxToolkit(
+    toolkit = QubricsToolkit(
         api_key="smx_mbx_test",
         default_from="agent@yourdomain.dev",
     )
@@ -78,7 +78,7 @@ def test_all_tools_resolve_current_oauth_token(monkeypatch: Any) -> None:
 
     monkeypatch.setattr(urllib3.PoolManager, "request", request)
     token = "oauth-first"
-    toolkit = SendmuxToolkit(access_token=lambda: token, default_from="agent@example.com")
+    toolkit = QubricsToolkit(access_token=lambda: token, default_from="agent@example.com")
     tools = {tool.name: tool for tool in toolkit.get_tools()}
     assert tools["list_messages"].invoke({"limit": 1}) == []
     token = "oauth-second"
@@ -109,7 +109,7 @@ def test_tools_accept_static_oauth_token(monkeypatch: Any) -> None:
         }).encode())
 
     monkeypatch.setattr(urllib3.PoolManager, "request", request)
-    toolkit = SendmuxToolkit(access_token="oauth-static")
+    toolkit = QubricsToolkit(access_token="oauth-static")
     tool = next(tool for tool in toolkit.get_tools() if tool.name == "list_messages")
     assert tool.invoke({"limit": 1}) == []
     assert headers == ["Bearer oauth-static"]
@@ -117,13 +117,13 @@ def test_tools_accept_static_oauth_token(monkeypatch: Any) -> None:
 
 def test_tools_reject_ambiguous_oauth_configuration() -> None:
     with pytest.raises(ValueError, match="exactly one of api_key or access_token"):
-        SendmuxToolkit(api_key="smx_mbx_test", access_token="oauth-static").get_tools()
+        QubricsToolkit(api_key="smx_mbx_test", access_token="oauth-static").get_tools()
 
 
 @pytest.mark.parametrize("field", ["api_key", "access_token"])
 def test_toolkit_representation_excludes_credentials(field: str) -> None:
     secret = "smx_mbx_private_fixture" if field == "api_key" else "oauth-private-fixture"
-    toolkit = SendmuxToolkit(**{field: secret})
+    toolkit = QubricsToolkit(**{field: secret})
     assert secret not in repr(toolkit)
     assert field not in toolkit.model_dump()
     assert secret not in toolkit.model_dump_json()

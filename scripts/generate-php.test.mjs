@@ -29,7 +29,7 @@ function prepareFixture(directory) {
   }
   for (const name of ["package.json", "openapitools.json", "phpcs.xml"]) cpSync(join(root, name), join(directory, name));
   cpSync(join(root, "codegen/templates/php-nextgen"), join(directory, "codegen/templates/php-nextgen"), { recursive: true });
-  cpSync(join(root, "packages/python/mcp/sendmux_mcp/openapi"), join(directory, "sendmux-docs"), { recursive: true });
+  cpSync(join(root, "packages/python/mcp/qubrics/mcp/openapi"), join(directory, "sendmux-docs"), { recursive: true });
   for (const name of ["node_modules", "vendor"]) symlinkSync(join(root, name), join(directory, name), "junction");
   writeFileSync(join(directory, "versions.php"), String.raw`<?php
 $result = [];

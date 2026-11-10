@@ -1,15 +1,15 @@
-# sendmux-sending
+# qubrics-sending
 
-[![PyPI version](https://img.shields.io/pypi/v/sendmux-sending)](https://pypi.org/project/sendmux-sending/)
-[![Python versions](https://img.shields.io/pypi/pyversions/sendmux-sending)](https://pypi.org/project/sendmux-sending/)
-[![PyPI downloads](https://img.shields.io/pypi/dm/sendmux-sending)](https://pypi.org/project/sendmux-sending/)
-[![Licence](https://img.shields.io/pypi/l/sendmux-sending)](https://github.com/qubrics/qubrics-sdk/blob/main/LICENSE)
+[![PyPI version](https://img.shields.io/pypi/v/qubrics-sending)](https://pypi.org/project/qubrics-sending/)
+[![Python versions](https://img.shields.io/pypi/pyversions/qubrics-sending)](https://pypi.org/project/qubrics-sending/)
+[![PyPI downloads](https://img.shields.io/pypi/dm/qubrics-sending)](https://pypi.org/project/qubrics-sending/)
+[![Licence](https://img.shields.io/pypi/l/qubrics-sending)](https://github.com/qubrics/qubrics-sdk/blob/main/LICENSE)
 
-Generated Python client for the Sendmux Sending API.
+Generated Python client for the Qubrics Sending API.
 
 ## Documentation
 
-- Sending API reference: [sendmux.ai/docs/sending-api/introduction](https://sendmux.ai/docs/sending-api/introduction)
+- Sending API reference: [qubrics.com/docs/sending-api/introduction](https://qubrics.com/docs/sending-api/introduction)
 - Source repository: [qubrics/qubrics-sdk](https://github.com/qubrics/qubrics-sdk)
 
 ## Requirements
@@ -17,12 +17,14 @@ Generated Python client for the Sendmux Sending API.
 - Python 3.10 or newer.
 - A send-capable `smx_mbx_*` key or owner-approved Sending-resource `smx_agent_*` token.
 
-For OAuth, use a REST access token with the scopes and mailbox access required by the operation. See [OAuth for REST APIs](https://sendmux.ai/docs/developer-tools/oauth).
+For OAuth, use a REST access token with the scopes and mailbox access required by the operation. See [OAuth for REST APIs](https://qubrics.com/docs/developer-tools/oauth).
 
 ## Installation
 
+These commands target the Qubrics release of `qubrics-sending`. Until it is published, install `sendmux-sending` with its existing import names.
+
 ```sh
-pip install sendmux-sending
+pip install qubrics-sending
 ```
 
 ## Connection checks
@@ -32,7 +34,7 @@ Check the authenticated team and credential without sending an email:
 ```python
 import os
 
-from sendmux_sending import MetaApi, create_sending_client
+from qubrics.sending import MetaApi, create_sending_client
 
 with create_sending_client(api_key=os.environ["QUBRICS_SENDING_API_KEY"]) as client:
     connection = MetaApi(client).sending_get_connection()
@@ -46,7 +48,7 @@ Pass either `api_key` or `access_token`. `access_token` accepts a bare token str
 ```python
 import os
 
-from sendmux_sending import create_sending_client
+from qubrics.sending import create_sending_client
 
 client = create_sending_client(
     access_token=lambda: os.environ["QUBRICS_ACCESS_TOKEN"]
@@ -58,7 +60,7 @@ client = create_sending_client(
 ```python
 import os
 
-from sendmux_sending import Address, EmailSendRequest, EmailsApi, create_sending_client
+from qubrics.sending import Address, EmailSendRequest, EmailsApi, create_sending_client
 
 client = create_sending_client(api_key=os.environ["QUBRICS_SENDING_API_KEY"])
 api = EmailsApi(client)
@@ -67,7 +69,7 @@ response = api.sending_send_email(
     EmailSendRequest(
         var_from=Address(email="sender@example.com"),
         to=Address(email="recipient@example.com"),
-        subject="Hello from Sendmux",
+        subject="Hello from Qubrics",
         html_body="<p>Hello.</p>",
         text_body="Hello.",
     ),
@@ -81,7 +83,7 @@ The package exports every generated Sending model and API class plus:
 
 - `create_sending_client`
 - `configure_sending`
-- `SendmuxSendingApiClient`
+- `QubricsSendingApiClient`
 - file helpers: `upload_attachment_from_file`, `send_email_with_files`, and explicit legacy `attachment_from_file`
 
 ## Attachments
@@ -91,7 +93,7 @@ For real files, upload bytes first and send with returned `attachment_id` refs. 
 ```python
 import os
 
-from sendmux_sending import create_sending_client, send_email_with_files
+from qubrics.sending import create_sending_client, send_email_with_files
 
 client = create_sending_client(api_key=os.environ["QUBRICS_SENDING_API_KEY"])
 
@@ -113,7 +115,7 @@ To upload first and compose the send yourself:
 ```python
 import os
 
-from sendmux_sending import EmailSendRequest, EmailsApi, create_sending_client, upload_attachment_from_file
+from qubrics.sending import EmailSendRequest, EmailsApi, create_sending_client, upload_attachment_from_file
 
 client = create_sending_client(api_key=os.environ["QUBRICS_SENDING_API_KEY"])
 attachment = upload_attachment_from_file(client, file_path="./report.pdf")
@@ -131,7 +133,7 @@ EmailsApi(client).sending_send_email(
 
 ## Request helpers
 
-Use `sendmux-core` when you need explicit idempotency, conditional request, pagination, retry, or typed-error helpers. The generated Sending client already uses the shared retry and error mapper.
+Use `qubrics-core` when you need explicit idempotency, conditional request, pagination, retry, or typed-error helpers. The generated Sending client already uses the shared retry and error mapper.
 
 ## Support
 

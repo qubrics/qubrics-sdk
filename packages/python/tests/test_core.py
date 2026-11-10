@@ -8,11 +8,11 @@ from typing import Any, AsyncIterator, Iterator, cast
 
 import pytest
 
-from sendmux_core import RetryOptions, SendmuxApiError, configure_auth, iter_cursor_pages, validate_api_key
-from sendmux_core.errors import map_api_exception
-from sendmux_core.headers import conditional_headers, idempotency_headers
-from sendmux_core.pagination import CursorResponse
-from sendmux_core.retry import RetryingRestClient
+from qubrics.core import RetryOptions, QubricsApiError, configure_auth, iter_cursor_pages, validate_api_key
+from qubrics.core.errors import map_api_exception
+from qubrics.core.headers import conditional_headers, idempotency_headers
+from qubrics.core.pagination import CursorResponse
+from qubrics.core.retry import RetryingRestClient
 
 
 def test_api_key_prefix_validation() -> None:
@@ -136,7 +136,7 @@ def test_error_mapping_from_json_body() -> None:
 
     mapped = map_api_exception(GeneratedException())
 
-    assert isinstance(mapped, SendmuxApiError)
+    assert isinstance(mapped, QubricsApiError)
     assert mapped.status_code == 429
     assert mapped.code == "rate_limited"
     assert mapped.message == "Slow down."
@@ -154,11 +154,11 @@ def test_api_error_survives_context_manager_cleanup() -> None:
         finally:
             cleaned.append(True)
 
-    error = SendmuxApiError(
+    error = QubricsApiError(
         status_code=409, code="idempotency_conflict", message="Different body for the same key",
         retryable=False, request_id="req_context", headers={},
     )
-    with pytest.raises(SendmuxApiError) as caught:
+    with pytest.raises(QubricsApiError) as caught:
         with managed_operation():
             raise error
 
@@ -177,7 +177,7 @@ def test_api_error_survives_async_context_manager_cleanup() -> None:
         finally:
             cleaned.append(True)
 
-    error = SendmuxApiError(
+    error = QubricsApiError(
         status_code=409, code="idempotency_conflict", message="Different body for the same key",
         retryable=False, request_id="req_async_context", headers={},
     )
@@ -186,7 +186,7 @@ def test_api_error_survives_async_context_manager_cleanup() -> None:
         async with managed_operation():
             raise error
 
-    with pytest.raises(SendmuxApiError) as caught:
+    with pytest.raises(QubricsApiError) as caught:
         asyncio.run(operation())
 
     assert caught.value is error

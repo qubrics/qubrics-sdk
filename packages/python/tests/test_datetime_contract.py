@@ -7,7 +7,7 @@ from urllib.parse import parse_qs, urlsplit
 import pytest
 from urllib3 import HTTPResponse
 
-from sendmux_management import ApiClient, Configuration, MailboxesApi
+from qubrics.management import ApiClient, Configuration, MailboxesApi
 
 
 @pytest.fixture

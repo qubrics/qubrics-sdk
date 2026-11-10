@@ -3,9 +3,9 @@ requires = ["hatchling>=1.27"]
 build-backend = "hatchling.build"
 
 [project]
-name = "sendmux-sending"
+name = "qubrics-sending"
 version = "1.6.0"
-description = "Generated Python client for the Sendmux Sending API."
+description = "Generated Python client for the Qubrics Sending API."
 readme = "README.md"
 requires-python = ">=3.10"
 license = "MIT"
@@ -21,7 +21,7 @@ dependencies = [
   "certifi",
   "pydantic>=2,<3",
   "python-dateutil>=2.8.2",
-  "sendmux-core>=1.3.1,<2.0.0",
+  "qubrics-core>=1.3.1,<2.0.0",
   "typing-extensions>=4.7.1",
   "urllib3>=2.3.0,<3",
 ]
@@ -34,4 +34,4 @@ core-metadata-version = "2.4"
 
 [tool.hatch.build.targets.wheel]
 core-metadata-version = "2.4"
-packages = ["sendmux_sending"]
+packages = ["qubrics"]

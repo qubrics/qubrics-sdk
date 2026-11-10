@@ -8,8 +8,8 @@ import pytest
 from fastmcp import Client
 from fastmcp.server.auth.providers.jwt import StaticTokenVerifier
 
-from sendmux_mcp.config import ServerConfig, Surface, config_from_env
-from sendmux_mcp.server import create_server
+from qubrics.mcp.config import ServerConfig, Surface, config_from_env
+from qubrics.mcp.server import create_server
 
 
 @pytest.mark.parametrize("prefix", ["QUBRICS", "SENDMUX"])

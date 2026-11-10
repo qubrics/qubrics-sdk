@@ -20,6 +20,7 @@ function seedFreshnessSources(repo) {
   const write = (file, value) => { mkdirSync(resolve(repo, file, ".."), { recursive: true }); writeFileSync(join(repo, file), value); };
   write("packages/python/mcp/pyproject.toml", '[project]\nname = "sendmux-mcp"\n');
   write("packages/python/mcp/sendmux_mcp/server.py", "fixture-server");
+  write("packages/python/mcp/pyproject.toml", '[project]\nname = "sendmux-mcp"\n');
   write("packages/python/mcp/sendmux_mcp/mcp-contract.json", JSON.stringify({ tools: { by_surface: { mailbox: [{ name: "mailbox_list", input_schema: { type: "object" }, description: "List messages" }] } }, provenance: { sources: { "server.py": hash("fixture-server") } } }));
   write("packages/ts/cli/src/generated/operations.ts", 'export const operations = {\n  mailboxList: {"command":"mailbox:list","operationId":"mailboxList","surface":"mailbox"}\n} as const satisfies Record<string, OperationDefinition>;\n');
   write("packages/ts/cli/src/base-command.ts", 'export const authFlags = { "api-key": "Sendmux API key" };\n');

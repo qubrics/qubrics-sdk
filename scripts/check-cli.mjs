@@ -27,7 +27,7 @@ const concurrentRegistrationPairReady = new Promise((resolve) => {
 // Same authentication response budget as the existing oauth-http.ts transport.
 const oauthResponseByteLimit = 256 * 1024;
 const sendingAttachmentLimit = JSON.parse(readFileSync(
-  new URL("../packages/python/mcp/sendmux_mcp/openapi/openapi-sending.json", import.meta.url), "utf8",
+  new URL("../packages/python/mcp/qubrics/mcp/openapi/openapi-sending.json", import.meta.url), "utf8",
 )).components.schemas.EmailSendRequest.properties.attachments.maxItems;
 // Sending's absolute ceiling: smtp-proxy/app/http-api/v1/lib/attachment-validation.js.
 const sendingAttachmentByteLimit = 18 * 1024 * 1024;

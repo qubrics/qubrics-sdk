@@ -12,12 +12,12 @@ import httpx2
 import pytest
 from fastmcp import Client
 
-import sendmux_mcp.retry as retry_module
-from sendmux_mcp.cli import config_from_args, parser
-from sendmux_mcp.config import RetryConfig, ServerConfig, Surface
-from sendmux_mcp.retry import RetryingAsyncTransport
-from sendmux_mcp.server import MCPHTTPTransport, create_server
-from sendmux_mcp.verification import structured_result
+import qubrics.mcp.retry as retry_module
+from qubrics.mcp.cli import config_from_args, parser
+from qubrics.mcp.config import RetryConfig, ServerConfig, Surface
+from qubrics.mcp.retry import RetryingAsyncTransport
+from qubrics.mcp.server import MCPHTTPTransport, create_server
+from qubrics.mcp.verification import structured_result
 
 
 class CancellingRetryBodyStream(httpx.AsyncByteStream):
@@ -149,7 +149,7 @@ def test_retry_chain_closes_503_response_when_body_read_fails() -> None:
 
 def test_retry_chain_reports_bounded_503_response_close_timeout(monkeypatch: Any) -> None:
     async def check() -> None:
-        monkeypatch.setattr("sendmux_mcp.response_ownership.RESPONSE_CLOSE_TIMEOUT_SECONDS", 0.01)
+        monkeypatch.setattr("qubrics.mcp.response_ownership.RESPONSE_CLOSE_TIMEOUT_SECONDS", 0.01)
         transport = retry_chain(
             httpx.MockTransport(
                 lambda request: httpx.Response(
@@ -246,7 +246,7 @@ def test_mcp_deadline_returns_original_error_without_early_retry(
             monkeypatch.setenv("SENDMUX_MCP_RETRY_MAX_ELAPSED_SECONDS", "30")
         else:
             arguments.extend(["--retry-max-elapsed-seconds", "30"])
-        config = config_from_args(("management",), parser(prog="sendmux-mcp").parse_args(arguments))
+        config = config_from_args(("management",), parser(prog="qubrics-mcp").parse_args(arguments))
 
     def handler(request: httpx.Request) -> httpx.Response:
         requests.append(request)

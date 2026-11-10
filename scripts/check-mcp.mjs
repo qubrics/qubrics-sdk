@@ -9,6 +9,7 @@ const venv = join(root, ".tmp", "python-venv");
 const python = join(venv, "bin", "python");
 const distDir = join(root, ".tmp", "mcp-dist");
 const mcpPackageDir = join(root, "packages/python/mcp");
+const mcpRegistryName = "io.github.Sendmux/sendmux-mcp";
 const mcpRegistryDescriptionMaxLength = 100;
 
 function main() {
@@ -20,7 +21,7 @@ function main() {
   run(python, ["-m", "pip", "install", "--upgrade", "pip"]);
   run(python, ["-m", "pip", "install", "-r", "requirements-dev.txt"]);
   run(python, ["-m", "pip", "install", "-e", "packages/python/core", "-e", "packages/python/mcp"]);
-  run(python, ["-m", "sendmux_mcp.contract", "--check"]);
+  run(python, ["-m", "qubrics.mcp.contract", "--check"]);
   run(python, ["-m", "compileall", "-q", "packages/python/mcp"]);
   run(python, ["-m", "mypy", "packages/python/mcp"]);
   run(python, ["-m", "pytest", "packages/python/tests/test_mcp.py", "packages/python/tests/test_mcp_retry.py", "packages/python/mcp/tests"]);
@@ -41,20 +42,21 @@ function run(command, args, options = {}) {
 export function verifyRegistryVersion(packageDir = mcpPackageDir, npmPackageDir = join(root, "packages/ts/mcp")) {
   const pyprojectPath = join(packageDir, "pyproject.toml");
   const registryPath = join(packageDir, "server.json");
-  const packageVersion = readProjectVersion(pyprojectPath);
+  const { name: packageIdentity, version: packageVersion } = readProjectMetadata(pyprojectPath);
   const registry = JSON.parse(readFileSync(registryPath, "utf8"));
-  const packageEntries = registry.packages?.filter((entry) => entry.registryType === "pypi" && entry.identifier === "sendmux-mcp") ?? [];
-  const npmEntries = registry.packages?.filter((entry) => entry.registryType === "npm" && entry.identifier === "sendmux-mcp") ?? [];
-  assert.equal(packageEntries.length, 1, "MCP Registry must contain exactly one PyPI sendmux-mcp entry");
-  assert.equal(npmEntries.length, 1, "MCP Registry must contain exactly one npm sendmux-mcp entry");
+  const packageEntries = registry.packages?.filter((entry) => entry.registryType === "pypi") ?? [];
+  const npmEntries = registry.packages?.filter((entry) => entry.registryType === "npm") ?? [];
+  assert.equal(packageEntries.length, 1, "MCP Registry must contain exactly one PyPI package entry");
+  assert.equal(npmEntries.length, 1, "MCP Registry must contain exactly one npm package entry");
   const [packageEntry] = packageEntries;
   const [npmEntry] = npmEntries;
   const npmPackage = JSON.parse(readFileSync(join(npmPackageDir, "package.json"), "utf8"));
-  const contract = JSON.parse(readFileSync(join(packageDir, "sendmux_mcp/mcp-contract.json"), "utf8"));
+  const contract = JSON.parse(readFileSync(join(packageDir, "qubrics/mcp/mcp-contract.json"), "utf8"));
 
+  assert.equal(contract.package.identity, packageIdentity, "MCP contract identity must match native project name");
   assert.equal(contract.package.version, packageVersion, "MCP contract version must match native project version");
   assert.equal(registry.$schema, "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json", "MCP Registry schema");
-  assert.equal(registry.name, `io.github.Sendmux/${contract.package.identity}`, "MCP Registry identity");
+  assert.equal(registry.name, mcpRegistryName, "MCP Registry identity");
   const hostedResources = [contract.hosted.resource, ...(contract.hosted.resource_aliases ?? [])];
   assert.deepEqual(registry.remotes, hostedResources.flatMap((url) => contract.hosted.transports.map((type) => ({ type, url }))), "MCP Registry resource/transport must match the package contract");
   assert.equal(packageEntry?.identifier, contract.package.identity, "MCP Registry package identity");
@@ -66,6 +68,8 @@ export function verifyRegistryVersion(packageDir = mcpPackageDir, npmPackageDir 
   assert.equal(npmEntry.version, npmPackage.version, "MCP Registry npm version must match package.json version");
   assert.equal(npmEntry.transport?.type, "stdio", "MCP Registry npm bridge transport");
   assert.equal(npmPackage.mcpName, registry.name, "MCP Registry npm ownership marker");
+  const pythonOwnershipNames = [...readFileSync(join(packageDir, "README.md"), "utf8").matchAll(/mcp-name:\s*([^\s<>]+)/g)].map((match) => match[1]);
+  assert.ok(pythonOwnershipNames.includes(registry.name), "MCP Registry PyPI ownership marker");
 
   if (packageEntry?.version !== packageVersion) {
     throw new Error(`packages/python/mcp/server.json package version ${packageEntry?.version ?? "<missing>"} must match pyproject.toml version ${packageVersion}`);
@@ -81,8 +85,9 @@ export function verifyRegistryVersion(packageDir = mcpPackageDir, npmPackageDir 
   return registry;
 }
 
-function readProjectVersion(pyprojectPath) {
+function readProjectMetadata(pyprojectPath) {
   let inProjectSection = false;
+  const metadata = {};
 
   for (const line of readFileSync(pyprojectPath, "utf8").split(/\r?\n/)) {
     if (/^\[.+\]$/.test(line)) {
@@ -94,13 +99,14 @@ function readProjectVersion(pyprojectPath) {
       continue;
     }
 
-    const version = line.match(/^version = "([^"]+)"$/)?.[1];
-    if (version) {
-      return version;
-    }
+    const field = line.match(/^(name|version) = "([^"]+)"$/);
+    if (field) metadata[field[1]] = field[2];
   }
 
-  throw new Error("Could not read packages/python/mcp/pyproject.toml project version");
+  if (!metadata.name || !metadata.version) {
+    throw new Error("Could not read packages/python/mcp/pyproject.toml project name and version");
+  }
+  return metadata;
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) main();

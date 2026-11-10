@@ -1,15 +1,15 @@
-# sendmux-mailbox
+# qubrics-mailbox
 
-[![PyPI version](https://img.shields.io/pypi/v/sendmux-mailbox)](https://pypi.org/project/sendmux-mailbox/)
-[![Python versions](https://img.shields.io/pypi/pyversions/sendmux-mailbox)](https://pypi.org/project/sendmux-mailbox/)
-[![PyPI downloads](https://img.shields.io/pypi/dm/sendmux-mailbox)](https://pypi.org/project/sendmux-mailbox/)
-[![Licence](https://img.shields.io/pypi/l/sendmux-mailbox)](https://github.com/qubrics/qubrics-sdk/blob/main/LICENSE)
+[![PyPI version](https://img.shields.io/pypi/v/qubrics-mailbox)](https://pypi.org/project/qubrics-mailbox/)
+[![Python versions](https://img.shields.io/pypi/pyversions/qubrics-mailbox)](https://pypi.org/project/qubrics-mailbox/)
+[![PyPI downloads](https://img.shields.io/pypi/dm/qubrics-mailbox)](https://pypi.org/project/qubrics-mailbox/)
+[![Licence](https://img.shields.io/pypi/l/qubrics-mailbox)](https://github.com/qubrics/qubrics-sdk/blob/main/LICENSE)
 
-Generated Python client for the Sendmux Mailbox API.
+Generated Python client for the Qubrics Mailbox API.
 
 ## Documentation
 
-- Mailbox API reference: [sendmux.ai/docs/mailbox-api/introduction](https://sendmux.ai/docs/mailbox-api/introduction)
+- Mailbox API reference: [qubrics.com/docs/mailbox-api/introduction](https://qubrics.com/docs/mailbox-api/introduction)
 - Source repository: [qubrics/qubrics-sdk](https://github.com/qubrics/qubrics-sdk)
 
 ## Requirements
@@ -17,12 +17,14 @@ Generated Python client for the Sendmux Mailbox API.
 - Python 3.10 or newer.
 - A mailbox-scoped `smx_mbx_*` key or scoped `smx_agent_*` token.
 
-For OAuth, use a REST access token with the scopes and mailbox access required by the operation. See [OAuth for REST APIs](https://sendmux.ai/docs/developer-tools/oauth).
+For OAuth, use a REST access token with the scopes and mailbox access required by the operation. See [OAuth for REST APIs](https://qubrics.com/docs/developer-tools/oauth).
 
 ## Installation
 
+These commands target the Qubrics release of `qubrics-mailbox`. Until it is published, install `sendmux-mailbox` with its existing import names.
+
 ```sh
-pip install sendmux-mailbox
+pip install qubrics-mailbox
 ```
 
 ## OAuth access tokens
@@ -32,7 +34,7 @@ Pass either `api_key` or `access_token`. `access_token` accepts a bare token str
 ```python
 import os
 
-from sendmux_mailbox import create_mailbox_client
+from qubrics.mailbox import create_mailbox_client
 
 client = create_mailbox_client(
     access_token=lambda: os.environ["QUBRICS_ACCESS_TOKEN"]
@@ -44,7 +46,7 @@ client = create_mailbox_client(
 ```python
 import os
 
-from sendmux_mailbox import MailboxAPIApi, create_mailbox_client, iter_mailbox_events
+from qubrics.mailbox import MailboxAPIApi, create_mailbox_client, iter_mailbox_events
 
 client = create_mailbox_client(api_key=os.environ["QUBRICS_MAILBOX_API_KEY"])
 api = MailboxAPIApi(client)
@@ -59,7 +61,7 @@ The package exports every generated Mailbox model and API class plus:
 
 - `create_mailbox_client`
 - `configure_mailbox`
-- `SendmuxMailboxApiClient`
+- `QubricsMailboxApiClient`
 - `iter_mailbox_events`
 - file helpers: `upload_mailbox_attachment_from_file`, `create_mailbox_attachment_upload_from_file`, `upload_mailbox_attachment_via_presigned_file`, and `send_mailbox_message_with_files`
 
@@ -85,7 +87,7 @@ Mailbox direct uploads, presigned uploads, and file helpers share the mailbox at
 import os
 import urllib.request
 
-from sendmux_mailbox import MailboxAPIApi, create_mailbox_client, read_mailbox_text_attachment
+from qubrics.mailbox import MailboxAPIApi, create_mailbox_client, read_mailbox_text_attachment
 
 client = create_mailbox_client(api_key=os.environ["QUBRICS_MAILBOX_API_KEY"])
 api = MailboxAPIApi(client)
@@ -124,7 +126,7 @@ For local files, use helper functions so file bytes stay out of model context:
 ```python
 import os
 
-from sendmux_mailbox import create_mailbox_client, send_mailbox_message_with_files
+from qubrics.mailbox import create_mailbox_client, send_mailbox_message_with_files
 
 client = create_mailbox_client(api_key=os.environ["QUBRICS_MAILBOX_API_KEY"])
 
@@ -157,13 +159,13 @@ for event in iter_mailbox_events(
 
 ## Pagination
 
-Use `iter_cursor_pages` from `sendmux-core` with list operations that return cursor pagination.
+Use `iter_cursor_pages` from `qubrics-core` with list operations that return cursor pagination.
 
 ```python
 import os
 
-from sendmux_core import iter_cursor_pages
-from sendmux_mailbox import MailboxAPIApi, create_mailbox_client
+from qubrics.core import iter_cursor_pages
+from qubrics.mailbox import MailboxAPIApi, create_mailbox_client
 
 client = create_mailbox_client(api_key=os.environ["QUBRICS_MAILBOX_API_KEY"])
 api = MailboxAPIApi(client)
@@ -172,14 +174,14 @@ for message in iter_cursor_pages(lambda cursor: api.mailbox_list_messages(cursor
     print(message.id)
 ```
 
-## Migrate from 1.x to 2.0
+## Thread message model migration
 
-If you annotate or construct thread-message list results (fixtures, mocks, or wrappers typed with the operation's result model), add the thread identity when upgrading to 2.0. `mailbox_list_thread_messages` returns `MailboxThreadMessageSummaryCursorListResponse` instead of `MailboxMessageSummaryCursorListResponse`: its `meta` is `MailboxThreadMessagesMeta`, whose `thread_id` is required and whose `sync_state` is an optional string. Code that only reads thread-message results keeps working.
+If you annotate or construct thread-message list results (fixtures, mocks, or wrappers typed with the operation's result model), add the thread identity. `mailbox_list_thread_messages` returns `MailboxThreadMessageSummaryCursorListResponse` instead of `MailboxMessageSummaryCursorListResponse`: its `meta` is `MailboxThreadMessagesMeta`, whose `thread_id` is required and whose `sync_state` is an optional string. Code that only reads thread-message results keeps working.
 
 1. Update thread-message annotations and type checks to the thread-specific result model:
 
    ```python
-   from sendmux_mailbox import MailboxThreadMessageSummaryCursorListResponse
+   from qubrics.mailbox import MailboxThreadMessageSummaryCursorListResponse
 
    # Before: isinstance(response, MailboxMessageSummaryCursorListResponse)
    def is_thread_message_list(response: object) -> bool:
@@ -189,7 +191,7 @@ If you annotate or construct thread-message list results (fixtures, mocks, or wr
 2. Add the thread identity to every thread-message result you construct:
 
    ```python
-   from sendmux_mailbox import MailboxThreadMessageSummaryCursorListResponse
+   from qubrics.mailbox import MailboxThreadMessageSummaryCursorListResponse
 
    # Before: "meta": {"request_id": "req_fixture"}
    fixture = MailboxThreadMessageSummaryCursorListResponse.model_validate(
@@ -206,9 +208,9 @@ If you annotate or construct thread-message list results (fixtures, mocks, or wr
 
 3. Run your tests and `mypy`. A constructed thread-message result without `thread_id` fails validation with `meta.thread_id  Field required`.
 
-`MailboxRealtimeMessage.body` is a `MailboxRealtimeMessageBody`. The earlier generated name, `MailboxRealtimeMessageAllOfBody`, remains importable from `sendmux_mailbox` and `sendmux_mailbox.models` as a deprecated alias of that class: reading it emits a `DeprecationWarning`, and the alias is removed in 3.0. Switch imports to `MailboxRealtimeMessageBody`.
+`MailboxRealtimeMessage.body` is a `MailboxRealtimeMessageBody`. The earlier generated name, `MailboxRealtimeMessageAllOfBody`, remains importable from `qubrics.mailbox` and `qubrics.mailbox.models` as a deprecated alias of that class: reading it emits a `DeprecationWarning`. Switch imports to `MailboxRealtimeMessageBody`.
 
-Update `sendmux-mailbox`, its lockfile, and affected annotations or fixtures together. To roll back, restore those package, lockfile, and call-site changes together.
+Update `qubrics-mailbox`, its lockfile, and affected annotations or fixtures together. To roll back, restore those package, lockfile, and call-site changes together.
 
 ## Support
 

@@ -11,7 +11,7 @@ rmSync(distDir, { force: true, recursive: true });
 mkdirSync(distDir, { recursive: true });
 
 run("node", ["scripts/check-python.mjs"]);
-run(python, ["-m", "sendmux_mcp.contract", "--check"]);
+run(python, ["-m", "qubrics.mcp.contract", "--check"]);
 
 for (const packageName of packages) {
   run(python, ["-m", "build", "--outdir", distDir, join("packages", "python", packageName)]);

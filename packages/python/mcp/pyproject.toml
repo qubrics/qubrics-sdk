@@ -3,7 +3,7 @@ requires = ["hatchling>=1.27"]
 build-backend = "hatchling.build"
 
 [project]
-name = "sendmux-mcp"
+name = "qubrics-mcp"
 version = "2.2.0"
 description = "Email inbox API and outbound sending tools for AI Agents."
 readme = "README.md"
@@ -26,15 +26,15 @@ dependencies = [
   "jsonschema>=4.20,<5",
   "mcp==2.2.0",
   "posthog>=7.21.0,<8",
-  "sendmux-core>=1.3.1,<2.0.0",
+  "qubrics-core>=1.3.1,<2.0.0",
 ]
 
 [project.scripts]
-sendmux-mcp = "sendmux_mcp.cli:main"
-sendmux-mcp-hosted = "sendmux_mcp.hosted:run_hosted"
-sendmux-mcp-mailbox = "sendmux_mcp.cli:main_mailbox"
-sendmux-mcp-management = "sendmux_mcp.cli:main_management"
-sendmux-mcp-sending = "sendmux_mcp.cli:main_sending"
+qubrics-mcp = "qubrics.mcp.cli:main"
+qubrics-mcp-hosted = "qubrics.mcp.hosted:run_hosted"
+qubrics-mcp-mailbox = "qubrics.mcp.cli:main_mailbox"
+qubrics-mcp-management = "qubrics.mcp.cli:main_management"
+qubrics-mcp-sending = "qubrics.mcp.cli:main_sending"
 
 [project.urls]
 Repository = "https://github.com/qubrics/qubrics-sdk"
@@ -45,10 +45,10 @@ include = [
   "LICENSE",
   "README.md",
   "evals.xml",
-  "sendmux_mcp",
+  "qubrics",
 ]
 
 [tool.hatch.build.targets.wheel]
 core-metadata-version = "2.4"
-packages = ["sendmux_mcp"]
-artifacts = ["sendmux_mcp/openapi/*.json"]
+packages = ["qubrics"]
+artifacts = ["qubrics/mcp/openapi/*.json"]
