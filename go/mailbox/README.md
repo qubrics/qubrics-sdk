@@ -1,19 +1,21 @@
-# Sendmux Go mailbox client
+# Qubrics Go mailbox client
 
-[![Go Reference](https://pkg.go.dev/badge/sendmux.ai/go/v3/mailbox.svg)](https://pkg.go.dev/sendmux.ai/go/v3/mailbox)
+[![Go Reference](https://pkg.go.dev/badge/qubrics.com/go/v4/mailbox.svg)](https://pkg.go.dev/qubrics.com/go/v4/mailbox)
 
 Go client for reading and managing granted mailbox data.
 
 ## Install
 
+These commands target unpublished v4 source. Use published `sendmux.ai/go/v3@v3.0.0`.
+
 ```sh
-go get sendmux.ai/go/v3@v3.0.0
+go get qubrics.com/go/v4@v4.0.0
 ```
 
 ## Import
 
 ```go
-import "sendmux.ai/go/v3/mailbox"
+import "qubrics.com/go/v4/mailbox"
 ```
 
 ## Authentication
@@ -26,11 +28,11 @@ Use `mailbox.NewWithAccessToken` for a bare token string, or `mailbox.NewWithTok
 
 ```go
 client, err := mailbox.NewWithTokenProvider(func(ctx context.Context) (string, error) {
-    return os.Getenv("SENDMUX_ACCESS_TOKEN"), nil
+    return os.Getenv("QUBRICS_ACCESS_TOKEN"), nil
 })
 ```
 
-Use a REST access token with the operation's required scopes and mailbox access. See [OAuth for REST APIs](https://sendmux.ai/docs/developer-tools/oauth).
+Use a REST access token with the operation's required scopes and mailbox access. See [OAuth for REST APIs](https://qubrics.com/docs/developer-tools/oauth).
 
 ## Quickstart
 
@@ -42,13 +44,13 @@ import (
 	"fmt"
 	"os"
 
-	"sendmux.ai/go/v3/mailbox"
+	"qubrics.com/go/v4/mailbox"
 )
 
 func main() {
 	ctx := context.Background()
 
-	client, err := mailbox.New(os.Getenv("SENDMUX_MAILBOX_API_KEY"))
+	client, err := mailbox.New(os.Getenv("QUBRICS_MAILBOX_API_KEY"))
 	if err != nil {
 		panic(err)
 	}
@@ -112,6 +114,6 @@ Use `MailboxUploadAttachment` to upload bytes and pass the returned `blob_id` in
 
 ## Documentation
 
-- Mailbox guide: <https://sendmux.ai/docs/guides/mailboxes>
-- Mailbox API: <https://sendmux.ai/docs/mailbox-api/introduction>
-- Go reference: <https://pkg.go.dev/sendmux.ai/go/v3/mailbox>
+- Mailbox guide: <https://qubrics.com/docs/guides/mailboxes>
+- Mailbox API: <https://qubrics.com/docs/mailbox-api/introduction>
+- Go reference: <https://pkg.go.dev/qubrics.com/go/v4/mailbox>

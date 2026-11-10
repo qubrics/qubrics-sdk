@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"os"
 
-	"sendmux.ai/go/v3/core"
+	"qubrics.com/go/v4/core"
 )
 
 type securitySource struct {
@@ -30,10 +30,10 @@ type sendmuxClientConfig struct {
 	retryOptions core.RetryOptions
 }
 
-// SendmuxOption configures a Sendmux Sending API client.
+// SendmuxOption configures a Qubrics Sending API client.
 type SendmuxOption func(*sendmuxClientConfig)
 
-// WithBaseURL overrides the default Sendmux API base URL.
+// WithBaseURL overrides the default Qubrics API base URL.
 func WithBaseURL(baseURL string) SendmuxOption {
 	return func(config *sendmuxClientConfig) {
 		if baseURL != "" {
@@ -58,7 +58,7 @@ func WithRetryOptions(options core.RetryOptions) SendmuxOption {
 	}
 }
 
-// New returns a Sendmux Sending API client authenticated with an API key.
+// New returns a Qubrics Sending API client authenticated with an API key.
 func New(apiKey string, opts ...SendmuxOption) (*Client, error) {
 	if apiKey == "" {
 		apiKey = environmentValue("API_KEY", "")
@@ -84,7 +84,7 @@ func NewWithAccessToken(token string, opts ...SendmuxOption) (*Client, error) {
 // The provider must be safe for concurrent calls.
 func NewWithTokenProvider(provider func(context.Context) (string, error), opts ...SendmuxOption) (*Client, error) {
 	if provider == nil {
-		return nil, errors.New("sendmux: token provider is required")
+		return nil, errors.New("qubrics: token provider is required")
 	}
 	config := sendmuxClientConfig{baseURL: environmentValue("BASE_URL", DefaultBaseURL)}
 	for _, opt := range opts {

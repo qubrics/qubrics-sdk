@@ -9,9 +9,9 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"sendmux.ai/go/v3/mailbox"
-	"sendmux.ai/go/v3/management"
-	"sendmux.ai/go/v3/sending"
+	"qubrics.com/go/v4/mailbox"
+	"qubrics.com/go/v4/management"
+	"qubrics.com/go/v4/sending"
 )
 
 const oauthConnection = `{"ok":true,"data":{"team":{"id":"team_test","name":"Test"},"credential":{"id":"grant_test","type":"oauth","name":null},"label":"Test","permissions":[],"mailboxes":[]},"meta":{"request_id":"req_test"}}`

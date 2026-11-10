@@ -1,6 +1,6 @@
 package core
 
-// SuccessEnvelope is the shared Sendmux response envelope shape.
+// SuccessEnvelope is the shared Qubrics response envelope shape.
 type SuccessEnvelope[TData any, TMeta any] struct {
 	Ok   bool  `json:"ok"`
 	Data TData `json:"data"`

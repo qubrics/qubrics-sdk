@@ -22,7 +22,7 @@ type RetryOptions struct {
 	MaxDelay    time.Duration
 }
 
-// NewHTTPClient returns an HTTP client with Sendmux retry behaviour.
+// NewHTTPClient returns an HTTP client with Qubrics retry behaviour.
 func NewHTTPClient(base *http.Client, options RetryOptions) *http.Client {
 	var client http.Client
 	if base != nil {

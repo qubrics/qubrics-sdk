@@ -10,7 +10,7 @@ A18 specifies seven new Python distribution names with the shared import package
 
 Measured old registry versions and A18's next-major rule give these release targets: `qubrics-core` 2.0.0, `qubrics-sending` 2.0.0, `qubrics-mailbox` 3.0.0, `qubrics-management` 3.0.0, `qubrics-sdk` 4.0.0, `qubrics-mcp` 3.0.0 and `langchain-qubrics` 1.0.0. `registry-audit.json` contains the original registry readback. Source native versions remain unchanged until the matching release PRs; local development artifacts built at those source versions must never be published.
 
-The generator projects Qubrics service hosts without modifying the shared OpenAPI snapshots. Existing A17 environment and header families remain. The default hosted CORS helper recognises both first-party app origins while keeping custom origins exact. Old-name pointer distributions, their Inactive classifier and useful legacy imports remain outstanding; exact pointer versions are absent from the spec and require an operator decision.
+The generator projects Qubrics service hosts without modifying the shared OpenAPI snapshots. Existing A17 environment and header families remain. The default hosted CORS helper recognises both first-party app origins while keeping custom origins exact. Ops settled the final old-name pointer versions: each equals its next-major replacement target, per A10/A18 and SemVer 2.0.0 item 8. Metadata-only pointers are prepared separately in PR369; historical releases retain the old imports. Registry publication remains operator-only.
 
 ## Measured source and artifact signals
 
@@ -50,6 +50,16 @@ Required fix belongs at the Skills checker origin: exact immutable `sendmux-mcp`
 The released Skills acceptance asset proves baseline SDK `8d3d749`, not this candidate. A corrected reviewed/released checker and fresh exact-candidate acceptance are still required. Ops ASK was sent with this trace and the requested origin correction. Skills source evidence: `/Users/rj/Desktop/GIT-REPOS/sendmux-skills/.claude/tasks/rebrand-qubrics-skills34/sdk344-checker-evidence.md`.
 
 Two independent staged-source reviews against base `f0e8b721acf62816475f43dd87b18fe025fa0e10` reported zero Python Standards findings and zero additional scoped Spec findings. Receipts: `non-ts-standards-review.md` and `non-ts-spec-review.md`. The shared Ruby guard defect is handled in the Ruby candidate; it does not justify weakening this candidate's failing Skills qualification.
+
+## Go integration and current qualification
+
+Merged Go source `8dbf3bff43f6d7d91fa997726fb59ada60d47720` into this branch without rewriting `a326bc923fff448470d908bb527afaaa35f6d739`. The only conflict was duplicate fixture metadata in `scripts/publication-guard.test.mjs`; the resolved file is byte-identical to the Python parent. Both `git diff --stat a326bc92 -- python/` and the actual package path `git diff --stat a326bc92 -- packages/python/` are empty: Python source and metadata are unchanged.
+
+The integration gate exposed four stale floor-test fixtures in `scripts/prepare-pypi-publish.test.mjs`: they seeded `sendmux-*` dependencies while the renamed guard requires `qubrics-*`. The failure was the missing explicit Qubrics floor, rather than the intended stale-floor rejection. Updated fixture dependency names and the corresponding error-name matcher under A18; versions, floor assertions and successful-boundary checks remain. All 13 preparation tests pass, zero skipped (`python-build-floor-fixtures-green.log`). The initial complete run is `python-go-merged-publication-fixtures.log`: 103 passed, five failed, zero skipped.
+
+The fifth failure came from selecting stale Skills MAIN as the local fixture checker. The corrected control is the exact released v2.0.2 checker extracted from commit `ffc8c41d20eab56184d11476809a9f5f319c8781`, SHA256 `3404789467143317b39d6936c17256e62b458bfde9b03d6348cadd03e9b4a267`. Canonical positive, changed-snapshot negative and immutable legacy positive now pass 3/3 with zero skipped (`python-go-merged-v202-controls-green.log`). The full final `pnpm test:publication-guard` run passes 108/108, zero skipped (`python-go-merged-publication-final.log`). These fixture results do not certify the genuine candidate.
+
+The v2.0.1 MCP-root defect above was corrected in v2.0.2. Genuine acceptance of clean `a326bc92` then failed on stale policy-selected public-source paths, beginning with `packages/python/mailbox/sendmux_mailbox/attachments.py`; the actual source lives under `qubrics/mailbox`. Seven stale Python paths and old console-script selectors were routed to skills34 for an origin correction. Ops reports genuine qualification of `a326bc92` in progress for the next Skills release. Per Ops, a PASS carries to a descendant only while Python package source and metadata remain unchanged; otherwise fresh genuine acceptance is mandatory before that release and the Python publish ASK. No PASS has been received here yet.
 
 ## Outstanding release work
 

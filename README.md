@@ -12,6 +12,8 @@ Official SDK, CLI, and MCP workspace for Qubrics.
 
 Seven `@qubrics/*` npm packages are published. Existing `@sendmux/*` releases remain available. Other ecosystems use the published names below until their separate migrations ship.
 
+Go v4 source for `qubrics.com/go/v4` awaits publication. Use published `sendmux.ai/go/v3@v3.0.0`.
+
 - Product documentation: [qubrics.com/docs](https://qubrics.com/docs)
 - Management API reference: [qubrics.com/docs/api/introduction](https://qubrics.com/docs/api/introduction)
 - Mailbox API reference: [qubrics.com/docs/mailbox-api/introduction](https://qubrics.com/docs/mailbox-api/introduction)
@@ -207,7 +209,7 @@ Maintainers: use the [protected live E2E matrix](docs/live-e2e-matrix.md) for cr
 | --- | --- |
 | [`packages/ts`](packages/ts) | TypeScript SDK packages and the `sendmux` CLI. |
 | [`packages/python`](packages/python) | Python SDK packages and the `sendmux-mcp` package. |
-| [`go`](go) | Go module `sendmux.ai/go/v3` and subpackages. |
+| [`go`](go) | Go v4 source for `qubrics.com/go/v4` and subpackages. |
 | [`rust`](rust) | Rust crate published as `sendmux` on crates.io. |
 | [`packages/php`](packages/php) | PHP package sources used for Packagist packages and public split repositories. |
 | [`packages/ruby`](packages/ruby) | RubyGem package sources. |
