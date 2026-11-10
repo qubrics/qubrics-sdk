@@ -8,11 +8,11 @@ from typing import Any
 import pytest
 import urllib3.util.retry
 
-import sendmux_core.retry as retry_module
-from sendmux_core import RetryOptions
-from sendmux_mailbox import MailboxAPIApi, create_mailbox_client
-from sendmux_management import ConnectionApi, create_management_client
-from sendmux_sending import AttachmentsApi, MetaApi, create_sending_client
+import qubrics.core.retry as retry_module
+from qubrics.core import RetryOptions
+from qubrics.mailbox import MailboxAPIApi, create_mailbox_client
+from qubrics.management import ConnectionApi, create_management_client
+from qubrics.sending import AttachmentsApi, MetaApi, create_sending_client
 from urllib3.exceptions import ProtocolError
 
 

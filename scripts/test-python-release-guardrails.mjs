@@ -30,12 +30,12 @@ try {
       "packages/python/sending": "1.2.0",
     },
     sdkDependencies: [
-      '"sendmux-core>=1.2.0,<2.0.0"',
-      '"sendmux-mailbox>=1.0.4,<2.0.0"',
-      '"sendmux-management>=1.0.4,<2.0.0"',
-      '"sendmux-sending>=1.1.0,<2.0.0"',
+      '"qubrics-core>=1.2.0,<2.0.0"',
+      '"qubrics-mailbox>=1.0.4,<2.0.0"',
+      '"qubrics-management>=1.0.4,<2.0.0"',
+      '"qubrics-sending>=1.1.0,<2.0.0"',
     ],
-    mcpDependencies: ['"sendmux-core>=1.1.0,<2.0.0"'],
+    mcpDependencies: ['"qubrics-core>=1.1.0,<2.0.0"'],
   });
 
   assert.doesNotThrow(() =>
@@ -43,12 +43,12 @@ try {
   );
   assert.throws(
     () => checkPythonSdkDependencyFloors({ root, changedPackages: new Set(["sdk"]) }),
-    /sendmux-sending >= 1\.2\.0,<2\.0\.0; found >= 1\.1\.0,<2\.0\.0/,
+    /qubrics-sending >= 1\.2\.0,<2\.0\.0; found >= 1\.1\.0,<2\.0\.0/,
   );
   assert.doesNotThrow(() => checkPythonMcpDependencyFloors({ root, changedPackages: new Set(["core"]) }));
   assert.throws(
     () => checkPythonMcpDependencyFloors({ root, changedPackages: new Set(["mcp"]) }),
-    /sendmux-core >= 1\.2\.0,<2\.0\.0; found >= 1\.1\.0,<2\.0\.0/,
+    /qubrics-core >= 1\.2\.0,<2\.0\.0; found >= 1\.1\.0,<2\.0\.0/,
   );
 
   writeFixture({
@@ -59,17 +59,17 @@ try {
       "packages/python/sending": "1.2.0",
     },
     sdkDependencies: [
-      '"sendmux-core>=1.2.0,<2.0.0"',
-      '"sendmux-mailbox>=1.1.0,<2.0.0"',
-      '"sendmux-management>=1.0.4,<2.0.0"',
-      '"sendmux-sending>=1.3.0,<2.0.0"',
+      '"qubrics-core>=1.2.0,<2.0.0"',
+      '"qubrics-mailbox>=1.1.0,<2.0.0"',
+      '"qubrics-management>=1.0.4,<2.0.0"',
+      '"qubrics-sending>=1.3.0,<2.0.0"',
     ],
-    mcpDependencies: ['"sendmux-core>=1.2.0,<2.0.0"'],
+    mcpDependencies: ['"qubrics-core>=1.2.0,<2.0.0"'],
   });
 
   assert.throws(
     () => checkPythonSdkDependencyFloors({ root, changedPackages: new Set(["sdk"]) }),
-    /sendmux-sending >= 1\.2\.0,<2\.0\.0; found >= 1\.3\.0,<2\.0\.0/,
+    /qubrics-sending >= 1\.2\.0,<2\.0\.0; found >= 1\.3\.0,<2\.0\.0/,
   );
 
   writeFixture({
@@ -80,12 +80,12 @@ try {
       "packages/python/sending": "1.2.0",
     },
     sdkDependencies: [
-      '"sendmux-core>=1.2.0,<2.0.0"',
-      '"sendmux-mailbox>=1.1.0,<2.0.0"',
-      '"sendmux-management>=1.0.4,<2.0.0"',
-      '"sendmux-sending>=1.2.0,<2.0.0"',
+      '"qubrics-core>=1.2.0,<2.0.0"',
+      '"qubrics-mailbox>=1.1.0,<2.0.0"',
+      '"qubrics-management>=1.0.4,<2.0.0"',
+      '"qubrics-sending>=1.2.0,<2.0.0"',
     ],
-    mcpDependencies: ['"sendmux-core>=1.2.0,<2.0.0"'],
+    mcpDependencies: ['"qubrics-core>=1.2.0,<2.0.0"'],
   });
 
   assert.doesNotThrow(() => checkPythonSdkDependencyFloors({ root, changedPackages: new Set(["sdk"]) }));
@@ -99,20 +99,20 @@ try {
       "packages/python/sending": "1.2.0",
     },
     sdkDependencies: [
-      '"sendmux-core>=1.2.0,<2.0.0"',
-      '"sendmux-mailbox>=2.0.0,<3.0.0"',
-      '"sendmux-management>=1.0.4,<2.0.0"',
-      '"sendmux-sending>=1.2.0,<2.0.0"',
+      '"qubrics-core>=1.2.0,<2.0.0"',
+      '"qubrics-mailbox>=2.0.0,<3.0.0"',
+      '"qubrics-management>=1.0.4,<2.0.0"',
+      '"qubrics-sending>=1.2.0,<2.0.0"',
     ],
-    mcpDependencies: ['"sendmux-core>=1.2.0,<2.0.0"'],
+    mcpDependencies: ['"qubrics-core>=1.2.0,<2.0.0"'],
   });
 
   assert.doesNotThrow(() => checkPythonSdkDependencyFloors({ root, changedPackages: new Set(["sdk"]) }));
 
   for (const invalidMailboxRange of [
-    '"sendmux-mailbox>=2.0.0"',
-    '"sendmux-mailbox>=2.0.0,<4.0.0"',
-    '"sendmux-mailbox>=2.0.0,<2.0.0"',
+    '"qubrics-mailbox>=2.0.0"',
+    '"qubrics-mailbox>=2.0.0,<4.0.0"',
+    '"qubrics-mailbox>=2.0.0,<2.0.0"',
   ]) {
     writeFixture({
       manifest: {
@@ -122,16 +122,16 @@ try {
         "packages/python/sending": "1.2.0",
       },
       sdkDependencies: [
-        '"sendmux-core>=1.2.0,<2.0.0"',
+        '"qubrics-core>=1.2.0,<2.0.0"',
         invalidMailboxRange,
-        '"sendmux-management>=1.0.4,<2.0.0"',
-        '"sendmux-sending>=1.2.0,<2.0.0"',
+        '"qubrics-management>=1.0.4,<2.0.0"',
+        '"qubrics-sending>=1.2.0,<2.0.0"',
       ],
-      mcpDependencies: ['"sendmux-core>=1.2.0,<2.0.0"'],
+      mcpDependencies: ['"qubrics-core>=1.2.0,<2.0.0"'],
     });
     assert.throws(
       () => checkPythonSdkDependencyFloors({ root, changedPackages: new Set(["sdk"]) }),
-      /sendmux-mailbox with an explicit >= floor and <3\.0\.0 upper bound.*>=2\.0\.0,<3\.0\.0/,
+      /qubrics-mailbox with an explicit >= floor and <3\.0\.0 upper bound.*>=2\.0\.0,<3\.0\.0/,
     );
   }
 
@@ -143,18 +143,18 @@ try {
       "packages/python/sending": "1.2.0",
     },
     sdkDependencies: [
-      '"sendmux-core>=1.2.0,<2.0.0"',
-      '"sendmux-mailbox>=1.1.0,<2.0.0"',
-      '"sendmux-management>=1.0.4,<2.0.0"',
-      '"sendmux-sending>=1.2.0,<2.0.0"',
+      '"qubrics-core>=1.2.0,<2.0.0"',
+      '"qubrics-mailbox>=1.1.0,<2.0.0"',
+      '"qubrics-management>=1.0.4,<2.0.0"',
+      '"qubrics-sending>=1.2.0,<2.0.0"',
     ],
-    mcpDependencies: ['"sendmux-core>=1.2.0,<2.0.0"'],
+    mcpDependencies: ['"qubrics-core>=1.2.0,<2.0.0"'],
   });
 
   assert.doesNotThrow(() => checkPythonSdkDependencyFloors({ root, changedPackages: new Set(["mailbox"]) }));
   assert.throws(
     () => checkPythonSdkDependencyFloors({ root, changedPackages: new Set(["sdk"]) }),
-    /sendmux-mailbox >= 2\.0\.0,<3\.0\.0; found >= 1\.1\.0,<2\.0\.0/,
+    /qubrics-mailbox >= 2\.0\.0,<3\.0\.0; found >= 1\.1\.0,<2\.0\.0/,
   );
 
   writeFixture({
@@ -165,17 +165,17 @@ try {
       "packages/python/sending": "1.2.0",
     },
     sdkDependencies: [
-      '"sendmux-core>=1.2.0,<2.0.0"',
-      '"sendmux-mailbox>=1.1.0"',
-      '"sendmux-management>=1.0.4,<2.0.0"',
-      '"sendmux-sending>=1.2.0,<2.0.0"',
+      '"qubrics-core>=1.2.0,<2.0.0"',
+      '"qubrics-mailbox>=1.1.0"',
+      '"qubrics-management>=1.0.4,<2.0.0"',
+      '"qubrics-sending>=1.2.0,<2.0.0"',
     ],
-    mcpDependencies: ['"sendmux-core>=1.2.0,<2.0.0"'],
+    mcpDependencies: ['"qubrics-core>=1.2.0,<2.0.0"'],
   });
 
   assert.throws(
     () => checkPythonSdkDependencyFloors({ root, changedPackages: new Set(["sending"]) }),
-    /sendmux-mailbox with an explicit >= floor and <2\.0\.0 upper bound/,
+    /qubrics-mailbox with an explicit >= floor and <2\.0\.0 upper bound/,
   );
 
   assert.deepEqual(
@@ -197,10 +197,10 @@ try {
 
   for (const surface of ["sending", "mailbox", "management"]) {
     const surfaceErrorPattern = new RegExp(
-      `${surface}[\\\\/]pyproject\\.toml must require sendmux-core`,
+      `${surface}[\\\\/]pyproject\\.toml must require qubrics-core`,
     );
     assert.match(
-      `C:\\repo\\packages\\python\\${surface}\\pyproject.toml must require sendmux-core`,
+      `C:\\repo\\packages\\python\\${surface}\\pyproject.toml must require qubrics-core`,
       surfaceErrorPattern,
     );
     writeFixture({
@@ -211,10 +211,10 @@ try {
         "packages/python/sending": "1.5.1",
       },
       surfaceCoreDependencies: {
-        sending: '"sendmux-core>=1.3.1,<2.0.0"',
-        mailbox: '"sendmux-core>=1.3.1,<2.0.0"',
-        management: '"sendmux-core>=1.3.1,<2.0.0"',
-        [surface]: '"sendmux-core>=1.3.0,<2.0.0"',
+        sending: '"qubrics-core>=1.3.1,<2.0.0"',
+        mailbox: '"qubrics-core>=1.3.1,<2.0.0"',
+        management: '"qubrics-core>=1.3.1,<2.0.0"',
+        [surface]: '"qubrics-core>=1.3.0,<2.0.0"',
       },
     });
     assert.throws(
@@ -233,16 +233,16 @@ try {
         "packages/python/sending": "1.5.1",
       },
       surfaceCoreDependencies: {
-        sending: '"sendmux-core>=1.3.1,<2.0.0"',
-        mailbox: '"sendmux-core>=1.3.1,<2.0.0"',
-        management: '"sendmux-core>=1.3.1,<2.0.0"',
+        sending: '"qubrics-core>=1.3.1,<2.0.0"',
+        mailbox: '"qubrics-core>=1.3.1,<2.0.0"',
+        management: '"qubrics-core>=1.3.1,<2.0.0"',
       },
     });
     assert.doesNotThrow(() =>
       checkPythonSurfaceDependencyFloors({ root, changedPackages: new Set([surface]) }),
     );
 
-    for (const invalidRange of ['"sendmux-core>=1.3.1"', '"sendmux-core>=1.3.1,<3.0.0"']) {
+    for (const invalidRange of ['"qubrics-core>=1.3.1"', '"qubrics-core>=1.3.1,<3.0.0"']) {
       writeFixture({
         manifest: {
           "packages/python/core": "1.3.1",
@@ -251,9 +251,9 @@ try {
           "packages/python/sending": "1.5.1",
         },
         surfaceCoreDependencies: {
-          sending: '"sendmux-core>=1.3.1,<2.0.0"',
-          mailbox: '"sendmux-core>=1.3.1,<2.0.0"',
-          management: '"sendmux-core>=1.3.1,<2.0.0"',
+          sending: '"qubrics-core>=1.3.1,<2.0.0"',
+          mailbox: '"qubrics-core>=1.3.1,<2.0.0"',
+          management: '"qubrics-core>=1.3.1,<2.0.0"',
           [surface]: invalidRange,
         },
       });
@@ -270,8 +270,8 @@ try {
       "packages/python/mailbox": "2.0.0",
     },
     langchainDependencies: [
-      '"sendmux-sending>=1.5.1,<2.0.0"',
-      '"sendmux-mailbox>=2.0.0,<3.0.0"',
+      '"qubrics-sending>=1.5.1,<2.0.0"',
+      '"qubrics-mailbox>=2.0.0,<3.0.0"',
     ],
   });
   assert.doesNotThrow(() =>
@@ -284,8 +284,8 @@ try {
       "packages/python/mailbox": "2.0.0",
     },
     langchainDependencies: [
-      '"sendmux-sending>=1.5.0,<2.0.0"',
-      '"sendmux-mailbox>=2.0.0,<3.0.0"',
+      '"qubrics-sending>=1.5.0,<2.0.0"',
+      '"qubrics-mailbox>=2.0.0,<3.0.0"',
     ],
   });
   assert.throws(
@@ -293,7 +293,7 @@ try {
       root,
       changedPackages: readChangedPythonPackages({ env: { PYTHON_CHANGED_PACKAGES: "langchain" } }),
     }),
-    /sendmux-sending >= 1\.5\.1,<2\.0\.0; found >= 1\.5\.0,<2\.0\.0/,
+    /qubrics-sending >= 1\.5\.1,<2\.0\.0; found >= 1\.5\.0,<2\.0\.0/,
   );
 
   writeFixture({
@@ -302,8 +302,8 @@ try {
       "packages/python/mailbox": "2.0.0",
     },
     langchainDependencies: [
-      '"sendmux-sending>=1.5.1,<2.0.0"',
-      '"sendmux-mailbox>=1.5.0,<2.0.0"',
+      '"qubrics-sending>=1.5.1,<2.0.0"',
+      '"qubrics-mailbox>=1.5.0,<2.0.0"',
     ],
   });
   assert.throws(
@@ -313,7 +313,7 @@ try {
         env: { PYTHON_PATHS_RELEASED: '["packages/python/langchain"]' },
       }),
     }),
-    /sendmux-mailbox >= 2\.0\.0,<3\.0\.0; found >= 1\.5\.0,<2\.0\.0/,
+    /qubrics-mailbox >= 2\.0\.0,<3\.0\.0; found >= 1\.5\.0,<2\.0\.0/,
   );
 
   assert.doesNotThrow(() =>
@@ -333,7 +333,7 @@ function writeFixture({ manifest, sdkDependencies = [], mcpDependencies = [], su
     mkdirSync(join(root, "packages", "python", surface), { recursive: true });
     writeFileSync(
       join(root, "packages", "python", surface, "pyproject.toml"),
-      `dependencies = [\n  ${surfaceCoreDependencies[surface] ?? '"sendmux-core>=1.2.0,<2.0.0"'}\n]\n`,
+      `dependencies = [\n  ${surfaceCoreDependencies[surface] ?? '"qubrics-core>=1.2.0,<2.0.0"'}\n]\n`,
     );
   }
   writeFileSync(join(root, ".release-please-manifest.json"), `${JSON.stringify(manifest)}\n`);

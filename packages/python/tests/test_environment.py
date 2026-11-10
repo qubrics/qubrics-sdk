@@ -5,10 +5,10 @@ from typing import Any
 
 import pytest
 
-from sendmux_core.environment import env_value
-from sendmux_mailbox import MailboxAPIApi, create_mailbox_client
-from sendmux_management import ConnectionApi, create_management_client
-from sendmux_sending import MetaApi, create_sending_client
+from qubrics.core.environment import env_value
+from qubrics.mailbox import MailboxAPIApi, create_mailbox_client
+from qubrics.management import ConnectionApi, create_management_client
+from qubrics.sending import MetaApi, create_sending_client
 
 
 CLIENTS: list[tuple[Callable[..., Any], Callable[[Any], Any]]] = [
@@ -16,6 +16,19 @@ CLIENTS: list[tuple[Callable[..., Any], Callable[[Any], Any]]] = [
     (create_sending_client, lambda client: MetaApi(client).sending_get_connection_without_preload_content()),
     (create_mailbox_client, lambda client: MailboxAPIApi(client).mailbox_get_connection_without_preload_content()),
 ]
+
+
+@pytest.mark.parametrize(("factory", "origin"), [
+    (create_mailbox_client, "https://app.qubrics.com/api/v1"),
+    (create_management_client, "https://app.qubrics.com/api/v1"),
+    (create_sending_client, "https://smtp.qubrics.com/api/v1"),
+])
+def test_clients_default_to_qubrics_hosts(monkeypatch: pytest.MonkeyPatch, factory: Callable[..., Any], origin: str) -> None:
+    for family in ("QUBRICS", "SENDMUX"):
+        monkeypatch.delenv(f"{family}_BASE_URL", raising=False)
+    key = "smx_root_test" if factory is create_management_client else "smx_mbx_test"
+    with factory(api_key=key) as client:
+        assert client.configuration.host == origin
 
 
 @pytest.mark.parametrize("create,key", [(create_mailbox_client, "smx_mbx_"), (create_management_client, "smx_root_"), (create_sending_client, "smx_mbx_")])

@@ -8,7 +8,7 @@ import { fileURLToPath } from "node:url";
 import test from "node:test";
 
 const repository = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-async function check({ root, inputDir = join(repository, "packages/python/mcp/sendmux_mcp/openapi"), writeProvenance = false }) {
+async function check({ root, inputDir = join(repository, "packages/python/mcp/qubrics/mcp/openapi"), writeProvenance = false }) {
   const child = spawn(process.execPath, [join(repository, "scripts/check-surface-coverage.mjs"), "--write", ...(writeProvenance ? ["--write-provenance"] : [])], {
     cwd: root, env: { ...process.env, OPENAPI_INPUT_DIR: inputDir }, stdio: ["ignore", "pipe", "pipe"],
   });
@@ -28,7 +28,7 @@ test("surface gate rejects Rust source provenance drift", async () => {
   const root = mkdtempSync(join(tmpdir(), "sendmux-rust-coverage-"));
   console.log(JSON.stringify({ directory: root, state: "created" }));
   try {
-    for (const path of ["packages/ts", "packages/python/mcp/sendmux_mcp/curation.py", "rust/src", "docs/surface-coverage.md"]) {
+    for (const path of ["packages/ts", "packages/python/mcp/qubrics/mcp/curation.py", "rust/src", "docs/surface-coverage.md"]) {
       cpSync(join(repository, path), join(root, path), { recursive: true, filter: (path) => !/(?:node_modules|\/dist(?:\/|$))/.test(path) });
     }
     if (existsSync(join(repository, "rust/operation-decisions.json"))) cpSync(join(repository, "rust/operation-decisions.json"), join(root, "rust/operation-decisions.json"));
@@ -74,14 +74,14 @@ test("surface gate rejects Rust source provenance drift", async () => {
 
 function provenanceFixture() {
   const root = mkdtempSync(join(tmpdir(), "sendmux-rust-provenance-"));
-  for (const relative of ["packages/ts", "packages/python/mcp/sendmux_mcp/curation.py", "rust/src", "rust/operation-decisions.json", "docs/surface-coverage.md"]) {
+  for (const relative of ["packages/ts", "packages/python/mcp/qubrics/mcp/curation.py", "rust/src", "rust/operation-decisions.json", "docs/surface-coverage.md"]) {
     cpSync(join(repository, relative), join(root, relative), { recursive: true, filter: (path) => !/(?:node_modules|\/dist(?:\/|$))/.test(path) });
   }
   const inputDir = join(root, "inputs");
   mkdirSync(inputDir);
   for (const name of ["openapi-app.json", "openapi-sending.json"]) {
     const snapshotPath = join(inputDir, name);
-    cpSync(join(repository, "packages/python/mcp/sendmux_mcp/openapi", name), snapshotPath);
+    cpSync(join(repository, "packages/python/mcp/qubrics/mcp/openapi", name), snapshotPath);
     const snapshot = JSON.parse(readFileSync(snapshotPath, "utf8"));
     snapshot.info.title += " fixture";
     writeFileSync(snapshotPath, JSON.stringify(snapshot));

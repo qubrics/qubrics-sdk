@@ -5,7 +5,7 @@ const specs = ["openapi-app.json", "openapi-sending.json"];
 const root = process.cwd();
 const options = parseArgs(process.argv.slice(2));
 const inputDir = resolve(options.inputDir ?? process.env.OPENAPI_INPUT_DIR ?? findDefaultInputDir());
-const outputDir = resolve(options.outputDir ?? "packages/python/mcp/sendmux_mcp/openapi");
+const outputDir = resolve(options.outputDir ?? "packages/python/mcp/qubrics/mcp/openapi");
 
 mkdirSync(outputDir, { recursive: true });
 

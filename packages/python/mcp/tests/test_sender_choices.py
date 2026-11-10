@@ -8,8 +8,8 @@ import httpx
 import pytest
 from fastmcp.server.auth.providers.jwt import StaticTokenVerifier
 
-from sendmux_mcp.config import ServerConfig
-from sendmux_mcp.server import create_server
+from qubrics.mcp.config import ServerConfig
+from qubrics.mcp.server import create_server
 
 CHOICES: dict[str, Any] = {
     "origin_address": "origin@example.com",

@@ -1,0 +1,168 @@
+"""LangChain toolkit for the Qubrics email API for AI agents."""
+
+from __future__ import annotations
+
+from typing import Any, Callable, Optional, Union
+
+from langchain_core.tools import BaseTool, BaseToolkit, tool
+from pydantic import Field
+
+from qubrics.mailbox import MailboxAPIApi, create_mailbox_client
+from qubrics.mailbox.models.send_mailbox_message_body import SendMailboxMessageBody
+from qubrics.sending import EmailSendRequest, EmailsApi, create_sending_client
+
+
+def _html_from_text(text: str) -> str:
+    escaped = (
+        text.replace("&", "&amp;")
+        .replace("<", "&lt;")
+        .replace(">", "&gt;")
+        .replace("\n", "<br>")
+    )
+    return f"<p>{escaped}</p>"
+
+
+class QubricsToolkit(BaseToolkit):
+    """LangChain toolkit exposing Qubrics tools to an agent.
+
+    ``get_tools()`` returns three tools: ``send_email``, ``list_messages`` and
+    ``reply``.
+
+    Example:
+        >>> from langchain.agents import create_agent
+        >>> from qubrics.langchain import QubricsToolkit
+        >>> smx = QubricsToolkit(api_key="smx_mbx_...")
+        >>> agent = create_agent(model="gpt-4o", tools=smx.get_tools())
+    """
+
+    api_key: Optional[str] = Field(
+        default=None,
+        repr=False,
+        exclude=True,
+        description=(
+            "A send + receive capable mailbox API key (smx_mbx_*) or a scoped "
+            "agent token. Read it from your environment; never hard-code it."
+        ),
+    )
+    access_token: str | Callable[[], str] | None = Field(
+        default=None,
+        repr=False,
+        exclude=True,
+        description=(
+            "A REST OAuth access token or a callable returning the current token. "
+            "Supply this instead of api_key."
+        ),
+    )
+    default_from: Optional[str] = Field(
+        default=None,
+        description=(
+            "Default From address for send_email when a call omits `from`. "
+            "If unset, the model must supply a sender per call."
+        ),
+    )
+
+    def get_tools(self) -> list[BaseTool]:
+        sending_client = create_sending_client(api_key=self.api_key, access_token=self.access_token)
+        mailbox_client = create_mailbox_client(api_key=self.api_key, access_token=self.access_token)
+        emails = EmailsApi(sending_client)
+        mailbox = MailboxAPIApi(mailbox_client)
+        default_from = self.default_from
+
+        @tool
+        def send_email(
+            to: str,
+            subject: str,
+            text: str,
+            html: Optional[str] = None,
+            var_from: Optional[str] = None,
+            idempotency_key: Optional[str] = None,
+            delivery_group: Optional[Union[str, list[str]]] = None,
+        ) -> Any:
+            """Send an email through Qubrics to any recipient.
+
+            Args:
+                to: Recipient email address.
+                subject: Email subject line.
+                text: Plain-text body of the email.
+                html: Optional HTML body.
+                var_from: Sender email address; defaults to the configured sender.
+                idempotency_key: Optional key that makes a retried send idempotent
+                    for 24 hours.
+                delivery_group: Optional delivery group ID or list of group IDs that
+                    narrows the eligible provider pool.
+            """
+            sender = var_from if var_from is not None else default_from
+            if sender is None:
+                raise ValueError(
+                    "No sender address: pass `var_from` in the tool call, or set "
+                    "default_from on QubricsToolkit."
+                )
+            if delivery_group is not None:
+                from qubrics.sending.models.email_send_request_delivery_group import (
+                    EmailSendRequestDeliveryGroup,
+                )
+
+                delivery_group_value = EmailSendRequestDeliveryGroup(delivery_group)
+            else:
+                delivery_group_value = None
+            # EmailSendRequest.var_from carries alias "from" (a Python keyword),
+            # so build from a dict via model_validate rather than keyword args.
+            request: dict[str, Any] = {
+                "from": {"email": sender},
+                "to": {"email": to},
+                "subject": subject,
+                "text_body": text,
+                "html_body": html if html is not None else _html_from_text(text),
+            }
+            if delivery_group_value is not None:
+                request["delivery_group"] = delivery_group_value
+            response = emails.sending_send_email(
+                EmailSendRequest.model_validate(request),
+                idempotency_key=idempotency_key,
+            )
+            return response.data
+
+        @tool
+        def list_messages(limit: int = 25) -> Any:
+            """List recent messages in the agent's mailbox, newest first.
+
+            Args:
+                limit: Maximum number of messages to return (1-100).
+            """
+            response = mailbox.mailbox_list_messages(limit=limit)
+            return response.data
+
+        @tool
+        def reply(
+            to: str,
+            subject: str,
+            text: str,
+            html: Optional[str] = None,
+            idempotency_key: Optional[str] = None,
+        ) -> Any:
+            """Send a message from the agent's own mailbox, e.g. to reply to a sender.
+
+            Args:
+                to: Recipient email address.
+                subject: Subject line.
+                text: Plain-text body.
+                html: Optional HTML body.
+                idempotency_key: Optional key that makes a retried send idempotent
+                    for 24 hours.
+            """
+            response = mailbox.mailbox_send_message(
+                idempotency_key=idempotency_key,
+                send_mailbox_message_body=SendMailboxMessageBody.model_validate(
+                    {
+                        "to": [{"email": to, "name": None}],
+                        "subject": subject,
+                        "text_body": text,
+                        "html_body": (
+                            html if html is not None else _html_from_text(text)
+                        ),
+                    }
+                ),
+            )
+            return response.data
+
+        return [send_email, list_messages, reply]

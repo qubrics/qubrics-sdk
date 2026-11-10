@@ -10,7 +10,7 @@ if (!existsSync(python)) {
 }
 
 run("pnpm", ["generate:mcp"]);
-run(python, ["-m", "sendmux_mcp.smoke"]);
+run(python, ["-m", "qubrics.mcp.smoke"]);
 
 function run(command, args) {
   const result = spawnSync(command, args, { cwd: root, encoding: "utf8", stdio: "inherit" });

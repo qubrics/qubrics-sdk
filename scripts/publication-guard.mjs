@@ -9,7 +9,7 @@ import { promisify } from "node:util";
 
 const execute = promisify(execFile);
 const controlRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-export const snapshotPath = "packages/python/mcp/sendmux_mcp/openapi";
+export const snapshotPath = "packages/python/mcp/qubrics/mcp/openapi";
 const snapshots = ["openapi-app.json", "openapi-sending.json"];
 const repository = "qubrics/qubrics-sdk";
 const actionPin = "0dfd8538845b8e92600d271a895a5372865d4062";
@@ -35,14 +35,23 @@ export function immutableSha(value) {
   return value;
 }
 
+export async function sourceSnapshotPath(read) {
+  const project = (await read("packages/python/mcp/pyproject.toml")).split(/^\[project\][ \t]*$/m)[1]?.split(/^\[/m)[0];
+  const name = project?.match(/^name\s*=\s*["']([^"']+)["'][ \t]*(?:#.*)?$/m)?.[1];
+  if (name === "qubrics-mcp") return snapshotPath;
+  if (name === "sendmux-mcp") return "packages/python/mcp/sendmux_mcp/openapi";
+  throw new Error("Unsupported source MCP package identity");
+}
+
 // Read the immutable source, never substitute newer docs for missing snapshots.
 export async function checkSource({ sha, read, repo = controlRoot }) {
   immutableSha(sha);
+  const sourceSnapshots = await sourceSnapshotPath(read);
   const directory = mkdtempSync(join(tmpdir(), "sendmux-publication-specs-"));
   const hashes = {};
   try {
     for (const name of snapshots) {
-      const bytes = await read(`${snapshotPath}/${name}`);
+      const bytes = await read(`${sourceSnapshots}/${name}`);
       hashes[name] = digest(bytes);
       writeFileSync(join(directory, name), bytes);
     }
@@ -84,8 +93,9 @@ export async function checkCandidate({ repo, sha, releases = [] }) {
   const head = (await git({ repo, args: ["rev-parse", "HEAD"] })).trim();
   if (head !== sha) throw new Error(`Publishing checkout ${head} does not match candidate ${sha}`);
   const read = (file) => git({ repo, args: ["show", `${sha}:${file}`] });
+  const sourceSnapshots = await sourceSnapshotPath(read);
   for (const name of snapshots) {
-    const file = `${snapshotPath}/${name}`;
+    const file = `${sourceSnapshots}/${name}`;
     if (digest(readFileSync(join(repo, file))) !== digest(await read(file))) throw new Error(`Candidate snapshot changed: ${name}`);
   }
   for (const release of releases) {
@@ -375,6 +385,7 @@ async function main() {
     await preflight({ repo: resolve(options.repo ?? "."), sha: options.sha, receipt: options.receipt });
   } else if (command === "resolve") {
     const release = await resolveProducer(options.tag);
+    output("snapshot_path", await sourceSnapshotPath((file) => remoteFile({ sha: release.sha, file })));
     output("sha", release.sha); output("tag", release.tag); output("version", release.version); output("paths_released", [release.path]);
     console.log(JSON.stringify(release));
   } else if (command === "verify-release") {

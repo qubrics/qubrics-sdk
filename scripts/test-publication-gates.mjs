@@ -4,7 +4,7 @@ import { appendFileSync, existsSync, mkdirSync, mkdtempSync, realpathSync, rmSyn
 import { randomUUID } from "node:crypto";
 import { tmpdir } from "node:os";
 import { basename, dirname, join, resolve } from "node:path";
-import { git, snapshotPath } from "./publication-guard.mjs";
+import { git, sourceSnapshotPath } from "./publication-guard.mjs";
 
 const [command, flag, value, ...extra] = process.argv.slice(2);
 const parent = realpathSync(process.env.RUNNER_TEMP ?? tmpdir());
@@ -12,10 +12,14 @@ if (extra.length || !value) throw new Error("Expected diagnostic command and exp
 if (command === "prepare-negative" && flag === "--repo") {
   const directory = mkdtempSync(join(parent, "sendmux-publication-negative-"));
   try {
+    const sourceSha = (await git({ repo: resolve(value), args: ["rev-parse", "HEAD"] })).trim();
+    const read = (file) => git({ repo: resolve(value), args: ["show", `${sourceSha}:${file}`] });
+    const snapshotPath = await sourceSnapshotPath(read);
     mkdirSync(join(directory, snapshotPath), { recursive: true });
+    writeFileSync(join(directory, "packages/python/mcp/pyproject.toml"), await read("packages/python/mcp/pyproject.toml"));
     for (const name of ["openapi-app.json", "openapi-sending.json"]) {
       const file = `${snapshotPath}/${name}`;
-      const source = JSON.parse(await git({ repo: resolve(value), args: ["show", `HEAD:${file}`] }));
+      const source = JSON.parse(await read(file));
       source["x-sendmux-publication-negative"] = randomUUID();
       writeFileSync(join(directory, file), `${JSON.stringify(source)}\n`);
     }

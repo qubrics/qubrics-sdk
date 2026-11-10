@@ -40,7 +40,7 @@ for (const path of owners) {
     name = tomlField(`${path}/pyproject.toml`, "project", "name");
     version = tomlField(`${path}/pyproject.toml`, "project", "version");
     releaseType = "python";
-    const generatedInit = join(root, path, name.replaceAll("-", "_"), "__init__.py");
+    const generatedInit = join(root, path, "qubrics", path.split("/").at(-1), "__init__.py");
     if (existsSync(generatedInit)) {
       const generated = readFileSync(generatedInit, "utf8").match(/^__version__ = "([^"]+)"$/m)?.[1];
       if (generated) assert.equal(generated, version, `${path} generated __version__ must match project.version`);

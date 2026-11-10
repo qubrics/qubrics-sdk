@@ -11,13 +11,13 @@ import { startWindowsConsumer } from "./windows-consumer-owner.mjs";
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const nativePackages = ["core", "sending", "mailbox", "management", "sdk"];
 export const pythonPackages = [
-  { name: "core", distribution: "sendmux-core", module: "sendmux_core" },
-  { name: "sending", distribution: "sendmux-sending", module: "sendmux_sending" },
-  { name: "mailbox", distribution: "sendmux-mailbox", module: "sendmux_mailbox" },
-  { name: "management", distribution: "sendmux-management", module: "sendmux_management" },
-  { name: "sdk", distribution: "sendmux-sdk", module: "sendmux_sdk" },
-  { name: "mcp", distribution: "sendmux-mcp", module: "sendmux_mcp" },
-  { name: "langchain", distribution: "langchain-sendmux", module: "langchain_sendmux" },
+  { name: "core", distribution: "qubrics-core", module: "qubrics.core" },
+  { name: "sending", distribution: "qubrics-sending", module: "qubrics.sending" },
+  { name: "mailbox", distribution: "qubrics-mailbox", module: "qubrics.mailbox" },
+  { name: "management", distribution: "qubrics-management", module: "qubrics.management" },
+  { name: "sdk", distribution: "qubrics-sdk", module: "qubrics.sdk" },
+  { name: "mcp", distribution: "qubrics-mcp", module: "qubrics.mcp" },
+  { name: "langchain", distribution: "langchain-qubrics", module: "qubrics.langchain" },
 ];
 export const pythonVerificationCohorts = [
   { name: "native", packages: pythonPackages.filter(({ name }) => ["core", "sending", "mailbox", "management", "mcp"].includes(name)) },
@@ -258,9 +258,10 @@ prefix = pathlib.Path(sys.prefix).resolve()
 
 def archive_payload(archive_path, module):
     archive = pathlib.Path(archive_path)
+    module_path = module.replace('.', '/')
     if archive.suffix == '.whl':
         with zipfile.ZipFile(archive) as source:
-            members = {name: source.read(name) for name in source.namelist() if name.startswith(module + '/') and not name.endswith('/')}
+            members = {name: source.read(name) for name in source.namelist() if name.startswith(module_path + '/') and not name.endswith('/')}
             metadata_name = next(name for name in source.namelist() if name.endswith('.dist-info/METADATA'))
             metadata = email.parser.Parser().parsestr(source.read(metadata_name).decode())
     else:
@@ -268,9 +269,9 @@ def archive_payload(archive_path, module):
             files = [member for member in source.getmembers() if member.isfile()]
             members = {}
             for member in files:
-                marker = '/' + module + '/'
+                marker = '/' + module_path + '/'
                 if marker in member.name:
-                    name = module + '/' + member.name.split(marker, 1)[1]
+                    name = module_path + '/' + member.name.split(marker, 1)[1]
                     members[name] = source.extractfile(member).read()
             metadata_member = next(member for member in files if member.name.endswith('/PKG-INFO'))
             metadata = email.parser.Parser().parsestr(source.extractfile(metadata_member).read().decode())
@@ -288,7 +289,7 @@ for target in targets:
     assert distribution.version == metadata['Version'], (target['distribution'], distribution.version, metadata['Version'])
     module_root = location.parent
     for name, expected in members.items():
-        relative = pathlib.PurePosixPath(name).relative_to(target['module'])
+        relative = pathlib.PurePosixPath(name).relative_to(target['module'].replace('.', '/'))
         installed = module_root.joinpath(*relative.parts)
         assert installed.read_bytes() == expected, (target['distribution'], str(installed), target['archive'])
     print(json.dumps({'target_distribution': target['distribution'], 'version': distribution.version, 'module': target['module'], 'location': str(location), 'archive': target['archive'], 'matched_files': len(members)}))
@@ -303,11 +304,11 @@ for target in targets:
 
 target_names = {target['name'] for target in targets}
 if 'sdk' in target_names:
-    from sendmux_sdk import core, mailbox, management, sending
-    assert all(module.__name__.startswith('sendmux_') for module in [core, mailbox, management, sending])
+    from qubrics.sdk import core, mailbox, management, sending
+    assert all(module.__name__.startswith('qubrics.') for module in [core, mailbox, management, sending])
 if 'mcp' in target_names:
-    from sendmux_mcp.contract import load_contract
-    assert load_contract()['package']['identity'] == 'sendmux-mcp'
+    from qubrics.mcp.contract import load_contract
+    assert load_contract()['package']['identity'] == 'qubrics-mcp'
 `, "utf8");
   await run(python, ["provenance.py", JSON.stringify(targets)], { cwd: directory, env });
 }
@@ -354,7 +355,7 @@ export async function pythonArtifactConsumers({
 }) {
     const consumerEnv = { ...env, PYTHONPATH: "", PYTHONHOME: "", PYTHONNOUSERSITE: "1" };
     for (const name of Object.keys(consumerEnv)) {
-      if (name.startsWith("SENDMUX_")) delete consumerEnv[name];
+      if (name.startsWith("SENDMUX_") || name.startsWith("QUBRICS_")) delete consumerEnv[name];
     }
     for (const [kind, suffix] of artifactKinds) {
       const archives = readdirSync(distributions).filter((name) => name.endsWith(suffix));
@@ -366,7 +367,7 @@ export async function pythonArtifactConsumers({
         const python = join(consumer, "bin/python");
         await run(python, ["-m", "pip", "install", "--upgrade", "pip"], { cwd: consumer, env: consumerEnv });
         const testDependencies = kind === "wheel" && runWheelTests && cohort.name !== "sdk" ? ["pytest==8.4.1"] : [];
-        await run(python, ["-m", "pip", "install", ...cohortArchives, ...testDependencies], { cwd: consumer, env: consumerEnv });
+        await run(python, ["-m", "pip", "install", "--find-links", distributions, ...cohortArchives, ...testDependencies], { cwd: consumer, env: consumerEnv });
         await run(python, ["-m", "pip", "check"], { cwd: consumer, env: consumerEnv });
         await pythonProvenance(python, consumer, cohort.packages, cohortArchives, consumerEnv);
         if (kind === "wheel" && runWheelTests) await runPythonWheelTests(python, consumer, cohort, consumerEnv);

@@ -10,8 +10,8 @@ import httpx
 import pytest
 from fastmcp import Client
 
-from sendmux_mcp.config import ServerConfig
-from sendmux_mcp.server import create_server
+from qubrics.mcp.config import ServerConfig
+from qubrics.mcp.server import create_server
 
 FIXTURE = json.loads((Path(__file__).parents[4] / "scripts/fixtures/mailbox-session-discovery.json").read_text())
 

@@ -15,11 +15,11 @@ import pytest
 from fastmcp import Client
 from jsonschema import Draft202012Validator
 
-from sendmux_mcp.cli import parser, surfaces_from_args
-from sendmux_mcp.config import RetryConfig, ServerConfig, Surface
-from sendmux_mcp.contract import load_contract
-from sendmux_mcp.curation import TOOLS_BY_SURFACE
-from sendmux_mcp.hosted_proxy import (
+from qubrics.mcp.cli import parser, surfaces_from_args
+from qubrics.mcp.config import RetryConfig, ServerConfig, Surface
+from qubrics.mcp.contract import load_contract
+from qubrics.mcp.curation import TOOLS_BY_SURFACE
+from qubrics.mcp.hosted_proxy import (
     HostedOperationManifest,
     HostedOperationRoute,
     HostedProxyConfig,
@@ -27,12 +27,12 @@ from sendmux_mcp.hosted_proxy import (
     build_hosted_operation_manifest,
     path_template_pattern,
 )
-from sendmux_mcp.live_e2e import expected_api_error_exception
-from sendmux_mcp.retry import RetryingAsyncTransport
-from sendmux_mcp.security import middleware_for_config
-from sendmux_mcp.server import MCPHTTPTransport, create_server
-from sendmux_mcp.specs import load_spec, prepare_for_fastmcp
-from sendmux_mcp.verification import structured_result
+from qubrics.mcp.live_e2e import expected_api_error_exception
+from qubrics.mcp.retry import RetryingAsyncTransport
+from qubrics.mcp.security import middleware_for_config
+from qubrics.mcp.server import MCPHTTPTransport, create_server
+from qubrics.mcp.specs import load_spec, prepare_for_fastmcp
+from qubrics.mcp.verification import structured_result
 
 EXPECTED_TOOL_NAMES_BY_SURFACE = {
     "mailbox": {
@@ -597,13 +597,13 @@ def test_selected_surface_composition_exposes_exact_curated_tools() -> None:
         assert "management_list_domains" in all_names
         assert "sending_send_email" in all_names
         assert len(all_names) == len(mailbox_sending_names) + len(management_names)
-        assert all_surfaces._mcp_server.server_info.version == version("sendmux-mcp")
+        assert all_surfaces._mcp_server.server_info.version == version("qubrics-mcp")
         mounted_versions = [
             provider.server._mcp_server.server_info.version
             for provider in all_surfaces.providers
             if hasattr(provider, "server")
         ]
-        assert mounted_versions == [version("sendmux-mcp")] * 3
+        assert mounted_versions == [version("qubrics-mcp")] * 3
 
     asyncio.run(check())
 
@@ -646,7 +646,7 @@ def test_http_server_negotiates_modern_discovery_and_legacy_initialise() -> None
         assert modern.json()["result"]["supportedVersions"] == ["2026-07-28"]
         assert modern.json()["result"]["ttlMs"] == 0
         assert modern.json()["result"]["cacheScope"] == "private"
-        assert modern.json()["result"]["_meta"]["io.modelcontextprotocol/serverInfo"]["version"] == version("sendmux-mcp")
+        assert modern.json()["result"]["_meta"]["io.modelcontextprotocol/serverInfo"]["version"] == version("qubrics-mcp")
         assert "mcp-session-id" not in modern.headers
         assert modern_tools.status_code == 200
         assert modern_tools.json()["result"]["ttlMs"] == 0
@@ -654,7 +654,7 @@ def test_http_server_negotiates_modern_discovery_and_legacy_initialise() -> None
         assert "mcp-session-id" not in modern_tools.headers
         assert legacy.status_code == 200
         assert legacy.json()["result"]["protocolVersion"] == "2025-11-25"
-        assert legacy.json()["result"]["serverInfo"]["version"] == version("sendmux-mcp")
+        assert legacy.json()["result"]["serverInfo"]["version"] == version("qubrics-mcp")
 
     asyncio.run(check())
 
@@ -753,7 +753,7 @@ def test_live_e2e_expected_error_parser_handles_literal_eval_type_error(
     def raise_type_error(_value: str) -> object:
         raise TypeError("malformed node or string")
 
-    monkeypatch.setattr("sendmux_mcp.live_e2e.ast.literal_eval", raise_type_error)
+    monkeypatch.setattr("qubrics.mcp.live_e2e.ast.literal_eval", raise_type_error)
 
     assert not expected_api_error_exception(
         Exception("upstream - {'ok': False, 'error': {'code': 'not_found'}, 'meta': {'request_id': 'req_test'}}"),
@@ -771,7 +771,7 @@ def test_live_e2e_expected_error_parser_accepts_matching_api_error() -> None:
 def test_umbrella_cli_reads_surfaces_from_env(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("SENDMUX_MCP_SURFACES", "mailbox,sending")
 
-    args = parser(prog="sendmux-mcp").parse_args([])
+    args = parser(prog="qubrics-mcp").parse_args([])
 
     assert surfaces_from_args(args) == ("mailbox", "sending")
 

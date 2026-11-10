@@ -3,7 +3,7 @@ from __future__ import annotations
 import pytest
 from pydantic import ValidationError
 
-from sendmux_management import ManagementCreateMailboxRequest
+from qubrics.management import ManagementCreateMailboxRequest
 
 
 @pytest.mark.parametrize("email", ["agent@example.com\n", "agent@example.com\r", "agent@example.com\r\n"])
