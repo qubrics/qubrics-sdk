@@ -10,7 +10,7 @@
 
 Official SDK, CLI, and MCP workspace for Qubrics.
 
-Seven `@qubrics/*` npm packages await publication. Existing `@sendmux/*` releases remain available. Other ecosystems use the published names below until their separate migrations ship.
+Seven `@qubrics/*` npm packages are published. Existing `@sendmux/*` releases remain available. Other ecosystems use the published names below until their separate migrations ship.
 
 - Product documentation: [qubrics.com/docs](https://qubrics.com/docs)
 - Management API reference: [qubrics.com/docs/api/introduction](https://qubrics.com/docs/api/introduction)
