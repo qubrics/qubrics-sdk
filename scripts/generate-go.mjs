@@ -6,18 +6,18 @@ import { planDeprecatedModelAliases, planDeprecatedUnionMembers, reportPendingAl
 const root = process.cwd();
 const outputRoot = join(root, ".tmp", "go-codegen");
 const ogenVersion = "v1.14.0";
-const goModulePath = "sendmux.ai/go/v3";
+const goModulePath = "qubrics.com/go/v4";
 
 const surfaces = [
   {
     name: "sending",
     spec: ".codegen/openapi-sending.openapi-generator.codegen.json",
     tags: ["Attachments", "Emails", "Meta"],
-    defaultBaseUrl: "https://smtp.sendmux.ai/api/v1",
+    defaultBaseUrl: "https://smtp.qubrics.com/api/v1",
     keySurface: "sending",
     description: "Sending API",
     packageDoc: [
-      "Package sending contains the Sendmux Sending API client.",
+      "Package sending contains the Qubrics Sending API client.",
       "",
       "Create a client with New and a send-capable smx_mbx_ key or owner-approved smx_agent_ token",
       "prefix. The client exposes generated methods for the Sending API, typed",
@@ -29,11 +29,11 @@ const surfaces = [
     name: "mailbox",
     spec: ".codegen/openapi-app.openapi-generator.codegen.json",
     tags: ["Mailbox API"],
-    defaultBaseUrl: "https://app.sendmux.ai/api/v1",
+    defaultBaseUrl: "https://app.qubrics.com/api/v1",
     keySurface: "mailbox",
     description: "Mailbox API",
     packageDoc: [
-      "Package mailbox contains the Sendmux Mailbox API client.",
+      "Package mailbox contains the Qubrics Mailbox API client.",
       "",
       "Create a client with New and an smx_mbx_ key or scoped smx_agent_ token.",
       "The client exposes generated methods for mailbox reads, message",
@@ -89,11 +89,11 @@ const surfaces = [
       "Sending accounts",
       "Webhooks",
     ],
-    defaultBaseUrl: "https://app.sendmux.ai/api/v1",
+    defaultBaseUrl: "https://app.qubrics.com/api/v1",
     keySurface: "root",
     description: "Management API",
     packageDoc: [
-      "Package management contains the Sendmux Management API client.",
+      "Package management contains the Qubrics Management API client.",
       "",
       "Create a client with New and a root API key using the smx_root_ prefix. The",
       "client exposes generated methods for domains, mailboxes, sending accounts,",
@@ -488,7 +488,7 @@ function writeSurfaceFiles(surface, specPath) {
     `${packageDoc}
 package ${surface.name}
 
-// DefaultBaseURL is the production Sendmux ${surface.description} base URL.
+// DefaultBaseURL is the production Qubrics ${surface.description} base URL.
 const DefaultBaseURL = "${surface.defaultBaseUrl}"
 `,
   );
@@ -527,10 +527,10 @@ type sendmuxClientConfig struct {
 \tretryOptions core.RetryOptions
 }
 
-// SendmuxOption configures a Sendmux ${surface.description} client.
+// SendmuxOption configures a Qubrics ${surface.description} client.
 type SendmuxOption func(*sendmuxClientConfig)
 
-// WithBaseURL overrides the default Sendmux API base URL.
+// WithBaseURL overrides the default Qubrics API base URL.
 func WithBaseURL(baseURL string) SendmuxOption {
 \treturn func(config *sendmuxClientConfig) {
 \t\tif baseURL != "" {
@@ -555,7 +555,7 @@ func WithRetryOptions(options core.RetryOptions) SendmuxOption {
 \t}
 }
 
-// New returns a Sendmux ${surface.description} client authenticated with an API key.
+// New returns a Qubrics ${surface.description} client authenticated with an API key.
 func New(apiKey string, opts ...SendmuxOption) (*Client, error) {
 \tif apiKey == "" {
 \t\tapiKey = environmentValue("API_KEY", "")
@@ -581,7 +581,7 @@ func NewWithAccessToken(token string, opts ...SendmuxOption) (*Client, error) {
 // The provider must be safe for concurrent calls.
 func NewWithTokenProvider(provider func(context.Context) (string, error), opts ...SendmuxOption) (*Client, error) {
 \tif provider == nil {
-\t\treturn nil, errors.New("sendmux: token provider is required")
+\t\treturn nil, errors.New("qubrics: token provider is required")
 \t}
 \tconfig := sendmuxClientConfig{baseURL: environmentValue("BASE_URL", DefaultBaseURL)}
 \tfor _, opt := range opts {

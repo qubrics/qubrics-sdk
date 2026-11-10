@@ -12,7 +12,7 @@ type ErrorIssue struct {
 	Path    string `json:"path"`
 }
 
-// APIError is the typed Sendmux API error used across generated packages.
+// APIError is the typed Qubrics API error used across generated packages.
 type APIError struct {
 	Status    int          `json:"status"`
 	Code      string       `json:"code"`
@@ -25,25 +25,25 @@ type APIError struct {
 
 func (e *APIError) Error() string {
 	if e == nil {
-		return "sendmux: api error"
+		return "qubrics: api error"
 	}
 	if e.Code != "" && e.Message != "" {
-		return fmt.Sprintf("sendmux: %s: %s", e.Code, e.Message)
+		return fmt.Sprintf("qubrics: %s: %s", e.Code, e.Message)
 	}
 	if e.Message != "" {
-		return fmt.Sprintf("sendmux: %s", e.Message)
+		return fmt.Sprintf("qubrics: %s", e.Message)
 	}
 	if e.Code != "" {
-		return fmt.Sprintf("sendmux: %s", e.Code)
+		return fmt.Sprintf("qubrics: %s", e.Code)
 	}
-	return fmt.Sprintf("sendmux: api error status %d", e.Status)
+	return fmt.Sprintf("qubrics: api error status %d", e.Status)
 }
 
 // ErrorMessageFromResponse returns the stable error string for a generated error response.
 func ErrorMessageFromResponse(response any, status int) string {
 	apiError, ok := APIErrorFromResponse(response, status)
 	if !ok {
-		return fmt.Sprintf("sendmux: api error status %d", status)
+		return fmt.Sprintf("qubrics: api error status %d", status)
 	}
 	return apiError.Error()
 }
