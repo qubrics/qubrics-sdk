@@ -129,7 +129,7 @@ test(`workspace drift gate rejects changed ${relative}`, () => {
       writeFileSync(path, JSON.stringify(contract));
     } else {
       const source = readFileSync(path, "utf8");
-      const updated = source.replace(/qubrics-core>=[^,"]+,<[^"\n]+/, "qubrics-core>=2.0.0,<3.0.0");
+      const updated = source.replace(/("qubrics-core>=[^,"]+,)</, "$1=");
       assert.notEqual(updated, source);
       writeFileSync(path, updated);
     }
