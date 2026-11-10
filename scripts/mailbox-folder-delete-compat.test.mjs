@@ -38,9 +38,9 @@ assert MailboxFolderDeletedResponse.model_fields['data'].annotation is type(data
 test("Ruby preserves the old folder-delete model constant for existing callers", () => {
   const hasRbenv = existsSync(`${process.env.HOME}/.rbenv/bin/rbenv`) || existsSync("/opt/homebrew/bin/rbenv");
   runImport(hasRbenv ? "rbenv" : "bundle", [...(hasRbenv ? ["exec", "bundle", "exec"] : ["exec"]), "ruby", "-e", String.raw`
-require 'sendmux/mailbox'
+require 'qubrics/mailbox'
 Warning[:deprecated] = true
-models = Sendmux::Mailbox::Generated
+models = Qubrics::Mailbox::Generated
 legacy = models::MailboxFolderDeletedResponseAllOfData
 raise 'Old model has a different type' unless legacy.equal?(models::MailboxDraftDeleteResponseAllOfData)
 data = legacy.build_from_hash(deleted: true, id: 'fld_compat')

@@ -20,13 +20,13 @@ if (selected.length === 0) {
 }
 
 for (const pkg of selected) {
-  const localFiles = readdirSync(distDir).filter((file) => file.startsWith(`sendmux-${pkg.name}-`) && file.endsWith(".gem"));
+  const localFiles = readdirSync(distDir).filter((file) => file.startsWith(`qubrics-${pkg.name}-`) && file.endsWith(".gem"));
   if (localFiles.length !== 1) {
-    throw new Error(`Expected one local gem for sendmux-${pkg.name}, found ${localFiles.length}`);
+    throw new Error(`Expected one local gem for qubrics-${pkg.name}, found ${localFiles.length}`);
   }
   const [gemFile] = localFiles;
   if (!gemFile) {
-    throw new Error(`No local gem found for sendmux-${pkg.name}`);
+    throw new Error(`No local gem found for qubrics-${pkg.name}`);
   }
   run("gem", ["push", join(distDir, gemFile)]);
 }

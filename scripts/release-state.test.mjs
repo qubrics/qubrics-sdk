@@ -18,7 +18,7 @@ const config = readJson("release-please-config.json");
 const owners = [
   ...packagePaths("ts", "package.json"),
   ...packagePaths("python", "pyproject.toml"),
-  ...packagePaths("ruby", (name) => `sendmux-${name}.gemspec`),
+  ...packagePaths("ruby", (name) => `qubrics-${name}.gemspec`),
   "go", "rust",
 ].sort();
 assert.deepEqual(Object.keys(manifest).sort(), owners, "Release manifest owners must match native packages (PHP uses split tags)");

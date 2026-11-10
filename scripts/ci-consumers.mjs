@@ -403,17 +403,17 @@ export async function rubyConsumer() {
     const archives = readdirSync(distributions).filter((name) => name.endsWith(".gem"));
     assert.equal(archives.length, 5);
     for (const name of nativePackages) {
-      const matches = archives.filter((file) => file.startsWith(`sendmux-${name}-`));
+      const matches = archives.filter((file) => file.startsWith(`qubrics-${name}-`));
       assert.equal(matches.length, 1);
       await run("gem", ["install", "--no-document", join(distributions, matches[0])], { cwd: directory, env });
     }
     await run("gem", ["install", "--no-document", "minitest", "-v", "5.27.0"], { cwd: directory, env });
     writeFileSync(join(directory, "provenance.rb"), `require 'json'
-%w[core sending mailbox management sdk].each { |name| require "sendmux/#{name}" }
-loaded = $LOADED_FEATURES.select { |file| file.include?('/sendmux/') }
-abort('No installed Sendmux modules loaded') if loaded.empty?
+%w[core sending mailbox management sdk].each { |name| require "qubrics/#{name}" }
+loaded = $LOADED_FEATURES.select { |file| file.include?('/qubrics/') }
+abort('No installed Qubrics modules loaded') if loaded.empty?
 loaded.each do |file|
-  abort('Non-candidate Sendmux import') unless File.realpath(file).start_with?(File.realpath(ENV.fetch('GEM_HOME')) + File::SEPARATOR)
+  abort('Non-candidate Qubrics import') unless File.realpath(file).start_with?(File.realpath(ENV.fetch('GEM_HOME')) + File::SEPARATOR)
 end
 puts JSON.generate(installed_files: loaded)
 `);

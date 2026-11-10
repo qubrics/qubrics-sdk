@@ -1,24 +1,24 @@
 # frozen_string_literal: true
 
 require 'minitest/autorun'
-require 'sendmux/management'
+require 'qubrics/management'
 
-class SendmuxRubyManagementValidationTest < Minitest::Test
+class QubricsRubyManagementValidationTest < Minitest::Test
   def test_mailbox_email_validation_matches_the_full_value
     ["x\nvalid@example.com", "valid@example.com\n", "valid@example.com\r", "valid@example.com\r\n"].each do |email|
       assert_raises(ArgumentError) do
-        Sendmux::Management::Generated::ManagementCreateMailboxRequest.new(email: email)
+        Qubrics::Management::Generated::ManagementCreateMailboxRequest.new(email: email)
       end
     end
 
-    request = Sendmux::Management::Generated::ManagementCreateMailboxRequest.new(email: 'valid@example.com')
+    request = Qubrics::Management::Generated::ManagementCreateMailboxRequest.new(email: 'valid@example.com')
     assert_equal 'valid@example.com', request.email
   end
 
   def test_nullable_delivery_log_constraints_accept_nil
     models = [
-      Sendmux::Management::Generated::DeliveryLogItem.new(delivery_log_attributes),
-      Sendmux::Management::Generated::DeliveryLogDetail.new(delivery_log_attributes.merge(recipients: nil))
+      Qubrics::Management::Generated::DeliveryLogItem.new(delivery_log_attributes),
+      Qubrics::Management::Generated::DeliveryLogDetail.new(delivery_log_attributes.merge(recipients: nil))
     ]
 
     models.each do |model|
@@ -28,14 +28,14 @@ class SendmuxRubyManagementValidationTest < Minitest::Test
 
   def test_nullable_ses_limit_constraints_accept_nil
     models = [
-      Sendmux::Management::Generated::SharedAmazonSesLimit.new(
+      Qubrics::Management::Generated::SharedAmazonSesLimit.new(
         can_request_increase: true,
         daily_limit: nil,
         is_near_limit: false,
         sent_today: 0,
         threshold_usage: nil
       ),
-      Sendmux::Management::Generated::SharedAmazonSesLimitRequest.new(
+      Qubrics::Management::Generated::SharedAmazonSesLimitRequest.new(
         approved_daily_limit: nil,
         created_at: '2026-09-16T00:00:00Z',
         current_daily_limit: 100,
@@ -52,7 +52,7 @@ class SendmuxRubyManagementValidationTest < Minitest::Test
 
   def test_provider_item_reports_invalid_variables_without_raising
     [nil, 'not-a-hash'].each do |variables|
-      model = Sendmux::Management::Generated::ProviderItem.new(provider_item_attributes.merge(variables: variables))
+      model = Qubrics::Management::Generated::ProviderItem.new(provider_item_attributes.merge(variables: variables))
 
       errors = assert_public_validation(model, expected_valid: false)
       assert_includes errors, 'invalid value for "variables", variables cannot be nil.'
@@ -61,7 +61,7 @@ class SendmuxRubyManagementValidationTest < Minitest::Test
 
   def test_non_null_out_of_range_values_stay_invalid
     assert_raises(ArgumentError) do
-      Sendmux::Management::Generated::DeliveryLogItem.new(
+      Qubrics::Management::Generated::DeliveryLogItem.new(
         delivery_log_attributes.merge(recipient_count: 51)
       )
     end
@@ -93,13 +93,13 @@ class SendmuxRubyManagementValidationTest < Minitest::Test
   end
 
   def provider_item_attributes
-    actions = Sendmux::Management::Generated::ProviderAllowedActions.new(
+    actions = Qubrics::Management::Generated::ProviderAllowedActions.new(
       activate: true, deactivate: true, delete: true, test: true, update: true, update_variables: true
     )
     {
       allowed_actions: actions, created_at: '2026-09-16T00:00:00Z', has_refresh_token: false,
       has_smtp_password: true, id: 'provider_fixture', is_active: true, is_editable: true, is_shared: false,
-      name: 'Provider fixture', quotas: Sendmux::Management::Generated::ProviderQuotas.new, status: 'active',
+      name: 'Provider fixture', quotas: Qubrics::Management::Generated::ProviderQuotas.new, status: 'active',
       type: 'smtp', updated_at: '2026-09-16T00:00:00Z', variables: {}
     }
   end

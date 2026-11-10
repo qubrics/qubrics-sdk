@@ -16,8 +16,8 @@ if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1]
 
   for (const name of packages) {
     const version = readVersion(name);
-    const gemFile = `sendmux-${name}-${version}.gem`;
-    run(gem, ["build", `sendmux-${name}.gemspec`], { cwd: `${root}/packages/ruby/${name}` });
+    const gemFile = `qubrics-${name}-${version}.gem`;
+    run(gem, ["build", `qubrics-${name}.gemspec`], { cwd: `${root}/packages/ruby/${name}` });
     run(gem, ["specification", gemFile, "name"], { cwd: `${root}/packages/ruby/${name}` });
     rmSync(`${root}/packages/ruby/${name}/${gemFile}`, { force: true });
   }
@@ -45,7 +45,7 @@ function commandWithRbenv(command) {
 
 function readVersion(name) {
   const moduleName = name === "sdk" ? "sdk" : name;
-  const source = readFileSync(`${root}/packages/ruby/${name}/lib/sendmux/${moduleName}/version.rb`, "utf8");
+  const source = readFileSync(`${root}/packages/ruby/${name}/lib/qubrics/${moduleName}/version.rb`, "utf8");
   const match = source.match(/VERSION = ['"]([^'"]+)['"]/);
   if (!match) {
     throw new Error(`Could not read Ruby version for ${name}`);
@@ -58,17 +58,17 @@ export function checkRubyDependencyFloors({ root: fixtureRoot = root, changedPac
   const dependencyChecks = [
     {
       packageName: "sending",
-      gemspecPath: "packages/ruby/sending/sendmux-sending.gemspec",
-      dependencies: [["sendmux-core", manifest["packages/ruby/core"]]],
+      gemspecPath: "packages/ruby/sending/qubrics-sending.gemspec",
+      dependencies: [["qubrics-core", manifest["packages/ruby/core"]]],
     },
     {
       packageName: "sdk",
-      gemspecPath: "packages/ruby/sdk/sendmux-sdk.gemspec",
+      gemspecPath: "packages/ruby/sdk/qubrics-sdk.gemspec",
       dependencies: [
-        ["sendmux-core", manifest["packages/ruby/core"]],
-        ["sendmux-mailbox", manifest["packages/ruby/mailbox"]],
-        ["sendmux-management", manifest["packages/ruby/management"]],
-        ["sendmux-sending", manifest["packages/ruby/sending"]],
+        ["qubrics-core", manifest["packages/ruby/core"]],
+        ["qubrics-mailbox", manifest["packages/ruby/mailbox"]],
+        ["qubrics-management", manifest["packages/ruby/management"]],
+        ["qubrics-sending", manifest["packages/ruby/sending"]],
       ],
     },
   ];
@@ -101,9 +101,9 @@ export function checkRubyDependencyFloors({ root: fixtureRoot = root, changedPac
 
 function checkGeneratedRubyHeaderStringification() {
   const generatedClients = [
-    "packages/ruby/sending/lib/sendmux_sending_generated/api_client.rb",
-    "packages/ruby/mailbox/lib/sendmux_mailbox_generated/api_client.rb",
-    "packages/ruby/management/lib/sendmux_management_generated/api_client.rb",
+    "packages/ruby/sending/lib/qubrics_sending_generated/api_client.rb",
+    "packages/ruby/mailbox/lib/qubrics_mailbox_generated/api_client.rb",
+    "packages/ruby/management/lib/qubrics_management_generated/api_client.rb",
   ];
 
   for (const clientPath of generatedClients) {
@@ -123,7 +123,7 @@ function checkGeneratedRubyHeaderStringification() {
   }
 
   const attachmentsSource = readFileSync(
-    `${root}/packages/ruby/sending/lib/sendmux_sending_generated/api/attachments_api.rb`,
+    `${root}/packages/ruby/sending/lib/qubrics_sending_generated/api/attachments_api.rb`,
     "utf8",
   );
   for (const expected of [

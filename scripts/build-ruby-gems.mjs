@@ -13,10 +13,10 @@ mkdirSync(distDir, { recursive: true });
 for (const name of packages) {
   const version = readVersion(name);
   const packageDir = join(root, "packages", "ruby", name);
-  run(gem, ["build", `sendmux-${name}.gemspec`], { cwd: packageDir });
-  const built = readdirSync(packageDir).find((file) => file === `sendmux-${name}-${version}.gem`);
+  run(gem, ["build", `qubrics-${name}.gemspec`], { cwd: packageDir });
+  const built = readdirSync(packageDir).find((file) => file === `qubrics-${name}-${version}.gem`);
   if (!built) {
-    throw new Error(`No gem built for sendmux-${name}`);
+    throw new Error(`No gem built for qubrics-${name}`);
   }
   renameSync(join(packageDir, built), join(distDir, built));
 }
@@ -31,7 +31,7 @@ function commandWithRbenv(command) {
 }
 
 function readVersion(name) {
-  const source = readFileSync(join(root, "packages", "ruby", name, "lib", "sendmux", name, "version.rb"), "utf8");
+  const source = readFileSync(join(root, "packages", "ruby", name, "lib", "qubrics", name, "version.rb"), "utf8");
   const match = source.match(/VERSION = ['"]([^'"]+)['"]/);
   if (!match) {
     throw new Error(`Could not read Ruby version for ${name}`);

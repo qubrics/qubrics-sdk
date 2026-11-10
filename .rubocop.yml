@@ -5,8 +5,8 @@ AllCops:
   Exclude:
     - ".tmp/**/*"
     - "vendor/**/*"
-    - "packages/ruby/*/lib/sendmux_*_generated/**/*"
-    - "packages/ruby/*/lib/sendmux_*_generated.rb"
+    - "packages/ruby/*/lib/qubrics_*_generated/**/*"
+    - "packages/ruby/*/lib/qubrics_*_generated.rb"
 
 Gemspec/RequireMFA:
   Enabled: false

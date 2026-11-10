@@ -1,48 +1,48 @@
 PATH
   remote: packages/ruby/core
   specs:
-    sendmux-core (1.3.0)
+    qubrics-core (1.3.0)
       faraday (~> 2.0)
       faraday-retry (>= 2.4, < 3.0)
 
 PATH
   remote: packages/ruby/mailbox
   specs:
-    sendmux-mailbox (2.0.2)
+    qubrics-mailbox (2.0.2)
       faraday (~> 2.0)
       faraday-multipart (~> 1.0)
       faraday-retry (>= 2.4, < 3.0)
       marcel (~> 1.0)
-      sendmux-core (>= 1.3.0, < 2.0)
+      qubrics-core (>= 1.3.0, < 2.0)
 
 PATH
   remote: packages/ruby/management
   specs:
-    sendmux-management (2.0.1)
+    qubrics-management (2.0.1)
       faraday (~> 2.0)
       faraday-multipart (~> 1.0)
       faraday-retry (>= 2.4, < 3.0)
       marcel (~> 1.0)
-      sendmux-core (>= 1.3.0, < 2.0)
+      qubrics-core (>= 1.3.0, < 2.0)
 
 PATH
   remote: packages/ruby/sdk
   specs:
-    sendmux-sdk (2.0.0)
-      sendmux-core (>= 1.3.0, < 2.0)
-      sendmux-mailbox (>= 2.0.2, < 3.0)
-      sendmux-management (>= 2.0.1, < 3.0)
-      sendmux-sending (>= 1.5.0, < 2.0)
+    qubrics-sdk (2.0.0)
+      qubrics-core (>= 1.3.0, < 2.0)
+      qubrics-mailbox (>= 2.0.2, < 3.0)
+      qubrics-management (>= 2.0.1, < 3.0)
+      qubrics-sending (>= 1.5.0, < 2.0)
 
 PATH
   remote: packages/ruby/sending
   specs:
-    sendmux-sending (1.5.0)
+    qubrics-sending (1.5.0)
       faraday (~> 2.0)
       faraday-multipart (~> 1.0)
       faraday-retry (>= 2.4, < 3.0)
       marcel (~> 1.0)
-      sendmux-core (>= 1.3.0, < 2.0)
+      qubrics-core (>= 1.3.0, < 2.0)
 
 GEM
   remote: https://rubygems.org/
@@ -102,13 +102,13 @@ PLATFORMS
 
 DEPENDENCIES
   minitest (~> 5.25)
+  qubrics-core!
+  qubrics-mailbox!
+  qubrics-management!
+  qubrics-sdk!
+  qubrics-sending!
   rake (~> 13.2)
   rubocop (~> 1.81)
-  sendmux-core!
-  sendmux-mailbox!
-  sendmux-management!
-  sendmux-sdk!
-  sendmux-sending!
 
 RUBY VERSION
    ruby 3.4.1p0
