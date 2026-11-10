@@ -31,5 +31,14 @@ jobs:
           Invoke-WebRequest https://download.sysinternals.com/files/Handle.zip -OutFile $archive
           Expand-Archive -LiteralPath $archive -DestinationPath $directory
           "SDK343_HANDLE64=$(Join-Path $directory 'handle64.exe')" >> $env:GITHUB_ENV
+      - run: pnpm -r --if-present build
+      - run: pnpm verify:ts-public-api
+      - run: pnpm verify:tree-shaking
+      - run: pnpm test:ts-helpers
+      - run: pnpm test:connections
+      - run: pnpm test:windows-command-shims
+      - run: pnpm check:cli
+      - name: Diagnose actual Windows consumer ownership
+        run: node scripts/diagnose-windows-consumer-ownership.mjs .tmp/windows-consumer-ownership
       - name: Run sensitivity once and capture first fixture EBUSY
         run: node scripts/test-windows-consumer-sensitivity.mjs
