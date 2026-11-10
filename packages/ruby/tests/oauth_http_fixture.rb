@@ -3,7 +3,7 @@
 require 'socket'
 require 'json'
 
-module SendmuxRubyOAuthHTTPFixture
+module QubricsRubyOAuthHTTPFixture
   CONNECTION = {
     ok: true,
     data: {

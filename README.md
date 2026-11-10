@@ -200,6 +200,18 @@ Maintainers: use the [protected live E2E matrix](docs/live-e2e-matrix.md) for cr
 
 ## Versioning and support
 
+### Ruby source migration
+
+Ruby source in this checkout uses the `Qubrics` module. The replacements below are awaiting publication. Use the published Sendmux install commands in the Packages table until then.
+
+| Published gem | Replacement and target version | Source require |
+| --- | --- | --- |
+| `sendmux-core` | `qubrics-core` 2.0.0 | `qubrics/core` |
+| `sendmux-sending` | `qubrics-sending` 2.0.0 | `qubrics/sending` |
+| `sendmux-mailbox` | `qubrics-mailbox` 3.0.0 | `qubrics/mailbox` |
+| `sendmux-management` | `qubrics-management` 3.0.0 | `qubrics/management` |
+| `sendmux-sdk` | `qubrics-sdk` 3.0.0 | `qubrics/sdk` |
+
 ### Maintain package contracts
 
 In a source checkout, maintainers can inspect the generated [MCP package contract](packages/python/mcp/sendmux_mcp/mcp-contract.json) for the actual tool catalogue, schemas, upload workflows, hosted resource, and frozen protocol revisions. It describes this checkout, not the version already available from a package registry. Source hashes and native distribution metadata bind the artifact to its inputs; local transports and upstream API origins are separate from the hosted OAuth resource.

@@ -22,6 +22,7 @@ const hash = (bytes) => createHash("sha256").update(bytes).digest("hex");
 
 function seedFreshnessSources(repo) {
   const write = (file, value) => { mkdirSync(resolve(repo, file, ".."), { recursive: true }); writeFileSync(join(repo, file), value); };
+  write("packages/python/mcp/pyproject.toml", '[project]\nname = "sendmux-mcp"\n');
   write("packages/python/mcp/sendmux_mcp/server.py", "fixture-server");
   write("packages/python/mcp/sendmux_mcp/mcp-contract.json", JSON.stringify({ tools: { by_surface: { mailbox: [{ name: "mailbox_list", input_schema: { type: "object" }, description: "List messages" }] } }, provenance: { sources: { "server.py": hash("fixture-server") } } }));
   write("packages/ts/cli/src/generated/operations.ts", 'export const operations = {\n  mailboxList: {"command":"mailbox:list","operationId":"mailboxList","surface":"mailbox"}\n} as const satisfies Record<string, OperationDefinition>;\n');
@@ -215,8 +216,15 @@ async function releaseFixture(t, options = {}) {
   const config = { "release-type": "node", "include-component-in-tag": true, "sequential-calls": true,
     "separate-pull-requests": true, packages: { "packages/ts/cli": { component: "ts-cli", "package-name": "@sendmux/cli" } } };
   if (options.customLabels) config.label = "custom pending";
+  if (options.rubyNamespace) {
+    const versionFile = `lib/${options.rubyNamespace}/core/version.rb`;
+    config.packages["packages/ruby/core"] = { component: "ruby-core", "package-name": `${options.rubyNamespace}-core`,
+      "release-type": "ruby", "version-file": versionFile };
+    mkdirSync(join(local.repo, "packages/ruby/core", versionFile, ".."), { recursive: true });
+    writeFileSync(join(local.repo, "packages/ruby/core", versionFile), "module Fixture\n  VERSION = '1.2.3'\nend\n");
+  }
   mkdirSync(join(local.repo, "packages/ts/cli"), { recursive: true });
-  writeFileSync(join(local.repo, "packages/python/mcp/pyproject.toml"), '[project]\nversion = "1.2.3"\n');
+  writeFileSync(join(local.repo, "packages/python/mcp/pyproject.toml"), '[project]\nname = "sendmux-mcp"\nversion = "1.2.3"\n');
   mkdirSync(join(local.repo, "packages/python/langchain"), { recursive: true });
   writeFileSync(join(local.repo, "packages/python/langchain/pyproject.toml"), '[project]\nname = "langchain-sendmux"\nversion = "1.2.3"\n');
   mkdirSync(join(local.repo, ".github/workflows"), { recursive: true });
@@ -398,6 +406,21 @@ test("no pending candidate permits guarded PR maintenance with no publisher iden
   assert.deepEqual(receipt.candidates, []);
   assert.deepEqual(receipt.releases, []);
   assert.deepEqual(receipt.checked.map((entry) => entry.sha), [candidate.sha]);
+});
+
+for (const namespace of ["qubrics", "sendmux"]) test(`candidate accepts ${namespace} Ruby metadata from its immutable release`, async (t) => {
+  const candidate = await releaseFixture(t, { tagExists: true, rubyNamespace: namespace });
+  const release = { path: "packages/ruby/core", tag: "ruby-core-v1.2.3", version: "1.2.3", sha: candidate.sha };
+  const configFile = join(candidate.repo, "release-please-config.json");
+  const changedConfig = JSON.parse(readFileSync(configFile, "utf8"));
+  changedConfig.packages[release.path]["version-file"] = "lib/uncommitted/core/version.rb";
+  writeFileSync(configFile, JSON.stringify(changedConfig));
+  const command = ["candidate", "--repo", candidate.repo, "--sha", candidate.sha];
+  const { stdout } = await candidate.runCommand(command, { PUBLICATION_RELEASES: JSON.stringify([release]) });
+  assert.match(stdout, new RegExp(candidate.sha));
+  await assert.rejects(candidate.runCommand(command, { PUBLICATION_RELEASES: JSON.stringify([{ ...release, version: "9.9.9" }]) }),
+    (error) => /Native version does not match release/.test(error.stderr));
+  assert.ok(candidate.queries.every((query) => query.method === "GET"));
 });
 
 test("recovery resolves the tag commit and rejects a manual version/source mismatch", async (t) => {

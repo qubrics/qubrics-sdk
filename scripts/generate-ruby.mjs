@@ -11,23 +11,23 @@ const surfaces = [
   {
     name: "sending",
     moduleName: "Sending",
-    gemName: "sendmux-sending",
-    generatedGemName: "sendmux_sending_generated",
+    gemName: "qubrics-sending",
+    generatedGemName: "qubrics_sending_generated",
     spec: ".codegen/openapi-sending.openapi-generator.codegen.json",
     tags: ["Attachments", "Emails", "Meta"],
     keySurface: "SENDING",
-    defaultBaseUrl: "https://smtp.sendmux.ai/api/v1",
+    defaultBaseUrl: "https://smtp.qubrics.com/api/v1",
     modelNameMappings: [],
   },
   {
     name: "mailbox",
     moduleName: "Mailbox",
-    gemName: "sendmux-mailbox",
-    generatedGemName: "sendmux_mailbox_generated",
+    gemName: "qubrics-mailbox",
+    generatedGemName: "qubrics_mailbox_generated",
     spec: ".codegen/openapi-app.openapi-generator.codegen.json",
     tags: ["Mailbox API"],
     keySurface: "MAILBOX",
-    defaultBaseUrl: "https://app.sendmux.ai/api/v1",
+    defaultBaseUrl: "https://app.qubrics.com/api/v1",
     modelNameMappings: ["ApiError=ApiErrorResponse"],
     // Generated constants dropped by a schema regeneration that still resolve, as deprecated constants,
     // until the next planned major. An entry may land ahead of the regeneration that drops its
@@ -46,8 +46,8 @@ const surfaces = [
   {
     name: "management",
     moduleName: "Management",
-    gemName: "sendmux-management",
-    generatedGemName: "sendmux_management_generated",
+    gemName: "qubrics-management",
+    generatedGemName: "qubrics_management_generated",
     spec: ".codegen/openapi-app.openapi-generator.codegen.json",
     tags: [
       "Billing",
@@ -62,7 +62,7 @@ const surfaces = [
       "Webhooks",
     ],
     keySurface: "ROOT",
-    defaultBaseUrl: "https://app.sendmux.ai/api/v1",
+    defaultBaseUrl: "https://app.qubrics.com/api/v1",
     modelNameMappings: ["ApiError=ApiErrorResponse"],
     // Dropped once the API publishes nullable references as anyOf: [{ $ref }, { type: "null" }].
     deprecatedModelAliases: [
@@ -94,7 +94,7 @@ for (const surface of surfaces) {
     templateDir,
     `--additional-properties=${[
       `gemName=${surface.generatedGemName}`,
-      `moduleName=Sendmux::${surface.moduleName}::Generated`,
+      `moduleName=Qubrics::${surface.moduleName}::Generated`,
       "gemVersion=1.0.0",
       "gemLicense=MIT",
       "gemHomepage=https://github.com/qubrics/qubrics-sdk",
@@ -142,6 +142,8 @@ console.log("Generated Ruby SDK packages");
 
 function writeFilteredSpec(surface) {
   const source = JSON.parse(readFileSync(join(root, surface.spec), "utf8"));
+  source.info.title = source.info.title.replaceAll("Sendmux", "Qubrics");
+  source.info.description = source.info.description.replaceAll("Sendmux", "Qubrics");
   prepareNilSafeValidation(source, surface);
   const allowed = new Set(surface.tags);
   const paths = {};
@@ -165,7 +167,7 @@ function writeFilteredSpec(surface) {
   }
 
   const outputPath = join(outputRoot, `${surface.name}.openapi-generator.codegen.json`);
-  writeFileSync(outputPath, `${JSON.stringify(pruneComponents({ ...source, paths }), null, 2)}\n`);
+  writeFileSync(outputPath, `${JSON.stringify(pruneComponents({ ...source, paths, servers: [{ url: surface.defaultBaseUrl }] }), null, 2)}\n`);
   return outputPath;
 }
 
@@ -291,10 +293,10 @@ function writeSurfaceClient(surface, packageDir) {
   const accessors = apiClasses.map((apiClass) => createAccessor(apiClass)).join("\n\n");
 
   writeFileSync(
-    join(packageDir, "lib", "sendmux", surface.name, "client.rb"),
+    join(packageDir, "lib", "qubrics", surface.name, "client.rb"),
     `# frozen_string_literal: true
 
-module Sendmux
+module Qubrics
   module ${surface.moduleName}
     DEFAULT_BASE_URL = '${surface.defaultBaseUrl}'
 
@@ -313,7 +315,7 @@ module Sendmux
       def call_api(...)
         super
       rescue Generated::ApiError => e
-        raise Sendmux::Core::ErrorMapper.map(e)
+        raise Qubrics::Core::ErrorMapper.map(e)
       end
 
       private
@@ -338,14 +340,14 @@ module Sendmux
       def initialize(api_key: nil, access_token: nil, base_url: nil, retry_options: nil)
         qubrics_base_url = ENV.fetch('QUBRICS_BASE_URL', nil)
         qubrics_base_url = nil if qubrics_base_url&.empty?
-        @configuration = Sendmux::Core::Auth.configure_bearer(
+        @configuration = Qubrics::Core::Auth.configure_bearer(
           Generated::Configuration.new,
           api_key,
-          Sendmux::Core::ApiKeySurface::${surface.keySurface},
+          Qubrics::Core::ApiKeySurface::${surface.keySurface},
           base_url: base_url || qubrics_base_url || ENV.fetch('SENDMUX_BASE_URL', DEFAULT_BASE_URL),
           access_token: access_token
         )
-        Sendmux::Core::Retry.configure(@configuration, retry_options)
+        Qubrics::Core::Retry.configure(@configuration, retry_options)
         @api_client = ApiClient.new(@configuration)
       end
 
@@ -432,7 +434,7 @@ function writeDeprecatedModelAliases(surface, entryPath) {
     entryPath,
     `${generated.trimEnd()}
 
-module Sendmux::${surface.moduleName}::Generated
+module Qubrics::${surface.moduleName}::Generated
   # Deprecated model constants kept as aliases of their replacements until the next major release.
 ${constants}
 end

@@ -54,8 +54,8 @@ const mutations = {
   "rust version": (root) => mutateNativeVersion(root, "rust/Cargo.toml", /^version = "([^"]+)"$/m),
   "rust floor consumer lock": (root) => mutateNativeVersion(root, "rust/ci/floor-consumer/Cargo.lock", rustConsumerLockEntry),
   "rust floor consumer lock updater": (root) => editJson(join(root, "release-please-config.json"), (c) => { delete c.packages.rust["extra-files"]; }),
-  "ruby version": (root) => mutateNativeVersion(root, "packages/ruby/core/lib/sendmux/core/version.rb", /^\s*VERSION = '([^']+)'$/m),
-  "ruby identity": (root) => writeFileSync(join(root, "packages/ruby/core/sendmux-core.gemspec"), readFileSync(join(root, "packages/ruby/core/sendmux-core.gemspec"), "utf8").replace("spec.name = 'sendmux-core'", "spec.name = 'wrong-core'")),
+  "ruby version": (root) => mutateNativeVersion(root, "packages/ruby/core/lib/qubrics/core/version.rb", /^\s*VERSION = '([^']+)'$/m),
+  "ruby identity": (root) => writeFileSync(join(root, "packages/ruby/core/qubrics-core.gemspec"), readFileSync(join(root, "packages/ruby/core/qubrics-core.gemspec"), "utf8").replace("spec.name = 'qubrics-core'", "spec.name = 'wrong-core'")),
   "go identity": (root) => writeFileSync(join(root, "go/go.mod"), readFileSync(join(root, "go/go.mod"), "utf8").replace("module sendmux.ai/go", "module wrong.invalid/go")),
   "go tag convention": (root) => editJson(join(root, "release-please-config.json"), (c) => { c.packages.go["tag-separator"] = "-"; }),
   "missing manifest owner": (root) => editJson(join(root, ".release-please-manifest.json"), (m) => { delete m["packages/python/mcp"]; }),
@@ -84,7 +84,7 @@ test("native release gate accepts native versions without inventing Go or PHP fi
 for (const [language, owner, versionFile, lockFile] of [
   ["python", "packages/python/core", "packages/python/core/pyproject.toml"],
   ["rust", "rust", "rust/Cargo.toml", "rust/ci/floor-consumer/Cargo.lock"],
-  ["ruby", "packages/ruby/core", "packages/ruby/core/lib/sendmux/core/version.rb"],
+  ["ruby", "packages/ruby/core", "packages/ruby/core/lib/qubrics/core/version.rb"],
 ]) {
   test(`native release gate accepts synchronized future ${language} release and rejects its version mutation`, () => fixture((root) => {
     const manifest = readJson(join(root, ".release-please-manifest.json"));

@@ -158,8 +158,9 @@ async function assertNativeVersion({ release, read }) {
   else if (release.path.startsWith("packages/python/")) version = (await read(`${release.path}/pyproject.toml`)).match(/^version\s*=\s*"([^"]+)"/m)?.[1];
   else if (release.path === "rust") version = (await read("rust/Cargo.toml")).match(/^version\s*=\s*"([^"]+)"/m)?.[1];
   else if (release.path.startsWith("packages/ruby/")) {
-    const component = release.path.split("/").at(-1);
-    version = (await read(`${release.path}/lib/sendmux/${component}/version.rb`)).match(/VERSION\s*=\s*['"]([^'"]+)['"]/)?.[1];
+    const config = JSON.parse(await read("release-please-config.json"));
+    const versionFile = config.packages[release.path]["version-file"];
+    version = (await read(`${release.path}/${versionFile}`)).match(/VERSION\s*=\s*['"]([^'"]+)['"]/)?.[1];
   } else if (release.path === "go") return; // Go's module identity is the checked tag itself.
   else throw new Error(`Unsupported publication package: ${release.path}`);
   if (version !== release.version) throw new Error(`Native version does not match release ${release.tag}`);

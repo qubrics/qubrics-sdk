@@ -1,41 +1,43 @@
-# sendmux-management
+# qubrics-management
 
-[![Gem Version](https://badge.fury.io/rb/sendmux-management.svg)](https://rubygems.org/gems/sendmux-management)
+[![Gem Version](https://badge.fury.io/rb/qubrics-management.svg)](https://rubygems.org/gems/qubrics-management)
 [![CI](https://github.com/qubrics/qubrics-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/qubrics/qubrics-sdk/actions/workflows/ci.yml)
 [![Licence: MIT](https://img.shields.io/badge/licence-MIT-blue.svg)](https://github.com/qubrics/qubrics-sdk/blob/main/LICENSE)
 
-Ruby SDK package for the Sendmux Management API.
+Ruby SDK package for the Qubrics Management API.
 
 ## Documentation
 
-- Ruby SDK guide: https://sendmux.ai/docs/sdks/ruby
-- Management API reference: https://sendmux.ai/docs/api
+- Ruby SDK guide: https://qubrics.com/docs/sdks/ruby
+- Management API reference: https://qubrics.com/docs/api
 - Source: https://github.com/qubrics/qubrics-sdk/tree/main/packages/ruby/management
 - Changelog: https://github.com/qubrics/qubrics-sdk/blob/main/packages/ruby/management/CHANGELOG.md
 
 ## Requirements
 
 - Ruby 3.1 or newer.
-- A root Sendmux API key beginning with `smx_root_`.
+- A root Qubrics API key beginning with `smx_root_`.
 
-For OAuth, use a REST access token with the scopes and mailbox access required by the operation. See [OAuth for REST APIs](https://sendmux.ai/docs/developer-tools/oauth).
+For OAuth, use a REST access token with the scopes and mailbox access required by the operation. See [OAuth for REST APIs](https://qubrics.com/docs/developer-tools/oauth).
 
 ## Installation
 
+These commands target the Qubrics release of `qubrics-management`. Until it is published, install `sendmux-management` with its existing require paths and `Sendmux` module.
+
 ```sh
-gem install sendmux-management
+gem install qubrics-management
 ```
 
 Or add it to your Gemfile:
 
 ```ruby
-gem "sendmux-management", "~> 2.0"
+gem "qubrics-management", "~> 3.0"
 ```
 
-## Migrate from 1.x to 2.0
+## Provider model migration
 
-If you check sending-account result classes, update those checks when upgrading
-to 2.0. `management_list_providers` returns `ProviderListItem` entries instead of
+If you check sending-account result classes, update those checks to use the current
+models. `management_list_providers` returns `ProviderListItem` entries instead of
 `ProviderItem`. List entries don't expose `variables`; detail results remain
 `ProviderItem` and require a variables hash, which is empty when none are set.
 
@@ -43,11 +45,11 @@ to 2.0. `management_list_providers` returns `ProviderListItem` entries instead o
    point:
 
    ```ruby
-   require "sendmux/management"
+   require "qubrics/management"
 
    def provider_list_item?(item)
-     # Before: item.is_a?(Sendmux::Management::Generated::ProviderItem)
-     item.is_a?(Sendmux::Management::Generated::ProviderListItem)
+     # Before: item.is_a?(Qubrics::Management::Generated::ProviderItem)
+     item.is_a?(Qubrics::Management::Generated::ProviderListItem)
    end
    ```
 
@@ -73,9 +75,9 @@ to 2.0. `management_list_providers` returns `ProviderListItem` entries instead o
 Pass either `api_key:` or `access_token:`. `access_token:` accepts a bare token string or a callable; the callable is evaluated once per authenticated request. Your application owns token storage, expiry checks and refresh coordination.
 
 ```ruby
-require "sendmux/management"
+require "qubrics/management"
 
-client = Sendmux::Management::Client.new(
+client = Qubrics::Management::Client.new(
   access_token: -> { ENV.fetch("QUBRICS_ACCESS_TOKEN") }
 )
 ```
@@ -85,9 +87,9 @@ client = Sendmux::Management::Client.new(
 Create a management client with a root key for the API-key example below.
 
 ```ruby
-require "sendmux/management"
+require "qubrics/management"
 
-client = Sendmux::Management::Client.new(
+client = Qubrics::Management::Client.new(
   api_key: ENV.fetch("QUBRICS_ROOT_KEY")
 )
 
@@ -100,7 +102,7 @@ puts domains.data.length
 
 ### Client surface
 
-`Sendmux::Management::Client` exposes generated API groups:
+`Qubrics::Management::Client` exposes generated API groups:
 
 - `client.billing`
 - `client.connection`
@@ -121,8 +123,8 @@ Mutating generated operations accept option hashes. Use the core header helpers 
 
 ```ruby
 client.webhooks.management_create_webhook(
-  Sendmux::Core::Headers.idempotency_key("create-webhook-001").merge(
-    webhook_create_body: Sendmux::Management::Generated::WebhookCreateBody.new(
+  Qubrics::Core::Headers.idempotency_key("create-webhook-001").merge(
+    webhook_create_body: Qubrics::Management::Generated::WebhookCreateBody.new(
       url: "https://example.com/webhook",
       event_types: ["sendmux.test"]
     )
@@ -131,16 +133,16 @@ client.webhooks.management_create_webhook(
 
 client.domains.management_update_domain(
   "mdom_123",
-  Sendmux::Core::Headers.if_match('W/"etag"')
+  Qubrics::Core::Headers.if_match('W/"etag"')
 )
 ```
 
 ### Pagination and errors
 
-Use `Sendmux::Core.each_cursor` for list operations that return cursor pagination. Generated API errors are mapped to `Sendmux::Core::ApiError`.
+Use `Qubrics::Core.each_cursor` for list operations that return cursor pagination. Generated API errors are mapped to `Qubrics::Core::ApiError`.
 
 ```ruby
-pager = Sendmux::Core.each_cursor(lambda do |opts|
+pager = Qubrics::Core.each_cursor(lambda do |opts|
   client.mailboxes.management_list_mailboxes(opts.merge(limit: 50))
 end)
 
@@ -149,8 +151,8 @@ pager.each { |mailbox| puts mailbox.id }
 
 ## Support
 
-- Documentation: https://sendmux.ai/docs
-- Contact: contact@sendmux.ai
+- Documentation: https://qubrics.com/docs
+- Contact: contact@qubrics.com
 
 ## Licence
 

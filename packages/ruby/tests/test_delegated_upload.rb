@@ -2,11 +2,11 @@
 
 require 'json'
 require 'minitest/autorun'
-require 'sendmux/sdk'
+require 'qubrics/sdk'
 require_relative 'oauth_http_fixture'
 
-class SendmuxRubyDelegatedUploadTest < Minitest::Test
-  include SendmuxRubyOAuthHTTPFixture
+class QubricsRubyDelegatedUploadTest < Minitest::Test
+  include QubricsRubyOAuthHTTPFixture
 
   UPLOAD_RESPONSE = {
     ok: true, meta: { request_id: 'req_upload' },
@@ -17,7 +17,7 @@ class SendmuxRubyDelegatedUploadTest < Minitest::Test
   %w[qubrics sendmux].each do |family|
     define_method("test_#{family}_delegated_upload_does_not_read_or_leak_bearer_provider") do
       with_server(response: [201, {}, UPLOAD_RESPONSE]) do |url, requests|
-        client = Sendmux::SDK.sending(
+        client = Qubrics::SDK.sending(
           access_token: -> { raise 'Delegated upload must not read the bearer credential' }, base_url: url
         )
         client.attachments.sending_complete_attachment_upload(
@@ -33,7 +33,7 @@ class SendmuxRubyDelegatedUploadTest < Minitest::Test
     [false, true].each do |with_options|
       define_method("test_#{method}_retains_legacy_arguments_#{with_options ? 'with' : 'without'}_options") do
         with_server(response: [201, {}, UPLOAD_RESPONSE]) do |url, requests|
-          client = Sendmux::SDK.sending(
+          client = Qubrics::SDK.sending(
             access_token: -> { raise 'Delegated upload must not read the bearer credential' }, base_url: url
           )
           arguments = ['1234', 4, 'upl_aaaaaaaaaaaaaaaaaaaaaaaa', 'test']

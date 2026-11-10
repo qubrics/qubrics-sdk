@@ -2,9 +2,9 @@
 
 require 'json'
 require 'minitest/autorun'
-require 'sendmux/sdk'
+require 'qubrics/sdk'
 
-class SendmuxRubyDatetimeContractTest < Minitest::Test
+class QubricsRubyDatetimeContractTest < Minitest::Test
   def test_cost_query_preserves_instant_and_milliseconds
     [
       ['2026-10-05T12:00:00.123Z', '2026-10-05T12:00:00.123Z', '2026-10-05T12:00:01.123Z'],
@@ -40,7 +40,7 @@ class SendmuxRubyDatetimeContractTest < Minitest::Test
       ['2026-10-05T12:00:00.123456789Z', '2026-10-05T12:00:00.123456789Z']
     ].each do |timestamp, expected|
       client, requests = client_with_transport(:mailbox, :post, '/api/v1/mailbox/drafts/draft_test/send')
-      body = Sendmux::Mailbox::Generated::SendMailboxDraft.new(
+      body = Qubrics::Mailbox::Generated::SendMailboxDraft.new(
         expected_revision: 1, scheduled_for: Time.iso8601(timestamp)
       )
       client.mailbox_api.mailbox_send_draft('draft_test', body)
@@ -51,7 +51,7 @@ class SendmuxRubyDatetimeContractTest < Minitest::Test
 
   def test_scheduled_send_rejects_subnanosecond_precision_without_rounding
     client, requests = client_with_transport(:mailbox, :post, '/api/v1/mailbox/drafts/draft_test/send')
-    body = Sendmux::Mailbox::Generated::SendMailboxDraft.new(
+    body = Qubrics::Mailbox::Generated::SendMailboxDraft.new(
       expected_revision: 1,
       scheduled_for: Time.iso8601('2026-10-05T12:00:00Z') + Rational(1, 1_000_000_000_000)
     )
@@ -62,7 +62,7 @@ class SendmuxRubyDatetimeContractTest < Minitest::Test
 
   def test_scheduled_send_preserves_instant_with_second_granularity_timezone
     client, requests = client_with_transport(:mailbox, :post, '/api/v1/mailbox/drafts/draft_test/send')
-    body = Sendmux::Mailbox::Generated::SendMailboxDraft.new(
+    body = Qubrics::Mailbox::Generated::SendMailboxDraft.new(
       expected_revision: 1, scheduled_for: Time.iso8601('2026-10-05T12:00:00Z').getlocal(30)
     )
     client.mailbox_api.mailbox_send_draft('draft_test', body)
@@ -83,7 +83,7 @@ class SendmuxRubyDatetimeContractTest < Minitest::Test
 
   def client_with_transport(surface, method, route)
     requests = []
-    client = Sendmux::SDK.public_send(surface, access_token: 'test.token', base_url: 'https://sdk.example.invalid/api/v1')
+    client = Qubrics::SDK.public_send(surface, access_token: 'test.token', base_url: 'https://sdk.example.invalid/api/v1')
     stubs = Faraday::Adapter::Test::Stubs.new do |stub|
       stub.public_send(method, route) do |request|
         requests << { url: request.url, body: request.body }

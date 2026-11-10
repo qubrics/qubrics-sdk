@@ -14,7 +14,7 @@ root = Pathname.new(__dir__).parent
   $LOAD_PATH.unshift((root + path).to_s)
 end
 
-require 'sendmux/sdk'
+require 'qubrics/sdk'
 
 BODY_KEY_CACHE = {}
 
@@ -73,9 +73,9 @@ end
 def create_apis(surface)
   case surface
   when 'mailbox'
-    [Sendmux::SDK.mailbox(api_key: mailbox_api_key, base_url: app_base_url).mailbox_api]
+    [Qubrics::SDK.mailbox(api_key: mailbox_api_key, base_url: app_base_url).mailbox_api]
   when 'management'
-    client = Sendmux::SDK.management(api_key: root_api_key, base_url: app_base_url)
+    client = Qubrics::SDK.management(api_key: root_api_key, base_url: app_base_url)
     [
       client.billing,
       client.connection,
@@ -89,7 +89,7 @@ def create_apis(surface)
       client.webhooks
     ]
   when 'sending'
-    client = Sendmux::SDK.sending(api_key: mailbox_api_key, base_url: sending_base_url)
+    client = Qubrics::SDK.sending(api_key: mailbox_api_key, base_url: sending_base_url)
     [client.attachments, client.emails, client.meta]
   else
     raise "Unknown surface: #{surface}"
@@ -298,11 +298,11 @@ def snake_case(value)
 end
 
 def app_base_url
-  ENV['SENDMUX_LIVE_E2E_APP_BASE_URL'] || ENV['SENDMUX_STAGING_APP_BASE_URL'] || 'https://app.sendmux.ai/api/v1'
+  ENV['SENDMUX_LIVE_E2E_APP_BASE_URL'] || ENV['SENDMUX_STAGING_APP_BASE_URL'] || 'https://app.qubrics.com/api/v1'
 end
 
 def sending_base_url
-  ENV['SENDMUX_LIVE_E2E_SENDING_BASE_URL'] || ENV['SENDMUX_STAGING_SMTP_BASE_URL'] || 'https://smtp.sendmux.ai/api/v1'
+  ENV['SENDMUX_LIVE_E2E_SENDING_BASE_URL'] || ENV['SENDMUX_STAGING_SMTP_BASE_URL'] || 'https://smtp.qubrics.com/api/v1'
 end
 
 def root_api_key

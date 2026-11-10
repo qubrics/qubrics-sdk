@@ -1,15 +1,15 @@
-# sendmux-mailbox
+# qubrics-mailbox
 
-[![Gem Version](https://badge.fury.io/rb/sendmux-mailbox.svg)](https://rubygems.org/gems/sendmux-mailbox)
+[![Gem Version](https://badge.fury.io/rb/qubrics-mailbox.svg)](https://rubygems.org/gems/qubrics-mailbox)
 [![CI](https://github.com/qubrics/qubrics-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/qubrics/qubrics-sdk/actions/workflows/ci.yml)
 [![Licence: MIT](https://img.shields.io/badge/licence-MIT-blue.svg)](https://github.com/qubrics/qubrics-sdk/blob/main/LICENSE)
 
-Ruby SDK package for the Sendmux Mailbox API.
+Ruby SDK package for the Qubrics Mailbox API.
 
 ## Documentation
 
-- Ruby SDK guide: https://sendmux.ai/docs/sdks/ruby
-- Mailbox API reference: https://sendmux.ai/docs/mailbox-api
+- Ruby SDK guide: https://qubrics.com/docs/sdks/ruby
+- Mailbox API reference: https://qubrics.com/docs/mailbox-api
 - Source: https://github.com/qubrics/qubrics-sdk/tree/main/packages/ruby/mailbox
 - Changelog: https://github.com/qubrics/qubrics-sdk/blob/main/packages/ruby/mailbox/CHANGELOG.md
 
@@ -18,24 +18,26 @@ Ruby SDK package for the Sendmux Mailbox API.
 - Ruby 3.1 or newer.
 - A mailbox-scoped `smx_mbx_` key or scoped `smx_agent_` token.
 
-For OAuth, use a REST access token with the scopes and mailbox access required by the operation. See [OAuth for REST APIs](https://sendmux.ai/docs/developer-tools/oauth).
+For OAuth, use a REST access token with the scopes and mailbox access required by the operation. See [OAuth for REST APIs](https://qubrics.com/docs/developer-tools/oauth).
 
 ## Installation
 
+These commands target the Qubrics release of `qubrics-mailbox`. Until it is published, install `sendmux-mailbox` with its existing require paths and `Sendmux` module.
+
 ```sh
-gem install sendmux-mailbox
+gem install qubrics-mailbox
 ```
 
 Or add it to your Gemfile:
 
 ```ruby
-gem "sendmux-mailbox", "~> 2.0"
+gem "qubrics-mailbox", "~> 3.0"
 ```
 
-## Migrate from 1.x to 2.0
+## Thread message model migration
 
-If you check thread-message result classes or build thread-message fixtures by
-hand, update them when upgrading to 2.0. `mailbox_list_thread_messages` returns
+If you check thread-message result classes or build thread-message fixtures by hand,
+use the thread-specific models below. `mailbox_list_thread_messages` returns
 `MailboxThreadMessageSummaryCursorListResponse` instead of
 `MailboxMessageSummaryCursorListResponse`: its `meta` is
 `MailboxThreadMessagesMeta`, whose `thread_id` is required and whose
@@ -46,11 +48,11 @@ keeps working.
    entry point:
 
    ```ruby
-   require "sendmux/mailbox"
+   require "qubrics/mailbox"
 
    def thread_message_list?(response)
-     # Before: response.is_a?(Sendmux::Mailbox::Generated::MailboxMessageSummaryCursorListResponse)
-     response.is_a?(Sendmux::Mailbox::Generated::MailboxThreadMessageSummaryCursorListResponse)
+     # Before: response.is_a?(Qubrics::Mailbox::Generated::MailboxMessageSummaryCursorListResponse)
+     response.is_a?(Qubrics::Mailbox::Generated::MailboxThreadMessageSummaryCursorListResponse)
    end
    ```
 
@@ -61,7 +63,7 @@ keeps working.
    ```ruby
    def thread_message_fixture(thread_id)
      # Before: meta: { request_id: "req_fixture" }
-     Sendmux::Mailbox::Generated::MailboxThreadMessageSummaryCursorListResponse.build_from_hash(
+     Qubrics::Mailbox::Generated::MailboxThreadMessageSummaryCursorListResponse.build_from_hash(
        ok: true,
        meta: { request_id: "req_fixture", thread_id: thread_id },
        data: [],
@@ -87,7 +89,7 @@ keeps working.
    thread-message result without `meta.thread_id` fails with
    `ArgumentError: thread_id cannot be nil`.
 
-Update `sendmux-mailbox`, the bundle lock, and affected call sites or fixtures
+Update `qubrics-mailbox`, the bundle lock, and affected call sites or fixtures
 together. To roll back, restore those gem requirement, lock, and call-site
 changes together.
 
@@ -96,9 +98,9 @@ changes together.
 Pass either `api_key:` or `access_token:`. `access_token:` accepts a bare token string or a callable; the callable is evaluated once per authenticated request. Your application owns token storage, expiry checks and refresh coordination.
 
 ```ruby
-require "sendmux/mailbox"
+require "qubrics/mailbox"
 
-client = Sendmux::Mailbox::Client.new(
+client = Qubrics::Mailbox::Client.new(
   access_token: -> { ENV.fetch("QUBRICS_ACCESS_TOKEN") }
 )
 ```
@@ -108,9 +110,9 @@ client = Sendmux::Mailbox::Client.new(
 Create a mailbox client with a mailbox key or scoped agent token for the API-key example below.
 
 ```ruby
-require "sendmux/mailbox"
+require "qubrics/mailbox"
 
-client = Sendmux::Mailbox::Client.new(
+client = Qubrics::Mailbox::Client.new(
   api_key: ENV.fetch("QUBRICS_MAILBOX_KEY")
 )
 
@@ -123,7 +125,7 @@ puts messages.data.length
 
 ### Client surface
 
-`Sendmux::Mailbox::Client` exposes `client.mailbox_api`, which contains generated mailbox operations such as:
+`Qubrics::Mailbox::Client` exposes `client.mailbox_api`, which contains generated mailbox operations such as:
 
 - `mailbox_get_me`
 - `mailbox_list_messages`
@@ -136,10 +138,10 @@ When a key grants access to more than one mailbox, pass `mailbox_id:` to operati
 
 ### Pagination and conditional requests
 
-Use `Sendmux::Core.each_cursor` for list operations that return cursor pagination. Use the ETag helpers for generated operations that accept `:if_match` or `:if_none_match`.
+Use `Qubrics::Core.each_cursor` for list operations that return cursor pagination. Use the ETag helpers for generated operations that accept `:if_match` or `:if_none_match`.
 
 ```ruby
-pager = Sendmux::Core.each_cursor(lambda do |opts|
+pager = Qubrics::Core.each_cursor(lambda do |opts|
   client.mailbox_api.mailbox_list_messages(opts.merge(limit: 50))
 end)
 
@@ -147,7 +149,7 @@ pager.each { |message| puts message.id }
 
 client.mailbox_api.mailbox_delete_message(
   "msg_123",
-  Sendmux::Core::Headers.if_match('W/"etag"')
+  Qubrics::Core::Headers.if_match('W/"etag"')
 )
 ```
 
@@ -161,20 +163,20 @@ Use `mailbox_upload_attachment` to upload bytes and pass the returned `blob_id` 
 
 ### Errors
 
-Generated API errors are mapped to `Sendmux::Core::ApiError`.
+Generated API errors are mapped to `Qubrics::Core::ApiError`.
 
 ```ruby
 begin
   client.mailbox_api.mailbox_get_message("msg_123")
-rescue Sendmux::Core::ApiError => error
+rescue Qubrics::Core::ApiError => error
   warn "#{error.status} #{error.code}: #{error.message}"
 end
 ```
 
 ## Support
 
-- Documentation: https://sendmux.ai/docs
-- Contact: contact@sendmux.ai
+- Documentation: https://qubrics.com/docs
+- Contact: contact@qubrics.com
 
 ## Licence
 

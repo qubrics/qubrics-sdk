@@ -4,7 +4,7 @@ import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { checkRubyDependencyFloors } from "./check-ruby.mjs";
 
-const root = mkdtempSync(join(tmpdir(), "sendmux-ruby-release-"));
+const root = mkdtempSync(join(tmpdir(), "qubrics-ruby-release-"));
 
 try {
   for (const name of ["sending", "sdk"]) mkdirSync(join(root, "packages/ruby", name), { recursive: true });
@@ -14,7 +14,7 @@ try {
     "packages/ruby/management": "2.0.0",
     "packages/ruby/sending": "1.4.0",
   }));
-  writeFileSync(join(root, "packages/ruby/sending/sendmux-sending.gemspec"), "spec.add_dependency 'sendmux-core', '>= 1.3.0', '< 2.0'\n");
+  writeFileSync(join(root, "packages/ruby/sending/qubrics-sending.gemspec"), "spec.add_dependency 'qubrics-core', '>= 1.3.0', '< 2.0'\n");
 
   writeSdk(">= 2.0.0', '< 3.0");
   assert.doesNotThrow(() => checkRubyDependencyFloors({ root, changedPackages: new Set(["sdk"]) }));
@@ -22,7 +22,7 @@ try {
 
   for (const ceiling of ["2.0", "4.0"]) {
     writeSdk(`>= 2.0.0', '< ${ceiling}`);
-    assert.throws(() => checkRubyDependencyFloors({ root, changedPackages: new Set(["sdk"]) }), /sendmux-management.*< 3\.0/);
+    assert.throws(() => checkRubyDependencyFloors({ root, changedPackages: new Set(["sdk"]) }), /qubrics-management.*< 3\.0/);
   }
   writeSdk(">= 2.0.0");
   assert.throws(() => checkRubyDependencyFloors({ root, changedPackages: new Set() }), /explicit >= floor/);
@@ -30,7 +30,7 @@ try {
 
   writeSdk(">= 1.3.0', '< 2.0");
   assert.doesNotThrow(() => checkRubyDependencyFloors({ root, changedPackages: new Set(["management"]) }));
-  assert.throws(() => checkRubyDependencyFloors({ root, changedPackages: new Set(["sdk"]) }), /sendmux-management >= 2\.0\.0; found >= 1\.3\.0/);
+  assert.throws(() => checkRubyDependencyFloors({ root, changedPackages: new Set(["sdk"]) }), /qubrics-management >= 2\.0\.0; found >= 1\.3\.0/);
   console.log("PASS: unchanged-package allowance and changed-package manifest floor retained");
 } finally {
   rmSync(root, { recursive: true, force: true });
@@ -38,10 +38,10 @@ try {
 }
 
 function writeSdk(managementRange) {
-  writeFileSync(join(root, "packages/ruby/sdk/sendmux-sdk.gemspec"), [
-    "spec.add_dependency 'sendmux-core', '>= 1.3.0', '< 2.0'",
-    "spec.add_dependency 'sendmux-mailbox', '>= 1.4.0', '< 2.0'",
-    `spec.add_dependency 'sendmux-management', '${managementRange}'`,
-    "spec.add_dependency 'sendmux-sending', '>= 1.4.0', '< 2.0'",
+  writeFileSync(join(root, "packages/ruby/sdk/qubrics-sdk.gemspec"), [
+    "spec.add_dependency 'qubrics-core', '>= 1.3.0', '< 2.0'",
+    "spec.add_dependency 'qubrics-mailbox', '>= 1.4.0', '< 2.0'",
+    `spec.add_dependency 'qubrics-management', '${managementRange}'`,
+    "spec.add_dependency 'qubrics-sending', '>= 1.4.0', '< 2.0'",
   ].join("\n"));
 }
