@@ -34,6 +34,10 @@ Two independent source reviews cover Standards and Spec. Copy receives the requi
 
 ## External acceptance still outstanding
 
+PR367 CI run `42801545285` passed all language/runtime jobs but `verify` failed at `scripts/check-live-e2e-runner.mjs:436`. The source-text gate still required the two old service hosts after `go/livee2e/main.go:658` adopted the A18 Qubrics defaults. The gate now requires the exact new hosts and retains both environment fallback arguments and the existing rejection of URL literals passed as environment names. No check was skipped or relaxed. Raw CI failure: `pr367-ci-failed.log`. Local verification initially lacked the built TypeScript exports, then the native Python editable installations used by the nested language tests; those missing setup dependencies were identified directly and installed through the existing workspace build and pip editable commands. These setup failures are not green verification receipts.
+
+After setup, `node scripts/check-live-e2e-runner-environment.test.mjs` exited 0 (`go-runner-gate-green.log`). This executes the unchanged nested language safety tests plus the exact fallback assertions. `node --check scripts/check-live-e2e-runner.mjs` and `git diff --check` also exited 0. The origin fix changes only the two expected hosts to the A18 defaults.
+
 - SITE#193 remains OPEN under attachment HOLD. #898 is CLOSED.
 - Legacy `sendmux.ai/go` and `/go/v3` go-get requests return HTTP 200 with meta tags. New Qubrics vanity paths return HTTP 522. Latest root readback: `go-public-readback.json`.
 - SITE `src/middleware.ts:9–11` hardcodes the legacy metadata root; its existing routing exemption precedes redirects, but the crawl script has no go-get request proof. SITE owner must implement host-correct metadata and prove both hosts before/after redirect activation.
@@ -82,6 +86,6 @@ Release PR merges trigger publishing workflows, so they remain held. Pending-pub
 
 ## Cleanup and limits
 
-The source-consumer directory was removed by its existing runner. Shell tooling rejected deleting this task's `.tmp/go-codegen` with `rm -rf`: `rm -f style commands are not permitted. Use a safer approach`. No deletion retry or workaround was attempted. Cache cleanup remains outstanding; shared SDK worktrees, sdk343 work and shared caches were retained.
+The source-consumer directory was removed by its existing runner. Shell tooling rejected deleting this task's `.tmp/go-codegen` with `rm -rf`: `rm -f style commands are not permitted. Use a safer approach`. No deletion retry or workaround was attempted. Ops subsequently chose normal `git worktree remove` at close-off to collect this task's caches with its worktree; no operator cache deletion ask remains. Shared SDK worktrees, sdk343 work and shared caches remain with their owners.
 
 No publishing credentials were read or printed. Public install/publication and live vanity acceptance remain unproved. This task is not complete.

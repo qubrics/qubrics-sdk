@@ -435,12 +435,12 @@ for (const helperName of [
 
 assert.match(
   goLiveE2eSource,
-  /func appBaseURL\(\) string \{\s*return firstEnvOrDefault\("https:\/\/app\.sendmux\.ai\/api\/v1", "SENDMUX_LIVE_E2E_APP_BASE_URL", "SENDMUX_STAGING_APP_BASE_URL"\)\s*\}/,
+  /func appBaseURL\(\) string \{\s*return firstEnvOrDefault\("https:\/\/app\.qubrics\.com\/api\/v1", "SENDMUX_LIVE_E2E_APP_BASE_URL", "SENDMUX_STAGING_APP_BASE_URL"\)\s*\}/,
   "Go live E2E app base URL must use a real default fallback",
 );
 assert.match(
   goLiveE2eSource,
-  /func sendingBaseURL\(\) string \{\s*return firstEnvOrDefault\("https:\/\/smtp\.sendmux\.ai\/api\/v1", "SENDMUX_LIVE_E2E_SENDING_BASE_URL", "SENDMUX_STAGING_SMTP_BASE_URL"\)\s*\}/,
+  /func sendingBaseURL\(\) string \{\s*return firstEnvOrDefault\("https:\/\/smtp\.qubrics\.com\/api\/v1", "SENDMUX_LIVE_E2E_SENDING_BASE_URL", "SENDMUX_STAGING_SMTP_BASE_URL"\)\s*\}/,
   "Go live E2E sending base URL must use a real default fallback",
 );
 assert.doesNotMatch(
