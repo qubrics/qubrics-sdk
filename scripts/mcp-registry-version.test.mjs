@@ -125,14 +125,23 @@ test("retries PyPI version propagation failures from the MCP publisher", () => {
   const output =
     "registry validation failed for package 0 (sendmux-mcp): PyPI package 'sendmux-mcp' exists, but version '1.6.1' was not found (status: 404). A newly published release can take a moment to appear on PyPI.";
 
-  assert.equal(isRetryableMcpPublisherError(output), true);
+  assert.equal(isRetryableMcpPublisherError(output, { packages: [{ registryType: "pypi", identifier: "sendmux-mcp" }] }), true);
+});
+
+test("publisher propagation classification follows the manifest PyPI identity independently of its server name", () => {
+  for (const identifier of ["qubrics-mcp", "sendmux-mcp"]) {
+    const manifest = { name, packages: [{ registryType: "pypi", identifier }] };
+    const message = (packageName) => `PyPI package '${packageName}' exists, but version '${version}' was not found (status: 404).`;
+    assert.equal(isRetryableMcpPublisherError(message(identifier), manifest), true, identifier);
+    assert.equal(isRetryableMcpPublisherError(message(identifier === "qubrics-mcp" ? "sendmux-mcp" : "qubrics-mcp"), manifest), false, "another distribution must not be retried");
+  }
 });
 
 test("does not retry unrelated MCP publisher failures", () => {
   const output =
     'server returned status 400: {"detail":"Failed to publish server","errors":[{"message":"namespace is not owned by this repository"}]}';
 
-  assert.equal(isRetryableMcpPublisherError(output), false);
+  assert.equal(isRetryableMcpPublisherError(output, { packages: [{ registryType: "pypi", identifier: "qubrics-mcp" }] }), false);
 });
 
 test("an existing metadata version must retain both exact package identities and the remote", async (t) => {

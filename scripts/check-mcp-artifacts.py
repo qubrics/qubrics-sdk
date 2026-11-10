@@ -13,12 +13,12 @@ import zipfile
 
 
 ROOT = Path(__file__).resolve().parents[1]
-CONTRACT = ROOT / "packages/python/mcp/sendmux_mcp/mcp-contract.json"
+CONTRACT = ROOT / "packages/python/mcp/qubrics/mcp/mcp-contract.json"
 REQUIRED = {
-    "sendmux_mcp/openapi/openapi-app.json",
-    "sendmux_mcp/openapi/openapi-sending.json",
-    "sendmux_mcp/py.typed",
-    "sendmux_mcp/mcp-contract.json",
+    "qubrics/mcp/openapi/openapi-app.json",
+    "qubrics/mcp/openapi/openapi-sending.json",
+    "qubrics/mcp/py.typed",
+    "qubrics/mcp/mcp-contract.json",
 }
 
 
@@ -26,7 +26,7 @@ def check_members(members: dict[str, bytes], metadata: bytes) -> None:
     missing = REQUIRED - members.keys()
     if missing:
         raise ValueError(f"Missing package files: {sorted(missing)}")
-    contract_bytes = members["sendmux_mcp/mcp-contract.json"]
+    contract_bytes = members["qubrics/mcp/mcp-contract.json"]
     if contract_bytes != CONTRACT.read_bytes():
         raise ValueError("Packaged MCP contract differs from checked-in factory evidence")
     contract = json.loads(contract_bytes)
@@ -35,7 +35,7 @@ def check_members(members: dict[str, bytes], metadata: bytes) -> None:
         raise ValueError("Packaged MCP contract version/identity differs from native distribution metadata")
     package = CONTRACT.parent
     for relative in contract["provenance"]["sources"]:
-        if members.get(f"sendmux_mcp/{relative}") != (package / relative).read_bytes():
+        if members.get(f"qubrics/mcp/{relative}") != (package / relative).read_bytes():
             raise ValueError(f"Packaged source differs from contract source: {relative}")
 
 
@@ -59,8 +59,8 @@ def run(args: list[str], cwd: Path, env: dict[str, str] | None = None) -> None:
 
 
 def check_distributions(directory: Path) -> None:
-    wheels = list(directory.glob("sendmux_mcp-*.whl"))
-    sdists = list(directory.glob("sendmux_mcp-*.tar.gz"))
+    wheels = list(directory.glob("qubrics_mcp-*.whl"))
+    sdists = list(directory.glob("qubrics_mcp-*.tar.gz"))
     if len(wheels) != 1 or len(sdists) != 1:
         raise ValueError("Expected exactly one MCP wheel and sdist")
     with zipfile.ZipFile(wheels[0]) as wheel:
@@ -76,18 +76,18 @@ def check_distributions(directory: Path) -> None:
             assert content is not None
             members[member.name.split("/", 1)[1]] = content.read()
         check_members(members, members["PKG-INFO"])
-    with tempfile.TemporaryDirectory(prefix="sendmux-mcp-installed-") as temporary:
+    with tempfile.TemporaryDirectory(prefix="qubrics-mcp-installed-") as temporary:
         target = Path(temporary)
         run([sys.executable, "-m", "pip", "install", "--no-deps", "--no-compile", "--target", str(target), str(wheels[0])], target)
         run([sys.executable, "-c", "\n".join([
             "from importlib.metadata import distribution",
             "from pathlib import Path",
-            "import sendmux_mcp.contract as contract",
+            "import qubrics.mcp.contract as contract",
             "root = Path.cwd()",
             "assert Path(contract.__file__).resolve().is_relative_to(root)",
-            "assert Path(distribution('sendmux-mcp').locate_file('')).resolve() == root",
+            "assert Path(distribution('qubrics-mcp').locate_file('')).resolve() == root",
             "value = contract.load_contract()",
-            "assert value['package']['version'] == distribution('sendmux-mcp').version",
+            "assert value['package']['version'] == distribution('qubrics-mcp').version",
             "print('Installed contract verified: ' + value['package']['identity'] + ' ' + value['package']['version'])",
         ])], target, {**os.environ, "PYTHONPATH": str(target)})
     if target.exists():

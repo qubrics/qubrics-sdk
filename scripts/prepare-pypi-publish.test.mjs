@@ -108,7 +108,7 @@ for (const [helper, released, dependencies] of [
       for (const name of released) {
         const project = join(directory, "packages/python", name);
         mkdirSync(project, { recursive: true });
-        writeFileSync(join(project, "pyproject.toml"), `dependencies = [${dependencies.map((dependency) => `"sendmux-${dependency}>=${version},<2.0.0"`).join(",")} ]\n`);
+        writeFileSync(join(project, "pyproject.toml"), `dependencies = [${dependencies.map((dependency) => `"qubrics-${dependency}>=${version},<2.0.0"`).join(",")} ]\n`);
       }
     };
     const workflow = readFileSync(process.env.SENDMUX_TEST_WORKFLOW_FILE ?? resolve(".github/workflows/release-please.yml"), "utf8");
@@ -123,7 +123,7 @@ for (const [helper, released, dependencies] of [
         env.PYTHON_PATHS_RELEASED = JSON.stringify(released.map((name) => `packages/python/${name}`));
       }
       writeFloors("1.1.0");
-      await assert.rejects(run(process.execPath, ["--input-type=module", "-e", source], { env }), (error) => error.code === 1 && /must require sendmux-.+ >= 1\.2\.0,<2\.0\.0; found >= 1\.1\.0/.test(error.stderr));
+      await assert.rejects(run(process.execPath, ["--input-type=module", "-e", source], { env }), (error) => error.code === 1 && /must require qubrics-.+ >= 1\.2\.0,<2\.0\.0; found >= 1\.1\.0/.test(error.stderr));
       writeFloors("1.2.0");
       await run(process.execPath, ["--input-type=module", "-e", source], { env });
     }

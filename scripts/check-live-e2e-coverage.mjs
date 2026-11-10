@@ -204,7 +204,7 @@ function loadCliOperations() {
 }
 
 function loadMcpCuration() {
-  const source = readFileSync("packages/python/mcp/sendmux_mcp/curation.py", "utf8");
+  const source = readFileSync("packages/python/mcp/qubrics/mcp/curation.py", "utf8");
   const entries = new Map();
 
   for (const match of source.matchAll(/operation_id="([^"]+)"[\s\S]*?name="([^"]+)"/g)) {

@@ -14,11 +14,11 @@ from importlib.metadata import distribution, version
 
 import pytest
 
-from sendmux_mcp.contract import build_contract
+from qubrics.mcp.contract import build_contract
 
 
 PACKAGE_DIR = Path(__file__).resolve().parents[1]
-CONTRACT_PATH = PACKAGE_DIR / "sendmux_mcp" / "mcp-contract.json"
+CONTRACT_PATH = PACKAGE_DIR / "qubrics" / "mcp" / "mcp-contract.json"
 
 
 def test_contract_advertises_qubrics_resource_and_permanent_legacy_alias() -> None:
@@ -34,9 +34,9 @@ def test_checked_in_contract_matches_the_public_mcp_factory() -> None:
 
 def test_contract_counts_match_combined_public_discovery() -> None:
     from fastmcp import Client
-    from sendmux_mcp.config import SURFACES, ServerConfig
-    from sendmux_mcp.contract import NoUpstreamTransport
-    from sendmux_mcp.server import create_server
+    from qubrics.mcp.config import SURFACES, ServerConfig
+    from qubrics.mcp.contract import NoUpstreamTransport
+    from qubrics.mcp.server import create_server
 
     async def discover() -> list[str]:
         server = create_server(ServerConfig(surfaces=SURFACES, api_keys={"mailbox": "smx_mbx_fixture", "management": "smx_root_fixture", "sending": "smx_mbx_fixture"}), transport=NoUpstreamTransport())
@@ -53,15 +53,15 @@ def test_contract_binds_packaged_sources_and_distinguishes_api_origins() -> None
     contract = build_contract()
     sources = contract["provenance"]["sources"]
     for relative in ("server.py", "curation.py", "config.py", "hosted.py", "hosted_auth.py", "openapi/openapi-app.json", "openapi/openapi-sending.json"):
-        assert sources[relative] == hashlib.sha256((PACKAGE_DIR / "sendmux_mcp" / relative).read_bytes()).hexdigest()
-    from sendmux_mcp.config import DEFAULT_APP_BASE_URL, DEFAULT_SENDING_BASE_URL
+        assert sources[relative] == hashlib.sha256((PACKAGE_DIR / "qubrics" / "mcp" / relative).read_bytes()).hexdigest()
+    from qubrics.mcp.config import DEFAULT_APP_BASE_URL, DEFAULT_SENDING_BASE_URL
     assert contract["api_origins"] == {"app": DEFAULT_APP_BASE_URL, "sending": DEFAULT_SENDING_BASE_URL}
     assert contract["hosted"]["resource"] not in contract["api_origins"].values()
 
 
 def test_hosted_transport_and_frozen_protocols_match_runtime() -> None:
     from mcp.types.version import HANDSHAKE_PROTOCOL_VERSIONS, MODERN_PROTOCOL_VERSIONS
-    from sendmux_mcp.config import ServerConfig, Transport
+    from qubrics.mcp.config import ServerConfig, Transport
     from typing import get_args
 
     contract = build_contract()
@@ -74,9 +74,9 @@ def test_hosted_transport_and_frozen_protocols_match_runtime() -> None:
 
 def test_upload_contract_distinguishes_enforced_limits_from_upstream_reference() -> None:
     from fastmcp import Client
-    from sendmux_mcp.config import ServerConfig
-    from sendmux_mcp.contract import NoUpstreamTransport
-    from sendmux_mcp.server import create_server
+    from qubrics.mcp.config import ServerConfig
+    from qubrics.mcp.contract import NoUpstreamTransport
+    from qubrics.mcp.server import create_server
 
     contract = build_contract()
     uploads = contract["uploads"]
@@ -101,7 +101,7 @@ def test_upload_contract_distinguishes_enforced_limits_from_upstream_reference()
 def test_installed_reader_respects_supported_runtime_range(change: str) -> None:
     with tempfile.TemporaryDirectory(prefix="sendmux-contract-runtime-") as temporary:
         root = Path(temporary)
-        shutil.copytree(PACKAGE_DIR / "sendmux_mcp", root / "sendmux_mcp")
+        shutil.copytree(PACKAGE_DIR / "qubrics" / "mcp", root / "qubrics" / "mcp")
         if change == "compatible_mcp":
             native = distribution("mcp")
             assert native.files is not None
@@ -113,11 +113,11 @@ def test_installed_reader_respects_supported_runtime_range(change: str) -> None:
             compatible = ".".join([*parts[:2], str(int(parts[2]) + 1)])
             target.write_text(native.locate_file(metadata_path).read_text().replace(f"Version: {current}\n", f"Version: {compatible}\n"))
         else:
-            artifact = root / "sendmux_mcp/mcp-contract.json"
+            artifact = root / "qubrics/mcp/mcp-contract.json"
             contract = json.loads(artifact.read_text())
             contract["protocols"].append("1900-01-01")
             artifact.write_text(json.dumps(contract))
-        child = subprocess.Popen([sys.executable, "-c", "from sendmux_mcp.contract import load_contract; load_contract()"], cwd=root, env={**os.environ, "PYTHONPATH": str(root)}, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        child = subprocess.Popen([sys.executable, "-c", "from qubrics.mcp.contract import load_contract; load_contract()"], cwd=root, env={**os.environ, "PYTHONPATH": str(root)}, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         print(f"runtime reader child {child.pid}, fixture {root}")
         try:
             stdout, stderr = child.communicate(timeout=45)
@@ -138,9 +138,9 @@ def test_installed_reader_respects_supported_runtime_range(change: str) -> None:
 def test_installed_reader_loads_from_shallow_package_root() -> None:
     with tempfile.TemporaryDirectory(prefix="sendmux-contract-shallow-") as temporary:
         root = Path(temporary)
-        shutil.copytree(PACKAGE_DIR / "sendmux_mcp", root / "sendmux_mcp")
+        shutil.copytree(PACKAGE_DIR / "qubrics" / "mcp", root / "qubrics" / "mcp")
         child = subprocess.Popen(
-            [sys.executable, "-c", "from sendmux_mcp.contract import load_contract; load_contract()"],
+            [sys.executable, "-c", "from qubrics.mcp.contract import load_contract; load_contract()"],
             cwd=root,
             env={**os.environ, "PYTHONPATH": str(root)},
             stdout=subprocess.PIPE,
@@ -164,11 +164,11 @@ def test_installed_reader_loads_from_shallow_package_root() -> None:
 def test_installed_reader_rejects_stale_provenance(drift: str) -> None:
     with tempfile.TemporaryDirectory(prefix="sendmux-contract-reader-") as temporary:
         root = Path(temporary)
-        shutil.copytree(PACKAGE_DIR / "sendmux_mcp", root / "sendmux_mcp")
-        artifact = root / "sendmux_mcp/mcp-contract.json"
+        shutil.copytree(PACKAGE_DIR / "qubrics" / "mcp", root / "qubrics" / "mcp")
+        artifact = root / "qubrics/mcp/mcp-contract.json"
         contract = json.loads(artifact.read_text())
         if drift == "source":
-            with (root / "sendmux_mcp/curation.py").open("a") as source:
+            with (root / "qubrics/mcp/curation.py").open("a") as source:
                 source.write("\n# fixture source drift\n")
         elif drift == "native_version":
             contract["package"]["version"] = "0.0.0"
@@ -177,7 +177,7 @@ def test_installed_reader_rejects_stale_provenance(drift: str) -> None:
         else:
             del contract["provenance"]["sources"]["server.py"]
         artifact.write_text(json.dumps(contract))
-        child = subprocess.Popen([sys.executable, "-c", "from sendmux_mcp.contract import load_contract; load_contract()"], cwd=root, env={**os.environ, "PYTHONPATH": str(root)}, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        child = subprocess.Popen([sys.executable, "-c", "from qubrics.mcp.contract import load_contract; load_contract()"], cwd=root, env={**os.environ, "PYTHONPATH": str(root)}, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         print(f"reader child {child.pid}, fixture {root}")
         try:
             stdout, stderr = child.communicate(timeout=45)
@@ -201,7 +201,7 @@ def test_contract_check_rejects_public_fact_drift_without_rewriting(fact: str) -
         shutil.copytree(PACKAGE_DIR, package, ignore=shutil.ignore_patterns("__pycache__", ".pytest_cache"))
         (root / "scripts").mkdir()
         shutil.copyfile(PACKAGE_DIR.parents[2] / "scripts/mcp-conformance-required-checks.json", root / "scripts/mcp-conformance-required-checks.json")
-        artifact = package / "sendmux_mcp/mcp-contract.json"
+        artifact = package / "qubrics/mcp/mcp-contract.json"
         contract = json.loads(artifact.read_text())
         if fact == "tools":
             contract["tools"]["count"] += 1
@@ -215,7 +215,7 @@ def test_contract_check_rejects_public_fact_drift_without_rewriting(fact: str) -
             contract["uploads"]["inline_decoded_max_bytes"] += 1
         artifact.write_text(json.dumps(contract))
         before = artifact.read_bytes()
-        child = subprocess.Popen([sys.executable, "-m", "sendmux_mcp.contract", "--check"], cwd=root, env={**os.environ, "PYTHONPATH": str(package)}, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        child = subprocess.Popen([sys.executable, "-m", "qubrics.mcp.contract", "--check"], cwd=root, env={**os.environ, "PYTHONPATH": str(package)}, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         print(f"contract check child PID {child.pid}")
         try:
             stdout, stderr = child.communicate(timeout=45)
@@ -239,20 +239,20 @@ def test_generator_rejects_incompatible_source_contract_without_overwriting(chan
         shutil.copytree(PACKAGE_DIR, package, ignore=shutil.ignore_patterns("__pycache__", ".pytest_cache"))
         (root / "scripts").mkdir()
         shutil.copyfile(PACKAGE_DIR.parents[2] / "scripts/mcp-conformance-required-checks.json", root / "scripts/mcp-conformance-required-checks.json")
-        artifact = package / "sendmux_mcp/mcp-contract.json"
+        artifact = package / "qubrics/mcp/mcp-contract.json"
         before = artifact.read_bytes()
         if change == "returned_limit":
-            source = package / "sendmux_mcp/openapi/openapi-sending.json"
+            source = package / "qubrics/mcp/openapi/openapi-sending.json"
             source.write_text(source.read_text().replace('"max_size_bytes"', '"renamed_max_bytes"'))
         elif change == "native_version":
             source = package / "pyproject.toml"
             current = json.loads(before)["package"]["version"]
             source.write_text(source.read_text().replace(f'version = "{current}"', 'version = "99.0.0"'))
         else:
-            source = package / "sendmux_mcp/server.py"
+            source = package / "qubrics/mcp/server.py"
             original = "content_base64" if change == "inline_mode" else "presign_upload_url"
             source.write_text(source.read_text().replace(original, "renamed_input"))
-        child = subprocess.Popen([sys.executable, "-m", "sendmux_mcp.contract"], cwd=root, env={**os.environ, "PYTHONPATH": str(package)}, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        child = subprocess.Popen([sys.executable, "-m", "qubrics.mcp.contract"], cwd=root, env={**os.environ, "PYTHONPATH": str(package)}, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         print(f"source generator child {child.pid}, fixture {root}", flush=True)
         try:
             stdout, stderr = child.communicate(timeout=45)

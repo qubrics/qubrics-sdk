@@ -12,22 +12,22 @@ from urllib.parse import parse_qs, urlsplit
 import pytest
 import urllib3
 
-import sendmux_mailbox.attachments as mailbox_attachments
-import sendmux_sending.attachments as sending_attachments
-from sendmux_mailbox import download_mailbox_attachment, read_mailbox_text_attachment
-from sendmux_core import SendmuxApiError
-from sendmux_mailbox.api_client import ApiClient as MailboxApiClient
-from sendmux_mailbox.models.mailbox_attachment_upload_intent_result_response import (
+import qubrics.mailbox.attachments as mailbox_attachments
+import qubrics.sending.attachments as sending_attachments
+from qubrics.mailbox import download_mailbox_attachment, read_mailbox_text_attachment
+from qubrics.core import QubricsApiError
+from qubrics.mailbox.api_client import ApiClient as MailboxApiClient
+from qubrics.mailbox.models.mailbox_attachment_upload_intent_result_response import (
     MailboxAttachmentUploadIntentResultResponse,
 )
-from sendmux_mailbox.models.mailbox_attachment_upload_result_response import MailboxAttachmentUploadResultResponse
-from sendmux_mailbox.models.mailbox_send_result_response import MailboxSendResultResponse
-from sendmux_sending.api_client import ApiClient as SendingApiClient
-from sendmux_sending import create_sending_client
-from sendmux_sending.models.send_success_response import SendSuccessResponse
+from qubrics.mailbox.models.mailbox_attachment_upload_result_response import MailboxAttachmentUploadResultResponse
+from qubrics.mailbox.models.mailbox_send_result_response import MailboxSendResultResponse
+from qubrics.sending.api_client import ApiClient as SendingApiClient
+from qubrics.sending import create_sending_client
+from qubrics.sending.models.send_success_response import SendSuccessResponse
 
 SENDING_ATTACHMENT_LIMIT = json.loads(
-    (Path(__file__).resolve().parents[1] / "mcp/sendmux_mcp/openapi/openapi-sending.json").read_text()
+    (Path(__file__).resolve().parents[1] / "mcp/qubrics/mcp/openapi/openapi-sending.json").read_text()
 )["components"]["schemas"]["EmailSendRequest"]["properties"]["attachments"]["maxItems"]
 # Sending's absolute ceiling: smtp-proxy/app/http-api/v1/lib/attachment-validation.js.
 SENDING_ATTACHMENT_BYTE_LIMIT = 18 * 1024 * 1024
@@ -449,7 +449,7 @@ def test_sending_oversized_file_fails_before_upload(sending_replay: Any, tmp_pat
     client, requests = sending_replay
     report = tmp_path / "oversized.txt"
     report.write_bytes(b"x" * (SENDING_ATTACHMENT_BYTE_LIMIT + 1))
-    with pytest.raises((ValueError, SendmuxApiError)):
+    with pytest.raises((ValueError, QubricsApiError)):
         sending_attachments.upload_attachment_from_file(client, file_path=report)
     assert requests == [], "Oversized files must not be uploaded"
 
@@ -467,7 +467,7 @@ def test_sending_file_growth_cannot_be_uploaded(sending_replay: Any, tmp_path: P
         return original_open(path, *args, **kwargs)
 
     monkeypatch.setattr(Path, "open", grow_before_open)
-    with pytest.raises((ValueError, SendmuxApiError)):
+    with pytest.raises((ValueError, QubricsApiError)):
         sending_attachments.upload_attachment_from_file(client, file_path=report)
     assert requests == [], "An invalidated file must not be uploaded, including a truncated prefix"
 
@@ -599,7 +599,7 @@ def test_sending_changed_file_conflicts_before_send(sending_replay: Any, tmp_pat
     sending_attachments.send_email_with_files(client, **options)
     sends_before = sum(not request["upload"] for request in requests)
     report.write_bytes(b"Changed attachment bytes\n")
-    with pytest.raises(SendmuxApiError) as conflict:
+    with pytest.raises(QubricsApiError) as conflict:
         sending_attachments.send_email_with_files(client, **options)
     assert conflict.value.code == "idempotency_conflict"
     assert conflict.value.status_code == 409

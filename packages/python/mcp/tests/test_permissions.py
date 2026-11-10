@@ -6,9 +6,9 @@ from typing import cast, get_args
 from fastmcp.server.auth import AccessToken, AuthContext
 from fastmcp.utilities.components import FastMCPComponent
 
-from sendmux_mcp.config import Surface
-from sendmux_mcp.curation import TOOLS_BY_SURFACE
-from sendmux_mcp.permissions import (
+from qubrics.mcp.config import Surface
+from qubrics.mcp.curation import TOOLS_BY_SURFACE
+from qubrics.mcp.permissions import (
     TOOL_PERMISSION_REQUIREMENTS,
     api_key_has_permission,
     authorised_tool_names,

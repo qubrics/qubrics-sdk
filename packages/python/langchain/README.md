@@ -1,6 +1,6 @@
-# langchain-sendmux
+# langchain-qubrics
 
-[LangChain](https://docs.langchain.com) toolkit for [Sendmux](https://sendmux.ai), the email API for AI agents.
+[LangChain](https://docs.langchain.com) toolkit for [Qubrics](https://qubrics.com), the email API for AI agents.
 
 Gives an agent its own mailbox: it can send email, read what arrives, and reply from its own address.
 
@@ -11,16 +11,18 @@ Gives an agent its own mailbox: it can send email, read what arrives, and reply 
 
 ## Installation
 
+These commands target the Qubrics release of `langchain-qubrics`. Until it is published, install `langchain-sendmux` with its existing import names.
+
 ```sh
-pip install langchain-sendmux
+pip install langchain-qubrics
 ```
 
 ## Getting an API key
 
 For API-key authentication, use a key that can both send and receive. Two ways to get one:
 
-- **Dashboard** — create a mailbox and a mailbox-scoped key (`smx_mbx_*`). See [API keys](https://sendmux.ai/docs/guides/api-keys).
-- **Agent self-registration** — the agent claims its own `@myagent.mx` mailbox and gets an `smx_agent_*` token, with no human signup first. See [email for AI agents](https://sendmux.ai/solutions/for-ai-agents/).
+- **Dashboard** — create a mailbox and a mailbox-scoped key (`smx_mbx_*`). See [API keys](https://qubrics.com/docs/guides/api-keys).
+- **Agent self-registration** — the agent claims its own `@myagent.mx` mailbox and gets an `smx_agent_*` token, with no human signup first. See [email for AI agents](https://qubrics.com/solutions/for-ai-agents/).
 
 Note on agent tokens: a freshly self-registered `smx_agent_*` token can read and receive, but **cannot send** until a human owner has been invited and has approved it. Until then `send_email` and `reply` will fail. A dashboard `smx_mbx_*` key with send permission works immediately.
 
@@ -32,16 +34,16 @@ Set `access_token` to a bare REST OAuth token or callable instead of `api_key`:
 
 ```python
 import os
-from langchain_sendmux import SendmuxToolkit
+from qubrics.langchain import QubricsToolkit
 
-toolkit = SendmuxToolkit(
+toolkit = QubricsToolkit(
     access_token=lambda: os.environ["QUBRICS_ACCESS_TOKEN"],
     default_from="agent@yourdomain.dev",
 )
 tools = toolkit.get_tools()
 ```
 
-The provider runs before every tool request. Your application owns protected token storage, expiry checks, and refresh coordination. Request `mailbox.read` and `email.send` to use all three tools, and select one mailbox at consent; these tools do not supply a mailbox selector. Credentials are excluded from the toolkit's representation and model serialisation. See [REST OAuth](https://sendmux.ai/docs/developer-tools/oauth).
+The provider runs before every tool request. Your application owns protected token storage, expiry checks, and refresh coordination. Request `mailbox.read` and `email.send` to use all three tools, and select one mailbox at consent; these tools do not supply a mailbox selector. Credentials are excluded from the toolkit's representation and model serialisation. See [REST OAuth](https://qubrics.com/docs/developer-tools/oauth).
 
 ## Quick start
 
@@ -50,9 +52,9 @@ import os
 
 from langchain.agents import create_agent
 
-from langchain_sendmux import SendmuxToolkit
+from qubrics.langchain import QubricsToolkit
 
-smx = SendmuxToolkit(
+smx = QubricsToolkit(
     api_key=os.environ["QUBRICS_API_KEY"],
     default_from="agent@yourdomain.dev",
 )
@@ -70,7 +72,7 @@ agent.invoke(
 
 ## Tools
 
-`SendmuxToolkit(...).get_tools()` returns three tools.
+`QubricsToolkit(...).get_tools()` returns three tools.
 
 ### `send_email`
 
@@ -111,7 +113,7 @@ Sends from the agent's own mailbox address, rather than through a sending provid
 ## Configuration
 
 ```python
-SendmuxToolkit(api_key=..., default_from=...)
+QubricsToolkit(api_key=..., default_from=...)
 ```
 
 | Option | Required | Purpose |
@@ -122,9 +124,9 @@ SendmuxToolkit(api_key=..., default_from=...)
 
 ## Retries and duplicate sends
 
-Agents retry. Pass `idempotency_key` on `send_email` and `reply` and Sendmux will send once, even if the same call arrives several times inside 24 hours. Any stable string works — a task id, a thread id, a hash of the message.
+Agents retry. Pass `idempotency_key` on `send_email` and `reply` and Qubrics will send once, even if the same call arrives several times inside 24 hours. Any stable string works — a task id, a thread id, a hash of the message.
 
-Details: [idempotency](https://sendmux.ai/docs/guides/idempotency).
+Details: [idempotency](https://qubrics.com/docs/guides/idempotency).
 
 ## Common errors
 
@@ -136,10 +138,10 @@ Details: [idempotency](https://sendmux.ai/docs/guides/idempotency).
 
 ## Related
 
-- [Quickstart](https://sendmux.ai/docs/guides/quickstart)
-- [Mailboxes](https://sendmux.ai/docs/guides/mailboxes)
-- [All Sendmux SDKs](https://sendmux.ai/docs/sdks)
-- [Pricing](https://sendmux.ai/pricing/) — usage-based, no per-seat or per-mailbox fees
+- [Quickstart](https://qubrics.com/docs/guides/quickstart)
+- [Mailboxes](https://qubrics.com/docs/guides/mailboxes)
+- [All Qubrics SDKs](https://qubrics.com/docs/sdks)
+- [Pricing](https://qubrics.com/pricing/) — usage-based, no per-seat or per-mailbox fees
 
 ## Licence
 

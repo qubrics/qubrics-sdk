@@ -3,6 +3,13 @@ import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { spawn } from "node:child_process";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import {
+  checkPythonLangchainDependencyFloors,
+  checkPythonMcpDependencyFloors,
+  checkPythonSdkDependencyFloors,
+  checkPythonSurfaceDependencyFloors,
+  pythonPackages,
+} from "./python-release-guardrails.mjs";
 
 const rootIndex = process.argv.indexOf("--root");
 const root = rootIndex < 0 ? resolve(dirname(fileURLToPath(import.meta.url)), "..") : resolve(process.argv[rootIndex + 1]);
@@ -28,6 +35,10 @@ const mismatches = Object.entries(manifest)
 assert.equal(mismatches.length, 0, `TypeScript release state mismatch:\n${mismatches.join("\n")}`);
 console.log("TypeScript release state matches package metadata.");
 
+for (const check of [checkPythonSurfaceDependencyFloors, checkPythonSdkDependencyFloors, checkPythonMcpDependencyFloors, checkPythonLangchainDependencyFloors]) {
+  check({ root, changedPackages: new Set(pythonPackages) });
+}
+
 for (const path of owners) {
   const owner = { ...config, ...config.packages[path] };
   let name;
@@ -40,7 +51,7 @@ for (const path of owners) {
     name = tomlField(`${path}/pyproject.toml`, "project", "name");
     version = tomlField(`${path}/pyproject.toml`, "project", "version");
     releaseType = "python";
-    const generatedInit = join(root, path, name.replaceAll("-", "_"), "__init__.py");
+    const generatedInit = join(root, path, "qubrics", path.split("/").at(-1), "__init__.py");
     if (existsSync(generatedInit)) {
       const generated = readFileSync(generatedInit, "utf8").match(/^__version__ = "([^"]+)"$/m)?.[1];
       if (generated) assert.equal(generated, version, `${path} generated __version__ must match project.version`);

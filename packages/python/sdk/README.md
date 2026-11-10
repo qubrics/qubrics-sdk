@@ -1,18 +1,18 @@
-# sendmux-sdk
+# qubrics-sdk
 
-[![PyPI version](https://img.shields.io/pypi/v/sendmux-sdk)](https://pypi.org/project/sendmux-sdk/)
-[![Python versions](https://img.shields.io/pypi/pyversions/sendmux-sdk)](https://pypi.org/project/sendmux-sdk/)
-[![PyPI downloads](https://img.shields.io/pypi/dm/sendmux-sdk)](https://pypi.org/project/sendmux-sdk/)
-[![Licence](https://img.shields.io/pypi/l/sendmux-sdk)](https://github.com/qubrics/qubrics-sdk/blob/main/LICENSE)
+[![PyPI version](https://img.shields.io/pypi/v/qubrics-sdk)](https://pypi.org/project/qubrics-sdk/)
+[![Python versions](https://img.shields.io/pypi/pyversions/qubrics-sdk)](https://pypi.org/project/qubrics-sdk/)
+[![PyPI downloads](https://img.shields.io/pypi/dm/qubrics-sdk)](https://pypi.org/project/qubrics-sdk/)
+[![Licence](https://img.shields.io/pypi/l/qubrics-sdk)](https://github.com/qubrics/qubrics-sdk/blob/main/LICENSE)
 
-Optional umbrella package for the Sendmux Python SDK.
+Optional umbrella package for the Qubrics Python SDK.
 
 ## Documentation
 
-- Sendmux docs: [sendmux.ai/docs](https://sendmux.ai/docs)
-- Management API reference: [sendmux.ai/docs/api/introduction](https://sendmux.ai/docs/api/introduction)
-- Mailbox API reference: [sendmux.ai/docs/mailbox-api/introduction](https://sendmux.ai/docs/mailbox-api/introduction)
-- Sending API reference: [sendmux.ai/docs/sending-api/introduction](https://sendmux.ai/docs/sending-api/introduction)
+- Qubrics docs: [qubrics.com/docs](https://qubrics.com/docs)
+- Management API reference: [qubrics.com/docs/api/introduction](https://qubrics.com/docs/api/introduction)
+- Mailbox API reference: [qubrics.com/docs/mailbox-api/introduction](https://qubrics.com/docs/mailbox-api/introduction)
+- Sending API reference: [qubrics.com/docs/sending-api/introduction](https://qubrics.com/docs/sending-api/introduction)
 - Source repository: [qubrics/qubrics-sdk](https://github.com/qubrics/qubrics-sdk)
 
 ## Requirements
@@ -22,12 +22,14 @@ Optional umbrella package for the Sendmux Python SDK.
 - A mailbox-scoped `smx_mbx_*` key or scoped `smx_agent_*` token for Mailbox clients.
 - A root `smx_root_*` key for Management clients.
 
-For OAuth, use a REST access token with the scopes and mailbox access required by the operation. See [OAuth for REST APIs](https://sendmux.ai/docs/developer-tools/oauth).
+For OAuth, use a REST access token with the scopes and mailbox access required by the operation. See [OAuth for REST APIs](https://qubrics.com/docs/developer-tools/oauth).
 
 ## Installation
 
+These commands target the Qubrics release of `qubrics-sdk`. Until it is published, install `sendmux-sdk` with its existing import names.
+
 ```sh
-pip install sendmux-sdk
+pip install qubrics-sdk
 ```
 
 ## Connection checks
@@ -37,7 +39,7 @@ Check a Management credential without creating resources:
 ```python
 import os
 
-from sendmux_sdk import management
+from qubrics.sdk import management
 
 with management.create_management_client(
     api_key=os.environ["QUBRICS_MANAGEMENT_API_KEY"]
@@ -64,7 +66,7 @@ Pass either `api_key` or `access_token`. `access_token` accepts a bare token str
 ```python
 import os
 
-from sendmux_sdk import management
+from qubrics.sdk import management
 
 client = management.create_management_client(
     access_token=lambda: os.environ["QUBRICS_ACCESS_TOKEN"]
@@ -76,7 +78,7 @@ client = management.create_management_client(
 ```python
 import os
 
-from sendmux_sdk import sending
+from qubrics.sdk import sending
 
 client = sending.create_sending_client(api_key=os.environ["QUBRICS_SENDING_API_KEY"])
 api = sending.EmailsApi(client)
@@ -85,7 +87,7 @@ response = api.sending_send_email(
     sending.EmailSendRequest(
         var_from=sending.Address(email="sender@example.com"),
         to=sending.Address(email="recipient@example.com"),
-        subject="Hello from Sendmux",
+        subject="Hello from Qubrics",
         html_body="<p>Hello.</p>",
         text_body="Hello.",
     ),
@@ -97,30 +99,30 @@ print(response.data.message_id)
 
 The umbrella package lazy-loads:
 
-- `core` from `sendmux_core`
-- `sending` from `sendmux_sending`
-- `mailbox` from `sendmux_mailbox`
-- `management` from `sendmux_management`
+- `core` from `qubrics.core`
+- `sending` from `qubrics.sending`
+- `mailbox` from `qubrics.mailbox`
+- `management` from `qubrics.management`
 
 Use the per-surface packages directly when an integration only needs one API surface.
 
-## Version 3.0.0 migration
+## Provider model migration
 
-SDK 3 adopts Management 2 and Sending 1.6. The `management` module's provider-list responses contain `ProviderListItem` objects instead of `ProviderItem` objects. Detail responses retain `ProviderItem` and require the `variables` map; list items omit that map.
+The `management` module's provider-list responses contain `ProviderListItem` objects instead of `ProviderItem` objects. Detail responses retain `ProviderItem` and require the `variables` map; list items omit that map.
 
-To migrate from SDK 2:
+To update provider-list callers:
 
-1. Update your requirements to `sendmux-sdk>=3.0.0,<4.0.0` and regenerate your lockfile. If you pin components directly, use `sendmux-management>=2.0.0,<3.0.0` and `sendmux-sending>=1.6.0,<2.0.0`; the Core `>=1.3.1,<2.0.0` and Mailbox `>=2.0.0,<3.0.0` ranges are unchanged.
+1. Update your requirements to `qubrics-sdk` and regenerate your lockfile. If you pin components directly, update `qubrics-core`, `qubrics-mailbox`, `qubrics-management`, and `qubrics-sending` together.
 2. Change provider-list annotations and type checks from `management.ProviderItem` to `management.ProviderListItem`. Keep `management.ProviderItem` for detail responses, and include `variables` in detail fixtures (`{}` when none are set).
 3. Run `python -m pip check` and your provider-list, provider-detail, and sending tests. Confirm list items use `ProviderListItem`, detail fixtures retain their variables, and delivery-group requests serialize the selected group.
 
 To roll back, restore the previous SDK and component requirements, lockfile, and affected call sites together.
 
-## Version 2.0.0 migration
+## Thread message model migration
 
 The umbrella's `mailbox` module adopts the thread-specific list response: thread-message results require `meta.thread_id` and expose optional typed `meta.sync_state`, while ordinary message-list results remain thread-independent. Other Mailbox list families expose typed state metadata where applicable.
 
-Update `sendmux-sdk`, `sendmux-mailbox`, the lockfile, and affected annotations or fixtures together. To roll back, restore the previous package requirements, lockfile, and call sites together.
+Update `qubrics-sdk`, `qubrics-mailbox`, the lockfile, and affected annotations or fixtures together. To roll back, restore the previous package requirements, lockfile, and call sites together.
 
 ## Support
 

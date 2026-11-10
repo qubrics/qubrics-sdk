@@ -9,9 +9,9 @@ import pytest
 @pytest.mark.parametrize(
     ("distribution_name", "package_name"),
     [
-        ("sendmux-sending", "sendmux_sending"),
-        ("sendmux-mailbox", "sendmux_mailbox"),
-        ("sendmux-management", "sendmux_management"),
+        ("qubrics-sending", "qubrics.sending"),
+        ("qubrics-mailbox", "qubrics.mailbox"),
+        ("qubrics-management", "qubrics.management"),
     ],
 )
 def test_generated_runtime_versions_follow_distribution_metadata(
@@ -33,9 +33,9 @@ def test_generated_runtime_versions_follow_distribution_metadata(
 @pytest.mark.parametrize(
     ("distribution_name", "package_name"),
     [
-        ("sendmux-sending", "sendmux_sending"),
-        ("sendmux-mailbox", "sendmux_mailbox"),
-        ("sendmux-management", "sendmux_management"),
+        ("qubrics-sending", "qubrics.sending"),
+        ("qubrics-mailbox", "qubrics.mailbox"),
+        ("qubrics-management", "qubrics.management"),
     ],
 )
 def test_generated_runtime_versions_prefer_imported_source(

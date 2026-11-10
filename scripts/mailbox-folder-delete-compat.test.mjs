@@ -24,9 +24,9 @@ test("Python preserves root and models imports of the old folder-delete model", 
 import warnings
 with warnings.catch_warnings(record=True) as captured:
     warnings.simplefilter('always', DeprecationWarning)
-    from sendmux_mailbox import MailboxFolderDeletedResponseAllOfData
-    from sendmux_mailbox.models import MailboxFolderDeletedResponseAllOfData as ModelsAlias
-from sendmux_mailbox import MailboxDraftDeleteResponseAllOfData, MailboxFolderDeletedResponse
+    from qubrics.mailbox import MailboxFolderDeletedResponseAllOfData
+    from qubrics.mailbox.models import MailboxFolderDeletedResponseAllOfData as ModelsAlias
+from qubrics.mailbox import MailboxDraftDeleteResponseAllOfData, MailboxFolderDeletedResponse
 assert MailboxFolderDeletedResponseAllOfData is ModelsAlias is MailboxDraftDeleteResponseAllOfData
 assert any(issubclass(item.category, DeprecationWarning) for item in captured)
 data = MailboxFolderDeletedResponseAllOfData.from_dict({'deleted': True, 'id': 'fld_compat'})
@@ -54,8 +54,8 @@ test("Python preserves the deprecated folder-delete model deep import", () => {
 import warnings
 with warnings.catch_warnings(record=True) as captured:
     warnings.simplefilter('always', DeprecationWarning)
-    from sendmux_mailbox.models.mailbox_folder_deleted_response_all_of_data import MailboxFolderDeletedResponseAllOfData
-from sendmux_mailbox import MailboxDraftDeleteResponseAllOfData
+    from qubrics.mailbox.models.mailbox_folder_deleted_response_all_of_data import MailboxFolderDeletedResponseAllOfData
+from qubrics.mailbox import MailboxDraftDeleteResponseAllOfData
 assert MailboxFolderDeletedResponseAllOfData is MailboxDraftDeleteResponseAllOfData
 assert any(issubclass(item.category, DeprecationWarning) for item in captured)
 assert MailboxFolderDeletedResponseAllOfData.from_dict({'deleted': True, 'id': 'fld_compat'}).to_dict() == {'deleted': True, 'id': 'fld_compat'}

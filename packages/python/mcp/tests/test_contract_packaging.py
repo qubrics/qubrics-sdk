@@ -101,7 +101,7 @@ def test_package_check_rejects_corrupt_native_or_source_evidence(distributions: 
 
     def mutate(name: str, content: bytes) -> bytes:
         if drift == "native_version" and (name.endswith(".dist-info/METADATA") or name.endswith("/PKG-INFO")):
-            current = json.loads((PACKAGE / "sendmux_mcp/mcp-contract.json").read_text())["package"]["version"]
+            current = json.loads((PACKAGE / "qubrics/mcp/mcp-contract.json").read_text())["package"]["version"]
             return content.replace(f"Version: {current}\n".encode(), b"Version: 0.0.0\n")
         if drift == "source" and name.endswith("/curation.py"):
             return content + b"\n# changed package source\n"
@@ -149,11 +149,11 @@ def test_generator_bootstraps_clean_environment_and_refreshes_future_version() -
         shutil.copyfile(ROOT / "scripts/mcp-conformance-required-checks.json", root / "scripts/mcp-conformance-required-checks.json")
         shutil.copyfile(ROOT / "requirements-dev.txt", root / "requirements-dev.txt")
         project = root / "packages/python/mcp/pyproject.toml"
-        original_version = json.loads((PACKAGE / "sendmux_mcp/mcp-contract.json").read_text())["package"]["version"]
+        original_version = json.loads((PACKAGE / "qubrics/mcp/mcp-contract.json").read_text())["package"]["version"]
         project.write_text(project.read_text().replace(f'version = "{original_version}"', 'version = "99.0.0"'))
         result = run_child(["node", str(ROOT / "scripts/generate-mcp-contract.mjs")], root, timeout=180)
         assert result.returncode == 0, result.stderr.decode()
-        contract = root / "packages/python/mcp/sendmux_mcp/mcp-contract.json"
+        contract = root / "packages/python/mcp/qubrics/mcp/mcp-contract.json"
         assert json.loads(contract.read_text())["package"]["version"] == "99.0.0"
         project.write_text(project.read_text().replace('version = "99.0.0"', 'version = "99.0.1"'))
         result = run_child(["node", str(ROOT / "scripts/generate-mcp-contract.mjs")], root, timeout=180)

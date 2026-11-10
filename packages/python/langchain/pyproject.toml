@@ -3,9 +3,9 @@ requires = ["hatchling>=1.27"]
 build-backend = "hatchling.build"
 
 [project]
-name = "langchain-sendmux"
+name = "langchain-qubrics"
 version = "0.4.0"
-description = "LangChain toolkit for the Sendmux email API for AI agents."
+description = "LangChain toolkit for the Qubrics email API for AI agents."
 readme = "README.md"
 requires-python = ">=3.10"
 license = "MIT"
@@ -35,13 +35,13 @@ classifiers = [
 ]
 dependencies = [
   "langchain-core>=1.0.0,<2",
-  "sendmux-sending>=1.6.0,<2.0.0",
-  "sendmux-mailbox>=2.0.2,<3.0.0",
+  "qubrics-sending>=1.6.0,<2.0.0",
+  "qubrics-mailbox>=2.0.2,<3.0.0",
 ]
 
 [project.urls]
-Homepage = "https://sendmux.ai"
-Documentation = "https://sendmux.ai/docs/sdks"
+Homepage = "https://qubrics.com"
+Documentation = "https://qubrics.com/docs/sdks"
 Repository = "https://github.com/qubrics/qubrics-sdk"
 Issues = "https://github.com/qubrics/qubrics-sdk/issues"
 
@@ -50,10 +50,10 @@ core-metadata-version = "2.4"
 include = [
   "LICENSE",
   "README.md",
-  "langchain_sendmux",
+  "qubrics",
 ]
 
 [tool.hatch.build.targets.wheel]
 core-metadata-version = "2.4"
-packages = ["langchain_sendmux"]
-artifacts = ["langchain_sendmux/py.typed"]
+packages = ["qubrics"]
+artifacts = ["qubrics/langchain/py.typed"]

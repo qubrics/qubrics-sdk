@@ -1,19 +1,21 @@
 #!/usr/bin/env node
 
 import { execFileSync } from "node:child_process";
+import { pythonPackages } from "./python-release-guardrails.mjs";
 
 const generatedPackageDirs = [
+  ...pythonPackages.map((name) => `packages/python/${name}/pyproject.toml`),
   "go/mailbox",
   "go/management",
   "go/sending",
   "packages/php/mailbox/src",
   "packages/php/management/src",
   "packages/php/sending/src",
-  "packages/python/mailbox/sendmux_mailbox",
-  "packages/python/management/sendmux_management",
-  "packages/python/mcp/sendmux_mcp/openapi",
-  "packages/python/mcp/sendmux_mcp/mcp-contract.json",
-  "packages/python/sending/sendmux_sending",
+  "packages/python/mailbox/qubrics/mailbox",
+  "packages/python/management/qubrics/management",
+  "packages/python/mcp/qubrics/mcp/openapi",
+  "packages/python/mcp/qubrics/mcp/mcp-contract.json",
+  "packages/python/sending/qubrics/sending",
   "packages/ruby/mailbox/lib/qubrics_mailbox_generated",
   "packages/ruby/mailbox/lib/qubrics_mailbox_generated.rb",
   "packages/ruby/management/lib/qubrics_management_generated",

@@ -1,22 +1,22 @@
-# Email Inbox API + Sending by Sendmux
+# Email Inbox API + Sending by Qubrics
 
-[![PyPI version](https://img.shields.io/pypi/v/sendmux-mcp)](https://pypi.org/project/sendmux-mcp/)
-[![Python versions](https://img.shields.io/pypi/pyversions/sendmux-mcp)](https://pypi.org/project/sendmux-mcp/)
-[![PyPI downloads](https://img.shields.io/pypi/dm/sendmux-mcp)](https://pypi.org/project/sendmux-mcp/)
-[![Licence](https://img.shields.io/pypi/l/sendmux-mcp)](https://github.com/qubrics/qubrics-sdk/blob/main/LICENSE)
+[![PyPI version](https://img.shields.io/pypi/v/qubrics-mcp)](https://pypi.org/project/qubrics-mcp/)
+[![Python versions](https://img.shields.io/pypi/pyversions/qubrics-mcp)](https://pypi.org/project/qubrics-mcp/)
+[![PyPI downloads](https://img.shields.io/pypi/dm/qubrics-mcp)](https://pypi.org/project/qubrics-mcp/)
+[![Licence](https://img.shields.io/pypi/l/qubrics-mcp)](https://github.com/qubrics/qubrics-sdk/blob/main/LICENSE)
 
-Email inbox API, inbound mail, and outbound sending MCP and A2A servers for AI agents, with inbound email, clean JSON parsing, webhooks, and multi-provider routing through Sendmux.
+Email inbox API, inbound mail, and outbound sending MCP and A2A servers for AI agents, with inbound email, clean JSON parsing, webhooks, and multi-provider routing through Qubrics.
 
-This package is the Sendmux MCP. Keep it separate from any documentation-search MCP used by docs tooling.
+This package is the Qubrics MCP. Keep it separate from any documentation-search MCP used by docs tooling.
 
 <!-- mcp-name: io.github.Sendmux/sendmux-mcp -->
 
 ## Documentation
 
-- Sendmux docs: [sendmux.ai/docs](https://sendmux.ai/docs)
-- Management API reference: [sendmux.ai/docs/api/introduction](https://sendmux.ai/docs/api/introduction)
-- Mailbox API reference: [sendmux.ai/docs/mailbox-api/introduction](https://sendmux.ai/docs/mailbox-api/introduction)
-- Sending API reference: [sendmux.ai/docs/sending-api/introduction](https://sendmux.ai/docs/sending-api/introduction)
+- Qubrics docs: [qubrics.com/docs](https://qubrics.com/docs)
+- Management API reference: [qubrics.com/docs/api/introduction](https://qubrics.com/docs/api/introduction)
+- Mailbox API reference: [qubrics.com/docs/mailbox-api/introduction](https://qubrics.com/docs/mailbox-api/introduction)
+- Sending API reference: [qubrics.com/docs/sending-api/introduction](https://qubrics.com/docs/sending-api/introduction)
 - Source repository: [qubrics/qubrics-sdk](https://github.com/qubrics/qubrics-sdk)
 
 ## Requirements
@@ -28,10 +28,10 @@ This package is the Sendmux MCP. Keep it separate from any documentation-search 
 
 <a id="unreleased-200-upgrade"></a>
 
-## 2.0.0 upgrade
+## Attachment input migration
 
-Version 2.0.0 removes local `file_path` and roots inputs from MCP attachment
-tools. Before upgrading a self-managed package or server, retain the prior
+MCP attachment tools use upload references instead of local `file_path` and
+roots inputs. Before upgrading a self-managed package or server, retain the prior
 known-working package environment, dependency state, and MCP client and tool
 configuration. Update attachment callers to use the
 [attachment workflow for agents](#attachment-workflow-for-agents), then verify
@@ -43,15 +43,17 @@ Verify tool discovery and the relevant attachment workflow before resuming
 agents. A package rollback doesn't reverse uploads or sends that have already
 completed.
 
-For clients that use Sendmux's hosted endpoint, changing a local `pip`
+For clients that use Qubrics's hosted endpoint, changing a local `pip`
 environment doesn't change the deployed server version. A hosted deployment
 rollback is a separate operator release action and must be verified against the
 hosted endpoint.
 
 ## Installation
 
+These commands target the Qubrics release of `qubrics-mcp`. Until it is published, install `sendmux-mcp` with its existing import names.
+
 ```sh
-pip install sendmux-mcp
+pip install qubrics-mcp
 ```
 
 ## Usage
@@ -59,18 +61,18 @@ pip install sendmux-mcp
 Run a single local server with the per-surface commands.
 
 ```sh
-QUBRICS_API_KEY=smx_mbx_... sendmux-mcp-mailbox
-QUBRICS_API_KEY=smx_root_... sendmux-mcp-management
-QUBRICS_API_KEY=smx_mbx_... sendmux-mcp-sending
+QUBRICS_API_KEY=smx_mbx_... qubrics-mcp-mailbox
+QUBRICS_API_KEY=smx_root_... qubrics-mcp-management
+QUBRICS_API_KEY=smx_mbx_... qubrics-mcp-sending
 ```
 
-Run a combined local server with `sendmux-mcp`.
+Run a combined local server with `qubrics-mcp`.
 
 ```sh
 QUBRICS_MCP_SURFACES=mailbox,sending \
 QUBRICS_MAILBOX_API_KEY=smx_mbx_... \
 QUBRICS_SENDING_API_KEY=smx_mbx_... \
-sendmux-mcp
+qubrics-mcp
 ```
 
 Run all three local surfaces when you have both key types.
@@ -80,17 +82,17 @@ QUBRICS_MCP_SURFACES=mailbox,management,sending \
 QUBRICS_MAILBOX_API_KEY=smx_mbx_... \
 QUBRICS_MANAGEMENT_API_KEY=smx_root_... \
 QUBRICS_SENDING_API_KEY=smx_mbx_... \
-sendmux-mcp
+qubrics-mcp
 ```
 
-The generic `sendmux-mcp` command also accepts `--surface` or `--surfaces`. The wrapper commands select exactly one surface.
+The generic `qubrics-mcp` command also accepts `--surface` or `--surfaces`. The wrapper commands select exactly one surface.
 
 ## Transports
 
 `stdio` is the default transport for local agent clients.
 
 ```sh
-QUBRICS_API_KEY=smx_mbx_... sendmux-mcp-mailbox --transport stdio
+QUBRICS_API_KEY=smx_mbx_... qubrics-mcp-mailbox --transport stdio
 ```
 
 `http` and `streamable-http` expose the MCP endpoint over HTTP. HTTP mode defaults to `127.0.0.1:8765/mcp` and requires a separate MCP bearer token unless you explicitly opt out.
@@ -98,26 +100,26 @@ QUBRICS_API_KEY=smx_mbx_... sendmux-mcp-mailbox --transport stdio
 ```sh
 QUBRICS_API_KEY=smx_mbx_... \
 QUBRICS_MCP_HTTP_BEARER_TOKEN=local-mcp-token \
-sendmux-mcp-mailbox --transport http --host 127.0.0.1 --port 8765 --path /mcp
+qubrics-mcp-mailbox --transport http --host 127.0.0.1 --port 8765 --path /mcp
 ```
 
 `/health` returns a small JSON health response for the selected surfaces.
 
 ## Hosted Endpoint
 
-The public hosted MCP endpoint is `https://mcp.sendmux.ai/mcp`.
+The public hosted MCP endpoint is `https://mcp.qubrics.com/mcp`.
 
 For hosted clients, use HTTP transport with OAuth. Do not add manual `Authorization` headers, API keys, custom OAuth endpoints, or custom scopes unless your client explicitly requires them.
 
 Hosted OAuth clients that omit requested scopes during registration or authorization are supported; the server advertises the hosted scope set through discovery and bearer challenges.
 
-The packaged `sendmux-mcp-hosted` command runs the hosted server runtime. Local and private deployments should use the local commands above unless you are operating a compatible OAuth-backed hosted environment.
+The packaged `qubrics-mcp-hosted` command runs the hosted server runtime. Local and private deployments should use the local commands above unless you are operating a compatible OAuth-backed hosted environment.
 
 ## Hosted A2A Endpoint
 
-The same hosted runtime exposes deterministic A2A 1.0 over HTTP+JSON at `https://a2a.sendmux.ai/a2a/v1`. Discover it from `https://a2a.sendmux.ai/.well-known/agent-card.json`; OAuth resource metadata is at `https://a2a.sendmux.ai/.well-known/oauth-protected-resource`.
+The same hosted runtime exposes deterministic A2A 1.0 over HTTP+JSON at `https://a2a.qubrics.com/a2a/v1`. Discover it from `https://a2a.qubrics.com/.well-known/agent-card.json`; OAuth resource metadata is at `https://a2a.qubrics.com/.well-known/oauth-protected-resource`.
 
-Send exactly one JSON `DataPart` to the A2A `message:send` operation. Its data selects a curated Sendmux operation and supplies that operation's inputs:
+Send exactly one JSON `DataPart` to the A2A `message:send` operation. Its data selects a curated Qubrics operation and supplies that operation's inputs:
 
 ```json
 {
@@ -130,7 +132,7 @@ Send exactly one JSON `DataPart` to the A2A `message:send` operation. Its data s
 }
 ```
 
-`operationId` uses the same curated operation IDs as the hosted MCP service. OAuth grants are audience-bound to the A2A resource and retain their Sendmux surface and permission limits. The service returns one JSON `DataPart` containing the upstream status, safe response headers, and JSON body (or `bodyBase64` for non-JSON responses).
+`operationId` uses the same curated operation IDs as the hosted MCP service. OAuth grants are audience-bound to the A2A resource and retain their Qubrics surface and permission limits. The service returns one JSON `DataPart` containing the upstream status, safe response headers, and JSON body (or `bodyBase64` for non-JSON responses).
 
 The A2A endpoint is immediate and stateless: streaming, push notifications, persistent tasks, and task cancellation are not advertised or routed.
 
@@ -138,13 +140,13 @@ The A2A endpoint is immediate and stateless: streaming, push notifications, pers
 
 | Setting | Environment | Default |
 | --- | --- | --- |
-| Tool surfaces | `QUBRICS_MCP_SURFACES` | required for `sendmux-mcp`; wrapper commands select one surface |
+| Tool surfaces | `QUBRICS_MCP_SURFACES` | required for `qubrics-mcp`; wrapper commands select one surface |
 | API key fallback | `QUBRICS_API_KEY` | accepted for compatible single-key setups |
 | Mailbox API key | `QUBRICS_MAILBOX_API_KEY` | required when mailbox is selected unless a compatible fallback is provided |
 | Management API key | `QUBRICS_MANAGEMENT_API_KEY` | required when management is selected unless a compatible fallback is provided |
 | Sending API key | `QUBRICS_SENDING_API_KEY` | required when sending is selected unless the fallback key is a send-capable `smx_mbx_*` key or owner-approved Sending-resource `smx_agent_*` token |
-| App API base URL | `QUBRICS_APP_BASE_URL` | `https://app.sendmux.ai/api/v1` |
-| Sending API base URL | `QUBRICS_SENDING_BASE_URL` | `https://smtp.sendmux.ai/api/v1` |
+| App API base URL | `QUBRICS_APP_BASE_URL` | `https://app.qubrics.com/api/v1` |
+| Sending API base URL | `QUBRICS_SENDING_BASE_URL` | `https://smtp.qubrics.com/api/v1` |
 | Transport | `QUBRICS_MCP_TRANSPORT` | `stdio` |
 | HTTP host | `QUBRICS_MCP_HOST` | `127.0.0.1` |
 | HTTP port | `QUBRICS_MCP_PORT` | `8765` |
@@ -173,12 +175,12 @@ The server rejects keys with the wrong prefix before starting.
 
 ## Package Contract For Maintainers
 
-The source checkout includes `sendmux_mcp/mcp-contract.json`, generated from the actual server factory's public tool discovery. Use its `tools.by_surface` entries and `tools.count` instead of maintaining a separate catalogue. Each entry retains the tool's description, input/output schemas, and annotations. The contract also separates hosted resource, local transports, API origins, certified protocol revisions, and the runtime versions used during generation.
+The source checkout includes `qubrics/mcp/mcp-contract.json`, generated from the actual server factory's public tool discovery. Use its `tools.by_surface` entries and `tools.count` instead of maintaining a separate catalogue. Each entry retains the tool's description, input/output schemas, and annotations. The contract also separates hosted resource, local transports, API origins, certified protocol revisions, and the runtime versions used during generation.
 
 After installing a build that contains the contract, read it without credentials or network requests:
 
 ```python
-from sendmux_mcp.contract import load_contract
+from qubrics.mcp.contract import load_contract
 
 contract = load_contract()
 print(contract["package"])
@@ -188,7 +190,7 @@ The result identifies the installed distribution and version. `load_contract()` 
 
 `uploads` distinguishes the locally enforced inline and Mailbox byte caps from Sending's returned `max_size_bytes` authority. The Sending presign request schema does not impose a numeric maximum; use the upload intent response, not a historical source constant. URL expiry and physical attachment retention are not equivalent, and this artifact does not certify storage cleanup.
 
-From the repository root, `pnpm generate:mcp` refreshes native editable metadata and writes deterministic contract bytes. With that environment prepared, `pnpm exec .tmp/python-venv/bin/python -m sendmux_mcp.contract --check` checks freshness without rewriting. `pnpm build:mcp` verifies tests, wheel/sdist inclusion, installed consumption, and frozen conformance checks. Checkout changes are not available through `pip install` until their release is published.
+From the repository root, `pnpm generate:mcp` refreshes native editable metadata and writes deterministic contract bytes. With that environment prepared, `pnpm exec .tmp/python-venv/bin/python -m qubrics.mcp.contract --check` checks freshness without rewriting. `pnpm build:mcp` verifies tests, wheel/sdist inclusion, installed consumption, and frozen conformance checks. Checkout changes are not available through `pip install` until their release is published.
 
 ## Attachment Workflow For Agents
 
@@ -214,11 +216,11 @@ For Sending API sends, use `qubrics_sending_upload_attachment` only for tiny inl
 
 ## Console Scripts
 
-- `sendmux-mcp`
-- `sendmux-mcp-mailbox`
-- `sendmux-mcp-management`
-- `sendmux-mcp-sending`
-- `sendmux-mcp-hosted`
+- `qubrics-mcp`
+- `qubrics-mcp-mailbox`
+- `qubrics-mcp-management`
+- `qubrics-mcp-sending`
+- `qubrics-mcp-hosted`
 
 ## Support
 

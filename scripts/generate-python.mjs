@@ -10,59 +10,53 @@ const templateDir = join(root, "codegen", "templates", "python");
 const surfaces = [
   {
     name: "sending",
-    projectName: "sendmux-sending",
-    packageName: "sendmux_sending",
+    projectName: "qubrics-sending",
+    packageName: "qubrics.sending",
     spec: ".codegen/openapi-sending.openapi-generator.codegen.json",
     tags: ["Attachments", "Emails", "Meta"],
   },
   {
     name: "mailbox",
-    projectName: "sendmux-mailbox",
-    packageName: "sendmux_mailbox",
+    projectName: "qubrics-mailbox",
+    packageName: "qubrics.mailbox",
     spec: ".codegen/openapi-app.openapi-generator.codegen.json",
     tags: ["Mailbox API"],
     // Generated names dropped by a schema regeneration that still resolve, with a DeprecationWarning,
-    // until the next planned major. An entry may land ahead of the regeneration that drops its
+    // when the generated name changes. An entry may land ahead of the regeneration that drops its
     // class: the alias is written once the name has left the generated exports
-    // (scripts/deprecated-model-aliases.mjs). Remove an entry when that major ships.
+    // (scripts/deprecated-model-aliases.mjs).
     deprecatedModelAliases: [
       {
         deprecated: "MailboxFolderDeletedResponseAllOfData",
         replacement: "MailboxDraftDeleteResponseAllOfData",
-        removedIn: "sendmux-mailbox 3.0",
       },
       {
         deprecated: "MailboxRealtimeMessageAllOfBody",
         replacement: "MailboxRealtimeMessageBody",
-        removedIn: "sendmux-mailbox 3.0",
       },
       // Dropped once the API publishes nullable references as anyOf: [{ $ref }, { type: "null" }].
       {
         deprecated: "MailboxMessageContentResponseAllOfData",
         replacement: "MailboxMessageContent",
-        removedIn: "sendmux-mailbox 3.0",
       },
       {
         deprecated: "MailboxRawBodyResponseAllOfData",
         replacement: "MailboxRawBody",
-        removedIn: "sendmux-mailbox 3.0",
       },
       {
         deprecated: "MailboxSubmissionEnvelopeRcptToInner",
         replacement: "MailboxSubmissionEnvelopeAddress",
-        removedIn: "sendmux-mailbox 3.0",
       },
       {
         deprecated: "MailboxThreadContentResponseAllOfData",
         replacement: "MailboxMessageContent",
-        removedIn: "sendmux-mailbox 3.0",
       },
     ],
   },
   {
     name: "management",
-    projectName: "sendmux-management",
-    packageName: "sendmux_management",
+    projectName: "qubrics-management",
+    packageName: "qubrics.management",
     spec: ".codegen/openapi-app.openapi-generator.codegen.json",
     tags: [
       "Billing",
@@ -81,17 +75,16 @@ const surfaces = [
       {
         deprecated: "MailboxAppPasswordResultCredential",
         replacement: "MailboxCredential",
-        removedIn: "sendmux-management 3.0",
       },
       {
         deprecated: "ProviderCreateBodyQuotasPerDayAnyOf",
         replacement: "ProviderQuotaRange",
-        removedIn: "sendmux-management 3.0",
       },
     ],
   },
 ];
 
+run(process.execPath, ["scripts/sync-python-dependency-floors.mjs"]);
 run("pnpm", ["normalize:codegen"]);
 rmSync(outputRoot, { force: true, recursive: true });
 mkdirSync(outputRoot, { recursive: true });
@@ -117,15 +110,16 @@ for (const surface of surfaces) {
     "--global-property=models,supportingFiles,apis,apiTests=false,modelTests=false,apiDocs=false,modelDocs=false",
   ]);
 
-  rmSync(join(packageDir, surface.packageName), { force: true, recursive: true });
-  cpSync(join(generatedRoot, surface.packageName), join(packageDir, surface.packageName), { recursive: true });
+  rmSync(join(packageDir, ...surface.packageName.split(".")), { force: true, recursive: true });
+  cpSync(join(generatedRoot, ...surface.packageName.split(".")), join(packageDir, ...surface.packageName.split(".")), { recursive: true });
+  writeFileSync(join(packageDir, ...surface.packageName.split("."), "py.typed"), "");
   correctPrimitiveUnionAnnotations(surface, packageDir);
   correctManagementCostUsageTimestamps(surface, packageDir);
   correctManagementWebhookMessageId(surface, packageDir);
   writeSurfaceClient(surface);
   writeDeprecatedModelAliases(surface, packageDir);
   linkGeneratedRuntimeVersion(surface, packageDir);
-  normalizePythonFiles(join(packageDir, surface.packageName));
+  normalizePythonFiles(join(packageDir, ...surface.packageName.split(".")));
 }
 
 console.log("Generated Python SDK packages");
@@ -135,7 +129,7 @@ function correctManagementWebhookMessageId(surface, packageDir) {
     return;
   }
 
-  const modelPath = join(packageDir, surface.packageName, "models", "webhook_event_data.py");
+  const modelPath = join(packageDir, ...surface.packageName.split("."), "models", "webhook_event_data.py");
   const source = readFileSync(modelPath, "utf8");
   writeFileSync(modelPath, replaceOnce({
     source,
@@ -150,7 +144,7 @@ function correctManagementCostUsageTimestamps(surface, packageDir) {
     return;
   }
 
-  const apiPath = join(packageDir, surface.packageName, "api", "mailboxes_api.py");
+  const apiPath = join(packageDir, ...surface.packageName.split("."), "api", "mailboxes_api.py");
   let source = readFileSync(apiPath, "utf8");
   source = replaceOnce({
     source,
@@ -202,7 +196,7 @@ function correctPrimitiveUnionAnnotations(surface, packageDir) {
 
   const modelPath = join(
     packageDir,
-    surface.packageName,
+    ...surface.packageName.split("."),
     "models",
     "email_send_request_delivery_group.py",
   );
@@ -224,6 +218,9 @@ function readProjectVersion(packageDir) {
 
 function writeFilteredSpec(surface) {
   const source = JSON.parse(readFileSync(join(root, surface.spec), "utf8"));
+  source.info.title = source.info.title.replaceAll("Sendmux", "Qubrics");
+  source.info.description = source.info.description?.replaceAll("Sendmux", "Qubrics");
+  source.servers = [{ url: surface.name === "sending" ? "https://smtp.qubrics.com/api/v1" : "https://app.qubrics.com/api/v1" }];
   const allowed = new Set(surface.tags);
   const paths = {};
 
@@ -366,11 +363,11 @@ function normalizePythonFiles(directory) {
 }
 
 function writeSurfaceClient(surface) {
-  const packageDir = join(root, "packages", "python", surface.name, surface.packageName);
+  const packageDir = join(root, "packages", "python", surface.name, ...surface.packageName.split("."));
   const className = toPascal(surface.name);
   const keySurface = surface.name === "management" ? "root" : surface.name === "sending" ? "sending" : "mailbox";
   const defaultBaseUrl =
-    surface.name === "sending" ? "https://smtp.sendmux.ai/api/v1" : "https://app.sendmux.ai/api/v1";
+    surface.name === "sending" ? "https://smtp.qubrics.com/api/v1" : "https://app.qubrics.com/api/v1";
 
   writeFileSync(
     join(packageDir, "client.py"),
@@ -382,10 +379,10 @@ import certifi
 
 from typing import Any, cast
 
-from sendmux_core import AccessToken, RetryOptions, configure_auth
-from sendmux_core.auth import resolve_access_token, validate_auth
-from sendmux_core.errors import map_api_exception
-from sendmux_core.retry import RetryingRestClient
+from qubrics.core import AccessToken, RetryOptions, configure_auth
+from qubrics.core.auth import resolve_access_token, validate_auth
+from qubrics.core.errors import map_api_exception
+from qubrics.core.retry import RetryingRestClient
 
 from ${surface.packageName}.api_client import ApiClient
 from ${surface.packageName}.configuration import Configuration
@@ -394,7 +391,7 @@ from ${surface.packageName}.exceptions import ApiException
 DEFAULT_BASE_URL = "${defaultBaseUrl}"
 
 
-class Sendmux${className}ApiClient(ApiClient):
+class Qubrics${className}ApiClient(ApiClient):
     def __init__(
         self,
         configuration: Configuration,
@@ -451,7 +448,7 @@ def create_${surface.name}_client(
     access_token: AccessToken | None = None,
     base_url: str | None = None,
     retry_options: RetryOptions | None = None,
-) -> Sendmux${className}ApiClient:
+) -> Qubrics${className}ApiClient:
     if api_key is None and access_token is None:
         api_key = os.environ.get("QUBRICS_API_KEY") or os.environ.get("SENDMUX_API_KEY")
         access_token = os.environ.get("QUBRICS_ACCESS_TOKEN") or os.environ.get("SENDMUX_ACCESS_TOKEN")
@@ -459,7 +456,7 @@ def create_${surface.name}_client(
     configuration = Configuration(host=base_url or os.environ.get("QUBRICS_BASE_URL") or os.environ.get("SENDMUX_BASE_URL") or DEFAULT_BASE_URL, ssl_ca_cert=certifi.where())
     if api_key is not None:
         configure_auth(configuration, api_key=api_key)
-    return Sendmux${className}ApiClient(configuration, access_token=access_token, retry_options=retry_options)
+    return Qubrics${className}ApiClient(configuration, access_token=access_token, retry_options=retry_options)
 
 
 configure_${surface.name} = create_${surface.name}_client
@@ -473,7 +470,7 @@ configure_${surface.name} = create_${surface.name}_client
     `${existing}
 from ${surface.packageName}.client import (
     DEFAULT_BASE_URL,
-    Sendmux${className}ApiClient,
+    Qubrics${className}ApiClient,
     configure_${surface.name},
     create_${surface.name}_client,
 )
@@ -520,7 +517,7 @@ function writeDeprecatedModelAliases(surface, packageDir) {
     return;
   }
 
-  const packageRoot = join(packageDir, surface.packageName);
+  const packageRoot = join(packageDir, ...surface.packageName.split("."));
   const initPaths = [join(packageRoot, "__init__.py"), join(packageRoot, "models", "__init__.py")];
   for (const initPath of initPaths) {
     const generated = readFileSync(initPath, "utf8");
@@ -537,7 +534,7 @@ function writeDeprecatedModelAliases(surface, packageDir) {
     }
 
     const table = active
-      .map(({ deprecated, replacement, removedIn }) => `    "${deprecated}": ("${replacement}", "${removedIn}"),`)
+      .map(({ deprecated, replacement }) => `    "${deprecated}": "${replacement}",`)
       .join("\n");
     writeFileSync(
       initPath,
@@ -547,19 +544,18 @@ import warnings as _warnings
 
 from typing import Any as _Any
 
-# Deprecated model names kept as aliases of their replacements until the release named here.
+# Deprecated model names kept as aliases of their replacements.
 _DEPRECATED_MODEL_ALIASES = {
 ${table}
 }
 
 
 def __getattr__(name: str) -> _Any:
-    alias = _DEPRECATED_MODEL_ALIASES.get(name)
-    if alias is None:
+    replacement = _DEPRECATED_MODEL_ALIASES.get(name)
+    if replacement is None:
         raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
-    replacement, removed_in = alias
     _warnings.warn(
-        f"{name} is deprecated; use {replacement}. It will be removed in {removed_in}.",
+        f"{name} is deprecated; use {replacement}.",
         DeprecationWarning,
         stacklevel=2,
     )
@@ -1116,7 +1112,7 @@ def _read_attachment_file(
 }
 
 function linkGeneratedRuntimeVersion(surface, packageDir) {
-  const packageRoot = join(packageDir, surface.packageName);
+  const packageRoot = join(packageDir, ...surface.packageName.split("."));
   const apiClientPath = join(packageRoot, "api_client.py");
   const configurationPath = join(packageRoot, "configuration.py");
 

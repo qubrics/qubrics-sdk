@@ -81,6 +81,29 @@ test("native release gate accepts native versions without inventing Go or PHP fi
   assert.equal(result.status, 0, result.stderr);
 }));
 
+test("Python release preparation updates dependent floors across a major boundary and is idempotent", () => fixture((root) => {
+  const owner = "packages/python/core";
+  const manifest = readJson(join(root, ".release-please-manifest.json"));
+  const current = manifest[owner];
+  const future = `${Number(current.split(".")[0]) + 1}.0.0`;
+  const path = join(root, owner, "pyproject.toml");
+  writeFileSync(path, readFileSync(path, "utf8").replace(current, future));
+  editJson(join(root, ".release-please-manifest.json"), (m) => { m[owner] = future; });
+  const stale = check(root);
+  assert.notEqual(stale.status, 0, "native gate accepted dependencies excluding the new core major");
+  assert.match(stale.stderr, /must require qubrics-core/);
+  const prepare = () => {
+    const child = spawnSync(process.execPath, [join(repository, "scripts/sync-python-dependency-floors.mjs")], { cwd: root, encoding: "utf8", timeout: 10_000 });
+    assert.equal(child.status, 0, child.stderr);
+  };
+  prepare();
+  assert.equal(check(root).status, 0, "prepared dependency ranges must match the native release state");
+  const metadata = () => Object.keys(manifest).filter((p) => p.startsWith("packages/python/")).map((p) => readFileSync(join(root, p, "pyproject.toml"), "utf8"));
+  const prepared = metadata();
+  prepare();
+  assert.deepEqual(metadata(), prepared, "a second preparation must leave native metadata unchanged");
+}));
+
 for (const [language, owner, versionFile, lockFile] of [
   ["python", "packages/python/core", "packages/python/core/pyproject.toml"],
   ["rust", "rust", "rust/Cargo.toml", "rust/ci/floor-consumer/Cargo.lock"],
@@ -97,6 +120,10 @@ for (const [language, owner, versionFile, lockFile] of [
     writeFileSync(path, advanced);
     if (lockFile) writeFileSync(join(root, lockFile), readFileSync(join(root, lockFile), "utf8").replace(rustConsumerLockEntry, (entry) => entry.replace(current, future)));
     editJson(join(root, ".release-please-manifest.json"), (m) => { m[owner] = future; });
+    if (language === "python") {
+      const preparation = spawnSync(process.execPath, [join(repository, "scripts/sync-python-dependency-floors.mjs")], { cwd: root, encoding: "utf8", timeout: 10_000 });
+      assert.equal(preparation.status, 0, preparation.stderr);
+    }
     const healthy = check(root);
     assert.equal(healthy.status, 0, healthy.stderr);
     mutations[`${language} version`](root);

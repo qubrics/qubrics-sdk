@@ -1,0 +1,73 @@
+from __future__ import annotations
+
+from dataclasses import dataclass
+from typing import Annotated
+
+from fastmcp.server.auth import RemoteAuthProvider
+from fastmcp.server.auth.providers.jwt import JWTVerifier
+from pydantic import AnyHttpUrl, TypeAdapter, UrlConstraints
+
+
+AuthorizationServerUrl = Annotated[AnyHttpUrl, UrlConstraints(preserve_empty_path=True)]
+AUTHORIZATION_SERVER_URL_ADAPTER: TypeAdapter[AnyHttpUrl] = TypeAdapter(AuthorizationServerUrl)
+HOSTED_MCP_RESOURCE_URLS = ("https://mcp.qubrics.com/mcp", "https://mcp.sendmux.ai/mcp")
+HOSTED_MCP_DISCOVERY_SCOPES = (
+    "analytics.read",
+    "billing.read",
+    "domain.create",
+    "domain.read",
+    "domain.verify",
+    "email.send",
+    "logs.read",
+    "mailbox.admin.create",
+    "mailbox.admin.manage",
+    "mailbox.admin.read",
+    "mailbox.read",
+    "mailbox.settings.update",
+    "webhook.create",
+    "webhook.manage",
+    "webhook.read",
+)
+
+
+@dataclass(frozen=True)
+class HostedAuthConfig:
+    issuer: str | list[str]
+    authorization_servers: tuple[str, ...]
+    jwks_uri: str
+    resource_base_url: str
+    mcp_path: str = "/mcp"
+    audience: str | None = None
+    scopes_supported: tuple[str, ...] = ()
+    resource_name: str = "Qubrics MCP"
+
+    @property
+    def resource_url(self) -> str:
+        return hosted_mcp_resource_url(self.resource_base_url, self.mcp_path)
+
+
+def hosted_mcp_resource_url(resource_base_url: str, mcp_path: str) -> str:
+    return f"{resource_base_url.rstrip('/')}/{mcp_path.lstrip('/')}"
+
+
+def create_remote_auth_provider(config: HostedAuthConfig) -> RemoteAuthProvider:
+    audience = config.audience or config.resource_url
+    if audience != config.resource_url:
+        raise ValueError(f"hosted MCP JWT audience must match resource URL: {config.resource_url}")
+
+    token_verifier = JWTVerifier(
+        jwks_uri=config.jwks_uri,
+        issuer=config.issuer,
+        audience=list(HOSTED_MCP_RESOURCE_URLS) if audience in HOSTED_MCP_RESOURCE_URLS else audience,
+    )
+
+    return RemoteAuthProvider(
+        token_verifier=token_verifier,
+        authorization_servers=[
+            AUTHORIZATION_SERVER_URL_ADAPTER.validate_python(server) for server in config.authorization_servers
+        ],
+        base_url=config.resource_base_url,
+        resource_base_url=config.resource_base_url,
+        scopes_supported=list(config.scopes_supported) or None,
+        resource_name=config.resource_name,
+    )

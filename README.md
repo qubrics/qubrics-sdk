@@ -59,6 +59,24 @@ Go v4 source for `qubrics.com/go/v4` awaits publication. Use published `sendmux.
 
 ## Quick start
 
+### Python source migration
+
+This checkout uses the shared `qubrics` Python namespace. The replacements below are awaiting publication. The Packages table and registry install commands still show the published Sendmux distributions.
+
+| Published distribution | Replacement and target version | Source import |
+| --- | --- | --- |
+| `sendmux-core` | `qubrics-core` 2.0.0 | `qubrics.core` |
+| `sendmux-sending` | `qubrics-sending` 2.0.0 | `qubrics.sending` |
+| `sendmux-mailbox` | `qubrics-mailbox` 3.0.0 | `qubrics.mailbox` |
+| `sendmux-management` | `qubrics-management` 3.0.0 | `qubrics.management` |
+| `sendmux-sdk` | `qubrics-sdk` 4.0.0 | `qubrics.sdk` |
+| `sendmux-mcp` | `qubrics-mcp` 3.0.0 | `qubrics.mcp` |
+| `langchain-sendmux` | `langchain-qubrics` 1.0.0 | `qubrics.langchain` |
+
+For example, the source Sending client is `from qubrics.sending import create_sending_client`. The source LangChain class is `qubrics.langchain.QubricsToolkit`. All seven distributions share the namespace without installing a separate package named `qubrics`.
+
+### Published packages
+
 Install only the package for the surface you need.
 
 ```sh
@@ -216,7 +234,7 @@ Ruby source in this checkout uses the `Qubrics` module. The replacements below a
 
 ### Maintain package contracts
 
-In a source checkout, maintainers can inspect the generated [MCP package contract](packages/python/mcp/sendmux_mcp/mcp-contract.json) for the actual tool catalogue, schemas, upload workflows, hosted resource, and frozen protocol revisions. It describes this checkout, not the version already available from a package registry. Source hashes and native distribution metadata bind the artifact to its inputs; local transports and upstream API origins are separate from the hosted OAuth resource.
+In a source checkout, maintainers can inspect the generated [MCP package contract](packages/python/mcp/qubrics/mcp/mcp-contract.json) for the actual tool catalogue, schemas, upload workflows, hosted resource, and frozen protocol revisions. It describes this checkout, not the version already available from a package registry. Source hashes and native distribution metadata bind the artifact to its inputs; local transports and upstream API origins are separate from the hosted OAuth resource.
 
 With the workspace dependencies installed and Python 3.10 or newer available, run these commands from the repository root:
 
@@ -227,6 +245,8 @@ pnpm build:mcp
 ```
 
 Generation refreshes editable Python metadata before discovering tools without upstream requests. The build checks wheel and source-distribution contents, an installed-wheel consumer outside the checkout, and the frozen conformance requirements. `pnpm drift:check` rejects generated changes that have not been staged or committed. Regenerate and review the contract when a release PR changes MCP's native version; do not reuse a contract from the previous version.
+
+Prepare each Python release PR from its freshly fetched head with `pnpm generate:python` followed by `pnpm generate:mcp`. Python generation synchronises internal dependency floors and their next-major upper bounds with the release manifest, then derives generated client versions from each native `pyproject.toml`. MCP generation refreshes the contract's package version and metadata digest. Review and commit the generated changes, then run `pnpm drift:check`, `pnpm test:release-state` and `pnpm build:python:dists`. Keep releases sequential and repeat preparation after Release Please refreshes a remaining PR; each candidate uses the sibling versions recorded in its own manifest.
 
 Native release validation covers TypeScript, Python, Rust, Ruby, and Go's component/tag convention. Go has no in-module version field. PHP versions belong to split-repository tags, not `composer.version` or release-please; Composer identities and dependencies are checked without treating a local path-repository version as publication evidence. Exact published tags and versions remain release gates.
 

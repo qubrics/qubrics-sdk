@@ -116,7 +116,7 @@ jobs:
     env:
       CANDIDATE_SHA: ${{ needs.release-please.outputs.candidate_sha }}
       PUBLICATION_RELEASES: ${{ needs.release-please.outputs.releases }}
-      OPENAPI_INPUT_DIR: ${{ github.workspace }}/packages/python/mcp/sendmux_mcp/openapi
+      OPENAPI_INPUT_DIR: ${{ github.workspace }}/packages/python/mcp/qubrics/mcp/openapi
       SENDMUX_NPM_PUBLISH_PACKAGES: ${{ needs.release-please.outputs.npm_packages }}
     permissions:
       contents: write
@@ -273,7 +273,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: release
     env:
-      OPENAPI_INPUT_DIR: ${{ github.workspace }}/packages/python/mcp/sendmux_mcp/openapi
+      OPENAPI_INPUT_DIR: ${{ github.workspace }}/packages/python/mcp/qubrics/mcp/openapi
     permissions:
       contents: write
       id-token: write
@@ -292,6 +292,11 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
           REQUESTED_VERSION: ${{ inputs.recover_ts_cli_version }}
         run: node .publication-guard/scripts/publication-guard.mjs resolve --tag "ts-cli-v${REQUESTED_VERSION}"
+
+      - name: Select immutable producer OpenAPI snapshots
+        env:
+          PRODUCER_SNAPSHOT_PATH: ${{ steps.producer.outputs.snapshot_path }}
+        run: echo "OPENAPI_INPUT_DIR=${GITHUB_WORKSPACE}/${PRODUCER_SNAPSHOT_PATH}" >> "$GITHUB_ENV"
 
       - name: Check out SDK
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
@@ -399,7 +404,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: release
     env:
-      OPENAPI_INPUT_DIR: ${{ github.workspace }}/packages/python/mcp/sendmux_mcp/openapi
+      OPENAPI_INPUT_DIR: ${{ github.workspace }}/packages/python/mcp/qubrics/mcp/openapi
     permissions:
       contents: read
       id-token: write
@@ -419,6 +424,11 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
           REQUESTED_VERSION: ${{ inputs.recover_ts_management_version }}
         run: node .publication-guard/scripts/publication-guard.mjs resolve --tag "ts-management-v${REQUESTED_VERSION}"
+
+      - name: Select immutable producer OpenAPI snapshots
+        env:
+          PRODUCER_SNAPSHOT_PATH: ${{ steps.producer.outputs.snapshot_path }}
+        run: echo "OPENAPI_INPUT_DIR=${GITHUB_WORKSPACE}/${PRODUCER_SNAPSHOT_PATH}" >> "$GITHUB_ENV"
 
       - name: Check out SDK
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
@@ -561,6 +571,7 @@ jobs:
           root = Path.cwd()
           pyproject = tomllib.loads((root / "packages/python/mcp/pyproject.toml").read_text())
           pypi_version = pyproject["project"]["version"]
+          pypi_name = pyproject["project"]["name"]
           requested_version = os.environ["RECOVER_MCP_REGISTRY_VERSION"]
 
           server_path = root / "packages/python/mcp/server.json"
@@ -576,9 +587,9 @@ jobs:
           if expected_marker not in marker:
             raise SystemExit(f"Missing README marker: {expected_marker}")
 
-          pypi_entries = [entry for entry in server.get("packages", []) if entry.get("registryType") == "pypi" and entry.get("identifier") == "sendmux-mcp"]
+          pypi_entries = [entry for entry in server.get("packages", []) if entry.get("registryType") == "pypi" and entry.get("identifier") == pypi_name]
           if len(pypi_entries) != 1 or pypi_entries[0]["version"] != pypi_version:
-            raise SystemExit("PyPI entry does not match committed sendmux-mcp package version")
+            raise SystemExit("PyPI entry does not match committed MCP package name and version")
           npm_entries = [entry for entry in server.get("packages", []) if entry.get("registryType") == "npm" and entry.get("identifier") == "sendmux-mcp"]
           npm_version = ""
           if npm_entries:
@@ -591,6 +602,7 @@ jobs:
             output.write(f"name={server['name']}\n")
             output.write(f"version={server['version']}\n")
             output.write(f"pypi_version={pypi_version}\n")
+            output.write(f"pypi_name={pypi_name}\n")
             output.write(f"npm_version={npm_version}\n")
           PY
 
@@ -598,9 +610,10 @@ jobs:
         env:
           MCP_SERVER_NAME: ${{ steps.mcp-manifest.outputs.name }}
           MCP_PACKAGE_VERSION: ${{ steps.mcp-manifest.outputs.pypi_version }}
+          MCP_PACKAGE_NAME: ${{ steps.mcp-manifest.outputs.pypi_name }}
         run: |
           set -euo pipefail
-          curl -fsSL "https://pypi.org/pypi/sendmux-mcp/${MCP_PACKAGE_VERSION}/json" -o /tmp/sendmux-mcp.json
+          curl -fsSL "https://pypi.org/pypi/${MCP_PACKAGE_NAME}/${MCP_PACKAGE_VERSION}/json" -o /tmp/sendmux-mcp.json
           python3 - <<'PY'
           import json
           import os
@@ -610,8 +623,8 @@ jobs:
           description = data["info"].get("description") or ""
           expected_marker = f"mcp-name: {os.environ['MCP_SERVER_NAME']}"
 
-          if data["info"]["version"] != os.environ["MCP_PACKAGE_VERSION"]:
-            raise SystemExit("PyPI returned the wrong sendmux-mcp version")
+          if data["info"]["name"] != os.environ["MCP_PACKAGE_NAME"] or data["info"]["version"] != os.environ["MCP_PACKAGE_VERSION"]:
+            raise SystemExit("PyPI returned the wrong MCP package name or version")
           if expected_marker not in description:
             raise SystemExit(f"PyPI description missing marker: {expected_marker}")
           PY
@@ -666,7 +679,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: release
     env:
-      OPENAPI_INPUT_DIR: ${{ github.workspace }}/packages/python/mcp/sendmux_mcp/openapi
+      OPENAPI_INPUT_DIR: ${{ github.workspace }}/packages/python/mcp/qubrics/mcp/openapi
     permissions:
       contents: read
       id-token: write
@@ -686,6 +699,11 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
           REQUESTED_TAG: ${{ inputs.recover_python_release_tag }}
         run: node .publication-guard/scripts/publication-guard.mjs resolve --tag "$REQUESTED_TAG"
+
+      - name: Select immutable producer OpenAPI snapshots
+        env:
+          PRODUCER_SNAPSHOT_PATH: ${{ steps.producer.outputs.snapshot_path }}
+        run: echo "OPENAPI_INPUT_DIR=${GITHUB_WORKSPACE}/${PRODUCER_SNAPSHOT_PATH}" >> "$GITHUB_ENV"
 
       - name: Check out SDK
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
@@ -779,7 +797,7 @@ jobs:
     env:
       CANDIDATE_SHA: ${{ needs.release-please.outputs.candidate_sha }}
       PUBLICATION_RELEASES: ${{ needs.release-please.outputs.releases }}
-      OPENAPI_INPUT_DIR: ${{ github.workspace }}/packages/python/mcp/sendmux_mcp/openapi
+      OPENAPI_INPUT_DIR: ${{ github.workspace }}/packages/python/mcp/qubrics/mcp/openapi
     permissions:
       contents: read
       id-token: write
@@ -911,18 +929,19 @@ jobs:
           import { appendFileSync } from "node:fs";
           import { verifyRegistryVersion } from "./scripts/check-mcp.mjs";
           const server = verifyRegistryVersion();
-          const packageVersion = (type) => server.packages.find((entry) => entry.registryType === type && entry.identifier === "sendmux-mcp").version;
-          appendFileSync(process.env.GITHUB_OUTPUT, `name=${server.name}\nversion=${server.version}\npypi_version=${packageVersion("pypi")}\nnpm_version=${packageVersion("npm")}\n`);
+          const registryPackage = (type) => server.packages.find((entry) => entry.registryType === type);
+          appendFileSync(process.env.GITHUB_OUTPUT, `name=${server.name}\nversion=${server.version}\npypi_name=${registryPackage("pypi").identifier}\npypi_version=${registryPackage("pypi").version}\nnpm_version=${registryPackage("npm").version}\n`);
           JS
 
       - name: Wait for PyPI MCP package marker
         env:
           MCP_SERVER_NAME: ${{ steps.mcp-manifest.outputs.name }}
           MCP_PACKAGE_VERSION: ${{ steps.mcp-manifest.outputs.pypi_version }}
+          MCP_PACKAGE_NAME: ${{ steps.mcp-manifest.outputs.pypi_name }}
         run: |
           set -euo pipefail
           for attempt in {1..30}; do
-            if curl -fsSL "https://pypi.org/pypi/sendmux-mcp/${MCP_PACKAGE_VERSION}/json" -o /tmp/sendmux-mcp.json; then
+            if curl -fsSL "https://pypi.org/pypi/${MCP_PACKAGE_NAME}/${MCP_PACKAGE_VERSION}/json" -o /tmp/sendmux-mcp.json; then
               if python3 - <<'PY'
           import json
           import os
@@ -932,8 +951,8 @@ jobs:
           description = data["info"].get("description") or ""
           expected_marker = f"mcp-name: {os.environ['MCP_SERVER_NAME']}"
 
-          if data["info"]["version"] != os.environ["MCP_PACKAGE_VERSION"]:
-            raise SystemExit("PyPI returned the wrong sendmux-mcp version")
+          if data["info"]["name"] != os.environ["MCP_PACKAGE_NAME"] or data["info"]["version"] != os.environ["MCP_PACKAGE_VERSION"]:
+            raise SystemExit("PyPI returned the wrong MCP package name or version")
           if expected_marker not in description:
             raise SystemExit(f"PyPI description missing marker: {expected_marker}")
           PY
@@ -943,7 +962,7 @@ jobs:
             fi
             sleep 10
           done
-          echo "Timed out waiting for PyPI sendmux-mcp ${MCP_PACKAGE_VERSION} marker" >&2
+          echo "Timed out waiting for PyPI ${MCP_PACKAGE_NAME} ${MCP_PACKAGE_VERSION} marker" >&2
           exit 1
 
       - name: Wait for npm MCP ownership marker
@@ -1058,7 +1077,7 @@ jobs:
     env:
       CANDIDATE_SHA: ${{ needs.release-please.outputs.candidate_sha }}
       PUBLICATION_RELEASES: ${{ needs.release-please.outputs.releases }}
-      OPENAPI_INPUT_DIR: ${{ github.workspace }}/packages/python/mcp/sendmux_mcp/openapi
+      OPENAPI_INPUT_DIR: ${{ github.workspace }}/packages/python/mcp/qubrics/mcp/openapi
     permissions:
       contents: read
       id-token: write

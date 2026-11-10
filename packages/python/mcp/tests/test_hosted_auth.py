@@ -4,9 +4,9 @@ from fastmcp.server.auth import RemoteAuthProvider
 from fastmcp.server.auth.providers.jwt import JWTVerifier
 from fastmcp.server.middleware import AuthMiddleware
 
-from sendmux_mcp.config import ServerConfig
-from sendmux_mcp.hosted_auth import HostedAuthConfig, create_remote_auth_provider, hosted_mcp_resource_url
-from sendmux_mcp.server import create_server
+from qubrics.mcp.config import ServerConfig
+from qubrics.mcp.hosted_auth import HostedAuthConfig, create_remote_auth_provider, hosted_mcp_resource_url
+from qubrics.mcp.server import create_server
 
 
 def test_remote_auth_provider_binds_resource_url_to_jwt_audience() -> None:
@@ -48,7 +48,7 @@ def test_remote_auth_provider_advertises_authorization_server_and_scopes() -> No
 
     assert [str(server) for server in auth_provider.authorization_servers] == ["https://app.sendmux.ai"]
     assert auth_provider._scopes_supported == ["mailbox.read", "email.send"]
-    assert auth_provider.resource_name == "Sendmux MCP"
+    assert auth_provider.resource_name == "Qubrics MCP"
 
 
 def test_remote_auth_provider_rejects_mismatched_explicit_audience() -> None:

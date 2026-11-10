@@ -73,7 +73,7 @@
     },
     "packages/python/langchain": {
       "component": "python-langchain",
-      "package-name": "langchain-sendmux",
+      "package-name": "langchain-qubrics",
       "release-type": "python",
       "initial-version": "0.1.0",
       "exclude-paths": [
@@ -82,7 +82,7 @@
     },
     "packages/python/core": {
       "component": "python-core",
-      "package-name": "sendmux-core",
+      "package-name": "qubrics-core",
       "release-type": "python",
       "initial-version": "1.0.0",
       "exclude-paths": [
@@ -91,7 +91,7 @@
     },
     "packages/python/sending": {
       "component": "python-sending",
-      "package-name": "sendmux-sending",
+      "package-name": "qubrics-sending",
       "release-type": "python",
       "initial-version": "1.0.0",
       "exclude-paths": [
@@ -100,7 +100,7 @@
     },
     "packages/python/mailbox": {
       "component": "python-mailbox",
-      "package-name": "sendmux-mailbox",
+      "package-name": "qubrics-mailbox",
       "release-type": "python",
       "initial-version": "1.0.0",
       "exclude-paths": [
@@ -109,7 +109,7 @@
     },
     "packages/python/management": {
       "component": "python-management",
-      "package-name": "sendmux-management",
+      "package-name": "qubrics-management",
       "release-type": "python",
       "initial-version": "1.0.0",
       "exclude-paths": [
@@ -118,7 +118,7 @@
     },
     "packages/python/sdk": {
       "component": "python-sdk",
-      "package-name": "sendmux-sdk",
+      "package-name": "qubrics-sdk",
       "release-type": "python",
       "initial-version": "1.0.0",
       "exclude-paths": [
@@ -127,14 +127,14 @@
     },
     "packages/python/mcp": {
       "component": "python-mcp",
-      "package-name": "sendmux-mcp",
+      "package-name": "qubrics-mcp",
       "release-type": "python",
       "initial-version": "1.0.0",
       "extra-files": [
         {
           "type": "json",
           "path": "server.json",
-          "jsonpath": "$.packages[?(@.registryType==\"pypi\" && @.identifier==\"sendmux-mcp\")].version"
+          "jsonpath": "$.packages[?(@.registryType==\"pypi\" && @.identifier==\"qubrics-mcp\")].version"
         }
       ],
       "exclude-paths": [
@@ -145,7 +145,6 @@
       "component": "go",
       "package-name": "qubrics.com/go/v4",
       "release-type": "go",
-      "release-as": "4.0.0",
       "include-component-in-tag": true,
       "include-v-in-tag": true,
       "tag-separator": "/",
