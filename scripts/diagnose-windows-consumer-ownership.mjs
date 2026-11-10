@@ -74,7 +74,7 @@ function captureLockOwners({ kind, fixture, directory, handles, phase, error }) 
   const lockedPath = error?.path;
   const fragment = lockedPath ? basename(lockedPath) : "sendmux-windows-";
   // Query handles before cold PowerShell startup can outlive a transient holder.
-  const captured = spawnSync(process.env.SDK343_HANDLE64, ["-accepteula", "-nobanner", fragment], {
+  const captured = spawnSync(process.env.SDK343_HANDLE64 ?? "handle64.exe", ["-accepteula", "-nobanner", fragment], {
     encoding: "utf8", timeout: 5000,
   });
   const processes = spawnSync(powershell, ["-NoProfile", "-NonInteractive", "-Command",

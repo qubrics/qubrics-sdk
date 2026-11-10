@@ -6,6 +6,7 @@ $config = Get-Content -LiteralPath $Request -Raw | ConvertFrom-Json
 # disallows breakaway and remains owned outside the command's process tree.
 Add-Type -TypeDefinition @'
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 public static class ConsumerJob {
@@ -97,25 +98,55 @@ public static class ConsumerJob {
         }
         throw new TimeoutException("Windows Job membership unconfirmed");
     }
-    public static bool HasLiveMembers(IntPtr job, DateTime deadline) {
-        foreach (uint pid in ProcessIds(job, deadline)) {
-            if (DateTime.UtcNow >= deadline) throw new TimeoutException("Windows Job membership unconfirmed");
-            IntPtr process = OpenProcess(0x101000, false, pid); // SYNCHRONIZE | QUERY_LIMITED_INFORMATION
-            Check(process != IntPtr.Zero);
-            try {
+    public static bool Shutdown(IntPtr job, DateTime deadline, bool interrupted) {
+        ExtendedLimits limits = new ExtendedLimits();
+        limits.Basic.Flags = 0x2008; // KILL_ON_JOB_CLOSE | ACTIVE_PROCESS; no breakaway.
+        limits.Basic.ActiveProcessLimit = 0;
+        if (!SetInformationJobObject(job, 9, ref limits, (uint)Marshal.SizeOf(limits)))
+            throw new Win32Exception(Marshal.GetLastWin32Error(), "Windows Job ActiveProcessLimit=0 rejected");
+        Console.Error.WriteLine("{\"windows_job_admission_limit\":0,\"accepted\":true}");
+        uint[] ids = ProcessIds(job, deadline);
+        Console.Error.WriteLine("{\"windows_job_shutdown_snapshot\":[" + String.Join(",", ids) + "]}");
+        var processes = new List<IntPtr>();
+        try {
+            bool live = false;
+            foreach (uint pid in ids) {
+                if (DateTime.UtcNow >= deadline) throw new TimeoutException("Windows Job membership unconfirmed");
+                IntPtr process = OpenProcess(0x101000, false, pid); // SYNCHRONIZE | QUERY_LIMITED_INFORMATION
+                if (process == IntPtr.Zero) {
+                    int error = Marshal.GetLastWin32Error();
+                    if (error == 87) continue; // PID already freed (ERROR_INVALID_PARAMETER).
+                    throw new Win32Exception(error);
+                }
+                processes.Add(process);
                 bool belongs;
                 Check(IsProcessInJob(process, job, out belongs));
-                // A recycled numeric PID is not proof of ownership of this handle.
-                if (!belongs) throw new InvalidOperationException("Windows Job membership changed before confirmation");
+                if (!belongs) {
+                    // Association cannot be broken: this numeric PID was recycled.
+                    processes.RemoveAt(processes.Count - 1);
+                    Check(CloseHandle(process));
+                    continue;
+                }
                 uint state = WaitForSingleObject(process, 0);
-                if (state == 258) return true; // WAIT_TIMEOUT: still nonsignaled.
+                if (state == 258) live = true; // WAIT_TIMEOUT: still nonsignaled.
+                else if (state == 0xffffffff) throw new Win32Exception(Marshal.GetLastWin32Error());
+                else if (state != 0) throw new InvalidOperationException("Windows Job process wait unconfirmed");
+            }
+            bool orphan = !interrupted && Active(job) > 0 && live;
+            // Accounting zero can precede cwd-handle rundown; retain handles across termination.
+            if (interrupted || orphan) Check(TerminateJobObject(job, 1));
+            foreach (IntPtr process in processes) {
+                uint remaining = (uint)Math.Max(0, Math.Ceiling((deadline - DateTime.UtcNow).TotalMilliseconds));
+                uint state = WaitForSingleObject(process, remaining);
+                if (state == 258) throw new TimeoutException("Windows Job shutdown unconfirmed");
                 if (state == 0xffffffff) throw new Win32Exception(Marshal.GetLastWin32Error());
                 if (state != 0) throw new InvalidOperationException("Windows Job process wait unconfirmed");
-            } finally { Check(CloseHandle(process)); }
+            }
+            return orphan;
+        } finally {
+            foreach (IntPtr process in processes) Check(CloseHandle(process));
         }
-        return false;
     }
-    public static void Terminate(IntPtr job) { Check(TerminateJobObject(job, 1)); }
 }
 '@
 
@@ -139,29 +170,34 @@ try {
     $start.Arguments = "-NoProfile -NonInteractive -EncodedCommand $encoded"
     $start.UseShellExecute = $false
     $bootstrap = [Diagnostics.Process]::Start($start)
-    [Console]::Error.WriteLine(('{"child_pid":' + $bootstrap.Id + ',"command":"windows-job-bootstrap"}'))
+    $bootstrapId = $bootstrap.Id
+    [Console]::Error.WriteLine(('{"child_pid":' + $bootstrapId + ',"command":"windows-job-bootstrap"}'))
     $interrupted = $false
     while (!($bootstrap.WaitForExit(0))) {
         if (Test-Path -LiteralPath $config.stop) { $interrupted = $true; break }
         Start-Sleep -Milliseconds 20
     }
     $deadline = [DateTime]::UtcNow.AddMilliseconds(2000)
-    # A transient accounting count is not a confirmed surviving process.
-    $orphan = !$interrupted -and ([ConsumerJob]::Active($job) -gt 0) -and [ConsumerJob]::HasLiveMembers($job, $deadline)
-    if ($interrupted -or $orphan) { [ConsumerJob]::Terminate($job) }
-    while (([ConsumerJob]::Active($job) -gt 0) -or !($bootstrap.WaitForExit(0))) {
+    $orphan = [ConsumerJob]::Shutdown($job, $deadline, $interrupted)
+    $remaining = [int][Math]::Max(0, [Math]::Ceiling(($deadline - [DateTime]::UtcNow).TotalMilliseconds))
+    if (!$bootstrap.WaitForExit($remaining)) { throw 'Windows Job bootstrap shutdown unconfirmed' }
+    $bootstrapExitCode = $bootstrap.ExitCode
+    # Failed-association accounting retains the bootstrap until its process handle closes.
+    $bootstrap.Dispose()
+    $bootstrap = $null
+    while ([ConsumerJob]::Active($job) -gt 0) {
         if ([DateTime]::UtcNow -ge $deadline) { throw 'Windows Job shutdown unconfirmed' }
         Start-Sleep -Milliseconds 20
     }
     $result = @{
         job = $config.job; controller = $PID; active_processes = 0
-        bootstrap = $bootstrap.Id; exit_code = $bootstrap.ExitCode
+        bootstrap = $bootstrapId; exit_code = $bootstrapExitCode
         interrupted = $interrupted; orphan = $orphan
     }
     [IO.File]::WriteAllText($config.result, ($result | ConvertTo-Json -Compress))
-    [Console]::Error.WriteLine(('{"child_closed":' + $bootstrap.Id + '}'))
+    [Console]::Error.WriteLine(('{"child_closed":' + $bootstrapId + '}'))
     if ($interrupted -or $orphan) { exit 1 }
-    exit $bootstrap.ExitCode
+    exit $bootstrapExitCode
 } finally {
     # Missing completion receipt is never cleanup proof, even with kill-on-close.
     if (![ConsumerJob]::CloseHandle($job)) { throw 'Windows Job handle close failed' }
