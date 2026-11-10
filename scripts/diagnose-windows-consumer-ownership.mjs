@@ -70,6 +70,27 @@ async function recover(pid, row) {
   row.recovered.push(pid);
 }
 
+function captureLockOwners({ kind, fixture, directory, handles, phase, error }) {
+  const lockedPath = error?.path;
+  const fragment = lockedPath ? basename(lockedPath) : "sendmux-windows-";
+  // Query handles before cold PowerShell startup can outlive a transient holder.
+  const captured = spawnSync(process.env.SDK343_HANDLE64, ["-accepteula", "-nobanner", fragment], {
+    encoding: "utf8", timeout: 5000,
+  });
+  const processes = spawnSync(powershell, ["-NoProfile", "-NonInteractive", "-Command",
+    "Get-CimInstance Win32_Process | Select-Object ProcessId, Name, ParentProcessId, CommandLine | ConvertTo-Json -Depth 2",
+  ], { encoding: "utf8", timeout: 10000 });
+  const snapshot = [
+    JSON.stringify({ diagnostic: "sdk343-fixture-lock", phase, owner: process.pid, kind, fixture, directory, handles, fragment, lockedPath, error: error?.message }),
+    captured.stdout, captured.stderr,
+    JSON.stringify({ tool: "handle64", status: captured.status, signal: captured.signal, error: captured.error?.message }),
+    processes.stdout, processes.stderr,
+    JSON.stringify({ tool: "CIM", status: processes.status, signal: processes.signal, error: processes.error?.message }),
+  ].join("\n");
+  console.error(snapshot);
+  writeFileSync(join(evidence, `fixture-lock-${phase}-${kind}.log`), snapshot);
+}
+
 async function scenario(kind) {
   const fixture = mkdtempSync(join(tmpdir(), "sendmux-windows-ownership-"));
   const row = { kind, owner: process.pid, fixture, recovery: [], recovered: [] };
@@ -142,6 +163,7 @@ exit 0`;
     } catch (error) {
       timerMock?.mock.restore();
       if (!row.result && deadlineCallback) {
+        captureLockOwners({ kind, fixture, directory, handles: readHandles(), phase: "before-readiness-stop" });
         deadlineCallback();
         await invocation;
       }
@@ -153,6 +175,7 @@ exit 0`;
     Object.assign(row, handles, { directory });
     console.log(JSON.stringify({ ...handles, directory, kind }));
     assert(!absent(handles.leader) && !absent(handles.descendant), "Both owned processes must be live before trigger");
+    captureLockOwners({ kind, fixture, directory, handles, phase: "before-trigger" });
     timerMock?.mock.restore();
     if (kind === "powershell-deadline") {
       assert.equal(typeof deadlineCallback, "function");
@@ -198,22 +221,7 @@ exit 0`;
       row.cleanup_error = error.message;
       try {
         if (error.code === "EBUSY") {
-          const lockedPath = error.path ?? fixture;
-          // Match the unique directory name across Windows short/long path aliases.
-          const captured = spawnSync(powershell, ["-NoProfile", "-NonInteractive", "-Command",
-            "& $env:SDK343_HANDLE64 -accepteula -nobanner $env:SDK343_LOCKED_NAME; Get-CimInstance Win32_Process | Select-Object ProcessId, Name, ParentProcessId, CommandLine | ConvertTo-Json -Depth 2",
-          ], {
-            env: { ...process.env, SDK343_LOCKED_NAME: basename(lockedPath) },
-            encoding: "utf8",
-            timeout: 15000,
-          });
-          const snapshot = [
-            JSON.stringify({ diagnostic: "sdk343-fixture-lock", fixture, lockedPath, kind, error: error.message }),
-            captured.stdout, captured.stderr,
-            JSON.stringify({ status: captured.status, signal: captured.signal, error: captured.error?.message }),
-          ].join("\n");
-          console.error(snapshot);
-          writeFileSync(join(evidence, `fixture-lock-${kind}.log`), snapshot);
+          captureLockOwners({ kind, fixture, directory, handles, phase: "EBUSY", error });
         }
       } finally {
         throw error;
