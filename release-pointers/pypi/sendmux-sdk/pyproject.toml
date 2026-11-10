@@ -1,0 +1,23 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "sendmux-sdk"
+version = "4.0.0"
+description = "Deprecated: use qubrics-sdk."
+readme = { text = "sendmux-sdk is deprecated. Install qubrics-sdk and import from qubrics.", content-type = "text/plain" }
+requires-python = ">=3.10"
+license = "MIT"
+classifiers = ["Development Status :: 7 - Inactive"]
+dependencies = ["qubrics-sdk>=4.0.0,<5.0.0"]
+
+[project.urls]
+Repository = "https://github.com/qubrics/qubrics-sdk"
+
+[tool.hatch.build.targets.sdist]
+core-metadata-version = "2.4"
+
+[tool.hatch.build.targets.wheel]
+core-metadata-version = "2.4"
+bypass-selection = true
