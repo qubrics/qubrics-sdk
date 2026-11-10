@@ -1,8 +1,10 @@
 #!/usr/bin/env node
 
 import { execFileSync } from "node:child_process";
+import { pythonPackages } from "./python-release-guardrails.mjs";
 
 const generatedPackageDirs = [
+  ...pythonPackages.map((name) => `packages/python/${name}/pyproject.toml`),
   "go/mailbox",
   "go/management",
   "go/sending",
