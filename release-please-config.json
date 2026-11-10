@@ -67,7 +67,6 @@
     "packages/ts/ai-sdk": {
       "component": "ts-ai-sdk",
       "package-name": "@qubrics/ai-sdk",
-      "release-as": "1.0.0",
       "initial-version": "0.1.0",
       "exclude-paths": [
         "evidence"
