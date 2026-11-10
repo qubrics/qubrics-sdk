@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { spawn } from "node:child_process";
+import { spawn, spawnSync } from "node:child_process";
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
@@ -191,11 +191,22 @@ exit 0`;
       if (invocation) await invocation;
       if (directory && existsSync(directory)) await rm(directory, { recursive: true, maxRetries: 3, retryDelay: 100 });
       assert(!directory || !existsSync(directory));
-      await rm(fixture, { recursive: true, maxRetries: 3, retryDelay: 100 });
+      await rm(fixture, { recursive: true, maxRetries: 0 });
       assert(!existsSync(fixture));
       row.paths_absent = true;
     } catch (error) {
       row.cleanup_error = error.message;
+      if (error.code === "EBUSY") {
+        console.error(JSON.stringify({ diagnostic: "sdk343-fixture-lock", fixture, error: error.message }));
+        const captured = spawnSync(powershell, ["-NoProfile", "-NonInteractive", "-Command",
+          "& $env:SDK343_HANDLE64 -accepteula -nobanner $env:SDK343_LOCKED_FIXTURE; Get-CimInstance Win32_Process | Select-Object ProcessId, ParentProcessId, CommandLine | ConvertTo-Json -Depth 2",
+        ], {
+          env: { ...process.env, SDK343_LOCKED_FIXTURE: fixture },
+          stdio: "inherit",
+          timeout: 15000,
+        });
+        console.error(JSON.stringify({ diagnostic: "sdk343-fixture-lock-finished", status: captured.status, signal: captured.signal, error: captured.error?.message }));
+      }
       throw error;
     } finally {
       writeFileSync(join(evidence, "results.json"), JSON.stringify(results, null, 2));
