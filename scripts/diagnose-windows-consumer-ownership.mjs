@@ -3,7 +3,7 @@ import { spawn, spawnSync } from "node:child_process";
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { join, resolve } from "node:path";
+import { basename, join, resolve } from "node:path";
 import { setTimeout as delay } from "node:timers/promises";
 import { mock } from "node:test";
 import { run, workspace } from "./ci-consumers.mjs";
@@ -68,6 +68,27 @@ async function recover(pid, row) {
   }
   await waitFor(() => absent(pid), `Recorded process ${pid} did not stop`, 5000);
   row.recovered.push(pid);
+}
+
+function captureLockOwners({ kind, fixture, directory, handles, phase, error }) {
+  const lockedPath = error?.path;
+  const fragment = lockedPath ? basename(lockedPath) : "sendmux-windows-";
+  // Query handles before cold PowerShell startup can outlive a transient holder.
+  const captured = spawnSync(process.env.SDK343_HANDLE64 ?? "handle64.exe", ["-accepteula", "-nobanner", fragment], {
+    encoding: "utf8", timeout: 5000,
+  });
+  const processes = spawnSync(powershell, ["-NoProfile", "-NonInteractive", "-Command",
+    "Get-CimInstance Win32_Process | Select-Object ProcessId, Name, ParentProcessId, CommandLine | ConvertTo-Json -Depth 2",
+  ], { encoding: "utf8", timeout: 10000 });
+  const snapshot = [
+    JSON.stringify({ diagnostic: "sdk343-fixture-lock", phase, owner: process.pid, kind, fixture, directory, handles, fragment, lockedPath, error: error?.message }),
+    captured.stdout, captured.stderr,
+    JSON.stringify({ tool: "handle64", status: captured.status, signal: captured.signal, error: captured.error?.message }),
+    processes.stdout, processes.stderr,
+    JSON.stringify({ tool: "CIM", status: processes.status, signal: processes.signal, error: processes.error?.message }),
+  ].join("\n");
+  console.error(snapshot);
+  writeFileSync(join(evidence, `fixture-lock-${phase}-${kind}.log`), snapshot);
 }
 
 async function scenario(kind) {
@@ -191,35 +212,18 @@ exit 0`;
       if (invocation) await invocation;
       if (directory && existsSync(directory)) await rm(directory, { recursive: true, maxRetries: 3, retryDelay: 100 });
       assert(!directory || !existsSync(directory));
-      try {
-        await rm(fixture, { recursive: true, maxRetries: 0 });
-      } catch (error) {
-        try {
-          if (error.code === "EBUSY") {
-            const captured = spawnSync(powershell, ["-NoProfile", "-NonInteractive", "-Command",
-              "& $env:SDK343_HANDLE64 -accepteula -nobanner $env:SDK343_LOCKED_FIXTURE; Get-CimInstance Win32_Process | Select-Object ProcessId, Name, ParentProcessId, CommandLine | ConvertTo-Json -Depth 2",
-            ], {
-              env: { ...process.env, SDK343_LOCKED_FIXTURE: fixture },
-              encoding: "utf8",
-              timeout: 15000,
-            });
-            const snapshot = [
-              JSON.stringify({ diagnostic: "sdk343-fixture-lock", fixture, kind, error: error.message }),
-              captured.stdout, captured.stderr,
-              JSON.stringify({ status: captured.status, signal: captured.signal, error: captured.error?.message }),
-            ].join("\n");
-            console.error(snapshot);
-            writeFileSync(join(evidence, `fixture-lock-${kind}.log`), snapshot);
-          }
-        } finally {
-          throw error;
-        }
-      }
+      await rm(fixture, { recursive: true, maxRetries: 0 });
       assert(!existsSync(fixture));
       row.paths_absent = true;
     } catch (error) {
       row.cleanup_error = error.message;
-      throw error;
+      try {
+        if (error.code === "EBUSY") {
+          captureLockOwners({ kind, fixture, directory, handles, phase: "EBUSY", error });
+        }
+      } finally {
+        throw error;
+      }
     } finally {
       writeFileSync(join(evidence, "results.json"), JSON.stringify(results, null, 2));
       console.log(JSON.stringify({ kind, verdict: row.verdict, recovered: row.recovered, paths_absent: row.paths_absent, cleanup_error: row.cleanup_error, assertion: row.assertion, error: row.error }));
