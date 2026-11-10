@@ -12,10 +12,10 @@ import (
 	"strings"
 	"time"
 
-	"sendmux.ai/go/v3/core"
-	"sendmux.ai/go/v3/mailbox"
-	"sendmux.ai/go/v3/management"
-	"sendmux.ai/go/v3/sending"
+	"qubrics.com/go/v4/core"
+	"qubrics.com/go/v4/mailbox"
+	"qubrics.com/go/v4/management"
+	"qubrics.com/go/v4/sending"
 )
 
 type plan struct {
@@ -656,11 +656,11 @@ func contains(values []string, needle string) bool {
 }
 
 func appBaseURL() string {
-	return firstEnvOrDefault("https://app.sendmux.ai/api/v1", "SENDMUX_LIVE_E2E_APP_BASE_URL", "SENDMUX_STAGING_APP_BASE_URL")
+	return firstEnvOrDefault("https://app.qubrics.com/api/v1", "SENDMUX_LIVE_E2E_APP_BASE_URL", "SENDMUX_STAGING_APP_BASE_URL")
 }
 
 func sendingBaseURL() string {
-	return firstEnvOrDefault("https://smtp.sendmux.ai/api/v1", "SENDMUX_LIVE_E2E_SENDING_BASE_URL", "SENDMUX_STAGING_SMTP_BASE_URL")
+	return firstEnvOrDefault("https://smtp.qubrics.com/api/v1", "SENDMUX_LIVE_E2E_SENDING_BASE_URL", "SENDMUX_STAGING_SMTP_BASE_URL")
 }
 
 func rootAPIKey() string {

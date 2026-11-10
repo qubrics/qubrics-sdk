@@ -56,7 +56,7 @@ const mutations = {
   "rust floor consumer lock updater": (root) => editJson(join(root, "release-please-config.json"), (c) => { delete c.packages.rust["extra-files"]; }),
   "ruby version": (root) => mutateNativeVersion(root, "packages/ruby/core/lib/qubrics/core/version.rb", /^\s*VERSION = '([^']+)'$/m),
   "ruby identity": (root) => writeFileSync(join(root, "packages/ruby/core/qubrics-core.gemspec"), readFileSync(join(root, "packages/ruby/core/qubrics-core.gemspec"), "utf8").replace("spec.name = 'qubrics-core'", "spec.name = 'wrong-core'")),
-  "go identity": (root) => writeFileSync(join(root, "go/go.mod"), readFileSync(join(root, "go/go.mod"), "utf8").replace("module sendmux.ai/go", "module wrong.invalid/go")),
+  "go identity": (root) => writeFileSync(join(root, "go/go.mod"), readFileSync(join(root, "go/go.mod"), "utf8").replace("module qubrics.com/go", "module wrong.invalid/go")),
   "go tag convention": (root) => editJson(join(root, "release-please-config.json"), (c) => { c.packages.go["tag-separator"] = "-"; }),
   "missing manifest owner": (root) => editJson(join(root, ".release-please-manifest.json"), (m) => { delete m["packages/python/mcp"]; }),
   "extra manifest owner": (root) => editJson(join(root, ".release-please-manifest.json"), (m) => { m["packages/other"] = "1.0.0"; }),

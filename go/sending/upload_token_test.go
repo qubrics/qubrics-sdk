@@ -12,7 +12,7 @@ import (
 
 	"github.com/ogen-go/ogen/middleware"
 	"github.com/ogen-go/ogen/ogenerrors"
-	"sendmux.ai/go/v3/sending"
+	"qubrics.com/go/v4/sending"
 )
 
 type optionalUploadTokens struct{ legacySendingSecurity }

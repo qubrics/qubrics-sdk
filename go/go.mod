@@ -1,4 +1,4 @@
-module sendmux.ai/go/v3
+module qubrics.com/go/v4
 
 go 1.23.0
 

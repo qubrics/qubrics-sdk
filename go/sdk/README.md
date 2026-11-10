@@ -1,13 +1,15 @@
-# Sendmux Go SDK anchor
+# Qubrics Go SDK anchor
 
-[![Go Reference](https://pkg.go.dev/badge/sendmux.ai/go/v3/sdk.svg)](https://pkg.go.dev/sendmux.ai/go/v3/sdk)
+[![Go Reference](https://pkg.go.dev/badge/qubrics.com/go/v4/sdk.svg)](https://pkg.go.dev/qubrics.com/go/v4/sdk)
 
-Package `sdk` anchors the Sendmux Go module. It does not re-export the surface clients.
+Package `sdk` anchors the Qubrics Go module. It does not re-export the surface clients.
 
 ## Install
 
+These commands target unpublished v4 source. Use published `sendmux.ai/go/v3@v3.0.0`.
+
 ```sh
-go get sendmux.ai/go/v3@v3.0.0
+go get qubrics.com/go/v4@v4.0.0
 ```
 
 ## Use the surface packages
@@ -16,24 +18,24 @@ Most applications should import the package for the API surface they need:
 
 ```go
 import (
-	"sendmux.ai/go/v3/mailbox"
-	"sendmux.ai/go/v3/management"
-	"sendmux.ai/go/v3/sending"
+	"qubrics.com/go/v4/mailbox"
+	"qubrics.com/go/v4/management"
+	"qubrics.com/go/v4/sending"
 )
 ```
 
 | Surface | Import path | API key |
 | --- | --- | --- |
-| Sending | `sendmux.ai/go/v3/sending` | `smx_mbx_*` or owner-approved `smx_agent_*` |
-| Mailbox | `sendmux.ai/go/v3/mailbox` | `smx_mbx_*` or `smx_agent_*` |
-| Management | `sendmux.ai/go/v3/management` | `smx_root_*` |
-| Core helpers | `sendmux.ai/go/v3/core` | n/a |
+| Sending | `qubrics.com/go/v4/sending` | `smx_mbx_*` or owner-approved `smx_agent_*` |
+| Mailbox | `qubrics.com/go/v4/mailbox` | `smx_mbx_*` or `smx_agent_*` |
+| Management | `qubrics.com/go/v4/management` | `smx_root_*` |
+| Core helpers | `qubrics.com/go/v4/core` | n/a |
 
-All three surface packages also provide `NewWithAccessToken` and `NewWithTokenProvider` for [REST OAuth](https://sendmux.ai/docs/developer-tools/oauth).
+All three surface packages also provide `NewWithAccessToken` and `NewWithTokenProvider` for [REST OAuth](https://qubrics.com/docs/developer-tools/oauth).
 
 ## Documentation
 
-- Guides: <https://sendmux.ai/docs>
-- Go reference: <https://pkg.go.dev/sendmux.ai/go/v3/sdk>
+- Guides: <https://qubrics.com/docs>
+- Go reference: <https://pkg.go.dev/qubrics.com/go/v4/sdk>
 
-Upgrading from `sendmux.ai/go/v2` or `sendmux.ai/go` v1? See the [version 3 migration](../README.md#version-3-migration) before changing imports.
+For existing installations, see the [version 4 migration](../README.md#version-4-migration).

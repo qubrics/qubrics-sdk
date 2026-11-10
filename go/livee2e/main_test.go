@@ -3,7 +3,7 @@ package main
 import (
 	"testing"
 
-	"sendmux.ai/go/v3/management"
+	"qubrics.com/go/v4/management"
 )
 
 func TestAPIErrorExtractsHeaderWrappedManagementResponse(t *testing.T) {

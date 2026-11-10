@@ -1,26 +1,28 @@
-# Sendmux Go SDK
+# Qubrics Go SDK
 
-[![Go Reference](https://pkg.go.dev/badge/sendmux.ai/go/v3.svg)](https://pkg.go.dev/sendmux.ai/go/v3)
+[![Go Reference](https://pkg.go.dev/badge/qubrics.com/go/v4.svg)](https://pkg.go.dev/qubrics.com/go/v4)
 
-Official Sendmux Go module for the Sending, Mailbox, and Management APIs.
+Official Qubrics Go module for the Sending, Mailbox, and Management APIs.
 
 ## Install
+
+These commands target unpublished v4 source. Use published `sendmux.ai/go/v3@v3.0.0`.
 
 Requires Go 1.23 or newer.
 
 ```sh
-go get sendmux.ai/go/v3@v3.0.0
+go get qubrics.com/go/v4@v4.0.0
 ```
 
 ## Packages
 
 | Package | Import path | API key |
 | --- | --- | --- |
-| Core helpers | `sendmux.ai/go/v3/core` | n/a |
-| Sending client | `sendmux.ai/go/v3/sending` | `smx_mbx_*` or owner-approved `smx_agent_*` |
-| Mailbox client | `sendmux.ai/go/v3/mailbox` | `smx_mbx_*` or `smx_agent_*` |
-| Management client | `sendmux.ai/go/v3/management` | `smx_root_*` |
-| Module anchor | `sendmux.ai/go/v3/sdk` | n/a |
+| Core helpers | `qubrics.com/go/v4/core` | n/a |
+| Sending client | `qubrics.com/go/v4/sending` | `smx_mbx_*` or owner-approved `smx_agent_*` |
+| Mailbox client | `qubrics.com/go/v4/mailbox` | `smx_mbx_*` or `smx_agent_*` |
+| Management client | `qubrics.com/go/v4/management` | `smx_root_*` |
+| Module anchor | `qubrics.com/go/v4/sdk` | n/a |
 
 ## Connection checks
 
@@ -34,11 +36,11 @@ import (
 	"fmt"
 	"os"
 
-	"sendmux.ai/go/v3/management"
+	"qubrics.com/go/v4/management"
 )
 
 func main() {
-	client, err := management.New(os.Getenv("SENDMUX_API_KEY"))
+	client, err := management.New(os.Getenv("QUBRICS_API_KEY"))
 	if err != nil {
 		panic(err)
 	}
@@ -69,13 +71,13 @@ import (
 	"fmt"
 	"os"
 
-	"sendmux.ai/go/v3/sending"
+	"qubrics.com/go/v4/sending"
 )
 
 func main() {
 	ctx := context.Background()
 
-	client, err := sending.New(os.Getenv("SENDMUX_SENDING_API_KEY"))
+	client, err := sending.New(os.Getenv("QUBRICS_SENDING_API_KEY"))
 	if err != nil {
 		panic(err)
 	}
@@ -88,7 +90,7 @@ func main() {
 		To: sending.EmailSendRequestTo{
 			Email: "recipient@example.com",
 		},
-		Subject:  "Hello from Sendmux",
+		Subject:  "Hello from Qubrics",
 		HTMLBody: "<p>Hello.</p>",
 		TextBody: sending.NewOptString("Hello."),
 	}, sending.SendingSendEmailParams{
@@ -118,13 +120,13 @@ import (
 	"fmt"
 	"os"
 
-	"sendmux.ai/go/v3/mailbox"
+	"qubrics.com/go/v4/mailbox"
 )
 
 func main() {
 	ctx := context.Background()
 
-	client, err := mailbox.New(os.Getenv("SENDMUX_MAILBOX_API_KEY"))
+	client, err := mailbox.New(os.Getenv("QUBRICS_MAILBOX_API_KEY"))
 	if err != nil {
 		panic(err)
 	}
@@ -157,13 +159,13 @@ import (
 	"fmt"
 	"os"
 
-	"sendmux.ai/go/v3/management"
+	"qubrics.com/go/v4/management"
 )
 
 func main() {
 	ctx := context.Background()
 
-	client, err := management.New(os.Getenv("SENDMUX_API_KEY"))
+	client, err := management.New(os.Getenv("QUBRICS_API_KEY"))
 	if err != nil {
 		panic(err)
 	}
@@ -190,7 +192,13 @@ func main() {
 
 All three surface packages expose `NewWithAccessToken(token, opts...)` and `NewWithTokenProvider(provider, opts...)`. The provider has signature `func(context.Context) (string, error)` and runs for each authenticated request with its request context. Your application owns token storage, expiry checks and refresh coordination.
 
-Use a bare REST access token with the operation's required scopes and mailbox access. See [OAuth for REST APIs](https://sendmux.ai/docs/developer-tools/oauth). Existing `New` constructors retain API-key prefix validation.
+Use a bare REST access token with the operation's required scopes and mailbox access. See [OAuth for REST APIs](https://qubrics.com/docs/developer-tools/oauth). Existing `New` constructors retain API-key prefix validation.
+
+## Version 4 migration
+
+Change the module requirement and every import from `sendmux.ai/go/v3` to `qubrics.com/go/v4` together. Sending defaults to `https://smtp.qubrics.com/api/v1`, while Mailbox and Management use `https://app.qubrics.com/api/v1`. Explicit base-URL overrides still work.
+
+The v1, v2 and v3 tags remain available under their existing paths. Existing `SENDMUX_*` environment names and `SendmuxOption` remain supported. Use `QUBRICS_*` in new configuration.
 
 ## Version 3 migration
 
@@ -266,11 +274,11 @@ Version 1 (`sendmux.ai/go`) programs move straight to v3 with the same steps; th
 
 ## Documentation
 
-- Guides: <https://sendmux.ai/docs>
-- Sending API: <https://sendmux.ai/docs/sending-api/introduction>
-- Mailbox API: <https://sendmux.ai/docs/mailbox-api/introduction>
-- Management API: <https://sendmux.ai/docs/api/introduction>
+- Guides: <https://qubrics.com/docs>
+- Sending API: <https://qubrics.com/docs/sending-api/introduction>
+- Mailbox API: <https://qubrics.com/docs/mailbox-api/introduction>
+- Management API: <https://qubrics.com/docs/api/introduction>
 
 ## Support
 
-For support, email [contact@sendmux.ai](mailto:contact@sendmux.ai).
+For support, email [support@qubrics.com](mailto:support@qubrics.com).
