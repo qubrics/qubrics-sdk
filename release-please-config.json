@@ -74,7 +74,6 @@
     "packages/python/langchain": {
       "component": "python-langchain",
       "package-name": "langchain-qubrics",
-      "release-as": "1.0.0",
       "release-type": "python",
       "initial-version": "0.1.0",
       "exclude-paths": [
@@ -84,7 +83,6 @@
     "packages/python/core": {
       "component": "python-core",
       "package-name": "qubrics-core",
-      "release-as": "2.0.0",
       "release-type": "python",
       "initial-version": "1.0.0",
       "exclude-paths": [
@@ -94,7 +92,6 @@
     "packages/python/sending": {
       "component": "python-sending",
       "package-name": "qubrics-sending",
-      "release-as": "2.0.0",
       "release-type": "python",
       "initial-version": "1.0.0",
       "exclude-paths": [
@@ -104,7 +101,6 @@
     "packages/python/mailbox": {
       "component": "python-mailbox",
       "package-name": "qubrics-mailbox",
-      "release-as": "3.0.0",
       "release-type": "python",
       "initial-version": "1.0.0",
       "exclude-paths": [
@@ -114,7 +110,6 @@
     "packages/python/management": {
       "component": "python-management",
       "package-name": "qubrics-management",
-      "release-as": "3.0.0",
       "release-type": "python",
       "initial-version": "1.0.0",
       "exclude-paths": [
@@ -124,7 +119,6 @@
     "packages/python/sdk": {
       "component": "python-sdk",
       "package-name": "qubrics-sdk",
-      "release-as": "4.0.0",
       "release-type": "python",
       "initial-version": "1.0.0",
       "exclude-paths": [
@@ -134,7 +128,6 @@
     "packages/python/mcp": {
       "component": "python-mcp",
       "package-name": "qubrics-mcp",
-      "release-as": "3.0.0",
       "release-type": "python",
       "initial-version": "1.0.0",
       "extra-files": [
