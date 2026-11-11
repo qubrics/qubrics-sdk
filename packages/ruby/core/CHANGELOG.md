@@ -1,5 +1,23 @@
 # Changelog
 
+## [2.0.0](https://github.com/qubrics/qubrics-sdk/compare/ruby-core/v1.3.0...ruby-core/v2.0.0) (2026-11-11)
+
+
+### ⚠ BREAKING CHANGES
+
+* **ruby:** rename SDK gems and modules to Qubrics
+
+### Features
+
+* add compatible Qubrics integration aliases ([dff5cb8](https://github.com/qubrics/qubrics-sdk/commit/dff5cb89bccb5840d55071d23f79ff88c7e58040))
+* preserve integration contracts with Qubrics aliases ([722fbab](https://github.com/qubrics/qubrics-sdk/commit/722fbab2f98248d17b4878dd5149a35a711d5a18))
+* **ruby:** rename SDK gems and modules to Qubrics ([c6a27a6](https://github.com/qubrics/qubrics-sdk/commit/c6a27a61c409bcad497a68b436ffdfc38cf874b8))
+
+
+### Bug Fixes
+
+* preserve legacy SDK compatibility with dual aliases ([4910037](https://github.com/qubrics/qubrics-sdk/commit/491003792dd742cb2c83e4a09501abdf4f4458c9))
+
 ## [1.3.0](https://github.com/Sendmux/sendmux-sdk/compare/ruby-core/v1.2.0...ruby-core/v1.3.0) (2026-09-10)
 
 
