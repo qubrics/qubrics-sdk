@@ -1,5 +1,26 @@
 # Changelog
 
+## [4.0.0](https://github.com/qubrics/qubrics-sdk/compare/python-sdk-v3.0.1...python-sdk-v4.0.0) (2026-11-11)
+
+
+### ⚠ BREAKING CHANGES
+
+* **python:** move SDK packages into the Qubrics namespace
+
+### Features
+
+* **python:** move SDK packages into the Qubrics namespace ([a326bc9](https://github.com/qubrics/qubrics-sdk/commit/a326bc923fff448470d908bb527afaaa35f6d739))
+
+
+### Bug Fixes
+
+* **python:** prepare Sending 2.0.0 native release metadata ([9510177](https://github.com/qubrics/qubrics-sdk/commit/9510177d1cf309262bfa856975e64624c5aecf35))
+
+
+### Documentation
+
+* use generated SDK method names in examples ([5bb29fc](https://github.com/qubrics/qubrics-sdk/commit/5bb29fc309bae1013da2802210a5b23ccf9dbfd0))
+
 ## [3.0.1](https://github.com/Sendmux/sendmux-sdk/compare/python-sdk-v3.0.0...python-sdk-v3.0.1) (2026-09-21)
 
 
