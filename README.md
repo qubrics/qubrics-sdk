@@ -10,7 +10,7 @@
 
 Official SDK, CLI, and MCP workspace for Qubrics.
 
-The seven `@qubrics/*` npm packages and `qubrics-core` on PyPI are published. Existing `@sendmux/*` releases remain available. Other Python and Ruby packages use the published names below until their separate migrations ship.
+The seven `@qubrics/*` npm packages and PyPI packages `qubrics-core` and `qubrics-sending` are published. Existing `@sendmux/*` releases remain available. Other Python and Ruby packages use the published names below until their separate migrations ship.
 
 Go v4 source for `qubrics.com/go/v4` awaits publication. Use published `sendmux.ai/go/v3@v3.0.0`.
 
@@ -34,7 +34,7 @@ Go v4 source for `qubrics.com/go/v4` awaits publication. Use published `sendmux.
 | npm | `@qubrics/ai-sdk` | Vercel AI SDK tools (agent inbox + sending) | send + receive `smx_mbx_*` or `smx_agent_*` | `npm install @qubrics/ai-sdk` | [`packages/ts/ai-sdk`](packages/ts/ai-sdk) |
 | Homebrew | `sendmux` | `sendmux` CLI | command/profile-specific | `brew install qubrics/tap/sendmux` | [`qubrics/homebrew-tap`](https://github.com/qubrics/homebrew-tap) |
 | PyPI | `qubrics-core` | Shared Python helpers | n/a | `pip install qubrics-core` | [`packages/python/core`](packages/python/core) |
-| PyPI | `sendmux-sending` | Sending API | `smx_mbx_*` or owner-approved `smx_agent_*` | `pip install sendmux-sending` | [`packages/python/sending`](packages/python/sending) |
+| PyPI | `qubrics-sending` | Sending API | `smx_mbx_*` or owner-approved `smx_agent_*` | `pip install qubrics-sending` | [`packages/python/sending`](packages/python/sending) |
 | PyPI | `sendmux-mailbox` | Mailbox API | `smx_mbx_*` or `smx_agent_*` | `pip install sendmux-mailbox` | [`packages/python/mailbox`](packages/python/mailbox) |
 | PyPI | `sendmux-management` | Management API | `smx_root_*` | `pip install sendmux-management` | [`packages/python/management`](packages/python/management) |
 | PyPI | `sendmux-sdk` | Python umbrella package | surface-specific | `pip install sendmux-sdk` | [`packages/python/sdk`](packages/python/sdk) |
@@ -61,7 +61,7 @@ Go v4 source for `qubrics.com/go/v4` awaits publication. Use published `sendmux.
 
 ### Python source migration
 
-This checkout uses the shared `qubrics` Python namespace. `qubrics-core` 2.0.0 is published, and the final `sendmux-core` 2.0.0 release installs it. The other replacements below await publication. The Packages table lists the published distributions.
+This checkout uses the shared `qubrics` Python namespace. `qubrics-core` and `qubrics-sending` 2.0.0 are published. The final `sendmux-core` 2.0.0 release installs `qubrics-core`. The other replacements below await publication. The Packages table lists the published distributions.
 
 | Published distribution | Replacement and target version | Source import |
 | --- | --- | --- |
@@ -81,7 +81,7 @@ Install only the package for the surface you need.
 
 ```sh
 npm install @qubrics/sending
-pip install sendmux-sending
+pip install qubrics-sending
 go get sendmux.ai/go/v3@v3.0.0
 cargo add sendmux
 composer require sendmux/sending:^2.1
@@ -187,7 +187,7 @@ For outbound files, avoid manually placing base64 in prompts or source strings. 
 
 - CLI: `qubrics mailbox:send-message --attach ./report.pdf` or `qubrics sending:send --attach ./report.pdf`.
 - TypeScript: use `@qubrics/mailbox/node` `sendMailboxMessageWithFiles(...)` or `@qubrics/sending/node` `sendEmailWithFiles(...)`.
-- Python: use `sendmux_mailbox.send_mailbox_message_with_files(...)` or `sendmux_sending.send_email_with_files(...)`.
+- Python: use `sendmux_mailbox.send_mailbox_message_with_files(...)` or `qubrics.sending.send_email_with_files(...)`.
 - MCP: agents can mint a presigned upload URL, `PUT` bytes to it without an API key, then send with the returned `blob_id`.
 
 Mailbox direct uploads, presigned uploads, CLI `--attach`, and mailbox SDK file helpers share the mailbox attachment cap: currently `7,500,000` bytes per attachment. Sending API attachment helpers upload file bytes and send attachment references; the generated Sending API limit is max 10 attachments and a 25 MB request body.
