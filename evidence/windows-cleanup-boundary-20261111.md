@@ -17,3 +17,15 @@ The first change saves/logs that exact boundary error before workspace finally r
 ## Qualification
 
 Pending focused local syntax/shim/wiring checks, then existing normal PR CI on actual Windows22/24/26. No native Windows proof can be obtained from this Mac, and no platform emulation is claimed. No new CI job or standalone harness. No tests or assertions removed.
+
+## Readiness discriminator
+
+The instrumentation head `5f83abe7` passed Windows22/24/26 in CI42956275209 without recurrence. This does not establish the discarded original exception. Its overall root build remains active at this checkpoint.
+
+Microsoft's [.NET Framework File source](https://github.com/microsoft/referencesource/blob/main/mscorlib/system/io/file.cs#L884-L891) implements WriteAllText by constructing a StreamWriter, then writing and disposing. [StreamWriter's source](https://github.com/microsoft/referencesource/blob/main/mscorlib/system/io/streamwriter.cs#L224-L227) creates the file with FileShare.Read before those contents are flushed. The fixture currently treats file existence as complete JSON publication. That permits a reader to parse incomplete JSON while the independent lock holder is live.
+
+The existing swallowed-cleanup sensitivity fixture now pauses that same StreamWriter between creation/buffered write and disposal, using test-owned barrier files. Its parent observes this boundary within the unchanged ten-second readiness deadline, releases the writer in finally, and retains every existing lock/cleanup/recovery assertion. No production hook, extra job, workload retry or deadline increase is added. Expected red on the current direct writer: SyntaxError at the retained lock-confirmation boundary and the original startup assertion, with the exact holder recovered. This tests the leading mechanism rather than asserting it was the lost historical exception.
+
+Alternatives: early holder exit predicts nonzero/abnormal recovery, whereas the original holder recovered normally after less than one second; unexpected rmdir behavior remains distinguishable in the new exact boundary capture. PR371's command had already closed before this independently spawned holder. Historical attribution remains limited by the discarded assertion and missing artifact.
+
+Local JavaScript syntax, source-injection compilation, Windows command-shim and workflow wiring checks pass. Real Windows red/green qualification remains required before any fix claim or normal merge.
