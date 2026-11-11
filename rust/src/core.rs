@@ -388,6 +388,18 @@ impl Transport {
             .await
     }
 
+    pub(crate) async fn delete_json_with_options<T>(
+        &self,
+        path: &str,
+        options: &RequestOptions,
+    ) -> Result<Response<T>>
+    where
+        T: DeserializeOwned,
+    {
+        self.request_json::<(), T>(Method::DELETE, path, None, Some(options))
+            .await
+    }
+
     pub(crate) async fn post_json<B, T>(
         &self,
         path: &str,

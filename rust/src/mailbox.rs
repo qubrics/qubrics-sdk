@@ -96,6 +96,102 @@ impl MailboxClient {
             .await
     }
 
+    pub async fn list_calendars(&self) -> Result<Response<serde_json::Value>> {
+        self.list_calendars_with_cursor(None).await
+    }
+
+    pub async fn list_calendars_with_cursor(
+        &self,
+        cursor: Option<&str>,
+    ) -> Result<Response<serde_json::Value>> {
+        self.transport.get_page("/mailbox/calendars", cursor).await
+    }
+
+    pub async fn create_calendar<B>(
+        &self,
+        body: &B,
+        options: &RequestOptions,
+    ) -> Result<Response<serde_json::Value>>
+    where
+        B: Serialize + ?Sized,
+    {
+        self.raw_post("/mailbox/calendars", body, options).await
+    }
+
+    pub async fn get_calendar(&self, calendar_id: &str) -> Result<Response<serde_json::Value>> {
+        self.raw_get(&calendar_path(calendar_id)).await
+    }
+
+    pub async fn delete_calendar(
+        &self,
+        calendar_id: &str,
+        options: &RequestOptions,
+    ) -> Result<Response<serde_json::Value>> {
+        self.transport
+            .delete_json_with_options(&calendar_path(calendar_id), options)
+            .await
+    }
+
+    pub async fn list_calendar_events(&self) -> Result<Response<serde_json::Value>> {
+        self.list_calendar_events_with_cursor(None).await
+    }
+
+    pub async fn list_calendar_events_with_cursor(
+        &self,
+        cursor: Option<&str>,
+    ) -> Result<Response<serde_json::Value>> {
+        self.transport
+            .get_page("/mailbox/calendar-events", cursor)
+            .await
+    }
+
+    pub async fn create_calendar_event<B>(
+        &self,
+        body: &B,
+        options: &RequestOptions,
+    ) -> Result<Response<serde_json::Value>>
+    where
+        B: Serialize + ?Sized,
+    {
+        self.raw_post("/mailbox/calendar-events", body, options)
+            .await
+    }
+
+    pub async fn get_calendar_event(&self, event_id: &str) -> Result<Response<serde_json::Value>> {
+        self.raw_get(&calendar_event_path(event_id)).await
+    }
+
+    pub async fn update_calendar_event<B>(
+        &self,
+        event_id: &str,
+        body: &B,
+        options: &RequestOptions,
+    ) -> Result<Response<serde_json::Value>>
+    where
+        B: Serialize + ?Sized,
+    {
+        self.raw_patch(&calendar_event_path(event_id), body, options)
+            .await
+    }
+
+    pub async fn delete_calendar_event(
+        &self,
+        event_id: &str,
+        options: &RequestOptions,
+    ) -> Result<Response<serde_json::Value>> {
+        self.transport
+            .delete_json_with_options(&calendar_event_path(event_id), options)
+            .await
+    }
+
+    pub async fn get_calendar_event_changes(
+        &self,
+        since_state: Option<&str>,
+    ) -> Result<Response<serde_json::Value>> {
+        self.raw_get(&calendar_event_changes_path(since_state))
+            .await
+    }
+
     pub async fn raw_get(&self, path: &str) -> Result<Response<serde_json::Value>> {
         self.transport.get_json(path).await
     }
@@ -143,6 +239,26 @@ impl MailboxClient {
 
 fn message_path(message_id: &str) -> String {
     format!("/mailbox/messages/{}", encode_path_segment(message_id))
+}
+
+fn calendar_path(calendar_id: &str) -> String {
+    format!("/mailbox/calendars/{}", encode_path_segment(calendar_id))
+}
+
+fn calendar_event_path(event_id: &str) -> String {
+    format!("/mailbox/calendar-events/{}", encode_path_segment(event_id))
+}
+
+fn calendar_event_changes_path(since_state: Option<&str>) -> String {
+    match since_state {
+        Some(since_state) => format!(
+            "/mailbox/calendar-events/changes?{}",
+            url::form_urlencoded::Serializer::new(String::new())
+                .append_pair("since_state", since_state)
+                .finish()
+        ),
+        None => "/mailbox/calendar-events/changes".to_owned(),
+    }
 }
 
 #[cfg(test)]
