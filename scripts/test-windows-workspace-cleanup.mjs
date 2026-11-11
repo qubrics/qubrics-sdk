@@ -50,7 +50,8 @@ public static class DirectoryLock {
 $handle=[DirectoryLock]::CreateFile(${quoted(directory)},1,3,[IntPtr]::Zero,3,0x02000000,[IntPtr]::Zero)
 if ($handle -eq [IntPtr](-1)) { throw 'Directory lock acquisition failed' }
 try {
-    [IO.File]::WriteAllText(${quoted(ready)}, ('{"pid":' + $PID + '}'))
+    [IO.File]::WriteAllText(${quoted(ready + '.pending')}, ('{"pid":' + $PID + '}'))
+    [IO.File]::Move(${quoted(ready + '.pending')}, ${quoted(ready)})
     $limit=[DateTime]::UtcNow.AddSeconds(45)
     while (!(Test-Path -LiteralPath ${quoted(release)})) {
         if ([DateTime]::UtcNow -ge $limit) { throw 'Directory lock release was not requested' }
@@ -72,12 +73,20 @@ try {
           holder.once("error", (error) => accept({ error: error.message }));
           holder.once("close", (code) => accept({ code }));
         });
-        const readyDeadline = Date.now() + 10000;
-        while (!existsSync(ready) && Date.now() < readyDeadline && !absent(holder.pid)) await delay(10);
-        assert.equal(JSON.parse(readFileSync(ready, "utf8")).pid, holder.pid);
-        assert(!absent(holder.pid), "Exact lock holder must still be live at cleanup boundary");
-        assert(!existsSync(released), "Lock must not release during command startup");
-        assert.throws(() => rmdirSync(directory), { code: "EBUSY" }, "Real OS handle must deny directory deletion");
+        try {
+          const readyDeadline = Date.now() + 10000;
+          while (!existsSync(ready) && Date.now() < readyDeadline && !absent(holder.pid)) await delay(10);
+          assert.equal(JSON.parse(readFileSync(ready, "utf8")).pid, holder.pid);
+          assert(!absent(holder.pid), "Exact lock holder must still be live at cleanup boundary");
+          assert(!existsSync(released), "Lock must not release during command startup");
+          assert.throws(() => rmdirSync(directory), { code: "EBUSY" }, "Real OS handle must deny directory deletion");
+        } catch (error) {
+          // The intentional finally-return mutation can discard this callback error.
+          row.lock_confirmation_error = { name: error.name, code: error.code, message: error.message, stack: error.stack };
+          save();
+          console.error(JSON.stringify({ boundary: "windows-lock-confirmation", mode, error: row.lock_confirmation_error }));
+          throw error;
+        }
         row.lock_confirmed = true;
         cleanupStarted = Date.now();
         if (mode === "transient") writeFileSync(release, "release");

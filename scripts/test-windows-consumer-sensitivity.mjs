@@ -159,6 +159,34 @@ for (const mutation of Array.from({ length: 4 }, (_, iteration) => mutations.map
     assert.equal(original.split(removal).length, 2, "Mutation must change exactly one real workspace cleanup");
     writeFileSync(helper, original.replace(removal, swallowed));
     assert.notEqual(readFileSync(helper, "utf8"), original);
+    const fixture = join(directory, "test-windows-workspace-cleanup.mjs");
+    const fixtureSource = readFileSync(fixture, "utf8");
+    const readyWrite = /^    \[IO\.File\]::WriteAllText\((.*), \('\{"pid":' \+ \$PID \+ '\}'\)\)$/gm;
+    assert.equal([...fixtureSource.matchAll(readyWrite)].length, 1, "Pause exactly one real readiness writer");
+    // Hold the same .NET writer between file creation and flush; no timing race is needed.
+    const buffered = fixtureSource.replace(readyWrite, (_, destination) => [
+      `    $writer=[IO.StreamWriter]::new(${destination})`,
+      "    try {",
+      "        $writer.Write(('{\"pid\":' + $PID + '}'))",
+      "        [IO.File]::WriteAllText(${quoted(ready + '.writing')}, 'buffered')",
+      "        $writeLimit=[DateTime]::UtcNow.AddSeconds(45)",
+      "        while (!(Test-Path -LiteralPath ${quoted(ready + '.continue')})) {",
+      "            if ([DateTime]::UtcNow -ge $writeLimit) { throw 'Buffered readiness write was not released' }",
+      "            Start-Sleep -Milliseconds 10",
+      "        }",
+      "    } finally { $writer.Dispose() }",
+    ].join("\n"));
+    const readyPoll = "          while (!existsSync(ready) && Date.now() < readyDeadline && !absent(holder.pid)) await delay(10);";
+    assert.equal(buffered.split(readyPoll).length, 2, "Observe exactly one readiness boundary");
+    writeFileSync(fixture, buffered.replace(readyPoll, [
+      "          while (!existsSync(ready + '.writing') && Date.now() < readyDeadline && !absent(holder.pid)) await delay(10);",
+      "          try {",
+      "            assert(existsSync(ready + '.writing'), 'Buffered readiness writer must start');",
+      "            if (existsSync(ready)) JSON.parse(readFileSync(ready, 'utf8'));",
+      "            assert(!existsSync(ready), 'Unflushed readiness must not be published');",
+      "          } finally { writeFileSync(ready + '.continue', 'resume'); }",
+      readyPoll,
+    ].join("\n")));
     const evidence = join(directory, "evidence");
     await assert.rejects(run(process.execPath, [join(directory, "test-windows-workspace-cleanup.mjs"), evidence]), /exit 1/);
     const rows = JSON.parse(readFileSync(join(evidence, "results.json"), "utf8"));
