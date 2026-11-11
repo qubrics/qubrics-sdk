@@ -1,5 +1,30 @@
 # Changelog
 
+## [4.0.0](https://github.com/qubrics/qubrics-sdk/compare/go/v3.0.0...go/v4.0.0) (2026-11-11)
+
+
+### ⚠ BREAKING CHANGES
+
+* **go:** rename module and defaults to Qubrics
+
+### Features
+
+* add compatible Qubrics integration aliases ([dff5cb8](https://github.com/qubrics/qubrics-sdk/commit/dff5cb89bccb5840d55071d23f79ff88c7e58040))
+* **go:** rename module and defaults to Qubrics ([8de0a05](https://github.com/qubrics/qubrics-sdk/commit/8de0a05c09088507709af92e3f4fb11729ffea0b))
+* **mailbox:** expose durable drafts and agent-email workflows ([bb2f462](https://github.com/qubrics/qubrics-sdk/commit/bb2f462447affd43b3b175b9625068f1a02e3172))
+* **mailbox:** expose durable drafts and agent-email workflows ([7e867c5](https://github.com/qubrics/qubrics-sdk/commit/7e867c5bd7b7c85add27c7c04e036997ae57dbc4))
+* **mailbox:** expose permitted sender choices to consumers ([#317](https://github.com/qubrics/qubrics-sdk/issues/317)) ([7ac3dc1](https://github.com/qubrics/qubrics-sdk/commit/7ac3dc1c08915ec12477171a49edb87b3d482f39))
+* preserve integration contracts with Qubrics aliases ([722fbab](https://github.com/qubrics/qubrics-sdk/commit/722fbab2f98248d17b4878dd5149a35a711d5a18))
+
+
+### Bug Fixes
+
+* preserve legacy SDK compatibility with dual aliases ([4910037](https://github.com/qubrics/qubrics-sdk/commit/491003792dd742cb2c83e4a09501abdf4f4458c9))
+* preserve webhook variants and own calendar lifecycle fixtures ([49d4604](https://github.com/qubrics/qubrics-sdk/commit/49d4604235528b2fd56ac0bb51d55c244a18f771))
+* regenerate SDKs from current calendar and webhook contracts ([276082c](https://github.com/qubrics/qubrics-sdk/commit/276082cb5e525c0a6fb1e521858846cbd21c8714))
+* regenerate SDKs from current calendar and webhook contracts ([d728ea8](https://github.com/qubrics/qubrics-sdk/commit/d728ea87ac3f0aeebdb6380ad3bd515bac63d413))
+* **sdk:** preserve timestamps and fixture prerequisites ([894ee58](https://github.com/qubrics/qubrics-sdk/commit/894ee580c8331ac19f80a3778300f265a1a39300))
+
 ## [3.0.0](https://github.com/Sendmux/sendmux-sdk/compare/go/v2.0.0...go/v3.0.0) (2026-09-21)
 
 
