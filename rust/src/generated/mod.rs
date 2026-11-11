@@ -54,12 +54,54 @@ pub const SENDING_OPERATIONS: &[Operation] = &[
 
 /// Named mailbox operations represented by this curated client.
 pub const MAILBOX_OPERATIONS: &[Operation] = &[
+    Operation::new("mailboxCreateCalendar", "POST", "/mailbox/calendars"),
+    Operation::new(
+        "mailboxCreateCalendarEvent",
+        "POST",
+        "/mailbox/calendar-events",
+    ),
+    Operation::new(
+        "mailboxDeleteCalendar",
+        "DELETE",
+        "/mailbox/calendars/{calendar_id}",
+    ),
+    Operation::new(
+        "mailboxDeleteCalendarEvent",
+        "DELETE",
+        "/mailbox/calendar-events/{event_id}",
+    ),
+    Operation::new(
+        "mailboxGetCalendar",
+        "GET",
+        "/mailbox/calendars/{calendar_id}",
+    ),
+    Operation::new(
+        "mailboxGetCalendarEvent",
+        "GET",
+        "/mailbox/calendar-events/{event_id}",
+    ),
+    Operation::new(
+        "mailboxGetCalendarEventChanges",
+        "GET",
+        "/mailbox/calendar-events/changes",
+    ),
     Operation::new("mailboxGetConnection", "GET", "/mailbox/connection"),
     Operation::new("mailboxGetMe", "GET", "/mailbox/me"),
     Operation::new("mailboxGetMessage", "GET", "/mailbox/messages/{message_id}"),
+    Operation::new(
+        "mailboxListCalendarEvents",
+        "GET",
+        "/mailbox/calendar-events",
+    ),
+    Operation::new("mailboxListCalendars", "GET", "/mailbox/calendars"),
     Operation::new("mailboxListFolders", "GET", "/mailbox/folders"),
     Operation::new("mailboxListMessages", "GET", "/mailbox/messages"),
     Operation::new("mailboxSendMessage", "POST", "/mailbox/messages/send"),
+    Operation::new(
+        "mailboxUpdateCalendarEvent",
+        "PATCH",
+        "/mailbox/calendar-events/{event_id}",
+    ),
 ];
 
 /// Named management operations represented by this curated client.

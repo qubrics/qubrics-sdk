@@ -56,17 +56,21 @@
       "operationId": "mailboxCreateCalendar",
       "method": "POST",
       "path": "/mailbox/calendars",
-      "publicMethods": [],
-      "decision": "raw-json-only",
-      "reason": "Calendar tracer source covers TypeScript, CLI and MCP only; no named Rust method or live certification. Manual relative-path JSON calls only."
+      "publicMethods": [
+        "create_calendar"
+      ],
+      "decision": "named-partial",
+      "reason": "Named create route with request body and idempotency header; optional mailbox selection is not exposed by the curated method."
     },
     {
       "operationId": "mailboxCreateCalendarEvent",
       "method": "POST",
       "path": "/mailbox/calendar-events",
-      "publicMethods": [],
-      "decision": "raw-json-only",
-      "reason": "Calendar tracer source covers TypeScript, CLI and MCP only; no named Rust method or live certification. Manual relative-path JSON calls only."
+      "publicMethods": [
+        "create_calendar_event"
+      ],
+      "decision": "named-partial",
+      "reason": "Named create route with request body and idempotency header; optional mailbox selection is not exposed by the curated method."
     },
     {
       "operationId": "mailboxCreateDraft",
@@ -88,17 +92,21 @@
       "operationId": "mailboxDeleteCalendar",
       "method": "DELETE",
       "path": "/mailbox/calendars/{calendar_id}",
-      "publicMethods": [],
-      "decision": "raw-json-only",
-      "reason": "No named operation-specific API or certification; manual relative-path JSON calls only."
+      "publicMethods": [
+        "delete_calendar"
+      ],
+      "decision": "named-partial",
+      "reason": "Named delete route with escaped calendar ID and If-Match header; optional mailbox selection is not exposed by the curated method."
     },
     {
       "operationId": "mailboxDeleteCalendarEvent",
       "method": "DELETE",
       "path": "/mailbox/calendar-events/{event_id}",
-      "publicMethods": [],
-      "decision": "raw-json-only",
-      "reason": "Calendar tracer source covers TypeScript, CLI and MCP only; no named Rust method or live certification. Manual relative-path JSON calls only."
+      "publicMethods": [
+        "delete_calendar_event"
+      ],
+      "decision": "named-partial",
+      "reason": "Named delete route with escaped event ID and If-Match header; optional mailbox selection is not exposed by the curated method."
     },
     {
       "operationId": "mailboxDeleteDraft",
@@ -144,25 +152,31 @@
       "operationId": "mailboxGetCalendar",
       "method": "GET",
       "path": "/mailbox/calendars/{calendar_id}",
-      "publicMethods": [],
-      "decision": "raw-json-only",
-      "reason": "Calendar tracer source covers TypeScript, CLI and MCP only; no named Rust method or live certification. Manual relative-path JSON calls only."
+      "publicMethods": [
+        "get_calendar"
+      ],
+      "decision": "named-partial",
+      "reason": "Named get route with escaped calendar ID; optional mailbox selection and conditional GET are not exposed by the curated method."
     },
     {
       "operationId": "mailboxGetCalendarEvent",
       "method": "GET",
       "path": "/mailbox/calendar-events/{event_id}",
-      "publicMethods": [],
-      "decision": "raw-json-only",
-      "reason": "Calendar tracer source covers TypeScript, CLI and MCP only; no named Rust method or live certification. Manual relative-path JSON calls only."
+      "publicMethods": [
+        "get_calendar_event"
+      ],
+      "decision": "named-partial",
+      "reason": "Named get route with escaped event ID; optional mailbox selection and conditional GET are not exposed by the curated method."
     },
     {
       "operationId": "mailboxGetCalendarEventChanges",
       "method": "GET",
       "path": "/mailbox/calendar-events/changes",
-      "publicMethods": [],
-      "decision": "raw-json-only",
-      "reason": "Calendar tracer source covers TypeScript, CLI and MCP only; no named Rust method or live certification. Manual relative-path JSON calls only."
+      "publicMethods": [
+        "get_calendar_event_changes"
+      ],
+      "decision": "named-partial",
+      "reason": "Named changes route with encoded state progression; optional limit and mailbox selection are not exposed by the curated method."
     },
     {
       "operationId": "mailboxGetChanges",
@@ -310,17 +324,23 @@
       "operationId": "mailboxListCalendarEvents",
       "method": "GET",
       "path": "/mailbox/calendar-events",
-      "publicMethods": [],
-      "decision": "raw-json-only",
-      "reason": "Calendar tracer source covers TypeScript, CLI and MCP only; no named Rust method or live certification. Manual relative-path JSON calls only."
+      "publicMethods": [
+        "list_calendar_events",
+        "list_calendar_events_with_cursor"
+      ],
+      "decision": "named-partial",
+      "reason": "Named list route with cursor progression; optional limit, UID, calendar and mailbox filters are not exposed by the curated methods."
     },
     {
       "operationId": "mailboxListCalendars",
       "method": "GET",
       "path": "/mailbox/calendars",
-      "publicMethods": [],
-      "decision": "raw-json-only",
-      "reason": "Calendar tracer source covers TypeScript, CLI and MCP only; no named Rust method or live certification. Manual relative-path JSON calls only."
+      "publicMethods": [
+        "list_calendars",
+        "list_calendars_with_cursor"
+      ],
+      "decision": "named-partial",
+      "reason": "Named list route with cursor progression; optional limit and mailbox selection are not exposed by the curated methods."
     },
     {
       "operationId": "mailboxListContent",
@@ -478,9 +498,11 @@
       "operationId": "mailboxUpdateCalendarEvent",
       "method": "PATCH",
       "path": "/mailbox/calendar-events/{event_id}",
-      "publicMethods": [],
-      "decision": "raw-json-only",
-      "reason": "Calendar tracer source covers TypeScript, CLI and MCP only; no named Rust method or live certification. Manual relative-path JSON calls only."
+      "publicMethods": [
+        "update_calendar_event"
+      ],
+      "decision": "named-partial",
+      "reason": "Named update route with escaped event ID, request body and If-Match header; optional mailbox selection is not exposed by the curated method."
     },
     {
       "operationId": "mailboxUpdateDraft",

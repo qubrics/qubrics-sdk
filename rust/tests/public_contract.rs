@@ -176,6 +176,85 @@ async fn cursor_lists_preserve_pagination_and_advance_to_next_page() {
     }
 }
 
+#[tokio::test]
+async fn calendar_named_operations_bind_routes_inputs_and_concurrency_headers() {
+    let payload = json!({"id":"calendar_fixture"});
+    let mut server =
+        Server::new(json!({"ok":true,"data":payload,"meta":{"request_id":"req_calendar"}}));
+    let client = MailboxClient::new("smx_mbx_fixture")
+        .unwrap()
+        .with_base_url(server.base())
+        .unwrap();
+    let body = json!({"name":"Fixture"});
+    let create = RequestOptions::new().idempotency_key("calendar-create");
+    let current = RequestOptions::new().if_match("\"calendar-etag\"");
+
+    client.list_calendars().await.unwrap();
+    client
+        .list_calendars_with_cursor(Some("next/a+b"))
+        .await
+        .unwrap();
+    client.create_calendar(&body, &create).await.unwrap();
+    client.get_calendar("calendar/a").await.unwrap();
+    client
+        .delete_calendar("calendar/a", &current)
+        .await
+        .unwrap();
+    client.list_calendar_events().await.unwrap();
+    client
+        .list_calendar_events_with_cursor(Some("event/a+b"))
+        .await
+        .unwrap();
+    client.create_calendar_event(&body, &create).await.unwrap();
+    client.get_calendar_event("event/a").await.unwrap();
+    client
+        .update_calendar_event("event/a", &body, &current)
+        .await
+        .unwrap();
+    client
+        .delete_calendar_event("event/a", &current)
+        .await
+        .unwrap();
+    client
+        .get_calendar_event_changes(Some("state/a+b"))
+        .await
+        .unwrap();
+
+    let requests = server.finish();
+    let routes = [
+        "GET /api/v1/mailbox/calendars",
+        "GET /api/v1/mailbox/calendars?cursor=next%2Fa%2Bb",
+        "POST /api/v1/mailbox/calendars",
+        "GET /api/v1/mailbox/calendars/calendar%2Fa",
+        "DELETE /api/v1/mailbox/calendars/calendar%2Fa",
+        "GET /api/v1/mailbox/calendar-events",
+        "GET /api/v1/mailbox/calendar-events?cursor=event%2Fa%2Bb",
+        "POST /api/v1/mailbox/calendar-events",
+        "GET /api/v1/mailbox/calendar-events/event%2Fa",
+        "PATCH /api/v1/mailbox/calendar-events/event%2Fa",
+        "DELETE /api/v1/mailbox/calendar-events/event%2Fa",
+        "GET /api/v1/mailbox/calendar-events/changes?since_state=state%2Fa%2Bb",
+    ];
+    assert_eq!(requests.len(), routes.len());
+    for (request, route) in requests.iter().zip(routes) {
+        assert!(
+            request.starts_with(&format!("{route} HTTP/1.1\r\n")),
+            "incorrect calendar route: {route}"
+        );
+    }
+    for index in [2, 7] {
+        assert!(requests[index].contains("idempotency-key: calendar-create\r\n"));
+        assert_eq!(
+            serde_json::from_str::<Value>(requests[index].split_once("\r\n\r\n").unwrap().1)
+                .unwrap(),
+            body
+        );
+    }
+    for index in [4, 9, 10] {
+        assert!(requests[index].contains("if-match: \"calendar-etag\"\r\n"));
+    }
+}
+
 impl Drop for Server {
     fn drop(&mut self) {
         if self.worker.is_some() {

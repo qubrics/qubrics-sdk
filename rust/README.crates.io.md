@@ -130,6 +130,31 @@ async fn main() -> sendmux::Result<()> {
 }
 ```
 
+## Mailbox calendars
+
+The Mailbox client exposes named methods for private calendars and non-sending events. Create calls accept `RequestOptions` for idempotency. Updates and deletes use the same type for `If-Match`.
+
+```rust,no_run
+use sendmux::RequestOptions;
+use serde_json::json;
+
+#[tokio::main]
+async fn main() -> sendmux::Result<()> {
+    let client = sendmux::mailbox(std::env::var("SENDMUX_MAILBOX_API_KEY").unwrap())?;
+    let calendar = client
+        .create_calendar(
+            &json!({"name": "Appointments", "time_zone": "Australia/Melbourne"}),
+            &RequestOptions::new().idempotency_key("calendar-appointments-v1"),
+        )
+        .await?;
+
+    println!("calendar response: {}", calendar.data);
+    Ok(())
+}
+```
+
+Use `list_calendars_with_cursor` and `list_calendar_events_with_cursor` to continue pages. `get_calendar_event_changes` accepts the last event state, or `None` to establish a new baseline. Use the raw JSON helpers for optional mailbox selection, filters, and limits, except conditional Calendar deletes with `mailbox_id`; the curated delete methods send `If-Match` but do not expose mailbox selection. Conditional GET is not exposed by the curated Rust client.
+
 ## OAuth Access Tokens
 
 Each surface client provides `new_with_access_token` for a bare token string and `new_with_token_provider` for an asynchronous provider. The provider runs for each request, including requests from cloned clients. Your application owns token storage, expiry checks and refresh coordination.
@@ -180,7 +205,7 @@ async fn main() -> sendmux::Result<()> {
 ## OpenAPI Source
 
 The source checkout's `rust/operation-decisions.json` and
-`docs/surface-coverage.md` account for all 104 snapshot operations and 20 named
+`docs/surface-coverage.md` account for all 128 snapshot operations and 30 named
 operation IDs. Conditional GET/304/ETag handling, optional list filters and
 selectors, automatic retries, and missing named operations aren't implied by
 raw JSON access. `ApiError.retryable` reports the server/fallback classification;
