@@ -1,5 +1,26 @@
 # Changelog
 
+## [0.6.0](https://github.com/qubrics/qubrics-sdk/compare/rust-v0.5.1...rust-v0.6.0) (2026-11-11)
+
+
+### Features
+
+* add compatible Qubrics integration aliases ([dff5cb8](https://github.com/qubrics/qubrics-sdk/commit/dff5cb89bccb5840d55071d23f79ff88c7e58040))
+* **mailbox:** expose durable drafts and agent-email workflows ([bb2f462](https://github.com/qubrics/qubrics-sdk/commit/bb2f462447affd43b3b175b9625068f1a02e3172))
+* **mailbox:** expose durable drafts and agent-email workflows ([7e867c5](https://github.com/qubrics/qubrics-sdk/commit/7e867c5bd7b7c85add27c7c04e036997ae57dbc4))
+* **mailbox:** expose permitted sender choices to consumers ([#317](https://github.com/qubrics/qubrics-sdk/issues/317)) ([7ac3dc1](https://github.com/qubrics/qubrics-sdk/commit/7ac3dc1c08915ec12477171a49edb87b3d482f39))
+* preserve integration contracts with Qubrics aliases ([722fbab](https://github.com/qubrics/qubrics-sdk/commit/722fbab2f98248d17b4878dd5149a35a711d5a18))
+* **rust:** add named calendar operations ([1228b59](https://github.com/qubrics/qubrics-sdk/commit/1228b59b0cddf12062c6ea7da7a4b3dfdcbd3b86))
+* **rust:** add named calendar operations ([8211d31](https://github.com/qubrics/qubrics-sdk/commit/8211d31a55206ba1ad64a5c27df7f8c7b87f8e85))
+
+
+### Bug Fixes
+
+* preserve webhook variants and own calendar lifecycle fixtures ([49d4604](https://github.com/qubrics/qubrics-sdk/commit/49d4604235528b2fd56ac0bb51d55c244a18f771))
+* regenerate SDKs from current calendar and webhook contracts ([276082c](https://github.com/qubrics/qubrics-sdk/commit/276082cb5e525c0a6fb1e521858846cbd21c8714))
+* regenerate SDKs from current calendar and webhook contracts ([d728ea8](https://github.com/qubrics/qubrics-sdk/commit/d728ea87ac3f0aeebdb6380ad3bd515bac63d413))
+* sync generated Qubrics API defaults ([#351](https://github.com/qubrics/qubrics-sdk/issues/351)) ([388a410](https://github.com/qubrics/qubrics-sdk/commit/388a4107d25e6cf94a7c7704b094f8765f851be3))
+
 ## [0.5.1](https://github.com/Sendmux/sendmux-sdk/compare/rust-v0.5.0...rust-v0.5.1) (2026-09-21)
 
 
