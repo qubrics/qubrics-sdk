@@ -50,7 +50,8 @@ public static class DirectoryLock {
 $handle=[DirectoryLock]::CreateFile(${quoted(directory)},1,3,[IntPtr]::Zero,3,0x02000000,[IntPtr]::Zero)
 if ($handle -eq [IntPtr](-1)) { throw 'Directory lock acquisition failed' }
 try {
-    [IO.File]::WriteAllText(${quoted(ready)}, ('{"pid":' + $PID + '}'))
+    [IO.File]::WriteAllText(${quoted(ready + '.pending')}, ('{"pid":' + $PID + '}'))
+    [IO.File]::Move(${quoted(ready + '.pending')}, ${quoted(ready)})
     $limit=[DateTime]::UtcNow.AddSeconds(45)
     while (!(Test-Path -LiteralPath ${quoted(release)})) {
         if ([DateTime]::UtcNow -ge $limit) { throw 'Directory lock release was not requested' }

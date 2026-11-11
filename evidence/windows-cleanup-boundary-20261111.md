@@ -12,15 +12,15 @@ The affected callback is `test-windows-workspace-cleanup.mjs`'s readiness/livene
 
 The sensitivity mutation changes the workspace finally cleanup to `catch (error) { if (error.code === "EBUSY") return; throw error; }`. A callback error before lock_confirmed can therefore be discarded before the fixture's outer catch. Canonical per [MDN try/finally](https://github.com/mdn/content/blob/main/files/en-us/web/javascript/reference/statements/try...catch/index.md), researched via Context7 /mdn/content: a return from finally overrides a pending throw.
 
-The first change saves/logs that exact boundary error before workspace finally runs, rethrows it and preserves every original assertion and timeout. Existing14day artifact upload gains only the failed cleanup sensitivity results glob; successful fixtures still remove their scratch. This is observation, not an asserted startup/lock cause fix. Native readiness/lock cause remains unknown until the original assertion is captured; no sleep, retry, widened deadline, relief rerun or guessed readiness change is the fix.
+The first change saves/logs that exact boundary error before workspace finally runs, rethrows it and preserves every original assertion and timeout. Existing14day artifact upload gains only the failed cleanup sensitivity results glob; successful fixtures still remove their scratch. This closes the observation gap; historical exception attribution remains unavailable. The controlled Windows proof below establishes a readiness-publication defect at this same boundary. No sleep, retry, widened deadline or relief rerun is the fix.
 
 ## Qualification
 
-Pending focused local syntax/shim/wiring checks, then existing normal PR CI on actual Windows22/24/26. No native Windows proof can be obtained from this Mac, and no platform emulation is claimed. No new CI job or standalone harness. No tests or assertions removed.
+Focused local syntax/shim/wiring checks pass. The instrumentation head `5f83abe7` passed CI42956275209 34/34 without recurrence. Normal corrected-head CI on actual Windows22/24/26 is required before merge. No platform emulation, new CI job or standalone harness; no tests or assertions removed.
 
 ## Readiness discriminator
 
-The instrumentation head `5f83abe7` passed Windows22/24/26 in CI42956275209 without recurrence. This does not establish the discarded original exception. Its overall root build remains active at this checkpoint.
+The instrumentation run does not establish the discarded original exception.
 
 Microsoft's [.NET Framework File source](https://github.com/microsoft/referencesource/blob/main/mscorlib/system/io/file.cs#L884-L891) implements WriteAllText by constructing a StreamWriter, then writing and disposing. [StreamWriter's source](https://github.com/microsoft/referencesource/blob/main/mscorlib/system/io/streamwriter.cs#L224-L227) creates the file with FileShare.Read before those contents are flushed. The fixture currently treats file existence as complete JSON publication. That permits a reader to parse incomplete JSON while the independent lock holder is live.
 
@@ -28,4 +28,12 @@ The existing swallowed-cleanup sensitivity fixture now pauses that same StreamWr
 
 Alternatives: early holder exit predicts nonzero/abnormal recovery, whereas the original holder recovered normally after less than one second; unexpected rmdir behavior remains distinguishable in the new exact boundary capture. PR371's command had already closed before this independently spawned holder. Historical attribution remains limited by the discarded assertion and missing artifact.
 
-Local JavaScript syntax, source-injection compilation, Windows command-shim and workflow wiring checks pass. Real Windows red/green qualification remains required before any fix claim or normal merge.
+## Confirmed red and origin correction
+
+[CI42958723285](https://github.com/qubrics/qubrics-sdk/actions/runs/42958723285), head `8cef5770`, reproduced the defect on all three native Windows versions. Node22 job130319919353 logs the two boundary SyntaxErrors at lines2500/2517; Node24 job130319919393 at2075/2092; Node26 job130319919425 at2077/2094. Each says `Unexpected end of JSON input`. Both fixture modes then report `Do not mistake startup failure for filesystem behavior`, no lock_confirmed, holder_absent=true, path_absent_after_recovery=true and no cleanup_error. The other15 sensitivity mutations are detected. Raw logs: SDK MAIN .claude/artifacts/rebrand-qubrics-sdk343/cleanup375-buffered-red-node{22,24,26}.log.
+
+This explains how the independent holder can be live while JSON parsing fails before lock confirmation and the intentional finally return discards that error. It is a mutation-fixture readiness-publication defect, not a demonstrated PR371 process-rundown recurrence. The original run's exact exception is irrecoverable; this counterexample demonstrates the same failure pattern, not recovery of the lost exception.
+
+Canonical correction: write to an adjacent `.pending` path, let WriteAllText close it, then publish it with File.Move. [.NET Framework File.Move](https://github.com/microsoft/referencesource/blob/main/mscorlib/system/io/file.cs#L1262-L1268) invokes Win32 MoveFile; source and destination share the same directory. The polled path is absent throughout the unflushed write. No parser retry, new polling, deadline increase, removed assertion or PR371 change. The same paused-writer regression remains in the sensitivity test and must now reach every existing lock/cleanup assertion.
+
+Local syntax, mutation-injection compilation, Windows command-shim and workflow wiring checks pass. Corrected native CI and settled Spec/Standards review remain required. README still accurately states seven published npm packages; no package metadata or public SDK surface changes.
