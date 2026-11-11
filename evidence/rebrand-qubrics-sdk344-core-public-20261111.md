@@ -2,7 +2,7 @@
 
 Issue: https://github.com/qubrics/qubrics-sdk/issues/344. Spec A18.
 
-Operator confirmed the uploads and environment approval as `m10 done` at 17:25 AEDT. Ops reconciled the sequence and authorised read-only public installation and smoke verification. The agent performed no upload, token mutation, environment approval or yank. Token revocation remains on the operator board.
+Operator confirmed the uploads and environment approval as `m10 done` at 17:25 AEDT. Ops reconciled the sequence and authorised read-only public installation and smoke verification. The agent performed no upload, token mutation, environment approval or yank. PyPI All-projects token retained per operator 11 Nov for future publishing.
 
 ## Exact public bytes
 
