@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.0.0](https://github.com/qubrics/qubrics-sdk/compare/python-langchain-v0.4.0...python-langchain-v1.0.0) (2026-11-11)
+
+
+### ⚠ BREAKING CHANGES
+
+* **python:** move SDK packages into the Qubrics namespace
+
+### Features
+
+* **python:** move SDK packages into the Qubrics namespace ([a326bc9](https://github.com/qubrics/qubrics-sdk/commit/a326bc923fff448470d908bb527afaaa35f6d739))
+
+
+### Bug Fixes
+
+* align changed SDK dependency floors with release manifest ([b1c5548](https://github.com/qubrics/qubrics-sdk/commit/b1c5548c1dde8b441b4fa2605253907971c2f5d2))
+* align LangChain mailbox floor with release manifest ([6a35034](https://github.com/qubrics/qubrics-sdk/commit/6a350342e3f2c62d52ab167d9e580a6dea06ab0f))
+* **python:** prepare Sending 2.0.0 native release metadata ([9510177](https://github.com/qubrics/qubrics-sdk/commit/9510177d1cf309262bfa856975e64624c5aecf35))
+
 ## [0.4.0](https://github.com/Sendmux/sendmux-sdk/compare/python-langchain-v0.3.0...python-langchain-v0.4.0) (2026-09-19)
 
 
