@@ -10,7 +10,7 @@
 
 Official SDK, CLI, and MCP workspace for Qubrics.
 
-Seven `@qubrics/*` npm packages are published. Existing `@sendmux/*` releases remain available. Other ecosystems use the published names below until their separate migrations ship.
+The seven `@qubrics/*` npm packages and `qubrics-core` on PyPI are published. Existing `@sendmux/*` releases remain available. Other Python and Ruby packages use the published names below until their separate migrations ship.
 
 Go v4 source for `qubrics.com/go/v4` awaits publication. Use published `sendmux.ai/go/v3@v3.0.0`.
 
@@ -33,7 +33,7 @@ Go v4 source for `qubrics.com/go/v4` awaits publication. Use published `sendmux.
 | npm | `sendmux-mcp` | stdio bridge to hosted MCP | OAuth | `npx -y sendmux-mcp` | [`packages/ts/mcp`](packages/ts/mcp) |
 | npm | `@qubrics/ai-sdk` | Vercel AI SDK tools (agent inbox + sending) | send + receive `smx_mbx_*` or `smx_agent_*` | `npm install @qubrics/ai-sdk` | [`packages/ts/ai-sdk`](packages/ts/ai-sdk) |
 | Homebrew | `sendmux` | `sendmux` CLI | command/profile-specific | `brew install qubrics/tap/sendmux` | [`qubrics/homebrew-tap`](https://github.com/qubrics/homebrew-tap) |
-| PyPI | `sendmux-core` | Shared Python helpers | n/a | `pip install sendmux-core` | [`packages/python/core`](packages/python/core) |
+| PyPI | `qubrics-core` | Shared Python helpers | n/a | `pip install qubrics-core` | [`packages/python/core`](packages/python/core) |
 | PyPI | `sendmux-sending` | Sending API | `smx_mbx_*` or owner-approved `smx_agent_*` | `pip install sendmux-sending` | [`packages/python/sending`](packages/python/sending) |
 | PyPI | `sendmux-mailbox` | Mailbox API | `smx_mbx_*` or `smx_agent_*` | `pip install sendmux-mailbox` | [`packages/python/mailbox`](packages/python/mailbox) |
 | PyPI | `sendmux-management` | Management API | `smx_root_*` | `pip install sendmux-management` | [`packages/python/management`](packages/python/management) |
@@ -61,7 +61,7 @@ Go v4 source for `qubrics.com/go/v4` awaits publication. Use published `sendmux.
 
 ### Python source migration
 
-This checkout uses the shared `qubrics` Python namespace. The replacements below are awaiting publication. The Packages table and registry install commands still show the published Sendmux distributions.
+This checkout uses the shared `qubrics` Python namespace. `qubrics-core` 2.0.0 is published, and the final `sendmux-core` 2.0.0 release installs it. The other replacements below await publication. The Packages table lists the published distributions.
 
 | Published distribution | Replacement and target version | Source import |
 | --- | --- | --- |

@@ -35,7 +35,7 @@ classifiers = [
 ]
 dependencies = [
   "langchain-core>=1.0.0,<2",
-  "qubrics-sending>=1.6.0,<2.0.0",
+  "qubrics-sending>=2.0.0,<3.0.0",
   "qubrics-mailbox>=2.0.2,<3.0.0",
 ]
 
