@@ -2,6 +2,30 @@
 
 ## Unreleased
 
+## [2.0.0](https://github.com/qubrics/qubrics-sdk/compare/python-sending-v1.6.0...python-sending-v2.0.0) (2026-11-11)
+
+
+### ⚠ BREAKING CHANGES
+
+* **python:** move SDK packages into the Qubrics namespace
+
+### Features
+
+* add compatible Qubrics integration aliases ([dff5cb8](https://github.com/qubrics/qubrics-sdk/commit/dff5cb89bccb5840d55071d23f79ff88c7e58040))
+* preserve integration contracts with Qubrics aliases ([722fbab](https://github.com/qubrics/qubrics-sdk/commit/722fbab2f98248d17b4878dd5149a35a711d5a18))
+* **python:** move SDK packages into the Qubrics namespace ([a326bc9](https://github.com/qubrics/qubrics-sdk/commit/a326bc923fff448470d908bb527afaaa35f6d739))
+
+
+### Bug Fixes
+
+* preserve legacy SDK compatibility with dual aliases ([4910037](https://github.com/qubrics/qubrics-sdk/commit/491003792dd742cb2c83e4a09501abdf4f4458c9))
+* preserve Python environment compatibility with published core ([8f4c78f](https://github.com/qubrics/qubrics-sdk/commit/8f4c78f050725b6d57a6b71d39178dee40c1774e))
+
+
+### Documentation
+
+* use generated SDK method names in examples ([5bb29fc](https://github.com/qubrics/qubrics-sdk/commit/5bb29fc309bae1013da2802210a5b23ccf9dbfd0))
+
 ## [1.6.0](https://github.com/Sendmux/sendmux-sdk/compare/python-sending-v1.5.1...python-sending-v1.6.0) (2026-09-16)
 
 
