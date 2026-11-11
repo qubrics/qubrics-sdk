@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "qubrics-sending"
-version = "1.6.0"
+version = "2.0.0"
 description = "Generated Python client for the Qubrics Sending API."
 readme = "README.md"
 requires-python = ">=3.10"
