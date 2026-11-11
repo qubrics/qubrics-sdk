@@ -72,12 +72,20 @@ try {
           holder.once("error", (error) => accept({ error: error.message }));
           holder.once("close", (code) => accept({ code }));
         });
-        const readyDeadline = Date.now() + 10000;
-        while (!existsSync(ready) && Date.now() < readyDeadline && !absent(holder.pid)) await delay(10);
-        assert.equal(JSON.parse(readFileSync(ready, "utf8")).pid, holder.pid);
-        assert(!absent(holder.pid), "Exact lock holder must still be live at cleanup boundary");
-        assert(!existsSync(released), "Lock must not release during command startup");
-        assert.throws(() => rmdirSync(directory), { code: "EBUSY" }, "Real OS handle must deny directory deletion");
+        try {
+          const readyDeadline = Date.now() + 10000;
+          while (!existsSync(ready) && Date.now() < readyDeadline && !absent(holder.pid)) await delay(10);
+          assert.equal(JSON.parse(readFileSync(ready, "utf8")).pid, holder.pid);
+          assert(!absent(holder.pid), "Exact lock holder must still be live at cleanup boundary");
+          assert(!existsSync(released), "Lock must not release during command startup");
+          assert.throws(() => rmdirSync(directory), { code: "EBUSY" }, "Real OS handle must deny directory deletion");
+        } catch (error) {
+          // The intentional finally-return mutation can discard this callback error.
+          row.lock_confirmation_error = { name: error.name, code: error.code, message: error.message, stack: error.stack };
+          save();
+          console.error(JSON.stringify({ boundary: "windows-lock-confirmation", mode, error: row.lock_confirmation_error }));
+          throw error;
+        }
         row.lock_confirmed = true;
         cleanupStarted = Date.now();
         if (mode === "transient") writeFileSync(release, "release");
