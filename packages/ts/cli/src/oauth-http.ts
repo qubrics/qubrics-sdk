@@ -1,3 +1,5 @@
+import { addAbortListener } from "node:events";
+
 export const OAUTH_RESOURCE = "https://qubrics.com/api";
 export const DEFAULT_OAUTH_ISSUER = "https://app.qubrics.com";
 
@@ -24,16 +26,19 @@ export async function oauthRequest(
 ): Promise<Record<string, unknown>> {
   oauthUrl(endpoint);
   try {
+    const signal = init.signal ?? AbortSignal.timeout(15_000);
     const response = await fetch(endpoint, {
       ...init,
       redirect: "error",
-      signal: init.signal ?? AbortSignal.timeout(15_000),
+      signal,
       headers: { Accept: "application/json", ...init.headers },
     });
     const reader = response.body?.getReader();
     const chunks: Uint8Array[] = [];
     let bytes = 0;
     if (reader) {
+      // Keep body cancellation independent of fetch's weakly held request controller.
+      const abortListener = addAbortListener(signal, () => { void reader.cancel().catch(() => {}); });
       try {
         while (true) {
           const chunk = await reader.read();
@@ -43,7 +48,9 @@ export async function oauthRequest(
             throw new Error("Response exceeds the OAuth size limit.");
           chunks.push(chunk.value);
         }
+        signal.throwIfAborted();
       } finally {
+        abortListener[Symbol.dispose]();
         await reader.cancel();
       }
     }
