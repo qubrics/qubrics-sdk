@@ -1,51 +1,6 @@
 # Changelog
 
-## [3.0.0](https://github.com/qubrics/qubrics-sdk/compare/python-mailbox-v3.0.0...python-mailbox-v3.0.0) (2026-11-18)
-
-
-### ⚠ BREAKING CHANGES
-
-* **python:** move SDK packages into the Qubrics namespace
-* **python-mailbox:** `sendmux_mailbox.MailboxRealtimeMessageAllOfBody` is renamed to `sendmux_mailbox.MailboxRealtimeMessageBody` (the type of `MailboxRealtimeMessage.body`), and the unused `sendmux_mailbox.Mailbox` model (`sendmux_mailbox.models.mailbox`) is removed.
-
-### Features
-
-* add compatible Qubrics integration aliases ([dff5cb8](https://github.com/qubrics/qubrics-sdk/commit/dff5cb89bccb5840d55071d23f79ff88c7e58040))
-* **mailbox:** expose durable drafts and agent-email workflows ([bb2f462](https://github.com/qubrics/qubrics-sdk/commit/bb2f462447affd43b3b175b9625068f1a02e3172))
-* **mailbox:** expose durable drafts and agent-email workflows ([7e867c5](https://github.com/qubrics/qubrics-sdk/commit/7e867c5bd7b7c85add27c7c04e036997ae57dbc4))
-* **mailbox:** expose permitted sender choices to consumers ([#317](https://github.com/qubrics/qubrics-sdk/issues/317)) ([7ac3dc1](https://github.com/qubrics/qubrics-sdk/commit/7ac3dc1c08915ec12477171a49edb87b3d482f39))
-* preserve integration contracts with Qubrics aliases ([722fbab](https://github.com/qubrics/qubrics-sdk/commit/722fbab2f98248d17b4878dd5149a35a711d5a18))
-* **python:** move SDK packages into the Qubrics namespace ([a326bc9](https://github.com/qubrics/qubrics-sdk/commit/a326bc923fff448470d908bb527afaaa35f6d739))
-
-
-### Bug Fixes
-
-* prepare mailbox SDK major releases ([dc01472](https://github.com/qubrics/qubrics-sdk/commit/dc014724f7f6eb6b93293e6acbcc1a36c5060ebb))
-* preserve legacy SDK compatibility with dual aliases ([4910037](https://github.com/qubrics/qubrics-sdk/commit/491003792dd742cb2c83e4a09501abdf4f4458c9))
-* preserve Python environment compatibility with published core ([8f4c78f](https://github.com/qubrics/qubrics-sdk/commit/8f4c78f050725b6d57a6b71d39178dee40c1774e))
-* preserve webhook variants and own calendar lifecycle fixtures ([49d4604](https://github.com/qubrics/qubrics-sdk/commit/49d4604235528b2fd56ac0bb51d55c244a18f771))
-* **python-mailbox:** regenerate flattened mailbox response models ([1a57997](https://github.com/qubrics/qubrics-sdk/commit/1a57997bef97d065f24aa0b6cfec2acceb191744))
-* **python-mailbox:** regenerate mailbox models from the deployed v1.8.250 schema ([88c40fa](https://github.com/qubrics/qubrics-sdk/commit/88c40fa582602016f6e585d9102da26b29048ae0))
-* **python:** prepare Mailbox 3.0.0 on released Sending ([4f699ae](https://github.com/qubrics/qubrics-sdk/commit/4f699ae351825c8e6e61fb4afbe833292168d962))
-* regenerate SDKs from current calendar and webhook contracts ([276082c](https://github.com/qubrics/qubrics-sdk/commit/276082cb5e525c0a6fb1e521858846cbd21c8714))
-* regenerate SDKs from current calendar and webhook contracts ([d728ea8](https://github.com/qubrics/qubrics-sdk/commit/d728ea87ac3f0aeebdb6380ad3bd515bac63d413))
-* regenerate SDKs from the deployed flattened response schemas (docs 86b0f45) ([628b161](https://github.com/qubrics/qubrics-sdk/commit/628b161d2692775ac1f4830c1d64c024ba04ed83))
-* **releases:** keep legacy pointer installs silent ([6cefa86](https://github.com/qubrics/qubrics-sdk/commit/6cefa86689aff2daafede2c413f9454d39ad4493))
-* **sdk:** preserve timestamps and fixture prerequisites ([894ee58](https://github.com/qubrics/qubrics-sdk/commit/894ee580c8331ac19f80a3778300f265a1a39300))
-* **sdk:** withhold calendar clients from unpublished native releases ([7a0bf48](https://github.com/qubrics/qubrics-sdk/commit/7a0bf484344bb68fb9c8508e83e49c80c56cfaf1))
-* **sdk:** withhold calendar clients from unpublished native releases ([052cd45](https://github.com/qubrics/qubrics-sdk/commit/052cd455ed3279342d7cf1c6d73932ac3207ff6f))
-* sync generated Qubrics API defaults ([#351](https://github.com/qubrics/qubrics-sdk/issues/351)) ([388a410](https://github.com/qubrics/qubrics-sdk/commit/388a4107d25e6cf94a7c7704b094f8765f851be3))
-
-
-### Documentation
-
-* **python-mailbox:** lead the 2.0.1 changelog with the deprecated alias and the flattened models ([e1e81eb](https://github.com/qubrics/qubrics-sdk/commit/e1e81eb2529924fcac9d5d54f773c0ae405eb45e))
-* **python-mailbox:** lead the 2.0.2 changelog with the message header fields ([8e4b896](https://github.com/qubrics/qubrics-sdk/commit/8e4b8960dc61bdda85cb8b24afdfe8cacfd49e83))
-* **python-mailbox:** replace the pre-release migration note with the 1.x to 2.0 guide ([1ed2c23](https://github.com/qubrics/qubrics-sdk/commit/1ed2c23aff0c79d7810f7230decf73e79c71e0df))
-* use generated SDK method names in examples ([5bb29fc](https://github.com/qubrics/qubrics-sdk/commit/5bb29fc309bae1013da2802210a5b23ccf9dbfd0))
-
-## [3.0.0](https://github.com/qubrics/qubrics-sdk/compare/python-mailbox-v2.0.2...python-mailbox-v3.0.0) (2026-11-11)
-
+## [3.0.0](https://github.com/qubrics/qubrics-sdk/compare/python-mailbox-v2.0.2...python-mailbox-v3.0.0) (2026-11-18)
 
 ### ⚠ BREAKING CHANGES
 
@@ -54,27 +9,6 @@
 ### Features
 
 * Version 3.0.0 excludes calendar and calendar-event clients and models. Mail, folders, drafts and mailbox event streams remain available.
-* add compatible Qubrics integration aliases ([dff5cb8](https://github.com/qubrics/qubrics-sdk/commit/dff5cb89bccb5840d55071d23f79ff88c7e58040))
-* **mailbox:** expose durable drafts and agent-email workflows ([bb2f462](https://github.com/qubrics/qubrics-sdk/commit/bb2f462447affd43b3b175b9625068f1a02e3172))
-* **mailbox:** expose durable drafts and agent-email workflows ([7e867c5](https://github.com/qubrics/qubrics-sdk/commit/7e867c5bd7b7c85add27c7c04e036997ae57dbc4))
-* **mailbox:** expose permitted sender choices to consumers ([#317](https://github.com/qubrics/qubrics-sdk/issues/317)) ([7ac3dc1](https://github.com/qubrics/qubrics-sdk/commit/7ac3dc1c08915ec12477171a49edb87b3d482f39))
-* preserve integration contracts with Qubrics aliases ([722fbab](https://github.com/qubrics/qubrics-sdk/commit/722fbab2f98248d17b4878dd5149a35a711d5a18))
-
-
-### Bug Fixes
-
-* preserve legacy SDK compatibility with dual aliases ([4910037](https://github.com/qubrics/qubrics-sdk/commit/491003792dd742cb2c83e4a09501abdf4f4458c9))
-* preserve Python environment compatibility with published core ([8f4c78f](https://github.com/qubrics/qubrics-sdk/commit/8f4c78f050725b6d57a6b71d39178dee40c1774e))
-* preserve webhook variants and own calendar lifecycle fixtures ([49d4604](https://github.com/qubrics/qubrics-sdk/commit/49d4604235528b2fd56ac0bb51d55c244a18f771))
-* regenerate SDKs from current calendar and webhook contracts ([276082c](https://github.com/qubrics/qubrics-sdk/commit/276082cb5e525c0a6fb1e521858846cbd21c8714))
-* regenerate SDKs from current calendar and webhook contracts ([d728ea8](https://github.com/qubrics/qubrics-sdk/commit/d728ea87ac3f0aeebdb6380ad3bd515bac63d413))
-* **sdk:** preserve timestamps and fixture prerequisites ([894ee58](https://github.com/qubrics/qubrics-sdk/commit/894ee580c8331ac19f80a3778300f265a1a39300))
-* sync generated Qubrics API defaults ([#351](https://github.com/qubrics/qubrics-sdk/issues/351)) ([388a410](https://github.com/qubrics/qubrics-sdk/commit/388a4107d25e6cf94a7c7704b094f8765f851be3))
-
-
-### Documentation
-
-* use generated SDK method names in examples ([5bb29fc](https://github.com/qubrics/qubrics-sdk/commit/5bb29fc309bae1013da2802210a5b23ccf9dbfd0))
 
 ## [2.0.2](https://github.com/Sendmux/sendmux-sdk/compare/python-mailbox-v2.0.1...python-mailbox-v2.0.2) (2026-09-21)
 
