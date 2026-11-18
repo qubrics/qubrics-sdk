@@ -8,7 +8,8 @@ class QubricsRubyManagementValidationTest < Minitest::Test
     generated = Qubrics::Management::Generated
     assert_empty generated.constants.grep(/Calendar/)
     client = Qubrics::Management::Client.new(api_key: 'smx_root_test')
-    assert_raises(ArgumentError) { client.webhooks.management_list_delivery('hook_test', event_type: 'calendar.changed') }
+    event = 'calendar.changed'
+    assert_raises(ArgumentError) { client.webhooks.management_list_delivery('hook_test', event_type: event) }
     body = generated::WebhookCreateBody.new(url: 'https://example.com/hooks', event_types: ['message.received'])
     assert_equal ['message.received'], body.event_types
     snapshot = File.expand_path('../../python/mcp/qubrics/mcp/openapi/openapi-app.json', __dir__)
