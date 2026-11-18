@@ -2,6 +2,9 @@
 
 ## [0.6.0](https://github.com/qubrics/qubrics-sdk/compare/rust-v0.5.1...rust-v0.6.0) (2026-11-11)
 
+### Release scope
+
+* Version 0.6.0 excludes calendar-specific client bindings. Existing non-calendar clients and generic raw JSON helpers remain available.
 
 ### Features
 
@@ -10,8 +13,6 @@
 * **mailbox:** expose durable drafts and agent-email workflows ([7e867c5](https://github.com/qubrics/qubrics-sdk/commit/7e867c5bd7b7c85add27c7c04e036997ae57dbc4))
 * **mailbox:** expose permitted sender choices to consumers ([#317](https://github.com/qubrics/qubrics-sdk/issues/317)) ([7ac3dc1](https://github.com/qubrics/qubrics-sdk/commit/7ac3dc1c08915ec12477171a49edb87b3d482f39))
 * preserve integration contracts with Qubrics aliases ([722fbab](https://github.com/qubrics/qubrics-sdk/commit/722fbab2f98248d17b4878dd5149a35a711d5a18))
-* **rust:** add named calendar operations ([1228b59](https://github.com/qubrics/qubrics-sdk/commit/1228b59b0cddf12062c6ea7da7a4b3dfdcbd3b86))
-* **rust:** add named calendar operations ([8211d31](https://github.com/qubrics/qubrics-sdk/commit/8211d31a55206ba1ad64a5c27df7f8c7b87f8e85))
 
 
 ### Bug Fixes
