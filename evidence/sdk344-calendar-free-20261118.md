@@ -78,6 +78,31 @@ invented rename in this source PR.
 
 ## Receipts and undo
 
+PR379 normally merged at `b272a770c8434e7a9743def964853a4f6712c806`.
+Its exact-head CI44253396855 and main CI44255476435 both passed 34/34,
+zero skipped. Only test workflows and native Ruby version pins changed;
+release, publish and tag workflows were untouched.
+
+PR378 CI44255575991 at `500224ed` passed 33/34. Its sole failure is
+`calendar lifecycle python mailboxCreateCalendarEvent`: the live-E2E matrix
+still claimed the ten intentionally withheld Python calendar operations.
+Raw `pr378-500224ed-failed.log:29640` records the failing adapter result.
+Canonical per the existing `expectedPairs` contract: declare only exposed
+operations, then return `inapplicable` before preparing fixtures. The matrix
+generator, scenario output and runner now follow that same contract. Other
+languages still declare all ten operations; Python retains mail operations.
+
+The new public runner regression first failed with Python pairs incorrectly
+applicable (`calendar-plan-red.log`), then with fixture preparation attempted
+(`calendar-adapter-red.log`: "Mailbox identity mutation requires the dedicated
+preflight-verified mailbox ID"). The fix passes the 27 calendar/fixture safety
+tests, zero skipped (`calendar-plan-green.log`). It also asserts no HTTP
+request or owned fixture is created for an unavailable Python calendar call.
+The former Python calendar lifecycle case is replaced by that absence check;
+the TypeScript lifecycle and all mail/auth/cleanup assertions remain.
+Generated scenarios also restore the canonical optional upload header already
+present in the normalised input; no API or transport behaviour changes.
+
 Machine-local raw outputs retained in SDK MAIN
 `.claude/artifacts/rebrand-qubrics-sdk344/`:
 

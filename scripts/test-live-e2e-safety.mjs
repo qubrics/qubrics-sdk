@@ -181,9 +181,25 @@ for (const failure of ["uncertain_create", "foreign_id", "foreign_name", "foreig
 }
 }
 
+test("Python calendar bindings are withheld from planning and fixture setup", async () => {
+  const calendarIds = operations.filter(operation => /^\/mailbox\/(calendars|calendar-events)(\/|$)/.test(operation.path)).map(operation => operation.operationId);
+  assert.equal(calendarIds.length, 10);
+  const pairs = expectedPairs(calendarIds, ["python", "typescript"], scenarios);
+  assert.ok(pairs.filter(pair => pair.adapter === "python").every(pair => pair.applicable === false));
+  assert.ok(pairs.filter(pair => pair.adapter === "typescript").every(pair => pair.applicable === true));
+  assert.deepEqual(expectedPairs(["managementGetConnection"], ["python"], scenarios), [
+    { adapter: "python", operationId: "managementGetConnection", applicable: true },
+  ]);
+  await withApi(() => ({ body: connection() }), async ({ baseUrl, runtime, requests }) => {
+    const [result] = await runAdapterStep({ adapter: "python", credentials: { mailboxApiKey: "smx_mbx_test", appBaseUrl: baseUrl }, fixtureRuntime: runtime, fixtures, operation: operations.find(item => item.operationId === "mailboxCreateCalendarEvent"), sdk });
+    assert.equal(result.status, "inapplicable", JSON.stringify(result));
+    assert.equal(requests.length, 0);
+    assert.equal(runtime.ledger.resources.length, 0);
+  });
+});
+
 for (const { operationId, failedUpdate = false, adapter = "typescript" } of [
   { operationId: "mailboxCreateCalendarEvent" },
-  { operationId: "mailboxCreateCalendarEvent", adapter: "python" },
   { operationId: "mailboxUpdateCalendarEvent" },
   { operationId: "mailboxDeleteCalendarEvent" },
   { operationId: "mailboxUpdateCalendarEvent", failedUpdate: true },

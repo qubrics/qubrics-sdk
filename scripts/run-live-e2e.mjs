@@ -321,6 +321,10 @@ async function runAdapterStepInner({ adapter, credentials, fixtureRuntime, fixtu
     ];
   }
 
+  if (sdkAdapters.includes(adapter) && !expectedPairs([operation.operationId], [adapter], scenarios)[0].applicable) {
+    return [{ adapter, operationId: operation.operationId, reason: "SDK adapter does not expose this operation", status: "inapplicable" }];
+  }
+
   if (adapter === "mcp" && !isMcpCurated(operation)) {
     return [skippedMcpResult(operation)];
   }
