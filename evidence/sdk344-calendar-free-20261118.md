@@ -50,6 +50,16 @@ predates final prose and is not a publish-approved hash.
 
 ## Qualification boundaries
 
+Operator ruling, 18 November 2026: only the docs changelog announces the
+brand move. A18's Ruby post-install deprecation message is cancelled by the
+operator. All five pointer gemspecs now have no `post_install_message`.
+Seven Python pointers retain replacement dependencies and Inactive metadata,
+with neutral descriptions and no executable install hook. Pointer versions
+and dependency bounds are unchanged. The native Ruby metadata check was red
+with `Unexpected install message: sendmux-core`, then green for all five.
+The Mailbox release notes use the import instruction without a move
+announcement. Already-published immutable package bytes are not replaced.
+
 Fresh native Python build/dists check exits 0. Its source cohorts, installed
 MCP artifact check and Twine checks run through existing repo commands. Final
 candidate SHA, exact-head CI, default Skills acceptance, final archive hashes
@@ -74,6 +84,7 @@ Machine-local raw outputs retained in SDK MAIN
 - `calendar-free-python-{red,green,generate,dists,selector}.log`
 - `calendar-free-rust-{red,green,coverage,package,package-inspection}.log`
 - `calendar-free-canary.log`
+- `pointers-{silent-red,silent-green,python-silent}.log`
 
 Source rollback is a normal revert. Keep calendar publication held through
 any revert. Public registry versions cannot be overwritten or reused, and

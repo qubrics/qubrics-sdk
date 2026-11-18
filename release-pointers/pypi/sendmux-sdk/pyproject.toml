@@ -5,8 +5,8 @@ build-backend = "hatchling.build"
 [project]
 name = "sendmux-sdk"
 version = "4.0.0"
-description = "Deprecated: use qubrics-sdk."
-readme = { text = "sendmux-sdk is deprecated. Install qubrics-sdk and import from qubrics.", content-type = "text/plain" }
+description = "Dependency-only package."
+readme = { text = "Installs the required dependency.", content-type = "text/plain" }
 requires-python = ">=3.10"
 license = "MIT"
 classifiers = ["Development Status :: 7 - Inactive"]
