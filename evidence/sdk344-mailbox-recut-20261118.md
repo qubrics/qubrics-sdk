@@ -91,3 +91,27 @@ using current Job members and held-handle membership checks; no new child,
 timer,wait or ownership-error suppression remains. Both final reviews
 returned zero findings. Local JavaScript syntax,unchanged-workflow source
 extraction and native-exit wiring checks passed; native execution awaits CI.
+
+Diagnostic head092d1154 CI44270195093 completed34/34 successful jobs.
+Windows22 job134684578463 returned Chocolatey2.7.5 with command PID at901ms,
+first output2634ms,controller close2740ms and confirmed ownership2742ms.
+The10s snapshot did not fire; this passing control does not identify or
+remove the original hang's cause. Raw stages are in MAIN artifacts
+`pr380-092d1154-windows22.log:2675-2687`.
+
+Review corrections remove the incomplete-snapshot marker stage and name
+controller closure accurately. The existing100ms enumeration deadline is
+shared across process/thread collection,with stop checks and an explicit
+truncation marker; a partial controller PID entry survives enumeration
+failure or expiry. Thread CPU sampling is omitted: .NET Framework's
+ThreadState/WaitReason use the enumerated record,but TotalProcessorTime
+reopens the thread by ID,which could have been reused:
+https://github.com/microsoft/referencesource/blob/main/System/services/monitoring/system/diagnosticts/ProcessThread.cs .
+No command,assertion,20s deadline or shutdown ownership change accompanies
+these diagnostic corrections. Native capture and exact-head CI remain
+unqualified until their own receipts exist; no original-hang fix is claimed.
+Independent Spec/Standards reviews returned zero findings for these
+corrections. The capture budget is cooperative: synchronous local OS reads
+finish between deadline/stop checks; no stronger native bound is claimed.
+Existing JavaScript syntax, workflow-source extraction and native-exit
+wiring checks passed locally; no new harness or test was added.

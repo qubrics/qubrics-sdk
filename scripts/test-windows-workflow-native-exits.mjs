@@ -327,7 +327,7 @@ async function runCapturedProcess({ command, args, env, label }) {
   });
   child.stderr.on("data", (chunk) => {
     receipt.stderr += chunk;
-    for (const marker of ["windows-job-bootstrap", "windows-command-bridge", `"command":${JSON.stringify(command)}`, "windows_probe_state", "windows_job_admission_limit", "windows_job_shutdown_snapshot"]) {
+    for (const marker of ["windows-job-bootstrap", "windows-command-bridge", `"command":${JSON.stringify(command)}`, "windows_job_admission_limit", "windows_job_shutdown_snapshot"]) {
       if (receipt.stderr.includes(marker) && !receipt.stages.some((event) => event.stage === marker)) stage(marker);
     }
   });
@@ -355,7 +355,7 @@ async function runCapturedProcess({ command, args, env, label }) {
     clearTimeout(timer);
     clearTimeout(shutdownTimer);
   });
-  stage("command-closed");
+  stage("controller-closed");
   receipt.timed_out = timedOut;
   receipt.job = await owner.confirm();
   stage("owner-confirmed");

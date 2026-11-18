@@ -184,23 +184,34 @@ try {
         if (!$stateCaptured -and $config.probeStateAt -and [DateTime]::UtcNow -ge [DateTime]::Parse($config.probeStateAt).ToUniversalTime()) {
             $stateCaptured = $true
             $snapshot = @{ started_at = [DateTime]::UtcNow.ToString('o') }
+            $snapshotDeadline = [DateTime]::UtcNow.AddMilliseconds(100)
             try {
-                $ids = @($PID) + [ConsumerJob]::ProcessIds($job, [DateTime]::UtcNow.AddMilliseconds(100))
+                $ids = @($PID)
+                try { $ids += [ConsumerJob]::ProcessIds($job, $snapshotDeadline) }
+                catch { $snapshot.error = $_.Exception.Message }
                 $snapshot.processes = @(foreach ($processId in $ids) {
-                    $process = $null
                     $entry = @{ pid = $processId }
+                    if ((Test-Path -LiteralPath $config.stop) -or [DateTime]::UtcNow -ge $snapshotDeadline) {
+                        $snapshot.truncated = $true
+                        $entry
+                        break
+                    }
+                    $process = $null
                     try {
                         $process = [Diagnostics.Process]::GetProcessById($processId)
                         if ($processId -ne $PID -and ![ConsumerJob]::Belongs($job, $process.Handle)) { continue }
                         $entry.name = $process.ProcessName
                         $entry.started_at = $process.StartTime.ToUniversalTime().ToString('o')
                         $entry.cpu_ms = $process.TotalProcessorTime.TotalMilliseconds
-                        $entry.threads = @($process.Threads | ForEach-Object {
-                            $thread = @{ id = $_.Id }
+                        $entry.threads = @(foreach ($processThread in $process.Threads) {
+                            if ((Test-Path -LiteralPath $config.stop) -or [DateTime]::UtcNow -ge $snapshotDeadline) {
+                                $snapshot.truncated = $true
+                                break
+                            }
+                            $thread = @{ id = $processThread.Id }
                             try {
-                                $thread.state = $_.ThreadState.ToString()
-                                if ($thread.state -eq 'Wait') { $thread.wait_reason = $_.WaitReason.ToString() }
-                                $thread.cpu_ms = $_.TotalProcessorTime.TotalMilliseconds
+                                $thread.state = $processThread.ThreadState.ToString()
+                                if ($thread.state -eq 'Wait') { $thread.wait_reason = $processThread.WaitReason.ToString() }
                             } catch { $thread.error = $_.Exception.Message }
                             $thread
                         })
