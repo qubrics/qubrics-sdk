@@ -74,9 +74,9 @@ jobs:
           cache-dependency-path: go/go.sum
 
       - name: Set up Ruby
-        uses: ruby/setup-ruby@afeafc3d1ab54a631816aba4c914a0081c12ff2f # v1.310.0
+        uses: ruby/setup-ruby@20eb24b0d509e2b9ed9b6d42ddfeb992915e0564 # v1.341.0
         with:
-          ruby-version: "3.4.1"
+          ruby-version: "3.4.12"
           bundler-cache: false
 
       - name: Install dependencies
