@@ -305,20 +305,39 @@ Invoke-ChocolateyCredentialTransaction -Source $probeSource -Operation {
 }
 
 async function runCapturedProcess({ command, args, env, label }) {
-  const owner = startWindowsConsumer(command, args, { cwd: root, env: windowsPowerShellEnvironment(env), stdio: ["ignore", "pipe", "pipe"] });
+  const started = performance.now();
+  const owner = startWindowsConsumer(command, args, {
+    cwd: root, env: windowsPowerShellEnvironment(env), stdio: ["ignore", "pipe", "pipe"],
+    probeStateAt: new Date(Date.now() + 10000).toISOString(),
+  });
   const child = owner.child;
-  const receipt = { pid: child.pid, command, args, label, stdout: "", stderr: "" };
+  const receipt = { pid: child.pid, command, args, label, stdout: "", stderr: "", stages: [] };
+  const stage = (name) => {
+    const event = { stage: name, elapsed_ms: Math.round(performance.now() - started) };
+    receipt.stages.push(event);
+    console.log(JSON.stringify({ native_probe_stage: label, ...event }));
+  };
+  stage("owner-created");
   console.log(JSON.stringify({ child_pid: child.pid, command, label }));
   child.stdout.setEncoding("utf8");
   child.stderr.setEncoding("utf8");
-  child.stdout.on("data", (chunk) => { receipt.stdout += chunk; });
-  child.stderr.on("data", (chunk) => { receipt.stderr += chunk; });
+  child.stdout.on("data", (chunk) => {
+    if (!receipt.stdout) stage("first-stdout");
+    receipt.stdout += chunk;
+  });
+  child.stderr.on("data", (chunk) => {
+    receipt.stderr += chunk;
+    for (const marker of ["windows-job-bootstrap", "windows-command-bridge", `"command":${JSON.stringify(command)}`, "windows_probe_state", "windows_job_admission_limit", "windows_job_shutdown_snapshot"]) {
+      if (receipt.stderr.includes(marker) && !receipt.stages.some((event) => event.stage === marker)) stage(marker);
+    }
+  });
   let timedOut = false;
   let shutdownTimer;
   let rejectShutdown;
   const shutdownFailed = new Promise((_, reject) => { rejectShutdown = reject; });
   const timer = setTimeout(() => {
     timedOut = true;
+    stage("deadline");
     try { owner.stop(); } catch (error) { receipt.stop_error = error.message; }
     shutdownTimer = setTimeout(() => {
       try { child.kill("SIGKILL"); } catch (error) { receipt.kill_error = error.message; }
@@ -336,8 +355,10 @@ async function runCapturedProcess({ command, args, env, label }) {
     clearTimeout(timer);
     clearTimeout(shutdownTimer);
   });
+  stage("command-closed");
   receipt.timed_out = timedOut;
   receipt.job = await owner.confirm();
+  stage("owner-confirmed");
   receipt.absent = absent(child.pid);
   assert(!receipt.job.orphan, "Installed Chocolatey command must not leave an owned descendant");
   assert(!receipt.stop_error && !receipt.kill_error, "Installed Chocolatey command shutdown must be confirmed");

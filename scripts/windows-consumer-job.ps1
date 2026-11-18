@@ -71,7 +71,12 @@ public static class ConsumerJob {
         Check(QueryInformationJobObject(job, 1, out info, (uint)Marshal.SizeOf(typeof(Accounting)), IntPtr.Zero));
         return info.ActiveProcesses;
     }
-    static uint[] ProcessIds(IntPtr job, DateTime deadline) {
+    public static bool Belongs(IntPtr job, IntPtr process) {
+        bool belongs;
+        Check(IsProcessInJob(process, job, out belongs));
+        return belongs;
+    }
+    public static uint[] ProcessIds(IntPtr job, DateTime deadline) {
         uint capacity = Math.Max(Active(job), 1u);
         while (DateTime.UtcNow < deadline) {
             // JOBOBJECT_BASIC_PROCESS_ID_LIST: two DWORDs followed by ULONG_PTRs.
@@ -173,8 +178,41 @@ try {
     $bootstrapId = $bootstrap.Id
     [Console]::Error.WriteLine(('{"child_pid":' + $bootstrapId + ',"command":"windows-job-bootstrap"}'))
     $interrupted = $false
+    $stateCaptured = $false
     while (!($bootstrap.WaitForExit(0))) {
         if (Test-Path -LiteralPath $config.stop) { $interrupted = $true; break }
+        if (!$stateCaptured -and $config.probeStateAt -and [DateTime]::UtcNow -ge [DateTime]::Parse($config.probeStateAt).ToUniversalTime()) {
+            $stateCaptured = $true
+            $snapshot = @{ started_at = [DateTime]::UtcNow.ToString('o') }
+            try {
+                $ids = @($PID) + [ConsumerJob]::ProcessIds($job, [DateTime]::UtcNow.AddMilliseconds(100))
+                $snapshot.processes = @(foreach ($processId in $ids) {
+                    $process = $null
+                    $entry = @{ pid = $processId }
+                    try {
+                        $process = [Diagnostics.Process]::GetProcessById($processId)
+                        if ($processId -ne $PID -and ![ConsumerJob]::Belongs($job, $process.Handle)) { continue }
+                        $entry.name = $process.ProcessName
+                        $entry.started_at = $process.StartTime.ToUniversalTime().ToString('o')
+                        $entry.cpu_ms = $process.TotalProcessorTime.TotalMilliseconds
+                        $entry.threads = @($process.Threads | ForEach-Object {
+                            $thread = @{ id = $_.Id }
+                            try {
+                                $thread.state = $_.ThreadState.ToString()
+                                if ($thread.state -eq 'Wait') { $thread.wait_reason = $_.WaitReason.ToString() }
+                                $thread.cpu_ms = $_.TotalProcessorTime.TotalMilliseconds
+                            } catch { $thread.error = $_.Exception.Message }
+                            $thread
+                        })
+                    } catch { $entry.error = $_.Exception.Message }
+                    finally { if ($process) { $process.Dispose() } }
+                    $entry
+                })
+            } catch { $snapshot.error = $_.Exception.Message }
+            $snapshot.completed_at = [DateTime]::UtcNow.ToString('o')
+            $snapshot.before_stop = !(Test-Path -LiteralPath $config.stop)
+            [Console]::Error.WriteLine((@{ windows_probe_state = $snapshot } | ConvertTo-Json -Depth 7 -Compress))
+        }
         Start-Sleep -Milliseconds 20
     }
     $deadline = [DateTime]::UtcNow.AddMilliseconds(2000)

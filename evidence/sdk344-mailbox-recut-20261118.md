@@ -59,3 +59,35 @@ PyPI yank is withdrawal rather than a full rollback and needs named GO.
 Sending's existing environment hold remains operator-deferred and is not
 re-requested. Obsolete PR330/PR326 remain non-pending; old Rust run stays
 cancelled. No public release or package was created during preparation.
+
+## Windows diagnostic reopening
+
+Candidate333b146a CI44266029118 completed33/34 successful, with the real
+installed `choco.exe --version` probe stopped by its existing20-second
+deadline on Windows22. Same-code preceding main22 passed in2.768s;
+this run's Windows24/26 passed in5.005s/2.413s. Root cause is unconfirmed.
+Earlier intentional sensitivity/syntax failures are expected test cases;
+the final installed-version assertion is the actual failure.
+
+Ops19:34 authorised stage timing and owned process/thread wait-state
+capture in the existing native probe before the unchanged deadline.
+The diagnostic preserves the original command,assertions and Windows Job
+ownership; it does not fix the failure or authorise a rerun-as-fix.
+Read-only process inspection follows Microsoft Get-Process documentation
+and ProcessThread.WaitReason's requirement that ThreadState be Wait:
+https://learn.microsoft.com/en-us/dotnet/api/system.diagnostics.processthread.waitreason .
+
+Detailed trace and unchanged-code controls: SDK MAIN task
+`pr380-windows22-cause-20261118.md`; raw logs in MAIN artifacts
+`pr380-windows22-failed.log`, `pr380-windows24-success.log`,
+`pr380-windows26-success.log` and `pr378-main-windows22-success.log`.
+The diagnostic requires a fresh Windows22 run; no later candidate PASS
+or confirmed origin fix is claimed here. Python package source/metadata
+remain unchanged by this diagnostic.
+
+Pre-push Spec/Standards review found and removed an independently owned
+observer draft. Capture now runs inside the existing Job controller,
+using current Job members and held-handle membership checks; no new child,
+timer,wait or ownership-error suppression remains. Both final reviews
+returned zero findings. Local JavaScript syntax,unchanged-workflow source
+extraction and native-exit wiring checks passed; native execution awaits CI.
