@@ -43,9 +43,15 @@ for (const mutation of ["cold-controller-start", "started-never-ready", "complet
       ownerSource = ownerSource
         .replace(captureOption, "probeStateAt: new Date(Date.now() + 10000).toISOString(),")
         .replace(spawnStatement, '  options = { ...options, stdio: ["ignore", "pipe", "pipe"] };\n' + spawnStatement)
-        .replace(returnStatement, `  child.stderr.on("data", (chunk) => { writeFileSync(${JSON.stringify(join(directory, "capture.stderr"))}, chunk, { flag: "a", mode: 0o600 }); process.stderr.write(chunk); });\n` + returnStatement)
-        .replace(stopStatement, `stop() { writeFileSync(request.stop, "stop"); writeFileSync(${JSON.stringify(join(directory, "stop.json"))}, JSON.stringify({ stopped_at: new Date().toISOString() })); },`);
+        .replace(returnStatement, `  writeFileSync(${JSON.stringify(join(directory, "controllers.jsonl"))}, JSON.stringify({ controller: child.pid, cwd: options.cwd, started_at: new Date().toISOString() }) + "\\n", { flag: "a", mode: 0o600 });\n  child.stderr.on("data", (chunk) => { writeFileSync(${JSON.stringify(join(directory, "capture.stderr"))}, chunk, { flag: "a", mode: 0o600 }); process.stderr.write(chunk); });\n` + returnStatement)
+        .replace(stopStatement, `stop() { const stoppedAt = new Date().toISOString(); writeFileSync(request.stop, "stop"); writeFileSync(${JSON.stringify(join(directory, "stops.jsonl"))}, JSON.stringify({ controller: child.pid, stopped_at: stoppedAt }) + "\\n", { flag: "a", mode: 0o600 }); },`);
       writeFileSync(owner, ownerSource);
+      const diagnostic = join(directory, "diagnose-windows-consumer-ownership.mjs");
+      const diagnosticSource = readFileSync(diagnostic, "utf8");
+      const releaseStatement = 'writeFileSync(release, "release");';
+      assert.equal(diagnosticSource.split(releaseStatement).length, 2, "Cold-start capture must record exactly one existing fixture release seam");
+      writeFileSync(diagnostic, diagnosticSource.replace(releaseStatement,
+        `writeFileSync(${JSON.stringify(join(directory, "releases.jsonl"))}, JSON.stringify({ kind, released_at: new Date().toISOString() }) + "\\n", { flag: "a", mode: 0o600 });\n      ` + releaseStatement));
     } else if (mutation === "started-never-ready") {
       const diagnostic = join(directory, "diagnose-windows-consumer-ownership.mjs");
       const original = readFileSync(diagnostic, "utf8");
@@ -82,18 +88,37 @@ for (const mutation of ["cold-controller-start", "started-never-ready", "complet
           return start === -1 ? [] : [JSON.parse(line.slice(start)).windows_probe_state];
         });
       assert.equal(snapshots.length, 3, "Each existing cold-start controller must retain one complete capture");
-      const { stopped_at: stoppedAt } = JSON.parse(readFileSync(join(directory, "stop.json"), "utf8"));
-      for (const snapshot of snapshots) {
+      const controllers = readFileSync(join(directory, "controllers.jsonl"), "utf8").trim().split("\n").map((line) => JSON.parse(line));
+      const releases = readFileSync(join(directory, "releases.jsonl"), "utf8").trim().split("\n").map((line) => JSON.parse(line));
+      const stops = readFileSync(join(directory, "stops.jsonl"), "utf8").trim().split("\n").map((line) => JSON.parse(line));
+      assert.equal(controllers.length, rows.length);
+      assert.equal(releases.length, 2);
+      assert.equal(stops.length, 1);
+      for (const row of rows) {
+        const matchingControllers = controllers.filter((controller) => controller.cwd === row.directory);
+        assert.equal(matchingControllers.length, 1, "Each scenario must record its actual controller");
+        const controller = matchingControllers[0];
+        assert(Number.isSafeInteger(controller.controller) && controller.controller > 0);
+        const boundaries = row.kind === "powershell-deadline"
+          ? stops.filter((stop) => stop.controller === controller.controller).map((stop) => stop.stopped_at)
+          : releases.filter((release) => release.kind === row.kind).map((release) => release.released_at);
+        assert.equal(boundaries.length, 1, "Each scenario must record its own release or stop boundary");
+        const boundary = boundaries[0];
+        const matches = snapshots.filter((snapshot) => snapshot.processes[0].pid === controller.controller
+          && Date.parse(snapshot.started_at) >= Date.parse(controller.started_at)
+          && Date.parse(snapshot.completed_at) <= Date.parse(boundary));
+        assert.equal(matches.length, 1, "Each controller must capture exactly once before its own release or stop");
+        const snapshot = matches[0];
         assert(snapshot.before_stop, "Cold-start capture must complete before its controller observes stop");
         assert(Date.parse(snapshot.started_at) <= Date.parse(snapshot.completed_at));
-        assert(Date.parse(snapshot.completed_at) <= Date.parse(stoppedAt), "Capture must precede the existing deadline stop");
+        assert(Date.parse(snapshot.completed_at) <= Date.parse(boundary), "Capture must precede this controller's release or stop");
         assert(Number.isSafeInteger(snapshot.processes[0].pid) && snapshot.processes[0].pid > 0, "Capture must retain controller identity");
         if (!snapshot.truncated) {
           assert(snapshot.processes[0].threads?.some((thread) => typeof thread.state === "string" && thread.state.length > 0), "Complete cold-start capture must include an observed controller thread state");
         }
       }
       assert(snapshots.some((snapshot) => snapshot.processes[0].threads?.some((thread) => typeof thread.state === "string" && thread.state.length > 0)), "Cold-start case must observe a controller thread state");
-      console.log(JSON.stringify({ cold_start_capture: snapshots, stopped_at: stoppedAt }));
+      console.log(JSON.stringify({ cold_start_capture: snapshots, controllers, releases, stops }));
     } else if (mutation === "started-never-ready") {
       assert.equal(rows[0].verdict, "failed");
       assert.equal(rows[0].result, "failure");

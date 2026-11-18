@@ -239,6 +239,10 @@ async function runInstalledChocolateyProbe() {
     assert(probe.config_restored, "Installed Chocolatey transaction must restore the exact config bytes");
     assert.equal(probe.config_after_sha256, probe.config_before_sha256, "Installed Chocolatey transaction must restore the original SHA-256");
     assert(probe.staging_path_absent, "Installed Chocolatey transaction must remove its exact staging path");
+    for (const receipt of [probe.version_process, probe.transaction]) {
+      await rm(receipt.stderr_directory, { recursive: true, maxRetries: 3, retryDelay: 100 });
+      assert(!existsSync(receipt.stderr_directory));
+    }
     probe.verdict = "passed";
   } catch (error) {
     probe.assertion = error.message;
@@ -258,7 +262,9 @@ async function runInstalledChocolateyProbe() {
     writeFileSync(join(evidence, "installed-chocolatey-probe.json"), JSON.stringify({
       ...probe,
       transaction: probe.transaction && { ...probe.transaction, stdout: undefined },
-    }, (name, value) => name === "stderr" ? undefined : value, 2));
+    }, (name, value) => name === "stderr" ? undefined : typeof value === "string"
+      ? credentialSentinels.reduce((redacted, sentinel) => redacted.replaceAll(sentinel, "<REDACTED>"), value)
+      : value, 2));
   }
 
   assert(probe.final_config_restored, "Installed Chocolatey probe recovery must leave exact original config bytes");
@@ -310,15 +316,23 @@ Invoke-ChocolateyCredentialTransaction -Source $probeSource -Operation {
 async function runCapturedProcess({ command, args, env, label }) {
   const stderrDirectory = mkdtempSync(join(tmpdir(), "sendmux-native-probe-stderr-"));
   const stderrFile = join(stderrDirectory, "stderr.log");
-  writeFileSync(stderrFile, "", { flag: "wx", mode: 0o600 });
-  console.log(JSON.stringify({ native_probe_stderr: label, private_path: stderrFile, retention: "runner-lifetime-on-failure" }));
-  const started = performance.now();
-  const owner = startWindowsConsumer(command, args, {
-    cwd: root, env: windowsPowerShellEnvironment(env), stdio: ["ignore", "pipe", "pipe"],
-    probeStateAt: new Date(Date.now() + 10000).toISOString(),
-  });
+  let started;
+  let owner;
+  try {
+    writeFileSync(stderrFile, "", { flag: "wx", mode: 0o600 });
+    console.log(JSON.stringify({ native_probe_stderr: label, private_path: stderrFile, retention: "runner-lifetime-on-failure" }));
+    started = performance.now();
+    owner = startWindowsConsumer(command, args, {
+      cwd: root, env: windowsPowerShellEnvironment(env), stdio: ["ignore", "pipe", "pipe"],
+      probeStateAt: new Date(Date.now() + 10000).toISOString(),
+    });
+  } catch (error) {
+    try { await rm(stderrDirectory, { recursive: true }); }
+    catch (cleanupError) { console.error(JSON.stringify({ native_probe_stderr: label, private_path: stderrFile, cleanup_error: cleanupError.code ?? cleanupError.message })); }
+    throw error;
+  }
   const child = owner.child;
-  const receipt = { pid: child.pid, command, args, label, stdout: "", stderr: "", stages: [] };
+  const receipt = { pid: child.pid, command, args, label, stdout: "", stderr: "", stderr_directory: stderrDirectory, stages: [] };
   let stderrPending = "";
   const stage = (name) => {
     const event = { stage: name, elapsed_ms: Math.round(performance.now() - started) };
@@ -377,20 +391,23 @@ async function runCapturedProcess({ command, args, env, label }) {
     child.once("error", reject);
     child.once("close", accept);
   });
-  receipt.status = await Promise.race([closed, shutdownFailed]).finally(() => {
-    clearTimeout(timer);
-    clearTimeout(shutdownTimer);
-  });
-  stage("controller-closed");
-  receipt.timed_out = timedOut;
-  receipt.job = await owner.confirm();
-  stage("owner-confirmed");
-  receipt.absent = absent(child.pid);
-  assert(!receipt.job.orphan, "Installed Chocolatey command must not leave an owned descendant");
-  assert(!receipt.stop_error && !receipt.kill_error, "Installed Chocolatey command shutdown must be confirmed");
-  assert(!receipt.stderr_error, `Installed Chocolatey probe stderr retention failed: ${receipt.stderr_error}; retained ${stderrFile}`);
-  await rm(stderrDirectory, { recursive: true, maxRetries: 3, retryDelay: 100 });
-  assert(!existsSync(stderrDirectory));
+  try {
+    receipt.status = await Promise.race([closed, shutdownFailed]).finally(() => {
+      clearTimeout(timer);
+      clearTimeout(shutdownTimer);
+    });
+    stage("controller-closed");
+    receipt.timed_out = timedOut;
+    receipt.job = await owner.confirm();
+    stage("owner-confirmed");
+    receipt.absent = absent(child.pid);
+    assert(!receipt.job.orphan, "Installed Chocolatey command must not leave an owned descendant");
+    assert(!receipt.stop_error && !receipt.kill_error, "Installed Chocolatey command shutdown must be confirmed");
+    assert(!receipt.stderr_error, `Installed Chocolatey probe stderr retention failed: ${receipt.stderr_error}; retained ${stderrFile}`);
+  } catch (error) {
+    if (receipt.stderr_error) console.error(JSON.stringify({ native_probe_stderr: label, private_path: stderrFile, retention_error: receipt.stderr_error }));
+    throw error;
+  }
   console.log(JSON.stringify({ child_closed: child.pid, label, status: receipt.status, timed_out: timedOut }));
   return receipt;
 }

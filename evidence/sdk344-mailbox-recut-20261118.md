@@ -197,3 +197,50 @@ remains UNCONFIRMED. If this one new CI is diagnostically red,Ops requires
 STOP with its cause and the option to hold PR380;no further corrections.
 Final independent Spec/Standards reviews returned zero remaining findings
 after checking both the direct and embedded stderr publication paths.
+
+## Last approved diagnostic correction round
+
+A2 head3487b543 qualified CI44286733673 SUCCESS34/34,zero skipped;
+all42PR checks passed and defaultlatestv2.0.5 accepted22 results.
+Nine cold captures retained controller identity,including permitted partial
+captures on Windows24. Native version commands completed before10s on all
+three Windows runners. These controls did not reproduce or explain the
+original333b146a20s timeout. Full measurements and six late review traces:
+SDK MAIN task`pr380-a2-qualification-result-20261118.md`.
+
+Ops authorises one LAST code round for those six routes,then one normal
+CI/default receipt. The existing copied cold-start fixture now records each
+controller's PID/workspace/start and its actual scenario release or stop.
+Each scenario must match exactly one capture in that controller's lifetime
+before its own trigger;the aggregate count is no longer the ordering proof.
+Existing output,exit,ownership,partial-capture and actual-state assertions
+remain. No scenario,test,harness or observer was added.
+
+Artifact serialization redacts known credential sentinels in every retained
+string,including version and child stdout on assertion failure;original
+in-memory assertions and config recovery remain unchanged. Stderr append
+errors are reported alongside rejection without replacing the original
+shutdown error. Private stderr survives owner confirmation and all caller
+validation;success removes it only after the whole probe passes. Empty
+storage is removed if file setup or controller startup throws.
+
+Held Job identities now use the existing Win32 OpenProcess binding with
+QUERY_LIMITED_INFORMATION and verified membership,before the one cached
+GetProcesses enumeration. Every held handle is closed in finally.
+Canonical trace:official .NET Process.cs1512-1515 calls IsProcessRunning;
+ProcessManager.cs219-226 enumerates process IDs for every GetProcessById.
+https://raw.githubusercontent.com/microsoft/referencesource/main/System/services/monitoring/system/diagnosticts/ProcessManager.cs
+Removing those repeated scans preserves identity without extra enumeration.
+It is not evidence that these scans caused the original timeout.
+
+Local syntax,workflow source extraction and native-exit wiring passed.
+Independent Spec and Standards reviews returned zero findings for this
+four-file batch. Fresh native CI/default results remain unclaimed until
+measured. Effective Windows ACLs and targeted prefixed/split-chunk/
+slow-reader failure coverage remain unverified under the scope limit.
+20s native deadline,cooperative100ms capture budget,ownership guarantees,
+workflows,package source and frozen artifacts are unchanged.
+Diagnostic-caused red means STOP. New findings from this final push get
+in-thread disposition and ONE follow-up issue rather than another code
+round,except a confirmed credential leak or break in the diagnostic itself.
+Rollback is revert;no merge,tag,upload or publication is authorised.

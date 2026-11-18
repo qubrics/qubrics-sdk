@@ -38,7 +38,7 @@ public static class ConsumerJob {
     [DllImport("kernel32.dll", EntryPoint="QueryInformationJobObject", SetLastError=true)]
     static extern bool QueryProcessIds(IntPtr job, int kind, IntPtr info, uint size, IntPtr returned);
     [DllImport("kernel32.dll", SetLastError=true)]
-    static extern IntPtr OpenProcess(uint access, bool inherit, uint pid);
+    public static extern IntPtr OpenProcess(uint access, bool inherit, uint pid);
     [DllImport("kernel32.dll", SetLastError=true)]
     static extern bool IsProcessInJob(IntPtr process, IntPtr job, out bool belongs);
     [DllImport("kernel32.dll", SetLastError=true)]
@@ -198,15 +198,20 @@ try {
                         $snapshot.truncated = $true
                         break
                     }
-                    $process = $null
+                    $processHandle = [IntPtr]::Zero
                     try {
-                        $process = [Diagnostics.Process]::GetProcessById($processId)
-                        if ([ConsumerJob]::Belongs($job, $process.Handle)) {
-                            $heldProcesses[$process.Id] = $process
-                            $process = $null
+                        $processHandle = [ConsumerJob]::OpenProcess(0x1000, $false, $processId) # QUERY_LIMITED_INFORMATION
+                        if ($processHandle -eq [IntPtr]::Zero) { throw [ComponentModel.Win32Exception]::new([Runtime.InteropServices.Marshal]::GetLastWin32Error()) }
+                        if ([ConsumerJob]::Belongs($job, $processHandle)) {
+                            $heldProcesses[[int]$processId] = $processHandle
+                            $processHandle = [IntPtr]::Zero
                         }
                     } catch { $snapshot.error = $_.Exception.Message }
-                    finally { if ($process) { $process.Dispose() } }
+                    finally {
+                        if ($processHandle -ne [IntPtr]::Zero -and ![ConsumerJob]::CloseHandle($processHandle)) {
+                            $snapshot.error = "Diagnostic handle close failed: $([Runtime.InteropServices.Marshal]::GetLastWin32Error())"
+                        }
+                    }
                 }
                 if ((Test-Path -LiteralPath $config.stop) -or [DateTime]::UtcNow -ge $snapshotDeadline) {
                     $snapshot.truncated = $true
@@ -248,7 +253,11 @@ try {
             } catch { $snapshot.error = $_.Exception.Message }
             finally {
                 foreach ($process in $processes) { $process.Dispose() }
-                foreach ($process in $heldProcesses.Values) { $process.Dispose() }
+                foreach ($processHandle in $heldProcesses.Values) {
+                    if (![ConsumerJob]::CloseHandle($processHandle)) {
+                        $snapshot.error = "Diagnostic handle close failed: $([Runtime.InteropServices.Marshal]::GetLastWin32Error())"
+                    }
+                }
             }
             $snapshot.completed_at = [DateTime]::UtcNow.ToString('o')
             $snapshot.before_stop = !(Test-Path -LiteralPath $config.stop)
