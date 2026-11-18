@@ -9,6 +9,18 @@ import pytest
 from qubrics.management import WebhookEventData, WebhookEventPayload
 
 
+def test_management_withholds_calendar_but_preserves_mail_webhooks() -> None:
+    import qubrics.management as management
+    import qubrics.management.models as models
+
+    assert not [name for name in dir(management) if "calendar" in name.lower()]
+    assert not [name for name in dir(models) if "calendar" in name.lower()]
+    with pytest.raises(ValueError):
+        management.WebhookCreateBody(url="https://example.com/hooks", event_types=["calendar.changed"])
+    body = management.WebhookCreateBody(url="https://example.com/hooks", event_types=["message.received"])
+    assert body.event_types == ["message.received"]
+
+
 @pytest.mark.parametrize("correlation", [{}, {"qubrics_message_id": None}, {"qubrics_message_id": "message_compatibility"}], ids=["omitted", "null", "string"])
 @pytest.mark.parametrize("nested", [False, True], ids=["data", "payload"])
 def test_webhook_message_alias_preserves_presence_and_value(correlation: dict[str, Any], nested: bool) -> None:

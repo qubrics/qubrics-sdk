@@ -49,8 +49,8 @@ class WebhookDeliveryAttempt(BaseModel):
     @field_validator('event_type')
     def event_type_validate_enum(cls, value):
         """Validates the enum"""
-        if value not in set(['message.delivered', 'message.bounced', 'message.complained', 'message.rejected', 'message.delivery_delayed', 'message.received', 'message.received.spam', 'calendar.changed', 'sendmux.test']):
-            raise ValueError("must be one of enum values ('message.delivered', 'message.bounced', 'message.complained', 'message.rejected', 'message.delivery_delayed', 'message.received', 'message.received.spam', 'calendar.changed', 'sendmux.test')")
+        if value not in set(['message.delivered', 'message.bounced', 'message.complained', 'message.rejected', 'message.delivery_delayed', 'message.received', 'message.received.spam', 'sendmux.test']):
+            raise ValueError("must be one of enum values ('message.delivered', 'message.bounced', 'message.complained', 'message.rejected', 'message.delivery_delayed', 'message.received', 'message.received.spam', 'sendmux.test')")
         return value
 
     @field_validator('result')

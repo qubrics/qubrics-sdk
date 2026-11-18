@@ -2,6 +2,7 @@ import { cpSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFi
 import { join } from "node:path";
 import { spawnSync } from "node:child_process";
 import { planDeprecatedModelAliases, reportPendingAliases } from "./deprecated-model-aliases.mjs";
+import { withholdManagementCalendar } from "./withhold-management-calendar.mjs";
 
 const root = process.cwd();
 const outputRoot = join(root, ".tmp", "python-codegen");
@@ -218,6 +219,7 @@ function readProjectVersion(packageDir) {
 
 function writeFilteredSpec(surface) {
   const source = JSON.parse(readFileSync(join(root, surface.spec), "utf8"));
+  if (surface.name === "management") withholdManagementCalendar(source);
   source.info.title = source.info.title.replaceAll("Sendmux", "Qubrics");
   source.info.description = source.info.description?.replaceAll("Sendmux", "Qubrics");
   source.servers = [{ url: surface.name === "sending" ? "https://smtp.qubrics.com/api/v1" : "https://app.qubrics.com/api/v1" }];

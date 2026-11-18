@@ -13,126 +13,93 @@
 
 
 from __future__ import annotations
-import json
 import pprint
-from pydantic import BaseModel, ConfigDict, Field, StrictStr, ValidationError, field_validator
-from typing import Any, List, Optional
-from qubrics.management.models.calendar_webhook_event_payload import CalendarWebhookEventPayload
-from qubrics.management.models.mail_webhook_event_payload import MailWebhookEventPayload
-from pydantic import StrictStr, Field
-from typing import Union, List, Set, Optional, Dict
-from typing_extensions import Literal, Self
+import re  # noqa: F401
+import json
 
-WEBHOOKEVENTPAYLOAD_ONE_OF_SCHEMAS = ["CalendarWebhookEventPayload", "MailWebhookEventPayload"]
+from pydantic import BaseModel, ConfigDict, Field, StrictStr, field_validator
+from typing import Any, ClassVar, Dict, List
+from qubrics.management.models.webhook_event_data import WebhookEventData
+from typing import Optional, Set
+from typing_extensions import Self
+from pydantic_core import to_jsonable_python
 
 class WebhookEventPayload(BaseModel):
     """
     The JSON request body delivered to the webhook endpoint.
-    """
-    # data type: MailWebhookEventPayload
-    oneof_schema_1_validator: Optional[MailWebhookEventPayload] = None
-    # data type: CalendarWebhookEventPayload
-    oneof_schema_2_validator: Optional[CalendarWebhookEventPayload] = None
-    actual_instance: Optional[Union[CalendarWebhookEventPayload, MailWebhookEventPayload]] = None
-    one_of_schemas: Set[str] = { "CalendarWebhookEventPayload", "MailWebhookEventPayload" }
+    """ # noqa: E501
+    data: WebhookEventData
+    id: StrictStr = Field(description="Stable per-event identifier. Also sent in the X-Qubrics-Event-Id and X-Sendmux-Event-Id headers.")
+    occurred_at: StrictStr = Field(description="When the event occurred.")
+    team_public_id: StrictStr = Field(description="Team that owns the event.")
+    type: StrictStr = Field(description="Dotted event type. Same value as the X-Qubrics-Event-Type and X-Sendmux-Event-Type headers.")
+    __properties: ClassVar[List[str]] = ["data", "id", "occurred_at", "team_public_id", "type"]
+
+    @field_validator('type')
+    def type_validate_enum(cls, value):
+        """Validates the enum"""
+        if value not in set(['message.delivered', 'message.bounced', 'message.complained', 'message.rejected', 'message.delivery_delayed', 'message.received', 'message.received.spam', 'sendmux.test']):
+            raise ValueError("must be one of enum values ('message.delivered', 'message.bounced', 'message.complained', 'message.rejected', 'message.delivery_delayed', 'message.received', 'message.received.spam', 'sendmux.test')")
+        return value
 
     model_config = ConfigDict(
+        validate_by_name=True,
+        validate_by_alias=True,
         validate_assignment=True,
         protected_namespaces=(),
     )
 
 
-    discriminator_value_class_map: Dict[str, str] = {
-    }
-
-    def __init__(self, *args, **kwargs) -> None:
-        if args:
-            if len(args) > 1:
-                raise ValueError("If a position argument is used, only 1 is allowed to set `actual_instance`")
-            if kwargs:
-                raise ValueError("If a position argument is used, keyword arguments cannot be used.")
-            super().__init__(actual_instance=args[0])
-        else:
-            super().__init__(**kwargs)
-
-    @field_validator('actual_instance')
-    def actual_instance_must_validate_oneof(cls, v):
-        instance = WebhookEventPayload.model_construct()
-        error_messages = []
-        match = 0
-        # validate data type: MailWebhookEventPayload
-        if not isinstance(v, MailWebhookEventPayload):
-            error_messages.append(f"Error! Input type `{type(v)}` is not `MailWebhookEventPayload`")
-        else:
-            match += 1
-        # validate data type: CalendarWebhookEventPayload
-        if not isinstance(v, CalendarWebhookEventPayload):
-            error_messages.append(f"Error! Input type `{type(v)}` is not `CalendarWebhookEventPayload`")
-        else:
-            match += 1
-        if match > 1:
-            # more than 1 match
-            raise ValueError("Multiple matches found when setting `actual_instance` in WebhookEventPayload with oneOf schemas: CalendarWebhookEventPayload, MailWebhookEventPayload. Details: " + ", ".join(error_messages))
-        elif match == 0:
-            # no match
-            raise ValueError("No match found when setting `actual_instance` in WebhookEventPayload with oneOf schemas: CalendarWebhookEventPayload, MailWebhookEventPayload. Details: " + ", ".join(error_messages))
-        else:
-            return v
-
-    @classmethod
-    def from_dict(cls, obj: Union[str, Dict[str, Any]]) -> Self:
-        return cls.from_json(json.dumps(obj))
-
-    @classmethod
-    def from_json(cls, json_str: str) -> Self:
-        """Returns the object represented by the json string"""
-        instance = cls.model_construct()
-        error_messages = []
-        match = 0
-
-        # deserialize data into MailWebhookEventPayload
-        try:
-            instance.actual_instance = MailWebhookEventPayload.from_json(json_str)
-            match += 1
-        except (ValidationError, ValueError) as e:
-            error_messages.append(str(e))
-        # deserialize data into CalendarWebhookEventPayload
-        try:
-            instance.actual_instance = CalendarWebhookEventPayload.from_json(json_str)
-            match += 1
-        except (ValidationError, ValueError) as e:
-            error_messages.append(str(e))
-
-        if match > 1:
-            # more than 1 match
-            raise ValueError("Multiple matches found when deserializing the JSON string into WebhookEventPayload with oneOf schemas: CalendarWebhookEventPayload, MailWebhookEventPayload. Details: " + ", ".join(error_messages))
-        elif match == 0:
-            # no match
-            raise ValueError("No match found when deserializing the JSON string into WebhookEventPayload with oneOf schemas: CalendarWebhookEventPayload, MailWebhookEventPayload. Details: " + ", ".join(error_messages))
-        else:
-            return instance
+    def to_str(self) -> str:
+        """Returns the string representation of the model using alias"""
+        return pprint.pformat(self.model_dump(by_alias=True))
 
     def to_json(self) -> str:
-        """Returns the JSON representation of the actual instance"""
-        if self.actual_instance is None:
-            return "null"
+        """Returns the JSON representation of the model using alias"""
+        return json.dumps(to_jsonable_python(self.to_dict()))
 
-        if hasattr(self.actual_instance, "to_json") and callable(self.actual_instance.to_json):
-            return self.actual_instance.to_json()
-        else:
-            return json.dumps(self.actual_instance)
+    @classmethod
+    def from_json(cls, json_str: str) -> Optional[Self]:
+        """Create an instance of WebhookEventPayload from a JSON string"""
+        return cls.from_dict(json.loads(json_str))
 
-    def to_dict(self) -> Optional[Union[Dict[str, Any], CalendarWebhookEventPayload, MailWebhookEventPayload]]:
-        """Returns the dict representation of the actual instance"""
-        if self.actual_instance is None:
+    def to_dict(self) -> Dict[str, Any]:
+        """Return the dictionary representation of the model using alias.
+
+        This has the following differences from calling pydantic's
+        `self.model_dump(by_alias=True)`:
+
+        * `None` is only added to the output dict for nullable fields that
+          were set at model initialization. Other fields with value `None`
+          are ignored.
+        """
+        excluded_fields: Set[str] = set([
+        ])
+
+        _dict = self.model_dump(
+            by_alias=True,
+            exclude=excluded_fields,
+            exclude_none=True,
+        )
+        # override the default output from pydantic by calling `to_dict()` of data
+        if self.data:
+            _dict['data'] = self.data.to_dict()
+        return _dict
+
+    @classmethod
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
+        """Create an instance of WebhookEventPayload from a dict"""
+        if obj is None:
             return None
 
-        if hasattr(self.actual_instance, "to_dict") and callable(self.actual_instance.to_dict):
-            return self.actual_instance.to_dict()
-        else:
-            # primitive type
-            return self.actual_instance
+        if not isinstance(obj, dict):
+            return cls.model_validate(obj)
 
-    def to_str(self) -> str:
-        """Returns the string representation of the actual instance"""
-        return pprint.pformat(self.model_dump())
+        _obj = cls.model_validate({
+            "data": WebhookEventData.from_dict(obj["data"]) if obj.get("data") is not None else None,
+            "id": obj.get("id"),
+            "occurred_at": obj.get("occurred_at"),
+            "team_public_id": obj.get("team_public_id"),
+            "type": obj.get("type")
+        })
+        return _obj

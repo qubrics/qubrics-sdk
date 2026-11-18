@@ -2,6 +2,7 @@ import { cpSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFi
 import { basename, join } from "node:path";
 import { spawnSync } from "node:child_process";
 import { planDeprecatedModelAliases, reportPendingAliases } from "./deprecated-model-aliases.mjs";
+import { withholdManagementCalendar } from "./withhold-management-calendar.mjs";
 
 const root = process.cwd();
 const outputRoot = join(root, ".tmp", "ruby-codegen");
@@ -142,6 +143,7 @@ console.log("Generated Ruby SDK packages");
 
 function writeFilteredSpec(surface) {
   const source = JSON.parse(readFileSync(join(root, surface.spec), "utf8"));
+  if (surface.name === "management") withholdManagementCalendar(source);
   source.info.title = source.info.title.replaceAll("Sendmux", "Qubrics");
   source.info.description = source.info.description.replaceAll("Sendmux", "Qubrics");
   prepareNilSafeValidation(source, surface);

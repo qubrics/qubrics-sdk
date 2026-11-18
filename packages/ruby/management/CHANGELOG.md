@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.0.0
+
+### Changed
+
+* Load the client with `require 'qubrics/management'`.
+* Calendar webhook models and the `calendar.changed` event are excluded. Mail webhook models and events remain available.
+* The Core dependency accepts `qubrics-core 2.0.0` and excludes 3.0.0.
+
 ## [2.0.1](https://github.com/Sendmux/sendmux-sdk/compare/ruby-management/v2.0.0...ruby-management/v2.0.1) (2026-09-21)
 
 

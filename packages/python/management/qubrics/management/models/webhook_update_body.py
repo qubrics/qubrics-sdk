@@ -43,8 +43,8 @@ class WebhookUpdateBody(BaseModel):
             return value
 
         for i in value:
-            if i not in set(['message.delivered', 'message.bounced', 'message.complained', 'message.rejected', 'message.delivery_delayed', 'message.received', 'message.received.spam', 'calendar.changed', 'sendmux.test']):
-                raise ValueError("each list item must be one of ('message.delivered', 'message.bounced', 'message.complained', 'message.rejected', 'message.delivery_delayed', 'message.received', 'message.received.spam', 'calendar.changed', 'sendmux.test')")
+            if i not in set(['message.delivered', 'message.bounced', 'message.complained', 'message.rejected', 'message.delivery_delayed', 'message.received', 'message.received.spam', 'sendmux.test']):
+                raise ValueError("each list item must be one of ('message.delivered', 'message.bounced', 'message.complained', 'message.rejected', 'message.delivery_delayed', 'message.received', 'message.received.spam', 'sendmux.test')")
         return value
 
     model_config = ConfigDict(
