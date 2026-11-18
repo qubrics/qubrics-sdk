@@ -154,3 +154,46 @@ checkpoint. No passing control is described as a fix of the original hang.
 Final independent Spec/Standards reviews returned zero remaining findings
 after the raw-stderr upload boundary and pre-enumeration stop guard were
 corrected. No assertion,bound or workflow was weakened to settle review.
+
+## Bounded correction after the capture qualification
+
+The one A qualification at bfb4ff01,CI44281264413,finished33/34 successful
+jobs. Windows22/24 proved three captures before the recorded stop;Windows26
+failed the new thread-array assertion. Its first capture took544ms and
+explicitly reported truncation with zero threads;later captures had19 each.
+The test had wrongly required threads even for permitted truncated records.
+Red receipt:MAIN artifacts`pr380-a-qualification-failed.log:77,251-252,267`.
+Original command/ownership assertions were not the source of that red.
+
+Ops approved exactly items1–6 of the result packet as one bounded correction
+batch and one fresh normal CI/default receipt. The same existing case now
+accepts an explicitly truncated capture with controller identity,requires an
+observed state in complete captures,and still requires an actual observed
+controller state across the three captures. No test case was added or removed.
+
+Private stderr setup precedes controller start. Append errors are retained
+as failures while stderr draining,snapshot parsing and owned shutdown continue;
+retention is asserted only after confirmation. Failure-retained paths are
+reported without file contents. A complete known JSON snapshot can follow
+unterminated descendant stderr on the same line;both existing readers now
+extract the known record without emitting the preceding bytes.
+The later public version log and uploaded probe summary also omit raw stderr;
+the in-memory receipts used by every existing assertion remain complete.
+The uploaded transaction summary also omits its serialised stdout receipt,
+which otherwise embeds child stderr as a string;parsed safe fields remain.
+
+Non-controller Job handles are verified and retained BEFORE cached process
+enumeration,then disposed with every cached object. This prevents cached
+thread data from being paired with a later process reusing the PID.
+Canonical lifetime rule:an open handle retains its process object and PID,
+https://devblogs.microsoft.com/oldnewthing/20110107-00/?p=11803%2F .
+The .NET cached collection is documented in Process.cs1593–1600 above.
+
+Local syntax/native-exit wiring passed. The next exact source/default/native
+receipts remain unclaimed until measured. Command,ownership assertions,20s
+deadline and cooperative100ms budget are unchanged. No new harness,observer,
+workflow,package source or frozen artifact changed. Original Chocolatey hang
+remains UNCONFIRMED. If this one new CI is diagnostically red,Ops requires
+STOP with its cause and the option to hold PR380;no further corrections.
+Final independent Spec/Standards reviews returned zero remaining findings
+after checking both the direct and embedded stderr publication paths.

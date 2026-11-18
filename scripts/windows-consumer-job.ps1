@@ -186,23 +186,40 @@ try {
             $snapshot = @{ started_at = [DateTime]::UtcNow.ToString('o'); processes = @(@{ pid = $PID }) }
             $snapshotDeadline = [DateTime]::UtcNow.AddMilliseconds(100)
             $processes = @()
+            $heldProcesses = @{}
             try {
                 $ids = @($PID)
                 try { $ids += [ConsumerJob]::ProcessIds($job, $snapshotDeadline) }
                 catch { $snapshot.error = $_.Exception.Message }
+                # Hold identity before cached thread enumeration; an open handle prevents PID reuse.
+                foreach ($processId in $ids) {
+                    if ($processId -eq $PID) { continue }
+                    if ((Test-Path -LiteralPath $config.stop) -or [DateTime]::UtcNow -ge $snapshotDeadline) {
+                        $snapshot.truncated = $true
+                        break
+                    }
+                    $process = $null
+                    try {
+                        $process = [Diagnostics.Process]::GetProcessById($processId)
+                        if ([ConsumerJob]::Belongs($job, $process.Handle)) {
+                            $heldProcesses[$process.Id] = $process
+                            $process = $null
+                        }
+                    } catch { $snapshot.error = $_.Exception.Message }
+                    finally { if ($process) { $process.Dispose() } }
+                }
                 if ((Test-Path -LiteralPath $config.stop) -or [DateTime]::UtcNow -ge $snapshotDeadline) {
                     $snapshot.truncated = $true
                 } else { $processes = [Diagnostics.Process]::GetProcesses() }
                 foreach ($process in $processes) {
                     $processId = $process.Id
-                    if ($ids -notcontains $processId) { continue }
+                    if ($processId -ne $PID -and !$heldProcesses.ContainsKey($processId)) { continue }
                     if ((Test-Path -LiteralPath $config.stop) -or [DateTime]::UtcNow -ge $snapshotDeadline) {
                         $snapshot.truncated = $true
                         break
                     }
                     $entry = $null
                     try {
-                        if ($processId -ne $PID -and ![ConsumerJob]::Belongs($job, $process.Handle)) { continue }
                         $entry = @{ pid = $processId }
                         $entry.name = $process.ProcessName
                         $entry.started_at = $process.StartTime.ToUniversalTime().ToString('o')
@@ -229,7 +246,10 @@ try {
                     }
                 }
             } catch { $snapshot.error = $_.Exception.Message }
-            finally { foreach ($process in $processes) { $process.Dispose() } }
+            finally {
+                foreach ($process in $processes) { $process.Dispose() }
+                foreach ($process in $heldProcesses.Values) { $process.Dispose() }
+            }
             $snapshot.completed_at = [DateTime]::UtcNow.ToString('o')
             $snapshot.before_stop = !(Test-Path -LiteralPath $config.stop)
             [Console]::Error.WriteLine((@{ windows_probe_state = $snapshot } | ConvertTo-Json -Depth 7 -Compress))

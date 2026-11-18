@@ -77,8 +77,10 @@ for (const mutation of ["cold-controller-start", "started-never-ready", "complet
       assert.equal(rows[0].verdict, "passed");
       assert.equal(rows[0].result, "success");
       const snapshots = readFileSync(join(directory, "capture.stderr"), "utf8").split("\n")
-        .filter((line) => line.startsWith('{"windows_probe_state":'))
-        .map((line) => JSON.parse(line).windows_probe_state);
+        .flatMap((line) => {
+          const start = line.lastIndexOf('{"windows_probe_state":');
+          return start === -1 ? [] : [JSON.parse(line.slice(start)).windows_probe_state];
+        });
       assert.equal(snapshots.length, 3, "Each existing cold-start controller must retain one complete capture");
       const { stopped_at: stoppedAt } = JSON.parse(readFileSync(join(directory, "stop.json"), "utf8"));
       for (const snapshot of snapshots) {
@@ -86,8 +88,11 @@ for (const mutation of ["cold-controller-start", "started-never-ready", "complet
         assert(Date.parse(snapshot.started_at) <= Date.parse(snapshot.completed_at));
         assert(Date.parse(snapshot.completed_at) <= Date.parse(stoppedAt), "Capture must precede the existing deadline stop");
         assert(Number.isSafeInteger(snapshot.processes[0].pid) && snapshot.processes[0].pid > 0, "Capture must retain controller identity");
-        assert(snapshot.processes[0].threads?.length > 0, "Cold-start capture must include controller thread states");
+        if (!snapshot.truncated) {
+          assert(snapshot.processes[0].threads?.some((thread) => typeof thread.state === "string" && thread.state.length > 0), "Complete cold-start capture must include an observed controller thread state");
+        }
       }
+      assert(snapshots.some((snapshot) => snapshot.processes[0].threads?.some((thread) => typeof thread.state === "string" && thread.state.length > 0)), "Cold-start case must observe a controller thread state");
       console.log(JSON.stringify({ cold_start_capture: snapshots, stopped_at: stoppedAt }));
     } else if (mutation === "started-never-ready") {
       assert.equal(rows[0].verdict, "failed");
