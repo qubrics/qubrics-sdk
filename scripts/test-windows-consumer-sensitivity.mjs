@@ -31,6 +31,21 @@ for (const mutation of ["cold-controller-start", "started-never-ready", "complet
       assert.equal(original.split(bootstrap).length, 2, "Cold-start mutation must delay exactly one real bootstrap start");
       writeFileSync(job, original.replace(bootstrap, delayed));
       assert.notEqual(readFileSync(job, "utf8"), original);
+      const owner = join(directory, "windows-consumer-owner.mjs");
+      let ownerSource = readFileSync(owner, "utf8");
+      const captureOption = "probeStateAt: options.probeStateAt,";
+      const spawnStatement = "  const child = spawn(powershell,";
+      const returnStatement = "  return {";
+      const stopStatement = 'stop() { writeFileSync(request.stop, "stop"); },';
+      for (const marker of [captureOption, spawnStatement, returnStatement, stopStatement]) {
+        assert.equal(ownerSource.split(marker).length, 2, "Cold-start capture must change exactly one existing owner seam");
+      }
+      ownerSource = ownerSource
+        .replace(captureOption, "probeStateAt: new Date(Date.now() + 10000).toISOString(),")
+        .replace(spawnStatement, '  options = { ...options, stdio: ["ignore", "pipe", "pipe"] };\n' + spawnStatement)
+        .replace(returnStatement, `  child.stderr.on("data", (chunk) => { writeFileSync(${JSON.stringify(join(directory, "capture.stderr"))}, chunk, { flag: "a", mode: 0o600 }); process.stderr.write(chunk); });\n` + returnStatement)
+        .replace(stopStatement, `stop() { writeFileSync(request.stop, "stop"); writeFileSync(${JSON.stringify(join(directory, "stop.json"))}, JSON.stringify({ stopped_at: new Date().toISOString() })); },`);
+      writeFileSync(owner, ownerSource);
     } else if (mutation === "started-never-ready") {
       const diagnostic = join(directory, "diagnose-windows-consumer-ownership.mjs");
       const original = readFileSync(diagnostic, "utf8");
@@ -61,6 +76,19 @@ for (const mutation of ["cold-controller-start", "started-never-ready", "complet
     if (mutation === "cold-controller-start") {
       assert.equal(rows[0].verdict, "passed");
       assert.equal(rows[0].result, "success");
+      const snapshots = readFileSync(join(directory, "capture.stderr"), "utf8").split("\n")
+        .filter((line) => line.startsWith('{"windows_probe_state":'))
+        .map((line) => JSON.parse(line).windows_probe_state);
+      assert.equal(snapshots.length, 3, "Each existing cold-start controller must retain one complete capture");
+      const { stopped_at: stoppedAt } = JSON.parse(readFileSync(join(directory, "stop.json"), "utf8"));
+      for (const snapshot of snapshots) {
+        assert(snapshot.before_stop, "Cold-start capture must complete before its controller observes stop");
+        assert(Date.parse(snapshot.started_at) <= Date.parse(snapshot.completed_at));
+        assert(Date.parse(snapshot.completed_at) <= Date.parse(stoppedAt), "Capture must precede the existing deadline stop");
+        assert(Number.isSafeInteger(snapshot.processes[0].pid) && snapshot.processes[0].pid > 0, "Capture must retain controller identity");
+        assert(snapshot.processes[0].threads?.length > 0, "Cold-start capture must include controller thread states");
+      }
+      console.log(JSON.stringify({ cold_start_capture: snapshots, stopped_at: stoppedAt }));
     } else if (mutation === "started-never-ready") {
       assert.equal(rows[0].verdict, "failed");
       assert.equal(rows[0].result, "failure");

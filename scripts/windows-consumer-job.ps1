@@ -183,23 +183,27 @@ try {
         if (Test-Path -LiteralPath $config.stop) { $interrupted = $true; break }
         if (!$stateCaptured -and $config.probeStateAt -and [DateTime]::UtcNow -ge [DateTime]::Parse($config.probeStateAt).ToUniversalTime()) {
             $stateCaptured = $true
-            $snapshot = @{ started_at = [DateTime]::UtcNow.ToString('o') }
+            $snapshot = @{ started_at = [DateTime]::UtcNow.ToString('o'); processes = @(@{ pid = $PID }) }
             $snapshotDeadline = [DateTime]::UtcNow.AddMilliseconds(100)
+            $processes = @()
             try {
                 $ids = @($PID)
                 try { $ids += [ConsumerJob]::ProcessIds($job, $snapshotDeadline) }
                 catch { $snapshot.error = $_.Exception.Message }
-                $snapshot.processes = @(foreach ($processId in $ids) {
-                    $entry = @{ pid = $processId }
+                if ((Test-Path -LiteralPath $config.stop) -or [DateTime]::UtcNow -ge $snapshotDeadline) {
+                    $snapshot.truncated = $true
+                } else { $processes = [Diagnostics.Process]::GetProcesses() }
+                foreach ($process in $processes) {
+                    $processId = $process.Id
+                    if ($ids -notcontains $processId) { continue }
                     if ((Test-Path -LiteralPath $config.stop) -or [DateTime]::UtcNow -ge $snapshotDeadline) {
                         $snapshot.truncated = $true
-                        $entry
                         break
                     }
-                    $process = $null
+                    $entry = $null
                     try {
-                        $process = [Diagnostics.Process]::GetProcessById($processId)
                         if ($processId -ne $PID -and ![ConsumerJob]::Belongs($job, $process.Handle)) { continue }
+                        $entry = @{ pid = $processId }
                         $entry.name = $process.ProcessName
                         $entry.started_at = $process.StartTime.ToUniversalTime().ToString('o')
                         $entry.cpu_ms = $process.TotalProcessorTime.TotalMilliseconds
@@ -215,11 +219,17 @@ try {
                             } catch { $thread.error = $_.Exception.Message }
                             $thread
                         })
-                    } catch { $entry.error = $_.Exception.Message }
-                    finally { if ($process) { $process.Dispose() } }
-                    $entry
-                })
+                    } catch {
+                        if ($entry) { $entry.error = $_.Exception.Message }
+                        else { $snapshot.error = $_.Exception.Message }
+                    }
+                    if ($entry) {
+                        if ($processId -eq $PID) { $snapshot.processes[0] = $entry }
+                        else { $snapshot.processes += $entry }
+                    }
+                }
             } catch { $snapshot.error = $_.Exception.Message }
+            finally { foreach ($process in $processes) { $process.Dispose() } }
             $snapshot.completed_at = [DateTime]::UtcNow.ToString('o')
             $snapshot.before_stop = !(Test-Path -LiteralPath $config.stop)
             [Console]::Error.WriteLine((@{ windows_probe_state = $snapshot } | ConvertTo-Json -Depth 7 -Compress))

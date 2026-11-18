@@ -3,7 +3,7 @@
 import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
 import { createHash } from "node:crypto";
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
+import { appendFileSync, existsSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { delimiter, join, resolve } from "node:path";
@@ -312,6 +312,10 @@ async function runCapturedProcess({ command, args, env, label }) {
   });
   const child = owner.child;
   const receipt = { pid: child.pid, command, args, label, stdout: "", stderr: "", stages: [] };
+  const stderrDirectory = mkdtempSync(join(tmpdir(), "sendmux-native-probe-stderr-"));
+  const stderrFile = join(stderrDirectory, "stderr.log");
+  writeFileSync(stderrFile, "", { flag: "wx", mode: 0o600 });
+  let stderrPending = "";
   const stage = (name) => {
     const event = { stage: name, elapsed_ms: Math.round(performance.now() - started) };
     receipt.stages.push(event);
@@ -326,7 +330,20 @@ async function runCapturedProcess({ command, args, env, label }) {
     receipt.stdout += chunk;
   });
   child.stderr.on("data", (chunk) => {
+    appendFileSync(stderrFile, chunk);
     receipt.stderr += chunk;
+    stderrPending += chunk;
+    let newline;
+    while ((newline = stderrPending.indexOf("\n")) !== -1) {
+      const line = stderrPending.slice(0, newline);
+      stderrPending = stderrPending.slice(newline + 1);
+      let record;
+      try { record = JSON.parse(line); } catch { continue; }
+      if (!record?.windows_probe_state || typeof record.windows_probe_state !== "object") continue;
+      stage("state-captured");
+      const snapshot = JSON.stringify({ native_probe_state: label, windows_probe_state: record.windows_probe_state });
+      console.log(credentialSentinels.reduce((redacted, sentinel) => redacted.replaceAll(sentinel, "<REDACTED>"), snapshot));
+    }
     for (const marker of ["windows-job-bootstrap", "windows-command-bridge", `"command":${JSON.stringify(command)}`, "windows_job_admission_limit", "windows_job_shutdown_snapshot"]) {
       if (receipt.stderr.includes(marker) && !receipt.stages.some((event) => event.stage === marker)) stage(marker);
     }
@@ -362,6 +379,8 @@ async function runCapturedProcess({ command, args, env, label }) {
   receipt.absent = absent(child.pid);
   assert(!receipt.job.orphan, "Installed Chocolatey command must not leave an owned descendant");
   assert(!receipt.stop_error && !receipt.kill_error, "Installed Chocolatey command shutdown must be confirmed");
+  await rm(stderrDirectory, { recursive: true, maxRetries: 3, retryDelay: 100 });
+  assert(!existsSync(stderrDirectory));
   console.log(JSON.stringify({ child_closed: child.pid, label, status: receipt.status, timed_out: timedOut }));
   return receipt;
 }

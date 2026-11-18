@@ -115,3 +115,42 @@ corrections. The capture budget is cooperative: synchronous local OS reads
 finish between deadline/stop checks; no stronger native bound is claimed.
 Existing JavaScript syntax, workflow-source extraction and native-exit
 wiring checks passed locally; no new harness or test was added.
+
+## Approved capture qualification
+
+Ops approved items1–4 of the bounded diagnostic continuation on18November
+at20:46AEDT. Review comments4611562950 and4611577058 establish the two
+diagnostic defects: an unchecked Job PID could survive truncation,and a
+shutdown rejection discarded the in-memory stderr receipt. These defects
+do not establish the cause of the original Chocolatey timeout.
+
+The collector now obtains one cached `Process.GetProcesses()` collection,
+filters current Job IDs,and verifies held-handle membership before emitting
+any non-controller entry. Every process object is disposed,including filtered
+objects. The controller PID remains present even when collection truncates.
+Canonical cached enumeration is documented in the .NET Framework reference
+source `Process.cs:1593-1600`:
+https://github.com/microsoft/referencesource/blob/main/System/services/monitoring/system/diagnosticts/Process.cs .
+
+Native probes append raw stderr to mode0600 files in a mode0700 OS-temporary
+directory outside uploaded evidence. Successful probes remove that directory;
+failed probes retain it only for the runner's lifetime. Complete
+newline-delimited snapshot records are emitted
+as they arrive,with the synthetic credentials redacted; arbitrary stderr,
+arguments and environment are not dumped publicly. Shutdown rejection cannot
+erase already-retained snapshot bytes. The existing cold-controller-start
+case arms the same optional capture and records its actual stderr and stop
+time in its copied fixture. Assertions require three complete captures with
+controller identity and thread states,all completing before stop. Existing
+ownership,output,exit and cleanup assertions remain intact.
+
+This adds no test case,harness,observer,workflow or package-source change.
+The100ms cooperative capture budget,the20-second native probe deadline,and
+all shutdown guarantees remain unchanged. Local syntax,workflow extraction
+and native-exit wiring passed. Native capture/stop ordering and the new
+exact-head CI/default receipts still require measurement; their raw results
+will live in SDK MAIN artifacts`pr380-a-qualification-*` and the MAIN task
+checkpoint. No passing control is described as a fix of the original hang.
+Final independent Spec/Standards reviews returned zero remaining findings
+after the raw-stderr upload boundary and pre-enumeration stop guard were
+corrected. No assertion,bound or workflow was weakened to settle review.
