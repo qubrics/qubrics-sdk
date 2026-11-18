@@ -359,7 +359,9 @@ function buildExpectedScenarios(operations, cliOperations, curatedMcp) {
       adapters: {
         cli: Boolean(cli),
         mcp: curatedMcp.get(operation.operationId) ?? null,
-        sdk: sdkAdapters,
+        sdk: /^\/mailbox\/(calendars|calendar-events)(\/|$)/.test(operation.path)
+          ? sdkAdapters.filter(adapter => adapter !== "python")
+          : sdkAdapters,
       },
       assertions: assertionsFor(operation),
       fixture: fixtureFor(operation),
@@ -499,8 +501,10 @@ function validateScenarios({ curatedMcp, expected, operations, scenarios }) {
       }
     } else {
       for (const adapter of sdkAdapters) {
-        if (!Array.isArray(scenario.adapters?.sdk) || !scenario.adapters.sdk.includes(adapter)) {
-          failures.push(`${operation.operationId}: missing SDK live scenario adapter ${adapter}`);
+        const required = expectedScenario.adapters.sdk.includes(adapter);
+        const present = Array.isArray(scenario.adapters?.sdk) && scenario.adapters.sdk.includes(adapter);
+        if (required !== present) {
+          failures.push(`${operation.operationId}: ${required ? "missing" : "unexpected"} SDK live scenario adapter ${adapter}`);
         }
       }
 
@@ -682,7 +686,6 @@ function renderMatrix({ curatedMcp, fixtures, operations, scenarios }) {
     `- OpenAPI operations by surface: management ${bySurface.management ?? 0}, mailbox ${
       bySurface.mailbox ?? 0
     }, sending ${bySurface.sending ?? 0}.`,
-    `- SDK adapters required per operation: ${sdkAdapters.join(", ")}.`,
     "- CLI adapters required per operation: generated command for every OpenAPI operation.",
     `- Applicable MCP operation pairs: ${mcpCount} (not a unique tool count).`,
     `- Default executable live operations: ${executable}.`,

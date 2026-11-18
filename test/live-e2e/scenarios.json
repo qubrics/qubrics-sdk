@@ -196,7 +196,6 @@
         "mcp": "mailbox_create_calendar",
         "sdk": [
           "typescript",
-          "python",
           "go",
           "php",
           "ruby"
@@ -229,7 +228,6 @@
         "mcp": "mailbox_create_calendar_event",
         "sdk": [
           "typescript",
-          "python",
           "go",
           "php",
           "ruby"
@@ -326,7 +324,6 @@
         "mcp": "mailbox_delete_calendar",
         "sdk": [
           "typescript",
-          "python",
           "go",
           "php",
           "ruby"
@@ -361,7 +358,6 @@
         "mcp": "mailbox_delete_calendar_event",
         "sdk": [
           "typescript",
-          "python",
           "go",
           "php",
           "ruby"
@@ -575,7 +571,6 @@
         "mcp": "mailbox_get_calendar",
         "sdk": [
           "typescript",
-          "python",
           "go",
           "php",
           "ruby"
@@ -607,7 +602,6 @@
         "mcp": "mailbox_get_calendar_event",
         "sdk": [
           "typescript",
-          "python",
           "go",
           "php",
           "ruby"
@@ -639,7 +633,6 @@
         "mcp": "mailbox_get_calendar_event_changes",
         "sdk": [
           "typescript",
-          "python",
           "go",
           "php",
           "ruby"
@@ -1190,7 +1183,6 @@
         "mcp": "mailbox_list_calendar_events",
         "sdk": [
           "typescript",
-          "python",
           "go",
           "php",
           "ruby"
@@ -1218,7 +1210,6 @@
         "mcp": "mailbox_list_calendars",
         "sdk": [
           "typescript",
-          "python",
           "go",
           "php",
           "ruby"
@@ -1809,7 +1800,6 @@
         "mcp": "mailbox_update_calendar_event",
         "sdk": [
           "typescript",
-          "python",
           "go",
           "php",
           "ruby"
@@ -3881,6 +3871,7 @@
       "fixture": {
         "body": "binary",
         "headers": [
+          "X-Qubrics-Upload-Token",
           "X-Sendmux-Upload-Token",
           "Content-Length"
         ],

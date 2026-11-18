@@ -40,8 +40,6 @@ __all__ = [
     "ConnectionResponse",
     "ConnectionTeam",
     "ControlMailboxDraftSchedule",
-    "CreateCalendarBody",
-    "CreateCalendarEventBody",
     "CreateMailboxDraft",
     "CreateMailboxDraftAttachmentsInner",
     "CreateMailboxDraftBccInner",
@@ -72,25 +70,6 @@ __all__ = [
     "MailboxBatchMessageStates",
     "MailboxBatchUpdateMessagesResult",
     "MailboxBatchUpdateMessagesResultResponse",
-    "MailboxCalendar",
-    "MailboxCalendarChanges",
-    "MailboxCalendarChangesResponse",
-    "MailboxCalendarCreated",
-    "MailboxCalendarCreatedResponse",
-    "MailboxCalendarDeletedResponse",
-    "MailboxCalendarEvent",
-    "MailboxCalendarEventCreated",
-    "MailboxCalendarEventCreatedResponse",
-    "MailboxCalendarEventDeletedResponse",
-    "MailboxCalendarEventDeletedResponseAllOfData",
-    "MailboxCalendarEventListResponse",
-    "MailboxCalendarEventResponse",
-    "MailboxCalendarEventUpdatedResponse",
-    "MailboxCalendarEventUpdatedResponseAllOfData",
-    "MailboxCalendarEventWithEtag",
-    "MailboxCalendarListResponse",
-    "MailboxCalendarResponse",
-    "MailboxCalendarWithEtag",
     "MailboxChanges",
     "MailboxChangesResponse",
     "MailboxContentHeaders",
@@ -190,7 +169,6 @@ __all__ = [
     "MailboxUsageResource",
     "MailboxUsageResponse",
     "MailboxUsageStates",
-    "PatchCalendarEventBody",
     "PatchMailboxFolderBody",
     "PatchMailboxMessageBody",
     "ResponseMeta",
@@ -232,8 +210,6 @@ from qubrics.mailbox.models.connection_mailboxes_inner import ConnectionMailboxe
 from qubrics.mailbox.models.connection_response import ConnectionResponse as ConnectionResponse
 from qubrics.mailbox.models.connection_team import ConnectionTeam as ConnectionTeam
 from qubrics.mailbox.models.control_mailbox_draft_schedule import ControlMailboxDraftSchedule as ControlMailboxDraftSchedule
-from qubrics.mailbox.models.create_calendar_body import CreateCalendarBody as CreateCalendarBody
-from qubrics.mailbox.models.create_calendar_event_body import CreateCalendarEventBody as CreateCalendarEventBody
 from qubrics.mailbox.models.create_mailbox_draft import CreateMailboxDraft as CreateMailboxDraft
 from qubrics.mailbox.models.create_mailbox_draft_attachments_inner import CreateMailboxDraftAttachmentsInner as CreateMailboxDraftAttachmentsInner
 from qubrics.mailbox.models.create_mailbox_draft_bcc_inner import CreateMailboxDraftBccInner as CreateMailboxDraftBccInner
@@ -264,25 +240,6 @@ from qubrics.mailbox.models.mailbox_batch_message_failure import MailboxBatchMes
 from qubrics.mailbox.models.mailbox_batch_message_states import MailboxBatchMessageStates as MailboxBatchMessageStates
 from qubrics.mailbox.models.mailbox_batch_update_messages_result import MailboxBatchUpdateMessagesResult as MailboxBatchUpdateMessagesResult
 from qubrics.mailbox.models.mailbox_batch_update_messages_result_response import MailboxBatchUpdateMessagesResultResponse as MailboxBatchUpdateMessagesResultResponse
-from qubrics.mailbox.models.mailbox_calendar import MailboxCalendar as MailboxCalendar
-from qubrics.mailbox.models.mailbox_calendar_changes import MailboxCalendarChanges as MailboxCalendarChanges
-from qubrics.mailbox.models.mailbox_calendar_changes_response import MailboxCalendarChangesResponse as MailboxCalendarChangesResponse
-from qubrics.mailbox.models.mailbox_calendar_created import MailboxCalendarCreated as MailboxCalendarCreated
-from qubrics.mailbox.models.mailbox_calendar_created_response import MailboxCalendarCreatedResponse as MailboxCalendarCreatedResponse
-from qubrics.mailbox.models.mailbox_calendar_deleted_response import MailboxCalendarDeletedResponse as MailboxCalendarDeletedResponse
-from qubrics.mailbox.models.mailbox_calendar_event import MailboxCalendarEvent as MailboxCalendarEvent
-from qubrics.mailbox.models.mailbox_calendar_event_created import MailboxCalendarEventCreated as MailboxCalendarEventCreated
-from qubrics.mailbox.models.mailbox_calendar_event_created_response import MailboxCalendarEventCreatedResponse as MailboxCalendarEventCreatedResponse
-from qubrics.mailbox.models.mailbox_calendar_event_deleted_response import MailboxCalendarEventDeletedResponse as MailboxCalendarEventDeletedResponse
-from qubrics.mailbox.models.mailbox_calendar_event_deleted_response_all_of_data import MailboxCalendarEventDeletedResponseAllOfData as MailboxCalendarEventDeletedResponseAllOfData
-from qubrics.mailbox.models.mailbox_calendar_event_list_response import MailboxCalendarEventListResponse as MailboxCalendarEventListResponse
-from qubrics.mailbox.models.mailbox_calendar_event_response import MailboxCalendarEventResponse as MailboxCalendarEventResponse
-from qubrics.mailbox.models.mailbox_calendar_event_updated_response import MailboxCalendarEventUpdatedResponse as MailboxCalendarEventUpdatedResponse
-from qubrics.mailbox.models.mailbox_calendar_event_updated_response_all_of_data import MailboxCalendarEventUpdatedResponseAllOfData as MailboxCalendarEventUpdatedResponseAllOfData
-from qubrics.mailbox.models.mailbox_calendar_event_with_etag import MailboxCalendarEventWithEtag as MailboxCalendarEventWithEtag
-from qubrics.mailbox.models.mailbox_calendar_list_response import MailboxCalendarListResponse as MailboxCalendarListResponse
-from qubrics.mailbox.models.mailbox_calendar_response import MailboxCalendarResponse as MailboxCalendarResponse
-from qubrics.mailbox.models.mailbox_calendar_with_etag import MailboxCalendarWithEtag as MailboxCalendarWithEtag
 from qubrics.mailbox.models.mailbox_changes import MailboxChanges as MailboxChanges
 from qubrics.mailbox.models.mailbox_changes_response import MailboxChangesResponse as MailboxChangesResponse
 from qubrics.mailbox.models.mailbox_content_headers import MailboxContentHeaders as MailboxContentHeaders
@@ -382,7 +339,6 @@ from qubrics.mailbox.models.mailbox_usage import MailboxUsage as MailboxUsage
 from qubrics.mailbox.models.mailbox_usage_resource import MailboxUsageResource as MailboxUsageResource
 from qubrics.mailbox.models.mailbox_usage_response import MailboxUsageResponse as MailboxUsageResponse
 from qubrics.mailbox.models.mailbox_usage_states import MailboxUsageStates as MailboxUsageStates
-from qubrics.mailbox.models.patch_calendar_event_body import PatchCalendarEventBody as PatchCalendarEventBody
 from qubrics.mailbox.models.patch_mailbox_folder_body import PatchMailboxFolderBody as PatchMailboxFolderBody
 from qubrics.mailbox.models.patch_mailbox_message_body import PatchMailboxMessageBody as PatchMailboxMessageBody
 from qubrics.mailbox.models.response_meta import ResponseMeta as ResponseMeta

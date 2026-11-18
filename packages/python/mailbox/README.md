@@ -7,6 +7,9 @@
 
 Generated Python client for the Qubrics Mailbox API.
 
+Version 3.0.0 excludes calendar and calendar-event clients and models. Mail,
+folders, drafts and mailbox event streams remain available.
+
 ## Documentation
 
 - Mailbox API reference: [qubrics.com/docs/mailbox-api/introduction](https://qubrics.com/docs/mailbox-api/introduction)
