@@ -4,8 +4,12 @@ on:
   workflow_dispatch:
     inputs:
       ref:
-        description: Full Git commit SHA to deploy
+        description: Full Git commit SHA of the release to deploy
         required: true
+        type: string
+      rollback_image:
+        description: Immutable image digest (sha256:…) from that release, for rollback only
+        required: false
         type: string
 
 permissions:
@@ -20,12 +24,17 @@ jobs:
     runs-on: ${{ vars.RUNNER }}
     timeout-minutes: 20
     steps:
-      - name: Validate commit SHA
+      - name: Validate release inputs
         env:
           DEPLOY_REF: ${{ inputs.ref }}
+          ROLLBACK_IMAGE: ${{ inputs.rollback_image }}
         run: |
           if [[ ! "$DEPLOY_REF" =~ ^[0-9a-f]{40}$ ]]; then
             echo 'Enter a full, lowercase Git commit SHA.' >&2
+            exit 1
+          fi
+          if [[ -n "$ROLLBACK_IMAGE" && ! "$ROLLBACK_IMAGE" =~ ^sha256:[0-9a-f]{64}$ ]]; then
+            echo 'Enter the SHA-256 digest of the previous release image.' >&2
             exit 1
           fi
 
@@ -43,4 +52,11 @@ jobs:
       - name: Deploy on Fly
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
-        run: flyctl deploy --remote-only
+          ROLLBACK_IMAGE: ${{ inputs.rollback_image }}
+        run: |
+          if [[ -z "$ROLLBACK_IMAGE" ]]; then
+            flyctl deploy --remote-only
+          else
+            app=$(flyctl config show --local | jq -er '.app | select(type == "string" and test("^[a-z0-9]+(-[a-z0-9]+)*$"))')
+            flyctl deploy --rollback --image "registry.fly.io/$app@$ROLLBACK_IMAGE"
+          fi
