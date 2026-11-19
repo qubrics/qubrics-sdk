@@ -360,7 +360,7 @@ function buildExpectedScenarios(operations, cliOperations, curatedMcp) {
         cli: Boolean(cli),
         mcp: curatedMcp.get(operation.operationId) ?? null,
         sdk: /^\/mailbox\/(calendars|calendar-events)(\/|$)/.test(operation.path)
-          ? sdkAdapters.filter(adapter => adapter !== "python")
+          ? sdkAdapters.filter(adapter => adapter !== "python" && adapter !== "ruby")
           : sdkAdapters,
       },
       assertions: assertionsFor(operation),

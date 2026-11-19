@@ -151,6 +151,10 @@ function writeFilteredSpec(surface) {
   const paths = {};
 
   for (const [path, pathItem] of Object.entries(source.paths ?? {})) {
+    // Calendar clients stay withheld until the calendar rebuild is released.
+    if (surface.name === "mailbox" && /^\/mailbox\/(calendars|calendar-events)(\/|$)/.test(path)) {
+      continue;
+    }
     const nextPathItem = {};
     for (const [method, operation] of Object.entries(pathItem)) {
       if (!["get", "post", "put", "patch", "delete", "head", "options"].includes(method)) {

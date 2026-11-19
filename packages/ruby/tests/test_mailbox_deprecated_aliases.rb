@@ -78,6 +78,14 @@ class QubricsRubyMailboxDeprecatedAliasesTest < Minitest::Test
     end
   end
 
+  def test_calendar_clients_are_withheld_while_message_clients_remain
+    api_methods = Qubrics::Mailbox::Generated::MailboxAPIApi.public_instance_methods(false)
+
+    assert_empty api_methods.grep(/calendar/)
+    assert_empty Qubrics::Mailbox::Generated.constants.grep(/Calendar/)
+    assert_includes api_methods, :mailbox_list_messages
+  end
+
   private
 
   def realtime_message_attributes
