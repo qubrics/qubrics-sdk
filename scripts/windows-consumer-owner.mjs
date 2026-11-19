@@ -14,6 +14,7 @@ export function startWindowsConsumer(command, args, options) {
     job: `Local\\sendmux-${randomUUID()}`, command, args, cwd: options.cwd,
     node: process.execPath, bridge: fileURLToPath(new URL("./windows-consumer-command.mjs", import.meta.url)),
     stop: join(directory, "stop"), result: join(directory, "result.json"),
+    probeStateAt: options.probeStateAt,
   };
   writeFileSync(requestFile, JSON.stringify(request));
   console.log(JSON.stringify({ workspace: directory, owner_pid: process.pid, job: request.job }));

@@ -340,8 +340,6 @@ module Qubrics::Management::Generated
       return false if @delivery_attempt <= 0
       return false if @event_id.nil?
       return false if @event_type.nil?
-      event_type_validator = EnumAttributeValidator.new('String', ["message.delivered", "message.bounced", "message.complained", "message.rejected", "message.delivery_delayed", "message.received", "message.received.spam", "calendar.changed", "sendmux.test", "unknown_default_open_api"])
-      return false unless event_type_validator.valid?(@event_type)
       return false if @id.nil?
       return false if @max_attempts.nil?
       return false if @max_attempts <= 0
@@ -391,13 +389,13 @@ module Qubrics::Management::Generated
       @event_id = event_id
     end
 
-    # Custom attribute writer method checking allowed values (enum).
-    # @param [Object] event_type Object to be assigned
+    # Custom attribute writer method with validation
+    # @param [Object] event_type Value to be assigned
     def event_type=(event_type)
-      validator = EnumAttributeValidator.new('String', ["message.delivered", "message.bounced", "message.complained", "message.rejected", "message.delivery_delayed", "message.received", "message.received.spam", "calendar.changed", "sendmux.test", "unknown_default_open_api"])
-      unless validator.valid?(event_type)
-        fail ArgumentError, "invalid value for \"event_type\", must be one of #{validator.allowable_values}."
+      if event_type.nil?
+        fail ArgumentError, 'event_type cannot be nil'
       end
+
       @event_type = event_type
     end
 

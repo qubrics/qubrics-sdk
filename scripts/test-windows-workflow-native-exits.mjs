@@ -3,7 +3,7 @@
 import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
 import { createHash } from "node:crypto";
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
+import { appendFileSync, existsSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { delimiter, join, resolve } from "node:path";
@@ -181,7 +181,7 @@ async function runInstalledChocolateyProbe() {
       ),
       "A synthetic Chocolatey credential reached installed-version output",
     );
-    console.log(JSON.stringify({ installed_chocolatey_version_process: probe.version_process }));
+    console.log(JSON.stringify({ installed_chocolatey_version_process: { ...probe.version_process, stderr: undefined } }));
     assert.equal(probe.version_process.status, 0, "Installed Chocolatey version command must succeed");
     assert(!probe.version_process.timed_out, "Installed Chocolatey version command exceeded its bound");
     assert(probe.version_process.absent, "Installed Chocolatey version process must be absent after close");
@@ -239,6 +239,10 @@ async function runInstalledChocolateyProbe() {
     assert(probe.config_restored, "Installed Chocolatey transaction must restore the exact config bytes");
     assert.equal(probe.config_after_sha256, probe.config_before_sha256, "Installed Chocolatey transaction must restore the original SHA-256");
     assert(probe.staging_path_absent, "Installed Chocolatey transaction must remove its exact staging path");
+    for (const receipt of [probe.version_process, probe.transaction]) {
+      await rm(receipt.stderr_directory, { recursive: true, maxRetries: 3, retryDelay: 100 });
+      assert(!existsSync(receipt.stderr_directory));
+    }
     probe.verdict = "passed";
   } catch (error) {
     probe.assertion = error.message;
@@ -255,7 +259,12 @@ async function runInstalledChocolateyProbe() {
     }
     probe.final_config_restored = readFileSync(configPath).equals(originalConfig);
     probe.final_staging_path_absent = !existsSync(stagingPath);
-    writeFileSync(join(evidence, "installed-chocolatey-probe.json"), JSON.stringify(probe, null, 2));
+    writeFileSync(join(evidence, "installed-chocolatey-probe.json"), JSON.stringify({
+      ...probe,
+      transaction: probe.transaction && { ...probe.transaction, stdout: undefined },
+    }, (name, value) => name === "stderr" ? undefined : typeof value === "string"
+      ? credentialSentinels.reduce((redacted, sentinel) => redacted.replaceAll(sentinel, "<REDACTED>"), value)
+      : value, 2));
   }
 
   assert(probe.final_config_restored, "Installed Chocolatey probe recovery must leave exact original config bytes");
@@ -305,20 +314,70 @@ Invoke-ChocolateyCredentialTransaction -Source $probeSource -Operation {
 }
 
 async function runCapturedProcess({ command, args, env, label }) {
-  const owner = startWindowsConsumer(command, args, { cwd: root, env: windowsPowerShellEnvironment(env), stdio: ["ignore", "pipe", "pipe"] });
+  const stderrDirectory = mkdtempSync(join(tmpdir(), "sendmux-native-probe-stderr-"));
+  const stderrFile = join(stderrDirectory, "stderr.log");
+  let started;
+  let owner;
+  try {
+    writeFileSync(stderrFile, "", { flag: "wx", mode: 0o600 });
+    console.log(JSON.stringify({ native_probe_stderr: label, private_path: stderrFile, retention: "runner-lifetime-on-failure" }));
+    started = performance.now();
+    owner = startWindowsConsumer(command, args, {
+      cwd: root, env: windowsPowerShellEnvironment(env), stdio: ["ignore", "pipe", "pipe"],
+      probeStateAt: new Date(Date.now() + 10000).toISOString(),
+    });
+  } catch (error) {
+    try { await rm(stderrDirectory, { recursive: true }); }
+    catch (cleanupError) { console.error(JSON.stringify({ native_probe_stderr: label, private_path: stderrFile, cleanup_error: cleanupError.code ?? cleanupError.message })); }
+    throw error;
+  }
   const child = owner.child;
-  const receipt = { pid: child.pid, command, args, label, stdout: "", stderr: "" };
+  const receipt = { pid: child.pid, command, args, label, stdout: "", stderr: "", stderr_directory: stderrDirectory, stages: [] };
+  let stderrPending = "";
+  const stage = (name) => {
+    const event = { stage: name, elapsed_ms: Math.round(performance.now() - started) };
+    receipt.stages.push(event);
+    console.log(JSON.stringify({ native_probe_stage: label, ...event }));
+  };
+  stage("owner-created");
   console.log(JSON.stringify({ child_pid: child.pid, command, label }));
   child.stdout.setEncoding("utf8");
   child.stderr.setEncoding("utf8");
-  child.stdout.on("data", (chunk) => { receipt.stdout += chunk; });
-  child.stderr.on("data", (chunk) => { receipt.stderr += chunk; });
+  child.stdout.on("data", (chunk) => {
+    if (!receipt.stdout) stage("first-stdout");
+    receipt.stdout += chunk;
+  });
+  child.stderr.on("data", (chunk) => {
+    if (!receipt.stderr_error) {
+      try { appendFileSync(stderrFile, chunk); }
+      catch (error) { receipt.stderr_error = error.code ?? error.message; }
+    }
+    receipt.stderr += chunk;
+    stderrPending += chunk;
+    let newline;
+    while ((newline = stderrPending.indexOf("\n")) !== -1) {
+      const line = stderrPending.slice(0, newline);
+      stderrPending = stderrPending.slice(newline + 1);
+      const start = line.lastIndexOf('{"windows_probe_state":');
+      if (start === -1) continue;
+      let record;
+      try { record = JSON.parse(line.slice(start)); } catch { continue; }
+      if (!record?.windows_probe_state || typeof record.windows_probe_state !== "object") continue;
+      stage("state-captured");
+      const snapshot = JSON.stringify({ native_probe_state: label, windows_probe_state: record.windows_probe_state });
+      console.log(credentialSentinels.reduce((redacted, sentinel) => redacted.replaceAll(sentinel, "<REDACTED>"), snapshot));
+    }
+    for (const marker of ["windows-job-bootstrap", "windows-command-bridge", `"command":${JSON.stringify(command)}`, "windows_job_admission_limit", "windows_job_shutdown_snapshot"]) {
+      if (receipt.stderr.includes(marker) && !receipt.stages.some((event) => event.stage === marker)) stage(marker);
+    }
+  });
   let timedOut = false;
   let shutdownTimer;
   let rejectShutdown;
   const shutdownFailed = new Promise((_, reject) => { rejectShutdown = reject; });
   const timer = setTimeout(() => {
     timedOut = true;
+    stage("deadline");
     try { owner.stop(); } catch (error) { receipt.stop_error = error.message; }
     shutdownTimer = setTimeout(() => {
       try { child.kill("SIGKILL"); } catch (error) { receipt.kill_error = error.message; }
@@ -332,15 +391,23 @@ async function runCapturedProcess({ command, args, env, label }) {
     child.once("error", reject);
     child.once("close", accept);
   });
-  receipt.status = await Promise.race([closed, shutdownFailed]).finally(() => {
-    clearTimeout(timer);
-    clearTimeout(shutdownTimer);
-  });
-  receipt.timed_out = timedOut;
-  receipt.job = await owner.confirm();
-  receipt.absent = absent(child.pid);
-  assert(!receipt.job.orphan, "Installed Chocolatey command must not leave an owned descendant");
-  assert(!receipt.stop_error && !receipt.kill_error, "Installed Chocolatey command shutdown must be confirmed");
+  try {
+    receipt.status = await Promise.race([closed, shutdownFailed]).finally(() => {
+      clearTimeout(timer);
+      clearTimeout(shutdownTimer);
+    });
+    stage("controller-closed");
+    receipt.timed_out = timedOut;
+    receipt.job = await owner.confirm();
+    stage("owner-confirmed");
+    receipt.absent = absent(child.pid);
+    assert(!receipt.job.orphan, "Installed Chocolatey command must not leave an owned descendant");
+    assert(!receipt.stop_error && !receipt.kill_error, "Installed Chocolatey command shutdown must be confirmed");
+    assert(!receipt.stderr_error, `Installed Chocolatey probe stderr retention failed: ${receipt.stderr_error}; retained ${stderrFile}`);
+  } catch (error) {
+    if (receipt.stderr_error) console.error(JSON.stringify({ native_probe_stderr: label, private_path: stderrFile, retention_error: receipt.stderr_error }));
+    throw error;
+  }
   console.log(JSON.stringify({ child_closed: child.pid, label, status: receipt.status, timed_out: timedOut }));
   return receipt;
 }

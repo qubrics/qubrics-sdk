@@ -38,7 +38,7 @@ public static class ConsumerJob {
     [DllImport("kernel32.dll", EntryPoint="QueryInformationJobObject", SetLastError=true)]
     static extern bool QueryProcessIds(IntPtr job, int kind, IntPtr info, uint size, IntPtr returned);
     [DllImport("kernel32.dll", SetLastError=true)]
-    static extern IntPtr OpenProcess(uint access, bool inherit, uint pid);
+    public static extern IntPtr OpenProcess(uint access, bool inherit, uint pid);
     [DllImport("kernel32.dll", SetLastError=true)]
     static extern bool IsProcessInJob(IntPtr process, IntPtr job, out bool belongs);
     [DllImport("kernel32.dll", SetLastError=true)]
@@ -71,7 +71,12 @@ public static class ConsumerJob {
         Check(QueryInformationJobObject(job, 1, out info, (uint)Marshal.SizeOf(typeof(Accounting)), IntPtr.Zero));
         return info.ActiveProcesses;
     }
-    static uint[] ProcessIds(IntPtr job, DateTime deadline) {
+    public static bool Belongs(IntPtr job, IntPtr process) {
+        bool belongs;
+        Check(IsProcessInJob(process, job, out belongs));
+        return belongs;
+    }
+    public static uint[] ProcessIds(IntPtr job, DateTime deadline) {
         uint capacity = Math.Max(Active(job), 1u);
         while (DateTime.UtcNow < deadline) {
             // JOBOBJECT_BASIC_PROCESS_ID_LIST: two DWORDs followed by ULONG_PTRs.
@@ -173,8 +178,91 @@ try {
     $bootstrapId = $bootstrap.Id
     [Console]::Error.WriteLine(('{"child_pid":' + $bootstrapId + ',"command":"windows-job-bootstrap"}'))
     $interrupted = $false
+    $stateCaptured = $false
     while (!($bootstrap.WaitForExit(0))) {
         if (Test-Path -LiteralPath $config.stop) { $interrupted = $true; break }
+        if (!$stateCaptured -and $config.probeStateAt -and [DateTime]::UtcNow -ge [DateTime]::Parse($config.probeStateAt).ToUniversalTime()) {
+            $stateCaptured = $true
+            $snapshot = @{ started_at = [DateTime]::UtcNow.ToString('o'); processes = @(@{ pid = $PID }) }
+            $snapshotDeadline = [DateTime]::UtcNow.AddMilliseconds(100)
+            $processes = @()
+            $heldProcesses = @{}
+            try {
+                $ids = @($PID)
+                try { $ids += [ConsumerJob]::ProcessIds($job, $snapshotDeadline) }
+                catch { $snapshot.error = $_.Exception.Message }
+                # Hold identity before cached thread enumeration; an open handle prevents PID reuse.
+                foreach ($processId in $ids) {
+                    if ($processId -eq $PID) { continue }
+                    if ((Test-Path -LiteralPath $config.stop) -or [DateTime]::UtcNow -ge $snapshotDeadline) {
+                        $snapshot.truncated = $true
+                        break
+                    }
+                    $processHandle = [IntPtr]::Zero
+                    try {
+                        $processHandle = [ConsumerJob]::OpenProcess(0x1000, $false, $processId) # QUERY_LIMITED_INFORMATION
+                        if ($processHandle -eq [IntPtr]::Zero) { throw [ComponentModel.Win32Exception]::new([Runtime.InteropServices.Marshal]::GetLastWin32Error()) }
+                        if ([ConsumerJob]::Belongs($job, $processHandle)) {
+                            $heldProcesses[[int]$processId] = $processHandle
+                            $processHandle = [IntPtr]::Zero
+                        }
+                    } catch { $snapshot.error = $_.Exception.Message }
+                    finally {
+                        if ($processHandle -ne [IntPtr]::Zero -and ![ConsumerJob]::CloseHandle($processHandle)) {
+                            $snapshot.error = "Diagnostic handle close failed: $([Runtime.InteropServices.Marshal]::GetLastWin32Error())"
+                        }
+                    }
+                }
+                if ((Test-Path -LiteralPath $config.stop) -or [DateTime]::UtcNow -ge $snapshotDeadline) {
+                    $snapshot.truncated = $true
+                } else { $processes = [Diagnostics.Process]::GetProcesses() }
+                foreach ($process in $processes) {
+                    $processId = $process.Id
+                    if ($processId -ne $PID -and !$heldProcesses.ContainsKey($processId)) { continue }
+                    if ((Test-Path -LiteralPath $config.stop) -or [DateTime]::UtcNow -ge $snapshotDeadline) {
+                        $snapshot.truncated = $true
+                        break
+                    }
+                    $entry = $null
+                    try {
+                        $entry = @{ pid = $processId }
+                        $entry.name = $process.ProcessName
+                        $entry.started_at = $process.StartTime.ToUniversalTime().ToString('o')
+                        $entry.cpu_ms = $process.TotalProcessorTime.TotalMilliseconds
+                        $entry.threads = @(foreach ($processThread in $process.Threads) {
+                            if ((Test-Path -LiteralPath $config.stop) -or [DateTime]::UtcNow -ge $snapshotDeadline) {
+                                $snapshot.truncated = $true
+                                break
+                            }
+                            $thread = @{ id = $processThread.Id }
+                            try {
+                                $thread.state = $processThread.ThreadState.ToString()
+                                if ($thread.state -eq 'Wait') { $thread.wait_reason = $processThread.WaitReason.ToString() }
+                            } catch { $thread.error = $_.Exception.Message }
+                            $thread
+                        })
+                    } catch {
+                        if ($entry) { $entry.error = $_.Exception.Message }
+                        else { $snapshot.error = $_.Exception.Message }
+                    }
+                    if ($entry) {
+                        if ($processId -eq $PID) { $snapshot.processes[0] = $entry }
+                        else { $snapshot.processes += $entry }
+                    }
+                }
+            } catch { $snapshot.error = $_.Exception.Message }
+            finally {
+                foreach ($process in $processes) { $process.Dispose() }
+                foreach ($processHandle in $heldProcesses.Values) {
+                    if (![ConsumerJob]::CloseHandle($processHandle)) {
+                        $snapshot.error = "Diagnostic handle close failed: $([Runtime.InteropServices.Marshal]::GetLastWin32Error())"
+                    }
+                }
+            }
+            $snapshot.completed_at = [DateTime]::UtcNow.ToString('o')
+            $snapshot.before_stop = !(Test-Path -LiteralPath $config.stop)
+            [Console]::Error.WriteLine((@{ windows_probe_state = $snapshot } | ConvertTo-Json -Depth 7 -Compress))
+        }
         Start-Sleep -Milliseconds 20
     }
     $deadline = [DateTime]::UtcNow.AddMilliseconds(2000)

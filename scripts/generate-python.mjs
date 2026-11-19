@@ -2,6 +2,7 @@ import { cpSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFi
 import { join } from "node:path";
 import { spawnSync } from "node:child_process";
 import { planDeprecatedModelAliases, reportPendingAliases } from "./deprecated-model-aliases.mjs";
+import { retainedManagementSchemaRefs, withholdManagementCalendar } from "./withhold-management-calendar.mjs";
 
 const root = process.cwd();
 const outputRoot = join(root, ".tmp", "python-codegen");
@@ -218,6 +219,7 @@ function readProjectVersion(packageDir) {
 
 function writeFilteredSpec(surface) {
   const source = JSON.parse(readFileSync(join(root, surface.spec), "utf8"));
+  if (surface.name === "management") withholdManagementCalendar(source);
   source.info.title = source.info.title.replaceAll("Sendmux", "Qubrics");
   source.info.description = source.info.description?.replaceAll("Sendmux", "Qubrics");
   source.servers = [{ url: surface.name === "sending" ? "https://smtp.qubrics.com/api/v1" : "https://app.qubrics.com/api/v1" }];
@@ -225,6 +227,10 @@ function writeFilteredSpec(surface) {
   const paths = {};
 
   for (const [path, pathItem] of Object.entries(source.paths ?? {})) {
+    // Calendar clients stay withheld until the calendar rebuild is released.
+    if (surface.name === "mailbox" && /^\/mailbox\/(calendars|calendar-events)(\/|$)/.test(path)) {
+      continue;
+    }
     const nextPathItem = {};
     for (const [method, operation] of Object.entries(pathItem)) {
       if (!["get", "post", "put", "patch", "delete", "head", "options"].includes(method)) {
@@ -243,7 +249,7 @@ function writeFilteredSpec(surface) {
   }
 
   const outputPath = join(outputRoot, `${surface.name}.openapi-generator.codegen.json`);
-  writeFileSync(outputPath, `${JSON.stringify(markTrailingSdkParams(pruneComponents({ ...source, paths })), null, 2)}\n`);
+  writeFileSync(outputPath, `${JSON.stringify(markTrailingSdkParams(pruneComponents({ ...source, paths }, surface.name === "management" ? retainedManagementSchemaRefs : [])), null, 2)}\n`);
   return outputPath;
 }
 
@@ -266,8 +272,8 @@ function markTrailingSdkParams(document) {
   return document;
 }
 
-function pruneComponents(document) {
-  const refs = new Set();
+function pruneComponents(document, roots = []) {
+  const refs = new Set(roots);
   collectRefs(document.paths, refs);
 
   for (const ref of refs) {

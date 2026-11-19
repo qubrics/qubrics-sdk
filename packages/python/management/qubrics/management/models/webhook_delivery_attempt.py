@@ -46,13 +46,6 @@ class WebhookDeliveryAttempt(BaseModel):
     result: StrictStr = Field(description="Delivery result for this attempt.")
     __properties: ClassVar[List[str]] = ["created_at", "delivery_attempt", "error_message", "event_id", "event_type", "id", "max_attempts", "next_retry_at", "payload_available", "payload_expires_at", "request_payload_bytes", "request_payload_sha256", "response_body", "response_ms", "response_status", "result"]
 
-    @field_validator('event_type')
-    def event_type_validate_enum(cls, value):
-        """Validates the enum"""
-        if value not in set(['message.delivered', 'message.bounced', 'message.complained', 'message.rejected', 'message.delivery_delayed', 'message.received', 'message.received.spam', 'calendar.changed', 'sendmux.test']):
-            raise ValueError("must be one of enum values ('message.delivered', 'message.bounced', 'message.complained', 'message.rejected', 'message.delivery_delayed', 'message.received', 'message.received.spam', 'calendar.changed', 'sendmux.test')")
-        return value
-
     @field_validator('result')
     def result_validate_enum(cls, value):
         """Validates the enum"""

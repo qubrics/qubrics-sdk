@@ -1,4 +1,5 @@
 import { randomUUID } from "node:crypto";
+import { addAbortListener } from "node:events";
 import { isIP } from "node:net";
 
 import {
@@ -216,6 +217,7 @@ export async function resolveAgentSendingToken({
     return profile.sendingToken.accessToken;
   }
 
+  const signal = AbortSignal.timeout(AUTH_REQUEST_TIMEOUT_MS);
   const response = await fetch(`${profile.authBaseUrl}/oauth2/token`, {
     body: new URLSearchParams({
       grant_type: TOKEN_EXCHANGE_GRANT_TYPE,
@@ -227,9 +229,9 @@ export async function resolveAgentSendingToken({
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
     method: "POST",
     redirect: "error",
-    signal: AbortSignal.timeout(AUTH_REQUEST_TIMEOUT_MS),
+    signal,
   });
-  const body = await responseJson(response);
+  const body = await responseJson(response, signal);
   if (!response.ok) {
     throw new Error(agentAuthFailureMessage(response.status, body));
   }
@@ -364,7 +366,7 @@ export async function waitForMailbox(
         await response.body?.cancel();
         return;
       }
-      body = await responseJson(response);
+      body = await responseJson(response, signal);
     } catch (error) {
       if (signal.aborted || isAbortError(error) || Date.now() >= deadline) throw mailboxReadinessTimeoutError();
       throw error;
@@ -413,27 +415,30 @@ async function postJson<T = Record<string, unknown>>(
     headers?: Record<string, string>;
   },
 ): Promise<T> {
+  const signal = AbortSignal.timeout(AUTH_REQUEST_TIMEOUT_MS);
   const response = await fetch(url, {
     body: JSON.stringify(options.body),
     headers: { "Content-Type": "application/json", ...options.headers },
     method: "POST",
     redirect: "error",
-    signal: AbortSignal.timeout(AUTH_REQUEST_TIMEOUT_MS),
+    signal,
   });
-  const body = await responseJson(response);
+  const body = await responseJson(response, signal);
   if (!options.expectedStatuses.includes(response.status)) {
     throw new Error(agentAuthFailureMessage(response.status, body));
   }
   return body as T;
 }
 
-async function responseJson(response: Response): Promise<Record<string, unknown>> {
+async function responseJson(response: Response, signal: AbortSignal): Promise<Record<string, unknown>> {
   let bytes = 0;
   let body: unknown;
   try {
     const reader = response.body?.getReader();
     const chunks: Uint8Array[] = [];
     if (reader) {
+      // Fetch's weakly held request controller can be collected before the body finishes.
+      const abortListener = addAbortListener(signal, () => { void reader.cancel().catch(() => {}); });
       try {
         while (true) {
           const chunk = await reader.read();
@@ -442,7 +447,9 @@ async function responseJson(response: Response): Promise<Record<string, unknown>
           if (bytes > MAX_AUTH_RESPONSE_BYTES) break;
           chunks.push(chunk.value);
         }
+        signal.throwIfAborted();
       } finally {
+        abortListener[Symbol.dispose]();
         await reader.cancel();
       }
     }

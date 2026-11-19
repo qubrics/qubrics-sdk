@@ -138,7 +138,7 @@ const server = createServer(async (request, response) => {
     serverState.authStall.closed = once(response, "close");
     if (serverState.authStall.stage === "body") {
       response.writeHead(200, { "Content-Type": "application/json" });
-      response.write("{");
+      response.write(serverState.authStall.body ?? "{");
     }
     return;
   }
@@ -1596,6 +1596,17 @@ try {
   }), "Agent token exchange stalled during response body");
   serverState.authStall = undefined;
 
+  serverState.authStall = { path: "/agent-auth/oauth2/token", stage: "body",
+    body: JSON.stringify({ access_token: delegatedAgentSendKey, expires_in: 3600 }),
+  };
+  await assertAgentRequestDeadline(() => resolveAgentSendingToken({
+    config: deadlineConfig,
+    configDir: agentConfigDir,
+    profile: deadlineConfig.profiles["deadline-exchange-agent"],
+    profileName: "deadline-exchange-agent",
+  }), "Agent token exchange with valid JSON but an unfinished response body");
+  serverState.authStall = undefined;
+
   console.log("CLI gate checks passed.");
 } finally {
   const address = server.address();
@@ -1609,6 +1620,9 @@ try {
 }
 
 async function assertAgentRequestDeadline(operation, label) {
+  if (typeof globalThis.gc !== "function") throw new Error("Run the CLI gate with --expose-gc");
+  // Collect fetch's weakly held request controller while its response body is pending.
+  const gcTimer = setInterval(() => globalThis.gc(), 1_000);
   const startedAt = Date.now();
   const requestStart = serverState.requests.length;
   serverState.authPending = operation();
@@ -1631,6 +1645,7 @@ async function assertAgentRequestDeadline(operation, label) {
     console.log(JSON.stringify({ auth_deadline: label, elapsed_ms: Date.now() - startedAt, response_closed: true }));
   } finally {
     clearTimeout(timer);
+    clearInterval(gcTimer);
   }
 }
 

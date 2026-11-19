@@ -5,8 +5,8 @@ build-backend = "hatchling.build"
 [project]
 name = "sendmux-core"
 version = "2.0.0"
-description = "Deprecated: use qubrics-core."
-readme = { text = "sendmux-core is deprecated. Install qubrics-core and import from qubrics.", content-type = "text/plain" }
+description = "Dependency-only package."
+readme = { text = "Installs the required dependency.", content-type = "text/plain" }
 requires-python = ">=3.10"
 license = "MIT"
 classifiers = ["Development Status :: 7 - Inactive"]

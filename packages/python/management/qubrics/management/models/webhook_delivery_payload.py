@@ -17,10 +17,9 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, StrictStr, field_validator
+from pydantic import BaseModel, ConfigDict, Field, StrictStr
 from typing import Any, ClassVar, Dict, List
 from typing_extensions import Annotated
-from qubrics.management.models.webhook_event_payload import WebhookEventPayload
 from typing import Optional, Set
 from typing_extensions import Self
 from pydantic_core import to_jsonable_python
@@ -35,15 +34,8 @@ class WebhookDeliveryPayload(BaseModel):
     event_type: StrictStr = Field(description="Event types a webhook may subscribe to. `sendmux.test` is accepted so you can verify end-to-end delivery via POST /webhooks/{id}/test.")
     expires_at: StrictStr = Field(description="Timestamp when this retained payload expires.")
     id: StrictStr = Field(description="Delivery-attempt public ID")
-    payload: WebhookEventPayload
+    payload: Dict[str, Any]
     __properties: ClassVar[List[str]] = ["created_at", "delivery_attempt", "event_id", "event_type", "expires_at", "id", "payload"]
-
-    @field_validator('event_type')
-    def event_type_validate_enum(cls, value):
-        """Validates the enum"""
-        if value not in set(['message.delivered', 'message.bounced', 'message.complained', 'message.rejected', 'message.delivery_delayed', 'message.received', 'message.received.spam', 'calendar.changed', 'sendmux.test']):
-            raise ValueError("must be one of enum values ('message.delivered', 'message.bounced', 'message.complained', 'message.rejected', 'message.delivery_delayed', 'message.received', 'message.received.spam', 'calendar.changed', 'sendmux.test')")
-        return value
 
     model_config = ConfigDict(
         validate_by_name=True,
@@ -84,9 +76,6 @@ class WebhookDeliveryPayload(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of payload
-        if self.payload:
-            _dict['payload'] = self.payload.to_dict()
         return _dict
 
     @classmethod
@@ -105,6 +94,6 @@ class WebhookDeliveryPayload(BaseModel):
             "event_type": obj.get("event_type"),
             "expires_at": obj.get("expires_at"),
             "id": obj.get("id"),
-            "payload": WebhookEventPayload.from_dict(obj["payload"]) if obj.get("payload") is not None else None
+            "payload": obj.get("payload")
         })
         return _obj

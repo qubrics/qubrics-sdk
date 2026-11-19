@@ -19,8 +19,6 @@ Shared authentication, retry, pagination, header, and error helpers for the Qubr
 
 ## Installation
 
-These commands target the Qubrics release of `qubrics-core`. Until it is published, install `sendmux-core` with its existing require paths and `Sendmux` module.
-
 ```sh
 gem install qubrics-core
 ```

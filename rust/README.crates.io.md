@@ -12,6 +12,8 @@ JSON helpers. Not every OpenAPI operation has a named Rust method:
 - `sendmux::mailbox` for Mailbox API requests with `smx_mbx_*` keys or scoped `smx_agent_*` tokens.
 - `sendmux::management` for Management API requests with `smx_root_*` keys.
 
+Version 0.6.0 excludes calendar-specific client bindings. Generic raw JSON helpers remain available.
+
 ## Install
 
 ```sh
@@ -129,31 +131,6 @@ async fn main() -> sendmux::Result<()> {
     Ok(())
 }
 ```
-
-## Mailbox calendars
-
-The Mailbox client exposes named methods for private calendars and non-sending events. Create calls accept `RequestOptions` for idempotency. Updates and deletes use the same type for `If-Match`.
-
-```rust,no_run
-use sendmux::RequestOptions;
-use serde_json::json;
-
-#[tokio::main]
-async fn main() -> sendmux::Result<()> {
-    let client = sendmux::mailbox(std::env::var("SENDMUX_MAILBOX_API_KEY").unwrap())?;
-    let calendar = client
-        .create_calendar(
-            &json!({"name": "Appointments", "time_zone": "Australia/Melbourne"}),
-            &RequestOptions::new().idempotency_key("calendar-appointments-v1"),
-        )
-        .await?;
-
-    println!("calendar response: {}", calendar.data);
-    Ok(())
-}
-```
-
-Use `list_calendars_with_cursor` and `list_calendar_events_with_cursor` to continue pages. `get_calendar_event_changes` accepts the last event state, or `None` to establish a new baseline. Use the raw JSON helpers for optional mailbox selection, filters, and limits, except conditional Calendar deletes with `mailbox_id`; the curated delete methods send `If-Match` but do not expose mailbox selection. Conditional GET is not exposed by the curated Rust client.
 
 ## OAuth Access Tokens
 

@@ -1,5 +1,15 @@
 # Changelog
 
+## [3.0.0](https://github.com/qubrics/qubrics-sdk/compare/python-mailbox-v2.0.2...python-mailbox-v3.0.0) (2026-11-18)
+
+### ⚠ BREAKING CHANGES
+
+* Import the client from `qubrics.mailbox`.
+
+### Features
+
+* Version 3.0.0 excludes calendar and calendar-event clients and models. Mail, folders, drafts and mailbox event streams remain available.
+
 ## [2.0.2](https://github.com/Sendmux/sendmux-sdk/compare/python-mailbox-v2.0.1...python-mailbox-v2.0.2) (2026-09-21)
 
 
