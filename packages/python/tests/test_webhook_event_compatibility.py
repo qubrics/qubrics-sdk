@@ -21,6 +21,18 @@ def test_management_withholds_calendar_but_preserves_mail_webhooks() -> None:
     assert body.event_types == ["message.received"]
 
 
+@pytest.mark.parametrize("event", ["calendar.changed", "message.received"])
+def test_existing_webhook_subscription_event_labels_round_trip(event: str) -> None:
+    from qubrics.management import WebhookSubscription
+
+    body = {
+        "id": "hook_test", "name": None, "url": "https://example.com/hooks",
+        "event_types": [event], "filters": {"mailbox_ids": []}, "enabled": True,
+        "failing": False, "created_at": "2026-11-19T00:00:00Z", "updated_at": "2026-11-19T00:00:00Z",
+    }
+    assert WebhookSubscription.from_dict(body).to_dict() == body
+
+
 @pytest.mark.parametrize("correlation", [{}, {"qubrics_message_id": None}, {"qubrics_message_id": "message_compatibility"}], ids=["omitted", "null", "string"])
 @pytest.mark.parametrize("nested", [False, True], ids=["data", "payload"])
 def test_webhook_message_alias_preserves_presence_and_value(correlation: dict[str, Any], nested: bool) -> None:

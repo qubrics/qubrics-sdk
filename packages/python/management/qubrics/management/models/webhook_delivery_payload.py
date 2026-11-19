@@ -17,7 +17,7 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, StrictStr, field_validator
+from pydantic import BaseModel, ConfigDict, Field, StrictStr
 from typing import Any, ClassVar, Dict, List
 from typing_extensions import Annotated
 from qubrics.management.models.webhook_event_payload import WebhookEventPayload
@@ -37,13 +37,6 @@ class WebhookDeliveryPayload(BaseModel):
     id: StrictStr = Field(description="Delivery-attempt public ID")
     payload: WebhookEventPayload
     __properties: ClassVar[List[str]] = ["created_at", "delivery_attempt", "event_id", "event_type", "expires_at", "id", "payload"]
-
-    @field_validator('event_type')
-    def event_type_validate_enum(cls, value):
-        """Validates the enum"""
-        if value not in set(['message.delivered', 'message.bounced', 'message.complained', 'message.rejected', 'message.delivery_delayed', 'message.received', 'message.received.spam', 'sendmux.test']):
-            raise ValueError("must be one of enum values ('message.delivered', 'message.bounced', 'message.complained', 'message.rejected', 'message.delivery_delayed', 'message.received', 'message.received.spam', 'sendmux.test')")
-        return value
 
     model_config = ConfigDict(
         validate_by_name=True,

@@ -17,7 +17,7 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictStr, field_validator
+from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
 from qubrics.management.models.webhook_filters import WebhookFilters
 from typing import Optional, Set
@@ -38,14 +38,6 @@ class WebhookSubscription(BaseModel):
     updated_at: StrictStr = Field(description="ISO 8601 last-modified timestamp")
     url: StrictStr = Field(description="HTTPS endpoint that receives signed event POSTs.")
     __properties: ClassVar[List[str]] = ["created_at", "enabled", "event_types", "failing", "filters", "id", "name", "updated_at", "url"]
-
-    @field_validator('event_types')
-    def event_types_validate_enum(cls, value):
-        """Validates the enum"""
-        for i in value:
-            if i not in set(['message.delivered', 'message.bounced', 'message.complained', 'message.rejected', 'message.delivery_delayed', 'message.received', 'message.received.spam', 'sendmux.test']):
-                raise ValueError("each list item must be one of ('message.delivered', 'message.bounced', 'message.complained', 'message.rejected', 'message.delivery_delayed', 'message.received', 'message.received.spam', 'sendmux.test')")
-        return value
 
     model_config = ConfigDict(
         validate_by_name=True,

@@ -14,7 +14,9 @@ values exposed calendar clients through its webhook surface.
 Canonical per local SDK AGENTS.md: filter at the generator input and
 regenerate. Both generators now call `withholdManagementCalendar` before
 their existing reachability pruning. The filter removes the calendar union
-branch, discriminator mapping and exact event enum value. Raw snapshots,
+branch, discriminator mapping and request event enum value. Response labels
+remain plain strings so an existing subscription or delivery record does
+not break a mixed list. No calendar-specific response type is generated. Raw snapshots,
 the live API, other language surfaces and mail webhook fields are unchanged.
 
 Management versions and the manifest agree on 3.0.0. Python generated runtime
@@ -28,6 +30,12 @@ Bundler lock command updates only Management's version and the two affected
 dependency entries. No Core source or other surface dependency is changed.
 
 ## Red and green
+
+Review identified that removing the response enum value rejected existing
+subscriptions. The public subscription round-trip first failed with a Pydantic
+`ValidationError` for `calendar.changed`. Filtering now removes response enum
+restrictions, retaining string typing and existing record labels without
+calendar-specific client code. The adjacent mail label round-trip remains.
 
 Python's public-import regression was red with
 `AssertionError: assert not ['CalendarWebhookEventData', 'CalendarWebhookEventPayload']`.

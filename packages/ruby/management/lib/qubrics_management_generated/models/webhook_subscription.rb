@@ -41,28 +41,6 @@ module Qubrics::Management::Generated
     # HTTPS endpoint that receives signed event POSTs.
     attr_accessor :url
 
-    class EnumAttributeValidator
-      attr_reader :datatype
-      attr_reader :allowable_values
-
-      def initialize(datatype, allowable_values)
-        @allowable_values = allowable_values.map do |value|
-          case datatype.to_s
-          when /Integer/i
-            value.to_i
-          when /Float/i
-            value.to_f
-          else
-            value
-          end
-        end
-      end
-
-      def valid?(value)
-        !value || allowable_values.include?(value)
-      end
-    end
-
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
@@ -256,6 +234,16 @@ module Qubrics::Management::Generated
       end
 
       @enabled = enabled
+    end
+
+    # Custom attribute writer method with validation
+    # @param [Object] event_types Value to be assigned
+    def event_types=(event_types)
+      if event_types.nil?
+        fail ArgumentError, 'event_types cannot be nil'
+      end
+
+      @event_types = event_types
     end
 
     # Custom attribute writer method with validation
