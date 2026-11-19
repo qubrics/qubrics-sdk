@@ -1,5 +1,12 @@
 # Changelog
 
+## 3.0.0
+
+### Changed
+
+* Calendar operations and models are excluded from this release.
+* Requires `qubrics-core >= 2.0.0, < 3.0`.
+
 ## [2.0.2](https://github.com/Sendmux/sendmux-sdk/compare/ruby-mailbox/v2.0.1...ruby-mailbox/v2.0.2) (2026-09-21)
 
 

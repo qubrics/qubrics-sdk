@@ -8,7 +8,7 @@ PATH
 PATH
   remote: packages/ruby/mailbox
   specs:
-    qubrics-mailbox (2.0.2)
+    qubrics-mailbox (3.0.0)
       faraday (~> 2.0)
       faraday-multipart (~> 1.0)
       faraday-retry (>= 2.4, < 3.0)
@@ -30,7 +30,7 @@ PATH
   specs:
     qubrics-sdk (2.0.0)
       qubrics-core (>= 2.0.0, < 3.0)
-      qubrics-mailbox (>= 2.0.2, < 3.0)
+      qubrics-mailbox (>= 3.0.0, < 4.0)
       qubrics-management (>= 3.0.0, < 4.0)
       qubrics-sending (>= 2.0.0, < 3.0)
 

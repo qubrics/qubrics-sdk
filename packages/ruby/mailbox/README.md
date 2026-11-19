@@ -22,7 +22,7 @@ For OAuth, use a REST access token with the scopes and mailbox access required b
 
 ## Installation
 
-These commands target the Qubrics release of `qubrics-mailbox`. Until it is published, install `sendmux-mailbox` with its existing require paths and `Sendmux` module.
+Version 3.0.0 is not published yet. Calendar operations are excluded from this version.
 
 ```sh
 gem install qubrics-mailbox
