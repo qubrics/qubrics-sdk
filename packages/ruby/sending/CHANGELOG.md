@@ -1,6 +1,8 @@
 # Changelog
 
-## Unreleased
+## 2.0.0
+
+- Requires `qubrics-core` 2.x and Ruby 3.1 or newer.
 
 ### Features
 
