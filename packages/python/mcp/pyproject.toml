@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "qubrics-mcp"
-version = "2.2.0"
+version = "3.0.0"
 description = "Email inbox API and outbound sending tools for AI Agents."
 readme = "README.md"
 requires-python = ">=3.10"
@@ -39,6 +39,9 @@ qubrics-mcp-sending = "qubrics.mcp.cli:main_sending"
 [project.urls]
 Repository = "https://github.com/qubrics/qubrics-sdk"
 
+[tool.hatch.build]
+exclude = ["qubrics/mcp/openapi/*.json"]
+
 [tool.hatch.build.targets.sdist]
 core-metadata-version = "2.4"
 include = [
@@ -51,4 +54,4 @@ include = [
 [tool.hatch.build.targets.wheel]
 core-metadata-version = "2.4"
 packages = ["qubrics"]
-artifacts = ["qubrics/mcp/openapi/*.json"]
+artifacts = ["qubrics/mcp/runtime_openapi/*.json"]
