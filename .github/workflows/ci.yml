@@ -10,7 +10,19 @@ permissions:
   contents: read
 
 jobs:
+  openapi-generator:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Cache checksum regression
+        run: node --test scripts/prepare-openapi-generator-cache.test.mjs
+      - uses: ./.github/actions/openapi-generator-cache
+        with:
+          seed: "true"
+
   verify:
+    needs: openapi-generator
     runs-on: ubuntu-latest
     env:
       OPENAPI_INPUT_DIR: >-
@@ -74,6 +86,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Install verified cached generator
+        uses: ./.github/actions/openapi-generator-cache
+
       - name: Set up Python
         uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
         with:
@@ -109,6 +124,7 @@ jobs:
   # Generates and checks one language SDK per job, in parallel with verify.
   # verify's drift:check still proves every generated surface matches the commit.
   verify-languages:
+    needs: openapi-generator
     name: verify-languages (${{ matrix.language }})
     strategy:
       fail-fast: false
@@ -168,6 +184,9 @@ jobs:
           bundler-cache: false
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+      - name: Install verified cached generator
+        if: matrix.language == 'python' || matrix.language == 'php' || matrix.language == 'ruby'
+        uses: ./.github/actions/openapi-generator-cache
       - name: Set up Python
         if: matrix.language == 'python' || matrix.language == 'mcp'
         uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
