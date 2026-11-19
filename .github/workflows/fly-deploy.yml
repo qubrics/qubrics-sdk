@@ -16,7 +16,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: fly-deploy
+  group: fly-deploy-token-proof
   cancel-in-progress: false
 
 jobs:
@@ -49,14 +49,35 @@ jobs:
         with:
           version: 0.5.12
 
-      - name: Deploy on Fly
+      - name: Authenticate with the current deploy token
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+        run: flyctl machine list --app qubrics-mcp-pilot >/dev/null
+
+      - name: Verify the captured token cannot deploy after revocation
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
           ROLLBACK_IMAGE: ${{ inputs.rollback_image }}
         run: |
-          if [[ -z "$ROLLBACK_IMAGE" ]]; then
-            flyctl deploy --remote-only
-          else
-            app=$(flyctl config show --local | jq -er '.app | select(type == "string" and test("^[a-z0-9]+(-[a-z0-9]+)*$"))')
-            flyctl deploy --rollback --image "registry.fly.io/$app@$ROLLBACK_IMAGE"
-          fi
+          auth_error='(^|[^[:digit:]])(401|403)([^[:digit:]]|$)|not authorized|unauthori[sz]ed|unauthenticated|authentication|invalid token|revoked token'
+          for attempt in {1..60}; do
+            if listing=$(flyctl machine list --app qubrics-mcp-pilot 2>&1); then
+              sleep 5
+            elif grep -Eiq "$auth_error" <<< "$listing"; then
+              if deployment=$(flyctl deploy --rollback --image "registry.fly.io/qubrics-mcp-pilot@$ROLLBACK_IMAGE" 2>&1); then
+                echo 'The captured token still enabled a deploy.' >&2
+                exit 1
+              fi
+              if ! grep -Eiq "$auth_error" <<< "$deployment"; then
+                echo 'The deploy failed without an authentication rejection.' >&2
+                exit 1
+              fi
+              echo 'Fly rejected the deployment with the revoked credential.'
+              exit 0
+            else
+              echo 'The token check failed without an authentication rejection.' >&2
+              exit 1
+            fi
+          done
+          echo 'The captured token still authenticates.' >&2
+          exit 1
