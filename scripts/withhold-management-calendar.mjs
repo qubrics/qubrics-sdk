@@ -1,8 +1,11 @@
 // Filter only the Management generator input; the live API remains unchanged.
+export const retainedManagementSchemaRefs = ["#/components/schemas/WebhookEventPayload"];
+
 export function withholdManagementCalendar(document) {
   const payload = document.components.schemas.WebhookEventPayload;
   payload.oneOf = payload.oneOf.filter(({ $ref }) => $ref !== "#/components/schemas/CalendarWebhookEventPayload");
   delete payload.discriminator.mapping["calendar.changed"];
+  document.components.schemas.WebhookDeliveryPayload.properties.payload = { type: "object", additionalProperties: true };
 
   // Existing subscription/delivery labels remain readable without calendar bindings.
   for (const name of ["WebhookSubscription", "WebhookSubscriptionWithSecret", "WebhookDeliveryAttempt", "WebhookDeliveryPayload"]) {

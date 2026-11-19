@@ -67,7 +67,7 @@ module Qubrics::Management::Generated
         :'event_type' => :'String',
         :'expires_at' => :'String',
         :'id' => :'String',
-        :'payload' => :'WebhookEventPayload'
+        :'payload' => :'Hash<String, Object>'
       }
     end
 
@@ -130,7 +130,9 @@ module Qubrics::Management::Generated
       end
 
       if attributes.key?(:'payload')
-        self.payload = attributes[:'payload']
+        if (value = attributes[:'payload']).is_a?(Hash)
+          self.payload = value
+        end
       else
         self.payload = nil
       end

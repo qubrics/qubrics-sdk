@@ -36,6 +36,37 @@ subscriptions. The public subscription round-trip first failed with a Pydantic
 `ValidationError` for `calendar.changed`. Filtering now removes response enum
 restrictions, retaining string typing and existing record labels without
 calendar-specific client code. The adjacent mail label round-trip remains.
+The retained-delivery payload endpoint returns opaque JSON data, avoiding a
+mail-only parser for old records. Public round-trips were red on that nested
+parse. Path-only component pruning then deleted exported mail webhook models:
+Python generation raised ENOENT and Ruby's mail-model assertion raised
+NameError. These failures are historical and were not acceptance receipts.
+
+Two failed response corrections trigger the operator's stop rule. Read-only
+advisor b106896b confirms explicit Management-only `WebhookEventPayload`
+pruning roots as the minimal next correction. An independent read-only closure
+trace retains three mail types and zero calendar types with that seed. Ops
+approved that bounded correction; see MAIN task
+`management-response-origin-ask-20261119.md` and task directives. Prior
+candidate archives are superseded and marked NOT QUALIFIED.
+
+Ops subsequently approved the explicit Management-only root correction. Both
+generators now complete (exit 0), restoring the mail exports. Focused Ruby
+public tests pass 7 runs / 35 assertions with zero failures, errors or skips.
+Focused RuboCop reported one trailing EOF blank line in
+`packages/ruby/tests/test_management_validation.rb:122`; `git diff --check`
+confirmed it. Ops classified it as lint and approved removing only that
+blank line. Both checks now exit 0. No assertion was weakened.
+
+The regenerated Python public Management/webhook/deprecated-alias checks
+pass 23/23, zero skipped. Focused mypy exits 0. Existing native regressions
+assert zero exported calendar models, unchanged mail payload round-trips,
+rejection of new calendar webhook requests, and preservation of existing
+calendar response labels and opaque retained delivery payloads. Root seeding
+applies only to Management in both generators. Other generated surfaces,
+raw snapshots, lockfile and workflows are unchanged by this correction.
+Fresh exact-head CI and default Skills acceptance remain required; no
+publication readiness is claimed from local checks alone.
 
 Python's public-import regression was red with
 `AssertionError: assert not ['CalendarWebhookEventData', 'CalendarWebhookEventPayload']`.

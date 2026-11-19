@@ -2,6 +2,7 @@
 
 require 'minitest/autorun'
 require 'qubrics/management'
+require_relative 'management_retained_webhook_payload_test'
 
 class QubricsRubyManagementValidationTest < Minitest::Test
   def test_calendar_webhooks_withheld_and_mail_webhooks_preserved
