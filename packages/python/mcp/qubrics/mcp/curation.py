@@ -479,11 +479,6 @@ TOOL_BY_OPERATION_ID = {
 
 READ_ONLY_OPERATION_IDS = frozenset(
     {
-        "mailboxListCalendars",
-        "mailboxGetCalendar",
-        "mailboxListCalendarEvents",
-        "mailboxGetCalendarEvent",
-        "mailboxGetCalendarEventChanges",
         "mailboxListDrafts",
         "mailboxGetDraft",
         "mailboxGetAttachmentText",
@@ -526,8 +521,6 @@ READ_ONLY_OPERATION_IDS = frozenset(
 
 DESTRUCTIVE_OPERATION_IDS = frozenset(
     {
-        "mailboxDeleteCalendar",
-        "mailboxDeleteCalendarEvent",
         "mailboxDeleteDraft",
         "mailboxBatchDeleteMessages",
         "managementDeleteMailboxKey",
@@ -536,9 +529,6 @@ DESTRUCTIVE_OPERATION_IDS = frozenset(
 
 IDEMPOTENT_WRITE_OPERATION_IDS = frozenset(
     {
-        "mailboxDeleteCalendar",
-        "mailboxUpdateCalendarEvent",
-        "mailboxDeleteCalendarEvent",
         "mailboxControlDraftSchedule",
         "mailboxRequestAttachmentText",
         "mailboxUpdateIdentity",

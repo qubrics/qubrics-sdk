@@ -47,7 +47,7 @@
       "cli.py": "7d38a9704eff170b983d4239e380a3c2a08cbff36226370c3a2098c96b51ad5a",
       "config.py": "a69059776df6c5d980abdb3d5306a377e9820e23597616f41ed05b3219796230",
       "contract.py": "253737af5185f68d4059ca83a3dfe8c9710bcae1ea6a2c7ff0aeac949cb7b6fc",
-      "curation.py": "cc8cbeccefc395cbaf9a5d1dae0c02230461e1784fcf29c44e981f4426114ea9",
+      "curation.py": "0d5843d4bd793dd47e08655aebbc8719e4aa56090f690439b6c40ca40406c3cb",
       "hosted.py": "db87492b06ac24aabdad9e8470fc02614cb6ca4f4308ab63490d4b408f150dd4",
       "hosted_auth.py": "fcde289c6e4713413c631bfabff0ccc49847efd28da39cb55da43877805de3f0",
       "hosted_proxy.py": "87b8137b0756b9cbb268cf111dc77a5814df6422af9018a7275260fb2bfe33f3",

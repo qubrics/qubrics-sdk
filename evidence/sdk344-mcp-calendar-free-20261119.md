@@ -51,6 +51,11 @@ patterns bypass exclusions, so only runtime JSON is marked as an artifact).
 - Both archives build and pass Twine plus the existing strict native
   artifact checker, including installed-contract verification outside
   the checkout and process/fixture teardown confirmation.
+- Final archive scan found inert calendar operation names in annotation
+  lookup sets, despite zero exposed calendar tools. Removed those unused
+  names, regenerated contract provenance and rebuilt. Final discovery,
+  metadata and absence checks pass 3/3. Both final archives contain 25
+  Python/JSON members, zero calendar text, and zero raw producer JSON files.
 - Fresh isolated no-cache wheel install resolves public qubrics-core
   2.0.0. pip check passes. Installed load_contract equals the real factory
   tools/list result: 130 tools, no calendar tools, paths or schema names;
@@ -65,19 +70,20 @@ patterns bypass exclusions, so only runtime JSON is marked as an artifact).
   terms. No move announcement, registry announcement or install message.
 
 Raw logs and files: SDK MAIN/.claude/artifacts/rebrand-qubrics-sdk344/,
-prefix mcp3-20261119 checks and mcp3-recut-20261119/consumer-*.log.
+prefix mcp3-final checks and mcp3-final-20261119/consumer-*.log. The first
+archives are superseded evidence of the inert-name finding, never publish files.
 Normal exact-head CI and default released Skills acceptance are the
 remaining qualification gates; no inherited receipt claims this candidate.
 
 ## Frozen files for review, not publication permission
 
 Directory: SDK MAIN/.claude/artifacts/rebrand-qubrics-sdk344/
-mcp3-recut-20261119/dist/.
+mcp3-final-20261119/dist/.
 
 | File | Bytes | SHA256 |
 | --- | ---: | --- |
-| qubrics_mcp-3.0.0-py3-none-any.whl | 231156 | c05d4dc8217e0584afd9fba4a74d0a51b920955e352ca9ca1c9d1bd48ee6520c |
-| qubrics_mcp-3.0.0.tar.gz | 212840 | 95aede05bcde25131a3e936ee0c29e50d08deee8c27143daf485914a87ffdf90 |
+| qubrics_mcp-3.0.0-py3-none-any.whl | 231101 | 9ea85ab0acca29dfa638a8a6d54bc00dd06df38ecca8296e4158d0081ea47c31 |
+| qubrics_mcp-3.0.0.tar.gz | 212794 | 4357427c8f90e7352245284597bf1be406c08179528a42ad7a7cf13c42f70b5d |
 
 Calendar exposure: NO. Holding the whole release remains an option.
 Source undo: normal revert. Eventual PyPI versions cannot be replaced or
