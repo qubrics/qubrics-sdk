@@ -224,7 +224,7 @@ Maintainers: use the [protected live E2E matrix](docs/live-e2e-matrix.md) for cr
 
 Ruby Core and Management use the `Qubrics` module. Install `qubrics-core` 2.0.0 or `qubrics-management` 3.0.0 from RubyGems. `qubrics-sending`, `qubrics-mailbox` and `qubrics-sdk` are unpublished source targets. For Sending, Mailbox and SDK installs, use the published names and commands in the Packages table.
 
-| Source package | Version | Source require | Published |
+| Source package | Target version | Source require | Published |
 | --- | --- | --- | --- |
 | `qubrics-core` | 2.0.0 | `qubrics/core` | Yes |
 | `qubrics-sending` | 2.0.0 | `qubrics/sending` | No |
