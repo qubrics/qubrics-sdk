@@ -11,12 +11,16 @@ on:
         description: Immutable image digest (sha256:…) from that release, for rollback only
         required: false
         type: string
+      expected_expiry:
+        description: Expected Fly token expiry as Unix seconds
+        required: true
+        type: string
 
 permissions:
   contents: read
 
 concurrency:
-  group: fly-deploy-token-proof
+  group: fly-deploy-token-proof-${{ inputs.rollback_image != '' && 'retirement' || 'readback' }}
   cancel-in-progress: false
 
 jobs:
@@ -49,18 +53,28 @@ jobs:
         with:
           version: 0.5.12
 
-      - name: Authenticate with the current deploy token
+      - name: Read back the Actions deploy token
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
-        run: flyctl machine list --app qubrics-mcp-pilot >/dev/null
+          EXPECTED_EXPIRY: ${{ inputs.expected_expiry }}
+        run: |
+          set -o pipefail
+          expiry=$(flyctl tokens debug 2>/dev/null | jq -er '[.[].caveats[] | select(.type == "ValidityWindow") | .body.not_after] | min // empty')
+          if [[ "$expiry" != "$EXPECTED_EXPIRY" ]]; then
+            echo 'The stored token did not match the expected expiry.' >&2
+            exit 1
+          fi
+          flyctl machine list --app qubrics-mcp-pilot >/dev/null
+          date -u '+Deploy credential read back and authenticated at %Y-%m-%dT%H:%M:%SZ.'
 
       - name: Verify the captured token cannot deploy after revocation
+        if: inputs.rollback_image != ''
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
           ROLLBACK_IMAGE: ${{ inputs.rollback_image }}
         run: |
           auth_error='(^|[^[:digit:]])(401|403)([^[:digit:]]|$)|not authorized|unauthori[sz]ed|unauthenticated|authentication|invalid token|revoked token'
-          for attempt in {1..60}; do
+          for attempt in {1..144}; do
             if listing=$(flyctl machine list --app qubrics-mcp-pilot 2>&1); then
               sleep 5
             elif grep -Eiq "$auth_error" <<< "$listing"; then
@@ -72,7 +86,7 @@ jobs:
                 echo 'The deploy failed without an authentication rejection.' >&2
                 exit 1
               fi
-              echo 'Fly rejected the deployment with the revoked credential.'
+              date -u '+Fly rejected the deployment with the revoked credential at %Y-%m-%dT%H:%M:%SZ.'
               exit 0
             else
               echo 'The token check failed without an authentication rejection.' >&2
