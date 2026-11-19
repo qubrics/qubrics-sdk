@@ -10487,7 +10487,7 @@
           },
           "url": {
             "description": "HTTPS endpoint that will receive event POSTs. Must be https:// — plain HTTP is rejected.",
-            "example": "https://hooks.acme.com/sendmux",
+            "example": "https://hooks.example.com/qubrics",
             "format": "uri",
             "type": "string"
           }
@@ -11085,7 +11085,7 @@
           },
           "url": {
             "description": "HTTPS endpoint that receives signed event POSTs.",
-            "example": "https://hooks.acme.com/sendmux",
+            "example": "https://hooks.example.com/qubrics",
             "format": "uri",
             "type": "string"
           }
@@ -11224,7 +11224,7 @@
           },
           "url": {
             "description": "HTTPS endpoint that receives signed event POSTs.",
-            "example": "https://hooks.acme.com/sendmux",
+            "example": "https://hooks.example.com/qubrics",
             "format": "uri",
             "type": "string"
           }

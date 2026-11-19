@@ -334,7 +334,7 @@ class MetaApi:
     ) -> Dict[str, object]:
         """OpenAPI 3.1 specification
 
-        Auto-generated OpenAPI 3.1 spec for the Sendmux Sending API. Public endpoint (no authentication). Emits a weak ETag; clients may send `If-None-Match` to receive 304 Not Modified.
+        Auto-generated OpenAPI 3.1 spec for the Qubrics Sending API. Public endpoint (no authentication). Emits a weak ETag; clients may send `If-None-Match` to receive 304 Not Modified.
 
         :param if_none_match: Weak ETag from a previous response. When it matches the current resource, the server returns 304 Not Modified with no body.
         :type if_none_match: str
@@ -402,7 +402,7 @@ class MetaApi:
     ) -> ApiResponse[Dict[str, object]]:
         """OpenAPI 3.1 specification
 
-        Auto-generated OpenAPI 3.1 spec for the Sendmux Sending API. Public endpoint (no authentication). Emits a weak ETag; clients may send `If-None-Match` to receive 304 Not Modified.
+        Auto-generated OpenAPI 3.1 spec for the Qubrics Sending API. Public endpoint (no authentication). Emits a weak ETag; clients may send `If-None-Match` to receive 304 Not Modified.
 
         :param if_none_match: Weak ETag from a previous response. When it matches the current resource, the server returns 304 Not Modified with no body.
         :type if_none_match: str
@@ -470,7 +470,7 @@ class MetaApi:
     ) -> RESTResponseType:
         """OpenAPI 3.1 specification
 
-        Auto-generated OpenAPI 3.1 spec for the Sendmux Sending API. Public endpoint (no authentication). Emits a weak ETag; clients may send `If-None-Match` to receive 304 Not Modified.
+        Auto-generated OpenAPI 3.1 spec for the Qubrics Sending API. Public endpoint (no authentication). Emits a weak ETag; clients may send `If-None-Match` to receive 304 Not Modified.
 
         :param if_none_match: Weak ETag from a previous response. When it matches the current resource, the server returns 304 Not Modified with no body.
         :type if_none_match: str

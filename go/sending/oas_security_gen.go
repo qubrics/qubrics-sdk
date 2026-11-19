@@ -15,7 +15,7 @@ import (
 // SecurityHandler is handler for security parameters.
 type SecurityHandler interface {
 	// HandleBearerAuth handles BearerAuth security.
-	// Sendmux API key (smx_...).
+	// Qubrics API key (smx_...).
 	HandleBearerAuth(ctx context.Context, operationName OperationName, t BearerAuth) (context.Context, error)
 }
 
@@ -119,7 +119,7 @@ func (s *Server) securityUploadTokenSendmux(ctx context.Context, operationName O
 // SecuritySource is provider of security values (tokens, passwords, etc.).
 type SecuritySource interface {
 	// BearerAuth provides BearerAuth security value.
-	// Sendmux API key (smx_...).
+	// Qubrics API key (smx_...).
 	BearerAuth(ctx context.Context, operationName OperationName) (BearerAuth, error)
 }
 

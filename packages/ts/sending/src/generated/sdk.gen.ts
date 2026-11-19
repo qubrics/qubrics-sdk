@@ -36,7 +36,7 @@ export const sendingCreateAttachmentUpload = <ThrowOnError extends boolean = fal
 /**
  * Upload bytes to an attachment upload URL
  *
- * Upload the exact binary bytes for a previously-created attachment upload URL. This operation uses the short-lived upload token header returned by POST /emails/attachment-uploads, not a Sendmux API key.
+ * Upload the exact binary bytes for a previously-created attachment upload URL. This operation uses the short-lived upload token header returned by POST /emails/attachment-uploads, not a Qubrics API key.
  */
 export const sendingCompleteAttachmentUpload = <ThrowOnError extends boolean = false>(options: Options<SendingCompleteAttachmentUploadData, ThrowOnError>) => (options.client ?? client).put<SendingCompleteAttachmentUploadResponses, SendingCompleteAttachmentUploadErrors, ThrowOnError>({
     bodySerializer: null,
@@ -120,6 +120,6 @@ export const sendingGetConnection = <ThrowOnError extends boolean = false>(optio
 /**
  * OpenAPI 3.1 specification
  *
- * Auto-generated OpenAPI 3.1 spec for the Sendmux Sending API. Public endpoint (no authentication). Emits a weak ETag; clients may send `If-None-Match` to receive 304 Not Modified.
+ * Auto-generated OpenAPI 3.1 spec for the Qubrics Sending API. Public endpoint (no authentication). Emits a weak ETag; clients may send `If-None-Match` to receive 304 Not Modified.
  */
 export const sendingGetOpenApiSpec = <ThrowOnError extends boolean = false>(options?: Options<SendingGetOpenApiSpecData, ThrowOnError>) => (options?.client ?? client).get<SendingGetOpenApiSpecResponses, unknown, ThrowOnError>({ url: '/openapi.json', ...options });
