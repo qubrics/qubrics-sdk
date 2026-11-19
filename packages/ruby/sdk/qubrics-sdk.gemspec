@@ -21,5 +21,5 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'qubrics-core', '>= 2.0.0', '< 3.0'
   spec.add_dependency 'qubrics-mailbox', '>= 2.0.2', '< 3.0'
   spec.add_dependency 'qubrics-management', '>= 3.0.0', '< 4.0'
-  spec.add_dependency 'qubrics-sending', '>= 1.5.0', '< 2.0'
+  spec.add_dependency 'qubrics-sending', '>= 2.0.0', '< 3.0'
 end
