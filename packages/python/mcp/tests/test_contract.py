@@ -32,6 +32,19 @@ def test_checked_in_contract_matches_the_public_mcp_factory() -> None:
     assert json.loads(CONTRACT_PATH.read_text()) == build_contract()
 
 
+def test_calendar_clients_are_withheld_from_public_discovery_and_specs() -> None:
+    from qubrics.mcp.config import ServerConfig
+    from qubrics.mcp.specs import load_spec
+
+    contract = build_contract()
+    for tools in contract["tools"]["by_surface"].values():
+        assert all("calendar" not in tool["name"].lower() for tool in tools)
+    for surface in ("mailbox", "management", "sending"):
+        document = load_spec(ServerConfig(surfaces=(surface,), api_key="smx_test"))
+        assert all("calendar" not in path.lower() for path in document["paths"])
+        assert all("calendar" not in name.lower() for name in document["components"]["schemas"])
+
+
 def test_contract_counts_match_combined_public_discovery() -> None:
     from fastmcp import Client
     from qubrics.mcp.config import SURFACES, ServerConfig
@@ -52,7 +65,7 @@ def test_contract_counts_match_combined_public_discovery() -> None:
 def test_contract_binds_packaged_sources_and_distinguishes_api_origins() -> None:
     contract = build_contract()
     sources = contract["provenance"]["sources"]
-    for relative in ("server.py", "curation.py", "config.py", "hosted.py", "hosted_auth.py", "openapi/openapi-app.json", "openapi/openapi-sending.json"):
+    for relative in ("server.py", "curation.py", "config.py", "hosted.py", "hosted_auth.py", "runtime_openapi/openapi-app.json", "runtime_openapi/openapi-sending.json"):
         assert sources[relative] == hashlib.sha256((PACKAGE_DIR / "qubrics" / "mcp" / relative).read_bytes()).hexdigest()
     from qubrics.mcp.config import DEFAULT_APP_BASE_URL, DEFAULT_SENDING_BASE_URL
     assert contract["api_origins"] == {"app": DEFAULT_APP_BASE_URL, "sending": DEFAULT_SENDING_BASE_URL}
@@ -242,7 +255,7 @@ def test_generator_rejects_incompatible_source_contract_without_overwriting(chan
         artifact = package / "qubrics/mcp/mcp-contract.json"
         before = artifact.read_bytes()
         if change == "returned_limit":
-            source = package / "qubrics/mcp/openapi/openapi-sending.json"
+            source = package / "qubrics/mcp/runtime_openapi/openapi-sending.json"
             source.write_text(source.read_text().replace('"max_size_bytes"', '"renamed_max_bytes"'))
         elif change == "native_version":
             source = package / "pyproject.toml"

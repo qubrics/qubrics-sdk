@@ -158,7 +158,7 @@ def source_hashes() -> dict[str, str]:
     return {
         path.relative_to(PACKAGE_DIR).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest()
         for path in sorted(PACKAGE_DIR.rglob("*"))
-        if path.is_file() and (path.suffix == ".py" or path.parent == PACKAGE_DIR / "openapi")
+        if path.is_file() and (path.suffix == ".py" or path.parent == PACKAGE_DIR / "runtime_openapi")
     }
 
 

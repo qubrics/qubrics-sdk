@@ -444,6 +444,10 @@ function mcpDecision(operation, curatedMcp) {
 function mcpExclusionReason(operation) {
   const id = operation.operationId;
 
+  if (/^\/mailbox\/(calendars|calendar-events)(\/|$)/.test(operation.path)) {
+    return "Calendar client tools and schemas are withheld from the MCP distribution.";
+  }
+
   if (/^management(Get|Replace)MailboxSendPolicy$/.test(id)) {
     return "Sending policy administration requires scope-dependent administrative permissions; use SDK or CLI with an administrative connection.";
   }

@@ -193,7 +193,7 @@
     "mailboxCreateCalendar": {
       "adapters": {
         "cli": true,
-        "mcp": "mailbox_create_calendar",
+        "mcp": null,
         "sdk": [
           "typescript",
           "go",
@@ -224,7 +224,7 @@
     "mailboxCreateCalendarEvent": {
       "adapters": {
         "cli": true,
-        "mcp": "mailbox_create_calendar_event",
+        "mcp": null,
         "sdk": [
           "typescript",
           "go",
@@ -319,7 +319,7 @@
     "mailboxDeleteCalendar": {
       "adapters": {
         "cli": true,
-        "mcp": "mailbox_delete_calendar",
+        "mcp": null,
         "sdk": [
           "typescript",
           "go",
@@ -352,7 +352,7 @@
     "mailboxDeleteCalendarEvent": {
       "adapters": {
         "cli": true,
-        "mcp": "mailbox_delete_calendar_event",
+        "mcp": null,
         "sdk": [
           "typescript",
           "go",
@@ -564,7 +564,7 @@
     "mailboxGetCalendar": {
       "adapters": {
         "cli": true,
-        "mcp": "mailbox_get_calendar",
+        "mcp": null,
         "sdk": [
           "typescript",
           "go",
@@ -594,7 +594,7 @@
     "mailboxGetCalendarEvent": {
       "adapters": {
         "cli": true,
-        "mcp": "mailbox_get_calendar_event",
+        "mcp": null,
         "sdk": [
           "typescript",
           "go",
@@ -624,7 +624,7 @@
     "mailboxGetCalendarEventChanges": {
       "adapters": {
         "cli": true,
-        "mcp": "mailbox_get_calendar_event_changes",
+        "mcp": null,
         "sdk": [
           "typescript",
           "go",
@@ -1173,7 +1173,7 @@
     "mailboxListCalendarEvents": {
       "adapters": {
         "cli": true,
-        "mcp": "mailbox_list_calendar_events",
+        "mcp": null,
         "sdk": [
           "typescript",
           "go",
@@ -1199,7 +1199,7 @@
     "mailboxListCalendars": {
       "adapters": {
         "cli": true,
-        "mcp": "mailbox_list_calendars",
+        "mcp": null,
         "sdk": [
           "typescript",
           "go",
@@ -1788,7 +1788,7 @@
     "mailboxUpdateCalendarEvent": {
       "adapters": {
         "cli": true,
-        "mcp": "mailbox_update_calendar_event",
+        "mcp": null,
         "sdk": [
           "typescript",
           "go",

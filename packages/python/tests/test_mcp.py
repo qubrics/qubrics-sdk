@@ -36,16 +36,6 @@ from qubrics.mcp.verification import structured_result
 
 EXPECTED_TOOL_NAMES_BY_SURFACE = {
     "mailbox": {
-        "mailbox_list_calendars",
-        "mailbox_create_calendar",
-        "mailbox_get_calendar",
-        "mailbox_list_calendar_events",
-        "mailbox_create_calendar_event",
-        "mailbox_get_calendar_event",
-        "mailbox_update_calendar_event",
-        "mailbox_delete_calendar_event",
-        "mailbox_delete_calendar",
-        "mailbox_get_calendar_event_changes",
         "mailbox_list_drafts",
         "mailbox_get_draft",
         "mailbox_create_draft",
@@ -147,11 +137,6 @@ class CancellingResponseStream(httpx.AsyncByteStream):
 
 
 READ_ONLY_TOOL_NAMES = {
-    "mailbox_list_calendars",
-    "mailbox_get_calendar",
-    "mailbox_list_calendar_events",
-    "mailbox_get_calendar_event",
-    "mailbox_get_calendar_event_changes",
     "mailbox_list_drafts",
     "mailbox_get_draft",
     "mailbox_get_attachment_text",
@@ -195,17 +180,12 @@ READ_ONLY_TOOL_NAMES = {
 }
 
 DESTRUCTIVE_TOOL_NAMES = {
-    "mailbox_delete_calendar",
-    "mailbox_delete_calendar_event",
     "mailbox_delete_draft",
     "mailbox_batch_delete_messages",
     "management_delete_mailbox_key",
 }
 
 IDEMPOTENT_WRITE_TOOL_NAMES = {
-    "mailbox_delete_calendar",
-    "mailbox_update_calendar_event",
-    "mailbox_delete_calendar_event",
     "mailbox_control_draft_schedule",
     "mailbox_request_attachment_text",
     "mailbox_batch_update_messages",
@@ -281,7 +261,7 @@ def test_curated_tools_have_complete_mcp_quality_metadata() -> None:
             async with Client(server) as client:
                 tools.extend(await client.list_tools())
 
-        assert len(tools) == 150
+        assert len(tools) == 130
         assert {tool.name for tool in tools if tool.output_schema is None} == (
             NO_OUTPUT_SCHEMA_TOOL_NAMES | {f"qubrics_{name}" for name in NO_OUTPUT_SCHEMA_TOOL_NAMES}
         )

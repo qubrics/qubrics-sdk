@@ -42,7 +42,7 @@ def spec_source(config: ServerConfig, surface: str | None = None) -> str:
     if config.openapi_input_dir:
         return str(Path(config.openapi_input_dir) / filename)
 
-    return str(resources.files("qubrics.mcp.openapi").joinpath(filename))
+    return str(resources.files("qubrics.mcp.runtime_openapi").joinpath(filename))
 
 
 def prepare_for_fastmcp(document: dict[str, Any], *, base_url: str) -> dict[str, Any]:

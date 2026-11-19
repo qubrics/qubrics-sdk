@@ -14,6 +14,7 @@ const generatedPackageDirs = [
   "packages/python/mailbox/qubrics/mailbox",
   "packages/python/management/qubrics/management",
   "packages/python/mcp/qubrics/mcp/openapi",
+  "packages/python/mcp/qubrics/mcp/runtime_openapi",
   "packages/python/mcp/qubrics/mcp/mcp-contract.json",
   "packages/python/sending/qubrics/sending",
   "packages/ruby/mailbox/lib/qubrics_mailbox_generated",

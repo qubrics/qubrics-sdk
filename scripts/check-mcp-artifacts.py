@@ -15,14 +15,16 @@ import zipfile
 ROOT = Path(__file__).resolve().parents[1]
 CONTRACT = ROOT / "packages/python/mcp/qubrics/mcp/mcp-contract.json"
 REQUIRED = {
-    "qubrics/mcp/openapi/openapi-app.json",
-    "qubrics/mcp/openapi/openapi-sending.json",
+    "qubrics/mcp/runtime_openapi/openapi-app.json",
+    "qubrics/mcp/runtime_openapi/openapi-sending.json",
     "qubrics/mcp/py.typed",
     "qubrics/mcp/mcp-contract.json",
 }
 
 
 def check_members(members: dict[str, bytes], metadata: bytes) -> None:
+    if any(name.startswith("qubrics/mcp/openapi/") and name.endswith(".json") for name in members):
+        raise ValueError("Source-only producer snapshots must not ship in MCP distributions")
     missing = REQUIRED - members.keys()
     if missing:
         raise ValueError(f"Missing package files: {sorted(missing)}")

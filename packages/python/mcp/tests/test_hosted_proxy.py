@@ -77,7 +77,7 @@ def test_operation_manifest_resolves_curated_route_to_operation_id() -> None:
     assert route.permissions == ("domain.read",)
 
 
-def test_calendar_manifest_allows_only_canonical_routes_and_scopes() -> None:
+def test_calendar_manifest_rejects_withheld_routes() -> None:
     config = ServerConfig(surfaces=("mailbox",), api_key="smx_mbx_test")
     spec = prepare_for_fastmcp(load_spec(config), base_url=config.api_base_url)
     manifest = build_hosted_operation_manifest(spec, "mailbox")
@@ -94,9 +94,7 @@ def test_calendar_manifest_allows_only_canonical_routes_and_scopes() -> None:
         ("GET", "/mailbox/calendar-events/changes", "mailboxGetCalendarEventChanges", "calendar.read"),
     ):
         route = manifest.resolve(method, path)
-        assert route is not None
-        assert route.operation_id == operation_id
-        assert route.permissions == (permission,)
+        assert route is None
     assert manifest.resolve("PATCH", "/mailbox/calendars/owned") is None
     assert manifest.resolve("POST", "/mailbox/calendar-events/owned") is None
 

@@ -1,13 +1,16 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
+import { withholdMcpCalendar } from "./withhold-mcp-calendar.mjs";
 
 const specs = ["openapi-app.json", "openapi-sending.json"];
 const root = process.cwd();
 const options = parseArgs(process.argv.slice(2));
 const inputDir = resolve(options.inputDir ?? process.env.OPENAPI_INPUT_DIR ?? findDefaultInputDir());
 const outputDir = resolve(options.outputDir ?? "packages/python/mcp/qubrics/mcp/openapi");
+const runtimeOutputDir = resolve(outputDir, "..", "runtime_openapi");
 
 mkdirSync(outputDir, { recursive: true });
+mkdirSync(runtimeOutputDir, { recursive: true });
 
 for (const spec of specs) {
   const inputPath = join(inputDir, spec);
@@ -21,6 +24,8 @@ for (const spec of specs) {
   }
 
   writeFileSync(join(outputDir, spec), `${stableStringify(document)}\n`);
+  if (spec === "openapi-app.json") withholdMcpCalendar(document);
+  writeFileSync(join(runtimeOutputDir, spec), `${stableStringify(document)}\n`);
 }
 
 console.log(`Wrote MCP OpenAPI snapshots to ${outputDir}`);
