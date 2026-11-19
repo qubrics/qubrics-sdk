@@ -18,7 +18,7 @@ Gem::Specification.new do |spec|
   }
   spec.files = Dir.chdir(__dir__) { Dir['lib/**/*.rb', 'README.md', 'CHANGELOG.md', 'LICENSE'] }
   spec.require_paths = ['lib']
-  spec.add_dependency 'qubrics-core', '>= 1.3.0', '< 2.0'
+  spec.add_dependency 'qubrics-core', '>= 2.0.0', '< 3.0'
   spec.add_dependency 'qubrics-mailbox', '>= 2.0.2', '< 3.0'
   spec.add_dependency 'qubrics-management', '>= 3.0.0', '< 4.0'
   spec.add_dependency 'qubrics-sending', '>= 1.5.0', '< 2.0'

@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.0.0
+
+- Provides `Qubrics::Core` authentication, retry, pagination, header and error helpers.
+- Requires Ruby 3.1 or newer.
+
 ## [1.3.0](https://github.com/Sendmux/sendmux-sdk/compare/ruby-core/v1.2.0...ruby-core/v1.3.0) (2026-09-10)
 
 
