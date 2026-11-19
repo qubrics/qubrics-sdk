@@ -259,10 +259,8 @@ async function runInstalledChocolateyProbe() {
     }
     probe.final_config_restored = readFileSync(configPath).equals(originalConfig);
     probe.final_staging_path_absent = !existsSync(stagingPath);
-    writeFileSync(join(evidence, "installed-chocolatey-probe.json"), JSON.stringify({
-      ...probe,
-      transaction: probe.transaction && { ...probe.transaction, stdout: undefined },
-    }, (name, value) => name === "stderr" ? undefined : typeof value === "string"
+    writeFileSync(join(evidence, "installed-chocolatey-probe.json"), JSON.stringify(probe,
+      (name, value) => name === "stdout" || name === "stderr" ? undefined : typeof value === "string"
       ? credentialSentinels.reduce((redacted, sentinel) => redacted.replaceAll(sentinel, "<REDACTED>"), value)
       : value, 2));
   }
@@ -274,8 +272,11 @@ async function runInstalledChocolateyProbe() {
 }
 
 function installedProbeScript(probeSource) {
+  const probeTransaction = credentialTransaction
+    .replace("} finally {", "} finally {\n[Console]::Error.WriteLine('SENDMUX_CHOCO_PROBE_STAGE=restore-started')")
+    .replace(/(\n[ \t]*})(\n\n[ \t]*exit \$nativeExitCode)/, "\n[Console]::Error.WriteLine('SENDMUX_CHOCO_PROBE_STAGE=restore-completed')$1$2");
   return `$ErrorActionPreference = 'Stop'
-${credentialTransaction}
+${probeTransaction}
 $probeSource = ${powerShellLiteral(probeSource)}
 Invoke-ChocolateyCredentialTransaction -Source $probeSource -Operation {
   param($configuredSource)
@@ -294,16 +295,22 @@ Invoke-ChocolateyCredentialTransaction -Source $probeSource -Operation {
   $probePid = $process.Id
   [Console]::Out.WriteLine("SENDMUX_CHOCO_PROBE_PID=$probePid")
   [Console]::Out.Flush()
+  [Console]::Error.WriteLine("SENDMUX_CHOCO_PROBE_STAGE=child-started:$probePid")
   $stdoutTask = $process.StandardOutput.ReadToEndAsync()
   $stderrTask = $process.StandardError.ReadToEndAsync()
   $process.WaitForExit()
+  [Console]::Error.WriteLine("SENDMUX_CHOCO_PROBE_STAGE=child-exited:$probePid")
   $probeExitCode = $process.ExitCode
+  $probeStdout = $stdoutTask.GetAwaiter().GetResult()
+  [Console]::Error.WriteLine("SENDMUX_CHOCO_PROBE_STAGE=stdout-read:$probePid")
+  $probeStderr = $stderrTask.GetAwaiter().GetResult()
+  [Console]::Error.WriteLine("SENDMUX_CHOCO_PROBE_STAGE=stderr-read:$probePid")
   $receipt = [ordered]@{
     pid = $probePid
     argv = $probeArguments
     credential_environment_present = $credentialEnvironmentPresent
-    stdout = $stdoutTask.GetAwaiter().GetResult()
-    stderr = $stderrTask.GetAwaiter().GetResult()
+    stdout = $probeStdout
+    stderr = $probeStderr
     exit_code = $probeExitCode
   }
   $process.Dispose()
@@ -334,8 +341,8 @@ async function runCapturedProcess({ command, args, env, label }) {
   const child = owner.child;
   const receipt = { pid: child.pid, command, args, label, stdout: "", stderr: "", stderr_directory: stderrDirectory, stages: [] };
   let stderrPending = "";
-  const stage = (name) => {
-    const event = { stage: name, elapsed_ms: Math.round(performance.now() - started) };
+  const stage = (name, pid) => {
+    const event = { stage: name, elapsed_ms: Math.round(performance.now() - started), ...(pid === undefined ? {} : { pid }) };
     receipt.stages.push(event);
     console.log(JSON.stringify({ native_probe_stage: label, ...event }));
   };
@@ -358,6 +365,12 @@ async function runCapturedProcess({ command, args, env, label }) {
     while ((newline = stderrPending.indexOf("\n")) !== -1) {
       const line = stderrPending.slice(0, newline);
       stderrPending = stderrPending.slice(newline + 1);
+      const probeStage = /^SENDMUX_CHOCO_PROBE_STAGE=(child-started|child-exited|stdout-read|stderr-read|restore-started|restore-completed)(?::([1-9][0-9]*))?\r?$/.exec(line);
+      if (probeStage) {
+        const pid = probeStage[2] === undefined ? undefined : Number(probeStage[2]);
+        if (pid === undefined || Number.isSafeInteger(pid)) stage(probeStage[1], pid);
+        continue;
+      }
       const start = line.lastIndexOf('{"windows_probe_state":');
       if (start === -1) continue;
       let record;
