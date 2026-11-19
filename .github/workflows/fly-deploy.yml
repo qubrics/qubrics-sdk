@@ -1,0 +1,46 @@
+name: Deploy Fly app
+
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: Full Git commit SHA to deploy
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: fly-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ${{ vars.RUNNER }}
+    timeout-minutes: 20
+    steps:
+      - name: Validate commit SHA
+        env:
+          DEPLOY_REF: ${{ inputs.ref }}
+        run: |
+          if [[ ! "$DEPLOY_REF" =~ ^[0-9a-f]{40}$ ]]; then
+            echo 'Enter a full, lowercase Git commit SHA.' >&2
+            exit 1
+          fi
+
+      - name: Check out deploy commit
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          ref: ${{ inputs.ref }}
+          persist-credentials: false
+
+      - name: Set up Fly CLI
+        uses: superfly/flyctl-actions/setup-flyctl@98172f70657cb3e15db199af139be99bd3e61200
+        with:
+          version: 0.5.12
+
+      - name: Deploy on Fly
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+        run: flyctl deploy --remote-only
