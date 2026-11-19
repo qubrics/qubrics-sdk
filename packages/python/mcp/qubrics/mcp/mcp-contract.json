@@ -54,8 +54,8 @@
       "live_e2e.py": "ccb7193600a294f038600094a08a51fa943091a00e1848af12aac84004f18842",
       "observability.py": "2dc20c5edc6b9515aadaf34ae8a388f5196e8a62c524c66c4dad4f43fec28d1d",
       "openapi/__init__.py": "b9722745c52a997c608de42c155090bca049853af0cc9ad82a00048e788f018e",
-      "openapi/openapi-app.json": "1d49dc00e00b86837041b76cdb0676d96c68317ec74354d6a5acf4cf2ff0e73c",
-      "openapi/openapi-sending.json": "3138c5f27e3c0ab8475d1ccaf7378815c12e12918c30a90e77e2115642bc3647",
+      "openapi/openapi-app.json": "ba45a5411d151e2e74497d859c5967d12f601a5ec25a4e1da66ec2e8a5bfb23c",
+      "openapi/openapi-sending.json": "d2c32e1371929ab99e49c5a92a09800373dc07839a0be8926ba91ef6a14b57f4",
       "permissions.py": "5f0c71a9e373114093ab155d93354eb4dfe1491322d29a6b3b3bcf26ef8c9988",
       "response_ownership.py": "eff042d51d3d158438e05fd131e0e993fa76706a2895838e84114fb0c488ef83",
       "retry.py": "14654bdc36c4e11c2ccd66f92388937a4422809288edf8331e9a86d081432fb8",
@@ -28490,7 +28490,7 @@
               },
               "url": {
                 "description": "HTTPS endpoint that will receive event POSTs. Must be https:// \u2014 plain HTTP is rejected.",
-                "example": "https://hooks.acme.com/sendmux",
+                "example": "https://hooks.example.com/qubrics",
                 "format": "uri",
                 "type": "string"
               }
@@ -28613,7 +28613,7 @@
                           },
                           "url": {
                             "description": "HTTPS endpoint that receives signed event POSTs.",
-                            "example": "https://hooks.acme.com/sendmux",
+                            "example": "https://hooks.example.com/qubrics",
                             "format": "uri",
                             "type": "string"
                           }
@@ -31486,7 +31486,7 @@
                             },
                             "url": {
                               "description": "HTTPS endpoint that receives signed event POSTs.",
-                              "example": "https://hooks.acme.com/sendmux",
+                              "example": "https://hooks.example.com/qubrics",
                               "format": "uri",
                               "type": "string"
                             }
@@ -33432,7 +33432,7 @@
               },
               "url": {
                 "description": "HTTPS endpoint that will receive event POSTs. Must be https:// \u2014 plain HTTP is rejected.",
-                "example": "https://hooks.acme.com/sendmux",
+                "example": "https://hooks.example.com/qubrics",
                 "format": "uri",
                 "type": "string"
               }
@@ -33555,7 +33555,7 @@
                           },
                           "url": {
                             "description": "HTTPS endpoint that receives signed event POSTs.",
-                            "example": "https://hooks.acme.com/sendmux",
+                            "example": "https://hooks.example.com/qubrics",
                             "format": "uri",
                             "type": "string"
                           }
@@ -36428,7 +36428,7 @@
                             },
                             "url": {
                               "description": "HTTPS endpoint that receives signed event POSTs.",
-                              "example": "https://hooks.acme.com/sendmux",
+                              "example": "https://hooks.example.com/qubrics",
                               "format": "uri",
                               "type": "string"
                             }
@@ -37460,7 +37460,7 @@
                           },
                           "upload_url": {
                             "description": "Short-lived URL that accepts a binary PUT with the returned headers.",
-                            "example": "https://smtp.sendmux.ai/api/v1/emails/attachment-uploads/upl_tz4a98xxat96iws9zmbrgj3a",
+                            "example": "https://smtp.qubrics.com/api/v1/emails/attachment-uploads/upl_tz4a98xxat96iws9zmbrgj3a",
                             "format": "uri",
                             "type": "string"
                           }
@@ -38002,7 +38002,7 @@
               },
               "subject": {
                 "description": "Email subject line (max 998 chars, RFC 5322)",
-                "example": "Welcome to Sendmux",
+                "example": "Welcome to Qubrics",
                 "maxLength": 998,
                 "minLength": 1,
                 "pattern": "^[^\\r\\n]*$",
@@ -38362,7 +38362,7 @@
                     },
                     "subject": {
                       "description": "Email subject line (max 998 chars, RFC 5322)",
-                      "example": "Welcome to Sendmux",
+                      "example": "Welcome to Qubrics",
                       "maxLength": 998,
                       "minLength": 1,
                       "pattern": "^[^\\r\\n]*$",
@@ -38935,7 +38935,7 @@
                           },
                           "upload_url": {
                             "description": "Short-lived URL that accepts a binary PUT with the returned headers.",
-                            "example": "https://smtp.sendmux.ai/api/v1/emails/attachment-uploads/upl_tz4a98xxat96iws9zmbrgj3a",
+                            "example": "https://smtp.qubrics.com/api/v1/emails/attachment-uploads/upl_tz4a98xxat96iws9zmbrgj3a",
                             "format": "uri",
                             "type": "string"
                           }
@@ -39477,7 +39477,7 @@
               },
               "subject": {
                 "description": "Email subject line (max 998 chars, RFC 5322)",
-                "example": "Welcome to Sendmux",
+                "example": "Welcome to Qubrics",
                 "maxLength": 998,
                 "minLength": 1,
                 "pattern": "^[^\\r\\n]*$",
@@ -39837,7 +39837,7 @@
                     },
                     "subject": {
                       "description": "Email subject line (max 998 chars, RFC 5322)",
-                      "example": "Welcome to Sendmux",
+                      "example": "Welcome to Qubrics",
                       "maxLength": 998,
                       "minLength": 1,
                       "pattern": "^[^\\r\\n]*$",

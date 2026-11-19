@@ -118,7 +118,7 @@
           },
           "upload_url": {
             "description": "Short-lived URL that accepts a binary PUT with the returned headers.",
-            "example": "https://smtp.sendmux.ai/api/v1/emails/attachment-uploads/upl_tz4a98xxat96iws9zmbrgj3a",
+            "example": "https://smtp.qubrics.com/api/v1/emails/attachment-uploads/upl_tz4a98xxat96iws9zmbrgj3a",
             "format": "uri",
             "type": "string"
           }
@@ -514,7 +514,7 @@
           },
           "subject": {
             "description": "Email subject line (max 998 chars, RFC 5322)",
-            "example": "Welcome to Sendmux",
+            "example": "Welcome to Qubrics",
             "maxLength": 998,
             "minLength": 1,
             "pattern": "^[^\\r\\n]*$",
@@ -779,7 +779,7 @@
     },
     "securitySchemes": {
       "BearerAuth": {
-        "description": "Sendmux API key (smx_...)",
+        "description": "Qubrics API key (smx_...)",
         "scheme": "bearer",
         "type": "http"
       },
@@ -787,12 +787,12 @@
         "description": "Use the authorisation-code flow with S256 PKCE and resource=https://sendmux.ai/api. The user must grant Sending API access and email.send. OAuth access tokens authenticate HTTP requests; use a send-capable API key for SMTP.",
         "flows": {
           "authorizationCode": {
-            "authorizationUrl": "https://app.sendmux.ai/oauth/authorize",
-            "refreshUrl": "https://app.sendmux.ai/oauth/token",
+            "authorizationUrl": "https://app.qubrics.com/oauth/authorize",
+            "refreshUrl": "https://app.qubrics.com/oauth/token",
             "scopes": {
               "email.send": "Send email and manage temporary sending attachments"
             },
-            "tokenUrl": "https://app.sendmux.ai/oauth/token"
+            "tokenUrl": "https://app.qubrics.com/oauth/token"
           }
         },
         "type": "oauth2"
@@ -810,8 +810,8 @@
     }
   },
   "info": {
-    "description": "Send emails programmatically via the Sendmux email infrastructure. Every response carries an `X-Request-Id` header; errors include a `retryable` flag. 429 and 503 responses include `Retry-After`. Mutating endpoints accept an `Idempotency-Key` header for safe retries.",
-    "title": "Sendmux Sending API",
+    "description": "Send emails programmatically via the Qubrics email infrastructure. Every response carries an `X-Request-Id` header; errors include a `retryable` flag. 429 and 503 responses include `Retry-After`. Mutating endpoints accept an `Idempotency-Key` header for safe retries.",
+    "title": "Qubrics Sending API",
     "version": "1.0.0"
   },
   "openapi": "3.1.0",
@@ -961,7 +961,7 @@
     },
     "/emails/attachment-uploads/{upload_id}": {
       "put": {
-        "description": "Upload the exact binary bytes for a previously-created attachment upload URL. This operation uses the short-lived upload token header returned by POST /emails/attachment-uploads, not a Sendmux API key.",
+        "description": "Upload the exact binary bytes for a previously-created attachment upload URL. This operation uses the short-lived upload token header returned by POST /emails/attachment-uploads, not a Qubrics API key.",
         "operationId": "sendingCompleteAttachmentUpload",
         "parameters": [
           {
@@ -1804,7 +1804,7 @@
     },
     "/openapi.json": {
       "get": {
-        "description": "Auto-generated OpenAPI 3.1 spec for the Sendmux Sending API. Public endpoint (no authentication). Emits a weak ETag; clients may send `If-None-Match` to receive 304 Not Modified.",
+        "description": "Auto-generated OpenAPI 3.1 spec for the Qubrics Sending API. Public endpoint (no authentication). Emits a weak ETag; clients may send `If-None-Match` to receive 304 Not Modified.",
         "operationId": "sendingGetOpenApiSpec",
         "parameters": [
           {
@@ -1876,7 +1876,7 @@
   "servers": [
     {
       "description": "Production",
-      "url": "https://smtp.sendmux.ai/api/v1"
+      "url": "https://smtp.qubrics.com/api/v1"
     }
   ],
   "webhooks": {}

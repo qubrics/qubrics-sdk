@@ -63,7 +63,7 @@ class AttachmentsApi:
     ) -> AttachmentUploadResponse:
         """Upload bytes to an attachment upload URL
 
-        Upload the exact binary bytes for a previously-created attachment upload URL. This operation uses the short-lived upload token header returned by POST /emails/attachment-uploads, not a Sendmux API key.
+        Upload the exact binary bytes for a previously-created attachment upload URL. This operation uses the short-lived upload token header returned by POST /emails/attachment-uploads, not a Qubrics API key.
 
         :param content_length: Exact number of bytes in the binary request body. (required)
         :type content_length: int
@@ -153,7 +153,7 @@ class AttachmentsApi:
     ) -> ApiResponse[AttachmentUploadResponse]:
         """Upload bytes to an attachment upload URL
 
-        Upload the exact binary bytes for a previously-created attachment upload URL. This operation uses the short-lived upload token header returned by POST /emails/attachment-uploads, not a Sendmux API key.
+        Upload the exact binary bytes for a previously-created attachment upload URL. This operation uses the short-lived upload token header returned by POST /emails/attachment-uploads, not a Qubrics API key.
 
         :param content_length: Exact number of bytes in the binary request body. (required)
         :type content_length: int
@@ -243,7 +243,7 @@ class AttachmentsApi:
     ) -> RESTResponseType:
         """Upload bytes to an attachment upload URL
 
-        Upload the exact binary bytes for a previously-created attachment upload URL. This operation uses the short-lived upload token header returned by POST /emails/attachment-uploads, not a Sendmux API key.
+        Upload the exact binary bytes for a previously-created attachment upload URL. This operation uses the short-lived upload token header returned by POST /emails/attachment-uploads, not a Qubrics API key.
 
         :param content_length: Exact number of bytes in the binary request body. (required)
         :type content_length: int

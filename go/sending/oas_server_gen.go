@@ -11,7 +11,7 @@ type Handler interface {
 	// SendingCompleteAttachmentUpload implements sendingCompleteAttachmentUpload operation.
 	//
 	// Upload the exact binary bytes for a previously-created attachment upload URL. This operation uses
-	// the short-lived upload token header returned by POST /emails/attachment-uploads, not a Sendmux API
+	// the short-lived upload token header returned by POST /emails/attachment-uploads, not a Qubrics API
 	// key.
 	//
 	// PUT /emails/attachment-uploads/{upload_id}
@@ -32,7 +32,7 @@ type Handler interface {
 	SendingGetAttachment(ctx context.Context, params SendingGetAttachmentParams) (SendingGetAttachmentRes, error)
 	// SendingGetOpenApiSpec implements sendingGetOpenApiSpec operation.
 	//
-	// Auto-generated OpenAPI 3.1 spec for the Sendmux Sending API. Public endpoint (no authentication).
+	// Auto-generated OpenAPI 3.1 spec for the Qubrics Sending API. Public endpoint (no authentication).
 	// Emits a weak ETag; clients may send `If-None-Match` to receive 304 Not Modified.
 	//
 	// GET /openapi.json
