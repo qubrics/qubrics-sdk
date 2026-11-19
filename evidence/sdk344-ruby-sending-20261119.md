@@ -121,3 +121,25 @@ origin to the Skills owner. No guard override or unchanged-input retry.
 Fresh exact-candidate default acceptance and Sending PR CI remain gates.
 Calendar exposure remains **NO**; holding the gem unpublished is available.
 No merge, upload, tag, queue or environment action is authorised here.
+
+## Default gate cleared and source refresh
+
+On 19 November 2026 the Skills owner published reviewed v2.0.6 at
+`9e2659c9dba3efd943190f2541016d0548db7201`. The unchanged default selection
+downloaded its sole actual acceptance asset, whose SHA256 is
+`809a7d4378fb08eed5a0ecd16b59448dc6aebb31c7c6a144e5e29ed7949543c6`.
+Official release-receipt binding passed. Fresh exact Sending candidate
+`729ae54ac9b78926f7a32732ddf939bee6795f8b` then passed live equality and
+all 22 results, digest
+`a95d06d1568b98008bede98c6835b3dae30c9ffe54058e25ae355e2bf363316f`.
+Logs/receipts are in MAIN artifacts `default-v206-b25a7cbc/sending-guard.log`
+and `default-v206-sending/receipts/`. No pin, fallback or same-input retry.
+Normal exact-head CI `44485864018` also completed successfully.
+
+After authorised parent PR385 reached main as `1a833169`, this source
+normally merges that main commit without a force-push. It gains the approved
+checksum-verified CI cache and its measured evidence. Packaged Sending
+source and metadata remain byte-identical to `729ae54a`; the frozen gem
+remains 36,352 bytes with SHA256 `8dd5350a…bee462`. Fresh default acceptance,
+normal exact-head CI and review on the resulting successor remain required.
+Calendar exposure remains NO, and no exact-file publication approval exists.

@@ -66,8 +66,33 @@ and its source-byte proof remain unchanged. Source undo is normal revert.
 Fresh exact-head CI/default acceptance still remain required; no release
 approval follows from source preparation.
 
-Status: Prepared locally, uncommitted and unpublished. No external writes, commit, push, PR, CI dispatch, merge, tag, queue, environment approval or upload occurred. Parent/root integration owns all remaining release work.
+Initial preparation status: local and unpublished; that isolated proof made no external writes, commit, push, PR, CI dispatch, merge, tag, queue, environment approval or upload. Root integration below owns the remaining source and release gates.
 
 Default Skills v2.0.5 is missing 15 producer contract reviews, already routed by root to skills34. No default retry, pin or fallback was attempted. Default acceptance and exact-head CI remain pending. Native Ruby 3.4.1 proof is not CI Ruby 3.4.12 proof. Full polyglot/release checks were outside this isolated authorised slice.
 
 Consumer/transitive caches and duplicate public gem downloads are removed after proof, with absence verified before `cleanup.log` records the retained gem hash. The first forced-remove command was rejected by the command guard; its named safer non-forced removal succeeded. No source check failed or source correction occurred. Frozen SDK gem, logs and public JSON metadata remain. Exact source write leases are released at handoff. No source/worktree cleanup or root-owned state mutation.
+
+## Default acceptance and cache-enabled source refresh
+
+Root integration committed SDK version 3.0.0, matching shared manifest and
+official native lock, at `e8456759d4e99f5a039de5fcc5cc08ffc7d49d51`.
+Independent Spec and Standards reviews reported zero findings each.
+The unchanged default selector downloaded latest Skills v2.0.6 at
+`9e2659c9dba3efd943190f2541016d0548db7201`, verified the actual released
+receipt and accepted all 22 results on that exact SDK head, including live
+OpenAPI equality. Candidate digest:
+`df4ce32a2055e42e63405f8b36367a0eb2b73b45afa8ffde2ae182f47b6e19bf`.
+Raw MAIN artifacts: `default-v206-sdk/receipts/` and
+`default-v206-b25a7cbc/sdk-guard.log`. No workflow pin or fallback.
+
+The parent refresh normally merges Mailbox successor
+`5d398e0e066635e847b5a7ede06693bd5515d38f`, which includes Sending
+`ec5fc13f` and approved main/cache commit `1a833169`. Main CI
+`44492953710` passed all 35 jobs. No force-push is used. The complete
+`packages/ruby/` diff from `e8456759` is empty, preserving the exact SDK
+archive and all 371 runtime files in the installed transitive proof above.
+The SDK gem remains 9,216 bytes, SHA256 `622b6aea…9e4dd91`, with no calendar
+client code or post-install announcement. Fresh successor-head default
+acceptance, normal PR CI and review remain required. Main merge and exact
+file publication remain operator-gated; Sending and Mailbox replacements
+must be public before the SDK publication can resolve its dependencies.

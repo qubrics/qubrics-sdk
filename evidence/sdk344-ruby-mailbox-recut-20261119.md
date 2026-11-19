@@ -1,10 +1,10 @@
 # Ruby Mailbox calendar-free source qualification
 
-Status: source preparation, not merged or published. Shared release
-metadata is integrated. Producers and docs are now live and equal; source
-rebased onto Sending successor `b7dad6ca42ee59c747bf14c11cc4619fcc3b742f`.
-Fresh default acceptance and PR CI remain required.
-No push, CI dispatch, PR, tag, queue, environment or registry write occurred.
+Status: PR387 source qualification, not merged to main or published. Shared
+release metadata is integrated; producers and docs are live and equal.
+The initial qualification below used Sending successor `b7dad6ca`.
+The final section records the cache-enabled parent refresh and fresh gates.
+No tag, queue, environment or registry write occurred.
 
 Goal: qualify Ruby `qubrics-mailbox 3.0.0` without calendar client code for
 #344, preserving the operator's separate exact-file publication gate.
@@ -49,7 +49,7 @@ Fresh raw receipts in MAIN `ruby-mailbox-integration-20261119/`:
 `python-stat-from-a326bc92.txt` is empty: `python/` is unchanged from
 `a326bc923fff448470d908bb527afaaa35f6d739`.
 
-Default Skills v2.0.5 currently lacks compatibility evidence for 15 of 22
+At initial qualification, default Skills v2.0.5 lacked evidence for 15 of 22
 changed producer pairs on the parent source. The owner handoff is MAIN
 task `producer-sync-skills-origin-20261119.md`. This candidate still needs
 fresh exact-source default acceptance and normal PR CI. Calendar exposure
@@ -98,6 +98,30 @@ errors or skips**. Existing deprecated aliases and real model construction
 still pass. No assertion was removed, loosened or skipped.
 Focused RuboCop: **5 files inspected, no offences detected**.
 `git diff --check`: exit 0.
+
+## Released default acceptance and parent refresh
+
+Skills v2.0.6 is latest at
+`9e2659c9dba3efd943190f2541016d0548db7201`; its actual released acceptance
+asset SHA256 is
+`809a7d4378fb08eed5a0ecd16b59448dc6aebb31c7c6a144e5e29ed7949543c6`.
+The unchanged default selection and official release binding passed. Fresh
+exact Mailbox candidate `a0ef57d431959257ddb2da30cee6b6e941fba9d3` passed
+live equality and all 22 results, candidate digest
+`458b9389590b4bb884e3e963fa0d2494d83a5689ba1a21b3f98af6dfe12e7f35`.
+Raw MAIN artifacts: `default-v206-mailbox/receipts/` and
+`default-v206-b25a7cbc/mailbox-guard.log`. Normal CI `44486055882` attempt 2
+passed after the single authorised Maven relief rerun; no further rerun.
+
+After PR385 reached main as `1a833169` with main CI `44492953710` green
+35 of 35, this source normally merges the refreshed Sending parent
+`ec5fc13f`. It receives the reviewed CI cache and measured evidence without
+a force-push. Packaged Mailbox and Sending source remain unchanged from
+`a0ef57d4`; the exact frozen Mailbox archive above remains 110,592 bytes,
+SHA256 `7577dd99…26d602`. Existing native/source/archive proofs therefore
+continue to bind the same bytes. No calendar endpoint or type is added.
+Fresh exact-head CI/default acceptance and review remain required on the
+successor. No publication approval follows; holding the gem stays available.
 
 ## Actual built gem and isolated consumer
 
