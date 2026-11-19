@@ -80,7 +80,7 @@ module Qubrics::Sending::Generated
     end
 
     # OpenAPI 3.1 specification
-    # Auto-generated OpenAPI 3.1 spec for the Sendmux Sending API. Public endpoint (no authentication). Emits a weak ETag; clients may send `If-None-Match` to receive 304 Not Modified.
+    # Auto-generated OpenAPI 3.1 spec for the Qubrics Sending API. Public endpoint (no authentication). Emits a weak ETag; clients may send `If-None-Match` to receive 304 Not Modified.
     # @param [Hash] opts the optional parameters
     # @option opts [String] :if_none_match Weak ETag from a previous response. When it matches the current resource, the server returns 304 Not Modified with no body.
     # @return [Hash<String, Object>]
@@ -90,7 +90,7 @@ module Qubrics::Sending::Generated
     end
 
     # OpenAPI 3.1 specification
-    # Auto-generated OpenAPI 3.1 spec for the Sendmux Sending API. Public endpoint (no authentication). Emits a weak ETag; clients may send &#x60;If-None-Match&#x60; to receive 304 Not Modified.
+    # Auto-generated OpenAPI 3.1 spec for the Qubrics Sending API. Public endpoint (no authentication). Emits a weak ETag; clients may send &#x60;If-None-Match&#x60; to receive 304 Not Modified.
     # @param [Hash] opts the optional parameters
     # @option opts [String] :if_none_match Weak ETag from a previous response. When it matches the current resource, the server returns 304 Not Modified with no body.
     # @return [Array<(Hash<String, Object>, Integer, Hash)>] Hash<String, Object> data, response status code and response headers

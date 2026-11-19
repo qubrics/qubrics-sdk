@@ -32,7 +32,7 @@ type Invoker interface {
 	// SendingCompleteAttachmentUpload invokes sendingCompleteAttachmentUpload operation.
 	//
 	// Upload the exact binary bytes for a previously-created attachment upload URL. This operation uses
-	// the short-lived upload token header returned by POST /emails/attachment-uploads, not a Sendmux API
+	// the short-lived upload token header returned by POST /emails/attachment-uploads, not a Qubrics API
 	// key.
 	//
 	// PUT /emails/attachment-uploads/{upload_id}
@@ -53,7 +53,7 @@ type Invoker interface {
 	SendingGetAttachment(ctx context.Context, params SendingGetAttachmentParams) (SendingGetAttachmentRes, error)
 	// SendingGetOpenApiSpec invokes sendingGetOpenApiSpec operation.
 	//
-	// Auto-generated OpenAPI 3.1 spec for the Sendmux Sending API. Public endpoint (no authentication).
+	// Auto-generated OpenAPI 3.1 spec for the Qubrics Sending API. Public endpoint (no authentication).
 	// Emits a weak ETag; clients may send `If-None-Match` to receive 304 Not Modified.
 	//
 	// GET /openapi.json
@@ -128,7 +128,7 @@ func (c *Client) requestURL(ctx context.Context) *url.URL {
 // SendingCompleteAttachmentUpload invokes sendingCompleteAttachmentUpload operation.
 //
 // Upload the exact binary bytes for a previously-created attachment upload URL. This operation uses
-// the short-lived upload token header returned by POST /emails/attachment-uploads, not a Sendmux API
+// the short-lived upload token header returned by POST /emails/attachment-uploads, not a Qubrics API
 // key.
 //
 // PUT /emails/attachment-uploads/{upload_id}
@@ -684,7 +684,7 @@ func (c *Client) sendSendingGetConnection(ctx context.Context, params SendingGet
 
 // SendingGetOpenApiSpec invokes sendingGetOpenApiSpec operation.
 //
-// Auto-generated OpenAPI 3.1 spec for the Sendmux Sending API. Public endpoint (no authentication).
+// Auto-generated OpenAPI 3.1 spec for the Qubrics Sending API. Public endpoint (no authentication).
 // Emits a weak ETag; clients may send `If-None-Match` to receive 304 Not Modified.
 //
 // GET /openapi.json
