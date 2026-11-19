@@ -80,3 +80,44 @@ required; this pre-commit evidence does not claim they have completed.
 Source undo is a normal revert. Published RubyGems versions cannot be
 overwritten or reused. A separately authorised yank limits new resolution
 but cannot recall downloads or provide a full rollback. No agent upload.
+
+## Qualification after deployed-producer sync
+
+Docs75's joint receipt proves SMTP v1.2.128 and App v1.8.363 live and equal
+to docs main `0775e2f21428b215165fd25a0bf1894dcf339d46`. Existing generators
+consumed those exact emitted inputs in producer-sync commit `c8549be2`.
+See `evidence/sdk344-producer-sync-20261119.md`. The normal PR385 CI on
+that commit completed **34/34 successful jobs, zero skipped jobs** in run
+`44483116772`; no rerun, pin, fallback or workflow change was used.
+Independent source reviews found zero Spec defects and one Standards
+documentation defect: the root Ruby table now says “Target version” to
+avoid presenting unpublished majors as current native source versions.
+That one-label fix is `6a9e8dde`; no packaged Sending file changes with it.
+
+Rebuilt exact files supersede the earlier frozen table above:
+
+| File | Bytes | SHA256 |
+| --- | ---: | --- |
+| qubrics-sending-2.0.0.gem | 36,352 | `8dd5350aebf55dd588cc2c350dc906c3bb635f608b20dc7f71f0774455bee462` |
+| sendmux-sending-2.0.0.gem | 4,096 | `fc1ad0170f578ddfeb5156c5c5a893f0bfa5d029a45f082ec11b02ffddc02c6f` |
+
+Absolute directory: `/Users/rj/Desktop/GIT-REPOS/sendmux-sdk/.claude/artifacts/rebrand-qubrics-sdk344/ruby-sending-b7dad6ca-20261119/gems/`.
+Fresh isolated installation and existing native tests pass **30 tests,
+213 assertions, zero skips**. All 44 packaged files, including 41 runtime
+files, match source and installed bytes. Both cached archives match the
+frozen hashes. Calendar paths/content are absent, default host is
+`https://smtp.qubrics.com/api/v1`, Core 2.0.0 resolves, and the pointer is
+silent with precisely its replacement dependency. Raw receipts:
+`ruby-sending-b7dad6ca-20261119/{installed-native.log,provenance.json}`.
+
+The unchanged default selector resolves reviewed Skills v2.0.5 at
+`05e24366cebc2caf2b5c395727414e634ba7bf8c`; release receipt binding passes.
+The live OpenAPI stage passes, but exact-source compatibility fails on
+new producer contract fingerprints. Fifteen of 22 pairs need Skills-origin
+review evidence. First failure: `published/email-for-ai-agents` contract
+`f81288de22ec063dabed513a35ae2898641de1517a3ca321ab2eb02b0ce9b9f6`.
+`producer-sync-skills-origin-20261119.md` in MAIN task state routes the
+origin to the Skills owner. No guard override or unchanged-input retry.
+Fresh exact-candidate default acceptance and Sending PR CI remain gates.
+Calendar exposure remains **NO**; holding the gem unpublished is available.
+No merge, upload, tag, queue or environment action is authorised here.
