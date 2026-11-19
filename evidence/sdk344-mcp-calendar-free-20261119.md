@@ -56,6 +56,14 @@ patterns bypass exclusions, so only runtime JSON is marked as an artifact).
   names, regenerated contract provenance and rebuilt. Final discovery,
   metadata and absence checks pass 3/3. Both final archives contain 25
   Python/JSON members, zero calendar text, and zero raw producer JSON files.
+- Initial exact-head CI44523364859 passed 34/35 jobs; verify alone failed
+  static live-E2E coverage because ten scenarios still named removed MCP
+  adapters (failed log:29350-29361). Regenerated scenarios and matrix with
+  the existing writer; only those adapters become null. SDK/CLI scenarios,
+  assertions and safety gates remain. Direct coverage passes128 API plus
+  two custom operations. Full static safety/audit check requires built
+  workspace SDK exports; initial local invocation lacked them, corrected
+  by the documented dependency build. Final check is running separately.
 - Fresh isolated no-cache wheel install resolves public qubrics-core
   2.0.0. pip check passes. Installed load_contract equals the real factory
   tools/list result: 130 tools, no calendar tools, paths or schema names;
