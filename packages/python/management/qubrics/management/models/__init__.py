@@ -20,8 +20,6 @@ from qubrics.management.models.api_error_meta import ApiErrorMeta
 from qubrics.management.models.balance import Balance
 from qubrics.management.models.balance_auto_topup import BalanceAutoTopup
 from qubrics.management.models.balance_response import BalanceResponse
-from qubrics.management.models.calendar_webhook_event_data import CalendarWebhookEventData
-from qubrics.management.models.calendar_webhook_event_payload import CalendarWebhookEventPayload
 from qubrics.management.models.connection import Connection
 from qubrics.management.models.connection_credential import ConnectionCredential
 from qubrics.management.models.connection_mailboxes_inner import ConnectionMailboxesInner

@@ -9,6 +9,55 @@ import pytest
 from qubrics.management import WebhookEventData, WebhookEventPayload
 
 
+def test_management_withholds_calendar_but_preserves_mail_webhooks() -> None:
+    import qubrics.management as management
+    import qubrics.management.models as models
+
+    assert not [name for name in dir(management) if "calendar" in name.lower()]
+    assert not [name for name in dir(models) if "calendar" in name.lower()]
+    with pytest.raises(ValueError):
+        management.WebhookCreateBody(url="https://example.com/hooks", event_types=["calendar.changed"])
+    body = management.WebhookCreateBody(url="https://example.com/hooks", event_types=["message.received"])
+    assert body.event_types == ["message.received"]
+
+
+@pytest.mark.parametrize("event", ["calendar.changed", "message.received"])
+def test_existing_webhook_subscription_event_labels_round_trip(event: str) -> None:
+    from qubrics.management import WebhookSubscription
+
+    body: dict[str, Any] = {
+        "id": "hook_test", "name": None, "url": "https://example.com/hooks",
+        "event_types": [event], "filters": {"mailbox_ids": []}, "enabled": True,
+        "failing": False, "created_at": "2026-11-19T00:00:00Z", "updated_at": "2026-11-19T00:00:00Z",
+    }
+    decoded = WebhookSubscription.from_dict(body)
+    assert decoded is not None
+    assert decoded.to_dict() == body
+
+
+@pytest.mark.parametrize("event", ["calendar.changed", "message.received"])
+def test_retained_delivery_payload_round_trips_as_opaque_data(event: str) -> None:
+    from qubrics.management import WebhookDeliveryPayload
+
+    document = json.loads((Path(__file__).resolve().parents[1] / "mcp/qubrics/mcp/openapi/openapi-app.json").read_text())
+    payload = document["components"]["schemas"]["WebhookEventPayload"]["example"]
+    if event == "calendar.changed":
+        payload["type"] = event
+        payload["data"] = {
+            "mailbox_id": "mbx_test", "resource": "event", "created": [], "updated": ["event_test"],
+            "destroyed": [], "old_state": "state_old", "new_state": "state_new", "has_more": False, "sync_required": False,
+        }
+    body: dict[str, Any] = {
+        "id": "delivery_test", "event_id": payload["id"], "event_type": event,
+        "delivery_attempt": 1, "created_at": "2026-11-19T00:00:00Z",
+        "expires_at": "2026-11-20T00:00:00Z", "payload": payload,
+    }
+    decoded = WebhookDeliveryPayload.from_dict(body)
+    assert decoded is not None
+    assert decoded.payload == payload
+    assert decoded.to_dict() == body
+
+
 @pytest.mark.parametrize("correlation", [{}, {"qubrics_message_id": None}, {"qubrics_message_id": "message_compatibility"}], ids=["omitted", "null", "string"])
 @pytest.mark.parametrize("nested", [False, True], ids=["data", "payload"])
 def test_webhook_message_alias_preserves_presence_and_value(correlation: dict[str, Any], nested: bool) -> None:

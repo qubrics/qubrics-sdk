@@ -2,6 +2,7 @@ import { cpSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFi
 import { basename, join } from "node:path";
 import { spawnSync } from "node:child_process";
 import { planDeprecatedModelAliases, reportPendingAliases } from "./deprecated-model-aliases.mjs";
+import { retainedManagementSchemaRefs, withholdManagementCalendar } from "./withhold-management-calendar.mjs";
 
 const root = process.cwd();
 const outputRoot = join(root, ".tmp", "ruby-codegen");
@@ -142,6 +143,7 @@ console.log("Generated Ruby SDK packages");
 
 function writeFilteredSpec(surface) {
   const source = JSON.parse(readFileSync(join(root, surface.spec), "utf8"));
+  if (surface.name === "management") withholdManagementCalendar(source);
   source.info.title = source.info.title.replaceAll("Sendmux", "Qubrics");
   source.info.description = source.info.description.replaceAll("Sendmux", "Qubrics");
   prepareNilSafeValidation(source, surface);
@@ -167,7 +169,7 @@ function writeFilteredSpec(surface) {
   }
 
   const outputPath = join(outputRoot, `${surface.name}.openapi-generator.codegen.json`);
-  writeFileSync(outputPath, `${JSON.stringify(pruneComponents({ ...source, paths, servers: [{ url: surface.defaultBaseUrl }] }), null, 2)}\n`);
+  writeFileSync(outputPath, `${JSON.stringify(pruneComponents({ ...source, paths, servers: [{ url: surface.defaultBaseUrl }] }, surface.name === "management" ? retainedManagementSchemaRefs : []), null, 2)}\n`);
   return outputPath;
 }
 
@@ -207,8 +209,8 @@ function prepareNilSafeValidation(document, surface) {
   };
 }
 
-function pruneComponents(document) {
-  const refs = new Set();
+function pruneComponents(document, roots = []) {
+  const refs = new Set(roots);
   collectRefs(document.paths, refs);
 
   for (const ref of refs) {

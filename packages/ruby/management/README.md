@@ -22,8 +22,6 @@ For OAuth, use a REST access token with the scopes and mailbox access required b
 
 ## Installation
 
-These commands target the Qubrics release of `qubrics-management`. Until it is published, install `sendmux-management` with its existing require paths and `Sendmux` module.
-
 ```sh
 gem install qubrics-management
 ```

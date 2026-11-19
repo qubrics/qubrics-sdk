@@ -1,5 +1,12 @@
 # Changelog
 
+## 3.0.0
+
+### Changed
+
+* Import the client from `qubrics.management`.
+* Calendar webhook models and the `calendar.changed` event are excluded. Mail webhook models and events remain available.
+
 ## [2.0.1](https://github.com/Sendmux/sendmux-sdk/compare/python-management-v2.0.0...python-management-v2.0.1) (2026-09-21)
 
 

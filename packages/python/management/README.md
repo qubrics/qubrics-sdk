@@ -21,8 +21,6 @@ For OAuth, use a REST access token with the scopes and mailbox access required b
 
 ## Installation
 
-These commands target the Qubrics release of `qubrics-management`. Until it is published, install `sendmux-management` with its existing import names.
-
 ```sh
 pip install qubrics-management
 ```

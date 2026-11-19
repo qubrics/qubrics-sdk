@@ -14,7 +14,7 @@
 """  # noqa: E501
 
 
-__version__ = "2.0.1"
+__version__ = "3.0.0"
 
 # Define package exports
 __all__ = [
@@ -44,8 +44,6 @@ __all__ = [
     "Balance",
     "BalanceAutoTopup",
     "BalanceResponse",
-    "CalendarWebhookEventData",
-    "CalendarWebhookEventPayload",
     "Connection",
     "ConnectionCredential",
     "ConnectionMailboxesInner",
@@ -209,8 +207,6 @@ from qubrics.management.models.api_error_meta import ApiErrorMeta as ApiErrorMet
 from qubrics.management.models.balance import Balance as Balance
 from qubrics.management.models.balance_auto_topup import BalanceAutoTopup as BalanceAutoTopup
 from qubrics.management.models.balance_response import BalanceResponse as BalanceResponse
-from qubrics.management.models.calendar_webhook_event_data import CalendarWebhookEventData as CalendarWebhookEventData
-from qubrics.management.models.calendar_webhook_event_payload import CalendarWebhookEventPayload as CalendarWebhookEventPayload
 from qubrics.management.models.connection import Connection as Connection
 from qubrics.management.models.connection_credential import ConnectionCredential as ConnectionCredential
 from qubrics.management.models.connection_mailboxes_inner import ConnectionMailboxesInner as ConnectionMailboxesInner

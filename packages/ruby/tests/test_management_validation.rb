@@ -2,8 +2,23 @@
 
 require 'minitest/autorun'
 require 'qubrics/management'
+require_relative 'management_retained_webhook_payload_test'
 
 class QubricsRubyManagementValidationTest < Minitest::Test
+  def test_calendar_webhooks_withheld_and_mail_webhooks_preserved
+    generated = Qubrics::Management::Generated
+    assert_empty generated.constants.grep(/Calendar/)
+    client = Qubrics::Management::Client.new(api_key: 'smx_root_test')
+    event = 'calendar.changed'
+    assert_raises(ArgumentError) { client.webhooks.management_list_delivery('hook_test', event_type: event) }
+    body = generated::WebhookCreateBody.new(url: 'https://example.com/hooks', event_types: ['message.received'])
+    assert_equal ['message.received'], body.event_types
+    snapshot = File.expand_path('../../python/mcp/qubrics/mcp/openapi/openapi-app.json', __dir__)
+    payload = JSON.parse(File.read(snapshot)).dig('components', 'schemas', 'WebhookEventPayload', 'example')
+    decoded = generated::WebhookEventPayload.build_from_hash(payload)
+    assert_equal payload, JSON.parse(decoded.to_hash.to_json)
+  end
+
   def test_mailbox_email_validation_matches_the_full_value
     ["x\nvalid@example.com", "valid@example.com\n", "valid@example.com\r", "valid@example.com\r\n"].each do |email|
       assert_raises(ArgumentError) do
