@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.0.0
+
+- Exclude calendar tools, paths and schemas from the distribution.
+- Preserve mailbox, management and sending tools and credential compatibility.
+
 ## [2.2.0](https://github.com/Sendmux/sendmux-sdk/compare/python-mcp-v2.1.3...python-mcp-v2.2.0) (2026-09-30)
 
 

@@ -134,3 +134,28 @@ passed all nine applicable reference-document rubric lines; `humanize`
 ran once with no prose rewrite. Protected package names, commands, versions,
 publication qualifiers and calendar holds remain exact. No tests were
 added, changed, removed or skipped for this documentation update.
+
+## 20 November source refresh
+
+PR390 c86bfb74 finished CI44518010194 attempt2 SUCCESS35/35. A new default
+selection of Skills v2.0.8 then passed live OpenAPI equality but rejected
+the old candidate MCP source fingerprint d13efb6e: its pre-PR394 MCP contract
+still advertises calendar tools, unlike the reviewed latest source. Raw
+failure: MAIN artifacts/default-ruby-v208-20261120/guard.log. No retry,
+fallback, workflow/checker change or manual compatibility disposition.
+
+Normal origin/main086e6c40 integration brings the accepted calendar-free MCP
+origin into this candidate. The shared manifest conflict retains both the
+Ruby SDK3.0.0 candidate and already-public MCP3.0.0; neither entry rolls back.
+No Ruby package source or frozen gem bytes change. Exact source/default/CI
+must qualify this new commit before any normal merge or operator upload.
+
+Root README public facts now include measured PyPI qubrics-mcp3.0.0 and its
+working install command; the SDK and LangChain publication qualifiers stay.
+Public receipt: MAIN task mcp3-public-20261120.md, exact approved hashes,
+fresh no-cache install/contract/130 tools/default hosts/calendar absence.
+Fresh-reader critique passes every applicable rubric line for all three
+changed reference lines. Humanize method applied once, no prose rewrite;
+protected names, commands, versions and publication qualifiers match the
+verified source, with no move announcement. Diff whitespace check passes.
+Frozen gem remains9216B/SHA256622b6aeacb5b069a6c2f3fc7bc02763b17a9478b0a2b2e0e6233a65e29e4dd91.

@@ -23,4 +23,4 @@ USER sendmux
 
 EXPOSE 8765
 
-CMD ["sendmux-mcp-hosted"]
+CMD ["qubrics-mcp-hosted"]
