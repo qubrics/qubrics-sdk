@@ -96,3 +96,41 @@ client code or post-install announcement. Fresh successor-head default
 acceptance, normal PR CI and review remain required. Main merge and exact
 file publication remain operator-gated; Sending and Mailbox replacements
 must be public before the SDK publication can resolve its dependencies.
+
+## Public dependencies and README refresh, 19 November 2026
+
+The operator published Sending 2.0.0 and Mailbox 3.0.0 once each. Official
+RubyGems metadata reports both unyanked. Their downloaded archives match
+the full SHA256, size and bytes of the frozen inputs in the table above.
+Fresh isolated public installs, imports, exact versions, dependency
+resolution and canonical default hosts pass. Sending has 41 runtime files;
+Mailbox has 163. Neither contains calendar code or a post-install message.
+Raw MAIN artifacts: `ruby-sending-public-20261119/` and
+`ruby-mailbox-public-20261119/` (version metadata, headers, public archives,
+install and smoke logs). No agent upload, retry or yank occurred.
+
+The SDK frozen archive then installed successfully with all four dependencies
+fetched from RubyGems. All five installed archives match the approved full
+hashes and sizes in the table above. All 371 runtime files are calendar-free;
+versions, `Qubrics::Sdk` alias, native dependency resolution and the three
+canonical client default hosts pass. No network API mutation was made.
+Raw MAIN artifacts: `ruby-sdk-public-deps-20261119/{install.log,smoke.log}`.
+This proves the unpublished SDK candidate's public dependencies, not SDK
+publication. Consumer/spec caches (4,968 KiB) were removed; absence verified.
+
+The root README now lists the publicly available Sending and Mailbox names,
+install commands and publication status. It keeps the umbrella SDK on the
+published legacy name until a separate SDK publication. Package source and
+the frozen 9,216-byte SDK archive remain unchanged from `a9078236`.
+Fresh exact-head CI/default acceptance and source merge/main gates remain
+required after this documentation update. No tag, queue, environment or
+publication action is authorised by this evidence.
+
+Scoped independent review: Standards zero findings; Spec identified one
+remaining legacy Sending install command in the root Quick-start, now
+corrected to `gem install qubrics-sending`. A sibling search found only
+intentional historical Python mapping rows afterward. Fresh-reader polish
+passed all nine applicable reference-document rubric lines; `humanize`
+ran once with no prose rewrite. Protected package names, commands, versions,
+publication qualifiers and calendar holds remain exact. No tests were
+added, changed, removed or skipped for this documentation update.
