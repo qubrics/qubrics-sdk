@@ -111,6 +111,8 @@ function loadRustDecisions() {
     const hash = createHash("sha256").update(readFileSync(join(inputDir, file))).digest("hex");
     hashes[file] = hash;
     paths[file] = `packages/python/mcp/qubrics/mcp/openapi/${file}`;
+    const repositoryHash = existsSync(paths[file]) ? createHash("sha256").update(readFileSync(paths[file])).digest("hex") : undefined;
+    if (repositoryHash !== hash) failures.push(`Rust ${file} repository snapshot differs from input`);
     const surface = file === "openapi-app.json" ? "APP" : "SENDING";
     const recorded = provenance.match(new RegExp(`${surface}_OPENAPI_SHA256: &str =\\s*"([^"]+)"`))?.[1];
     const recordedPath = provenance.match(new RegExp(`${surface}_OPENAPI_PATH: &str =\\s*"([^"]+)"`))?.[1];

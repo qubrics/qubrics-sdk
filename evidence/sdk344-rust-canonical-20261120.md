@@ -85,6 +85,22 @@ Review fix logs: `provenance-path-red.log`, `provenance-write.log`,
 `rust-release-fixtures-final.log`. Review dispositions: `spec-review.md`
 and `standards-review.md` in the same raw directory.
 
+Automated PR review found an additional path/hash pairing escape: a
+different `OPENAPI_INPUT_DIR` could supply bytes unlike the canonical
+repository file whose path was recorded. The original fixture copied no
+repository snapshot, so it tested hashes without proving that pairing.
+A new case in the existing fixture failed pre-fix with
+`provenance accepted different repository snapshot bytes` (exit 1).
+The shared loader now compares actual canonical-file bytes with the input
+in both check and writer modes, rejecting mismatch before any writes.
+Fixtures carry the repository snapshots as well as inputs, matching the
+real MCP-generation sequence. All four tests pass, zero skips, including
+atomic refusal in both modes and the original route/pin protections.
+The real docs checkout and SDK snapshots have identical current hashes.
+Logs: `provenance-bytes-red.log`, `provenance-bytes-green.log`,
+`surface-final.log`. The first PR head's CI passed 35/35; the review-fix
+head still requires its own exact-source checks and publication archive.
+
 Exact candidate/default Skills receipt, independent review, PR/main CI,
 actual archive filename/bytes/SHA and archive inspection will be recorded
 when measured. No package is claimed public by this source PR. Root README
