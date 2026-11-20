@@ -12,6 +12,13 @@ license = "MIT"
 classifiers = ["Development Status :: 7 - Inactive"]
 dependencies = ["qubrics-mcp>=3.0.0,<4.0.0"]
 
+[project.scripts]
+sendmux-mcp = "qubrics.mcp.cli:main"
+sendmux-mcp-hosted = "qubrics.mcp.hosted:run_hosted"
+sendmux-mcp-mailbox = "qubrics.mcp.cli:main_mailbox"
+sendmux-mcp-management = "qubrics.mcp.cli:main_management"
+sendmux-mcp-sending = "qubrics.mcp.cli:main_sending"
+
 [project.urls]
 Repository = "https://github.com/qubrics/qubrics-sdk"
 
