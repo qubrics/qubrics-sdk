@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.0
+
+* Sending defaults to `https://smtp.qubrics.com/api/v1`; Mailbox and Management default to `https://app.qubrics.com/api/v1`.
+* Includes non-calendar clients, raw JSON helpers and the existing authentication and request validation.
+
 ## [0.6.0](https://github.com/qubrics/qubrics-sdk/compare/rust-v0.5.1...rust-v0.6.0) (2026-11-11)
 
 ### Release scope

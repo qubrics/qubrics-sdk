@@ -95,7 +95,7 @@ function provenanceFixture() {
   return { root, inputDir };
 }
 
-test("explicit Rust provenance writer refreshes only pins after metadata-only snapshot change", async () => {
+test("explicit Rust provenance writer repairs paths and refreshes only pins after metadata-only snapshot change", async () => {
   const fixture = provenanceFixture();
   const { root, inputDir } = fixture;
   try {
@@ -103,9 +103,14 @@ test("explicit Rust provenance writer refreshes only pins after metadata-only sn
     const rustPath = join(root, "rust/src/generated/mod.rs");
     const decisions = JSON.parse(readFileSync(decisionsPath, "utf8"));
     const rust = readFileSync(rustPath, "utf8");
+    const stalePaths = rust.replaceAll("qubrics/mcp/openapi/", "sendmux_mcp/openapi/");
+    assert.notEqual(stalePaths, rust);
+    writeFileSync(rustPath, stalePaths);
     const before = await check(fixture);
     assert.notEqual(before.code, 0, "ordinary gate accepted stale provenance");
     assert.match(before.output, /Rust openapi-app.json provenance hash drift/);
+    assert.match(before.output, /Rust openapi-app.json provenance path drift/);
+    assert.match(before.output, /Rust openapi-sending.json provenance path drift/);
     const generated = await check({ ...fixture, writeProvenance: true });
     assert.equal(generated.code, 0, generated.output);
     let expectedRust = rust;

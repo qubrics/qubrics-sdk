@@ -3,9 +3,9 @@ use reqwest::Client;
 use serde::{Deserialize, Serialize};
 use std::collections::BTreeMap;
 
-pub const DEFAULT_BASE_URL: &str = "https://smtp.sendmux.ai/api/v1";
+pub const DEFAULT_BASE_URL: &str = "https://smtp.qubrics.com/api/v1";
 
-/// Async Sendmux Sending API client.
+/// Async Qubrics Sending API client.
 #[derive(Clone)]
 pub struct SendingClient {
     transport: Transport,

@@ -1,39 +1,38 @@
-# Sendmux Rust SDK
+# Qubrics Rust SDK
 
-Official async Rust SDK for the Sendmux Sending, Mailbox, and Management APIs.
+Official async Rust SDK for the Qubrics Sending, Mailbox, and Management APIs.
 
-Sendmux provides programmable email sending, mailbox automation, and account
-management APIs. The `sendmux` crate exposes first-party Rust clients for all
-public Sendmux API surfaces. The Sending client includes typed request and
-response models; Mailbox and Management expose typed surface clients with raw
-JSON helpers. Not every OpenAPI operation has a named Rust method:
+Use the `qubrics` clients for email sending, mailbox automation and account
+management. Sending includes typed request and response models. For Mailbox
+and Management, typed surface clients expose raw JSON helpers. Not every
+OpenAPI operation has a named Rust method:
 
-- `sendmux::sending` for Sending API requests with send-capable `smx_mbx_*` keys or owner-approved Sending-resource `smx_agent_*` tokens.
-- `sendmux::mailbox` for Mailbox API requests with `smx_mbx_*` keys or scoped `smx_agent_*` tokens.
-- `sendmux::management` for Management API requests with `smx_root_*` keys.
+- `qubrics::sending` for Sending API requests with send-capable `smx_mbx_*` keys or owner-approved Sending-resource `smx_agent_*` tokens.
+- `qubrics::mailbox` for Mailbox API requests with `smx_mbx_*` keys or scoped `smx_agent_*` tokens.
+- `qubrics::management` for Management API requests with `smx_root_*` keys.
 
-Version 0.6.0 excludes calendar-specific client bindings. Generic raw JSON helpers remain available.
+Version 1.0.0 excludes calendar-specific client bindings. Generic raw JSON helpers remain available.
 
 ## Install
 
 ```sh
-cargo add sendmux
+cargo add qubrics@1
 ```
 
 ## Quick Start
 
 ```rust,no_run
-use sendmux::sending::{Address, EmailSendRequest, SendingClient};
+use qubrics::sending::{Address, EmailSendRequest, SendingClient};
 
 #[tokio::main]
-async fn main() -> sendmux::Result<()> {
-    let client = SendingClient::new(std::env::var("SENDMUX_MAILBOX_API_KEY").unwrap())?;
+async fn main() -> qubrics::Result<()> {
+    let client = SendingClient::new(std::env::var("QUBRICS_MAILBOX_API_KEY").unwrap())?;
 
     let response = client
         .send_email(&EmailSendRequest::new(
             Address::new("sender@example.com").with_name("Example App"),
             Address::new("user@example.com"),
-            "Welcome to Sendmux",
+            "Welcome to Qubrics",
             "<p>Hello from Rust.</p>",
         ))
         .await?;
@@ -49,8 +48,8 @@ Each surface exposes `get_connection()` to validate its current credential and r
 
 ```rust,no_run
 #[tokio::main]
-async fn main() -> sendmux::Result<()> {
-    let client = sendmux::management(std::env::var("SENDMUX_API_KEY").unwrap())?;
+async fn main() -> qubrics::Result<()> {
+    let client = qubrics::management(std::env::var("QUBRICS_API_KEY").unwrap())?;
     let connection = client.get_connection().await?;
     println!("{}", connection.data.label);
     Ok(())
@@ -62,12 +61,12 @@ async fn main() -> sendmux::Result<()> {
 Use a send-capable `smx_mbx_` key or owner-approved Sending-resource `smx_agent_` token.
 
 ```rust,no_run
-use sendmux::core::RequestOptions;
-use sendmux::sending::{Address, BatchSendRequest, EmailSendRequest, SendingClient};
+use qubrics::core::RequestOptions;
+use qubrics::sending::{Address, BatchSendRequest, EmailSendRequest, SendingClient};
 
 #[tokio::main]
-async fn main() -> sendmux::Result<()> {
-    let client = SendingClient::new(std::env::var("SENDMUX_MAILBOX_API_KEY").unwrap())?;
+async fn main() -> qubrics::Result<()> {
+    let client = SendingClient::new(std::env::var("QUBRICS_MAILBOX_API_KEY").unwrap())?;
 
     let message = EmailSendRequest::new(
         Address::new("sender@example.com"),
@@ -100,8 +99,8 @@ Use a mailbox-scoped `smx_mbx_` key or scoped `smx_agent_` token.
 
 ```rust,no_run
 #[tokio::main]
-async fn main() -> sendmux::Result<()> {
-    let client = sendmux::mailbox(std::env::var("SENDMUX_MAILBOX_API_KEY").unwrap())?;
+async fn main() -> qubrics::Result<()> {
+    let client = qubrics::mailbox(std::env::var("QUBRICS_MAILBOX_API_KEY").unwrap())?;
 
     let me = client.get_me().await?;
     println!("mailbox request id: {}", me.request_id());
@@ -119,8 +118,8 @@ Use a root API key beginning with `smx_root_`.
 
 ```rust,no_run
 #[tokio::main]
-async fn main() -> sendmux::Result<()> {
-    let client = sendmux::management(std::env::var("SENDMUX_ROOT_API_KEY").unwrap())?;
+async fn main() -> qubrics::Result<()> {
+    let client = qubrics::management(std::env::var("QUBRICS_ROOT_API_KEY").unwrap())?;
 
     let domains = client.list_domains().await?;
     println!("domains response: {}", domains.data);
@@ -138,9 +137,9 @@ Each surface client provides `new_with_access_token` for a bare token string and
 
 ```rust,no_run
 #[tokio::main]
-async fn main() -> sendmux::Result<()> {
-    let client = sendmux::management::ManagementClient::new_with_token_provider(|| async {
-        Ok(std::env::var("SENDMUX_ACCESS_TOKEN").expect("access token is configured"))
+async fn main() -> qubrics::Result<()> {
+    let client = qubrics::management::ManagementClient::new_with_token_provider(|| async {
+        Ok(std::env::var("QUBRICS_ACCESS_TOKEN").expect("access token is configured"))
     })?;
     let connection = client.get_connection().await?;
     println!("{}", connection.data.label);
@@ -148,7 +147,7 @@ async fn main() -> sendmux::Result<()> {
 }
 ```
 
-Use a REST access token with the operation's required scopes and mailbox access. The API-key constructors retain their prefix checks. See [OAuth for REST APIs](https://sendmux.ai/docs/developer-tools/oauth).
+Use a REST access token with the operation's required scopes and mailbox access. The API-key constructors retain their prefix checks. See [OAuth for REST APIs](https://qubrics.com/docs/developer-tools/oauth).
 
 ## API Keys
 
@@ -160,17 +159,21 @@ Do not hard-code API keys or commit them to source control.
 - Store keys in your secret manager and pass them through environment variables
   or your runtime secret injection mechanism.
 
+An empty constructor credential reads `QUBRICS_API_KEY` or
+`QUBRICS_ACCESS_TOKEN`, then the matching `SENDMUX_*` variable.
+`QUBRICS_BASE_URL` takes precedence over `SENDMUX_BASE_URL`.
+
 ## Errors and Request IDs
 
-SDK methods return `sendmux::Result<Response<T>>`. API failures are mapped to
-`sendmux::Error::Api`, including status code, machine-readable code, retryable
-flag, raw response body, and the Sendmux request ID when available.
+SDK methods return `qubrics::Result<Response<T>>`. API failures are mapped to
+`qubrics::Error::Api`, including status code, machine-readable code, retryable
+flag, raw response body, and the Qubrics request ID when available.
 
 ```rust,no_run
 #[tokio::main]
-async fn main() -> sendmux::Result<()> {
-    if let Err(sendmux::Error::Api(error)) =
-        sendmux::sending("smx_mbx_example")?.openapi().await
+async fn main() -> qubrics::Result<()> {
+    if let Err(qubrics::Error::Api(error)) =
+        qubrics::sending("smx_mbx_example")?.openapi().await
     {
         eprintln!("{} {:?}", error.message, error.request_id);
     }
@@ -182,7 +185,7 @@ async fn main() -> sendmux::Result<()> {
 ## OpenAPI Source
 
 The source checkout's `rust/operation-decisions.json` and
-`docs/surface-coverage.md` account for all 128 snapshot operations and 30 named
+`docs/surface-coverage.md` account for all 128 snapshot operations and 20 named
 operation IDs. Conditional GET/304/ETag handling, optional list filters and
 selectors, automatic retries, and missing named operations aren't implied by
 raw JSON access. `ApiError.retryable` reports the server/fallback classification;
@@ -215,22 +218,22 @@ metadata. Rebuild and run your application's tests before deploying the upgrade.
 To roll back, restore your previous `Cargo.toml`, `Cargo.lock`, and corresponding
 call-site changes together.
 
-This crate is aligned to the committed Sendmux OpenAPI snapshots in the
-`sendmux-sdk` repository:
+This crate is aligned to the committed Qubrics OpenAPI snapshots in the
+`qubrics-sdk` repository:
 
-- Sending: `packages/python/mcp/sendmux_mcp/openapi/openapi-sending.json`
-- Mailbox and Management: `packages/python/mcp/sendmux_mcp/openapi/openapi-app.json`
+- Sending: `packages/python/mcp/qubrics/mcp/openapi/openapi-sending.json`
+- Mailbox and Management: `packages/python/mcp/qubrics/mcp/openapi/openapi-app.json`
 
-Generated/provenance metadata lives under `sendmux::generated`; hand-written
-client helpers live under `sendmux::core`, `sendmux::sending`,
-`sendmux::mailbox`, and `sendmux::management`.
+Generated/provenance metadata lives under `qubrics::generated`; hand-written
+client helpers live under `qubrics::core`, `qubrics::sending`,
+`qubrics::mailbox`, and `qubrics::management`.
 
 ## Links
 
-- Product docs: <https://sendmux.ai/docs>
-- Sending API: <https://sendmux.ai/docs/sending-api/introduction>
-- Mailbox API: <https://sendmux.ai/docs/mailbox-api/introduction>
-- Management API: <https://sendmux.ai/docs/api/introduction>
+- Product docs: <https://qubrics.com/docs>
+- Sending API: <https://qubrics.com/docs/sending-api/introduction>
+- Mailbox API: <https://qubrics.com/docs/mailbox-api/introduction>
+- Management API: <https://qubrics.com/docs/api/introduction>
 - GitHub: <https://github.com/qubrics/qubrics-sdk>
 - Support: <https://github.com/qubrics/qubrics-sdk/issues>
 

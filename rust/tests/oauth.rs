@@ -1,4 +1,4 @@
-use sendmux::{Error, MailboxClient, ManagementClient, SendingClient};
+use qubrics::{Error, MailboxClient, ManagementClient, SendingClient};
 use std::io::{Read, Write};
 use std::net::TcpListener;
 use std::sync::atomic::{AtomicBool, AtomicUsize, Ordering};
@@ -155,7 +155,7 @@ macro_rules! oauth_tests {
                 let response = client.get_connection().await.unwrap();
                 assert_eq!(
                     response.data.credential.credential_type,
-                    sendmux::CredentialType::Oauth
+                    qubrics::CredentialType::Oauth
                 );
                 assert_eq!(server.authorizations(), ["Bearer opaque/token+value=="]);
             }

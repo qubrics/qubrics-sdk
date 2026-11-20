@@ -35,7 +35,7 @@ function check(root) {
   return child;
 }
 
-const rustConsumerLockEntry = /^name = "sendmux"\nversion = "([^"]+)"$/m;
+const rustConsumerLockEntry = /^name = "qubrics"\nversion = "([^"]+)"$/m;
 
 function mutateNativeVersion(root, file, pattern) {
   const path = join(root, file);

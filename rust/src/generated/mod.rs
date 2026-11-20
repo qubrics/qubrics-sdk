@@ -9,7 +9,7 @@
 /// This path is relative to the `sendmux-sdk` monorepo, not to downstream
 /// projects that install this crate from crates.io.
 pub const SENDING_OPENAPI_PATH: &str =
-    "packages/python/mcp/sendmux_mcp/openapi/openapi-sending.json";
+    "packages/python/mcp/qubrics/mcp/openapi/openapi-sending.json";
 
 /// SHA-256 of `SENDING_OPENAPI_PATH` at the time this crate surface was added.
 pub const SENDING_OPENAPI_SHA256: &str =
@@ -19,7 +19,7 @@ pub const SENDING_OPENAPI_SHA256: &str =
 ///
 /// This path is relative to the `sendmux-sdk` monorepo, not to downstream
 /// projects that install this crate from crates.io.
-pub const APP_OPENAPI_PATH: &str = "packages/python/mcp/sendmux_mcp/openapi/openapi-app.json";
+pub const APP_OPENAPI_PATH: &str = "packages/python/mcp/qubrics/mcp/openapi/openapi-app.json";
 
 /// SHA-256 of `APP_OPENAPI_PATH` at the time this crate surface was added.
 pub const APP_OPENAPI_SHA256: &str =

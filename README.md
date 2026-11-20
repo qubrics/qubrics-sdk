@@ -45,7 +45,8 @@ Go v4 source for `qubrics.com/go/v4` awaits publication. Use published `sendmux.
 | Go | `sendmux.ai/go/v3/mailbox` | Mailbox API | `smx_mbx_*` or `smx_agent_*` | `go get sendmux.ai/go/v3@v3.0.0` | [`go/mailbox`](go/mailbox) |
 | Go | `sendmux.ai/go/v3/management` | Management API | `smx_root_*` | `go get sendmux.ai/go/v3@v3.0.0` | [`go/management`](go/management) |
 | Go | `sendmux.ai/go/v3/sdk` | Go umbrella package | surface-specific | `go get sendmux.ai/go/v3@v3.0.0` | [`go/sdk`](go/sdk) |
-| crates.io | `sendmux` | Rust umbrella crate | surface-specific | `cargo add sendmux` | [`rust`](rust) |
+| crates.io | `sendmux` 0.5.1 | Published Rust umbrella crate | surface-specific | `cargo add sendmux@0.5.1` | [Published crate](https://crates.io/crates/sendmux/0.5.1) |
+| Source only | `qubrics` 1.0.0 | Rust umbrella crate source | surface-specific | Not published | [`rust`](rust) |
 | Packagist | `sendmux/core` | Shared PHP helpers | n/a | `composer require sendmux/core:^2.1` | [`packages/php/core`](packages/php/core) |
 | Packagist | `sendmux/sending` | Sending API | `smx_mbx_*` or owner-approved `smx_agent_*` | `composer require sendmux/sending:^2.1` | [`packages/php/sending`](packages/php/sending) |
 | Packagist | `sendmux/mailbox` | Mailbox API | `smx_mbx_*` or `smx_agent_*` | `composer require sendmux/mailbox:^2.1` | [`packages/php/mailbox`](packages/php/mailbox) |
@@ -210,7 +211,7 @@ Maintainers: use the [protected live E2E matrix](docs/live-e2e-matrix.md) for cr
 | [`packages/ts`](packages/ts) | TypeScript SDK packages and the `sendmux` CLI. |
 | [`packages/python`](packages/python) | Python SDK packages and the `sendmux-mcp` package. |
 | [`go`](go) | Go v4 source for `qubrics.com/go/v4` and subpackages. |
-| [`rust`](rust) | Rust crate published as `sendmux` on crates.io. |
+| [`rust`](rust) | Source for `qubrics` 1.0.0; publication pending. Published `sendmux` remains at 0.5.1. |
 | [`packages/php`](packages/php) | PHP package sources used for Packagist packages and public split repositories. |
 | [`packages/ruby`](packages/ruby) | RubyGem package sources. |
 | [`codegen`](codegen) | Generator configuration and templates. |

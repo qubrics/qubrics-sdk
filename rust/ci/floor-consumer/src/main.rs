@@ -1,5 +1,5 @@
-use sendmux::sending::{Address, Attachment, EmailSendRequest};
-use sendmux::{MailboxClient, ManagementClient, SendingClient};
+use qubrics::sending::{Address, Attachment, EmailSendRequest};
+use qubrics::{MailboxClient, ManagementClient, SendingClient};
 
 fn main() {
     let mut request = EmailSendRequest::new(
