@@ -10,7 +10,7 @@
 
 Official SDK, CLI, and MCP workspace for Qubrics.
 
-The seven `@qubrics/*` npm packages and PyPI packages `qubrics-core`, `qubrics-sending`, `qubrics-mailbox`, `qubrics-management` and `qubrics-mcp` are published. RubyGems has `qubrics-core` and `qubrics-sending` 2.0.0, plus `qubrics-mailbox` and `qubrics-management` 3.0.0. Existing `@sendmux/*` releases remain available. Other Python and Ruby packages use the published names in the Packages table.
+The seven `@qubrics/*` npm packages and PyPI packages `qubrics-core`, `qubrics-sending`, `qubrics-mailbox`, `qubrics-management` and `qubrics-mcp` are published. RubyGems has `qubrics-core` and `qubrics-sending` 2.0.0, plus `qubrics-mailbox`, `qubrics-management` and `qubrics-sdk` 3.0.0. Existing `@sendmux/*` releases remain available. Other Python and Ruby packages use the published names in the Packages table.
 
 Go v4 source for `qubrics.com/go/v4` awaits publication. Use published `sendmux.ai/go/v3@v3.0.0`.
 
@@ -55,7 +55,7 @@ Go v4 source for `qubrics.com/go/v4` awaits publication. Use published `sendmux.
 | RubyGems | `qubrics-sending` | Sending API | `smx_mbx_*` or owner-approved `smx_agent_*` | `gem install qubrics-sending` | [`packages/ruby/sending`](packages/ruby/sending) |
 | RubyGems | `qubrics-mailbox` | Mailbox API | `smx_mbx_*` or `smx_agent_*` | `gem install qubrics-mailbox` | [`packages/ruby/mailbox`](packages/ruby/mailbox) |
 | RubyGems | `qubrics-management` | Management API | `smx_root_*` | `gem install qubrics-management` | [`packages/ruby/management`](packages/ruby/management) |
-| RubyGems | `sendmux-sdk` | Ruby umbrella package | surface-specific | `gem install sendmux-sdk` | [`packages/ruby/sdk`](packages/ruby/sdk) |
+| RubyGems | `qubrics-sdk` | Ruby umbrella package | surface-specific | `gem install qubrics-sdk` | [`packages/ruby/sdk`](packages/ruby/sdk) |
 
 ## Quick start
 
@@ -222,7 +222,7 @@ Maintainers: use the [protected live E2E matrix](docs/live-e2e-matrix.md) for cr
 
 ### Ruby packages
 
-Ruby Core, Sending, Mailbox and Management use the `Qubrics` module. Install their published versions from RubyGems using the commands in the Packages table. The `qubrics-sdk` source target awaits publication. For the umbrella SDK, use `gem install sendmux-sdk`.
+All five Ruby packages use the `Qubrics` module. Install their published versions from RubyGems with the commands in the Packages table. For the umbrella SDK, use `gem install qubrics-sdk`.
 
 | Source package | Target version | Source require | Published |
 | --- | --- | --- | --- |
@@ -230,7 +230,7 @@ Ruby Core, Sending, Mailbox and Management use the `Qubrics` module. Install the
 | `qubrics-sending` | 2.0.0 | `qubrics/sending` | Yes |
 | `qubrics-mailbox` | 3.0.0 | `qubrics/mailbox` | Yes |
 | `qubrics-management` | 3.0.0 | `qubrics/management` | Yes |
-| `qubrics-sdk` | 3.0.0 | `qubrics/sdk` | No |
+| `qubrics-sdk` | 3.0.0 | `qubrics/sdk` | Yes |
 
 ### Maintain package contracts
 
