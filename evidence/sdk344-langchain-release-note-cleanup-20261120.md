@@ -4,7 +4,7 @@ The LangChain 1.0.0 candidate changelog replaces two announcement lines
 with `update native package imports`, retaining the breaking-change
 heading and original commit link. Package versions, dependency floors,
 manifest entries and runtime source match parent PR355 head
-`a3ec222ee41571501c71b0520fcda2f94367c6a4` exactly.
+`905273fa908bb403aa959127729b33146660f3e9` exactly.
 
 This source PR targets
 `release-please--branches--main--components--python-langchain`, leaving
