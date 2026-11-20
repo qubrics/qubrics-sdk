@@ -4,194 +4,12 @@ export type ClientOptions = {
     baseUrl: 'https://app.qubrics.com/api/v1' | (string & {});
 };
 
-export type WebhookUpdateBody = {
-    /**
-     * When toggled from false to true, also clears the `failing` flag — retry deliveries resume on the next matching event.
-     */
-    enabled?: boolean;
-    /**
-     * Replaces the full event-type list. At least one must be provided.
-     */
-    event_types?: Array<'message.delivered' | 'message.bounced' | 'message.complained' | 'message.rejected' | 'message.delivery_delayed' | 'message.received' | 'message.received.spam' | 'calendar.changed' | 'sendmux.test'>;
-    filters?: WebhookFilters & unknown;
-    /**
-     * Replace the human-friendly label. Send `null` to clear it; omit to leave unchanged.
-     */
-    name?: string | null;
-    /**
-     * New HTTPS endpoint. Must be https://.
-     */
-    url?: string;
-};
-
-/**
- * Optional delivery scope. Empty mailbox_ids means all team mailboxes.
- */
-export type WebhookFilters = {
-    /**
-     * Mailbox public IDs to receive events for. Empty means all mailboxes in the team.
-     */
-    mailbox_ids: Array<string>;
-};
-
-export type WebhookTestResponse = {
-    /**
-     * The event_id attached to the X-Qubrics-Event-Id and X-Sendmux-Event-Id headers of the test delivery.
-     */
-    event_id: string;
-};
-
-export type WebhookSubscriptionWithSecretResponse = SuccessEnvelope & {
-    data: WebhookSubscriptionWithSecret;
-    meta?: ResponseMeta;
-};
-
-export type ResponseMeta = {
-    request_id: string;
-};
-
-export type WebhookSubscriptionWithSecret = {
-    /**
-     * ISO 8601 creation timestamp
-     */
-    created_at: string;
-    /**
-     * When false, no events are delivered to this subscription.
-     */
-    enabled: boolean;
-    /**
-     * Event types this subscription receives.
-     */
-    event_types: Array<'message.delivered' | 'message.bounced' | 'message.complained' | 'message.rejected' | 'message.delivery_delayed' | 'message.received' | 'message.received.spam' | 'calendar.changed' | 'sendmux.test'>;
-    /**
-     * True when the 24-hour retry window has been exhausted for this subscription. Reset by updating the subscription (e.g. fixing the URL) and re-enabling.
-     */
-    failing: boolean;
-    filters: WebhookFilters;
-    /**
-     * Webhook public ID
-     */
-    id: string;
-    /**
-     * Optional human-friendly label used in dashboard list/detail pages. May be `null` for subscriptions created without a name.
-     */
-    name: string | null;
-    /**
-     * Signing secret for both webhook signature versions. X-Qubrics-Signature signs the exact body bytes. X-Qubrics-Signature-V2 contains v1=<hex HMAC-SHA256> and signs X-Qubrics-Timestamp (Unix seconds), a full stop, then the exact body bytes. The X-Sendmux-Signature, X-Sendmux-Signature-V2 and X-Sendmux-Timestamp headers carry the same values and remain supported indefinitely. Check timestamp freshness and compare signatures in constant time before parsing the body. Store this secret securely. It is returned only on creation and rotation. Use POST /webhooks/{id}/rotate-secret to issue a new one.
-     */
-    secret: string;
-    /**
-     * ISO 8601 last-modified timestamp
-     */
-    updated_at: string;
-    /**
-     * HTTPS endpoint that receives signed event POSTs.
-     */
-    url: string;
-};
-
-export type SuccessEnvelope = {
-    meta: {
-        [key: string]: unknown;
-    };
-    ok: true;
-};
-
-export type WebhookSubscriptionResponse = SuccessEnvelope & {
-    data: WebhookSubscription;
-    meta?: ResponseMeta;
-};
-
-export type WebhookSubscription = {
-    /**
-     * ISO 8601 creation timestamp
-     */
-    created_at: string;
-    /**
-     * When false, no events are delivered to this subscription.
-     */
-    enabled: boolean;
-    /**
-     * Event types this subscription receives.
-     */
-    event_types: Array<'message.delivered' | 'message.bounced' | 'message.complained' | 'message.rejected' | 'message.delivery_delayed' | 'message.received' | 'message.received.spam' | 'calendar.changed' | 'sendmux.test'>;
-    /**
-     * True when the 24-hour retry window has been exhausted for this subscription. Reset by updating the subscription (e.g. fixing the URL) and re-enabling.
-     */
-    failing: boolean;
-    filters: WebhookFilters;
-    /**
-     * Webhook public ID
-     */
-    id: string;
-    /**
-     * Optional human-friendly label used in dashboard list/detail pages. May be `null` for subscriptions created without a name.
-     */
-    name: string | null;
-    /**
-     * ISO 8601 last-modified timestamp
-     */
-    updated_at: string;
-    /**
-     * HTTPS endpoint that receives signed event POSTs.
-     */
-    url: string;
-};
-
-export type WebhookSubscriptionCursorListResponse = SuccessEnvelope & {
-    data: Array<WebhookSubscription>;
-    meta?: ResponseMeta;
-    pagination: CursorPagination;
-};
-
-export type CursorPagination = {
-    has_more: boolean;
-    next_cursor?: string;
-};
-
 /**
  * The JSON request body delivered to the webhook endpoint.
  */
-export type WebhookEventPayload = ({
+export type WebhookEventPayload = {
     type: 'message.bounced' | 'message.complained' | 'message.delivered' | 'message.delivery_delayed' | 'message.received' | 'message.received.spam' | 'message.rejected' | 'sendmux.test';
-} & MailWebhookEventPayload) | ({
-    type: 'calendar.changed';
-} & CalendarWebhookEventPayload);
-
-export type CalendarWebhookEventData = {
-    created: Array<string>;
-    destroyed: Array<string>;
-    has_more: boolean;
-    mailbox_id: string;
-    /**
-     * Opaque identifier scoped to the selected mailbox.
-     */
-    new_state: string;
-    /**
-     * Opaque identifier scoped to the selected mailbox.
-     */
-    old_state: string;
-    resource: 'calendar' | 'event';
-    sync_required: boolean;
-    updated: Array<string>;
-};
-
-export type CalendarWebhookEventPayload = {
-    data: CalendarWebhookEventData;
-    /**
-     * Stable per-event identifier. Also sent in the X-Qubrics-Event-Id and X-Sendmux-Event-Id headers.
-     */
-    id: string;
-    /**
-     * When the event occurred.
-     */
-    occurred_at: string;
-    /**
-     * Team that owns the event.
-     */
-    team_public_id: string;
-    type: 'calendar.changed';
-};
+} & MailWebhookEventPayload;
 
 export type WebhookEventData = {
     /**
@@ -280,6 +98,127 @@ export type MailWebhookEventPayload = {
     type: 'message.delivered' | 'message.bounced' | 'message.complained' | 'message.rejected' | 'message.delivery_delayed' | 'message.received' | 'message.received.spam' | 'sendmux.test';
 };
 
+export type SuccessEnvelope = {
+    meta: {
+        [key: string]: unknown;
+    };
+    ok: true;
+};
+
+export type WebhookTestResponse = {
+    /**
+     * The event_id attached to the X-Qubrics-Event-Id and X-Sendmux-Event-Id headers of the test delivery.
+     */
+    event_id: string;
+};
+
+export type ResponseMeta = {
+    request_id: string;
+};
+
+export type ApiError = {
+    error: {
+        /**
+         * Machine-readable error code
+         */
+        code: 'invalid_parameter' | 'missing_parameter' | 'authentication_required' | 'insufficient_permissions' | 'not_found' | 'conflict' | 'limit_exceeded' | 'idempotency_conflict' | 'payload_too_large' | 'validation_error' | 'rate_limit_exceeded' | 'service_unavailable' | 'internal_error';
+        /**
+         * Link to relevant documentation
+         */
+        doc_url?: string;
+        /**
+         * Accumulated per-field issues for validation errors. Only present on 400/422 responses.
+         */
+        errors?: Array<ApiErrorDetail>;
+        /**
+         * Human-readable error description
+         */
+        message: string;
+        /**
+         * The parameter that caused the error
+         */
+        param?: string;
+        /**
+         * Whether the caller may safely retry this request. 4xx are typically false (except 429); 5xx are typically true.
+         */
+        retryable: boolean;
+    };
+    meta: {
+        request_id: string;
+    };
+    ok: false;
+};
+
+export type ApiErrorDetail = {
+    /**
+     * Machine-readable issue code from the validator (e.g. zod issue code).
+     */
+    code: string;
+    /**
+     * Dot-path of the offending request field.
+     */
+    field: string;
+    /**
+     * Human-readable issue description.
+     */
+    message: string;
+};
+
+export type WebhookSubscriptionWithSecretResponse = SuccessEnvelope & {
+    data: WebhookSubscriptionWithSecret;
+    meta?: ResponseMeta;
+};
+
+export type WebhookSubscriptionWithSecret = {
+    /**
+     * ISO 8601 creation timestamp
+     */
+    created_at: string;
+    /**
+     * When false, no events are delivered to this subscription.
+     */
+    enabled: boolean;
+    /**
+     * Event types this subscription receives.
+     */
+    event_types: Array<string>;
+    /**
+     * True when the 24-hour retry window has been exhausted for this subscription. Reset by updating the subscription (e.g. fixing the URL) and re-enabling.
+     */
+    failing: boolean;
+    filters: WebhookFilters;
+    /**
+     * Webhook public ID
+     */
+    id: string;
+    /**
+     * Optional human-friendly label used in dashboard list/detail pages. May be `null` for subscriptions created without a name.
+     */
+    name: string | null;
+    /**
+     * Signing secret for both webhook signature versions. X-Qubrics-Signature signs the exact body bytes. X-Qubrics-Signature-V2 contains v1=<hex HMAC-SHA256> and signs X-Qubrics-Timestamp (Unix seconds), a full stop, then the exact body bytes. The X-Sendmux-Signature, X-Sendmux-Signature-V2 and X-Sendmux-Timestamp headers carry the same values and remain supported indefinitely. Check timestamp freshness and compare signatures in constant time before parsing the body. Store this secret securely. It is returned only on creation and rotation. Use POST /webhooks/{id}/rotate-secret to issue a new one.
+     */
+    secret: string;
+    /**
+     * ISO 8601 last-modified timestamp
+     */
+    updated_at: string;
+    /**
+     * HTTPS endpoint that receives signed event POSTs.
+     */
+    url: string;
+};
+
+/**
+ * Optional delivery scope. Empty mailbox_ids means all team mailboxes.
+ */
+export type WebhookFilters = {
+    /**
+     * Mailbox public IDs to receive events for. Empty means all mailboxes in the team.
+     */
+    mailbox_ids: Array<string>;
+};
+
 export type WebhookDeliveryPayloadResponse = SuccessEnvelope & {
     data: WebhookDeliveryPayload;
     meta?: ResponseMeta;
@@ -301,7 +240,7 @@ export type WebhookDeliveryPayload = {
     /**
      * Event types a webhook may subscribe to. `sendmux.test` is accepted so you can verify end-to-end delivery via POST /webhooks/{id}/test.
      */
-    event_type: 'message.delivered' | 'message.bounced' | 'message.complained' | 'message.rejected' | 'message.delivery_delayed' | 'message.received' | 'message.received.spam' | 'calendar.changed' | 'sendmux.test';
+    event_type: string;
     /**
      * Timestamp when this retained payload expires.
      */
@@ -310,7 +249,9 @@ export type WebhookDeliveryPayload = {
      * Delivery-attempt public ID
      */
     id: string;
-    payload: WebhookEventPayload;
+    payload: {
+        [key: string]: unknown;
+    };
 };
 
 export type WebhookDeliveryAttemptCursorListResponse = SuccessEnvelope & {
@@ -339,7 +280,7 @@ export type WebhookDeliveryAttempt = {
     /**
      * Event types a webhook may subscribe to. `sendmux.test` is accepted so you can verify end-to-end delivery via POST /webhooks/{id}/test.
      */
-    event_type: 'message.delivered' | 'message.bounced' | 'message.complained' | 'message.rejected' | 'message.delivery_delayed' | 'message.received' | 'message.received.spam' | 'calendar.changed' | 'sendmux.test';
+    event_type: string;
     /**
      * Delivery-attempt public ID
      */
@@ -386,6 +327,72 @@ export type WebhookDeliveryAttempt = {
     result: 'success' | 'retrying' | 'failed' | 'permanent_failure';
 };
 
+export type CursorPagination = {
+    has_more: boolean;
+    next_cursor?: string;
+};
+
+export type WebhookUpdateBody = {
+    /**
+     * When toggled from false to true, also clears the `failing` flag — retry deliveries resume on the next matching event.
+     */
+    enabled?: boolean;
+    /**
+     * Replaces the full event-type list. At least one must be provided.
+     */
+    event_types?: Array<'message.delivered' | 'message.bounced' | 'message.complained' | 'message.rejected' | 'message.delivery_delayed' | 'message.received' | 'message.received.spam' | 'sendmux.test'>;
+    filters?: WebhookFilters & unknown;
+    /**
+     * Replace the human-friendly label. Send `null` to clear it; omit to leave unchanged.
+     */
+    name?: string | null;
+    /**
+     * New HTTPS endpoint. Must be https://.
+     */
+    url?: string;
+};
+
+export type WebhookSubscriptionResponse = SuccessEnvelope & {
+    data: WebhookSubscription;
+    meta?: ResponseMeta;
+};
+
+export type WebhookSubscription = {
+    /**
+     * ISO 8601 creation timestamp
+     */
+    created_at: string;
+    /**
+     * When false, no events are delivered to this subscription.
+     */
+    enabled: boolean;
+    /**
+     * Event types this subscription receives.
+     */
+    event_types: Array<string>;
+    /**
+     * True when the 24-hour retry window has been exhausted for this subscription. Reset by updating the subscription (e.g. fixing the URL) and re-enabling.
+     */
+    failing: boolean;
+    filters: WebhookFilters;
+    /**
+     * Webhook public ID
+     */
+    id: string;
+    /**
+     * Optional human-friendly label used in dashboard list/detail pages. May be `null` for subscriptions created without a name.
+     */
+    name: string | null;
+    /**
+     * ISO 8601 last-modified timestamp
+     */
+    updated_at: string;
+    /**
+     * HTTPS endpoint that receives signed event POSTs.
+     */
+    url: string;
+};
+
 export type WebhookDeletedResponse = SuccessEnvelope & {
     data: {
         deleted: true;
@@ -402,7 +409,7 @@ export type WebhookCreateBody = {
     /**
      * At least one event type must be provided.
      */
-    event_types: Array<'message.delivered' | 'message.bounced' | 'message.complained' | 'message.rejected' | 'message.delivery_delayed' | 'message.received' | 'message.received.spam' | 'calendar.changed' | 'sendmux.test'>;
+    event_types: Array<'message.delivered' | 'message.bounced' | 'message.complained' | 'message.rejected' | 'message.delivery_delayed' | 'message.received' | 'message.received.spam' | 'sendmux.test'>;
     filters?: WebhookFilters & unknown;
     /**
      * Optional human-friendly label (max 255 chars). Surfaced in dashboard list/detail views.
@@ -414,260 +421,20 @@ export type WebhookCreateBody = {
     url: string;
 };
 
-export type UpdateMailboxBody = {
-    /**
-     * Replace the display name; send null to clear it.
-     */
-    display_name?: string | null;
-    /**
-     * Storage quota in bytes. Allowed values: 1073741824 (1 GB), 5368709120 (5 GB), 53687091200 (50 GB).
-     */
-    quota_bytes?: number;
-    /**
-     * Replace outbound routing restrictions.
-     */
-    send_scope?: {
-        /**
-         * Delivery group public IDs allowed for sending when type is `group`.
-         */
-        group_public_ids?: Array<string>;
-        /**
-         * Provider public IDs allowed for sending when type is `providers`.
-         */
-        provider_public_ids?: Array<string>;
-        /**
-         * Outbound routing strategy. Use `providers` with provider_public_ids, or `group` with group_public_ids.
-         */
-        type: 'all' | 'providers' | 'group';
-    };
-};
-
-export type TransactionCursorListResponse = SuccessEnvelope & {
-    data: Array<Transaction>;
+export type WebhookSubscriptionCursorListResponse = SuccessEnvelope & {
+    data: Array<WebhookSubscription>;
     meta?: ResponseMeta;
     pagination: CursorPagination;
-};
-
-export type Transaction = {
-    /**
-     * DECIMAL(19,6) amount
-     */
-    amount: string;
-    balance_after: string | null;
-    balance_before: string | null;
-    /**
-     * ISO 8601 timestamp
-     */
-    created_at: string;
-    description: string;
-    /**
-     * Transaction public ID
-     */
-    id: string;
-    /**
-     * Item count (for USAGE transactions)
-     */
-    quantity: number | null;
-    type: 'PURCHASE' | 'USAGE' | 'AUTO_TOPUP' | 'REFUND' | 'ADJUSTMENT';
-};
-
-export type SpendSummaryResponse = SuccessEnvelope & {
-    data: SpendSummary;
-    meta?: ResponseMeta;
-};
-
-export type SpendSummary = {
-    currency: 'USD';
-    period_days: number;
-    total_consumed: string;
-    total_purchased: string;
-    transaction_count: number;
-};
-
-export type SharedAmazonSesLimitRequestPageResponse = SuccessEnvelope & {
-    data: SharedAmazonSesLimitRequestPage;
-    meta?: ResponseMeta;
-};
-
-export type SharedAmazonSesLimitRequest = {
-    approved_daily_limit: number | null;
-    created_at: string;
-    current_daily_limit: number;
-    current_daily_sent: number;
-    decided_at: string | null;
-    decision_note: string | null;
-    id: string;
-    status: 'pending' | 'approved' | 'denied' | 'cancelled';
-};
-
-export type SharedAmazonSesLimit = {
-    can_request_increase: boolean;
-    daily_limit: number | null;
-    is_near_limit: boolean;
-    pending_request_id: string | null;
-    provider_id: string | null;
-    sent_today: number;
-    threshold_usage: number | null;
-    usage_ratio: number | null;
-};
-
-export type SharedAmazonSesLimitRequestPage = {
-    limit: SharedAmazonSesLimit;
-    pending_request: SharedAmazonSesLimitRequest | null;
-};
-
-export type SharedAmazonSesLimitRequestCreateResponse = SuccessEnvelope & {
-    data: SharedAmazonSesLimitRequestCreate;
-    meta?: ResponseMeta;
-};
-
-export type SharedAmazonSesLimitRequestCreate = {
-    limit: SharedAmazonSesLimit;
-    request: SharedAmazonSesLimitRequest;
-};
-
-export type SharedAmazonSesLimitRequestCancelResponse = SuccessEnvelope & {
-    data: SharedAmazonSesLimitRequestCancel;
-    meta?: ResponseMeta;
-};
-
-export type SharedAmazonSesLimitRequestCancel = {
-    limit: SharedAmazonSesLimit;
-    request: SharedAmazonSesLimitRequest;
-};
-
-export type SetFilterStateBody = {
-    mode: 'off' | 'allowlist' | 'denylist';
-    /**
-     * Replacement rule set. Maximum 1000 rules per request. An empty array is valid (no rules).
-     */
-    rules: Array<FilterRule>;
-};
-
-export type FilterRule = {
-    /**
-     * Free-form caption for the rule (≤255 chars). UI-only metadata — never consulted at match time. `null` when absent.
-     */
-    note?: string | null;
-    /**
-     * Email address or bare domain name. Validated against RFC 5321/1035 regexes. The `*@domain` wildcard spelling is accepted and normalised to the bare domain (matching is by exact address or sender domain).
-     */
-    pattern: string;
-    /**
-     * Rule type
-     */
-    type: 'allow' | 'deny';
-};
-
-export type SendingAccountLimitRequestResponse = SuccessEnvelope & {
-    data: SendingAccountLimitRequest;
-    meta?: ResponseMeta;
-};
-
-export type ResourceLimitSnapshot = {
-    can_request_increase: boolean;
-    is_at_limit: boolean;
-    is_near_limit: boolean;
-    max_allowed: number;
-    pending_request_id: string | null;
-    reserved: number;
-    resource_type: string;
-    threshold_usage: number;
-    usage: number;
-    usage_ratio: number;
-};
-
-export type SendingAccountLimitRequest = {
-    limit: ResourceLimitSnapshot;
-    request_id: string;
-};
-
-export type ReplaceMailboxSendPolicy = {
-    policy: MailboxSendPolicy & unknown;
-};
-
-export type MailboxSendPolicy = {
-    /**
-     * Allowed From addresses at this policy level.
-     */
-    allowed_from?: {
-        /**
-         * Exact email addresses matched by this rule.
-         */
-        addresses?: Array<string>;
-        /**
-         * Exact domains; subdomains are not included automatically.
-         */
-        domains?: Array<string>;
-        /**
-         * Allow the originating inbox address.
-         */
-        own_address?: boolean;
-    };
-    /**
-     * Allowed Reply-To addresses at this policy level.
-     */
-    allowed_reply_to?: {
-        /**
-         * Exact email addresses matched by this rule.
-         */
-        addresses?: Array<string>;
-        /**
-         * Exact domains; subdomains are not included automatically.
-         */
-        domains?: Array<string>;
-        /**
-         * Allow the originating inbox address.
-         */
-        own_address?: boolean;
-    };
-    /**
-     * Ordered fallback From addresses; every policy level must explicitly allow each alternative.
-     */
-    alternate_from?: Array<string>;
-    /**
-     * Recipient restrictions applied to every To, Cc and Bcc address.
-     */
-    recipients?: {
-        /**
-         * Allowed recipients, or null for no allow-list restriction. An empty rule allows no recipients.
-         */
-        allow?: {
-            /**
-             * Exact email addresses matched by this rule.
-             */
-            addresses?: Array<string>;
-            /**
-             * Exact domains; subdomains are not included automatically.
-             */
-            domains?: Array<string>;
-        } | null;
-        /**
-         * Blocked recipients; deny rules always take precedence.
-         */
-        deny?: {
-            /**
-             * Exact email addresses matched by this rule.
-             */
-            addresses?: Array<string>;
-            /**
-             * Exact domains; subdomains are not included automatically.
-             */
-            domains?: Array<string>;
-        };
-    };
-};
-
-/**
- * Per-account string variables. PATCH omission preserves the current map, a supplied map replaces it, and an empty map clears it. Detail responses return an empty map when no variables are set.
- */
-export type ProviderVariables = {
-    [key: string]: string;
 };
 
 export type ProviderUsageResponse = SuccessEnvelope & {
     data: ProviderUsage;
     meta?: ResponseMeta;
+};
+
+export type ProviderUsage = {
+    providers: Array<ProviderUsageItem>;
+    window_days: 7;
 };
 
 export type ProviderUsageItem = {
@@ -678,91 +445,6 @@ export type ProviderUsageItem = {
     sent_7d: number;
     sent_today: number;
     total_7d: number;
-};
-
-export type ProviderUsage = {
-    providers: Array<ProviderUsageItem>;
-    window_days: 7;
-};
-
-export type ProviderUpdateBody = {
-    /**
-     * Default From email address for an SMTP account. Connected Google and Microsoft accounts keep their authorised account address.
-     */
-    from_email?: string | null;
-    from_name?: string | null;
-    name?: string;
-    percentage?: number;
-    quotas?: {
-        /**
-         * Quota value. Use a number for a fixed cap, a min/max range, or null to clear on PATCH.
-         */
-        per_day?: number | ProviderQuotaRange | null;
-        /**
-         * Quota value. Use a number for a fixed cap, a min/max range, or null to clear on PATCH.
-         */
-        per_hour?: number | ProviderQuotaRange | null;
-        /**
-         * Quota value. Use a number for a fixed cap, a min/max range, or null to clear on PATCH.
-         */
-        per_minute?: number | ProviderQuotaRange | null;
-        /**
-         * Quota value. Use a number for a fixed cap, a min/max range, or null to clear on PATCH.
-         */
-        per_second?: number | ProviderQuotaRange | null;
-    };
-    reply_to_email?: string | null;
-    reply_to_name?: string | null;
-    smtp_host?: string;
-    smtp_password?: string;
-    smtp_port?: number;
-    smtp_protocol?: 'tls' | 'ssl' | 'none' | 'starttls';
-    smtp_username?: string;
-    tracking_domain?: string | null;
-    variables?: ProviderVariables;
-};
-
-export type ProviderQuotaRange = {
-    max: number;
-    min: number;
-};
-
-export type ProviderTypeCounts = {
-    /**
-     * Number of shared Amazon SES accounts
-     */
-    amazon_ses: number;
-    /**
-     * Number of Gmail API accounts
-     */
-    gmail_api: number;
-    /**
-     * Number of Outlook API accounts
-     */
-    outlook_api: number;
-    /**
-     * Number of SMTP accounts
-     */
-    smtp: number;
-};
-
-export type ProviderTestResultResponse = SuccessEnvelope & {
-    data: ProviderTestResult;
-    meta?: ResponseMeta;
-};
-
-export type ProviderTestResult = {
-    latency_ms: number;
-    message: string;
-    success: boolean;
-    tested_at: string;
-};
-
-export type ProviderStatusCounts = {
-    active: number;
-    error: number;
-    inactive: number;
-    pending: number;
 };
 
 export type ProviderStatsResponse = SuccessEnvelope & {
@@ -795,125 +477,105 @@ export type ProviderStats = {
     total: number;
 };
 
-export type ProviderQuotas = {
-    per_day: ProviderQuotaRange | null;
-    per_hour: ProviderQuotaRange | null;
-    per_minute: ProviderQuotaRange | null;
-    per_second: ProviderQuotaRange | null;
+export type ProviderStatusCounts = {
+    active: number;
+    error: number;
+    inactive: number;
+    pending: number;
 };
 
-export type ProviderListItem = {
-    allowed_actions: ProviderAllowedActions;
+export type ProviderTypeCounts = {
     /**
-     * ISO 8601 creation timestamp
+     * Number of shared Amazon SES accounts
      */
+    amazon_ses: number;
+    /**
+     * Number of Gmail API accounts
+     */
+    gmail_api: number;
+    /**
+     * Number of Outlook API accounts
+     */
+    outlook_api: number;
+    /**
+     * Number of SMTP accounts
+     */
+    smtp: number;
+};
+
+export type SharedAmazonSesLimitRequestCancelResponse = SuccessEnvelope & {
+    data: SharedAmazonSesLimitRequestCancel;
+    meta?: ResponseMeta;
+};
+
+export type SharedAmazonSesLimitRequestCancel = {
+    limit: SharedAmazonSesLimit;
+    request: SharedAmazonSesLimitRequest;
+};
+
+export type SharedAmazonSesLimit = {
+    can_request_increase: boolean;
+    daily_limit: number | null;
+    is_near_limit: boolean;
+    pending_request_id: string | null;
+    provider_id: string | null;
+    sent_today: number;
+    threshold_usage: number | null;
+    usage_ratio: number | null;
+};
+
+export type SharedAmazonSesLimitRequest = {
+    approved_daily_limit: number | null;
     created_at: string;
-    /**
-     * Default From email address. Connected Google and Microsoft accounts always use their authorised account address.
-     */
-    from_email: string | null;
-    /**
-     * Default From display name.
-     */
-    from_name: string | null;
-    /**
-     * Whether an OAuth account has an active connection token.
-     */
-    has_refresh_token: boolean;
-    /**
-     * Whether a custom SMTP password is stored.
-     */
-    has_smtp_password: boolean;
-    /**
-     * Sending account public ID
-     */
+    current_daily_limit: number;
+    current_daily_sent: number;
+    decided_at: string | null;
+    decision_note: string | null;
     id: string;
-    /**
-     * Whether this account is enabled for sending.
-     */
-    is_active: boolean;
-    /**
-     * False when the account is platform-managed.
-     */
-    is_editable: boolean;
-    /**
-     * True for the team's shared Amazon SES account.
-     */
-    is_shared: boolean;
-    /**
-     * Last connection test timestamp.
-     */
-    last_tested_at: string | null;
-    /**
-     * Last send timestamp.
-     */
-    last_used_at: string | null;
-    /**
-     * Display name
-     */
-    name: string;
-    /**
-     * Connected account email for OAuth accounts.
-     */
-    oauth_email: string | null;
-    /**
-     * Routing weight percentage.
-     */
-    percentage: number | null;
-    quotas: ProviderQuotas;
-    /**
-     * Default Reply-To email address.
-     */
-    reply_to_email: string | null;
-    /**
-     * Default Reply-To display name.
-     */
-    reply_to_name: string | null;
-    /**
-     * SMTP host for custom SMTP accounts.
-     */
-    smtp_host: string | null;
-    /**
-     * SMTP port for custom SMTP accounts.
-     */
-    smtp_port: number | null;
-    /**
-     * SMTP security mode.
-     */
-    smtp_protocol: string | null;
-    /**
-     * SMTP username for custom SMTP accounts.
-     */
-    smtp_username: string | null;
-    /**
-     * Current sending account status.
-     */
-    status: 'active' | 'inactive' | 'error' | 'pending';
-    /**
-     * Public-safe reason for the current status.
-     */
-    status_reason: string | null;
-    /**
-     * Custom tracking hostname.
-     */
-    tracking_domain: string | null;
-    /**
-     * Sending account type. `amazon_ses` is the shared managed account.
-     */
-    type: 'smtp' | 'gmail_api' | 'outlook_api' | 'amazon_ses';
-    /**
-     * ISO 8601 last update timestamp
-     */
-    updated_at: string;
+    status: 'pending' | 'approved' | 'denied' | 'cancelled';
 };
 
-export type ProviderAllowedActions = {
-    activate: boolean;
-    deactivate: boolean;
-    delete: boolean;
-    test: boolean;
-    update: boolean;
-    update_variables: boolean;
+export type SharedAmazonSesLimitRequestCreateResponse = SuccessEnvelope & {
+    data: SharedAmazonSesLimitRequestCreate;
+    meta?: ResponseMeta;
+};
+
+export type SharedAmazonSesLimitRequestCreate = {
+    limit: SharedAmazonSesLimit;
+    request: SharedAmazonSesLimitRequest;
+};
+
+export type SharedAmazonSesLimitRequestPageResponse = SuccessEnvelope & {
+    data: SharedAmazonSesLimitRequestPage;
+    meta?: ResponseMeta;
+};
+
+export type SharedAmazonSesLimitRequestPage = {
+    limit: SharedAmazonSesLimit;
+    pending_request: SharedAmazonSesLimitRequest | null;
+};
+
+export type SendingAccountLimitRequestResponse = SuccessEnvelope & {
+    data: SendingAccountLimitRequest;
+    meta?: ResponseMeta;
+};
+
+export type SendingAccountLimitRequest = {
+    limit: ResourceLimitSnapshot;
+    request_id: string;
+};
+
+export type ResourceLimitSnapshot = {
+    can_request_increase: boolean;
+    is_at_limit: boolean;
+    is_near_limit: boolean;
+    max_allowed: number;
+    pending_request_id: string | null;
+    reserved: number;
+    resource_type: string;
+    threshold_usage: number;
+    usage: number;
+    usage_ratio: number;
 };
 
 export type ProviderLimitsResponse = SuccessEnvelope & {
@@ -924,6 +586,18 @@ export type ProviderLimitsResponse = SuccessEnvelope & {
 export type ProviderLimits = {
     sending_accounts: ResourceLimitSnapshot;
     shared_amazon_ses: SharedAmazonSesLimit;
+};
+
+export type ProviderTestResultResponse = SuccessEnvelope & {
+    data: ProviderTestResult;
+    meta?: ResponseMeta;
+};
+
+export type ProviderTestResult = {
+    latency_ms: number;
+    message: string;
+    success: boolean;
+    tested_at: string;
 };
 
 export type ProviderItemResponse = SuccessEnvelope & {
@@ -1037,10 +711,69 @@ export type ProviderItem = {
     variables: ProviderVariables;
 };
 
-export type ProviderItemCursorListResponse = SuccessEnvelope & {
-    data: Array<ProviderListItem>;
-    meta?: ResponseMeta;
-    pagination: CursorPagination;
+export type ProviderAllowedActions = {
+    activate: boolean;
+    deactivate: boolean;
+    delete: boolean;
+    test: boolean;
+    update: boolean;
+    update_variables: boolean;
+};
+
+export type ProviderQuotas = {
+    per_day: ProviderQuotaRange | null;
+    per_hour: ProviderQuotaRange | null;
+    per_minute: ProviderQuotaRange | null;
+    per_second: ProviderQuotaRange | null;
+};
+
+export type ProviderQuotaRange = {
+    max: number;
+    min: number;
+};
+
+/**
+ * Per-account string variables. PATCH omission preserves the current map, a supplied map replaces it, and an empty map clears it. Detail responses return an empty map when no variables are set.
+ */
+export type ProviderVariables = {
+    [key: string]: string;
+};
+
+export type ProviderUpdateBody = {
+    /**
+     * Default From email address for an SMTP account. Connected Google and Microsoft accounts keep their authorised account address.
+     */
+    from_email?: string | null;
+    from_name?: string | null;
+    name?: string;
+    percentage?: number;
+    quotas?: {
+        /**
+         * Quota value. Use a number for a fixed cap, a min/max range, or null to clear on PATCH.
+         */
+        per_day?: number | ProviderQuotaRange | null;
+        /**
+         * Quota value. Use a number for a fixed cap, a min/max range, or null to clear on PATCH.
+         */
+        per_hour?: number | ProviderQuotaRange | null;
+        /**
+         * Quota value. Use a number for a fixed cap, a min/max range, or null to clear on PATCH.
+         */
+        per_minute?: number | ProviderQuotaRange | null;
+        /**
+         * Quota value. Use a number for a fixed cap, a min/max range, or null to clear on PATCH.
+         */
+        per_second?: number | ProviderQuotaRange | null;
+    };
+    reply_to_email?: string | null;
+    reply_to_name?: string | null;
+    smtp_host?: string;
+    smtp_password?: string;
+    smtp_port?: number;
+    smtp_protocol?: 'tls' | 'ssl' | 'none' | 'starttls';
+    smtp_username?: string;
+    tracking_domain?: string | null;
+    variables?: ProviderVariables;
 };
 
 export type ProviderDeletedResponse = SuccessEnvelope & {
@@ -1090,294 +823,161 @@ export type ProviderCreateBody = {
     variables?: ProviderVariables;
 };
 
-export type MailboxSendScope = {
-    /**
-     * Delivery group public IDs (only when type=group)
-     */
-    group_public_ids?: Array<string>;
-    /**
-     * Provider public IDs (only when type=providers)
-     */
-    provider_public_ids?: Array<string>;
-    /**
-     * Outbound routing strategy. `all` lets the mailbox use any team-configured provider; `providers` restricts to the listed provider IDs; `group` routes via a delivery group.
-     */
-    type: 'all' | 'providers' | 'group';
-} | null;
-
-export type MailboxSendPolicySnapshot = {
-    policy: MailboxSendPolicy;
-    /**
-     * Current policy version; also returned in ETag.
-     */
-    version: string;
-};
-
-export type MailboxSendPolicyResponse = SuccessEnvelope & {
-    data: MailboxSendPolicySnapshot;
-    meta?: ResponseMeta;
-};
-
-export type MailboxKeyDeletedResponse = SuccessEnvelope & {
-    data: {
-        deleted: true;
-        id: string;
-    };
-    meta?: ResponseMeta;
-};
-
-export type MailboxItemResponse = SuccessEnvelope & {
-    data: Mailbox;
-    meta?: ResponseMeta;
-};
-
-export type Mailbox = {
-    /**
-     * ISO 8601 creation timestamp
-     */
-    created_at: string;
-    /**
-     * Optional display name shown in outbound From headers
-     */
-    display_name: string | null;
-    /**
-     * Mailbox email address (lowercase)
-     */
-    email: string;
-    /**
-     * Public ID
-     */
-    id: string;
-    /**
-     * Storage quota in bytes. Current writable tiers are 1 GB, 5 GB, and 50 GB.
-     */
-    quota_bytes: number | null;
-    send_scope: MailboxSendScope;
-    /**
-     * active | suspended | deleted
-     */
-    status: string;
-};
-
-export type MailboxItemCursorListResponse = SuccessEnvelope & {
-    data: Array<Mailbox>;
+export type ProviderItemCursorListResponse = SuccessEnvelope & {
+    data: Array<ProviderListItem>;
     meta?: ResponseMeta;
     pagination: CursorPagination;
 };
 
-export type MailboxDomainVerifyResult = {
-    checks: MailboxDomainVerifyChecks;
-    /**
-     * Whether Amazon SES DKIM signing is enabled
-     */
-    ses_dkim_signing_enabled: boolean;
-    /**
-     * Latest Amazon SES DKIM status
-     */
-    ses_dkim_status: string;
-    /**
-     * ISO 8601 time of this SES identity check
-     */
-    ses_identity_checked_at: string;
-    /**
-     * Latest Amazon SES identity status
-     */
-    ses_identity_verification_status: string;
-    /**
-     * Latest Amazon SES MAIL FROM status
-     */
-    ses_mail_from_status: string;
-    /**
-     * Whether Amazon SES permits identity sending
-     */
-    ses_verified_for_sending: boolean;
-    /**
-     * Post-check verification status
-     */
-    status: 'verified' | 'pending' | 'failed';
-};
-
-export type MailboxDomainVerifyChecks = {
-    /**
-     * A DMARC record containing v=DMARC1 is present.
-     */
-    dmarc: boolean;
-    /**
-     * Custom MAIL FROM MX record matches expected value
-     */
-    mail_from_mx: boolean;
-    /**
-     * Custom MAIL FROM SPF policy is compatible with the required Amazon SES sender authorisation.
-     */
-    mail_from_spf: boolean;
-    /**
-     * MX record present when the domain is configured for receiving. Always true for send-only domains.
-     */
-    mx: boolean;
-    /**
-     * Published SPF policy is compatible with the required Amazon SES sender authorisation.
-     */
-    spf: boolean;
-    /**
-     * Ownership TXT record present with correct value
-     */
-    verification_txt: boolean;
-};
-
-/**
- * SPF TXT record for the custom MAIL FROM subdomain
- */
-export type MailboxDomainNameValueRecord = {
-    name: string;
-    value: string;
-};
-
-/**
- * MX record for Amazon SES bounce handling
- */
-export type MailboxDomainNamedMxRecord = {
-    name: string;
-    priority: number;
-    target: string;
-};
-
-export type MailboxDomainMxRecord = {
-    priority: number;
-    target: string;
-};
-
-/**
- * Custom MAIL FROM records for Amazon SES bounce handling
- */
-export type MailboxDomainMailFromRecords = {
-    mx: MailboxDomainNamedMxRecord;
-    spf: MailboxDomainNameValueRecord;
-};
-
-export type MailboxDomainDnsRecords = {
-    /**
-     * Three Amazon SES DKIM CNAME records
-     */
-    dkim: Array<MailboxDomainNameValueRecord>;
-    dmarc: MailboxDomainNameValueRecord & unknown;
-    mail_from: MailboxDomainMailFromRecords;
-    /**
-     * MX records the customer must place. All point at Qubrics' inbound mail servers.
-     */
-    mx: Array<MailboxDomainMxRecord>;
-    spf: MailboxDomainNameValueRecord & unknown;
-    verification: MailboxDomainNameValueRecord & unknown;
-};
-
-export type MailboxDomain = {
+export type ProviderListItem = {
+    allowed_actions: ProviderAllowedActions;
     /**
      * ISO 8601 creation timestamp
      */
     created_at: string;
-    dns_records: MailboxDomainDnsRecords;
     /**
-     * Fully qualified domain name
+     * Default From email address. Connected Google and Microsoft accounts always use their authorised account address.
      */
-    domain: string;
+    from_email: string | null;
     /**
-     * Public ID
+     * Default From display name.
+     */
+    from_name: string | null;
+    /**
+     * Whether an OAuth account has an active connection token.
+     */
+    has_refresh_token: boolean;
+    /**
+     * Whether a custom SMTP password is stored.
+     */
+    has_smtp_password: boolean;
+    /**
+     * Sending account public ID
      */
     id: string;
     /**
-     * Active mailboxes currently using this domain
+     * Whether this account is enabled for sending.
      */
-    mailbox_count: number;
+    is_active: boolean;
     /**
-     * `send_only` verifies outbound DNS only. `send_receive` also verifies MX records and can host mailboxes.
+     * False when the account is platform-managed.
      */
-    mode: 'send_only' | 'send_receive';
+    is_editable: boolean;
     /**
-     * Whether Amazon SES DKIM signing is currently enabled for this identity
+     * True for the team's shared Amazon SES account.
      */
-    ses_dkim_signing_enabled: boolean | null;
+    is_shared: boolean;
     /**
-     * Amazon SES DKIM status (pending/success/failed/temporary_failure/not_started)
+     * Last connection test timestamp.
      */
-    ses_dkim_status: string | null;
+    last_tested_at: string | null;
     /**
-     * ISO 8601 timestamp of the latest complete Amazon SES identity check
+     * Last send timestamp.
      */
-    ses_identity_checked_at: string | null;
+    last_used_at: string | null;
     /**
-     * Latest Amazon SES identity verification status
+     * Display name
      */
-    ses_identity_verification_status: string | null;
+    name: string;
     /**
-     * Amazon SES MAIL FROM status (pending/success/failed/temporary_failure/not_started)
+     * Connected account email for OAuth accounts.
      */
-    ses_mail_from_status: string | null;
+    oauth_email: string | null;
     /**
-     * Whether Amazon SES currently permits sending for this identity
+     * Routing weight percentage.
      */
-    ses_verified_for_sending: boolean | null;
+    percentage: number | null;
+    quotas: ProviderQuotas;
     /**
-     * Current verification state
+     * Default Reply-To email address.
      */
-    verification_status: 'pending' | 'verified' | 'failed';
+    reply_to_email: string | null;
     /**
-     * ISO 8601 timestamp of last successful verification
+     * Default Reply-To display name.
      */
-    verified_at: string | null;
+    reply_to_name: string | null;
+    /**
+     * SMTP host for custom SMTP accounts.
+     */
+    smtp_host: string | null;
+    /**
+     * SMTP port for custom SMTP accounts.
+     */
+    smtp_port: number | null;
+    /**
+     * SMTP security mode.
+     */
+    smtp_protocol: string | null;
+    /**
+     * SMTP username for custom SMTP accounts.
+     */
+    smtp_username: string | null;
+    /**
+     * Current sending account status.
+     */
+    status: 'active' | 'inactive' | 'error' | 'pending';
+    /**
+     * Public-safe reason for the current status.
+     */
+    status_reason: string | null;
+    /**
+     * Custom tracking hostname.
+     */
+    tracking_domain: string | null;
+    /**
+     * Sending account type. `amazon_ses` is the shared managed account.
+     */
+    type: 'smtp' | 'gmail_api' | 'outlook_api' | 'amazon_ses';
+    /**
+     * ISO 8601 last update timestamp
+     */
+    updated_at: string;
 };
 
-export type MailboxDeletedResponse = SuccessEnvelope & {
-    data: {
-        deleted: true;
+export type ConnectionResponse = SuccessEnvelope & {
+    data: Connection;
+    meta?: ResponseMeta;
+};
+
+export type Connection = {
+    credential: {
         id: string;
+        name: string | null;
+        type: 'api_key' | 'oauth' | 'agent_token';
     };
+    /**
+     * Display label for this connection.
+     */
+    label: string;
+    mailboxes: Array<{
+        email: string;
+        id: string;
+    }>;
+    permissions: Array<string>;
+    team: {
+        id: string;
+        name: string;
+    };
+};
+
+export type MailboxAvailabilityResponse = SuccessEnvelope & {
+    data: MailboxAvailabilityResult;
     meta?: ResponseMeta;
 };
 
-export type MailboxCredential = {
+export type MailboxAvailabilityResult = {
     /**
-     * IMAP retrieval port
+     * Whether this address can be reserved for mailbox creation.
      */
-    imap_port: number;
-    key_prefix: string;
-    key_suffix: string;
+    available: boolean;
     /**
-     * Credential public ID
+     * Normalised mailbox email address checked.
      */
-    public_id: string;
-    /**
-     * Mailbox credential — shown exactly once. Use as a Bearer token on the HTTP API and as the password for IMAP retrieval and SMTP submission.
-     */
-    secret: string;
-    /**
-     * Mailbox server name
-     */
-    server: string;
-    /**
-     * SMTP submission port
-     */
-    smtp_port: number;
-    /**
-     * Mailbox email address used as the login
-     */
-    username: string;
+    email: string;
+    reason: MailboxAvailabilityReason;
 };
 
-export type MailboxCreateResultResponse = SuccessEnvelope & {
-    data: MailboxCreateResult;
-    meta?: ResponseMeta;
-};
-
-export type MailboxCreateResult = {
-    /**
-     * Initial credential for the mailbox. `null` if credential generation failed — call POST /mailboxes/{id}/keys to retry.
-     */
-    credential: MailboxCredential | null;
-    mailbox: Mailbox;
-    /**
-     * Optional warning string when the mailbox was created without an initial credential
-     */
-    warning: string | null;
-};
+export type MailboxAvailabilityReason = 'available' | 'invalid_email' | 'domain_not_available' | 'taken' | 'reserved' | 'cleanup_pending';
 
 export type MailboxCostUsageResponse = SuccessEnvelope & {
     data: MailboxCostUsage;
@@ -1419,22 +1019,59 @@ export type MailboxCostUsage = {
     };
 };
 
-export type MailboxAvailabilityResult = {
-    /**
-     * Whether this address can be reserved for mailbox creation.
-     */
-    available: boolean;
-    /**
-     * Normalised mailbox email address checked.
-     */
-    email: string;
-    reason: MailboxAvailabilityReason;
+export type MailboxItemResponse = SuccessEnvelope & {
+    data: Mailbox;
+    meta?: ResponseMeta;
 };
 
-export type MailboxAvailabilityReason = 'available' | 'invalid_email' | 'domain_not_available' | 'taken' | 'reserved' | 'cleanup_pending';
+export type Mailbox = {
+    /**
+     * ISO 8601 creation timestamp
+     */
+    created_at: string;
+    /**
+     * Optional display name shown in outbound From headers
+     */
+    display_name: string | null;
+    /**
+     * Mailbox email address (lowercase)
+     */
+    email: string;
+    /**
+     * Public ID
+     */
+    id: string;
+    /**
+     * Storage quota in bytes. Current writable tiers are 1 GB, 5 GB, and 50 GB.
+     */
+    quota_bytes: number | null;
+    send_scope: MailboxSendScope;
+    /**
+     * active | suspended | deleted
+     */
+    status: string;
+};
 
-export type MailboxAvailabilityResponse = SuccessEnvelope & {
-    data: MailboxAvailabilityResult;
+export type MailboxSendScope = {
+    /**
+     * Delivery group public IDs (only when type=group)
+     */
+    group_public_ids?: Array<string>;
+    /**
+     * Provider public IDs (only when type=providers)
+     */
+    provider_public_ids?: Array<string>;
+    /**
+     * Outbound routing strategy. `all` lets the mailbox use any team-configured provider; `providers` restricts to the listed provider IDs; `group` routes via a delivery group.
+     */
+    type: 'all' | 'providers' | 'group';
+} | null;
+
+export type MailboxKeyDeletedResponse = SuccessEnvelope & {
+    data: {
+        deleted: true;
+        id: string;
+    };
     meta?: ResponseMeta;
 };
 
@@ -1445,6 +1082,222 @@ export type MailboxAppPasswordResultResponse = SuccessEnvelope & {
 
 export type MailboxAppPasswordResult = {
     credential: MailboxCredential;
+};
+
+export type MailboxCredential = {
+    /**
+     * IMAP retrieval port
+     */
+    imap_port: number;
+    key_prefix: string;
+    key_suffix: string;
+    /**
+     * Credential public ID
+     */
+    public_id: string;
+    /**
+     * Mailbox credential — shown exactly once. Use as a Bearer token on the HTTP API and as the password for IMAP retrieval and SMTP submission.
+     */
+    secret: string;
+    /**
+     * Mailbox server name
+     */
+    server: string;
+    /**
+     * SMTP submission port
+     */
+    smtp_port: number;
+    /**
+     * Mailbox email address used as the login
+     */
+    username: string;
+};
+
+export type SetFilterStateBody = {
+    mode: 'off' | 'allowlist' | 'denylist';
+    /**
+     * Replacement rule set. Maximum 1000 rules per request. An empty array is valid (no rules).
+     */
+    rules: Array<FilterRule>;
+};
+
+export type FilterRule = {
+    /**
+     * Free-form caption for the rule (≤255 chars). UI-only metadata — never consulted at match time. `null` when absent.
+     */
+    note?: string | null;
+    /**
+     * Email address or bare domain name. Validated against RFC 5321/1035 regexes. The `*@domain` wildcard spelling is accepted and normalised to the bare domain (matching is by exact address or sender domain).
+     */
+    pattern: string;
+    /**
+     * Rule type
+     */
+    type: 'allow' | 'deny';
+};
+
+export type FilterStateResponse = SuccessEnvelope & {
+    data: FilterState;
+    meta?: ResponseMeta;
+};
+
+export type FilterState = {
+    /**
+     * Active filtering mode. `off` disables filtering (all senders accepted). `allowlist` only accepts senders matching a rule. `denylist` blocks senders matching a rule.
+     */
+    mode: 'off' | 'allowlist' | 'denylist';
+    /**
+     * Current rules, sorted by pattern ascending
+     */
+    rules: Array<FilterRule>;
+};
+
+export type UpdateMailboxBody = {
+    /**
+     * Replace the display name; send null to clear it.
+     */
+    display_name?: string | null;
+    /**
+     * Storage quota in bytes. Allowed values: 1073741824 (1 GB), 5368709120 (5 GB), 53687091200 (50 GB).
+     */
+    quota_bytes?: number;
+    /**
+     * Replace outbound routing restrictions.
+     */
+    send_scope?: {
+        /**
+         * Delivery group public IDs allowed for sending when type is `group`.
+         */
+        group_public_ids?: Array<string>;
+        /**
+         * Provider public IDs allowed for sending when type is `providers`.
+         */
+        provider_public_ids?: Array<string>;
+        /**
+         * Outbound routing strategy. Use `providers` with provider_public_ids, or `group` with group_public_ids.
+         */
+        type: 'all' | 'providers' | 'group';
+    };
+};
+
+export type MailboxDeletedResponse = SuccessEnvelope & {
+    data: {
+        deleted: true;
+        id: string;
+    };
+    meta?: ResponseMeta;
+};
+
+export type MailboxCreateResultResponse = SuccessEnvelope & {
+    data: MailboxCreateResult;
+    meta?: ResponseMeta;
+};
+
+export type MailboxCreateResult = {
+    /**
+     * Initial credential for the mailbox. `null` if credential generation failed — call POST /mailboxes/{id}/keys to retry.
+     */
+    credential: MailboxCredential | null;
+    mailbox: Mailbox;
+    /**
+     * Optional warning string when the mailbox was created without an initial credential
+     */
+    warning: string | null;
+};
+
+export type MailboxItemCursorListResponse = SuccessEnvelope & {
+    data: Array<Mailbox>;
+    meta?: ResponseMeta;
+    pagination: CursorPagination;
+};
+
+export type ReplaceMailboxSendPolicy = {
+    policy: MailboxSendPolicy & unknown;
+};
+
+export type MailboxSendPolicy = {
+    /**
+     * Allowed From addresses at this policy level.
+     */
+    allowed_from?: {
+        /**
+         * Exact email addresses matched by this rule.
+         */
+        addresses?: Array<string>;
+        /**
+         * Exact domains; subdomains are not included automatically.
+         */
+        domains?: Array<string>;
+        /**
+         * Allow the originating inbox address.
+         */
+        own_address?: boolean;
+    };
+    /**
+     * Allowed Reply-To addresses at this policy level.
+     */
+    allowed_reply_to?: {
+        /**
+         * Exact email addresses matched by this rule.
+         */
+        addresses?: Array<string>;
+        /**
+         * Exact domains; subdomains are not included automatically.
+         */
+        domains?: Array<string>;
+        /**
+         * Allow the originating inbox address.
+         */
+        own_address?: boolean;
+    };
+    /**
+     * Ordered fallback From addresses; every policy level must explicitly allow each alternative.
+     */
+    alternate_from?: Array<string>;
+    /**
+     * Recipient restrictions applied to every To, Cc and Bcc address.
+     */
+    recipients?: {
+        /**
+         * Allowed recipients, or null for no allow-list restriction. An empty rule allows no recipients.
+         */
+        allow?: {
+            /**
+             * Exact email addresses matched by this rule.
+             */
+            addresses?: Array<string>;
+            /**
+             * Exact domains; subdomains are not included automatically.
+             */
+            domains?: Array<string>;
+        } | null;
+        /**
+         * Blocked recipients; deny rules always take precedence.
+         */
+        deny?: {
+            /**
+             * Exact email addresses matched by this rule.
+             */
+            addresses?: Array<string>;
+            /**
+             * Exact domains; subdomains are not included automatically.
+             */
+            domains?: Array<string>;
+        };
+    };
+};
+
+export type MailboxSendPolicyResponse = SuccessEnvelope & {
+    data: MailboxSendPolicySnapshot;
+    meta?: ResponseMeta;
+};
+
+export type MailboxSendPolicySnapshot = {
+    policy: MailboxSendPolicy;
+    /**
+     * Current policy version; also returned in ETag.
+     */
+    version: string;
 };
 
 export type IncomingLogItemResponse = SuccessEnvelope & {
@@ -1503,22 +1356,6 @@ export type IncomingLogItemCursorListResponse = SuccessEnvelope & {
     pagination: CursorPagination;
 };
 
-export type FilterStateResponse = SuccessEnvelope & {
-    data: FilterState;
-    meta?: ResponseMeta;
-};
-
-export type FilterState = {
-    /**
-     * Active filtering mode. `off` disables filtering (all senders accepted). `allowlist` only accepts senders matching a rule. `denylist` blocks senders matching a rule.
-     */
-    mode: 'off' | 'allowlist' | 'denylist';
-    /**
-     * Current rules, sorted by pattern ascending
-     */
-    rules: Array<FilterRule>;
-};
-
 export type EmailMetricsResponse = SuccessEnvelope & {
     data: EmailMetrics;
     meta?: ResponseMeta;
@@ -1554,49 +1391,6 @@ export type EmailMetrics = {
         timestamp: string;
         total: number;
     }>;
-};
-
-export type DomainVerifyResponse = SuccessEnvelope & {
-    data: MailboxDomainVerifyResult;
-    meta?: ResponseMeta;
-};
-
-export type DomainItemResponse = SuccessEnvelope & {
-    data: MailboxDomain;
-    meta?: ResponseMeta;
-};
-
-export type DomainItemCursorListResponse = SuccessEnvelope & {
-    data: Array<MailboxDomain>;
-    meta?: ResponseMeta;
-    pagination: CursorPagination;
-};
-
-export type DomainDeletedResponse = SuccessEnvelope & {
-    data: {
-        deleted: true;
-        id: string;
-    };
-    meta?: ResponseMeta;
-};
-
-export type DeliveryLogRecipient = {
-    /**
-     * Recipient email address
-     */
-    email: string;
-    /**
-     * Recipient-specific rejection reason when available
-     */
-    reason: string | null;
-    /**
-     * Provider acceptance outcome
-     */
-    status: 'accepted' | 'rejected';
-    /**
-     * Recipient header type when known
-     */
-    type: 'to' | 'cc' | 'bcc' | null;
 };
 
 export type DeliveryLogItemResponse = SuccessEnvelope & {
@@ -1662,6 +1456,25 @@ export type DeliveryLogDetail = {
     to_email: string | null;
 };
 
+export type DeliveryLogRecipient = {
+    /**
+     * Recipient email address
+     */
+    email: string;
+    /**
+     * Recipient-specific rejection reason when available
+     */
+    reason: string | null;
+    /**
+     * Provider acceptance outcome
+     */
+    status: 'accepted' | 'rejected';
+    /**
+     * Recipient header type when known
+     */
+    type: 'to' | 'cc' | 'bcc' | null;
+};
+
 export type DeliveryLogItemCursorListResponse = SuccessEnvelope & {
     data: Array<DeliveryLogItem>;
     meta?: ResponseMeta;
@@ -1722,30 +1535,230 @@ export type DeliveryLogItem = {
     to_email: string | null;
 };
 
-export type ConnectionResponse = SuccessEnvelope & {
-    data: Connection;
+export type DomainVerifyResponse = SuccessEnvelope & {
+    data: MailboxDomainVerifyResult;
     meta?: ResponseMeta;
 };
 
-export type Connection = {
-    credential: {
-        id: string;
-        name: string | null;
-        type: 'api_key' | 'oauth' | 'agent_token';
-    };
+export type MailboxDomainVerifyResult = {
+    checks: MailboxDomainVerifyChecks;
     /**
-     * Display label for this connection.
+     * Whether Amazon SES DKIM signing is enabled
      */
-    label: string;
-    mailboxes: Array<{
-        email: string;
+    ses_dkim_signing_enabled: boolean;
+    /**
+     * Latest Amazon SES DKIM status
+     */
+    ses_dkim_status: string;
+    /**
+     * ISO 8601 time of this SES identity check
+     */
+    ses_identity_checked_at: string;
+    /**
+     * Latest Amazon SES identity status
+     */
+    ses_identity_verification_status: string;
+    /**
+     * Latest Amazon SES MAIL FROM status
+     */
+    ses_mail_from_status: string;
+    /**
+     * Whether Amazon SES permits identity sending
+     */
+    ses_verified_for_sending: boolean;
+    /**
+     * Post-check verification status
+     */
+    status: 'verified' | 'pending' | 'failed';
+};
+
+export type MailboxDomainVerifyChecks = {
+    /**
+     * A DMARC record containing v=DMARC1 is present.
+     */
+    dmarc: boolean;
+    /**
+     * Custom MAIL FROM MX record matches expected value
+     */
+    mail_from_mx: boolean;
+    /**
+     * Custom MAIL FROM SPF policy is compatible with the required Amazon SES sender authorisation.
+     */
+    mail_from_spf: boolean;
+    /**
+     * MX record present when the domain is configured for receiving. Always true for send-only domains.
+     */
+    mx: boolean;
+    /**
+     * Published SPF policy is compatible with the required Amazon SES sender authorisation.
+     */
+    spf: boolean;
+    /**
+     * Ownership TXT record present with correct value
+     */
+    verification_txt: boolean;
+};
+
+export type DomainItemResponse = SuccessEnvelope & {
+    data: MailboxDomain;
+    meta?: ResponseMeta;
+};
+
+export type MailboxDomain = {
+    /**
+     * ISO 8601 creation timestamp
+     */
+    created_at: string;
+    dns_records: MailboxDomainDnsRecords;
+    /**
+     * Fully qualified domain name
+     */
+    domain: string;
+    /**
+     * Public ID
+     */
+    id: string;
+    /**
+     * Active mailboxes currently using this domain
+     */
+    mailbox_count: number;
+    /**
+     * `send_only` verifies outbound DNS only. `send_receive` also verifies MX records and can host mailboxes.
+     */
+    mode: 'send_only' | 'send_receive';
+    /**
+     * Whether Amazon SES DKIM signing is currently enabled for this identity
+     */
+    ses_dkim_signing_enabled: boolean | null;
+    /**
+     * Amazon SES DKIM status (pending/success/failed/temporary_failure/not_started)
+     */
+    ses_dkim_status: string | null;
+    /**
+     * ISO 8601 timestamp of the latest complete Amazon SES identity check
+     */
+    ses_identity_checked_at: string | null;
+    /**
+     * Latest Amazon SES identity verification status
+     */
+    ses_identity_verification_status: string | null;
+    /**
+     * Amazon SES MAIL FROM status (pending/success/failed/temporary_failure/not_started)
+     */
+    ses_mail_from_status: string | null;
+    /**
+     * Whether Amazon SES currently permits sending for this identity
+     */
+    ses_verified_for_sending: boolean | null;
+    /**
+     * Current verification state
+     */
+    verification_status: 'pending' | 'verified' | 'failed';
+    /**
+     * ISO 8601 timestamp of last successful verification
+     */
+    verified_at: string | null;
+};
+
+export type MailboxDomainDnsRecords = {
+    /**
+     * Three Amazon SES DKIM CNAME records
+     */
+    dkim: Array<MailboxDomainNameValueRecord>;
+    dmarc: MailboxDomainNameValueRecord & unknown;
+    mail_from: MailboxDomainMailFromRecords;
+    /**
+     * MX records the customer must place. All point at Qubrics' inbound mail servers.
+     */
+    mx: Array<MailboxDomainMxRecord>;
+    spf: MailboxDomainNameValueRecord & unknown;
+    verification: MailboxDomainNameValueRecord & unknown;
+};
+
+/**
+ * SPF TXT record for the custom MAIL FROM subdomain
+ */
+export type MailboxDomainNameValueRecord = {
+    name: string;
+    value: string;
+};
+
+/**
+ * Custom MAIL FROM records for Amazon SES bounce handling
+ */
+export type MailboxDomainMailFromRecords = {
+    mx: MailboxDomainNamedMxRecord;
+    spf: MailboxDomainNameValueRecord;
+};
+
+/**
+ * MX record for Amazon SES bounce handling
+ */
+export type MailboxDomainNamedMxRecord = {
+    name: string;
+    priority: number;
+    target: string;
+};
+
+export type MailboxDomainMxRecord = {
+    priority: number;
+    target: string;
+};
+
+export type DomainDeletedResponse = SuccessEnvelope & {
+    data: {
+        deleted: true;
         id: string;
-    }>;
-    permissions: Array<string>;
-    team: {
-        id: string;
-        name: string;
     };
+    meta?: ResponseMeta;
+};
+
+export type DomainItemCursorListResponse = SuccessEnvelope & {
+    data: Array<MailboxDomain>;
+    meta?: ResponseMeta;
+    pagination: CursorPagination;
+};
+
+export type TransactionCursorListResponse = SuccessEnvelope & {
+    data: Array<Transaction>;
+    meta?: ResponseMeta;
+    pagination: CursorPagination;
+};
+
+export type Transaction = {
+    /**
+     * DECIMAL(19,6) amount
+     */
+    amount: string;
+    balance_after: string | null;
+    balance_before: string | null;
+    /**
+     * ISO 8601 timestamp
+     */
+    created_at: string;
+    description: string;
+    /**
+     * Transaction public ID
+     */
+    id: string;
+    /**
+     * Item count (for USAGE transactions)
+     */
+    quantity: number | null;
+    type: 'PURCHASE' | 'USAGE' | 'AUTO_TOPUP' | 'REFUND' | 'ADJUSTMENT';
+};
+
+export type SpendSummaryResponse = SuccessEnvelope & {
+    data: SpendSummary;
+    meta?: ResponseMeta;
+};
+
+export type SpendSummary = {
+    currency: 'USD';
+    period_days: number;
+    total_consumed: string;
+    total_purchased: string;
+    transaction_count: number;
 };
 
 export type BalanceResponse = SuccessEnvelope & {
@@ -1768,54 +1781,6 @@ export type Balance = {
     balance_consumed: string;
     balance_purchased: string;
     currency: 'USD';
-};
-
-export type ApiErrorDetail = {
-    /**
-     * Machine-readable issue code from the validator (e.g. zod issue code).
-     */
-    code: string;
-    /**
-     * Dot-path of the offending request field.
-     */
-    field: string;
-    /**
-     * Human-readable issue description.
-     */
-    message: string;
-};
-
-export type ApiError = {
-    error: {
-        /**
-         * Machine-readable error code
-         */
-        code: 'invalid_parameter' | 'missing_parameter' | 'authentication_required' | 'insufficient_permissions' | 'not_found' | 'conflict' | 'limit_exceeded' | 'idempotency_conflict' | 'payload_too_large' | 'validation_error' | 'rate_limit_exceeded' | 'service_unavailable' | 'internal_error';
-        /**
-         * Link to relevant documentation
-         */
-        doc_url?: string;
-        /**
-         * Accumulated per-field issues for validation errors. Only present on 400/422 responses.
-         */
-        errors?: Array<ApiErrorDetail>;
-        /**
-         * Human-readable error description
-         */
-        message: string;
-        /**
-         * The parameter that caused the error
-         */
-        param?: string;
-        /**
-         * Whether the caller may safely retry this request. 4xx are typically false (except 429); 5xx are typically true.
-         */
-        retryable: boolean;
-    };
-    meta: {
-        request_id: string;
-    };
-    ok: false;
 };
 
 export type ManagementListBalanceData = {
@@ -4137,7 +4102,7 @@ export type ManagementListDeliveryData = {
         /**
          * Filter by event type.
          */
-        event_type?: 'message.delivered' | 'message.bounced' | 'message.complained' | 'message.rejected' | 'message.delivery_delayed' | 'message.received' | 'message.received.spam' | 'calendar.changed' | 'sendmux.test';
+        event_type?: 'message.delivered' | 'message.bounced' | 'message.complained' | 'message.rejected' | 'message.delivery_delayed' | 'message.received' | 'message.received.spam' | 'sendmux.test';
         /**
          * Filter by delivery result.
          */

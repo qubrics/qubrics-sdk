@@ -48,7 +48,6 @@ class WebhookEventPayload implements ModelInterface, ArrayAccess, JsonSerializab
     public const DISCRIMINATOR = 'type';
 
     public const DISCRIMINATOR_MAPPING = [
-        'calendar.changed' => CalendarWebhookEventPayload::class,
         'message.bounced' => MailWebhookEventPayload::class,
         'message.complained' => MailWebhookEventPayload::class,
         'message.delivered' => MailWebhookEventPayload::class,
@@ -72,7 +71,7 @@ class WebhookEventPayload implements ModelInterface, ArrayAccess, JsonSerializab
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'data' => '\Qubrics\Management\Model\CalendarWebhookEventData',
+        'data' => '\Qubrics\Management\Model\WebhookEventData',
         'id' => 'string',
         'occurred_at' => 'string',
         'team_public_id' => 'string',
@@ -254,7 +253,6 @@ class WebhookEventPayload implements ModelInterface, ArrayAccess, JsonSerializab
     public const TYPE_MESSAGE_RECEIVED = 'message.received';
     public const TYPE_MESSAGE_RECEIVED_SPAM = 'message.received.spam';
     public const TYPE_SENDMUX_TEST = 'sendmux.test';
-    public const TYPE_CALENDAR_CHANGED = 'calendar.changed';
     public const TYPE_UNKNOWN_DEFAULT_OPEN_API = 'unknown_default_open_api';
 
     /**
@@ -273,7 +271,6 @@ class WebhookEventPayload implements ModelInterface, ArrayAccess, JsonSerializab
             self::TYPE_MESSAGE_RECEIVED,
             self::TYPE_MESSAGE_RECEIVED_SPAM,
             self::TYPE_SENDMUX_TEST,
-            self::TYPE_CALENDAR_CHANGED,
             self::TYPE_UNKNOWN_DEFAULT_OPEN_API,
         ];
     }
@@ -366,9 +363,9 @@ class WebhookEventPayload implements ModelInterface, ArrayAccess, JsonSerializab
     /**
      * Gets data
      *
-     * @return \Qubrics\Management\Model\CalendarWebhookEventData
+     * @return \Qubrics\Management\Model\WebhookEventData
      */
-    public function getData(): \Qubrics\Management\Model\CalendarWebhookEventData
+    public function getData(): \Qubrics\Management\Model\WebhookEventData
     {
         return $this->container['data'];
     }
@@ -376,11 +373,11 @@ class WebhookEventPayload implements ModelInterface, ArrayAccess, JsonSerializab
     /**
      * Sets data
      *
-     * @param \Qubrics\Management\Model\CalendarWebhookEventData $data data
+     * @param \Qubrics\Management\Model\WebhookEventData $data data
      *
      * @return $this
      */
-    public function setData(\Qubrics\Management\Model\CalendarWebhookEventData $data): static
+    public function setData(\Qubrics\Management\Model\WebhookEventData $data): static
     {
         if (is_null($data)) {
             throw new InvalidArgumentException('non-nullable data cannot be null');

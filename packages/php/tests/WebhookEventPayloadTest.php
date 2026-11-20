@@ -6,8 +6,6 @@ namespace Qubrics\Tests;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Qubrics\Management\Model\CalendarWebhookEventData;
-use Qubrics\Management\Model\CalendarWebhookEventPayload;
 use Qubrics\Management\Model\MailWebhookEventPayload;
 use Qubrics\Management\Model\WebhookDeliveryPayload;
 use Qubrics\Management\Model\WebhookEventData;
@@ -37,7 +35,7 @@ final class WebhookEventPayloadTest extends TestCase
     #[DataProvider('mailEventTypes')]
     public function testMailDiscriminatorPreservesMailData(string $type): void
     {
-        $delivery = ObjectSerializer::deserialize((object) ['payload' => (object) [
+        $event = ObjectSerializer::deserialize((object) [
             'id' => 'evt_fixture',
             'type' => $type,
             'team_public_id' => 'team_fixture',
@@ -48,10 +46,8 @@ final class WebhookEventPayloadTest extends TestCase
                 'sender' => 'sender@example.com',
                 'recipients' => ['inbox@example.com'],
             ],
-        ]], WebhookDeliveryPayload::class);
+        ], WebhookEventPayload::class);
 
-        self::assertInstanceOf(WebhookDeliveryPayload::class, $delivery);
-        $event = $delivery->getPayload();
         self::assertInstanceOf(MailWebhookEventPayload::class, $event);
         self::assertSame($type, $event->getType());
         $data = $event->getData();
@@ -61,34 +57,34 @@ final class WebhookEventPayloadTest extends TestCase
         self::assertSame(['inbox@example.com'], $data->getRecipients());
     }
 
-    public function testCalendarDiscriminatorPreservesCalendarData(): void
+    public function testRetainedDeliveryPreservesOpaquePayloadAndLabel(): void
     {
-        $delivery = ObjectSerializer::deserialize((object) ['payload' => (object) [
+        $payload = (object) [
             'type' => 'calendar.changed',
-            'data' => (object) [
-                'mailbox_id' => 'mbx_fixture',
-                'resource' => 'event',
-                'created' => ['event_created'],
-                'updated' => [],
-                'destroyed' => ['event_destroyed'],
-                'old_state' => 'before',
-                'new_state' => 'after',
-                'has_more' => false,
-                'sync_required' => true,
-            ],
-        ]], WebhookDeliveryPayload::class);
+            'data' => (object) ['opaque' => ['retained', (object) ['unknown' => true]]],
+        ];
+        $delivery = ObjectSerializer::deserialize((object) [
+            'created_at' => '2026-11-20T00:00:00Z',
+            'delivery_attempt' => 1,
+            'event_id' => 'evt_retained',
+            'event_type' => 'calendar.changed',
+            'expires_at' => '2026-11-21T00:00:00Z',
+            'id' => 'delivery_retained',
+            'payload' => $payload,
+        ], WebhookDeliveryPayload::class);
 
         self::assertInstanceOf(WebhookDeliveryPayload::class, $delivery);
-        $event = $delivery->getPayload();
-        self::assertInstanceOf(CalendarWebhookEventPayload::class, $event);
-        self::assertSame('calendar.changed', $event->getType());
-        $data = $event->getData();
-        self::assertInstanceOf(CalendarWebhookEventData::class, $data);
-        self::assertSame(['event_created'], $data->getCreated());
-        self::assertSame(['event_destroyed'], $data->getDestroyed());
-        self::assertSame('after', $data->getNewState());
-        self::assertFalse($data->getHasMore());
-        self::assertTrue($data->getSyncRequired());
+        self::assertSame('calendar.changed', $delivery->getEventType());
+        self::assertSame(
+            json_decode(json_encode($payload, JSON_THROW_ON_ERROR), true),
+            json_decode(json_encode($delivery->getPayload(), JSON_THROW_ON_ERROR), true)
+        );
+        $encoded = ObjectSerializer::sanitizeForSerialization($delivery);
+        self::assertInstanceOf(\stdClass::class, $encoded);
+        self::assertSame(
+            json_decode(json_encode($payload, JSON_THROW_ON_ERROR), true),
+            json_decode(json_encode($encoded->payload, JSON_THROW_ON_ERROR), true)
+        );
     }
 
     public function testUnknownDiscriminatorKeepsBaseModelFallback(): void

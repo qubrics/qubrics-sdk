@@ -2,6 +2,8 @@ import { cpSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync, write
 import { basename, join } from "node:path";
 import { spawnSync } from "node:child_process";
 import { planDeprecatedModelAliases, reportPendingAliases } from "./deprecated-model-aliases.mjs";
+import { retainedManagementSchemaRefs } from "./withhold-management-calendar.mjs";
+import { withholdMcpCalendar } from "./withhold-mcp-calendar.mjs";
 
 const root = process.cwd();
 const outputRoot = join(root, ".tmp", "php-codegen");
@@ -83,6 +85,7 @@ for (const surface of surfaces) {
     generatedRoot,
     "-t",
     templateDir,
+    ...(surface.name === "management" ? ["--openapi-normalizer=SIMPLIFY_ONEOF_ANYOF=false"] : []),
     `--additional-properties=${[
       `composerPackageName=${surface.composerName}`,
       `invokerPackage=${surface.namespace.replaceAll("\\", "\\\\")}`,
@@ -108,6 +111,7 @@ console.log("Generated PHP SDK packages");
 
 function writeFilteredSpec(surface) {
   const source = JSON.parse(readFileSync(join(root, surface.spec), "utf8"));
+  if (surface.name !== "sending") withholdMcpCalendar(source);
   source.info.title = source.info.title.replaceAll("Sendmux", "Qubrics");
   source.info.description = source.info.description?.replaceAll("Sendmux", "Qubrics");
   source.servers = [{ url: surface.name === "sending" ? "https://smtp.qubrics.com/api/v1" : "https://app.qubrics.com/api/v1" }];
@@ -136,7 +140,7 @@ function writeFilteredSpec(surface) {
   }
 
   const outputPath = join(outputRoot, `${surface.name}.openapi-generator.codegen.json`);
-  writeFileSync(outputPath, `${JSON.stringify(markTrailingSdkParams(pruneComponents({ ...source, paths })), null, 2)}\n`);
+  writeFileSync(outputPath, `${JSON.stringify(markTrailingSdkParams(pruneComponents({ ...source, paths }, surface.name === "management" ? retainedManagementSchemaRefs : [])), null, 2)}\n`);
   return outputPath;
 }
 
@@ -259,8 +263,8 @@ function markBodylessSuccessResponses(operation) {
   };
 }
 
-function pruneComponents(document) {
-  const refs = new Set();
+function pruneComponents(document, roots = []) {
+  const refs = new Set(roots);
   collectRefs(document.paths, refs);
 
   for (const ref of refs) {

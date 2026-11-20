@@ -2,6 +2,8 @@ import { mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "nod
 import { join } from "node:path";
 import { spawnSync } from "node:child_process";
 import { planDeprecatedModelAliases, planDeprecatedUnionMembers, reportPendingAliases } from "./deprecated-model-aliases.mjs";
+import { retainedManagementSchemaRefs } from "./withhold-management-calendar.mjs";
+import { withholdMcpCalendar } from "./withhold-mcp-calendar.mjs";
 
 const root = process.cwd();
 const outputRoot = join(root, ".tmp", "go-codegen");
@@ -175,6 +177,7 @@ function writeFilteredSpec(surface) {
   // nullable-downconverted artifact as OpenAPI Generator. The committed
   // snapshots remain the 3.1 source of truth.
   const source = JSON.parse(readFileSync(join(root, surface.spec), "utf8"));
+  if (surface.name !== "sending") withholdMcpCalendar(source);
   normalizeGoBearerSecurity(source);
   const allowed = new Set(surface.tags);
   const paths = {};
@@ -209,7 +212,7 @@ function writeFilteredSpec(surface) {
   }
 
   const outputPath = join(outputRoot, `${surface.name}.openapi-generator.codegen.json`);
-  writeFileSync(outputPath, `${JSON.stringify(normalizeForOgen(pruneComponents({ ...source, paths })), null, 2)}\n`);
+  writeFileSync(outputPath, `${JSON.stringify(normalizeForOgen(pruneComponents({ ...source, paths }, surface.name === "management" ? retainedManagementSchemaRefs : [])), null, 2)}\n`);
   return outputPath;
 }
 
@@ -398,8 +401,8 @@ function isSuccessEnvelopeSchema(schema) {
   );
 }
 
-function pruneComponents(document) {
-  const refs = new Set();
+function pruneComponents(document, roots = []) {
+  const refs = new Set(roots);
   collectRefs(document.paths, refs);
 
   for (const ref of refs) {

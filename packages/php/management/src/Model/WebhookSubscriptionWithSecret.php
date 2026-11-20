@@ -263,37 +263,6 @@ class WebhookSubscriptionWithSecret implements ModelInterface, ArrayAccess, Json
         return self::$openAPIModelName;
     }
 
-    public const EVENT_TYPES_MESSAGE_DELIVERED = 'message.delivered';
-    public const EVENT_TYPES_MESSAGE_BOUNCED = 'message.bounced';
-    public const EVENT_TYPES_MESSAGE_COMPLAINED = 'message.complained';
-    public const EVENT_TYPES_MESSAGE_REJECTED = 'message.rejected';
-    public const EVENT_TYPES_MESSAGE_DELIVERY_DELAYED = 'message.delivery_delayed';
-    public const EVENT_TYPES_MESSAGE_RECEIVED = 'message.received';
-    public const EVENT_TYPES_MESSAGE_RECEIVED_SPAM = 'message.received.spam';
-    public const EVENT_TYPES_CALENDAR_CHANGED = 'calendar.changed';
-    public const EVENT_TYPES_SENDMUX_TEST = 'sendmux.test';
-    public const EVENT_TYPES_UNKNOWN_DEFAULT_OPEN_API = 'unknown_default_open_api';
-
-    /**
-     * Gets allowable values of the enum
-     *
-     * @return string[]
-     */
-    public static function getEventTypesAllowableValues()
-    {
-        return [
-            self::EVENT_TYPES_MESSAGE_DELIVERED,
-            self::EVENT_TYPES_MESSAGE_BOUNCED,
-            self::EVENT_TYPES_MESSAGE_COMPLAINED,
-            self::EVENT_TYPES_MESSAGE_REJECTED,
-            self::EVENT_TYPES_MESSAGE_DELIVERY_DELAYED,
-            self::EVENT_TYPES_MESSAGE_RECEIVED,
-            self::EVENT_TYPES_MESSAGE_RECEIVED_SPAM,
-            self::EVENT_TYPES_CALENDAR_CHANGED,
-            self::EVENT_TYPES_SENDMUX_TEST,
-            self::EVENT_TYPES_UNKNOWN_DEFAULT_OPEN_API,
-        ];
-    }
 
     /**
      * Associative array for storing property values
@@ -463,15 +432,6 @@ class WebhookSubscriptionWithSecret implements ModelInterface, ArrayAccess, Json
     {
         if (is_null($event_types)) {
             throw new InvalidArgumentException('non-nullable event_types cannot be null');
-        }
-        $allowedValues = self::getEventTypesAllowableValues();
-        if (array_diff($event_types, $allowedValues)) {
-            throw new InvalidArgumentException(
-                sprintf(
-                    "Invalid value for 'event_types', must be one of '%s'",
-                    implode("', '", $allowedValues)
-                )
-            );
         }
         $this->container['event_types'] = $event_types;
 

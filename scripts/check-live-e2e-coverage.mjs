@@ -360,7 +360,7 @@ function buildExpectedScenarios(operations, cliOperations, curatedMcp) {
         cli: Boolean(cli),
         mcp: curatedMcp.get(operation.operationId) ?? null,
         sdk: /^\/mailbox\/(calendars|calendar-events)(\/|$)/.test(operation.path)
-          ? sdkAdapters.filter(adapter => adapter !== "python" && adapter !== "ruby")
+          ? []
           : sdkAdapters,
       },
       assertions: assertionsFor(operation),
@@ -508,8 +508,8 @@ function validateScenarios({ curatedMcp, expected, operations, scenarios }) {
         }
       }
 
-      if (scenario.adapters?.cli !== true) {
-        failures.push(`${operation.operationId}: missing CLI live scenario adapter`);
+      if (scenario.adapters?.cli !== expectedScenario.adapters.cli) {
+        failures.push(`${operation.operationId}: CLI live scenario adapter drifted`);
       }
     }
 
@@ -561,7 +561,8 @@ function validateFixtureRegistry({ fixtures, operations, scenarios }) {
   for (const operation of operations) {
     const scenario = scenarios[operation.operationId];
     const entry = fixtures.operations?.[operation.operationId];
-    if (scenario?.mode !== "read_fixture") {
+    const hasAdapter = scenario?.adapters?.cli || scenario?.adapters?.mcp || scenario?.adapters?.sdk?.length;
+    if (scenario?.mode !== "read_fixture" || !hasAdapter) {
       if (entry) {
         failures.push(`${operation.operationId}: fixture registry entry exists for non-read-fixture scenario`);
       }
