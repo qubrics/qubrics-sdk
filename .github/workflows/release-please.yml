@@ -86,6 +86,7 @@ jobs:
         with:
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
+          skip-github-pull-request: true
 
       - name: Verify actual release tag identities
         id: verified
@@ -94,6 +95,11 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
           RELEASE_PLEASE_OUTPUTS: ${{ toJSON(steps.release.outputs) }}
         run: node scripts/publication-guard.mjs verify-release --receipt "$RUNNER_TEMP/publication-receipt.json"
+
+      - name: Emit release PRs with neutral pending Python notes
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: node scripts/python-release-notes.mjs
 
   publish-npm:
     needs: release-please
