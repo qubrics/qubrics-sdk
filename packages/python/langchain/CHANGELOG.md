@@ -5,11 +5,11 @@
 
 ### ⚠ BREAKING CHANGES
 
-* **python:** move SDK packages into the Qubrics namespace
+* **python:** update native package imports
 
 ### Features
 
-* **python:** move SDK packages into the Qubrics namespace ([a326bc9](https://github.com/qubrics/qubrics-sdk/commit/a326bc923fff448470d908bb527afaaa35f6d739))
+* **python:** update native package imports ([a326bc9](https://github.com/qubrics/qubrics-sdk/commit/a326bc923fff448470d908bb527afaaa35f6d739))
 
 
 ### Bug Fixes
