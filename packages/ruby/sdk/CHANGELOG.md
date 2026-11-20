@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.0.0
+
+### Changed
+
+* Load the SDK with `require 'qubrics/sdk'` and use `Qubrics::SDK`.
+* Requires `qubrics-core` 2.x, `qubrics-sending` 2.x, `qubrics-mailbox` 3.x and `qubrics-management` 3.x.
+* Calendar operations and models are excluded from the surface clients.
+
 ## [2.0.0](https://github.com/Sendmux/sendmux-sdk/compare/ruby-sdk/v1.3.0...ruby-sdk/v2.0.0) (2026-09-19)
 
 
