@@ -24,8 +24,8 @@ fn public_types_and_constructors_are_identical() {
         .attachments
         .push(Attachment::uploaded("att_abcdefghijklmnopqrstuvwx"));
     let canonical: qubrics::sending::EmailSendRequest = request;
-    let request: EmailSendRequest = canonical;
-    assert_eq!(request.attachments.len(), 2);
+    let reexported: EmailSendRequest = canonical;
+    assert_eq!(reexported.attachments.len(), 2);
     let _: qubrics::SendingClient = sendmux::sending("smx_mbx_fixture").unwrap();
     let _: qubrics::MailboxClient = sendmux::mailbox("smx_mbx_fixture").unwrap();
     let _: qubrics::ManagementClient = sendmux::management("smx_root_fixture").unwrap();

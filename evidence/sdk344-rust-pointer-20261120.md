@@ -43,6 +43,13 @@ After the one-line re-export, both `cargo +1.82.0 test --locked` and
 exit 0: one test passed, zero failed or ignored on each toolchain.
 No existing assertion was changed or removed.
 
+The first PR CI Rust package job reached the pointer's stable Clippy
+command and rejected a reused binding name as `clippy::almost_swapped`.
+The local focused Clippy command reproduced that exact error. Naming
+the final typed request `reexported` preserves the round-trip identity
+proof and attachment assertion without suppressing the lint; the same
+focused Clippy command then passed.
+
 ## Native lock resolution
 
 An initial unbounded Cargo 1.82 resolution selected `idna_adapter 1.2.2`,
@@ -70,6 +77,19 @@ CARGO_RESOLVER_INCOMPATIBLE_RUST_VERSIONS=fallback cargo +stable update --manife
 Cargo documents [Rust-version resolution](https://doc.rust-lang.org/cargo/reference/resolver.html#rust-version)
 and native [`update --precise`](https://doc.rust-lang.org/cargo/commands/cargo-update.html).
 These are lock-only selections of public unyanked packages.
+
+Qualification limit: the included lock proves the package on Rust 1.82,
+but a library's lock does not constrain a fresh application's dependencies
+([Cargo FAQ](https://doc.rust-lang.org/cargo/faq.html#why-have-cargolock-in-version-control)).
+A fresh copy of the existing public canonical consumer, with only
+`qubrics = "=1.0.0"` and no lockfile, failed `cargo +1.82.0 metadata`:
+`idna_adapter 1.2.2` requires unsupported edition 2024. Its observed
+chain is `qubrics -> url -> idna -> idna_adapter`, also shared by
+`reqwest -> url`. A separate fresh copy passed the existing consumer's
+one public constructor/attachment test with `cargo +stable test`.
+This is a confirmed upstream dependency-resolution limit affecting the
+already-public canonical crate. No fresh unpinned Rust 1.82 guarantee is
+made, and no transitive manifest pins or canonical package edit is added.
 
 ## Existing verification path
 
@@ -106,6 +126,9 @@ Raw local receipts are under MAIN
 `type-identity-green-stable.log`, `floor-setup-fallback-failure.log`,
 `floor-lock.log`, `lock-*.log`, `zerovec-trace.log`, `release-state.log`,
 `rust-surface-test.log`, `surface-coverage.log` and `docs-rs.html`.
+Fresh resolution receipts: `fresh-floor-metadata.log`,
+`fresh-stable-consumer.log`, `fresh-public-idna-chain.log`, and their
+separate `fresh-floor/` and `fresh-stable/` manifests/locks/source.
 Exact-head archive, default Skills acceptance and PR CI receipts bind
 their actual candidate commit separately. The merged source will require
 fresh exact-merge qualification before any publication ASK.

@@ -2,7 +2,7 @@
 
 `sendmux` 1.0.0 re-exports the public API of `qubrics` 1.0.0.
 
-Requires Rust 1.82 or later.
+Package tests pass on Rust 1.82 with the included lockfile. Use stable Rust to resolve dependencies for a fresh application.
 
 ```toml
 [dependencies]
