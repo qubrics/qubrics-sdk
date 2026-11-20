@@ -365,6 +365,15 @@ async function runCapturedProcess({ command, args, env, label }) {
     while ((newline = stderrPending.indexOf("\n")) !== -1) {
       const line = stderrPending.slice(0, newline);
       stderrPending = stderrPending.slice(newline + 1);
+      const nativeStart = line.lastIndexOf('{"child_pid":');
+      if (nativeStart !== -1 && receipt.native_child_pid === undefined) {
+        let native;
+        try { native = JSON.parse(line.slice(nativeStart)); } catch { /* Other stderr is retained privately. */ }
+        if (native?.command === command && Number.isSafeInteger(native.child_pid) && native.child_pid > 0) {
+          receipt.native_child_pid = native.child_pid;
+          stage("native-child-started", native.child_pid);
+        }
+      }
       const probeStage = /^SENDMUX_CHOCO_PROBE_STAGE=(child-started|child-exited|stdout-read|stderr-read|restore-started|restore-completed)(?::([1-9][0-9]*))?\r?$/.exec(line);
       if (probeStage) {
         const pid = probeStage[2] === undefined ? undefined : Number(probeStage[2]);
@@ -376,6 +385,7 @@ async function runCapturedProcess({ command, args, env, label }) {
       let record;
       try { record = JSON.parse(line.slice(start)); } catch { continue; }
       if (!record?.windows_probe_state || typeof record.windows_probe_state !== "object") continue;
+      receipt.windows_probe_state = record.windows_probe_state;
       stage("state-captured");
       const snapshot = JSON.stringify({ native_probe_state: label, windows_probe_state: record.windows_probe_state });
       console.log(credentialSentinels.reduce((redacted, sentinel) => redacted.replaceAll(sentinel, "<REDACTED>"), snapshot));

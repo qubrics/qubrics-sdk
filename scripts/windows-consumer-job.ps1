@@ -183,14 +183,17 @@ try {
         if (Test-Path -LiteralPath $config.stop) { $interrupted = $true; break }
         if (!$stateCaptured -and $config.probeStateAt -and [DateTime]::UtcNow -ge [DateTime]::Parse($config.probeStateAt).ToUniversalTime()) {
             $stateCaptured = $true
-            $snapshot = @{ started_at = [DateTime]::UtcNow.ToString('o'); processes = @(@{ pid = $PID }) }
+            $snapshot = @{ started_at = [DateTime]::UtcNow.ToString('o'); processes = @(@{ pid = $PID }); phases = @(); identified_processes = @() }
             $snapshotDeadline = [DateTime]::UtcNow.AddMilliseconds(100)
             $processes = @()
             $heldProcesses = @{}
             try {
                 $ids = @($PID)
+                $snapshot.phases += @{ phase = 'job-process-ids'; at = [DateTime]::UtcNow.ToString('o') }
                 try { $ids += [ConsumerJob]::ProcessIds($job, $snapshotDeadline) }
                 catch { $snapshot.error = $_.Exception.Message }
+                $snapshot.job_process_ids = $ids
+                $snapshot.phases += @{ phase = 'identity-handles'; at = [DateTime]::UtcNow.ToString('o') }
                 # Hold identity before cached thread enumeration; an open handle prevents PID reuse.
                 foreach ($processId in $ids) {
                     if ($processId -eq $PID) { continue }
@@ -205,6 +208,8 @@ try {
                         if ([ConsumerJob]::Belongs($job, $processHandle)) {
                             $heldProcesses[[int]$processId] = $processHandle
                             $processHandle = [IntPtr]::Zero
+                            # Keep confirmed identities even when the detail capture is truncated.
+                            $snapshot.identified_processes += [int]$processId
                         }
                     } catch { $snapshot.error = $_.Exception.Message }
                     finally {
@@ -215,7 +220,11 @@ try {
                 }
                 if ((Test-Path -LiteralPath $config.stop) -or [DateTime]::UtcNow -ge $snapshotDeadline) {
                     $snapshot.truncated = $true
-                } else { $processes = [Diagnostics.Process]::GetProcesses() }
+                } else {
+                    $snapshot.phases += @{ phase = 'process-enumeration'; at = [DateTime]::UtcNow.ToString('o') }
+                    $processes = [Diagnostics.Process]::GetProcesses()
+                }
+                $snapshot.phases += @{ phase = 'process-details'; at = [DateTime]::UtcNow.ToString('o') }
                 foreach ($process in $processes) {
                     $processId = $process.Id
                     if ($processId -ne $PID -and !$heldProcesses.ContainsKey($processId)) { continue }
@@ -225,10 +234,12 @@ try {
                     }
                     $entry = $null
                     try {
+                        $snapshot.phases += @{ phase = 'process-details'; pid = $processId; at = [DateTime]::UtcNow.ToString('o') }
                         $entry = @{ pid = $processId }
                         $entry.name = $process.ProcessName
                         $entry.started_at = $process.StartTime.ToUniversalTime().ToString('o')
                         $entry.cpu_ms = $process.TotalProcessorTime.TotalMilliseconds
+                        $snapshot.phases += @{ phase = 'process-threads'; pid = $processId; at = [DateTime]::UtcNow.ToString('o') }
                         $entry.threads = @(foreach ($processThread in $process.Threads) {
                             if ((Test-Path -LiteralPath $config.stop) -or [DateTime]::UtcNow -ge $snapshotDeadline) {
                                 $snapshot.truncated = $true
