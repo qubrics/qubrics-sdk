@@ -1,6 +1,9 @@
 import { defineConfig } from "@hey-api/openapi-ts";
+import { readFileSync } from "node:fs";
+import { withholdMcpCalendar } from "./scripts/withhold-mcp-calendar.mjs";
 
-const appSpec = ".codegen/openapi-app.codegen.json";
+const appSpec = JSON.parse(readFileSync(".codegen/openapi-app.codegen.json", "utf8"));
+withholdMcpCalendar(appSpec);
 const sendingSpec = ".codegen/openapi-sending.codegen.json";
 
 const baseOutput = {
@@ -30,7 +33,7 @@ export default defineConfig([
     plugins: ["@hey-api/typescript", { auth: true, name: "@hey-api/sdk" }],
   },
   {
-    input: appSpec,
+    input: structuredClone(appSpec),
     output: {
       ...baseOutput,
       path: "packages/ts/mailbox/src/generated",
@@ -46,7 +49,7 @@ export default defineConfig([
     plugins: ["@hey-api/typescript", { auth: true, name: "@hey-api/sdk" }],
   },
   {
-    input: appSpec,
+    input: structuredClone(appSpec),
     output: {
       ...baseOutput,
       path: "packages/ts/management/src/generated",
@@ -54,6 +57,7 @@ export default defineConfig([
     parser: {
       filters: {
         orphans: false,
+        schemas: { include: ["WebhookEventPayload"] },
         tags: {
           include: [
             "Billing",

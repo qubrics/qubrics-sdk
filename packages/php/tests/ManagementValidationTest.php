@@ -15,7 +15,6 @@ final class ManagementValidationTest extends TestCase
         $payload = new WebhookEventPayload();
         foreach (
             [
-                'calendar.changed',
                 'message.bounced',
                 'message.complained',
                 'message.delivered',
@@ -30,6 +29,7 @@ final class ManagementValidationTest extends TestCase
             self::assertSame($type, $payload->setType($type)->getType());
         }
         self::assertSame('unknown_default_open_api', $payload->setType('future.event')->getType());
+        self::assertNotContains('calendar.changed', WebhookEventPayload::getTypeAllowableValues());
     }
 
     public function testMailboxEmailValidationRejectsLineBreaks(): void

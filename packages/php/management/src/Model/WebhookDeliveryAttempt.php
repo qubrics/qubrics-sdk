@@ -306,7 +306,6 @@ class WebhookDeliveryAttempt implements ModelInterface, ArrayAccess, JsonSeriali
     public const EVENT_TYPE_MESSAGE_DELIVERY_DELAYED = 'message.delivery_delayed';
     public const EVENT_TYPE_MESSAGE_RECEIVED = 'message.received';
     public const EVENT_TYPE_MESSAGE_RECEIVED_SPAM = 'message.received.spam';
-    public const EVENT_TYPE_CALENDAR_CHANGED = 'calendar.changed';
     public const EVENT_TYPE_SENDMUX_TEST = 'sendmux.test';
     public const EVENT_TYPE_UNKNOWN_DEFAULT_OPEN_API = 'unknown_default_open_api';
     public const RESULT_SUCCESS = 'success';
@@ -330,7 +329,6 @@ class WebhookDeliveryAttempt implements ModelInterface, ArrayAccess, JsonSeriali
             self::EVENT_TYPE_MESSAGE_DELIVERY_DELAYED,
             self::EVENT_TYPE_MESSAGE_RECEIVED,
             self::EVENT_TYPE_MESSAGE_RECEIVED_SPAM,
-            self::EVENT_TYPE_CALENDAR_CHANGED,
             self::EVENT_TYPE_SENDMUX_TEST,
             self::EVENT_TYPE_UNKNOWN_DEFAULT_OPEN_API,
         ];
@@ -428,15 +426,6 @@ class WebhookDeliveryAttempt implements ModelInterface, ArrayAccess, JsonSeriali
         if ($this->container['event_type'] === null) {
             $invalidProperties[] = "'event_type' can't be null";
         }
-        $allowedValues = self::getEventTypeAllowableValues();
-        if (!is_null($this->container['event_type']) && !in_array($this->container['event_type'], $allowedValues, true)) {
-            $invalidProperties[] = sprintf(
-                "invalid value '%s' for 'event_type', must be one of '%s'",
-                $this->container['event_type'],
-                implode("', '", $allowedValues)
-            );
-        }
-
         if ($this->container['id'] === null) {
             $invalidProperties[] = "'id' can't be null";
         }
@@ -644,10 +633,6 @@ class WebhookDeliveryAttempt implements ModelInterface, ArrayAccess, JsonSeriali
     {
         if (is_null($event_type)) {
             throw new InvalidArgumentException('non-nullable event_type cannot be null');
-        }
-        $allowedValues = self::getEventTypeAllowableValues();
-        if (!in_array($event_type, $allowedValues, true)) {
-            $event_type = self::EVENT_TYPE_UNKNOWN_DEFAULT_OPEN_API;
         }
         $this->container['event_type'] = $event_type;
 

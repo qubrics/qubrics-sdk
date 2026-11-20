@@ -24,19 +24,23 @@ const rustDecisions = rust.decisions;
 const rows = [];
 
 for (const operation of operations) {
+  const withheld = /^\/mailbox\/(calendars|calendar-events)(\/|$)/.test(operation.path);
   const sdk = hasTypeScriptSdkOperation(operation);
   const cli = cliOperations.get(operation.operationId);
-  const commandModule = cli ? hasCliCommandModule(cli.command) : false;
+  const command = cli?.command ?? `${operation.surface}:${operation.operationId.slice(operation.surface.length).replace(/([a-z0-9])([A-Z])/g, "$1-$2").toLowerCase()}`;
+  const commandModule = hasCliCommandModule(command);
   const mcp = mcpDecision(operation, curatedMcp);
-  const cliParity = cli ? compareCliOperation(operation, cli) : ["missing CLI operation manifest entry"];
+  const cliParity = withheld ? [] : cli ? compareCliOperation(operation, cli) : ["missing CLI operation manifest entry"];
 
-  if (!sdk) {
+  if (withheld && (sdk || cli || commandModule)) {
+    failures.push(`${operation.operationId}: withheld calendar binding remains in TypeScript SDK or CLI`);
+  } else if (!withheld && !sdk) {
     failures.push(`${operation.operationId}: missing TypeScript SDK operation export`);
   }
 
-  if (!cli) {
+  if (!withheld && !cli) {
     failures.push(`${operation.operationId}: missing CLI operation manifest entry`);
-  } else if (!commandModule) {
+  } else if (!withheld && !commandModule) {
     failures.push(`${operation.operationId}: missing CLI command module ${cli.command}`);
   }
 
@@ -50,11 +54,11 @@ for (const operation of operations) {
 
   rows.push({
     ...operation,
-    cli: cli && commandModule && cliParity.length === 0 ? `yes (${cli.command})` : "no",
+    cli: withheld ? "withheld" : cli && commandModule && cliParity.length === 0 ? `yes (${cli.command})` : "no",
     mcp: mcp.included ? `tool (${mcp.toolName})` : "excluded",
     mcpReason: mcp.reason ?? "",
-    optionParity: cliParity.length === 0 ? "full" : `failed: ${cliParity.join("; ")}`,
-    sdk: sdk ? "yes" : "no",
+    optionParity: withheld ? "withheld" : cliParity.length === 0 ? "full" : `failed: ${cliParity.join("; ")}`,
+    sdk: withheld ? "withheld" : sdk ? "yes" : "no",
     rust: rustDecisions.get(operation.operationId)?.decision ?? "missing",
     rustReason: rustDecisions.get(operation.operationId)?.reason ?? "",
   });
@@ -278,7 +282,7 @@ function normaliseSchema(spec, schema) {
   }
 
   if (Array.isArray(resolved.enum)) {
-    normalised.enum = resolved.enum.filter((value) => typeof value === "string" || typeof value === "number");
+    normalised.enum = resolved.enum.filter((value) => value !== "calendar.changed" && (typeof value === "string" || typeof value === "number"));
   }
 
   for (const key of ["maximum", "maxItems", "maxLength", "minimum", "minItems", "minLength"]) {
@@ -544,8 +548,8 @@ function renderMatrix(rows) {
     "## Summary",
     "",
     `- OpenAPI operations: ${rows.length} (management ${bySurface.management}, mailbox ${bySurface.mailbox}, sending ${bySurface.sending}).`,
-    "- SDK coverage: every operation must be exported by its generated TypeScript surface package; non-TypeScript packages are regenerated from the same snapshots and covered by their language checks.",
-    "- CLI coverage: every operation must have a generated command module and spec-derived path/query/header/body metadata.",
+    "- SDK coverage: every available operation must be exported by its generated TypeScript surface package; calendar bindings are withheld. Non-TypeScript packages are regenerated from the same snapshots and covered by their language checks.",
+    "- CLI coverage: every available operation must have a generated command module and spec-derived path/query/header/body metadata; calendar bindings are withheld.",
     `- MCP coverage: curated by design; ${included} operations are tools and every excluded operation has a recorded reason.`,
     `- Rust coverage: curated; ${rows.filter((row) => row.rust.startsWith("named-")).length} named operations. Every operation has an explicit decision in rust/operation-decisions.json; raw JSON reachability is not named-operation certification.`,
     "",

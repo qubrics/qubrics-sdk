@@ -2,6 +2,8 @@ import { mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "nod
 import { join } from "node:path";
 import { spawnSync } from "node:child_process";
 import { planDeprecatedModelAliases, planDeprecatedUnionMembers, reportPendingAliases } from "./deprecated-model-aliases.mjs";
+import { retainedManagementSchemaRefs } from "./withhold-management-calendar.mjs";
+import { withholdMcpCalendar } from "./withhold-mcp-calendar.mjs";
 
 const root = process.cwd();
 const outputRoot = join(root, ".tmp", "go-codegen");
@@ -163,10 +165,48 @@ for (const surface of surfaces) {
     inputSpec,
   ]);
 
+  if (surface.name === "management") writeRetainedManagementModels(packageDir);
+  patchEmptyRawObjectFields(packageDir);
   writeSurfaceFiles(surface, inputSpec);
 }
 
 run("go", ["mod", "tidy"], { cwd: join(root, "go") });
+
+function patchEmptyRawObjectFields(packageDir) {
+  // ogen v1.14.0 writes the map key before its shared raw-value empty guard.
+  // Keep that omission policy but guard the key too, so empty Raw stays valid JSON.
+  replaceInFile(
+    join(packageDir, "oas_json_gen.go"),
+    /\t\te\.FieldStart\(k\)\n\n\t\tif len\(elem\) != 0 \{\n\t\t\te\.Raw\(elem\)\n\t\t\}/g,
+    "\t\tif len(elem) != 0 {\n\t\t\te.FieldStart(k)\n\t\t\te.Raw(elem)\n\t\t}",
+    "empty raw object field guard",
+  );
+}
+
+function writeRetainedManagementModels(packageDir) {
+  const schemaPath = join(outputRoot, "management-webhook.schema.json");
+  writeFileSync(schemaPath, `${JSON.stringify({ $ref: "management.openapi-generator.codegen.json#/components/schemas/WebhookEventPayload" })}\n`);
+  const destination = join(packageDir, "oas_webhook_models_gen.go");
+  run("go", [
+    "run", `github.com/ogen-go/ogen/cmd/jschemagen@${ogenVersion}`,
+    "--target", destination, "--package", "management", "--typename", "WebhookEventPayload",
+    "--trim-prefixes", "#/components/schemas/", schemaPath,
+  ]);
+  let models = readFileSync(destination, "utf8");
+  const operationModels = readFileSync(join(packageDir, "oas_schemas_gen.go"), "utf8");
+  for (const name of ["NilBool", "NilString", "OptNilString"]) {
+    if (!new RegExp(`^type ${name} struct \\{`, "m").test(operationModels)) {
+      throw new Error(`Management no longer generates shared wrapper ${name}`);
+    }
+    const comments = "(?:^//[^\\n]*\\n)*";
+    models = models
+      .replace(new RegExp(`${comments}^type ${name} struct \\{[\\s\\S]*?^\\}\\n`, "gm"), "")
+      .replace(new RegExp(`${comments}^func New${name}\\([^\\n]*\\{[\\s\\S]*?^\\}\\n`, "gm"), "")
+      .replace(new RegExp(`${comments}^func \\([^\\n)]*\\b${name}\\)[^\\n]*\\{(?:[^\\n]*\\}\\n|\\n[\\s\\S]*?^\\}\\n)`, "gm"), "");
+  }
+  writeFileSync(destination, models);
+  run("gofmt", ["-w", destination]);
+}
 console.log("Generated Go SDK packages");
 
 function writeFilteredSpec(surface) {
@@ -175,6 +215,7 @@ function writeFilteredSpec(surface) {
   // nullable-downconverted artifact as OpenAPI Generator. The committed
   // snapshots remain the 3.1 source of truth.
   const source = JSON.parse(readFileSync(join(root, surface.spec), "utf8"));
+  if (surface.name !== "sending") withholdMcpCalendar(source);
   normalizeGoBearerSecurity(source);
   const allowed = new Set(surface.tags);
   const paths = {};
@@ -209,7 +250,7 @@ function writeFilteredSpec(surface) {
   }
 
   const outputPath = join(outputRoot, `${surface.name}.openapi-generator.codegen.json`);
-  writeFileSync(outputPath, `${JSON.stringify(normalizeForOgen(pruneComponents({ ...source, paths })), null, 2)}\n`);
+  writeFileSync(outputPath, `${JSON.stringify(normalizeForOgen(pruneComponents({ ...source, paths }, surface.name === "management" ? retainedManagementSchemaRefs : [])), null, 2)}\n`);
   return outputPath;
 }
 
@@ -398,8 +439,8 @@ function isSuccessEnvelopeSchema(schema) {
   );
 }
 
-function pruneComponents(document) {
-  const refs = new Set();
+function pruneComponents(document, roots = []) {
+  const refs = new Set(roots);
   collectRefs(document.paths, refs);
 
   for (const ref of refs) {
