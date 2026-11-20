@@ -3,7 +3,7 @@
 [![npm version](https://img.shields.io/npm/v/@qubrics/sdk?label=npm)](https://www.npmjs.com/package/@qubrics/sdk)
 [![PyPI version](https://img.shields.io/pypi/v/sendmux-sdk?label=pypi)](https://pypi.org/project/sendmux-sdk/)
 [![Go Reference](https://pkg.go.dev/badge/sendmux.ai/go/v3.svg)](https://pkg.go.dev/sendmux.ai/go/v3)
-[![crates.io version](https://img.shields.io/crates/v/sendmux?label=crates.io)](https://crates.io/crates/sendmux)
+[![crates.io version](https://img.shields.io/crates/v/qubrics?label=crates.io)](https://crates.io/crates/qubrics)
 [![CI](https://github.com/qubrics/qubrics-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/qubrics/qubrics-sdk/actions/workflows/ci.yml)
 [![npm downloads](https://img.shields.io/npm/dm/@qubrics/sdk?label=npm%20downloads)](https://www.npmjs.com/package/@qubrics/sdk)
 [![Licence: MIT](https://img.shields.io/badge/licence-MIT-blue.svg)](LICENSE)
@@ -46,7 +46,8 @@ Go v4 source for `qubrics.com/go/v4` awaits publication. Use published `sendmux.
 | Go | `sendmux.ai/go/v3/management` | Management API | `smx_root_*` | `go get sendmux.ai/go/v3@v3.0.0` | [`go/management`](go/management) |
 | Go | `sendmux.ai/go/v3/sdk` | Go umbrella package | surface-specific | `go get sendmux.ai/go/v3@v3.0.0` | [`go/sdk`](go/sdk) |
 | crates.io | `sendmux` 0.5.1 | Published Rust umbrella crate | surface-specific | `cargo add sendmux@0.5.1` | [Published crate](https://crates.io/crates/sendmux/0.5.1) |
-| Source only | `qubrics` 1.0.0 | Rust umbrella crate source | surface-specific | Not published | [`rust`](rust) |
+| crates.io | `qubrics` 1.0.0 | Rust umbrella crate | surface-specific | `cargo add qubrics@=1.0.0` | [`rust`](rust) |
+| Source only | `sendmux` 1.0.0 | Rust API re-export | surface-specific | Not published | [`release-pointers/cratesio/sendmux`](release-pointers/cratesio/sendmux) |
 | Packagist | `sendmux/core` | Shared PHP helpers | n/a | `composer require sendmux/core:^2.1` | [`packages/php/core`](packages/php/core) |
 | Packagist | `sendmux/sending` | Sending API | `smx_mbx_*` or owner-approved `smx_agent_*` | `composer require sendmux/sending:^2.1` | [`packages/php/sending`](packages/php/sending) |
 | Packagist | `sendmux/mailbox` | Mailbox API | `smx_mbx_*` or `smx_agent_*` | `composer require sendmux/mailbox:^2.1` | [`packages/php/mailbox`](packages/php/mailbox) |
@@ -84,7 +85,7 @@ Install only the package for the surface you need.
 npm install @qubrics/sending
 pip install qubrics-sending
 go get sendmux.ai/go/v3@v3.0.0
-cargo add sendmux
+cargo add qubrics@=1.0.0
 composer require sendmux/sending:^2.1
 gem install qubrics-sending
 ```
