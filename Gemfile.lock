@@ -28,7 +28,7 @@ PATH
 PATH
   remote: packages/ruby/sdk
   specs:
-    qubrics-sdk (2.0.0)
+    qubrics-sdk (3.0.0)
       qubrics-core (>= 2.0.0, < 3.0)
       qubrics-mailbox (>= 3.0.0, < 4.0)
       qubrics-management (>= 3.0.0, < 4.0)

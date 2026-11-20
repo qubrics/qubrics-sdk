@@ -10,7 +10,7 @@
 
 Official SDK, CLI, and MCP workspace for Qubrics.
 
-The seven `@qubrics/*` npm packages and PyPI packages `qubrics-core`, `qubrics-sending`, `qubrics-mailbox` and `qubrics-management` are published. RubyGems has `qubrics-core` 2.0.0 and `qubrics-management` 3.0.0. Existing `@sendmux/*` releases remain available. Other Python and Ruby packages use the published names in the Packages table.
+The seven `@qubrics/*` npm packages and PyPI packages `qubrics-core`, `qubrics-sending`, `qubrics-mailbox`, `qubrics-management` and `qubrics-mcp` are published. RubyGems has `qubrics-core` and `qubrics-sending` 2.0.0, plus `qubrics-mailbox` and `qubrics-management` 3.0.0. Existing `@sendmux/*` releases remain available. Other Python and Ruby packages use the published names in the Packages table.
 
 Go v4 source for `qubrics.com/go/v4` awaits publication. Use published `sendmux.ai/go/v3@v3.0.0`.
 
@@ -38,7 +38,7 @@ Go v4 source for `qubrics.com/go/v4` awaits publication. Use published `sendmux.
 | PyPI | `qubrics-mailbox` | Mailbox API | `smx_mbx_*` or `smx_agent_*` | `pip install qubrics-mailbox` | [`packages/python/mailbox`](packages/python/mailbox) |
 | PyPI | `qubrics-management` | Management API | `smx_root_*` | `pip install qubrics-management` | [`packages/python/management`](packages/python/management) |
 | PyPI | `sendmux-sdk` | Python umbrella package | surface-specific | `pip install sendmux-sdk` | [`packages/python/sdk`](packages/python/sdk) |
-| PyPI | `sendmux-mcp` | Local MCP plus hosted MCP and A2A servers | OAuth for hosted; surface-specific keys for local | `pip install sendmux-mcp` | [`packages/python/mcp`](packages/python/mcp) |
+| PyPI | `qubrics-mcp` | Local MCP plus hosted MCP and A2A servers | OAuth for hosted; surface-specific keys for local | `pip install qubrics-mcp` | [`packages/python/mcp`](packages/python/mcp) |
 | PyPI | `langchain-sendmux` | LangChain toolkit (agent inbox + sending) | REST OAuth or send + receive `smx_mbx_*` / `smx_agent_*` | `pip install langchain-sendmux` | [`packages/python/langchain`](packages/python/langchain) |
 | Go | `sendmux.ai/go/v3/core` | Shared Go helpers | n/a | `go get sendmux.ai/go/v3@v3.0.0` | [`go/core`](go/core) |
 | Go | `sendmux.ai/go/v3/sending` | Sending API | `smx_mbx_*` or owner-approved `smx_agent_*` | `go get sendmux.ai/go/v3@v3.0.0` | [`go/sending`](go/sending) |
@@ -52,8 +52,8 @@ Go v4 source for `qubrics.com/go/v4` awaits publication. Use published `sendmux.
 | Packagist | `sendmux/management` | Management API | `smx_root_*` | `composer require sendmux/management:^2.1` | [`packages/php/management`](packages/php/management) |
 | Packagist | `sendmux/sdk` | PHP umbrella package | surface-specific | `composer require sendmux/sdk:^2.1` | [`packages/php/sdk`](packages/php/sdk) |
 | RubyGems | `qubrics-core` | Shared Ruby helpers | n/a | `gem install qubrics-core` | [`packages/ruby/core`](packages/ruby/core) |
-| RubyGems | `sendmux-sending` | Sending API | `smx_mbx_*` or owner-approved `smx_agent_*` | `gem install sendmux-sending` | [`packages/ruby/sending`](packages/ruby/sending) |
-| RubyGems | `sendmux-mailbox` | Mailbox API | `smx_mbx_*` or `smx_agent_*` | `gem install sendmux-mailbox` | [`packages/ruby/mailbox`](packages/ruby/mailbox) |
+| RubyGems | `qubrics-sending` | Sending API | `smx_mbx_*` or owner-approved `smx_agent_*` | `gem install qubrics-sending` | [`packages/ruby/sending`](packages/ruby/sending) |
+| RubyGems | `qubrics-mailbox` | Mailbox API | `smx_mbx_*` or `smx_agent_*` | `gem install qubrics-mailbox` | [`packages/ruby/mailbox`](packages/ruby/mailbox) |
 | RubyGems | `qubrics-management` | Management API | `smx_root_*` | `gem install qubrics-management` | [`packages/ruby/management`](packages/ruby/management) |
 | RubyGems | `sendmux-sdk` | Ruby umbrella package | surface-specific | `gem install sendmux-sdk` | [`packages/ruby/sdk`](packages/ruby/sdk) |
 
@@ -61,7 +61,7 @@ Go v4 source for `qubrics.com/go/v4` awaits publication. Use published `sendmux.
 
 ### Python packages
 
-Python packages share the `qubrics` namespace. PyPI has `qubrics-core` and `qubrics-sending` 2.0.0, plus `qubrics-mailbox` and `qubrics-management` 3.0.0. The `qubrics-sdk`, `qubrics-mcp` and `langchain-qubrics` targets in the table await publication.
+Python packages share the `qubrics` namespace. PyPI has `qubrics-core` and `qubrics-sending` 2.0.0, plus `qubrics-mailbox`, `qubrics-management` and `qubrics-mcp` 3.0.0. The `qubrics-sdk` and `langchain-qubrics` targets in the table await publication.
 
 | Published distribution | Replacement and target version | Source import |
 | --- | --- | --- |
@@ -85,7 +85,7 @@ pip install qubrics-sending
 go get sendmux.ai/go/v3@v3.0.0
 cargo add sendmux
 composer require sendmux/sending:^2.1
-gem install sendmux-sending
+gem install qubrics-sending
 ```
 
 Use send-capable `smx_mbx_*` keys or owner-approved Sending-resource `smx_agent_*` tokens for Sending clients. Use `smx_mbx_*` keys or scoped `smx_agent_*` tokens for Mailbox clients. Use root `smx_root_*` keys for Management clients. Agent tokens remain limited by server-side scopes; pre-claim self-registered agent tokens do not include `email.send`.
@@ -222,13 +222,13 @@ Maintainers: use the [protected live E2E matrix](docs/live-e2e-matrix.md) for cr
 
 ### Ruby packages
 
-Ruby Core and Management use the `Qubrics` module. Install `qubrics-core` 2.0.0 or `qubrics-management` 3.0.0 from RubyGems. `qubrics-sending`, `qubrics-mailbox` and `qubrics-sdk` are unpublished source targets. For Sending, Mailbox and SDK installs, use the published names and commands in the Packages table.
+Ruby Core, Sending, Mailbox and Management use the `Qubrics` module. Install their published versions from RubyGems using the commands in the Packages table. The `qubrics-sdk` source target awaits publication. For the umbrella SDK, use `gem install sendmux-sdk`.
 
 | Source package | Target version | Source require | Published |
 | --- | --- | --- | --- |
 | `qubrics-core` | 2.0.0 | `qubrics/core` | Yes |
-| `qubrics-sending` | 2.0.0 | `qubrics/sending` | No |
-| `qubrics-mailbox` | 3.0.0 | `qubrics/mailbox` | No |
+| `qubrics-sending` | 2.0.0 | `qubrics/sending` | Yes |
+| `qubrics-mailbox` | 3.0.0 | `qubrics/mailbox` | Yes |
 | `qubrics-management` | 3.0.0 | `qubrics/management` | Yes |
 | `qubrics-sdk` | 3.0.0 | `qubrics/sdk` | No |
 
