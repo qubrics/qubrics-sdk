@@ -4,7 +4,7 @@ The SDK 4.0.0 candidate changelog replaces two announcement lines with
 `update native package imports`, retaining the breaking-change heading
 and original commit link. Native metadata is unchanged. Package versions,
 dependency floors, manifest entries and runtime source match parent
-PR358 head `e3f041d9fa401000c1ecf389a4a3a4281206f285` exactly.
+PR358 head `155ccc0417bcfb520ff9661be661c1ef74f157d4` exactly.
 
 The source PR targets
 `release-please--branches--main--components--python-sdk`, leaving the

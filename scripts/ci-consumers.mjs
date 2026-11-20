@@ -451,6 +451,23 @@ export async function rustPackage() {
     await run("cargo", ["+1.82.0", "test", "--locked"], { cwd: consumer, env: floorEnv });
     assert.equal(readFileSync(join(consumer, "Cargo.lock"), "utf8"), lock);
     console.log(JSON.stringify({ stable_crate: archives[0], floor: "1.82.0", independent_consumer_lock: true }));
+
+    const pointer = join(directory, "pointer-source");
+    mkdirSync(pointer);
+    for (const name of ["Cargo.toml", "Cargo.lock", "src", "tests", "README.md", "LICENSE"]) cpSync(join(root, "release-pointers/cratesio/sendmux", name), join(pointer, name), { recursive: true });
+    await run("cargo", ["+stable", "fmt", "--check"], { cwd: pointer, env });
+    await run("cargo", ["+stable", "clippy", "--locked", "--all-targets", "--all-features", "--", "-D", "warnings"], { cwd: pointer, env });
+    await run("cargo", ["+stable", "test", "--locked", "--all-targets", "--all-features", "--", "--nocapture"], { cwd: pointer, env });
+    await run("cargo", ["+stable", "test", "--locked", "--doc", "--all-features"], { cwd: pointer, env });
+    await run("cargo", ["+stable", "package", "--locked"], { cwd: pointer, env });
+    const pointerArchives = readdirSync(join(pointer, "target/package")).filter((name) => name.endsWith(".crate"));
+    assert.deepEqual(pointerArchives, ["sendmux-1.0.0.crate"]);
+    const pointerUnpacked = join(directory, "pointer-package");
+    mkdirSync(pointerUnpacked);
+    await run("tar", ["-xzf", join(pointer, "target/package", pointerArchives[0]), "--strip-components=1", "-C", pointerUnpacked]);
+    await run("cargo", ["+1.82.0", "test", "--locked", "--all-targets", "--all-features"], { cwd: pointerUnpacked, env: floorEnv });
+    await run("cargo", ["+1.82.0", "test", "--locked", "--doc", "--all-features"], { cwd: pointerUnpacked, env: floorEnv });
+    console.log(JSON.stringify({ pointer_crate: pointerArchives[0], floor: "1.82.0", public_type_identity: true }));
   });
 }
 
