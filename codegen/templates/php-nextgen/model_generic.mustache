@@ -344,6 +344,7 @@ class {{classname}} {{#parentSchema}}extends {{{parent}}}{{/parentSchema}}{{^par
             $invalidProperties[] = "'{{name}}' {{^isNullable}}can't be null"{{/isNullable}}{{#isNullable}}is required"{{/isNullable}};
         }
         {{/required}}
+        {{^vendorExtensions.x-sendmux-open-label}}
         {{#isEnum}}
         {{^isContainer}}
         $allowedValues = self::{{getter}}AllowableValues();
@@ -357,6 +358,7 @@ class {{classname}} {{#parentSchema}}extends {{{parent}}}{{/parentSchema}}{{^par
 
         {{/isContainer}}
         {{/isEnum}}
+        {{/vendorExtensions.x-sendmux-open-label}}
         {{#hasValidation}}
         {{#maxLength}}
         if (!is_null($this->container['{{name}}']) && (mb_strlen($this->container['{{name}}']) > {{maxLength}})) {
@@ -466,6 +468,7 @@ class {{classname}} {{#parentSchema}}extends {{{parent}}}{{/parentSchema}}{{^par
             throw new InvalidArgumentException('non-nullable {{name}} cannot be null');
         }
         {{/isNullable}}
+        {{^vendorExtensions.x-sendmux-open-label}}
         {{#isEnum}}
         $allowedValues = self::{{getter}}AllowableValues();
         {{^isContainer}}
@@ -495,6 +498,7 @@ class {{classname}} {{#parentSchema}}extends {{{parent}}}{{/parentSchema}}{{^par
         }
         {{/isContainer}}
         {{/isEnum}}
+        {{/vendorExtensions.x-sendmux-open-label}}
         {{#hasValidation}}
         {{#maxLength}}
         if ({{#isNullable}}!is_null(${{name}}) && {{/isNullable}}(mb_strlen(${{name}}) > {{maxLength}})) {

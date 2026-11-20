@@ -81,6 +81,16 @@ test(`${adapter} calendar bindings are withheld from planning and fixture setup`
 });
 }
 
+async function withEnv(values, run) {
+  const previous = Object.fromEntries(Object.keys(values).map(key => [key, process.env[key]]));
+  Object.assign(process.env, values);
+  try { await run(); } finally {
+    for (const [key, value] of Object.entries(previous)) {
+      if (value === undefined) delete process.env[key]; else process.env[key] = value;
+    }
+  }
+}
+
 test("wrong team and wrong mailbox fail before fixture discovery or mutation", async () => {
   for (const response of [connection("team_other"), connection("team_expected", [])]) {
     await withApi(() => ({ body: response }), async ({ runtime, requests }) => {
@@ -282,7 +292,8 @@ test("draft and usage reads require explicit existing fixtures before selection"
 test("all-gates default selects custom MCP operations with mailbox credential requirements", async () => {
   await withEnv({ SENDMUX_STAGING_SEND: "1", SENDMUX_LIVE_E2E_MUTATIONS: "1", SENDMUX_LIVE_E2E_BINARY: "1", SENDMUX_LIVE_E2E_STREAM: "1", SENDMUX_LIVE_E2E_DRAFT_ID: "draft_existing", SENDMUX_LIVE_E2E_USAGE_START: "2026-10-01T00:00:00.000Z", SENDMUX_LIVE_E2E_USAGE_END: "2026-10-02T00:00:00.000Z" }, () => {
     const selected = selectOperations(buildOperationPlan(operations, scenarios, fixtures), []);
-    assert.equal(selected.length, 130);
+    assert.deepEqual(selected.map(operation => operation.operationId), operations.map(operation => operation.operationId));
+    assert.equal(selected.length, operations.length);
     for (const id of ["mailboxReadAttachment", "mailboxWaitForMessage"]) assert.equal(selected.find(item => item.operationId === id)?.requiredKeyKind, "mailbox");
   });
 });
@@ -1325,7 +1336,8 @@ test("JSON plans bind explicit selection to exactly its applicable pairs", () =>
   const plan = JSON.parse(result.stdout);
   assert.deepEqual(plan.selectedOperationIds, ["managementGetConnection"]);
   assert.deepEqual(plan.applicablePairs, [{ adapter: "typescript", operationId: "managementGetConnection" }]);
-  assert.equal(plan.summary.total, 130);
+  assert.deepEqual(plan.operations.map(operation => operation.operationId), operations.map(operation => operation.operationId));
+  assert.equal(plan.summary.total, operations.length);
 });
 
 test("mailbox key cleanup verifies the exact revocation receipt without inventing a read endpoint", async () => {

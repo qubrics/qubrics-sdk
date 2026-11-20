@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"reflect"
 	"testing"
+
+	"github.com/go-faster/jx"
 )
 
 func TestRetainedWebhookPayloadAndLabelsStayOpaque(t *testing.T) {
@@ -32,6 +34,32 @@ func TestRetainedWebhookPayloadAndLabelsStayOpaque(t *testing.T) {
 	subscription := WebhookSubscription{EventTypes: []string{"calendar.changed", "historical.event"}}
 	if !reflect.DeepEqual(subscription.GetEventTypes(), []string{"calendar.changed", "historical.event"}) {
 		t.Fatal("retained subscription labels changed")
+	}
+}
+
+func TestOpaqueWebhookPayloadOmitsEmptyRawValues(t *testing.T) {
+	for _, empty := range [][]byte{nil, {}} {
+		values := map[string]jx.Raw{
+			"empty": empty, "null": []byte(`null`), "data": []byte(`{"nested":[true,"retained"]}`),
+		}
+		for _, payload := range []json.Marshaler{WebhookDeliveryPayloadPayload(values), BalanceResponseMetaAdditional(values)} {
+			t.Run(reflect.TypeOf(payload).Name(), func(t *testing.T) {
+				wire, err := json.Marshal(payload)
+				if err != nil {
+					t.Fatal(err)
+				}
+				var decoded map[string]json.RawMessage
+				if err := json.Unmarshal(wire, &decoded); err != nil {
+					t.Fatal(err)
+				}
+				if _, present := decoded["empty"]; present {
+					t.Fatalf("empty raw value was encoded: %s", wire)
+				}
+				if string(decoded["null"]) != "null" || string(decoded["data"]) != `{"nested":[true,"retained"]}` {
+					t.Fatalf("nonempty opaque values changed: %s", wire)
+				}
+			})
+		}
 	}
 }
 

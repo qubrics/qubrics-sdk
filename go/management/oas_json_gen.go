@@ -1142,9 +1142,8 @@ func (s *BalanceResponseMeta) encodeFields(e *jx.Encoder) {
 		e.Str(s.RequestID)
 	}
 	for k, elem := range s.AdditionalProps {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -1253,9 +1252,8 @@ func (s BalanceResponseMetaAdditional) Encode(e *jx.Encoder) {
 // encodeFields implements json.Marshaler.
 func (s BalanceResponseMetaAdditional) encodeFields(e *jx.Encoder) {
 	for k, elem := range s {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -2438,9 +2436,8 @@ func (s *ConnectionResponseMeta) encodeFields(e *jx.Encoder) {
 		e.Str(s.RequestID)
 	}
 	for k, elem := range s.AdditionalProps {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -2549,9 +2546,8 @@ func (s ConnectionResponseMetaAdditional) Encode(e *jx.Encoder) {
 // encodeFields implements json.Marshaler.
 func (s ConnectionResponseMetaAdditional) encodeFields(e *jx.Encoder) {
 	for k, elem := range s {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -3866,9 +3862,8 @@ func (s *DeliveryLogItemCursorListResponseMeta) encodeFields(e *jx.Encoder) {
 		e.Str(s.RequestID)
 	}
 	for k, elem := range s.AdditionalProps {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -3977,9 +3972,8 @@ func (s DeliveryLogItemCursorListResponseMetaAdditional) Encode(e *jx.Encoder) {
 // encodeFields implements json.Marshaler.
 func (s DeliveryLogItemCursorListResponseMetaAdditional) encodeFields(e *jx.Encoder) {
 	for k, elem := range s {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -4195,9 +4189,8 @@ func (s *DeliveryLogItemResponseMeta) encodeFields(e *jx.Encoder) {
 		e.Str(s.RequestID)
 	}
 	for k, elem := range s.AdditionalProps {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -4306,9 +4299,8 @@ func (s DeliveryLogItemResponseMetaAdditional) Encode(e *jx.Encoder) {
 // encodeFields implements json.Marshaler.
 func (s DeliveryLogItemResponseMetaAdditional) encodeFields(e *jx.Encoder) {
 	for k, elem := range s {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -4934,9 +4926,8 @@ func (s *DomainDeletedResponseMeta) encodeFields(e *jx.Encoder) {
 		e.Str(s.RequestID)
 	}
 	for k, elem := range s.AdditionalProps {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -5045,9 +5036,8 @@ func (s DomainDeletedResponseMetaAdditional) Encode(e *jx.Encoder) {
 // encodeFields implements json.Marshaler.
 func (s DomainDeletedResponseMetaAdditional) encodeFields(e *jx.Encoder) {
 	for k, elem := range s {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -5290,9 +5280,8 @@ func (s *DomainItemCursorListResponseMeta) encodeFields(e *jx.Encoder) {
 		e.Str(s.RequestID)
 	}
 	for k, elem := range s.AdditionalProps {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -5401,9 +5390,8 @@ func (s DomainItemCursorListResponseMetaAdditional) Encode(e *jx.Encoder) {
 // encodeFields implements json.Marshaler.
 func (s DomainItemCursorListResponseMetaAdditional) encodeFields(e *jx.Encoder) {
 	for k, elem := range s {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -5619,9 +5607,8 @@ func (s *DomainItemResponseMeta) encodeFields(e *jx.Encoder) {
 		e.Str(s.RequestID)
 	}
 	for k, elem := range s.AdditionalProps {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -5730,9 +5717,8 @@ func (s DomainItemResponseMetaAdditional) Encode(e *jx.Encoder) {
 // encodeFields implements json.Marshaler.
 func (s DomainItemResponseMetaAdditional) encodeFields(e *jx.Encoder) {
 	for k, elem := range s {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -5948,9 +5934,8 @@ func (s *DomainVerifyResponseMeta) encodeFields(e *jx.Encoder) {
 		e.Str(s.RequestID)
 	}
 	for k, elem := range s.AdditionalProps {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -6059,9 +6044,8 @@ func (s DomainVerifyResponseMetaAdditional) Encode(e *jx.Encoder) {
 // encodeFields implements json.Marshaler.
 func (s DomainVerifyResponseMetaAdditional) encodeFields(e *jx.Encoder) {
 	for k, elem := range s {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -6756,9 +6740,8 @@ func (s *EmailMetricsResponseMeta) encodeFields(e *jx.Encoder) {
 		e.Str(s.RequestID)
 	}
 	for k, elem := range s.AdditionalProps {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -6867,9 +6850,8 @@ func (s EmailMetricsResponseMetaAdditional) Encode(e *jx.Encoder) {
 // encodeFields implements json.Marshaler.
 func (s EmailMetricsResponseMetaAdditional) encodeFields(e *jx.Encoder) {
 	for k, elem := range s {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -7761,9 +7743,8 @@ func (s *FilterStateResponseMeta) encodeFields(e *jx.Encoder) {
 		e.Str(s.RequestID)
 	}
 	for k, elem := range s.AdditionalProps {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -7872,9 +7853,8 @@ func (s FilterStateResponseMetaAdditional) Encode(e *jx.Encoder) {
 // encodeFields implements json.Marshaler.
 func (s FilterStateResponseMetaAdditional) encodeFields(e *jx.Encoder) {
 	for k, elem := range s {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -8448,9 +8428,8 @@ func (s *IncomingLogItemCursorListResponseMeta) encodeFields(e *jx.Encoder) {
 		e.Str(s.RequestID)
 	}
 	for k, elem := range s.AdditionalProps {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -8559,9 +8538,8 @@ func (s IncomingLogItemCursorListResponseMetaAdditional) Encode(e *jx.Encoder) {
 // encodeFields implements json.Marshaler.
 func (s IncomingLogItemCursorListResponseMetaAdditional) encodeFields(e *jx.Encoder) {
 	for k, elem := range s {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -8817,9 +8795,8 @@ func (s *IncomingLogItemResponseMeta) encodeFields(e *jx.Encoder) {
 		e.Str(s.RequestID)
 	}
 	for k, elem := range s.AdditionalProps {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -8928,9 +8905,8 @@ func (s IncomingLogItemResponseMetaAdditional) Encode(e *jx.Encoder) {
 // encodeFields implements json.Marshaler.
 func (s IncomingLogItemResponseMetaAdditional) encodeFields(e *jx.Encoder) {
 	for k, elem := range s {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -9432,9 +9408,8 @@ func (s *MailboxAppPasswordResultResponseMeta) encodeFields(e *jx.Encoder) {
 		e.Str(s.RequestID)
 	}
 	for k, elem := range s.AdditionalProps {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -9543,9 +9518,8 @@ func (s MailboxAppPasswordResultResponseMetaAdditional) Encode(e *jx.Encoder) {
 // encodeFields implements json.Marshaler.
 func (s MailboxAppPasswordResultResponseMetaAdditional) encodeFields(e *jx.Encoder) {
 	for k, elem := range s {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -9809,9 +9783,8 @@ func (s *MailboxAvailabilityResponseMeta) encodeFields(e *jx.Encoder) {
 		e.Str(s.RequestID)
 	}
 	for k, elem := range s.AdditionalProps {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -9920,9 +9893,8 @@ func (s MailboxAvailabilityResponseMetaAdditional) Encode(e *jx.Encoder) {
 // encodeFields implements json.Marshaler.
 func (s MailboxAvailabilityResponseMetaAdditional) encodeFields(e *jx.Encoder) {
 	for k, elem := range s {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -11029,9 +11001,8 @@ func (s *MailboxCostUsageResponseMeta) encodeFields(e *jx.Encoder) {
 		e.Str(s.RequestID)
 	}
 	for k, elem := range s.AdditionalProps {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -11140,9 +11111,8 @@ func (s MailboxCostUsageResponseMetaAdditional) Encode(e *jx.Encoder) {
 // encodeFields implements json.Marshaler.
 func (s MailboxCostUsageResponseMetaAdditional) encodeFields(e *jx.Encoder) {
 	for k, elem := range s {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -11707,9 +11677,8 @@ func (s *MailboxCreateResultResponseMeta) encodeFields(e *jx.Encoder) {
 		e.Str(s.RequestID)
 	}
 	for k, elem := range s.AdditionalProps {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -11818,9 +11787,8 @@ func (s MailboxCreateResultResponseMetaAdditional) Encode(e *jx.Encoder) {
 // encodeFields implements json.Marshaler.
 func (s MailboxCreateResultResponseMetaAdditional) encodeFields(e *jx.Encoder) {
 	for k, elem := range s {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -12394,9 +12362,8 @@ func (s *MailboxDeletedResponseMeta) encodeFields(e *jx.Encoder) {
 		e.Str(s.RequestID)
 	}
 	for k, elem := range s.AdditionalProps {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -12505,9 +12472,8 @@ func (s MailboxDeletedResponseMetaAdditional) Encode(e *jx.Encoder) {
 // encodeFields implements json.Marshaler.
 func (s MailboxDeletedResponseMetaAdditional) encodeFields(e *jx.Encoder) {
 	for k, elem := range s {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -14561,9 +14527,8 @@ func (s *MailboxItemCursorListResponseMeta) encodeFields(e *jx.Encoder) {
 		e.Str(s.RequestID)
 	}
 	for k, elem := range s.AdditionalProps {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -14672,9 +14637,8 @@ func (s MailboxItemCursorListResponseMetaAdditional) Encode(e *jx.Encoder) {
 // encodeFields implements json.Marshaler.
 func (s MailboxItemCursorListResponseMetaAdditional) encodeFields(e *jx.Encoder) {
 	for k, elem := range s {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -14890,9 +14854,8 @@ func (s *MailboxItemResponseMeta) encodeFields(e *jx.Encoder) {
 		e.Str(s.RequestID)
 	}
 	for k, elem := range s.AdditionalProps {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -15001,9 +14964,8 @@ func (s MailboxItemResponseMetaAdditional) Encode(e *jx.Encoder) {
 // encodeFields implements json.Marshaler.
 func (s MailboxItemResponseMetaAdditional) encodeFields(e *jx.Encoder) {
 	for k, elem := range s {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -15362,9 +15324,8 @@ func (s *MailboxKeyDeletedResponseMeta) encodeFields(e *jx.Encoder) {
 		e.Str(s.RequestID)
 	}
 	for k, elem := range s.AdditionalProps {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -15473,9 +15434,8 @@ func (s MailboxKeyDeletedResponseMetaAdditional) Encode(e *jx.Encoder) {
 // encodeFields implements json.Marshaler.
 func (s MailboxKeyDeletedResponseMetaAdditional) encodeFields(e *jx.Encoder) {
 	for k, elem := range s {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -16358,9 +16318,8 @@ func (s *MailboxSendPolicyResponseMeta) encodeFields(e *jx.Encoder) {
 		e.Str(s.RequestID)
 	}
 	for k, elem := range s.AdditionalProps {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -16469,9 +16428,8 @@ func (s MailboxSendPolicyResponseMetaAdditional) Encode(e *jx.Encoder) {
 // encodeFields implements json.Marshaler.
 func (s MailboxSendPolicyResponseMetaAdditional) encodeFields(e *jx.Encoder) {
 	for k, elem := range s {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -17586,9 +17544,8 @@ func (s *ManagementTestWebhookOKMeta) encodeFields(e *jx.Encoder) {
 		e.Str(s.RequestID)
 	}
 	for k, elem := range s.AdditionalProps {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -17697,9 +17654,8 @@ func (s ManagementTestWebhookOKMetaAdditional) Encode(e *jx.Encoder) {
 // encodeFields implements json.Marshaler.
 func (s ManagementTestWebhookOKMetaAdditional) encodeFields(e *jx.Encoder) {
 	for k, elem := range s {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -20964,9 +20920,8 @@ func (s *ProviderDeletedResponseMeta) encodeFields(e *jx.Encoder) {
 		e.Str(s.RequestID)
 	}
 	for k, elem := range s.AdditionalProps {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -21075,9 +21030,8 @@ func (s ProviderDeletedResponseMetaAdditional) Encode(e *jx.Encoder) {
 // encodeFields implements json.Marshaler.
 func (s ProviderDeletedResponseMetaAdditional) encodeFields(e *jx.Encoder) {
 	for k, elem := range s {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -21840,9 +21794,8 @@ func (s *ProviderItemCursorListResponseMeta) encodeFields(e *jx.Encoder) {
 		e.Str(s.RequestID)
 	}
 	for k, elem := range s.AdditionalProps {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -21951,9 +21904,8 @@ func (s ProviderItemCursorListResponseMetaAdditional) Encode(e *jx.Encoder) {
 // encodeFields implements json.Marshaler.
 func (s ProviderItemCursorListResponseMetaAdditional) encodeFields(e *jx.Encoder) {
 	for k, elem := range s {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -22169,9 +22121,8 @@ func (s *ProviderItemResponseMeta) encodeFields(e *jx.Encoder) {
 		e.Str(s.RequestID)
 	}
 	for k, elem := range s.AdditionalProps {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -22280,9 +22231,8 @@ func (s ProviderItemResponseMetaAdditional) Encode(e *jx.Encoder) {
 // encodeFields implements json.Marshaler.
 func (s ProviderItemResponseMetaAdditional) encodeFields(e *jx.Encoder) {
 	for k, elem := range s {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -22695,9 +22645,8 @@ func (s *ProviderLimitsResponseMeta) encodeFields(e *jx.Encoder) {
 		e.Str(s.RequestID)
 	}
 	for k, elem := range s.AdditionalProps {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -22806,9 +22755,8 @@ func (s ProviderLimitsResponseMetaAdditional) Encode(e *jx.Encoder) {
 // encodeFields implements json.Marshaler.
 func (s ProviderLimitsResponseMetaAdditional) encodeFields(e *jx.Encoder) {
 	for k, elem := range s {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -24063,9 +24011,8 @@ func (s *ProviderStatsResponseMeta) encodeFields(e *jx.Encoder) {
 		e.Str(s.RequestID)
 	}
 	for k, elem := range s.AdditionalProps {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -24174,9 +24121,8 @@ func (s ProviderStatsResponseMetaAdditional) Encode(e *jx.Encoder) {
 // encodeFields implements json.Marshaler.
 func (s ProviderStatsResponseMetaAdditional) encodeFields(e *jx.Encoder) {
 	for k, elem := range s {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -24686,9 +24632,8 @@ func (s *ProviderTestResultResponseMeta) encodeFields(e *jx.Encoder) {
 		e.Str(s.RequestID)
 	}
 	for k, elem := range s.AdditionalProps {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -24797,9 +24742,8 @@ func (s ProviderTestResultResponseMetaAdditional) Encode(e *jx.Encoder) {
 // encodeFields implements json.Marshaler.
 func (s ProviderTestResultResponseMetaAdditional) encodeFields(e *jx.Encoder) {
 	for k, elem := range s {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -26147,9 +26091,8 @@ func (s *ProviderUsageResponseMeta) encodeFields(e *jx.Encoder) {
 		e.Str(s.RequestID)
 	}
 	for k, elem := range s.AdditionalProps {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -26258,9 +26201,8 @@ func (s ProviderUsageResponseMetaAdditional) Encode(e *jx.Encoder) {
 // encodeFields implements json.Marshaler.
 func (s ProviderUsageResponseMetaAdditional) encodeFields(e *jx.Encoder) {
 	for k, elem := range s {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -27695,9 +27637,8 @@ func (s *SendingAccountLimitRequestResponseMeta) encodeFields(e *jx.Encoder) {
 		e.Str(s.RequestID)
 	}
 	for k, elem := range s.AdditionalProps {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -27806,9 +27747,8 @@ func (s SendingAccountLimitRequestResponseMetaAdditional) Encode(e *jx.Encoder) 
 // encodeFields implements json.Marshaler.
 func (s SendingAccountLimitRequestResponseMetaAdditional) encodeFields(e *jx.Encoder) {
 	for k, elem := range s {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -28708,9 +28648,8 @@ func (s *SharedAmazonSesLimitRequestCancelResponseMeta) encodeFields(e *jx.Encod
 		e.Str(s.RequestID)
 	}
 	for k, elem := range s.AdditionalProps {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -28819,9 +28758,8 @@ func (s SharedAmazonSesLimitRequestCancelResponseMetaAdditional) Encode(e *jx.En
 // encodeFields implements json.Marshaler.
 func (s SharedAmazonSesLimitRequestCancelResponseMetaAdditional) encodeFields(e *jx.Encoder) {
 	for k, elem := range s {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -29146,9 +29084,8 @@ func (s *SharedAmazonSesLimitRequestCreateResponseMeta) encodeFields(e *jx.Encod
 		e.Str(s.RequestID)
 	}
 	for k, elem := range s.AdditionalProps {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -29257,9 +29194,8 @@ func (s SharedAmazonSesLimitRequestCreateResponseMetaAdditional) Encode(e *jx.En
 // encodeFields implements json.Marshaler.
 func (s SharedAmazonSesLimitRequestCreateResponseMetaAdditional) encodeFields(e *jx.Encoder) {
 	for k, elem := range s {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -29584,9 +29520,8 @@ func (s *SharedAmazonSesLimitRequestPageResponseMeta) encodeFields(e *jx.Encoder
 		e.Str(s.RequestID)
 	}
 	for k, elem := range s.AdditionalProps {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -29695,9 +29630,8 @@ func (s SharedAmazonSesLimitRequestPageResponseMetaAdditional) Encode(e *jx.Enco
 // encodeFields implements json.Marshaler.
 func (s SharedAmazonSesLimitRequestPageResponseMetaAdditional) encodeFields(e *jx.Encoder) {
 	for k, elem := range s {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -30157,9 +30091,8 @@ func (s *SpendSummaryResponseMeta) encodeFields(e *jx.Encoder) {
 		e.Str(s.RequestID)
 	}
 	for k, elem := range s.AdditionalProps {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -30268,9 +30201,8 @@ func (s SpendSummaryResponseMetaAdditional) Encode(e *jx.Encoder) {
 // encodeFields implements json.Marshaler.
 func (s SpendSummaryResponseMetaAdditional) encodeFields(e *jx.Encoder) {
 	for k, elem := range s {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -30720,9 +30652,8 @@ func (s *TransactionCursorListResponseMeta) encodeFields(e *jx.Encoder) {
 		e.Str(s.RequestID)
 	}
 	for k, elem := range s.AdditionalProps {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -30831,9 +30762,8 @@ func (s TransactionCursorListResponseMetaAdditional) Encode(e *jx.Encoder) {
 // encodeFields implements json.Marshaler.
 func (s TransactionCursorListResponseMetaAdditional) encodeFields(e *jx.Encoder) {
 	for k, elem := range s {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -31865,9 +31795,8 @@ func (s *WebhookDeletedResponseMeta) encodeFields(e *jx.Encoder) {
 		e.Str(s.RequestID)
 	}
 	for k, elem := range s.AdditionalProps {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -31976,9 +31905,8 @@ func (s WebhookDeletedResponseMetaAdditional) Encode(e *jx.Encoder) {
 // encodeFields implements json.Marshaler.
 func (s WebhookDeletedResponseMetaAdditional) encodeFields(e *jx.Encoder) {
 	for k, elem := range s {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -32561,9 +32489,8 @@ func (s *WebhookDeliveryAttemptCursorListResponseMeta) encodeFields(e *jx.Encode
 		e.Str(s.RequestID)
 	}
 	for k, elem := range s.AdditionalProps {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -32672,9 +32599,8 @@ func (s WebhookDeliveryAttemptCursorListResponseMetaAdditional) Encode(e *jx.Enc
 // encodeFields implements json.Marshaler.
 func (s WebhookDeliveryAttemptCursorListResponseMetaAdditional) encodeFields(e *jx.Encoder) {
 	for k, elem := range s {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -33002,9 +32928,8 @@ func (s WebhookDeliveryPayloadPayload) Encode(e *jx.Encoder) {
 // encodeFields implements json.Marshaler.
 func (s WebhookDeliveryPayloadPayload) encodeFields(e *jx.Encoder) {
 	for k, elem := range s {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -33188,9 +33113,8 @@ func (s *WebhookDeliveryPayloadResponseMeta) encodeFields(e *jx.Encoder) {
 		e.Str(s.RequestID)
 	}
 	for k, elem := range s.AdditionalProps {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -33299,9 +33223,8 @@ func (s WebhookDeliveryPayloadResponseMetaAdditional) Encode(e *jx.Encoder) {
 // encodeFields implements json.Marshaler.
 func (s WebhookDeliveryPayloadResponseMetaAdditional) encodeFields(e *jx.Encoder) {
 	for k, elem := range s {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -33893,9 +33816,8 @@ func (s *WebhookSubscriptionCursorListResponseMeta) encodeFields(e *jx.Encoder) 
 		e.Str(s.RequestID)
 	}
 	for k, elem := range s.AdditionalProps {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -34004,9 +33926,8 @@ func (s WebhookSubscriptionCursorListResponseMetaAdditional) Encode(e *jx.Encode
 // encodeFields implements json.Marshaler.
 func (s WebhookSubscriptionCursorListResponseMetaAdditional) encodeFields(e *jx.Encoder) {
 	for k, elem := range s {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -34222,9 +34143,8 @@ func (s *WebhookSubscriptionResponseMeta) encodeFields(e *jx.Encoder) {
 		e.Str(s.RequestID)
 	}
 	for k, elem := range s.AdditionalProps {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -34333,9 +34253,8 @@ func (s WebhookSubscriptionResponseMetaAdditional) Encode(e *jx.Encoder) {
 // encodeFields implements json.Marshaler.
 func (s WebhookSubscriptionResponseMetaAdditional) encodeFields(e *jx.Encoder) {
 	for k, elem := range s {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -34809,9 +34728,8 @@ func (s *WebhookSubscriptionWithSecretResponseMeta) encodeFields(e *jx.Encoder) 
 		e.Str(s.RequestID)
 	}
 	for k, elem := range s.AdditionalProps {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}
@@ -34920,9 +34838,8 @@ func (s WebhookSubscriptionWithSecretResponseMetaAdditional) Encode(e *jx.Encode
 // encodeFields implements json.Marshaler.
 func (s WebhookSubscriptionWithSecretResponseMetaAdditional) encodeFields(e *jx.Encoder) {
 	for k, elem := range s {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}

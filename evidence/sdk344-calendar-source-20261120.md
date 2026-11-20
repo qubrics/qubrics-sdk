@@ -8,7 +8,7 @@ Goal: remove remaining calendar bindings from SDK source under the operator's 20
 - Reuse `withhold-mcp-calendar.mjs` and `withhold-management-calendar.mjs` on TypeScript, Go and PHP generator inputs. Raw OpenAPI producer snapshots remain unchanged while the App/gateway runtime awaits its infrastructure gate.
 - Generated CLI omits the same ten calendar operations and the calendar event enum value. Coverage reports distinguish withheld bindings from missing implementations. Retired calendar fixture creation/cleanup code and discovery records are removed.
 - Existing subscription/delivery labels stay strings. Retained webhook delivery payloads stay opaque maps, preserving unknown nested values. Mail webhook variants remain available.
-- Python, Ruby, Rust, MCP source, package versions, release metadata and workflows have no diff. Separate PHP repositories follow this immutable canonical output. No announcement copy is added.
+- Relative to integrated main `29ebc94f`, Python, Ruby, Rust and MCP source, package versions, release metadata and workflows have no calendar-removal diff. The branch normally incorporates the already-merged Ruby SDK release source from that main commit. Separate PHP repositories follow the forthcoming immutable canonical output. No announcement copy is added.
 
 ## Origin and regression evidence
 
@@ -46,3 +46,34 @@ Tests: add CLI input/output regression, Go history round-trip, PHP history/allow
 Status: coded, not merged. First exact default Skills v2.0.8 check of `27c2cd1b` passed live OpenAPI equality but failed because its new CLI command digest has no reviewed compatibility record. `calendar-source-default-27c2cd1b.log` records the failure. Skills owner must settle that evidence at origin before a new released checker/default recheck. No retry, pin, fallback or workflow change. Exact-head CI and merge disposition follow normal PR gates. Package publication remains separately held.
 
 Rollback: normal revert of the source PR. Preserved source remains on `archive/calendar`.
+
+## Post-review PHP metadata correction
+
+Standards review found an unintended public consumer regression in the four surviving historical Management models. `WebhookSubscription::EVENT_TYPES_MESSAGE_RECEIVED` raised `Error: Undefined constant` (PHP exit 255). The generic calendar filter removed historical-field enums to keep arbitrary stored labels readable. The pinned vendor template uses the same `isEnum` metadata to generate both constants/allowable-value methods and closed validation, so enum deletion also removed mail metadata symbols. All four fields share this origin; adjacent new-subscription request models must remain closed.
+
+Canonical per the pinned [OpenAPI Generator 7.22.0 templating guide](https://github.com/OpenAPITools/openapi-generator/blob/v7.22.0/docs/templating.md): customise the existing Mustache template and its vendor-extension data. The pinned [PHP model template](https://github.com/OpenAPITools/openapi-generator/blob/v7.22.0/modules/openapi-generator/src/main/resources/php-nextgen/model_generic.mustache) gates public enum metadata and validation together. `scripts/generate-php.mjs` now preserves the original non-calendar enum metadata for only `WebhookSubscription`, `WebhookSubscriptionWithSecret`, `WebhookDeliveryAttempt` and `WebhookDeliveryPayload`, marking their properties `x-sendmux-open-label`. Four guards in the existing local model template omit closed setter/property validation for those marked historical fields. There is no unknown-label fallback, generated hand patch, dependency change or new template copy.
+
+- Exact native public-consumer red: `calendar-php-mail-metadata-consumer-red.log`, exit 255. The existing `WebhookEventPayloadTest` seam reproduced missing metadata before the correction (`calendar-php-mail-metadata-native-red.log`).
+- Green: `calendar-php-mail-metadata-consumer-green.log` prints `message.received`, exit 0. `calendar-php-mail-metadata-native-green.log`: 15 tests, 109 assertions, zero skipped; includes all eight mail discriminators, opaque nested history, all four metadata methods, exact arbitrary historical strings and rejection of a new calendar subscription.
+- `calendar-php-mail-metadata-symbol-parity.json`: all 206 pre-existing non-calendar public symbols remain (47/49/67/43 per model); only the four named calendar constants disappear. The nine existing mail/unknown-default metadata values remain; `calendar.changed` is absent from them.
+- `calendar-php-correction-unrelated-output-diff-stat.log` is empty: Mailbox/Sending output and new-subscription create/update models are unchanged by this correction. `calendar-php-go-runtime-scan-final.log` is empty: no calendar runtime binding remains in generated PHP/Go Mailbox/Management source.
+- Focused PHPCS and max-level PHPStan pass in `calendar-php-mail-metadata-lint.log` and `calendar-php-mail-metadata-static.log`. Two line-length warnings in the new test were corrected by wrapping only those assertions.
+
+## Post-review Go opaque-value correction
+
+CodeRabbit finding `4637031067` is confirmed. A nil or empty raw JSON value in the new opaque webhook map produced malformed JSON; an existing `BalanceResponseMetaAdditional` map reproduced the same failure. The pinned [ogen 1.14.0 map template](https://github.com/ogen-go/ogen/blob/v1.14.0/gen/_template/json/encoders_map.tmpl#L14) and [struct template](https://github.com/ogen-go/ogen/blob/v1.14.0/gen/_template/json/encoders_struct.tmpl#L16) write `FieldStart(k)` before the shared [raw-value nonempty guard](https://github.com/ogen-go/ogen/blob/v1.14.0/gen/_template/json/encode.tmpl#L106). An empty value therefore writes a name/colon without a JSON value. Both observed parser errors (`invalid character '}' looking for beginning of value` and `invalid character ':' after object key:value pair`) follow from map iteration order around that dangling field.
+
+The existing checked generator postprocessing seam now moves the key write inside that same guard for the exact traced pattern. Empty raw values remain omitted under the vendor's existing policy; nonempty raw bytes and all public symbols remain unchanged. No codec generalisation, schema change, pin/fork or generated hand patch is used.
+
+- `calendar-go-empty-raw-both-red.log`: new opaque map and existing metadata map both fail for nil and empty raw values before the origin correction. The regression extends the existing native `webhook_history_test.go` seam, with JSON null/nonempty nested data as the adjacent boundary.
+- `calendar-go-empty-raw-green.log`: focused Management native tests pass, including both maps, nil/empty omission, unchanged JSON null/nested data, historical payload round-trip and all eight mail discriminators.
+- Exactly 162 occurrences share this template defect: 78 Mailbox, 83 Management and 1 Sending. [The tracked inventory](sdk344-go-empty-raw-map-types-20261120.json) lists every affected receiver/method and file.
+- `calendar-go-empty-raw-exact-delta.json` proves each of the three generated JSON files equals the prior file with only that exact replacement applied, with zero old-pattern occurrences left. `calendar-go-empty-raw-symbol-parity.json` proves no function signature removed or added.
+
+The previous immutable `4416e3ce` remains reachable. Main `29ebc94f` was integrated normally before these corrections. Coverage and shared-test-helper origin corrections, all red/green receipts and the local Ruby setup limit are recorded in [the coverage evidence](sdk344-calendar-coverage-origin-20261120.md).
+
+Independent Spec and Standards reviews of the complete correction batch each found zero issues. The reviewed source-only diff SHA-256 is `c5a242bdd0e3c6e7500a2797562b8dc18230a0425f37450ad82d86854630d1b9`, excluding appendable evidence, verified unchanged after both reviews. Focused safety checks pass 9/9 and surface checks pass 3/3, with zero skipped in those commands. The complete multi-language suite remains a normal CI gate; Ruby 3.4.12 is unavailable locally and no runtime fallback or pin change was made.
+
+`git diff --quiet 4416e3ce -- packages/ts/cli` exits 0: the correction leaves the CLI path byte-identical to the already-inspected candidate. Published `sendmux-cli` contract digest remains `46af45d935f17006bec9b7cd4745eeabdf192aa7e008357ba924cedc8ae93d51`; proposed `qubrics-cli` remains `173d494f78667ca69a49f233e5fcbdb79a178f9df274ec537b67a9af52a878b3`. The official inspection is MAIN `calendar-source-go-final-inspection.json`; this identity comparison is not an acceptance retry.
+
+Normal drift-hook commit, exact-head CI and fresh default acceptance after the Skills origin input changes remain pending. Source publication/tag/queue/environment holds remain unchanged.

@@ -7,9 +7,13 @@ namespace Qubrics\Tests;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Qubrics\Management\Model\MailWebhookEventPayload;
+use Qubrics\Management\Model\WebhookCreateBody;
+use Qubrics\Management\Model\WebhookDeliveryAttempt;
 use Qubrics\Management\Model\WebhookDeliveryPayload;
 use Qubrics\Management\Model\WebhookEventData;
 use Qubrics\Management\Model\WebhookEventPayload;
+use Qubrics\Management\Model\WebhookSubscription;
+use Qubrics\Management\Model\WebhookSubscriptionWithSecret;
 use Qubrics\Management\ObjectSerializer;
 
 final class WebhookEventPayloadTest extends TestCase
@@ -85,6 +89,48 @@ final class WebhookEventPayloadTest extends TestCase
             json_decode(json_encode($payload, JSON_THROW_ON_ERROR), true),
             json_decode(json_encode($encoded->payload, JSON_THROW_ON_ERROR), true)
         );
+    }
+
+    public function testHistoricalMailMetadataPreservesOpenLabels(): void
+    {
+        self::assertSame('message.received', WebhookSubscription::EVENT_TYPES_MESSAGE_RECEIVED);
+        self::assertSame('message.received', WebhookSubscriptionWithSecret::EVENT_TYPES_MESSAGE_RECEIVED);
+        self::assertSame('message.received', WebhookDeliveryAttempt::EVENT_TYPE_MESSAGE_RECEIVED);
+        self::assertSame('message.received', WebhookDeliveryPayload::EVENT_TYPE_MESSAGE_RECEIVED);
+        $knownLabels = [
+            'message.delivered', 'message.bounced', 'message.complained', 'message.rejected',
+            'message.delivery_delayed', 'message.received', 'message.received.spam', 'sendmux.test',
+            'unknown_default_open_api',
+        ];
+
+        foreach ([new WebhookSubscription(), new WebhookSubscriptionWithSecret()] as $subscription) {
+            self::assertSame($knownLabels, $subscription::getEventTypesAllowableValues());
+            self::assertFalse(defined($subscription::class . '::EVENT_TYPES_CALENDAR_CHANGED'));
+            $labels = ['message.received', 'calendar.changed', 'future.event'];
+            self::assertSame($labels, $subscription->setEventTypes($labels)->getEventTypes());
+            self::assertStringNotContainsString(
+                "for 'event_types'",
+                implode('; ', $subscription->listInvalidProperties())
+            );
+        }
+        foreach ([new WebhookDeliveryAttempt(), new WebhookDeliveryPayload()] as $delivery) {
+            self::assertSame($knownLabels, $delivery::getEventTypeAllowableValues());
+            self::assertFalse(defined($delivery::class . '::EVENT_TYPE_CALENDAR_CHANGED'));
+            foreach (['message.received', 'calendar.changed', 'future.event'] as $label) {
+                self::assertSame($label, $delivery->setEventType($label)->getEventType());
+                self::assertStringNotContainsString(
+                    "for 'event_type'",
+                    implode('; ', $delivery->listInvalidProperties())
+                );
+            }
+        }
+    }
+
+    public function testNewSubscriptionRejectsCalendarLabel(): void
+    {
+        self::assertNotContains('calendar.changed', WebhookCreateBody::getEventTypesAllowableValues());
+        $this->expectException(\InvalidArgumentException::class);
+        (new WebhookCreateBody())->setEventTypes(['calendar.changed']);
     }
 
     public function testUnknownDiscriminatorKeepsBaseModelFallback(): void

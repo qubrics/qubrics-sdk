@@ -166,10 +166,22 @@ for (const surface of surfaces) {
   ]);
 
   if (surface.name === "management") writeRetainedManagementModels(packageDir);
+  patchEmptyRawObjectFields(packageDir);
   writeSurfaceFiles(surface, inputSpec);
 }
 
 run("go", ["mod", "tidy"], { cwd: join(root, "go") });
+
+function patchEmptyRawObjectFields(packageDir) {
+  // ogen v1.14.0 writes the map key before its shared raw-value empty guard.
+  // Keep that omission policy but guard the key too, so empty Raw stays valid JSON.
+  replaceInFile(
+    join(packageDir, "oas_json_gen.go"),
+    /\t\te\.FieldStart\(k\)\n\n\t\tif len\(elem\) != 0 \{\n\t\t\te\.Raw\(elem\)\n\t\t\}/g,
+    "\t\tif len(elem) != 0 {\n\t\t\te.FieldStart(k)\n\t\t\te.Raw(elem)\n\t\t}",
+    "empty raw object field guard",
+  );
+}
 
 function writeRetainedManagementModels(packageDir) {
   const schemaPath = join(outputRoot, "management-webhook.schema.json");

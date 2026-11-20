@@ -645,6 +645,7 @@ function renderMatrix({ curatedMcp, fixtures, operations, scenarios }) {
   const byRisk = countBy(operations, (operation) => scenarios[operation.operationId]?.risk ?? "missing");
   const byMode = countBy(operations, (operation) => scenarios[operation.operationId]?.mode ?? "missing");
   const mcpCount = [...curatedMcp.keys()].filter((operationId) => scenarios[operationId]?.adapters?.mcp).length;
+  const withheld = operations.filter((operation) => !hasApplicableAdapter(scenarios[operation.operationId])).length;
   const executable = operations.filter((operation) => isExecutableByDefault(operation, scenarios[operation.operationId], fixtures)).length;
   const setupSources = Object.entries(fixtures.sources ?? {}).filter(([, source]) => source.setup);
 
@@ -687,10 +688,11 @@ function renderMatrix({ curatedMcp, fixtures, operations, scenarios }) {
     `- OpenAPI operations by surface: management ${bySurface.management ?? 0}, mailbox ${
       bySurface.mailbox ?? 0
     }, sending ${bySurface.sending ?? 0}.`,
-    "- CLI adapters required per operation: generated command for every OpenAPI operation.",
+    "- CLI adapters required per available OpenAPI operation; calendar bindings are withheld.",
     `- Applicable MCP operation pairs: ${mcpCount} (not a unique tool count).`,
     `- Default executable live operations: ${executable}.`,
-    `- Blocked behind safety gates: ${operations.length - executable}.`,
+    `- Blocked behind safety gates: ${operations.length - executable - withheld}.`,
+    `- Withheld operations (no applicable adapters): ${withheld}.`,
     `- Fixture setup sources: ${
       setupSources.length > 0
         ? setupSources
@@ -707,12 +709,13 @@ function renderMatrix({ curatedMcp, fixtures, operations, scenarios }) {
     "| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |",
     ...operations.map((operation) => {
       const scenario = scenarios[operation.operationId] ?? {};
+      const withheld = !hasApplicableAdapter(scenario);
       const sdkCell = operation.customMcpOnly
         ? "n/a"
-        : Array.isArray(scenario.adapters?.sdk)
+        : withheld ? "withheld" : Array.isArray(scenario.adapters?.sdk)
           ? scenario.adapters.sdk.join(", ")
           : "missing";
-      const cliCell = operation.customMcpOnly ? "n/a" : scenario.adapters?.cli === true ? "yes" : "missing";
+      const cliCell = operation.customMcpOnly ? "n/a" : withheld ? "withheld" : scenario.adapters?.cli === true ? "yes" : "missing";
       return `| ${operation.surface} | \`${operation.operationId}\` | ${operation.method.toUpperCase()} | \`${
         operation.path
       }\` | ${scenario.mode ?? "missing"} | ${scenario.risk ?? "missing"} | ${sdkCell} | ${cliCell} | ${
@@ -725,8 +728,12 @@ function renderMatrix({ curatedMcp, fixtures, operations, scenarios }) {
   ].join("\n");
 }
 
+function hasApplicableAdapter(scenario) {
+  return (scenario?.adapters?.sdk?.length ?? 0) > 0 || scenario?.adapters?.cli === true || Boolean(scenario?.adapters?.mcp);
+}
+
 function isExecutableByDefault(operation, scenario, fixtures) {
-  if (scenario?.risk !== "read" || (scenario.gates?.length ?? 0) > 0) {
+  if (!hasApplicableAdapter(scenario) || scenario?.risk !== "read" || (scenario.gates?.length ?? 0) > 0) {
     return false;
   }
   if (scenario.mode === "read") {

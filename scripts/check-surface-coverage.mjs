@@ -27,7 +27,8 @@ for (const operation of operations) {
   const withheld = /^\/mailbox\/(calendars|calendar-events)(\/|$)/.test(operation.path);
   const sdk = hasTypeScriptSdkOperation(operation);
   const cli = cliOperations.get(operation.operationId);
-  const commandModule = cli ? hasCliCommandModule(cli.command) : false;
+  const command = cli?.command ?? `${operation.surface}:${operation.operationId.slice(operation.surface.length).replace(/([a-z0-9])([A-Z])/g, "$1-$2").toLowerCase()}`;
+  const commandModule = hasCliCommandModule(command);
   const mcp = mcpDecision(operation, curatedMcp);
   const cliParity = withheld ? [] : cli ? compareCliOperation(operation, cli) : ["missing CLI operation manifest entry"];
 

@@ -5669,9 +5669,8 @@ func (s SendingGetOpenApiSpecOK) Encode(e *jx.Encoder) {
 // encodeFields implements json.Marshaler.
 func (s SendingGetOpenApiSpecOK) encodeFields(e *jx.Encoder) {
 	for k, elem := range s {
-		e.FieldStart(k)
-
 		if len(elem) != 0 {
+			e.FieldStart(k)
 			e.Raw(elem)
 		}
 	}

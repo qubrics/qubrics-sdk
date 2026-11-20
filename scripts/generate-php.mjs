@@ -111,7 +111,7 @@ console.log("Generated PHP SDK packages");
 
 function writeFilteredSpec(surface) {
   const source = JSON.parse(readFileSync(join(root, surface.spec), "utf8"));
-  if (surface.name !== "sending") withholdMcpCalendar(source);
+  if (surface.name !== "sending") withholdPhpCalendar(source, surface);
   source.info.title = source.info.title.replaceAll("Sendmux", "Qubrics");
   source.info.description = source.info.description?.replaceAll("Sendmux", "Qubrics");
   source.servers = [{ url: surface.name === "sending" ? "https://smtp.qubrics.com/api/v1" : "https://app.qubrics.com/api/v1" }];
@@ -142,6 +142,23 @@ function writeFilteredSpec(surface) {
   const outputPath = join(outputRoot, `${surface.name}.openapi-generator.codegen.json`);
   writeFileSync(outputPath, `${JSON.stringify(markTrailingSdkParams(pruneComponents({ ...source, paths }, surface.name === "management" ? retainedManagementSchemaRefs : [])), null, 2)}\n`);
   return outputPath;
+}
+
+function withholdPhpCalendar(source, surface) {
+  // Keep existing mail metadata symbols while historical labels remain open strings.
+  const historicalLabels = surface.name === "management"
+    ? ["WebhookSubscription", "WebhookSubscriptionWithSecret", "WebhookDeliveryAttempt", "WebhookDeliveryPayload"].map((name) => {
+      const properties = source.components.schemas[name].properties;
+      const property = properties.event_type ?? properties.event_types;
+      const label = property.items ?? property;
+      return { property, label, values: label.enum.filter((value) => value !== "calendar.changed") };
+    })
+    : [];
+  withholdMcpCalendar(source);
+  for (const { property, label, values } of historicalLabels) {
+    label.enum = values;
+    property["x-sendmux-open-label"] = true;
+  }
 }
 
 function markMailboxChangesResponseUnion(operation, surface) {

@@ -24,7 +24,7 @@ async function check({ root, inputDir = join(repository, "packages/python/mcp/qu
   } finally { clearTimeout(timeout); }
 }
 
-test("surface gate rejects Rust source provenance drift", async () => {
+test("surface gate rejects withheld CLI modules and Rust source provenance drift", async () => {
   const root = mkdtempSync(join(tmpdir(), "sendmux-rust-coverage-"));
   console.log(JSON.stringify({ directory: root, state: "created" }));
   try {
@@ -34,6 +34,12 @@ test("surface gate rejects Rust source provenance drift", async () => {
     if (existsSync(join(repository, "rust/operation-decisions.json"))) cpSync(join(repository, "rust/operation-decisions.json"), join(root, "rust/operation-decisions.json"));
     const healthy = await check({ root });
     assert.equal(healthy.code, 0, healthy.output);
+    const orphanCommand = join(root, "packages/ts/cli/src/commands/mailbox/list-calendars.ts");
+    writeFileSync(orphanCommand, "export default class CalendarCommand {}\n");
+    const orphan = await check({ root });
+    assert.notEqual(orphan.code, 0, "Withheld calendar command without a manifest entry was ignored");
+    assert.match(orphan.output, /mailboxListCalendars: withheld calendar binding/);
+    rmSync(orphanCommand);
     const path = join(root, "rust/src/generated/mod.rs");
     const before = readFileSync(path, "utf8");
     const changed = before.replace(/(SENDING_OPENAPI_SHA256: &str =\s*")[^"]+/, `$1${"0".repeat(64)}`);
