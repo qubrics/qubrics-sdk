@@ -165,10 +165,36 @@ for (const surface of surfaces) {
     inputSpec,
   ]);
 
+  if (surface.name === "management") writeRetainedManagementModels(packageDir);
   writeSurfaceFiles(surface, inputSpec);
 }
 
 run("go", ["mod", "tidy"], { cwd: join(root, "go") });
+
+function writeRetainedManagementModels(packageDir) {
+  const schemaPath = join(outputRoot, "management-webhook.schema.json");
+  writeFileSync(schemaPath, `${JSON.stringify({ $ref: "management.openapi-generator.codegen.json#/components/schemas/WebhookEventPayload" })}\n`);
+  const destination = join(packageDir, "oas_webhook_models_gen.go");
+  run("go", [
+    "run", `github.com/ogen-go/ogen/cmd/jschemagen@${ogenVersion}`,
+    "--target", destination, "--package", "management", "--typename", "WebhookEventPayload",
+    "--trim-prefixes", "#/components/schemas/", schemaPath,
+  ]);
+  let models = readFileSync(destination, "utf8");
+  const operationModels = readFileSync(join(packageDir, "oas_schemas_gen.go"), "utf8");
+  for (const name of ["NilBool", "NilString", "OptNilString"]) {
+    if (!new RegExp(`^type ${name} struct \\{`, "m").test(operationModels)) {
+      throw new Error(`Management no longer generates shared wrapper ${name}`);
+    }
+    const comments = "(?:^//[^\\n]*\\n)*";
+    models = models
+      .replace(new RegExp(`${comments}^type ${name} struct \\{[\\s\\S]*?^\\}\\n`, "gm"), "")
+      .replace(new RegExp(`${comments}^func New${name}\\([^\\n]*\\{[\\s\\S]*?^\\}\\n`, "gm"), "")
+      .replace(new RegExp(`${comments}^func \\([^\\n)]*\\b${name}\\)[^\\n]*\\{(?:[^\\n]*\\}\\n|\\n[\\s\\S]*?^\\}\\n)`, "gm"), "");
+  }
+  writeFileSync(destination, models);
+  run("gofmt", ["-w", destination]);
+}
 console.log("Generated Go SDK packages");
 
 function writeFilteredSpec(surface) {

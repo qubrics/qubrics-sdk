@@ -34,3 +34,29 @@ func TestRetainedWebhookPayloadAndLabelsStayOpaque(t *testing.T) {
 		t.Fatal("retained subscription labels changed")
 	}
 }
+
+func TestMailWebhookModelsKeepEveryMailDiscriminator(t *testing.T) {
+	for _, eventType := range []string{"message.bounced", "message.complained", "message.delivered", "message.delivery_delayed", "message.received", "message.received.spam", "message.rejected", "sendmux.test"} {
+		t.Run(eventType, func(t *testing.T) {
+			mail := MailWebhookEventPayload{
+				Data: WebhookEventData{MessageID: NewNilString("message@example.com"), Recipients: []string{"inbox@example.com"}},
+				ID:   "evt_fixture", OccurredAt: "2026-11-20T00:00:00Z", TeamPublicID: "team_fixture",
+				Type: MailWebhookEventPayloadType(eventType),
+			}
+			var event WebhookEventPayload
+			event.SetMailWebhookEventPayload(WebhookEventPayloadType(eventType), mail)
+			wire, err := json.Marshal(event)
+			if err != nil {
+				t.Fatal(err)
+			}
+			var decoded WebhookEventPayload
+			if err := json.Unmarshal(wire, &decoded); err != nil {
+				t.Fatal(err)
+			}
+			retained, ok := decoded.GetMailWebhookEventPayload()
+			if !ok || string(decoded.Type) != eventType || !reflect.DeepEqual(retained, mail) {
+				t.Fatalf("mail webhook changed: %s", wire)
+			}
+		})
+	}
+}

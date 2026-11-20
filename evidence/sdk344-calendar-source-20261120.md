@@ -19,6 +19,7 @@ Raw command logs live in MAIN `.claude/artifacts/rebrand-qubrics-sdk344/`.
 | CLI calendar operations absent, mailbox read retained | `calendar-cli-red.log`: actual includes `mailboxGetCalendarEventChanges` and `mailboxListCalendars`, expected only `mailboxListMessages` | `calendar-cli-green.log`: both generator tests pass |
 | CLI calendar enum value absent, mail value retained | `calendar-cli-enum-red.log`: actual contains `calendar.changed`, expected `message.received` only | `calendar-cli-enum-green.log`: 2 tests pass, zero skipped |
 | Go retained labels and opaque nested delivery payload round-trip | `calendar-go-history-red.log`: `[]string` incompatible with old `[]WebhookSubscriptionEventTypesItem` | `calendar-go-history-green.log`: focused Management test passes |
+| Go public mail models and all eight mail discriminators remain usable | `calendar-go-mail-models-red.log`: existing public mail types undefined | `calendar-go-mail-models-green.log`: mail round-trip and opaque retained-history tests pass |
 | PHP opaque retained history and withheld new-event label | `calendar-php-history-red.log`: calendar event remains allowable and typed payload loses unknown fields | `calendar-php-history-discriminator-green.log`: 13 tests, 79 assertions pass |
 | Every SDK adapter treats calendar planning/dispatch as inapplicable | `calendar-adapter-red.log` | `calendar-plan-withheld-green.log`: all 5 adapters pass, zero skipped |
 
@@ -28,18 +29,20 @@ Canonical option: [OpenAPI Generator v7.22.0 normaliser documentation](https://g
 
 PHP's new history test compares full JSON values across deserialisation and serialisation. The vendor maps an OpenAPI free-form object to `array<string,mixed>`, retaining nested mixed values. `JSON_THROW_ON_ERROR` makes encoding failures explicit and satisfies the native static checker. Existing mail subtype assertions remain unchanged; their fixture now deserialises the named event directly because retained delivery bodies intentionally have no typed discriminator.
 
+Independent Spec and Standards reviews of `27c2cd1b` found one shared blocker: ogen generates operation-reachable models only. Preserving the `WebhookEventPayload` component as a pruning root did not preserve the public Go mail models after delivery payloads became opaque. The generator now runs the vendor's [standalone JSON Schema generator](https://github.com/ogen-go/ogen/blob/v1.14.0/cmd/jschemagen/main.go) on that retained root after normal Management generation. It reuses the three already-generated wrappers `NilBool`, `NilString` and `OptNilString`. No synthetic operation or changed delivery shape is introduced. A native public consumer test first failed on missing mail types, then round-tripped all eight mail discriminators after the origin correction. `calendar-go-mail-models-generate.log` records generation.
+
 ## Focused qualification
 
 - TypeScript mailbox operation count: 63 to 53, exactly the ten calendar operations removed. Management 57 and Sending 8 unchanged. `calendar-ts-operation-proof.log`.
 - CLI operation count: 128 to 118, same ten removed and zero added. `calendar-cli-operation-proof.log`.
 - TypeScript source build/public API and CLI build pass: `calendar-ts-build.log`, `calendar-ts-public-api.log`, `calendar-cli-build.log`.
-- PHP changed-test PHPCS and PHPStan pass: `calendar-php-tests-lint.log`, `calendar-php-tests-types.log`. Native consumer assertions pass as above.
+- PHP changed-test PHPCS and PHPStan pass: `calendar-php-tests-lint.log`, `calendar-php-tests-types.log`. Native consumer assertions pass as above. Recursive singleton audit finds only `WebhookEventPayload.oneOf`: `calendar-php-singleton-unions.log`.
 - Surface and live coverage pass: `calendar-surface-coverage-green.log`, `calendar-plan-final-green.log`.
 - Runtime text/filename scan finds no calendar bindings in generated TypeScript Mailbox/Management/CLI, Go Mailbox/Management or PHP Mailbox/Management. Negative tests and raw contract/provenance history are intentionally retained.
 - `git diff --check` passes. No production request or fixture mutation is used for this source check.
 
 Tests: add CLI input/output regression, Go history round-trip, PHP history/allowable-event checks and five adapter inapplicability cases. Remove calendar lifecycle tests with their retired calendar fixture implementation under rule 12. Other fixture ownership and cleanup assertions remain.
 
-Status: coded, not merged. Exact-head CI, default Skills acceptance, independent review and merge disposition follow the normal PR gates. Package publication remains separately held.
+Status: coded, not merged. First exact default Skills v2.0.8 check of `27c2cd1b` passed live OpenAPI equality but failed because its new CLI command digest has no reviewed compatibility record. `calendar-source-default-27c2cd1b.log` records the failure. Skills owner must settle that evidence at origin before a new released checker/default recheck. No retry, pin, fallback or workflow change. Exact-head CI and merge disposition follow normal PR gates. Package publication remains separately held.
 
 Rollback: normal revert of the source PR. Preserved source remains on `archive/calendar`.
