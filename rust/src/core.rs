@@ -12,7 +12,7 @@ use url::Url;
 
 pub type Result<T> = std::result::Result<T, Error>;
 
-/// Sendmux API key category accepted by a surface.
+/// Qubrics API key category accepted by a surface.
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum ApiKeySurface {
     /// Root/team API keys with the `smx_root_` prefix.
@@ -33,7 +33,7 @@ impl fmt::Display for ApiKeySurface {
     }
 }
 
-/// Validates a Sendmux API key prefix without exposing the key value.
+/// Validates a Qubrics API key prefix without exposing the key value.
 pub fn validate_api_key(api_key: &str, surface: ApiKeySurface) -> Result<()> {
     match surface {
         _ if api_key.is_empty() => Err(Error::MissingApiKey),
@@ -97,7 +97,7 @@ impl<T> Response<T> {
     }
 }
 
-/// Sendmux response metadata.
+/// Qubrics response metadata.
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 pub struct ResponseMeta {
     pub request_id: String,
@@ -170,24 +170,24 @@ impl RequestOptions {
     }
 }
 
-/// Error type returned by the Sendmux Rust SDK.
+/// Error type returned by the Qubrics Rust SDK.
 #[derive(Debug, Error)]
 pub enum Error {
-    #[error("sendmux: api key is required")]
+    #[error("qubrics: api key is required")]
     MissingApiKey,
-    #[error("sendmux: api key must not contain control newlines")]
+    #[error("qubrics: api key must not contain control newlines")]
     InvalidApiKey,
-    #[error("sendmux: {expected} API key has the wrong prefix")]
+    #[error("qubrics: {expected} API key has the wrong prefix")]
     InvalidApiKeySurface { expected: ApiKeySurface },
-    #[error("sendmux: a valid bare access token is required")]
+    #[error("qubrics: a valid bare access token is required")]
     InvalidAccessToken,
-    #[error("sendmux: invalid base URL")]
+    #[error("qubrics: invalid base URL")]
     InvalidBaseUrl(#[from] url::ParseError),
-    #[error("sendmux: base URL cannot be used for path segments")]
+    #[error("qubrics: base URL cannot be used for path segments")]
     CannotBeBaseUrl,
-    #[error("sendmux: request path must be relative to the configured origin")]
+    #[error("qubrics: request path must be relative to the configured origin")]
     InvalidRequestPath,
-    #[error("sendmux: invalid header value")]
+    #[error("qubrics: invalid header value")]
     InvalidHeaderValue(#[from] reqwest::header::InvalidHeaderValue),
     #[error("{0}")]
     Api(Box<ApiError>),
@@ -197,7 +197,7 @@ pub enum Error {
     Decode(#[from] serde_json::Error),
 }
 
-/// Structured Sendmux API error response.
+/// Structured Qubrics API error response.
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct ApiError {
     pub status: StatusCode,
@@ -214,7 +214,7 @@ impl fmt::Display for ApiError {
         match &self.request_id {
             Some(request_id) => write!(
                 f,
-                "sendmux API error {} {}: {} (request_id: {})",
+                "qubrics API error {} {}: {} (request_id: {})",
                 self.status.as_u16(),
                 self.code,
                 self.message,
@@ -222,7 +222,7 @@ impl fmt::Display for ApiError {
             ),
             None => write!(
                 f,
-                "sendmux API error {} {}: {}",
+                "qubrics API error {} {}: {}",
                 self.status.as_u16(),
                 self.code,
                 self.message
@@ -327,7 +327,7 @@ impl Transport {
             )?,
             credential,
             user_agent: HeaderValue::from_static(concat!(
-                "sendmux-rust/",
+                "qubrics-rust/",
                 env!("CARGO_PKG_VERSION")
             )),
         })
@@ -626,7 +626,7 @@ fn map_api_error(status: StatusCode, headers: &HeaderMap, bytes: &[u8]) -> ApiEr
         .unwrap_or_else(|| {
             status
                 .canonical_reason()
-                .unwrap_or("Sendmux API request failed")
+                .unwrap_or("Qubrics API request failed")
                 .to_owned()
         });
 

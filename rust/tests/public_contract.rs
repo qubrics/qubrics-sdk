@@ -1,6 +1,6 @@
-use sendmux::sending::{Attachment, BatchSendRequest, EmailSendRequest};
-use sendmux::SendingClient;
-use sendmux::{Error, MailboxClient, ManagementClient, RequestOptions};
+use qubrics::sending::{Attachment, BatchSendRequest, EmailSendRequest};
+use qubrics::SendingClient;
+use qubrics::{Error, MailboxClient, ManagementClient, RequestOptions};
 use serde_json::{json, Value};
 use std::io::{Read, Write};
 use std::net::{SocketAddr, TcpListener};
@@ -10,6 +10,22 @@ use std::sync::{
 };
 use std::thread::{self, JoinHandle};
 use std::time::Duration;
+
+#[test]
+fn default_hosts_use_qubrics() {
+    assert_eq!(
+        [
+            qubrics::mailbox::DEFAULT_BASE_URL,
+            qubrics::management::DEFAULT_BASE_URL,
+            qubrics::sending::DEFAULT_BASE_URL,
+        ],
+        [
+            "https://app.qubrics.com/api/v1",
+            "https://app.qubrics.com/api/v1",
+            "https://smtp.qubrics.com/api/v1",
+        ]
+    );
+}
 
 struct Server {
     address: SocketAddr,
@@ -178,7 +194,7 @@ async fn cursor_lists_preserve_pagination_and_advance_to_next_page() {
 
 #[test]
 fn named_mailbox_surface_withholds_calendar_bindings() {
-    let operations = sendmux::generated::MAILBOX_OPERATIONS;
+    let operations = qubrics::generated::MAILBOX_OPERATIONS;
     assert!(operations
         .iter()
         .all(|operation| !operation.path.starts_with("/mailbox/calendar")));

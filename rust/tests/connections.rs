@@ -1,4 +1,4 @@
-use sendmux::{MailboxClient, ManagementClient, SendingClient};
+use qubrics::{MailboxClient, ManagementClient, SendingClient};
 use std::io::{Read, Write};
 use std::net::TcpListener;
 use std::thread::{self, JoinHandle};

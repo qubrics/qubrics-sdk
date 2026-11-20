@@ -4,9 +4,9 @@ use crate::core::{
 use reqwest::Client;
 use serde::Serialize;
 
-pub const DEFAULT_BASE_URL: &str = "https://app.sendmux.ai/api/v1";
+pub const DEFAULT_BASE_URL: &str = "https://app.qubrics.com/api/v1";
 
-/// Async Sendmux Mailbox API client.
+/// Async Qubrics Mailbox API client.
 #[derive(Clone)]
 pub struct MailboxClient {
     transport: Transport,

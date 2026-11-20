@@ -152,14 +152,14 @@
     },
     "rust": {
       "component": "rust",
-      "package-name": "sendmux",
+      "package-name": "qubrics",
       "release-type": "rust",
       "initial-version": "0.1.0",
       "extra-files": [
         {
           "type": "toml",
           "path": "ci/floor-consumer/Cargo.lock",
-          "jsonpath": "$.package[?(@.name.value=='sendmux')].version"
+          "jsonpath": "$.package[?(@.name.value=='qubrics')].version"
         }
       ],
       "exclude-paths": [

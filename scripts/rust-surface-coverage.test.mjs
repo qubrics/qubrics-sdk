@@ -28,7 +28,7 @@ test("surface gate rejects withheld CLI modules and Rust source provenance drift
   const root = mkdtempSync(join(tmpdir(), "sendmux-rust-coverage-"));
   console.log(JSON.stringify({ directory: root, state: "created" }));
   try {
-    for (const path of ["packages/ts", "packages/python/mcp/qubrics/mcp/curation.py", "rust/src", "docs/surface-coverage.md"]) {
+    for (const path of ["packages/ts", "packages/python/mcp/qubrics/mcp/curation.py", "packages/python/mcp/qubrics/mcp/openapi", "rust/src", "docs/surface-coverage.md"]) {
       cpSync(join(repository, path), join(root, path), { recursive: true, filter: (path) => !/(?:node_modules|\/dist(?:\/|$))/.test(path) });
     }
     if (existsSync(join(repository, "rust/operation-decisions.json"))) cpSync(join(repository, "rust/operation-decisions.json"), join(root, "rust/operation-decisions.json"));
@@ -80,7 +80,7 @@ test("surface gate rejects withheld CLI modules and Rust source provenance drift
 
 function provenanceFixture() {
   const root = mkdtempSync(join(tmpdir(), "sendmux-rust-provenance-"));
-  for (const relative of ["packages/ts", "packages/python/mcp/qubrics/mcp/curation.py", "rust/src", "rust/operation-decisions.json", "docs/surface-coverage.md"]) {
+  for (const relative of ["packages/ts", "packages/python/mcp/qubrics/mcp/curation.py", "packages/python/mcp/qubrics/mcp/openapi", "rust/src", "rust/operation-decisions.json", "docs/surface-coverage.md"]) {
     cpSync(join(repository, relative), join(root, relative), { recursive: true, filter: (path) => !/(?:node_modules|\/dist(?:\/|$))/.test(path) });
   }
   const inputDir = join(root, "inputs");
@@ -91,11 +91,12 @@ function provenanceFixture() {
     const snapshot = JSON.parse(readFileSync(snapshotPath, "utf8"));
     snapshot.info.title += " fixture";
     writeFileSync(snapshotPath, JSON.stringify(snapshot));
+    cpSync(snapshotPath, join(root, "packages/python/mcp/qubrics/mcp/openapi", name));
   }
   return { root, inputDir };
 }
 
-test("explicit Rust provenance writer refreshes only pins after metadata-only snapshot change", async () => {
+test("explicit Rust provenance writer repairs paths and refreshes only pins after metadata-only snapshot change", async () => {
   const fixture = provenanceFixture();
   const { root, inputDir } = fixture;
   try {
@@ -103,9 +104,14 @@ test("explicit Rust provenance writer refreshes only pins after metadata-only sn
     const rustPath = join(root, "rust/src/generated/mod.rs");
     const decisions = JSON.parse(readFileSync(decisionsPath, "utf8"));
     const rust = readFileSync(rustPath, "utf8");
+    const stalePaths = rust.replaceAll("qubrics/mcp/openapi/", "sendmux_mcp/openapi/");
+    assert.notEqual(stalePaths, rust);
+    writeFileSync(rustPath, stalePaths);
     const before = await check(fixture);
     assert.notEqual(before.code, 0, "ordinary gate accepted stale provenance");
     assert.match(before.output, /Rust openapi-app.json provenance hash drift/);
+    assert.match(before.output, /Rust openapi-app.json provenance path drift/);
+    assert.match(before.output, /Rust openapi-sending.json provenance path drift/);
     const generated = await check({ ...fixture, writeProvenance: true });
     assert.equal(generated.code, 0, generated.output);
     let expectedRust = rust;
@@ -137,6 +143,28 @@ test("explicit Rust provenance writer refuses invalid routes before changing fil
     assert.notEqual(result.code, 0, "writer accepted an invalid route decision");
     assert.match(result.output, /Rust stale route decision/);
     paths.forEach((path, index) => assert.deepEqual(readFileSync(path), bytes[index]));
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+    assert.equal(existsSync(root), false);
+  }
+});
+
+test("Rust provenance rejects mismatched input and repository bytes without writing", async () => {
+  const fixture = provenanceFixture();
+  const { root } = fixture;
+  try {
+    const snapshotPath = join(root, "packages/python/mcp/qubrics/mcp/openapi/openapi-app.json");
+    const snapshot = JSON.parse(readFileSync(snapshotPath, "utf8"));
+    snapshot.info.title += " divergent";
+    writeFileSync(snapshotPath, JSON.stringify(snapshot));
+    const paths = ["rust/operation-decisions.json", "rust/src/generated/mod.rs", "docs/surface-coverage.md"].map((path) => join(root, path));
+    const bytes = paths.map((path) => readFileSync(path));
+    for (const writeProvenance of [true, false]) {
+      const result = await check({ ...fixture, writeProvenance });
+      assert.notEqual(result.code, 0, "provenance accepted different repository snapshot bytes");
+      assert.match(result.output, /Rust openapi-app.json repository snapshot differs from input/);
+      paths.forEach((path, index) => assert.deepEqual(readFileSync(path), bytes[index]));
+    }
   } finally {
     rmSync(root, { recursive: true, force: true });
     assert.equal(existsSync(root), false);

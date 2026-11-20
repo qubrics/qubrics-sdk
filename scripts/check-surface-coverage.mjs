@@ -87,10 +87,15 @@ if (writeMatrix) {
 }
 if (writeProvenance) {
   rust.manifest.sources = { ...rust.manifest.sources, ...rust.hashes };
-  const provenance = rust.provenance.replace(
-    /((APP|SENDING)_OPENAPI_SHA256: &str =\s*")[^"]+(")/g,
-    (_match, prefix, surface, suffix) => `${prefix}${rust.hashes[surface === "APP" ? "openapi-app.json" : "openapi-sending.json"]}${suffix}`,
-  );
+  const provenance = rust.provenance
+    .replace(
+      /((APP|SENDING)_OPENAPI_SHA256: &str =\s*")[^"]+(")/g,
+      (_match, prefix, surface, suffix) => `${prefix}${rust.hashes[surface === "APP" ? "openapi-app.json" : "openapi-sending.json"]}${suffix}`,
+    )
+    .replace(
+      /((APP|SENDING)_OPENAPI_PATH: &str =\s*")[^"]+(")/g,
+      (_match, prefix, surface, suffix) => `${prefix}${rust.paths[surface === "APP" ? "openapi-app.json" : "openapi-sending.json"]}${suffix}`,
+    );
   writeFileSync("rust/operation-decisions.json", `${JSON.stringify(rust.manifest, null, 2)}\n`);
   writeFileSync("rust/src/generated/mod.rs", provenance);
 }
@@ -101,15 +106,22 @@ function loadRustDecisions() {
   const manifest = readJson("rust/operation-decisions.json");
   const provenance = readFileSync("rust/src/generated/mod.rs", "utf8");
   const hashes = {};
+  const paths = {};
   for (const { file } of specs) {
     const hash = createHash("sha256").update(readFileSync(join(inputDir, file))).digest("hex");
     hashes[file] = hash;
+    paths[file] = `packages/python/mcp/qubrics/mcp/openapi/${file}`;
+    const repositoryHash = existsSync(paths[file]) ? createHash("sha256").update(readFileSync(paths[file])).digest("hex") : undefined;
+    if (repositoryHash !== hash) failures.push(`Rust ${file} repository snapshot differs from input`);
     const surface = file === "openapi-app.json" ? "APP" : "SENDING";
     const recorded = provenance.match(new RegExp(`${surface}_OPENAPI_SHA256: &str =\\s*"([^"]+)"`))?.[1];
+    const recordedPath = provenance.match(new RegExp(`${surface}_OPENAPI_PATH: &str =\\s*"([^"]+)"`))?.[1];
     if (writeProvenance) {
       const constants = [...provenance.matchAll(new RegExp(`${surface}_OPENAPI_SHA256: &str =\\s*"([^"]+)"`, "g"))];
-      if (constants.length !== 1 || !/^[a-f0-9]{64}$/.test(recorded ?? "") || !/^[a-f0-9]{64}$/.test(manifest.sources?.[file] ?? "")) failures.push(`Rust ${file} provenance is malformed`);
+      const pathConstants = [...provenance.matchAll(new RegExp(`${surface}_OPENAPI_PATH: &str =\\s*"([^"]+)"`, "g"))];
+      if (constants.length !== 1 || pathConstants.length !== 1 || !/^[a-f0-9]{64}$/.test(recorded ?? "") || !/^[a-f0-9]{64}$/.test(manifest.sources?.[file] ?? "")) failures.push(`Rust ${file} provenance is malformed`);
     } else if (manifest.sources?.[file] !== hash || recorded !== hash) failures.push(`Rust ${file} provenance hash drift`);
+    if (!writeProvenance && recordedPath !== paths[file]) failures.push(`Rust ${file} provenance path drift`);
   }
   const entries = new Map();
   const states = new Set(["named-complete", "named-partial", "raw-json-only", "unsupported-transport"]);
@@ -133,7 +145,7 @@ function loadRustDecisions() {
     const recorded = [...entries.values()].filter((entry) => entry.operationId.startsWith(surface)).flatMap((entry) => entry.publicMethods ?? []);
     if (new Set(recorded).size !== recorded.length || stableJson([...actual].sort()) !== stableJson([...recorded].sort())) failures.push(`Rust ${surface} public method inventory drift`);
   }
-  return { decisions: entries, manifest, provenance, hashes };
+  return { decisions: entries, manifest, provenance, hashes, paths };
 }
 
 function findDefaultInputDir() {
