@@ -1,5 +1,15 @@
 # Changelog
 
+## [3.0.1](https://github.com/qubrics/qubrics-sdk/compare/ts-sdk-v3.0.0...ts-sdk-v3.0.1) (2026-11-21)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @qubrics/mailbox bumped to 3.0.1
+    * @qubrics/management bumped to 3.0.1
+
 ## [3.0.0](https://github.com/qubrics/qubrics-sdk/compare/ts-sdk-v2.0.2...ts-sdk-v3.0.0) (2026-11-09)
 
 
