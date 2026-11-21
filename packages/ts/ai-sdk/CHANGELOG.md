@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.0.1](https://github.com/qubrics/qubrics-sdk/compare/ts-ai-sdk-v1.0.0...ts-ai-sdk-v1.0.1) (2026-11-21)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @qubrics/mailbox bumped to 3.0.1
+
 ## [1.0.0](https://github.com/qubrics/qubrics-sdk/compare/ts-ai-sdk-v0.5.2...ts-ai-sdk-v1.0.0) (2026-11-09)
 
 
