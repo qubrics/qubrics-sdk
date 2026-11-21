@@ -274,7 +274,8 @@ async function releaseFixture(t, options = {}) {
   writeFileSync(join(local.repo, "packages/ts/management/package.json"), JSON.stringify({ name: "@sendmux/management", version: "1.2.3" }));
   writeFileSync(join(local.repo, "release-please-config.json"), JSON.stringify(config));
   writeFileSync(join(local.repo, ".release-please-manifest.json"), '{"packages/ts/cli":"1.2.3"}');
-  const workflowSource = readFileSync(resolve(".github/workflows/release-please.yml"), "utf8");
+  const workflowSource = readFileSync(resolve(".github/workflows/release-please.yml"), "utf8")
+    .replace("          skip-github-pull-request: true", options.pullRequestInput ?? "          skip-github-pull-request: true");
   writeFileSync(join(local.repo, ".github/workflows/release-please.yml"), options.actionOverride
     ? workflowSource.replace("          manifest-file: .release-please-manifest.json", "          manifest-file: .release-please-manifest.json\n          target-branch: another-branch") : workflowSource);
   await local.git("add", ".");
@@ -403,6 +404,9 @@ for (const [name, options, error] of [
   ["candidate set changes before action fail closed", { changedCandidates: true }, /changed/i],
   ["main changes before action fail closed", { changedHead: true }, /head|changed/i],
   ["unsupported action inputs cannot change the guarded target", { actionOverride: true }, /configuration|inputs/i],
+  ["missing PR-only action input fails before writer", { pullRequestInput: "" }, /configuration|inputs/i],
+  ["false PR-only action input fails before writer", { pullRequestInput: "          skip-github-pull-request: false" }, /configuration|inputs/i],
+  ["another action input cannot replace the PR-only input", { pullRequestInput: "          skip-github-release: true" }, /configuration|inputs/i],
   ["custom labels cannot silently change discovery", { customLabels: true }, /configuration/i],
   ["200th merged candidate remains covered after unmerged closed rows", { lastMergedPending: true }, /differs/i],
 ]) {
@@ -415,7 +419,7 @@ for (const [name, options, error] of [
   });
 }
 
-test("official release construction reaches writer after updated-order scan including unmerged closed rows", async (t) => {
+test("exact PR-only action input reaches writer after updated-order scan including unmerged closed rows", async (t) => {
   const candidate = await releaseFixture(t, { closedBeforeMerged: true, numericPagination: true });
   let writes = 0;
   await candidate.run().then(() => { writes++; });

@@ -5,6 +5,10 @@ import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import test from "node:test";
+import { PythonReleaseNotes } from "./python-release-notes.mjs";
+import { PullRequestBody } from "release-please/build/src/util/pull-request-body.js";
+import { Changelog } from "release-please/build/src/updaters/changelog.js";
+import { Version } from "release-please/build/src/version.js";
 
 const repository = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const readJson = (path) => JSON.parse(readFileSync(path, "utf8"));
@@ -132,3 +136,36 @@ for (const [language, owner, versionFile, lockFile] of [
     assert.notEqual(readFileSync(path, "utf8"), advanced, `${language} mutation must change native bytes`);
   }));
 }
+test("Python release-note producer keeps neutral notes across bot refreshes", async () => {
+  // Captured constructor output for PR358/36108a03 and PR355/47955f81.
+  const entry = "### ⚠ BREAKING CHANGES\n\n* **python:** move SDK packages into the Qubrics namespace\n\n### Features\n\n* **python:** move SDK packages into the Qubrics namespace ([a326bc9](https://github.com/qubrics/qubrics-sdk/commit/a326bc923fff448470d908bb527afaaa35f6d739))\n\n### Bug Fixes\n\n* align changed SDK dependency floors with release manifest ([b1c5548](https://github.com/qubrics/qubrics-sdk/commit/b1c5548c1dde8b441b4fa2605253907971c2f5d2))";
+  const neutral = "### ⚠ BREAKING CHANGES\n\n* **python:** update native package imports\n\n### Features\n\n* **python:** update native package imports ([a326bc9](https://github.com/qubrics/qubrics-sdk/commit/a326bc923fff448470d908bb527afaaa35f6d739))\n\n### Bug Fixes\n\n* align changed SDK dependency floors with release manifest ([b1c5548](https://github.com/qubrics/qubrics-sdk/commit/b1c5548c1dde8b441b4fa2605253907971c2f5d2))";
+  const candidates = [["packages/python/sdk", "4.0.0"], ["packages/python/langchain", "1.0.0"], ["go", "4.0.0"], ["packages/python/sdk", "4.0.1"]].map(([path, value]) => {
+    const version = Version.parse(value);
+    const notes = `## [${value}](https://github.com/qubrics/qubrics-sdk/compare/before...after) (2026-11-20)\n\n${entry}`;
+    return { path, pullRequest: {
+      version,
+      body: new PullRequestBody([{ notes, version }], { header: "existing header", footer: "existing footer", extra: "existing extra" }),
+      updates: [{ path: `${path}/CHANGELOG.md`, updater: new Changelog({ version, changelogEntry: notes }) }, { path: ".release-please-manifest.json", updater: { version } }],
+    } };
+  });
+  const plugin = new PythonReleaseNotes(undefined, "main", {});
+  const before = candidates.map(({ pullRequest }) => ({ body: pullRequest.body.toString(), entry: pullRequest.updates[0].updater.changelogEntry }));
+  assert.strictEqual(await plugin.run(candidates), candidates);
+  for (const [index, { pullRequest }] of candidates.entries()) {
+    const { body, updates, version } = pullRequest;
+    const expected = index < 2 ? neutral : entry;
+    assert.ok(body.toString().includes(expected), `candidate ${index} body must preserve neutral release notes`);
+    assert.ok(updates[0].updater.changelogEntry.endsWith(expected), `candidate ${index} changelog must match its body`);
+    assert.strictEqual(body.releaseData[0].version, version);
+    assert.strictEqual(updates[1].updater.version, version);
+    assert.equal(body.header, "existing header");
+    assert.equal(body.footer, "existing footer");
+    assert.equal(body.extra, "existing extra");
+    assert.equal(updates[0].updater.updateContent("# Changelog\n\n## 0.9.0\n\nhistorical unchanged\n"), `# Changelog\n\n${updates[0].updater.changelogEntry}\n\n## 0.9.0\n\nhistorical unchanged\n`);
+    if (index >= 2) assert.deepEqual({ body: body.toString(), entry: updates[0].updater.changelogEntry }, before[index]);
+  }
+  const after = candidates.map(({ pullRequest }) => pullRequest.body.toString());
+  await plugin.run(candidates);
+  assert.deepEqual(candidates.map(({ pullRequest }) => pullRequest.body.toString()), after);
+});

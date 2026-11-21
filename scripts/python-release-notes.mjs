@@ -1,0 +1,33 @@
+import assert from "node:assert/strict";
+import { pathToFileURL } from "node:url";
+import { GitHub, Manifest } from "release-please";
+import { ManifestPlugin } from "release-please/build/src/plugin.js";
+import { Changelog } from "release-please/build/src/updaters/changelog.js";
+
+const pendingVersions = new Map([["packages/python/sdk", "4.0.0"], ["packages/python/langchain", "1.0.0"]]);
+const neutralNotes = (notes) => notes.replaceAll("move SDK packages into the Qubrics namespace", "update native package imports");
+
+export class PythonReleaseNotes extends ManifestPlugin {
+  async run(candidates) {
+    for (const { path, pullRequest } of candidates) {
+      if (!pendingVersions.has(path) || pendingVersions.get(path) !== pullRequest.version?.toString()) continue;
+      const changelog = pullRequest.updates.find((update) => update.path === `${path}/CHANGELOG.md`);
+      assert.ok(changelog?.updater instanceof Changelog, `${path} needs its generated changelog updater`);
+      changelog.updater.changelogEntry = neutralNotes(changelog.updater.changelogEntry);
+      for (const release of pullRequest.body.releaseData) release.notes = neutralNotes(release.notes);
+    }
+    return candidates;
+  }
+}
+
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  assert.equal(process.env.GITHUB_ACTIONS, "true", "Bot PR emission runs only in GitHub Actions");
+  assert.equal(process.env.GITHUB_EVENT_NAME, "push");
+  assert.equal(process.env.GITHUB_REF, "refs/heads/main");
+  assert.equal(process.env.GITHUB_REPOSITORY, "qubrics/qubrics-sdk");
+  assert.ok(process.env.GITHUB_TOKEN, "GITHUB_TOKEN is required");
+  const github = await GitHub.create({ owner: "qubrics", repo: "qubrics-sdk", defaultBranch: "main", token: process.env.GITHUB_TOKEN });
+  const manifest = await Manifest.fromManifest(github, "main", "release-please-config.json", ".release-please-manifest.json");
+  manifest.plugins.push(new PythonReleaseNotes(github, "main", manifest.repositoryConfig));
+  await manifest.createPullRequests();
+}

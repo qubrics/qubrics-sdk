@@ -254,7 +254,7 @@ async function releaseState({ repo, sha }) {
   const actionBlocks = files[".github/workflows/release-please.yml"].split("uses: googleapis/release-please-action@");
   const actionLines = actionBlocks[1]?.split(/^      - /m)[0].trim().split("\n").map((line) => line.trim());
   if (actionBlocks.length !== 2 || actionLines?.[0]?.split(/\s/)[0] !== actionPin
-    || JSON.stringify(actionLines.slice(1)) !== JSON.stringify(["with:", "config-file: release-please-config.json", "manifest-file: .release-please-manifest.json"])) throw new Error("Unsupported Release Please action inputs/configuration");
+    || JSON.stringify(actionLines.slice(1)) !== JSON.stringify(["with:", "config-file: release-please-config.json", "manifest-file: .release-please-manifest.json", "skip-github-pull-request: true"])) throw new Error("Unsupported Release Please action inputs/configuration");
   if (config.label || config["release-label"] || config["sequential-calls"] !== true || config["separate-pull-requests"] !== true
     || !files[".github/workflows/release-please.yml"].includes(`googleapis/release-please-action@${actionPin}`)) throw new Error("Unsupported Release Please configuration or pin");
   for (const entry of [config, ...Object.values(config.packages)]) {
