@@ -1,5 +1,34 @@
 # Changelog
 
+## [1.1.0](https://github.com/qubrics/qubrics-sdk/compare/rust-v1.0.0...rust-v1.1.0) (2026-11-21)
+
+
+### Features
+
+* add compatible Qubrics integration aliases ([dff5cb8](https://github.com/qubrics/qubrics-sdk/commit/dff5cb89bccb5840d55071d23f79ff88c7e58040))
+* integrate combined provider variables and delivery routing ([81bbf22](https://github.com/qubrics/qubrics-sdk/commit/81bbf221a357bf5d588eba654184ff34491473df))
+* **mailbox:** expose durable drafts and agent-email workflows ([bb2f462](https://github.com/qubrics/qubrics-sdk/commit/bb2f462447affd43b3b175b9625068f1a02e3172))
+* **mailbox:** expose durable drafts and agent-email workflows ([7e867c5](https://github.com/qubrics/qubrics-sdk/commit/7e867c5bd7b7c85add27c7c04e036997ae57dbc4))
+* **mailbox:** expose permitted sender choices to consumers ([#317](https://github.com/qubrics/qubrics-sdk/issues/317)) ([7ac3dc1](https://github.com/qubrics/qubrics-sdk/commit/7ac3dc1c08915ec12477171a49edb87b3d482f39))
+* preserve integration contracts with Qubrics aliases ([722fbab](https://github.com/qubrics/qubrics-sdk/commit/722fbab2f98248d17b4878dd5149a35a711d5a18))
+* **rust:** add named calendar operations ([1228b59](https://github.com/qubrics/qubrics-sdk/commit/1228b59b0cddf12062c6ea7da7a4b3dfdcbd3b86))
+* **rust:** add named calendar operations ([8211d31](https://github.com/qubrics/qubrics-sdk/commit/8211d31a55206ba1ad64a5c27df7f8c7b87f8e85))
+* **rust:** prepare calendar-free qubrics 1.0.0 ([873369b](https://github.com/qubrics/qubrics-sdk/commit/873369bb37c6729ec779a31dda9288dc972fee3e))
+* **rust:** prepare calendar-free qubrics 1.0.0 ([e07f1b7](https://github.com/qubrics/qubrics-sdk/commit/e07f1b74b8f9268c3627e791fb65c444377625a4))
+
+
+### Bug Fixes
+
+* preserve webhook variants and own calendar lifecycle fixtures ([49d4604](https://github.com/qubrics/qubrics-sdk/commit/49d4604235528b2fd56ac0bb51d55c244a18f771))
+* regenerate SDKs from current calendar and webhook contracts ([276082c](https://github.com/qubrics/qubrics-sdk/commit/276082cb5e525c0a6fb1e521858846cbd21c8714))
+* regenerate SDKs from current calendar and webhook contracts ([d728ea8](https://github.com/qubrics/qubrics-sdk/commit/d728ea87ac3f0aeebdb6380ad3bd515bac63d413))
+* regenerate SDKs from the deployed flattened response schemas (docs 86b0f45) ([628b161](https://github.com/qubrics/qubrics-sdk/commit/628b161d2692775ac1f4830c1d64c024ba04ed83))
+* **sdk:** adopt final provider contract description and provenance ([a9bdaf5](https://github.com/qubrics/qubrics-sdk/commit/a9bdaf58f0db684328458e269ba8aff515334d0b))
+* **sdk:** adopt final provider contract description and provenance ([815278e](https://github.com/qubrics/qubrics-sdk/commit/815278e76587dcba314c51202b8e764250e51ef3))
+* **sdk:** withhold calendar clients from unpublished native releases ([7a0bf48](https://github.com/qubrics/qubrics-sdk/commit/7a0bf484344bb68fb9c8508e83e49c80c56cfaf1))
+* **sdk:** withhold calendar clients from unpublished native releases ([052cd45](https://github.com/qubrics/qubrics-sdk/commit/052cd455ed3279342d7cf1c6d73932ac3207ff6f))
+* sync generated Qubrics API defaults ([#351](https://github.com/qubrics/qubrics-sdk/issues/351)) ([388a410](https://github.com/qubrics/qubrics-sdk/commit/388a4107d25e6cf94a7c7704b094f8765f851be3))
+
 ## 1.0.0
 
 * Sending defaults to `https://smtp.qubrics.com/api/v1`; Mailbox and Management default to `https://app.qubrics.com/api/v1`.
