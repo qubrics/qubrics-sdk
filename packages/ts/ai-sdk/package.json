@@ -1,6 +1,6 @@
 {
   "name": "@qubrics/ai-sdk",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "license": "MIT",
   "description": "Vercel AI SDK tools for the Qubrics email API for AI agents - send email and read the agent inbox.",
   "keywords": [
