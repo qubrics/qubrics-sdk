@@ -78,7 +78,31 @@ README public-facts check found the newly public Rust pointer still
 described as source-only. That pre-existing documentation row is outside
 this calendar/copy producer scope and remains a follow-up.
 
-## Status and undo
+## Approved guard integration, 21 November
+
+Operator option A extends this preparation PR to the exact action-input
+guard and its first-write fixtures. Run `44726298052`, verify job
+`136254524716`, had 13 failures with the same
+`Unsupported Release Please action inputs/configuration` error. The first
+failure is line 344 of the saved failed log. The guard rejected the documented
+PR-only split input before official release construction could run.
+
+The guard now requires `skip-github-pull-request: true` alongside the
+unchanged config-file and manifest-file inputs. Missing or false values,
+replacement inputs and extra inputs remain rejected; action pin, candidate
+discovery, native versions, tags and first-write ordering stay unchanged.
+
+Before the fix, the focused five-case command had two failures: the exact
+input was rejected, and the missing input unexpectedly reached the writer.
+Three rejection cases passed. No tests were skipped. Raw red proof:
+MAIN `.claude/artifacts/rebrand-qubrics-sdk344/pr415-guard-a-red-20261121.log`.
+The existing first-write seam covers acceptance through the guarded official
+release constructor, and rejection before a writer with only GET requests.
+Fresh CI and review results are recorded in the task qualification file.
+The same focused command passed all five cases after the one-line guard
+correction, zero skipped; `pr415-guard-a-green-20261121.log` is the receipt.
+
+## Preparation hold
 
 Prepared, not merged or activated. PR CI and review results are recorded
 in the task's `python-release-note-producer-qualification-20261120.md`.
