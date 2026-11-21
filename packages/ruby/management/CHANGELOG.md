@@ -1,5 +1,40 @@
 # Changelog
 
+## [4.0.0](https://github.com/qubrics/qubrics-sdk/compare/ruby-management-v3.0.0...ruby-management/v4.0.0) (2026-11-21)
+
+
+### ⚠ BREAKING CHANGES
+
+* **ruby:** rename SDK gems and modules to Qubrics
+
+### Features
+
+* add compatible Qubrics integration aliases ([dff5cb8](https://github.com/qubrics/qubrics-sdk/commit/dff5cb89bccb5840d55071d23f79ff88c7e58040))
+* integrate combined provider variables and delivery routing ([81bbf22](https://github.com/qubrics/qubrics-sdk/commit/81bbf221a357bf5d588eba654184ff34491473df))
+* **mailbox:** expose durable drafts and agent-email workflows ([bb2f462](https://github.com/qubrics/qubrics-sdk/commit/bb2f462447affd43b3b175b9625068f1a02e3172))
+* **mailbox:** expose durable drafts and agent-email workflows ([7e867c5](https://github.com/qubrics/qubrics-sdk/commit/7e867c5bd7b7c85add27c7c04e036997ae57dbc4))
+* preserve integration contracts with Qubrics aliases ([722fbab](https://github.com/qubrics/qubrics-sdk/commit/722fbab2f98248d17b4878dd5149a35a711d5a18))
+* **ruby:** rename SDK gems and modules to Qubrics ([c6a27a6](https://github.com/qubrics/qubrics-sdk/commit/c6a27a61c409bcad497a68b436ffdfc38cf874b8))
+
+
+### Bug Fixes
+
+* **management:** prepare calendar-free Python and Ruby 3.0.0 ([1449b51](https://github.com/qubrics/qubrics-sdk/commit/1449b51e1decd1fe6ebb17d203e726363002f0f8))
+* **management:** prepare calendar-free Python and Ruby 3.0.0 ([6b282b0](https://github.com/qubrics/qubrics-sdk/commit/6b282b0049f5fc4c7bdb8dd201e0aabbd34929c0))
+* **management:** retain existing webhook response labels ([f74112c](https://github.com/qubrics/qubrics-sdk/commit/f74112c2a00d73b8c2fe9707bcfbb2ca53896fba))
+* **management:** retain mail webhook roots with opaque deliveries ([62aeddd](https://github.com/qubrics/qubrics-sdk/commit/62aeddd06b2b7349d429ff66dcf606a9d04afb64))
+* preserve calendar safety across current contracts ([b53f946](https://github.com/qubrics/qubrics-sdk/commit/b53f9466159caa89892d47641e243442ef993f77))
+* preserve legacy SDK compatibility with dual aliases ([4910037](https://github.com/qubrics/qubrics-sdk/commit/491003792dd742cb2c83e4a09501abdf4f4458c9))
+* regenerate SDKs from current calendar and webhook contracts ([276082c](https://github.com/qubrics/qubrics-sdk/commit/276082cb5e525c0a6fb1e521858846cbd21c8714))
+* regenerate SDKs from current calendar and webhook contracts ([d728ea8](https://github.com/qubrics/qubrics-sdk/commit/d728ea87ac3f0aeebdb6380ad3bd515bac63d413))
+* regenerate SDKs from the deployed flattened response schemas (docs 86b0f45) ([628b161](https://github.com/qubrics/qubrics-sdk/commit/628b161d2692775ac1f4830c1d64c024ba04ed83))
+* **ruby-management:** regenerate management models from the deployed v1.8.250 schema ([ab2af52](https://github.com/qubrics/qubrics-sdk/commit/ab2af52629e73b42862aae2f40c6b60248dccf95))
+* **ruby-management:** regenerate the flattened webhook secret response model ([b002849](https://github.com/qubrics/qubrics-sdk/commit/b00284908ee07980f25badafaba90f4bd4eb6b25))
+* **sdk:** adopt final provider contract description and provenance ([a9bdaf5](https://github.com/qubrics/qubrics-sdk/commit/a9bdaf58f0db684328458e269ba8aff515334d0b))
+* **sdk:** adopt final provider contract description and provenance ([815278e](https://github.com/qubrics/qubrics-sdk/commit/815278e76587dcba314c51202b8e764250e51ef3))
+* **sdk:** preserve timestamps and fixture prerequisites ([894ee58](https://github.com/qubrics/qubrics-sdk/commit/894ee580c8331ac19f80a3778300f265a1a39300))
+* sync generated Qubrics API defaults ([#351](https://github.com/qubrics/qubrics-sdk/issues/351)) ([388a410](https://github.com/qubrics/qubrics-sdk/commit/388a4107d25e6cf94a7c7704b094f8765f851be3))
+
 ## 3.0.0
 
 ### Changed
