@@ -1,5 +1,39 @@
 # Changelog
 
+## [4.0.0](https://github.com/qubrics/qubrics-sdk/compare/ruby-mailbox-v3.0.0...ruby-mailbox/v4.0.0) (2026-11-21)
+
+
+### ⚠ BREAKING CHANGES
+
+* **ruby:** rename SDK gems and modules to Qubrics
+* **ruby-mailbox:** `Sendmux::Mailbox::Generated::MailboxRealtimeMessageAllOfBody` is renamed to `Sendmux::Mailbox::Generated::MailboxRealtimeMessageBody` (the type of `MailboxRealtimeMessage#body`), and the unused
+
+### Features
+
+* add compatible Qubrics integration aliases ([dff5cb8](https://github.com/qubrics/qubrics-sdk/commit/dff5cb89bccb5840d55071d23f79ff88c7e58040))
+* **mailbox:** expose durable drafts and agent-email workflows ([bb2f462](https://github.com/qubrics/qubrics-sdk/commit/bb2f462447affd43b3b175b9625068f1a02e3172))
+* **mailbox:** expose durable drafts and agent-email workflows ([7e867c5](https://github.com/qubrics/qubrics-sdk/commit/7e867c5bd7b7c85add27c7c04e036997ae57dbc4))
+* **mailbox:** expose permitted sender choices to consumers ([#317](https://github.com/qubrics/qubrics-sdk/issues/317)) ([7ac3dc1](https://github.com/qubrics/qubrics-sdk/commit/7ac3dc1c08915ec12477171a49edb87b3d482f39))
+* preserve integration contracts with Qubrics aliases ([722fbab](https://github.com/qubrics/qubrics-sdk/commit/722fbab2f98248d17b4878dd5149a35a711d5a18))
+* **ruby:** rename SDK gems and modules to Qubrics ([c6a27a6](https://github.com/qubrics/qubrics-sdk/commit/c6a27a61c409bcad497a68b436ffdfc38cf874b8))
+
+
+### Bug Fixes
+
+* preserve calendar safety across current contracts ([b53f946](https://github.com/qubrics/qubrics-sdk/commit/b53f9466159caa89892d47641e243442ef993f77))
+* preserve legacy SDK compatibility with dual aliases ([4910037](https://github.com/qubrics/qubrics-sdk/commit/491003792dd742cb2c83e4a09501abdf4f4458c9))
+* preserve webhook variants and own calendar lifecycle fixtures ([49d4604](https://github.com/qubrics/qubrics-sdk/commit/49d4604235528b2fd56ac0bb51d55c244a18f771))
+* regenerate SDKs from current calendar and webhook contracts ([276082c](https://github.com/qubrics/qubrics-sdk/commit/276082cb5e525c0a6fb1e521858846cbd21c8714))
+* regenerate SDKs from current calendar and webhook contracts ([d728ea8](https://github.com/qubrics/qubrics-sdk/commit/d728ea87ac3f0aeebdb6380ad3bd515bac63d413))
+* regenerate SDKs from the deployed flattened response schemas (docs 86b0f45) ([628b161](https://github.com/qubrics/qubrics-sdk/commit/628b161d2692775ac1f4830c1d64c024ba04ed83))
+* **ruby-mailbox:** keep MailboxRealtimeMessageAllOfBody as a deprecated constant ([f1108bf](https://github.com/qubrics/qubrics-sdk/commit/f1108bf40f6c1ff3f3948b49c9ae9dd22b33b3d9))
+* **ruby-mailbox:** regenerate flattened mailbox response models ([9c05be1](https://github.com/qubrics/qubrics-sdk/commit/9c05be1bdad88fdcbbbeedf174adce01a6a48ae7))
+* **ruby-mailbox:** regenerate mailbox models from the deployed v1.8.250 schema ([ea211b7](https://github.com/qubrics/qubrics-sdk/commit/ea211b70ecc1d22404c441ee5fa0d791c7c14e1d))
+* **ruby:** qualify calendar-free Mailbox 3.0.0 ([3745c2e](https://github.com/qubrics/qubrics-sdk/commit/3745c2e2ee77908a2ac26ba3d53ff01005d82ea6))
+* **ruby:** qualify calendar-free Mailbox 3.0.0 ([a0ef57d](https://github.com/qubrics/qubrics-sdk/commit/a0ef57d431959257ddb2da30cee6b6e941fba9d3))
+* **sdk:** preserve timestamps and fixture prerequisites ([894ee58](https://github.com/qubrics/qubrics-sdk/commit/894ee580c8331ac19f80a3778300f265a1a39300))
+* sync generated Qubrics API defaults ([#351](https://github.com/qubrics/qubrics-sdk/issues/351)) ([388a410](https://github.com/qubrics/qubrics-sdk/commit/388a4107d25e6cf94a7c7704b094f8765f851be3))
+
 ## 3.0.0
 
 ### Changed
