@@ -4,7 +4,7 @@
   "description": "Connect stdio MCP clients to Qubrics' hosted email tools with OAuth.",
   "license": "MIT",
   "type": "module",
-  "mcpName": "io.github.Sendmux/sendmux-mcp",
+  "mcpName": "io.github.qubrics/qubrics-mcp",
   "bin": {
     "sendmux-mcp": "./bin/sendmux-mcp.js"
   },

@@ -68,18 +68,18 @@ test("registry metadata versions independently and package order is irrelevant",
   registry.packages.reverse();
 }, (check) => assert.doesNotThrow(check)));
 
-test("registry retains its existing server identity for the renamed PyPI distribution", () => withRegistry((registry) => {
+test("registry uses the selected Qubrics identity for the renamed PyPI distribution", () => withRegistry((registry) => {
   registry.packages.find((entry) => entry.registryType === "pypi").identifier = "qubrics-mcp";
 }, (check) => {
   const registry = check();
-  assert.equal(registry.name, "io.github.Sendmux/sendmux-mcp");
+  assert.equal(registry.name, "io.github.qubrics/qubrics-mcp");
   assert.equal(registry.packages.find((entry) => entry.registryType === "pypi").identifier, "qubrics-mcp");
 }));
 
 test("registry rejects a PyPI ownership marker for an unapproved replacement server", () => withRegistry((registry, root) => {
   registry.packages.find((entry) => entry.registryType === "pypi").identifier = "qubrics-mcp";
   const path = join(root, "README.md");
-  writeFileSync(path, readFileSync(path, "utf8").replace("mcp-name: io.github.Sendmux/sendmux-mcp", "mcp-name: io.github.Sendmux/qubrics-mcp"));
+  writeFileSync(path, readFileSync(path, "utf8").replace("mcp-name: io.github.qubrics/qubrics-mcp", "mcp-name: io.github.Sendmux/qubrics-mcp"));
 }, (check) => assert.throws(check, /PyPI ownership marker/)));
 
 test("registry rejects generated contract identity that differs from native project metadata", () => withRegistry((registry, root) => {

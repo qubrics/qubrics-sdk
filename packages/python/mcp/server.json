@@ -1,6 +1,6 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
-  "name": "io.github.Sendmux/sendmux-mcp",
+  "name": "io.github.qubrics/qubrics-mcp",
   "title": "Email Inbox API + Sending by Qubrics",
   "description": "AI email inbox and sending tools with attachments, search, live events, and webhooks.",
   "websiteUrl": "https://qubrics.com/docs/guides/mcp",
