@@ -2,7 +2,7 @@
 
 [![npm version](https://img.shields.io/npm/v/@qubrics/sdk?label=npm)](https://www.npmjs.com/package/@qubrics/sdk)
 [![PyPI version](https://img.shields.io/pypi/v/qubrics-sdk?label=pypi)](https://pypi.org/project/qubrics-sdk/)
-[![Go Reference](https://pkg.go.dev/badge/sendmux.ai/go/v3.svg)](https://pkg.go.dev/sendmux.ai/go/v3)
+[![Go Reference](https://pkg.go.dev/badge/qubrics.com/go/v4.svg)](https://pkg.go.dev/qubrics.com/go/v4)
 [![crates.io version](https://img.shields.io/crates/v/qubrics?label=crates.io)](https://crates.io/crates/qubrics)
 [![CI](https://github.com/qubrics/qubrics-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/qubrics/qubrics-sdk/actions/workflows/ci.yml)
 [![npm downloads](https://img.shields.io/npm/dm/@qubrics/sdk?label=npm%20downloads)](https://www.npmjs.com/package/@qubrics/sdk)
@@ -12,7 +12,7 @@ Official SDK, CLI, and MCP workspace for Qubrics.
 
 The seven `@qubrics/*` npm packages and PyPI packages `qubrics-core`, `qubrics-sending`, `qubrics-mailbox`, `qubrics-management`, `qubrics-mcp`, `qubrics-sdk` and `langchain-qubrics` are published. RubyGems has `qubrics-core` and `qubrics-sending` 2.0.0, plus `qubrics-mailbox`, `qubrics-management` and `qubrics-sdk` 3.0.0. Existing `@sendmux/*` releases remain available. Other Python and Ruby packages use the published names in the Packages table.
 
-Go v4 source for `qubrics.com/go/v4` awaits publication. Use published `sendmux.ai/go/v3@v3.0.0`.
+Go module `qubrics.com/go/v4` 4.0.0 is published. `sendmux.ai/go/v3@v3.0.0` remains available.
 
 - Product documentation: [qubrics.com/docs](https://qubrics.com/docs)
 - Management API reference: [qubrics.com/docs/api/introduction](https://qubrics.com/docs/api/introduction)
@@ -40,11 +40,11 @@ Go v4 source for `qubrics.com/go/v4` awaits publication. Use published `sendmux.
 | PyPI | `qubrics-sdk` | Python umbrella package | surface-specific | `pip install qubrics-sdk` | [`packages/python/sdk`](packages/python/sdk) |
 | PyPI | `qubrics-mcp` | Local MCP plus hosted MCP and A2A servers | OAuth for hosted; surface-specific keys for local | `pip install qubrics-mcp` | [`packages/python/mcp`](packages/python/mcp) |
 | PyPI | `langchain-qubrics` | LangChain toolkit (agent inbox + sending) | REST OAuth or send + receive `smx_mbx_*` / `smx_agent_*` | `pip install langchain-qubrics` | [`packages/python/langchain`](packages/python/langchain) |
-| Go | `sendmux.ai/go/v3/core` | Shared Go helpers | n/a | `go get sendmux.ai/go/v3@v3.0.0` | [`go/core`](go/core) |
-| Go | `sendmux.ai/go/v3/sending` | Sending API | `smx_mbx_*` or owner-approved `smx_agent_*` | `go get sendmux.ai/go/v3@v3.0.0` | [`go/sending`](go/sending) |
-| Go | `sendmux.ai/go/v3/mailbox` | Mailbox API | `smx_mbx_*` or `smx_agent_*` | `go get sendmux.ai/go/v3@v3.0.0` | [`go/mailbox`](go/mailbox) |
-| Go | `sendmux.ai/go/v3/management` | Management API | `smx_root_*` | `go get sendmux.ai/go/v3@v3.0.0` | [`go/management`](go/management) |
-| Go | `sendmux.ai/go/v3/sdk` | Go umbrella package | surface-specific | `go get sendmux.ai/go/v3@v3.0.0` | [`go/sdk`](go/sdk) |
+| Go | `qubrics.com/go/v4/core` | Shared Go helpers | n/a | `go get qubrics.com/go/v4@v4.0.0` | [`go/core`](go/core) |
+| Go | `qubrics.com/go/v4/sending` | Sending API | `smx_mbx_*` or owner-approved `smx_agent_*` | `go get qubrics.com/go/v4@v4.0.0` | [`go/sending`](go/sending) |
+| Go | `qubrics.com/go/v4/mailbox` | Mailbox API | `smx_mbx_*` or `smx_agent_*` | `go get qubrics.com/go/v4@v4.0.0` | [`go/mailbox`](go/mailbox) |
+| Go | `qubrics.com/go/v4/management` | Management API | `smx_root_*` | `go get qubrics.com/go/v4@v4.0.0` | [`go/management`](go/management) |
+| Go | `qubrics.com/go/v4/sdk` | Module anchor | n/a | `go get qubrics.com/go/v4@v4.0.0` | [`go/sdk`](go/sdk) |
 | crates.io | `sendmux` 0.5.1 | Published Rust umbrella crate | surface-specific | `cargo add sendmux@0.5.1` | [Published crate](https://crates.io/crates/sendmux/0.5.1) |
 | crates.io | `qubrics` 1.0.0 | Rust umbrella crate | surface-specific | `cargo add qubrics@=1.0.0` | [`rust`](rust) |
 | Source only | `sendmux` 1.0.0 | Rust API re-export | surface-specific | Not published | [`release-pointers/cratesio/sendmux`](release-pointers/cratesio/sendmux) |
@@ -84,7 +84,7 @@ Install only the package for the surface you need.
 ```sh
 npm install @qubrics/sending
 pip install qubrics-sending
-go get sendmux.ai/go/v3@v3.0.0
+go get qubrics.com/go/v4@v4.0.0
 cargo add qubrics@=1.0.0
 composer require sendmux/sending:^2.1
 gem install qubrics-sending
@@ -211,7 +211,7 @@ Maintainers: use the [protected live E2E matrix](docs/live-e2e-matrix.md) for cr
 | --- | --- |
 | [`packages/ts`](packages/ts) | TypeScript SDK packages and the `sendmux` CLI. |
 | [`packages/python`](packages/python) | Python SDK packages and the `sendmux-mcp` package. |
-| [`go`](go) | Go v4 source for `qubrics.com/go/v4` and subpackages. |
+| [`go`](go) | Go module `qubrics.com/go/v4` and subpackages. |
 | [`rust`](rust) | Source for `qubrics` 1.0.0; publication pending. Published `sendmux` remains at 0.5.1. |
 | [`packages/php`](packages/php) | PHP package sources used for Packagist packages and public split repositories. |
 | [`packages/ruby`](packages/ruby) | RubyGem package sources. |
