@@ -26,12 +26,9 @@ Existing source validators require the same server name in npm mcpName,
 Python README mcp-name and the committed descriptor. A published version
 cannot be replaced; these new versions keep prior public files untouched.
 
-Every npm, PyPI and Registry publication returns as a separate exact-file
-ask after all gates. Operator uploads PyPI; agent never uploads. npm uses
-the operator's browser passkey. Registry uses the existing org-OIDC recovery
-job with a separately approved immutable producer tag and release approval.
-No tag, upload, dispatch, Registry mutation or release-workflow change is
-part of this preparation. Source rollback is a normal revert.
+The candidates remain unpublished. No producer tag, upload, dispatch,
+Registry mutation or release-workflow change is part of this preparation.
+Source rollback is a normal revert.
 
 Owner state/receipts: SDK MAIN .claude/tasks/rebrand-qubrics-sdk344/
 matched-marker-mcp-prep-20261123.md and
