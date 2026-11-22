@@ -6,7 +6,7 @@ Official Qubrics Go module for the Sending, Mailbox, and Management APIs.
 
 ## Install
 
-These commands target unpublished v4 source. Use published `sendmux.ai/go/v3@v3.0.0`.
+Version 4.0.0 is published. `sendmux.ai/go/v3@v3.0.0` remains available.
 
 Requires Go 1.23 or newer.
 
