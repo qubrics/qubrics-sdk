@@ -22,7 +22,7 @@
   },
   "package": {
     "identity": "qubrics-mcp",
-    "version": "3.0.0"
+    "version": "3.0.1"
   },
   "protocols": [
     "2025-11-25",
@@ -30,7 +30,7 @@
   ],
   "provenance": {
     "build_inputs": {
-      "pyproject.toml": "20901ef6c60595f88231b9e84368b9996c2ec59849af90547101a89c62e90367",
+      "pyproject.toml": "8db3f4945e1fd6fd431c9b9dd42b0a1ee534ae11b8ffb4aee3cd7392b484e603",
       "scripts/mcp-conformance-required-checks.json": "c82a24f9f893f69c45ab31949e4089f80836230e913d95ca7a05f5933cb788e4"
     },
     "certified_protocols": "scripts/mcp-conformance-required-checks.json",

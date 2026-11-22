@@ -50,7 +50,7 @@ hosted endpoint.
 
 ## Installation
 
-These commands target the Qubrics release of `qubrics-mcp`. Until it is published, install `sendmux-mcp` with its existing import names.
+Install `qubrics-mcp` for the local commands below.
 
 ```sh
 pip install qubrics-mcp
