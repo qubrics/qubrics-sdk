@@ -219,15 +219,15 @@ test("Go release-note producer neutralises captured Go4 notes without changing o
 
 ### Bug Fixes
 
-* **go:** retain mail webhook models after calendar filtering ([4416e3c](https://github.com/qubrics/qubrics-sdk/commit/4416e3cec4e5cff2440f7aff8cbd6e5cd4b70c5e))
+* **go:** retain mail webhook models ([4416e3c](https://github.com/qubrics/qubrics-sdk/commit/4416e3cec4e5cff2440f7aff8cbd6e5cd4b70c5e))
 * preserve legacy SDK compatibility with dual aliases ([4910037](https://github.com/qubrics/qubrics-sdk/commit/491003792dd742cb2c83e4a09501abdf4f4458c9))
-* preserve webhook variants and own calendar lifecycle fixtures ([49d4604](https://github.com/qubrics/qubrics-sdk/commit/49d4604235528b2fd56ac0bb51d55c244a18f771))
-* regenerate SDKs from current calendar and webhook contracts ([276082c](https://github.com/qubrics/qubrics-sdk/commit/276082cb5e525c0a6fb1e521858846cbd21c8714))
-* regenerate SDKs from current calendar and webhook contracts ([d728ea8](https://github.com/qubrics/qubrics-sdk/commit/d728ea87ac3f0aeebdb6380ad3bd515bac63d413))
-* **sdk:** preserve mail consumers after calendar filtering ([d481266](https://github.com/qubrics/qubrics-sdk/commit/d481266dd8f4c3f3791c4627a05c49d8eee53374))
+* preserve webhook variants and fixture ownership ([49d4604](https://github.com/qubrics/qubrics-sdk/commit/49d4604235528b2fd56ac0bb51d55c244a18f771))
+* regenerate SDKs from current webhook contracts ([276082c](https://github.com/qubrics/qubrics-sdk/commit/276082cb5e525c0a6fb1e521858846cbd21c8714))
+* regenerate SDKs from current webhook contracts ([d728ea8](https://github.com/qubrics/qubrics-sdk/commit/d728ea87ac3f0aeebdb6380ad3bd515bac63d413))
+* **sdk:** preserve mail consumers ([d481266](https://github.com/qubrics/qubrics-sdk/commit/d481266dd8f4c3f3791c4627a05c49d8eee53374))
 * **sdk:** preserve timestamps and fixture prerequisites ([894ee58](https://github.com/qubrics/qubrics-sdk/commit/894ee580c8331ac19f80a3778300f265a1a39300))
-* **sdk:** remove calendar bindings from generated clients ([128169a](https://github.com/qubrics/qubrics-sdk/commit/128169a811c51f71d9c8440b2386b6c5029ee2af))
-* **sdk:** withhold remaining calendar bindings at generation ([27c2cd1](https://github.com/qubrics/qubrics-sdk/commit/27c2cd1be5fcdcc5376be7a06223a0eca1e8a4ae))`;
+* **sdk:** remove excluded bindings from generated clients ([128169a](https://github.com/qubrics/qubrics-sdk/commit/128169a811c51f71d9c8440b2386b6c5029ee2af))
+* **sdk:** exclude remaining bindings outside the selected surfaces ([27c2cd1](https://github.com/qubrics/qubrics-sdk/commit/27c2cd1be5fcdcc5376be7a06223a0eca1e8a4ae))`;
   const candidates = [["go", "4.0.0"], ["go", "4.0.1"], ["packages/python/sdk", "4.0.0"], ["rust", "4.0.0"]].map(([path, value]) => {
     const version = Version.parse(value);
     return { path, pullRequest: {
@@ -239,10 +239,15 @@ test("Go release-note producer neutralises captured Go4 notes without changing o
   const plugin = new PythonReleaseNotes(undefined, "main", {});
   const before = candidates.map(({ pullRequest }) => ({ body: pullRequest.body.toString(), entry: pullRequest.updates[0].updater.changelogEntry }));
   const history = "# Changelog\n\n## 3.0.0\n\nrename module and defaults to Qubrics\n";
+  assert.equal(entry.match(/calendar/gi)?.length, 7, "captured Go4 input must exercise all seven calendar notes");
   assert.strictEqual(await plugin.run(candidates), candidates);
   for (const [index, { pullRequest }] of candidates.entries()) {
     const { body, updates, version } = pullRequest;
     const expected = index === 0 ? neutral : entry;
+    if (index === 0) {
+      assert.doesNotMatch(body.toString(), /calendar/i, "selected Go4 body must exclude calendar notes");
+      assert.doesNotMatch(updates[0].updater.updateContent(history), /calendar/i, "selected Go4 changelog must exclude calendar notes");
+    }
     assert.equal(body.releaseData[0].notes, expected, `candidate ${index} body must contain the scoped notes`);
     assert.equal(updates[0].updater.changelogEntry, expected, `candidate ${index} changelog must match its body`);
     assert.strictEqual(body.releaseData[0].version, version);
