@@ -9,7 +9,7 @@ Email inbox API, inbound mail, and outbound sending MCP and A2A servers for AI a
 
 This package is the Qubrics MCP. Keep it separate from any documentation-search MCP used by docs tooling.
 
-<!-- mcp-name: io.github.Sendmux/sendmux-mcp -->
+<!-- mcp-name: io.github.qubrics/qubrics-mcp -->
 
 ## Documentation
 

@@ -9,7 +9,7 @@ const venv = join(root, ".tmp", "python-venv");
 const python = join(venv, "bin", "python");
 const distDir = join(root, ".tmp", "mcp-dist");
 const mcpPackageDir = join(root, "packages/python/mcp");
-const mcpRegistryName = "io.github.Sendmux/sendmux-mcp";
+const mcpRegistryName = "io.github.qubrics/qubrics-mcp";
 const mcpRegistryDescriptionMaxLength = 100;
 
 function main() {

@@ -585,7 +585,7 @@ jobs:
           if requested_version != server["version"]:
             raise SystemExit(f"Recovery version {requested_version} does not match committed metadata version {server['version']}")
 
-          if server["name"] != "io.github.Sendmux/sendmux-mcp":
+          if server["name"] != "io.github.qubrics/qubrics-mcp":
             raise SystemExit(f"Unexpected MCP Registry name: {server['name']}")
 
           marker = (root / "packages/python/mcp/README.md").read_text()
