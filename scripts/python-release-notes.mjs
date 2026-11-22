@@ -4,8 +4,12 @@ import { GitHub, Manifest } from "release-please";
 import { ManifestPlugin } from "release-please/build/src/plugin.js";
 import { Changelog } from "release-please/build/src/updaters/changelog.js";
 
-const pendingVersions = new Map([["packages/python/sdk", "4.0.0"], ["packages/python/langchain", "1.0.0"]]);
-const neutralNotes = (notes) => notes.replaceAll("move SDK packages into the Qubrics namespace", "update native package imports");
+const pendingVersions = new Map([["packages/python/sdk", "4.0.0"], ["packages/python/langchain", "1.0.0"], ["go", "4.0.0"]]);
+const neutralNotes = ({ path, notes }) => path === "go"
+  ? notes.replaceAll("rename module and defaults to Qubrics", "update native module imports and API defaults")
+    .replaceAll("add compatible Qubrics integration aliases", "add compatible integration aliases")
+    .replaceAll("preserve integration contracts with Qubrics aliases", "preserve integration contracts with aliases")
+  : notes.replaceAll("move SDK packages into the Qubrics namespace", "update native package imports");
 
 export class PythonReleaseNotes extends ManifestPlugin {
   async run(candidates) {
@@ -13,8 +17,8 @@ export class PythonReleaseNotes extends ManifestPlugin {
       if (!pendingVersions.has(path) || pendingVersions.get(path) !== pullRequest.version?.toString()) continue;
       const changelog = pullRequest.updates.find((update) => update.path === `${path}/CHANGELOG.md`);
       assert.ok(changelog?.updater instanceof Changelog, `${path} needs its generated changelog updater`);
-      changelog.updater.changelogEntry = neutralNotes(changelog.updater.changelogEntry);
-      for (const release of pullRequest.body.releaseData) release.notes = neutralNotes(release.notes);
+      changelog.updater.changelogEntry = neutralNotes({ path, notes: changelog.updater.changelogEntry });
+      for (const release of pullRequest.body.releaseData) release.notes = neutralNotes({ path, notes: release.notes });
     }
     return candidates;
   }
