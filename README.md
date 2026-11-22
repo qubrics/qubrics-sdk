@@ -1,7 +1,7 @@
 # Qubrics SDKs
 
 [![npm version](https://img.shields.io/npm/v/@qubrics/sdk?label=npm)](https://www.npmjs.com/package/@qubrics/sdk)
-[![PyPI version](https://img.shields.io/pypi/v/sendmux-sdk?label=pypi)](https://pypi.org/project/sendmux-sdk/)
+[![PyPI version](https://img.shields.io/pypi/v/qubrics-sdk?label=pypi)](https://pypi.org/project/qubrics-sdk/)
 [![Go Reference](https://pkg.go.dev/badge/sendmux.ai/go/v3.svg)](https://pkg.go.dev/sendmux.ai/go/v3)
 [![crates.io version](https://img.shields.io/crates/v/qubrics?label=crates.io)](https://crates.io/crates/qubrics)
 [![CI](https://github.com/qubrics/qubrics-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/qubrics/qubrics-sdk/actions/workflows/ci.yml)
@@ -10,7 +10,7 @@
 
 Official SDK, CLI, and MCP workspace for Qubrics.
 
-The seven `@qubrics/*` npm packages and PyPI packages `qubrics-core`, `qubrics-sending`, `qubrics-mailbox`, `qubrics-management` and `qubrics-mcp` are published. RubyGems has `qubrics-core` and `qubrics-sending` 2.0.0, plus `qubrics-mailbox`, `qubrics-management` and `qubrics-sdk` 3.0.0. Existing `@sendmux/*` releases remain available. Other Python and Ruby packages use the published names in the Packages table.
+The seven `@qubrics/*` npm packages and PyPI packages `qubrics-core`, `qubrics-sending`, `qubrics-mailbox`, `qubrics-management`, `qubrics-mcp`, `qubrics-sdk` and `langchain-qubrics` are published. RubyGems has `qubrics-core` and `qubrics-sending` 2.0.0, plus `qubrics-mailbox`, `qubrics-management` and `qubrics-sdk` 3.0.0. Existing `@sendmux/*` releases remain available. Other Python and Ruby packages use the published names in the Packages table.
 
 Go v4 source for `qubrics.com/go/v4` awaits publication. Use published `sendmux.ai/go/v3@v3.0.0`.
 
@@ -37,9 +37,9 @@ Go v4 source for `qubrics.com/go/v4` awaits publication. Use published `sendmux.
 | PyPI | `qubrics-sending` | Sending API | `smx_mbx_*` or owner-approved `smx_agent_*` | `pip install qubrics-sending` | [`packages/python/sending`](packages/python/sending) |
 | PyPI | `qubrics-mailbox` | Mailbox API | `smx_mbx_*` or `smx_agent_*` | `pip install qubrics-mailbox` | [`packages/python/mailbox`](packages/python/mailbox) |
 | PyPI | `qubrics-management` | Management API | `smx_root_*` | `pip install qubrics-management` | [`packages/python/management`](packages/python/management) |
-| PyPI | `sendmux-sdk` | Python umbrella package | surface-specific | `pip install sendmux-sdk` | [`packages/python/sdk`](packages/python/sdk) |
+| PyPI | `qubrics-sdk` | Python umbrella package | surface-specific | `pip install qubrics-sdk` | [`packages/python/sdk`](packages/python/sdk) |
 | PyPI | `qubrics-mcp` | Local MCP plus hosted MCP and A2A servers | OAuth for hosted; surface-specific keys for local | `pip install qubrics-mcp` | [`packages/python/mcp`](packages/python/mcp) |
-| PyPI | `langchain-sendmux` | LangChain toolkit (agent inbox + sending) | REST OAuth or send + receive `smx_mbx_*` / `smx_agent_*` | `pip install langchain-sendmux` | [`packages/python/langchain`](packages/python/langchain) |
+| PyPI | `langchain-qubrics` | LangChain toolkit (agent inbox + sending) | REST OAuth or send + receive `smx_mbx_*` / `smx_agent_*` | `pip install langchain-qubrics` | [`packages/python/langchain`](packages/python/langchain) |
 | Go | `sendmux.ai/go/v3/core` | Shared Go helpers | n/a | `go get sendmux.ai/go/v3@v3.0.0` | [`go/core`](go/core) |
 | Go | `sendmux.ai/go/v3/sending` | Sending API | `smx_mbx_*` or owner-approved `smx_agent_*` | `go get sendmux.ai/go/v3@v3.0.0` | [`go/sending`](go/sending) |
 | Go | `sendmux.ai/go/v3/mailbox` | Mailbox API | `smx_mbx_*` or `smx_agent_*` | `go get sendmux.ai/go/v3@v3.0.0` | [`go/mailbox`](go/mailbox) |
@@ -63,9 +63,9 @@ Go v4 source for `qubrics.com/go/v4` awaits publication. Use published `sendmux.
 
 ### Python packages
 
-Python packages share the `qubrics` namespace. PyPI has `qubrics-core` and `qubrics-sending` 2.0.0, plus `qubrics-mailbox`, `qubrics-management` and `qubrics-mcp` 3.0.0. The `qubrics-sdk` and `langchain-qubrics` targets in the table await publication.
+Python packages share the `qubrics` namespace. PyPI has `qubrics-core` and `qubrics-sending` 2.0.0, plus `qubrics-mailbox`, `qubrics-management` and `qubrics-mcp` 3.0.0. PyPI also has `qubrics-sdk` 4.0.0 and `langchain-qubrics` 1.0.0. The metadata-only `sendmux-sdk` 4.0.0 and `langchain-sendmux` 1.0.0 packages are public.
 
-| Published distribution | Replacement and target version | Source import |
+| Distribution | Published package and version | Python import |
 | --- | --- | --- |
 | `sendmux-core` | `qubrics-core` 2.0.0 | `qubrics.core` |
 | `sendmux-sending` | `qubrics-sending` 2.0.0 | `qubrics.sending` |
@@ -75,7 +75,7 @@ Python packages share the `qubrics` namespace. PyPI has `qubrics-core` and `qubr
 | `sendmux-mcp` | `qubrics-mcp` 3.0.0 | `qubrics.mcp` |
 | `langchain-sendmux` | `langchain-qubrics` 1.0.0 | `qubrics.langchain` |
 
-For example, the source Sending client is `from qubrics.sending import create_sending_client`. The source LangChain class is `qubrics.langchain.QubricsToolkit`. All seven distributions share the namespace without installing a separate package named `qubrics`.
+For example, the Sending client is `from qubrics.sending import create_sending_client`. The LangChain class is `qubrics.langchain.QubricsToolkit`. All seven distributions share the namespace without installing a separate package named `qubrics`.
 
 ### Published packages
 
