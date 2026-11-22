@@ -9,6 +9,12 @@ const neutralNotes = ({ path, notes }) => path === "go"
   ? notes.replaceAll("rename module and defaults to Qubrics", "update native module imports and API defaults")
     .replaceAll("add compatible Qubrics integration aliases", "add compatible integration aliases")
     .replaceAll("preserve integration contracts with Qubrics aliases", "preserve integration contracts with aliases")
+    .replaceAll("retain mail webhook models after calendar filtering", "retain mail webhook models")
+    .replaceAll("preserve webhook variants and own calendar lifecycle fixtures", "preserve webhook variants and fixture ownership")
+    .replaceAll("regenerate SDKs from current calendar and webhook contracts", "regenerate SDKs from current webhook contracts")
+    .replaceAll("preserve mail consumers after calendar filtering", "preserve mail consumers")
+    .replaceAll("remove calendar bindings from generated clients", "remove excluded bindings from generated clients")
+    .replaceAll("withhold remaining calendar bindings at generation", "exclude remaining bindings outside the selected surfaces")
   : notes.replaceAll("move SDK packages into the Qubrics namespace", "update native package imports");
 
 export class PythonReleaseNotes extends ManifestPlugin {
