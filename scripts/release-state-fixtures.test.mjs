@@ -169,3 +169,91 @@ test("Python release-note producer keeps neutral notes across bot refreshes", as
   await plugin.run(candidates);
   assert.deepEqual(candidates.map(({ pullRequest }) => pullRequest.body.toString()), after);
 });
+
+test("Go release-note producer neutralises captured Go4 notes without changing other releases", async () => {
+  // Captured constructor output for PR329/6b44445f.
+  const entry = `## [4.0.0](https://github.com/qubrics/qubrics-sdk/compare/go/v3.0.0...go/v4.0.0) (2026-11-22)
+
+
+### ⚠ BREAKING CHANGES
+
+* **go:** rename module and defaults to Qubrics
+
+### Features
+
+* add compatible Qubrics integration aliases ([dff5cb8](https://github.com/qubrics/qubrics-sdk/commit/dff5cb89bccb5840d55071d23f79ff88c7e58040))
+* **go:** rename module and defaults to Qubrics ([8de0a05](https://github.com/qubrics/qubrics-sdk/commit/8de0a05c09088507709af92e3f4fb11729ffea0b))
+* **mailbox:** expose durable drafts and agent-email workflows ([bb2f462](https://github.com/qubrics/qubrics-sdk/commit/bb2f462447affd43b3b175b9625068f1a02e3172))
+* **mailbox:** expose durable drafts and agent-email workflows ([7e867c5](https://github.com/qubrics/qubrics-sdk/commit/7e867c5bd7b7c85add27c7c04e036997ae57dbc4))
+* **mailbox:** expose permitted sender choices to consumers ([#317](https://github.com/qubrics/qubrics-sdk/issues/317)) ([7ac3dc1](https://github.com/qubrics/qubrics-sdk/commit/7ac3dc1c08915ec12477171a49edb87b3d482f39))
+* preserve integration contracts with Qubrics aliases ([722fbab](https://github.com/qubrics/qubrics-sdk/commit/722fbab2f98248d17b4878dd5149a35a711d5a18))
+
+
+### Bug Fixes
+
+* **go:** retain mail webhook models after calendar filtering ([4416e3c](https://github.com/qubrics/qubrics-sdk/commit/4416e3cec4e5cff2440f7aff8cbd6e5cd4b70c5e))
+* preserve legacy SDK compatibility with dual aliases ([4910037](https://github.com/qubrics/qubrics-sdk/commit/491003792dd742cb2c83e4a09501abdf4f4458c9))
+* preserve webhook variants and own calendar lifecycle fixtures ([49d4604](https://github.com/qubrics/qubrics-sdk/commit/49d4604235528b2fd56ac0bb51d55c244a18f771))
+* regenerate SDKs from current calendar and webhook contracts ([276082c](https://github.com/qubrics/qubrics-sdk/commit/276082cb5e525c0a6fb1e521858846cbd21c8714))
+* regenerate SDKs from current calendar and webhook contracts ([d728ea8](https://github.com/qubrics/qubrics-sdk/commit/d728ea87ac3f0aeebdb6380ad3bd515bac63d413))
+* **sdk:** preserve mail consumers after calendar filtering ([d481266](https://github.com/qubrics/qubrics-sdk/commit/d481266dd8f4c3f3791c4627a05c49d8eee53374))
+* **sdk:** preserve timestamps and fixture prerequisites ([894ee58](https://github.com/qubrics/qubrics-sdk/commit/894ee580c8331ac19f80a3778300f265a1a39300))
+* **sdk:** remove calendar bindings from generated clients ([128169a](https://github.com/qubrics/qubrics-sdk/commit/128169a811c51f71d9c8440b2386b6c5029ee2af))
+* **sdk:** withhold remaining calendar bindings at generation ([27c2cd1](https://github.com/qubrics/qubrics-sdk/commit/27c2cd1be5fcdcc5376be7a06223a0eca1e8a4ae))`;
+  const neutral = `## [4.0.0](https://github.com/qubrics/qubrics-sdk/compare/go/v3.0.0...go/v4.0.0) (2026-11-22)
+
+
+### ⚠ BREAKING CHANGES
+
+* **go:** update native module imports and API defaults
+
+### Features
+
+* add compatible integration aliases ([dff5cb8](https://github.com/qubrics/qubrics-sdk/commit/dff5cb89bccb5840d55071d23f79ff88c7e58040))
+* **go:** update native module imports and API defaults ([8de0a05](https://github.com/qubrics/qubrics-sdk/commit/8de0a05c09088507709af92e3f4fb11729ffea0b))
+* **mailbox:** expose durable drafts and agent-email workflows ([bb2f462](https://github.com/qubrics/qubrics-sdk/commit/bb2f462447affd43b3b175b9625068f1a02e3172))
+* **mailbox:** expose durable drafts and agent-email workflows ([7e867c5](https://github.com/qubrics/qubrics-sdk/commit/7e867c5bd7b7c85add27c7c04e036997ae57dbc4))
+* **mailbox:** expose permitted sender choices to consumers ([#317](https://github.com/qubrics/qubrics-sdk/issues/317)) ([7ac3dc1](https://github.com/qubrics/qubrics-sdk/commit/7ac3dc1c08915ec12477171a49edb87b3d482f39))
+* preserve integration contracts with aliases ([722fbab](https://github.com/qubrics/qubrics-sdk/commit/722fbab2f98248d17b4878dd5149a35a711d5a18))
+
+
+### Bug Fixes
+
+* **go:** retain mail webhook models after calendar filtering ([4416e3c](https://github.com/qubrics/qubrics-sdk/commit/4416e3cec4e5cff2440f7aff8cbd6e5cd4b70c5e))
+* preserve legacy SDK compatibility with dual aliases ([4910037](https://github.com/qubrics/qubrics-sdk/commit/491003792dd742cb2c83e4a09501abdf4f4458c9))
+* preserve webhook variants and own calendar lifecycle fixtures ([49d4604](https://github.com/qubrics/qubrics-sdk/commit/49d4604235528b2fd56ac0bb51d55c244a18f771))
+* regenerate SDKs from current calendar and webhook contracts ([276082c](https://github.com/qubrics/qubrics-sdk/commit/276082cb5e525c0a6fb1e521858846cbd21c8714))
+* regenerate SDKs from current calendar and webhook contracts ([d728ea8](https://github.com/qubrics/qubrics-sdk/commit/d728ea87ac3f0aeebdb6380ad3bd515bac63d413))
+* **sdk:** preserve mail consumers after calendar filtering ([d481266](https://github.com/qubrics/qubrics-sdk/commit/d481266dd8f4c3f3791c4627a05c49d8eee53374))
+* **sdk:** preserve timestamps and fixture prerequisites ([894ee58](https://github.com/qubrics/qubrics-sdk/commit/894ee580c8331ac19f80a3778300f265a1a39300))
+* **sdk:** remove calendar bindings from generated clients ([128169a](https://github.com/qubrics/qubrics-sdk/commit/128169a811c51f71d9c8440b2386b6c5029ee2af))
+* **sdk:** withhold remaining calendar bindings at generation ([27c2cd1](https://github.com/qubrics/qubrics-sdk/commit/27c2cd1be5fcdcc5376be7a06223a0eca1e8a4ae))`;
+  const candidates = [["go", "4.0.0"], ["go", "4.0.1"], ["packages/python/sdk", "4.0.0"], ["rust", "4.0.0"]].map(([path, value]) => {
+    const version = Version.parse(value);
+    return { path, pullRequest: {
+      version,
+      body: new PullRequestBody([{ notes: entry, version }], { header: "existing header", footer: "existing footer", extra: "existing extra" }),
+      updates: [{ path: `${path}/CHANGELOG.md`, updater: new Changelog({ version, changelogEntry: entry }) }, { path: ".release-please-manifest.json", updater: { version } }],
+    } };
+  });
+  const plugin = new PythonReleaseNotes(undefined, "main", {});
+  const before = candidates.map(({ pullRequest }) => ({ body: pullRequest.body.toString(), entry: pullRequest.updates[0].updater.changelogEntry }));
+  const history = "# Changelog\n\n## 3.0.0\n\nrename module and defaults to Qubrics\n";
+  assert.strictEqual(await plugin.run(candidates), candidates);
+  for (const [index, { pullRequest }] of candidates.entries()) {
+    const { body, updates, version } = pullRequest;
+    const expected = index === 0 ? neutral : entry;
+    assert.equal(body.releaseData[0].notes, expected, `candidate ${index} body must contain the scoped notes`);
+    assert.equal(updates[0].updater.changelogEntry, expected, `candidate ${index} changelog must match its body`);
+    assert.strictEqual(body.releaseData[0].version, version);
+    assert.strictEqual(updates[1].updater.version, version);
+    assert.equal(body.header, "existing header");
+    assert.equal(body.footer, "existing footer");
+    assert.equal(body.extra, "existing extra");
+    assert.equal(updates[0].updater.updateContent(history), `# Changelog\n\n${expected}\n\n## 3.0.0\n\nrename module and defaults to Qubrics\n`);
+    if (index > 0) assert.deepEqual({ body: body.toString(), entry: updates[0].updater.changelogEntry }, before[index]);
+  }
+  const after = candidates.map(({ pullRequest }) => ({ body: pullRequest.body.toString(), entry: pullRequest.updates[0].updater.changelogEntry }));
+  await plugin.run(candidates);
+  assert.deepEqual(candidates.map(({ pullRequest }) => ({ body: pullRequest.body.toString(), entry: pullRequest.updates[0].updater.changelogEntry })), after);
+});
