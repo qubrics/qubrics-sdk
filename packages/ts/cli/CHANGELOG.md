@@ -1,5 +1,22 @@
 # Changelog
 
+## [2.0.1](https://github.com/qubrics/qubrics-sdk/compare/ts-cli-v2.0.0...ts-cli-v2.0.1) (2026-11-23)
+
+
+### Bug Fixes
+
+* **cli:** bind authentication body reads to request deadlines ([abe82a5](https://github.com/qubrics/qubrics-sdk/commit/abe82a52536dd941e0d649d1440683a34d62ab27))
+* **cli:** preserve authentication body deadlines across garbage collection ([909c502](https://github.com/qubrics/qubrics-sdk/commit/909c502137c164211937455d0bc16bcca7fd8a3b))
+* **sdk:** remove calendar bindings from generated clients ([128169a](https://github.com/qubrics/qubrics-sdk/commit/128169a811c51f71d9c8440b2386b6c5029ee2af))
+* **sdk:** withhold remaining calendar bindings at generation ([27c2cd1](https://github.com/qubrics/qubrics-sdk/commit/27c2cd1be5fcdcc5376be7a06223a0eca1e8a4ae))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @qubrics/sdk bumped to 3.0.1
+
 ## [2.0.0](https://github.com/qubrics/qubrics-sdk/compare/ts-cli-v1.7.2...ts-cli-v2.0.0) (2026-11-10)
 
 
