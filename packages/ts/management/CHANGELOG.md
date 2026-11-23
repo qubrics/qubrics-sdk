@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.0.1](https://github.com/qubrics/qubrics-sdk/compare/ts-management-v3.0.0...ts-management-v3.0.1) (2026-11-23)
+
+
+### Bug Fixes
+
+* **sdk:** remove calendar bindings from generated clients ([128169a](https://github.com/qubrics/qubrics-sdk/commit/128169a811c51f71d9c8440b2386b6c5029ee2af))
+* **sdk:** withhold remaining calendar bindings at generation ([27c2cd1](https://github.com/qubrics/qubrics-sdk/commit/27c2cd1be5fcdcc5376be7a06223a0eca1e8a4ae))
+
 ## [3.0.0](https://github.com/qubrics/qubrics-sdk/compare/ts-management-v2.0.2...ts-management-v3.0.0) (2026-11-09)
 
 
