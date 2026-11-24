@@ -1,5 +1,33 @@
 # Changelog
 
+## [4.0.0](https://github.com/qubrics/qubrics-sdk/compare/ruby-sdk-v3.0.0...ruby-sdk/v4.0.0) (2026-11-23)
+
+
+### ⚠ BREAKING CHANGES
+
+* **ruby:** rename SDK gems and modules to Qubrics
+* **ruby-sdk:** adopt Mailbox 2 producer floor
+* **ruby-sdk:** adopt Management 2 producer floor
+
+### Features
+
+* add compatible Qubrics integration aliases ([dff5cb8](https://github.com/qubrics/qubrics-sdk/commit/dff5cb89bccb5840d55071d23f79ff88c7e58040))
+* preserve integration contracts with Qubrics aliases ([722fbab](https://github.com/qubrics/qubrics-sdk/commit/722fbab2f98248d17b4878dd5149a35a711d5a18))
+* **ruby:** rename SDK gems and modules to Qubrics ([c6a27a6](https://github.com/qubrics/qubrics-sdk/commit/c6a27a61c409bcad497a68b436ffdfc38cf874b8))
+
+
+### Bug Fixes
+
+* align changed SDK dependency floors with release manifest ([b1c5548](https://github.com/qubrics/qubrics-sdk/commit/b1c5548c1dde8b441b4fa2605253907971c2f5d2))
+* **management:** prepare calendar-free Python and Ruby 3.0.0 ([1449b51](https://github.com/qubrics/qubrics-sdk/commit/1449b51e1decd1fe6ebb17d203e726363002f0f8))
+* **management:** prepare calendar-free Python and Ruby 3.0.0 ([6b282b0](https://github.com/qubrics/qubrics-sdk/commit/6b282b0049f5fc4c7bdb8dd201e0aabbd34929c0))
+* preserve Python environment compatibility with published core ([8f4c78f](https://github.com/qubrics/qubrics-sdk/commit/8f4c78f050725b6d57a6b71d39178dee40c1774e))
+* **ruby-sdk:** adopt Mailbox 2 producer floor ([051a621](https://github.com/qubrics/qubrics-sdk/commit/051a6215f1ef2a8400696baba9a84d8b8d9d9aae))
+* **ruby-sdk:** adopt Management 2 producer floor ([3c4fe75](https://github.com/qubrics/qubrics-sdk/commit/3c4fe755c8be1b3afcd9b25aeb0aa4bb65be8556))
+* **ruby-sdk:** require released sending 1.5.0 ([eaf5a80](https://github.com/qubrics/qubrics-sdk/commit/eaf5a80d19abaca9db21e9c093a8713ad972d934))
+* **ruby:** qualify calendar-free Mailbox 3.0.0 ([3745c2e](https://github.com/qubrics/qubrics-sdk/commit/3745c2e2ee77908a2ac26ba3d53ff01005d82ea6))
+* **ruby:** qualify calendar-free Mailbox 3.0.0 ([a0ef57d](https://github.com/qubrics/qubrics-sdk/commit/a0ef57d431959257ddb2da30cee6b6e941fba9d3))
+
 ## 3.0.0
 
 ### Changed
