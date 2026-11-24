@@ -1,5 +1,53 @@
 # Changelog
 
+## [4.0.0](https://github.com/qubrics/qubrics-sdk/compare/python-mcp-v3.0.1...python-mcp-v4.0.0) (2026-11-23)
+
+
+### ⚠ BREAKING CHANGES
+
+* **python:** move SDK packages into the Qubrics namespace
+
+### Features
+
+* add compatible Qubrics integration aliases ([dff5cb8](https://github.com/qubrics/qubrics-sdk/commit/dff5cb89bccb5840d55071d23f79ff88c7e58040))
+* **mailbox:** expose durable drafts and agent-email workflows ([bb2f462](https://github.com/qubrics/qubrics-sdk/commit/bb2f462447affd43b3b175b9625068f1a02e3172))
+* **mailbox:** expose durable drafts and agent-email workflows ([7e867c5](https://github.com/qubrics/qubrics-sdk/commit/7e867c5bd7b7c85add27c7c04e036997ae57dbc4))
+* **mailbox:** expose permitted sender choices to consumers ([#317](https://github.com/qubrics/qubrics-sdk/issues/317)) ([7ac3dc1](https://github.com/qubrics/qubrics-sdk/commit/7ac3dc1c08915ec12477171a49edb87b3d482f39))
+* **mcp:** add npm bridge and enforce skill release freshness ([bc7b972](https://github.com/qubrics/qubrics-sdk/commit/bc7b972c9be57f51ecc791fdfe914e8f9bba4f69))
+* preserve integration contracts with Qubrics aliases ([722fbab](https://github.com/qubrics/qubrics-sdk/commit/722fbab2f98248d17b4878dd5149a35a711d5a18))
+* **python:** move SDK packages into the Qubrics namespace ([a326bc9](https://github.com/qubrics/qubrics-sdk/commit/a326bc923fff448470d908bb527afaaa35f6d739))
+
+
+### Bug Fixes
+
+* **a2a:** serve qualified Qubrics card by host ([909ddb5](https://github.com/qubrics/qubrics-sdk/commit/909ddb5f00c43642fcaeffd594bd8a48eb889756))
+* **mcp:** add npm install surface ([5c08efe](https://github.com/qubrics/qubrics-sdk/commit/5c08efe9194081e67b0167a556ce46e6369fe549))
+* **mcp:** align registry package versions and ownership metadata ([551d3e4](https://github.com/qubrics/qubrics-sdk/commit/551d3e46934c2f605a25ccc0ea072f61c8ed2a2e))
+* **mcp:** align registry package versions and ownership metadata ([1c3d5f6](https://github.com/qubrics/qubrics-sdk/commit/1c3d5f644a3e31c3e0bcf5c43a0da018863394c4))
+* **mcp:** pin Python runtime used by certified contract ([66289f1](https://github.com/qubrics/qubrics-sdk/commit/66289f1bb5d73fba2096dfa26d57ea5639035468))
+* **mcp:** prepare calendar-free 3.0.0 distribution ([e3271fa](https://github.com/qubrics/qubrics-sdk/commit/e3271fa4e321a1d6fa925b53ea63690495400212))
+* **mcp:** preserve resource-specific root discovery ([5350605](https://github.com/qubrics/qubrics-sdk/commit/535060586283912ce322551ed3a2b22e4fde8108))
+* **mcp:** remove unused calendar annotation bindings ([3eb02e1](https://github.com/qubrics/qubrics-sdk/commit/3eb02e16a86951b346c140668240d41def1002bd))
+* **mcp:** start the packaged hosted executable ([9a1370a](https://github.com/qubrics/qubrics-sdk/commit/9a1370a13b76b2c12d279d251ad5baff22a733cf))
+* **mcp:** trust both rebrand issuers and resource aliases ([#348](https://github.com/qubrics/qubrics-sdk/issues/348)) ([2498ae8](https://github.com/qubrics/qubrics-sdk/commit/2498ae8e90932fa98b54926653a4a6185bb2a4c3))
+* preserve generated contracts and typed alias checks ([ff4bb86](https://github.com/qubrics/qubrics-sdk/commit/ff4bb8601de885703e2cbff4af6a62f1b15d5791))
+* preserve legacy SDK compatibility with dual aliases ([4910037](https://github.com/qubrics/qubrics-sdk/commit/491003792dd742cb2c83e4a09501abdf4f4458c9))
+* preserve Python environment compatibility with published core ([8f4c78f](https://github.com/qubrics/qubrics-sdk/commit/8f4c78f050725b6d57a6b71d39178dee40c1774e))
+* preserve webhook variants and own calendar lifecycle fixtures ([49d4604](https://github.com/qubrics/qubrics-sdk/commit/49d4604235528b2fd56ac0bb51d55c244a18f771))
+* **python-mcp:** publish the deployed flattened response schemas ([a3a2897](https://github.com/qubrics/qubrics-sdk/commit/a3a2897b1f891c405eaa457b7130c14f36508e6d))
+* **python-mcp:** publish the deployed v1.8.250 app schema and tool result schemas ([2b9b2a5](https://github.com/qubrics/qubrics-sdk/commit/2b9b2a53fdf75dbc0f2be240bffa54146319e940))
+* regenerate SDKs from current calendar and webhook contracts ([276082c](https://github.com/qubrics/qubrics-sdk/commit/276082cb5e525c0a6fb1e521858846cbd21c8714))
+* regenerate SDKs from current calendar and webhook contracts ([d728ea8](https://github.com/qubrics/qubrics-sdk/commit/d728ea87ac3f0aeebdb6380ad3bd515bac63d413))
+* regenerate SDKs from the deployed flattened response schemas (docs 86b0f45) ([628b161](https://github.com/qubrics/qubrics-sdk/commit/628b161d2692775ac1f4830c1d64c024ba04ed83))
+* sync generated Qubrics API defaults ([#351](https://github.com/qubrics/qubrics-sdk/issues/351)) ([388a410](https://github.com/qubrics/qubrics-sdk/commit/388a4107d25e6cf94a7c7704b094f8765f851be3))
+
+
+### Documentation
+
+* **python-mcp:** drop the stale Unreleased block shipped in 2.1.1 ([0496214](https://github.com/qubrics/qubrics-sdk/commit/0496214d75dd3ba58a19651f68f31c50cc3bc8b9))
+* **python-mcp:** lead the 2.1.2 changelog with the tool result schema fix ([9077b56](https://github.com/qubrics/qubrics-sdk/commit/9077b5668ac762971e4670270d6f6b38d2af7ab1))
+* **python-mcp:** lead the 2.1.3 changelog with the tool result schema fix ([894d5b5](https://github.com/qubrics/qubrics-sdk/commit/894d5b5de1a17a405b59d30f09bd13719d507343))
+
 ## 3.0.0
 
 - Exclude calendar tools, paths and schemas from the distribution.
