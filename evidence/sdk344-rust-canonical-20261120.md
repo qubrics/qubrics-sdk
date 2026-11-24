@@ -16,9 +16,8 @@ error variants/fields, secret redaction, credential wire prefixes and
 QUBRICS-over-SENDMUX environment precedence are retained. Only error display
 words and user-agent identity change alongside the defaults/package name.
 
-The existing public modules, clients, constructors, non-calendar methods,
-raw JSON helpers, payloads and authentication APIs remain. No named
-calendar endpoint, schema or client is introduced. Raw producer snapshots
+The existing public modules, clients, constructors, supported methods,
+raw JSON helpers, payloads and authentication APIs remain. Raw producer snapshots
 and operation decisions retain truthful withheld-operation accounting and
 are outside the Cargo archive include list.
 
@@ -110,5 +109,4 @@ remain historical. Rollback before publication is a normal PR revert.
 
 Release Please's existing multi-source pending-record failure remains
 separately held; this PR does not change its labels, refs, jobs or policy.
-Published historical versions remain unchanged. App/gateway calendar
-endpoint removal remains behind its infrastructure gate.
+Published historical versions remain unchanged.

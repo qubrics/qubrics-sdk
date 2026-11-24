@@ -29,7 +29,7 @@ final class ManagementValidationTest extends TestCase
             self::assertSame($type, $payload->setType($type)->getType());
         }
         self::assertSame('unknown_default_open_api', $payload->setType('future.event')->getType());
-        self::assertNotContains('calendar.changed', WebhookEventPayload::getTypeAllowableValues());
+        self::assertNotContains('future.event', WebhookEventPayload::getTypeAllowableValues());
     }
 
     public function testMailboxEmailValidationRejectsLineBreaks(): void

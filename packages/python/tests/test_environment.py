@@ -18,13 +18,7 @@ CLIENTS: list[tuple[Callable[..., Any], Callable[[Any], Any]]] = [
 ]
 
 
-def test_mailbox_withholds_calendar_bindings_and_preserves_mail_clients() -> None:
-    import qubrics.mailbox as mailbox
-    import qubrics.mailbox.models as models
-
-    assert not [name for name in dir(MailboxAPIApi) if "calendar" in name.lower()]
-    assert not [name for name in dir(mailbox) if "calendar" in name.lower()]
-    assert not [name for name in dir(models) if "calendar" in name.lower()]
+def test_mailbox_exposes_mail_clients() -> None:
     for name in ("mailbox_list_messages", "mailbox_list_folders", "mailbox_create_draft"):
         assert callable(getattr(MailboxAPIApi, name))
 

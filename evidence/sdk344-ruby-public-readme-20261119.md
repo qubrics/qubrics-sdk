@@ -51,4 +51,4 @@ protected-token check passed. Local receipt:
 
 Status: documentation candidate only, not merged. Public proof is
 12/24 original PyPI/RubyGems identities and Ruby 4/10, not completion of #344.
-All publication, queue, tag and calendar holds remain in force.
+All publication, queue and tag holds remain in force.

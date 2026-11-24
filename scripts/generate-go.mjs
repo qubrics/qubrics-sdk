@@ -2,8 +2,7 @@ import { mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "nod
 import { join } from "node:path";
 import { spawnSync } from "node:child_process";
 import { planDeprecatedModelAliases, planDeprecatedUnionMembers, reportPendingAliases } from "./deprecated-model-aliases.mjs";
-import { retainedManagementSchemaRefs } from "./withhold-management-calendar.mjs";
-import { withholdMcpCalendar } from "./withhold-mcp-calendar.mjs";
+import { preserveWebhookHistory, retainedManagementSchemaRefs } from "./webhook-history-codegen.mjs";
 
 const root = process.cwd();
 const outputRoot = join(root, ".tmp", "go-codegen");
@@ -215,7 +214,7 @@ function writeFilteredSpec(surface) {
   // nullable-downconverted artifact as OpenAPI Generator. The committed
   // snapshots remain the 3.1 source of truth.
   const source = JSON.parse(readFileSync(join(root, surface.spec), "utf8"));
-  if (surface.name !== "sending") withholdMcpCalendar(source);
+  if (surface.name === "management") preserveWebhookHistory(source);
   normalizeGoBearerSecurity(source);
   const allowed = new Set(surface.tags);
   const paths = {};

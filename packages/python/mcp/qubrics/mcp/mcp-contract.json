@@ -58,7 +58,7 @@
       "response_ownership.py": "eff042d51d3d158438e05fd131e0e993fa76706a2895838e84114fb0c488ef83",
       "retry.py": "14654bdc36c4e11c2ccd66f92388937a4422809288edf8331e9a86d081432fb8",
       "runtime_openapi/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
-      "runtime_openapi/openapi-app.json": "272982668b44fd2273ff7d54e6386664f3c44a03816767fdea3b398984a09984",
+      "runtime_openapi/openapi-app.json": "ab1706966ecc420f05e68a12590bc56d5fc933129b1179c8940c8d8918980a9a",
       "runtime_openapi/openapi-sending.json": "d2c32e1371929ab99e49c5a92a09800373dc07839a0be8926ba91ef6a14b57f4",
       "security.py": "86c1d7fcb67deb4255ea7fa626525485a2388f9c010d0ba85b8a66028360c81e",
       "server.py": "8f273a9cc0a6375262d3aecb1360a40a76af95c23bd0f564dc81f7be8cc7410b",
@@ -24661,11 +24661,11 @@
                                   "description": "SPF TXT record for the custom MAIL FROM subdomain",
                                   "properties": {
                                     "name": {
-                                      "example": "_sendmux.acme.com",
+                                      "example": "_qubrics.acme.com",
                                       "type": "string"
                                     },
                                     "value": {
-                                      "example": "sendmux-verify=team_abc123",
+                                      "example": "qubrics-verify=team_abc123",
                                       "type": "string"
                                     }
                                   },
@@ -24684,11 +24684,11 @@
                                     "description": "SPF TXT record for the custom MAIL FROM subdomain",
                                     "properties": {
                                       "name": {
-                                        "example": "_sendmux.acme.com",
+                                        "example": "_qubrics.acme.com",
                                         "type": "string"
                                       },
                                       "value": {
-                                        "example": "sendmux-verify=team_abc123",
+                                        "example": "qubrics-verify=team_abc123",
                                         "type": "string"
                                       }
                                     },
@@ -24736,11 +24736,11 @@
                                     "description": "SPF TXT record for the custom MAIL FROM subdomain",
                                     "properties": {
                                       "name": {
-                                        "example": "_sendmux.acme.com",
+                                        "example": "_qubrics.acme.com",
                                         "type": "string"
                                       },
                                       "value": {
-                                        "example": "sendmux-verify=team_abc123",
+                                        "example": "qubrics-verify=team_abc123",
                                         "type": "string"
                                       }
                                     },
@@ -24786,11 +24786,11 @@
                                     "description": "SPF TXT record for the custom MAIL FROM subdomain",
                                     "properties": {
                                       "name": {
-                                        "example": "_sendmux.acme.com",
+                                        "example": "_qubrics.acme.com",
                                         "type": "string"
                                       },
                                       "value": {
-                                        "example": "sendmux-verify=team_abc123",
+                                        "example": "qubrics-verify=team_abc123",
                                         "type": "string"
                                       }
                                     },
@@ -24812,11 +24812,11 @@
                                     "description": "SPF TXT record for the custom MAIL FROM subdomain",
                                     "properties": {
                                       "name": {
-                                        "example": "_sendmux.acme.com",
+                                        "example": "_qubrics.acme.com",
                                         "type": "string"
                                       },
                                       "value": {
-                                        "example": "sendmux-verify=team_abc123",
+                                        "example": "qubrics-verify=team_abc123",
                                         "type": "string"
                                       }
                                     },
@@ -26020,11 +26020,11 @@
                                   "description": "SPF TXT record for the custom MAIL FROM subdomain",
                                   "properties": {
                                     "name": {
-                                      "example": "_sendmux.acme.com",
+                                      "example": "_qubrics.acme.com",
                                       "type": "string"
                                     },
                                     "value": {
-                                      "example": "sendmux-verify=team_abc123",
+                                      "example": "qubrics-verify=team_abc123",
                                       "type": "string"
                                     }
                                   },
@@ -26043,11 +26043,11 @@
                                     "description": "SPF TXT record for the custom MAIL FROM subdomain",
                                     "properties": {
                                       "name": {
-                                        "example": "_sendmux.acme.com",
+                                        "example": "_qubrics.acme.com",
                                         "type": "string"
                                       },
                                       "value": {
-                                        "example": "sendmux-verify=team_abc123",
+                                        "example": "qubrics-verify=team_abc123",
                                         "type": "string"
                                       }
                                     },
@@ -26095,11 +26095,11 @@
                                     "description": "SPF TXT record for the custom MAIL FROM subdomain",
                                     "properties": {
                                       "name": {
-                                        "example": "_sendmux.acme.com",
+                                        "example": "_qubrics.acme.com",
                                         "type": "string"
                                       },
                                       "value": {
-                                        "example": "sendmux-verify=team_abc123",
+                                        "example": "qubrics-verify=team_abc123",
                                         "type": "string"
                                       }
                                     },
@@ -26145,11 +26145,11 @@
                                     "description": "SPF TXT record for the custom MAIL FROM subdomain",
                                     "properties": {
                                       "name": {
-                                        "example": "_sendmux.acme.com",
+                                        "example": "_qubrics.acme.com",
                                         "type": "string"
                                       },
                                       "value": {
-                                        "example": "sendmux-verify=team_abc123",
+                                        "example": "qubrics-verify=team_abc123",
                                         "type": "string"
                                       }
                                     },
@@ -26171,11 +26171,11 @@
                                     "description": "SPF TXT record for the custom MAIL FROM subdomain",
                                     "properties": {
                                       "name": {
-                                        "example": "_sendmux.acme.com",
+                                        "example": "_qubrics.acme.com",
                                         "type": "string"
                                       },
                                       "value": {
-                                        "example": "sendmux-verify=team_abc123",
+                                        "example": "qubrics-verify=team_abc123",
                                         "type": "string"
                                       }
                                     },
@@ -27546,11 +27546,11 @@
                                     "description": "SPF TXT record for the custom MAIL FROM subdomain",
                                     "properties": {
                                       "name": {
-                                        "example": "_sendmux.acme.com",
+                                        "example": "_qubrics.acme.com",
                                         "type": "string"
                                       },
                                       "value": {
-                                        "example": "sendmux-verify=team_abc123",
+                                        "example": "qubrics-verify=team_abc123",
                                         "type": "string"
                                       }
                                     },
@@ -27569,11 +27569,11 @@
                                       "description": "SPF TXT record for the custom MAIL FROM subdomain",
                                       "properties": {
                                         "name": {
-                                          "example": "_sendmux.acme.com",
+                                          "example": "_qubrics.acme.com",
                                           "type": "string"
                                         },
                                         "value": {
-                                          "example": "sendmux-verify=team_abc123",
+                                          "example": "qubrics-verify=team_abc123",
                                           "type": "string"
                                         }
                                       },
@@ -27621,11 +27621,11 @@
                                       "description": "SPF TXT record for the custom MAIL FROM subdomain",
                                       "properties": {
                                         "name": {
-                                          "example": "_sendmux.acme.com",
+                                          "example": "_qubrics.acme.com",
                                           "type": "string"
                                         },
                                         "value": {
-                                          "example": "sendmux-verify=team_abc123",
+                                          "example": "qubrics-verify=team_abc123",
                                           "type": "string"
                                         }
                                       },
@@ -27671,11 +27671,11 @@
                                       "description": "SPF TXT record for the custom MAIL FROM subdomain",
                                       "properties": {
                                         "name": {
-                                          "example": "_sendmux.acme.com",
+                                          "example": "_qubrics.acme.com",
                                           "type": "string"
                                         },
                                         "value": {
-                                          "example": "sendmux-verify=team_abc123",
+                                          "example": "qubrics-verify=team_abc123",
                                           "type": "string"
                                         }
                                       },
@@ -27697,11 +27697,11 @@
                                       "description": "SPF TXT record for the custom MAIL FROM subdomain",
                                       "properties": {
                                         "name": {
-                                          "example": "_sendmux.acme.com",
+                                          "example": "_qubrics.acme.com",
                                           "type": "string"
                                         },
                                         "value": {
-                                          "example": "sendmux-verify=team_abc123",
+                                          "example": "qubrics-verify=team_abc123",
                                           "type": "string"
                                         }
                                       },
@@ -29580,11 +29580,11 @@
                                   "description": "SPF TXT record for the custom MAIL FROM subdomain",
                                   "properties": {
                                     "name": {
-                                      "example": "_sendmux.acme.com",
+                                      "example": "_qubrics.acme.com",
                                       "type": "string"
                                     },
                                     "value": {
-                                      "example": "sendmux-verify=team_abc123",
+                                      "example": "qubrics-verify=team_abc123",
                                       "type": "string"
                                     }
                                   },
@@ -29603,11 +29603,11 @@
                                     "description": "SPF TXT record for the custom MAIL FROM subdomain",
                                     "properties": {
                                       "name": {
-                                        "example": "_sendmux.acme.com",
+                                        "example": "_qubrics.acme.com",
                                         "type": "string"
                                       },
                                       "value": {
-                                        "example": "sendmux-verify=team_abc123",
+                                        "example": "qubrics-verify=team_abc123",
                                         "type": "string"
                                       }
                                     },
@@ -29655,11 +29655,11 @@
                                     "description": "SPF TXT record for the custom MAIL FROM subdomain",
                                     "properties": {
                                       "name": {
-                                        "example": "_sendmux.acme.com",
+                                        "example": "_qubrics.acme.com",
                                         "type": "string"
                                       },
                                       "value": {
-                                        "example": "sendmux-verify=team_abc123",
+                                        "example": "qubrics-verify=team_abc123",
                                         "type": "string"
                                       }
                                     },
@@ -29705,11 +29705,11 @@
                                     "description": "SPF TXT record for the custom MAIL FROM subdomain",
                                     "properties": {
                                       "name": {
-                                        "example": "_sendmux.acme.com",
+                                        "example": "_qubrics.acme.com",
                                         "type": "string"
                                       },
                                       "value": {
-                                        "example": "sendmux-verify=team_abc123",
+                                        "example": "qubrics-verify=team_abc123",
                                         "type": "string"
                                       }
                                     },
@@ -29731,11 +29731,11 @@
                                     "description": "SPF TXT record for the custom MAIL FROM subdomain",
                                     "properties": {
                                       "name": {
-                                        "example": "_sendmux.acme.com",
+                                        "example": "_qubrics.acme.com",
                                         "type": "string"
                                       },
                                       "value": {
-                                        "example": "sendmux-verify=team_abc123",
+                                        "example": "qubrics-verify=team_abc123",
                                         "type": "string"
                                       }
                                     },
@@ -30939,11 +30939,11 @@
                                   "description": "SPF TXT record for the custom MAIL FROM subdomain",
                                   "properties": {
                                     "name": {
-                                      "example": "_sendmux.acme.com",
+                                      "example": "_qubrics.acme.com",
                                       "type": "string"
                                     },
                                     "value": {
-                                      "example": "sendmux-verify=team_abc123",
+                                      "example": "qubrics-verify=team_abc123",
                                       "type": "string"
                                     }
                                   },
@@ -30962,11 +30962,11 @@
                                     "description": "SPF TXT record for the custom MAIL FROM subdomain",
                                     "properties": {
                                       "name": {
-                                        "example": "_sendmux.acme.com",
+                                        "example": "_qubrics.acme.com",
                                         "type": "string"
                                       },
                                       "value": {
-                                        "example": "sendmux-verify=team_abc123",
+                                        "example": "qubrics-verify=team_abc123",
                                         "type": "string"
                                       }
                                     },
@@ -31014,11 +31014,11 @@
                                     "description": "SPF TXT record for the custom MAIL FROM subdomain",
                                     "properties": {
                                       "name": {
-                                        "example": "_sendmux.acme.com",
+                                        "example": "_qubrics.acme.com",
                                         "type": "string"
                                       },
                                       "value": {
-                                        "example": "sendmux-verify=team_abc123",
+                                        "example": "qubrics-verify=team_abc123",
                                         "type": "string"
                                       }
                                     },
@@ -31064,11 +31064,11 @@
                                     "description": "SPF TXT record for the custom MAIL FROM subdomain",
                                     "properties": {
                                       "name": {
-                                        "example": "_sendmux.acme.com",
+                                        "example": "_qubrics.acme.com",
                                         "type": "string"
                                       },
                                       "value": {
-                                        "example": "sendmux-verify=team_abc123",
+                                        "example": "qubrics-verify=team_abc123",
                                         "type": "string"
                                       }
                                     },
@@ -31090,11 +31090,11 @@
                                     "description": "SPF TXT record for the custom MAIL FROM subdomain",
                                     "properties": {
                                       "name": {
-                                        "example": "_sendmux.acme.com",
+                                        "example": "_qubrics.acme.com",
                                         "type": "string"
                                       },
                                       "value": {
-                                        "example": "sendmux-verify=team_abc123",
+                                        "example": "qubrics-verify=team_abc123",
                                         "type": "string"
                                       }
                                     },
@@ -32465,11 +32465,11 @@
                                     "description": "SPF TXT record for the custom MAIL FROM subdomain",
                                     "properties": {
                                       "name": {
-                                        "example": "_sendmux.acme.com",
+                                        "example": "_qubrics.acme.com",
                                         "type": "string"
                                       },
                                       "value": {
-                                        "example": "sendmux-verify=team_abc123",
+                                        "example": "qubrics-verify=team_abc123",
                                         "type": "string"
                                       }
                                     },
@@ -32488,11 +32488,11 @@
                                       "description": "SPF TXT record for the custom MAIL FROM subdomain",
                                       "properties": {
                                         "name": {
-                                          "example": "_sendmux.acme.com",
+                                          "example": "_qubrics.acme.com",
                                           "type": "string"
                                         },
                                         "value": {
-                                          "example": "sendmux-verify=team_abc123",
+                                          "example": "qubrics-verify=team_abc123",
                                           "type": "string"
                                         }
                                       },
@@ -32540,11 +32540,11 @@
                                       "description": "SPF TXT record for the custom MAIL FROM subdomain",
                                       "properties": {
                                         "name": {
-                                          "example": "_sendmux.acme.com",
+                                          "example": "_qubrics.acme.com",
                                           "type": "string"
                                         },
                                         "value": {
-                                          "example": "sendmux-verify=team_abc123",
+                                          "example": "qubrics-verify=team_abc123",
                                           "type": "string"
                                         }
                                       },
@@ -32590,11 +32590,11 @@
                                       "description": "SPF TXT record for the custom MAIL FROM subdomain",
                                       "properties": {
                                         "name": {
-                                          "example": "_sendmux.acme.com",
+                                          "example": "_qubrics.acme.com",
                                           "type": "string"
                                         },
                                         "value": {
-                                          "example": "sendmux-verify=team_abc123",
+                                          "example": "qubrics-verify=team_abc123",
                                           "type": "string"
                                         }
                                       },
@@ -32616,11 +32616,11 @@
                                       "description": "SPF TXT record for the custom MAIL FROM subdomain",
                                       "properties": {
                                         "name": {
-                                          "example": "_sendmux.acme.com",
+                                          "example": "_qubrics.acme.com",
                                           "type": "string"
                                         },
                                         "value": {
-                                          "example": "sendmux-verify=team_abc123",
+                                          "example": "qubrics-verify=team_abc123",
                                           "type": "string"
                                         }
                                       },

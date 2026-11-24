@@ -17,7 +17,7 @@ No move announcement or post-install message was added.
 Focused MCP/Registry/bridge tests passed 31/31 with zero skipped. Native
 release-state validation passed. The frozen-lockfile install also passed
 (raw receipt: install.log in the artifact directory below). Packed
-artifact, calendar, consumer, exact-head/default and CI/review qualification
+artifact, consumer, exact-head/default and CI/review qualification
 remain pending; no publication-ready or public claim is made here.
 
 Canonical ownership rules:

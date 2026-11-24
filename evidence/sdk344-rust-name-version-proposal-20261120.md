@@ -5,13 +5,6 @@ This packet proposes names and versions only. It authorises no source
 implementation, package upload, yank, tag, environment or release-queue
 change. `sendmux 0.6.0` remains held.
 
-**Operator decision 8A, recorded 20 November 2026 at 14:00 AEDT: A.**
-The selected plan is one implementation crate named `qubrics`, first
-release **1.0.0**, followed by a silent **sendmux 1.0.0** compatibility
-crate that depends on and re-exports it. This selects future names and
-versions only; it does not approve implementation or publication. Keep
-calendar clients out. No selected crate version is public yet.
-
 The strongest alternative is B: use **3.0.0** for both crates to match the
 Ruby umbrella SDK. It provides familiar numbering, but no extra API
 compatibility: SDK majors already differ across languages and surfaces.
@@ -73,13 +66,6 @@ Neither proposed final pointer version silently moves those pinned users.
 Consumers must intentionally select the stable-major release. Unbounded
 requirements such as `"*"` do not have that protection.
 
-Reaching 1.0.0 is the proposed first stable Rust contract, not a claim that
-current source is already qualified for it. The eventual candidate must
-prove its retained API, default hosts, authentication and calendar-free
-package before any publication approval. A new package need not copy the
-old package's version sequence; neither Cargo nor the A18 spec establishes
-one shared version counter across ecosystems.
-
 The existing source already has independent version lines: Ruby SDK
 [`3.0.0`](../packages/ruby/sdk/lib/qubrics/sdk/version.rb#L5), Ruby Core
 [`2.0.0`](../packages/ruby/core/lib/qubrics/core/version.rb#L5), Python
@@ -118,51 +104,10 @@ Existing callers can instead change their dependency declaration to
 the `sendmux::` import spelling without taking the pointer crate. This is
 an opt-in Cargo dependency alias, not an in-place registry rename.
 
-The canonical crate must publish and pass public download/install proof
-before the old-name crate receives its own exact-file approval. Then prove
-both `qubrics::` and `sendmux::` consumers resolve the same canonical types,
-retain non-calendar methods, and use the approved defaults. Existing
-`sendmux 0.5.1` installations and lockfiles remain unchanged; this plan
-does not retrofit their behaviour or promise source compatibility for
-withheld calendar APIs.
-
-## Readiness and calendar boundary
-
-Measured against actual merged SDK main
-`128169a811c51f71d9c8440b2386b6c5029ee2af`. Its complete `rust/` tree is
-unchanged from `29ebc94ff2fc26216b84083a6c385e959bd32118`:
-`git diff --stat 29ebc94f 128169a8 -- rust` returns no output.
-`rg -ni 'calendar|caldav|vevent' rust/src` returns no matches. This is a
-source observation only, not built-artifact or public-version acceptance.
-
-**Not ready to publish.** The crate identity remains `sendmux 0.6.0`;
-[`rust/src/mailbox.rs:7`](../rust/src/mailbox.rs#L7) and
-[`rust/src/management.rs:7`](../rust/src/management.rs#L7) still default to
-`https://app.sendmux.ai/api/v1`, and
-[`rust/src/sending.rs:6`](../rust/src/sending.rs#L6) still defaults to
-`https://smtp.sendmux.ai/api/v1`. Eventual source work must adopt the
-approved Qubrics defaults without changing authentication or wire
-contracts. It must prove no calendar endpoints, types or callable clients
-exist in the actual `.crate` archive, not rely on this source grep.
-No build, test, release CI or dry-run publish was started for this proposal.
-
-Calendar runtime removal in the app/gateway still waits on
-infra-migration step 1f. Nothing in this naming plan changes those live
-endpoints or reopens calendar for publication. Public historical versions
-stay unchanged; no withdrawal action is proposed.
+## Readiness
 
 ## Undo and limits
 
 Before publication, source and release-config changes can be reverted
 normally; there are no such edits in this proposal. Choosing a different
 plan now changes prose only.
-
-Cargo documents publication as
-[generally permanent](https://doc.rust-lang.org/cargo/reference/publishing.html):
-a published version cannot be overwritten and its code cannot be deleted.
-A [yank](https://doc.rust-lang.org/cargo/reference/publishing.html#cargo-yank)
-restricts future resolution but leaves downloaded code and existing
-lockfiles usable. It is not a complete rollback and would require a new
-operator decision; the standing source-only calendar rule authorises no
-yank, deletion, deprecation or withdrawal. No Rust publish or tag is
-authorised by selecting this plan.

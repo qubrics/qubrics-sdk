@@ -23,7 +23,7 @@ pub const APP_OPENAPI_PATH: &str = "packages/python/mcp/qubrics/mcp/openapi/open
 
 /// SHA-256 of `APP_OPENAPI_PATH` at the time this crate surface was added.
 pub const APP_OPENAPI_SHA256: &str =
-    "ba45a5411d151e2e74497d859c5967d12f601a5ec25a4e1da66ec2e8a5bfb23c";
+    "2c55839bc227f897a3c91fc95ae930a3fef117196773bc2a77826489ed6b01f7";
 
 /// Tags included from the Sending API snapshot.
 pub const SENDING_TAGS: &[&str] = &["Emails", "Meta"];

@@ -37,7 +37,6 @@ for (const { file } of specs) {
 
   const spec = readJson(specPath);
   for (const [path, pathItem] of Object.entries(spec.paths ?? {})) {
-    if (/^\/mailbox\/(calendars|calendar-events)(\/|$)/.test(path)) continue;
     const pathParameters = normalizeParameters(spec, pathItem.parameters);
     for (const [method, operation] of Object.entries(pathItem)) {
       if (!httpMethods.has(method) || !operation?.operationId) {
@@ -184,7 +183,7 @@ function normaliseSchema(spec, schema) {
   }
 
   if (Array.isArray(resolved.enum)) {
-    normalised.enum = resolved.enum.filter((value) => value !== "calendar.changed" && (typeof value === "string" || typeof value === "number"));
+    normalised.enum = resolved.enum.filter((value) => typeof value === "string" || typeof value === "number");
   }
 
   if (typeof resolved.minimum === "number") {

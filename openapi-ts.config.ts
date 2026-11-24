@@ -1,9 +1,9 @@
 import { defineConfig } from "@hey-api/openapi-ts";
 import { readFileSync } from "node:fs";
-import { withholdMcpCalendar } from "./scripts/withhold-mcp-calendar.mjs";
+import { preserveWebhookHistory } from "./scripts/webhook-history-codegen.mjs";
 
 const appSpec = JSON.parse(readFileSync(".codegen/openapi-app.codegen.json", "utf8"));
-withholdMcpCalendar(appSpec);
+preserveWebhookHistory(appSpec);
 const sendingSpec = ".codegen/openapi-sending.codegen.json";
 
 const baseOutput = {

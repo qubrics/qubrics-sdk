@@ -1,6 +1,6 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
-import { withholdMcpCalendar } from "./withhold-mcp-calendar.mjs";
+import { preserveWebhookHistory } from "./webhook-history-codegen.mjs";
 
 const specs = ["openapi-app.json", "openapi-sending.json"];
 const root = process.cwd();
@@ -24,7 +24,7 @@ for (const spec of specs) {
   }
 
   writeFileSync(join(outputDir, spec), `${stableStringify(document)}\n`);
-  if (spec === "openapi-app.json") withholdMcpCalendar(document);
+  if (spec === "openapi-app.json") preserveWebhookHistory(document);
   writeFileSync(join(runtimeOutputDir, spec), `${stableStringify(document)}\n`);
 }
 

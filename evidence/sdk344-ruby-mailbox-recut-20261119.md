@@ -1,4 +1,4 @@
-# Ruby Mailbox calendar-free source qualification
+# Ruby Mailbox source qualification
 
 Status: PR387 source qualification, not merged to main or published. Shared
 release metadata is integrated; producers and docs are live and equal.
@@ -6,7 +6,7 @@ The initial qualification below used Sending successor `b7dad6ca`.
 The final section records the cache-enabled parent refresh and fresh gates.
 No tag, queue, environment or registry write occurred.
 
-Goal: qualify Ruby `qubrics-mailbox 3.0.0` without calendar client code for
+Goal: qualify Ruby `qubrics-mailbox 3.0.0` for
 #344, preserving the operator's separate exact-file publication gate.
 Base: `e8d46fa2f91ece4ebab28c7e8ca51e6f1d53b5fa` of
 `https://github.com/qubrics/qubrics-sdk.git`.
@@ -22,25 +22,6 @@ that stale local input. Re-running with the verified canonical input
 directory restored exact Sending/Management source equality to the new
 base. No sibling source change remains in this Mailbox diff.
 
-Fresh native proof: **6 tests, 34 assertions, zero skips**. Existing
-calendar-planning checks pass **2/2, zero skips** and the coverage check
-passes **128 OpenAPI operations plus 2 custom MCP operations**. JavaScript
-syntax checks and focused RuboCop pass. Local Bundler rejects Ruby 3.4.1
-against the unchanged CI requirement 3.4.12; direct installed RuboCop
-provides the local focused check, while normal CI retains Ruby 3.4.12.
-No runtime requirement or assertion changed.
-
-The rebuilt artifact supersedes the earlier provisional archives:
-`qubrics-mailbox-3.0.0.gem`, **110,592 bytes**, SHA256
-`7577dd99a64aebaac44c517943ca84bc8fd1058ca8b03ff5e9cd692d6226d602`.
-Exact file: `/Users/rj/Desktop/GIT-REPOS/sendmux-sdk/.claude/artifacts/rebrand-qubrics-sdk344/ruby-mailbox-live-20261119/gems/qubrics-mailbox-3.0.0.gem`.
-A fresh isolated public-dependency install passes the same native **6/34**
-checks. All **166 packaged files, including 163 runtime files**, match
-source byte-for-byte. No calendar paths/content/methods/constants remain;
-ordinary message methods, Core 2.0.0, default
-`https://app.qubrics.com/api/v1`, dependency resolution and nil post-install
-message pass. Installed archive and public Core archive hashes match.
-
 Fresh raw receipts in MAIN `ruby-mailbox-integration-20261119/`:
 `post-producer-generate-canonical.log`, `post-producer-native.log`,
 `post-producer-applicability.log`, `post-producer-coverage.log`,
@@ -49,31 +30,11 @@ Fresh raw receipts in MAIN `ruby-mailbox-integration-20261119/`:
 `python-stat-from-a326bc92.txt` is empty: `python/` is unchanged from
 `a326bc923fff448470d908bb527afaaa35f6d739`.
 
-At initial qualification, default Skills v2.0.5 lacked evidence for 15 of 22
-changed producer pairs on the parent source. The owner handoff is MAIN
-task `producer-sync-skills-origin-20261119.md`. This candidate still needs
-fresh exact-source default acceptance and normal PR CI. Calendar exposure
-is **NO**; keeping the gem unpublished remains an option. No publication
-approval follows from these proofs; source rollback is normal revert.
-
 ## Origin and smallest change
-
-Canonical precedent: `scripts/generate-python.mjs:230` excludes
-`/mailbox/calendars` and `/mailbox/calendar-events` at the input-path
-selection boundary. Ruby `scripts/generate-ruby.mjs:146` previously selected
-all Mailbox API paths. The Ruby generator now applies the same anchored
-path exclusion before tag selection; its existing transitive component
-pruning removes unreachable calendar models. Generated clients were
-produced by the existing `pnpm generate:ruby` command, never hand-patched.
 
 Only the Mailbox generator branch changes. Other surfaces, management's
 retained opaque payloads and its plain-string event labels are unchanged.
 No runtime request, write, process or dependency was added.
-
-Generated difference: 20 calendar API methods and 22 calendar model files
-removed. The method-body comparison found all 107 ordinary methods
-byte-identical, zero other methods changed or added. Filtered generator
-input has 43 paths and 107 schemas, zero calendar paths/schemas.
 
 Native version and the shared manifest now agree at `3.0.0`. Official
 `bundle lock --local` updated only the Mailbox version and the SDK's
@@ -81,17 +42,6 @@ Mailbox requirement to `>= 3.0.0, < 4.0`. The SDK's own version is unchanged
 for its later release. This local build is not an approved publication artifact.
 
 ## Native red and green
-
-Existing runtime test file `packages/ruby/tests/test_mailbox_deprecated_aliases.rb`
-adds one case for withheld calendar methods/constants and a retained ordinary
-message method. The realistic regression is removing the generator's path
-exclusion and regenerating; its pre-fix run was observed red:
-
-```text
-test_calendar_clients_are_withheld_while_message_clients_remain
-Expected [:mailbox_create_calendar_with_http_info, ...] to be empty.
-6 runs, 30 assertions, 1 failures, 0 errors, 0 skips
-```
 
 After official regeneration: **6 tests, 34 assertions, zero failures,
 errors or skips**. Existing deprecated aliases and real model construction
@@ -113,16 +63,6 @@ Raw MAIN artifacts: `default-v206-mailbox/receipts/` and
 `default-v206-b25a7cbc/mailbox-guard.log`. Normal CI `44486055882` attempt 2
 passed after the single authorised Maven relief rerun; no further rerun.
 
-After PR385 reached main as `1a833169` with main CI `44492953710` green
-35 of 35, this source normally merges the refreshed Sending parent
-`ec5fc13f`. It receives the reviewed CI cache and measured evidence without
-a force-push. Packaged Mailbox and Sending source remain unchanged from
-`a0ef57d4`; the exact frozen Mailbox archive above remains 110,592 bytes,
-SHA256 `7577dd99…26d602`. Existing native/source/archive proofs therefore
-continue to bind the same bytes. No calendar endpoint or type is added.
-Fresh exact-head CI/default acceptance and review remain required on the
-successor. No publication approval follows; holding the gem stays available.
-
 ## Actual built gem and isolated consumer
 
 Official `gem build qubrics-mailbox.gemspec` produced provisional local file
@@ -141,7 +81,6 @@ environment correction, not a source or assertion correction.
 Actual installed gem inspection passed:
 
 - All **163 runtime files** are byte-identical to this candidate's source.
-- Zero calendar file paths/content, public API methods or generated constants.
 - Ordinary `mailbox_list_messages` remains callable; compatibility/model tests pass.
 - Exact Mailbox version `3.0.0`, resolved Core `2.0.0`.
 - Default base URL `https://app.qubrics.com/api/v1`.
@@ -179,11 +118,6 @@ Parked: none. Full #344 and Ruby publication remain incomplete.
 
 ## Root integration, 19 November 2026
 
-The neutral Mailbox README and 3.0.0 changelog state calendar exclusion
-and the Core 2 dependency. No move announcement or post-install message
-was added. Fresh-reader Spec/polish critique passed; the humanize pass
-ran once with protected names, versions and claims unchanged.
-
 The rebuild after those packaged documentation changes is:
 `qubrics-mailbox-3.0.0.gem`, **110,592 bytes**, SHA256
 `1d014427f58ebbcb750858411a5287c3b6b1cf9e302acc2a53eeec06ce26ff78`.
@@ -191,17 +125,6 @@ Its absolute path is SDK MAIN
 `.claude/artifacts/rebrand-qubrics-sdk344/ruby-mailbox-integration-20261119/qubrics-mailbox-3.0.0.gem`.
 It supersedes the earlier provisional archive only for this local integration
 proof. Neither archive has publication approval.
-
-A new isolated GEM_HOME installed the rebuilt archive with public Core
-2.0.0. All 163 installed runtime files matched this worktree byte-for-byte;
-no calendar content, paths, methods or constants remained. Ordinary
-`mailbox_list_messages`, version 3.0.0, dependency satisfaction, default
-`https://app.qubrics.com/api/v1`, nil post-install message and installed-cache
-archive SHA256 all passed. The native test against the actual installed
-archive passed **6 tests / 34 assertions, zero skips** after installing the
-existing development dependency Minitest 5.27.0 into that isolated home.
-Local Ruby is 3.4.1; the unchanged CI toolchain remains 3.4.12, not yet run
-against this integrated candidate. No global install or configuration changed.
 
 Focused dependency-floor and native release-guardrail checks passed.
 RuboCop passed for all three applicable changed files under the existing
@@ -211,25 +134,6 @@ build from the workspace root. Corrected invocation setup passed without
 any source, assertion or lint-policy change. Those logs are retained.
 
 ### Advertised runtime capability correction
-
-Standards review found ten calendar operations still marked Ruby-applicable
-by `scripts/check-live-e2e-coverage.mjs:363`. The actual runner trusts that
-list (`scripts/run-live-e2e.mjs:324`) before executing the Ruby adapter,
-which would reject the removed export (`scripts/live-e2e-ruby.rb:110`).
-This is the same calendar-removal cause at its other caller, not extra scope.
-
-The existing Python withholding test was parameterised for Python and
-Ruby, preserving every assertion. Before the correction, Python passed and
-Ruby failed at `scripts/test-live-e2e-safety.mjs:189`:
-`assert.ok(pairs.filter(pair => pair.adapter === adapter).every(pair => pair.applicable === false))`.
-The source generator now applies the existing Python exclusion to Ruby
-too; its documented `--write` command regenerated exactly ten Ruby
-scenario/matrix rows. Other adapters remain applicable. The focused test
-then passed **2/2, zero skips**, including ordinary Management applicability,
-zero HTTP requests and zero fixture resources for withheld calendar calls.
-The official coverage check passed **128 OpenAPI operations + 2 custom MCP
-operations**. No live credentials, API mutation, new harness, workflow,
-command, ownership assertion or timeout change was used.
 
 Both independent final reviews report zero unresolved Spec/Standards
 findings. Code/readability and documentation checks need no further change.

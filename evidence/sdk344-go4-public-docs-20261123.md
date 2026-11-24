@@ -16,8 +16,7 @@ Measured 23 November 2026 at 09:58 AEDT: clean official-proxy
 `go get qubrics.com/go/v4@v4.0.0` exited 0 with sumdb enabled, empty GOFLAGS,
 fresh module/build caches, no local replace or direct fallback. The five
 public packages built on Go 1.23.4. The shipped default-origin test passed
-all three surfaces. All 108 public archive files equal the tagged Git source,
-and 83 production Go files have zero calendar matches. The earlier legacy
+all three surfaces. All 108 public archive files equal the tagged Git source. The earlier legacy
 import and redirect proof remains valid.
 
 Module sum: h1:BNVt7MidevF7RV9QbcJ2TAOdv5eZjaWwImPcWIU1GYw=.

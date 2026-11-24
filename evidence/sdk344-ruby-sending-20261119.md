@@ -36,14 +36,6 @@ Sending loaded from the installed artifact: **30 tests, 213 assertions,
 zero failures, errors or skips**. Mailbox/Management/SDK are source fixtures
 for these existing cross-surface tests; those fixtures are not packaged.
 
-All 44 archive files, including 41 runtime Ruby files, match source and
-installed bytes. Public installed Core's cached archive matches approved
-SHA256 `736fd1ed4c613f8dfe5c2cc4f81741c5e42f18bb19dd44aeffd4163b71971e79`.
-Native dependencies resolve. Import/version, canonical homepage and default
-`https://smtp.qubrics.com/api/v1` pass. Runtime paths and contents contain
-zero calendar matches. The pointer has zero files/extensions, nil
-post-install message and exactly the intended replacement dependency.
-
 The provenance command's initial `gem/package` require typo was corrected
 to RubyGems' `rubygems/package`; the corrected read-only assertion exits 0.
 No application source, assertion or test was altered to obtain the proof.
@@ -65,7 +57,7 @@ Files live under SDK MAIN
 | RubyGems | sendmux-sending-2.0.0.gem | 4,096 | `81a26c3c44eae8575900376c3795aba455e615fd992d8a01ede296ed060766c5` |
 
 Both exact-version RubyGems APIs returned 404 at qualification. This is no
-claim of name ownership/reservation. Calendar exposure for both is **NO**.
+claim of name ownership/reservation.
 Holding them unpublished remains the alternative. The operator requested
 asks in order: Sending replacement, Mailbox, SDK, then pointers; qualifying
 the pointer here does not grant permission or move it earlier in that order.
@@ -101,15 +93,6 @@ Rebuilt exact files supersede the earlier frozen table above:
 | qubrics-sending-2.0.0.gem | 36,352 | `8dd5350aebf55dd588cc2c350dc906c3bb635f608b20dc7f71f0774455bee462` |
 | sendmux-sending-2.0.0.gem | 4,096 | `fc1ad0170f578ddfeb5156c5c5a893f0bfa5d029a45f082ec11b02ffddc02c6f` |
 
-Absolute directory: `/Users/rj/Desktop/GIT-REPOS/sendmux-sdk/.claude/artifacts/rebrand-qubrics-sdk344/ruby-sending-b7dad6ca-20261119/gems/`.
-Fresh isolated installation and existing native tests pass **30 tests,
-213 assertions, zero skips**. All 44 packaged files, including 41 runtime
-files, match source and installed bytes. Both cached archives match the
-frozen hashes. Calendar paths/content are absent, default host is
-`https://smtp.qubrics.com/api/v1`, Core 2.0.0 resolves, and the pointer is
-silent with precisely its replacement dependency. Raw receipts:
-`ruby-sending-b7dad6ca-20261119/{installed-native.log,provenance.json}`.
-
 The unchanged default selector resolves reviewed Skills v2.0.5 at
 `05e24366cebc2caf2b5c395727414e634ba7bf8c`; release receipt binding passes.
 The live OpenAPI stage passes, but exact-source compatibility fails on
@@ -119,7 +102,7 @@ review evidence. First failure: `published/email-for-ai-agents` contract
 `producer-sync-skills-origin-20261119.md` in MAIN task state routes the
 origin to the Skills owner. No guard override or unchanged-input retry.
 Fresh exact-candidate default acceptance and Sending PR CI remain gates.
-Calendar exposure remains **NO**; holding the gem unpublished is available.
+The gem may remain unpublished.
 No merge, upload, tag, queue or environment action is authorised here.
 
 ## Default gate cleared and source refresh
@@ -142,4 +125,4 @@ checksum-verified CI cache and its measured evidence. Packaged Sending
 source and metadata remain byte-identical to `729ae54a`; the frozen gem
 remains 36,352 bytes with SHA256 `8dd5350a…bee462`. Fresh default acceptance,
 normal exact-head CI and review on the resulting successor remain required.
-Calendar exposure remains NO, and no exact-file publication approval exists.
+No exact-file publication approval exists.

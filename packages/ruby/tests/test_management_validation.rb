@@ -5,11 +5,10 @@ require 'qubrics/management'
 require_relative 'management_retained_webhook_payload_test'
 
 class QubricsRubyManagementValidationTest < Minitest::Test
-  def test_calendar_webhooks_withheld_and_mail_webhooks_preserved
+  def test_webhook_validation_and_mail_payload_round_trip
     generated = Qubrics::Management::Generated
-    assert_empty generated.constants.grep(/Calendar/)
     client = Qubrics::Management::Client.new(api_key: 'smx_root_test')
-    event = 'calendar.changed'
+    event = 'future.event'
     assert_raises(ArgumentError) { client.webhooks.management_list_delivery('hook_test', event_type: event) }
     body = generated::WebhookCreateBody.new(url: 'https://example.com/hooks', event_types: ['message.received'])
     assert_equal ['message.received'], body.event_types

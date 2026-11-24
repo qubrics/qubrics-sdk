@@ -61,26 +61,6 @@ const connection = (team = "team_expected", mailboxes = [{ id: "mbx_expected", e
   envelope({ team: { id: team, name: "Local fixture" }, mailboxes, credential: { id: "key_test", type: "api_key", name: null }, permissions: [], label: "Local fixture" });
 const expected = { teamId: "team_expected", mailboxId: "mbx_expected", mailboxEmail: "fixture@example.test" };
 
-for (const adapter of ["typescript", "python", "go", "php", "ruby"]) {
-test(`${adapter} calendar bindings are withheld from planning and fixture setup`, async () => {
-  const calendarIds = Object.keys(scenarios).filter(operationId => /Calendar/.test(operationId));
-  assert.equal(calendarIds.length, 10);
-  assert.ok(operations.every(operation => !/Calendar/.test(operation.operationId)));
-  assert.ok(Object.keys(sdk.mailbox).every(name => !/calendar/i.test(name)));
-  const pairs = expectedPairs(calendarIds, [adapter], scenarios);
-  assert.ok(pairs.filter(pair => pair.adapter === adapter).every(pair => pair.applicable === false));
-  assert.deepEqual(expectedPairs(["managementGetConnection"], [adapter], scenarios), [
-    { adapter, operationId: "managementGetConnection", applicable: true },
-  ]);
-  await withApi(() => ({ body: connection() }), async ({ baseUrl, runtime, requests }) => {
-    const [result] = await runAdapterStep({ adapter, credentials: { mailboxApiKey: "smx_mbx_test", appBaseUrl: baseUrl }, fixtureRuntime: runtime, fixtures, operation: { operationId: "mailboxCreateCalendarEvent", surface: "mailbox" }, sdk });
-    assert.equal(result.status, "inapplicable", JSON.stringify(result));
-    assert.equal(requests.length, 0);
-    assert.equal(runtime.ledger.resources.length, 0);
-  });
-});
-}
-
 async function withEnv(values, run) {
   const previous = Object.fromEntries(Object.keys(values).map(key => [key, process.env[key]]));
   Object.assign(process.env, values);

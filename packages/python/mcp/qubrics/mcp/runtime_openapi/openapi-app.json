@@ -3210,11 +3210,11 @@
         "description": "SPF TXT record for the custom MAIL FROM subdomain",
         "properties": {
           "name": {
-            "example": "_sendmux.acme.com",
+            "example": "_qubrics.acme.com",
             "type": "string"
           },
           "value": {
-            "example": "sendmux-verify=team_abc123",
+            "example": "qubrics-verify=team_abc123",
             "type": "string"
           }
         },

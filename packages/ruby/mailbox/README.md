@@ -22,7 +22,7 @@ For OAuth, use a REST access token with the scopes and mailbox access required b
 
 ## Installation
 
-Version 3.0.0 is not published yet. Calendar operations are excluded from this version.
+Version 3.0.0 is not published yet.
 
 ```sh
 gem install qubrics-mailbox

@@ -6,8 +6,6 @@ Status: initial source committed at `722fbab2f98248d17b4878dd5149a35a711d5a18`; 
 
 Qubrics environment names take precedence, with retained Sendmux fallbacks. MCP tools expose additive aliases while preserving original handlers. Generated native clients use the existing environment/URL configuration and preserve delegated-upload authentication independently of ordinary bearer credentials. Generators, rather than generated clients alone, own each correction.
 
-Generation uses the task docs snapshots: app SHA256 `16439b3c0d9eee73554202cf909af6aade12b6f8d3390ddee922663ba061de1a`; sending SHA256 `3138c5f27e3c0ab8475d1ccaf7378815c12e12918c30a90e77e2115642bc3647`. Current canonical snapshots contain calendar contracts missing from this SDK baseline; generated calendar additions come from those snapshots, not invented local contracts.
-
 ## Upload authentication root cause
 
 The sending contract now represents the two upload-token header families as alternative API-key schemes. Previously shared native authentication paths could treat any nonempty security list as bearer authentication, reading or leaking the main API credential during a delegated upload.
@@ -42,13 +40,9 @@ Final narrow Ruby review: Standards 0 hard violations / 0 heuristic findings; Sp
 
 ## Earlier dependencies and retained red proof
 
-This section records the prior freeze. All three source dependencies below were resolved after Ops released the calendar leases; final proof follows.
-
-Authenticated MCP aliases remain red: a permitted token lists/calls the original tool but not its alias. Two authenticated positive cases fail; two denied-permission cases pass. The shared registry lookups in `packages/python/mcp/sendmux_mcp/permissions.py:100,133` use the prefixed alias instead of its canonical name. The unapplied two-line `sdk-mcp-permission-aliases.patch` fixes both lookups without changing permissions, but calendar owns this frozen path. `sdk-mcp-auth-alias-rca.md` records the full trace and red receipts.
+This section records the prior freeze. All three source dependencies below were resolved; final proof follows.
 
 The pre-commit hook `.githooks/pre-commit:4` unconditionally invokes `pnpm drift:check`, which runs MCP generation and writes frozen `packages/python/mcp/sendmux_mcp/openapi/openapi-app.json`. No hook invocation, bypass, commit or push was attempted while that lease stands.
-
-Coverage/provenance generation also requires owner-supplied Rust and frozen MCP curation decisions for nine calendar operations: `mailboxCreateCalendar`, `mailboxCreateCalendarEvent`, `mailboxDeleteCalendarEvent`, `mailboxGetCalendar`, `mailboxGetCalendarEvent`, `mailboxGetCalendarEventChanges`, `mailboxListCalendarEvents`, `mailboxListCalendars`, `mailboxUpdateCalendarEvent`. The guarded writer refused to invent these decisions. Receipt: `sdk-coverage-provenance-blocked.log`.
 
 Frozen paths retain their original SHA256 values:
 
@@ -58,15 +52,9 @@ Frozen paths retain their original SHA256 values:
 
 Full drift/build/required CI remain unqualified until the lease releases and source can commit/push normally. Docs#78 keeps its existing MCP pin and release-facts snippet until a compatible publication is verified. No version is invented and no publication is authorised.
 
-## Source finalisation after calendar release
+## Source finalisation
 
-Ops released all calendar SDK leases on 2026-11-03. Seven owner-supplied source paths were reconciled from the read-only calendar candidate, not its generated outputs:
-
-- `packages/python/mcp/sendmux_mcp/permissions.py`: nine calendar permission entries, then the existing two-line alias correction.
-- `packages/python/mcp/sendmux_mcp/curation.py`: nine curated calendar tools and their read/destructive/idempotent metadata.
-- `packages/python/mcp/sendmux_mcp/hosted_proxy.py:263`: static routes precede parameter routes, so the calendar changes route resolves correctly.
 - `packages/python/mcp/tests/test_permissions.py` and `test_hosted_proxy.py`: unchanged owner permission-isolation and canonical-route cases.
-- `packages/python/tests/test_mcp.py`: owner calendar expectations combined with existing aliases; 74 originals and 74 aliases retain complete metadata.
 - `rust/operation-decisions.json`: all nine owner decisions remain `raw-json-only`, with no named method or live certification inferred.
 
 `permissions_for_tool` at permissions.py:109 and the surface lookup at :142 strip exactly one leading `qubrics_`. Both lookups use the same original registries. Unknown/nested aliases still fail; all permission and surface claim checks remain. The earlier authenticated positive red cases now pass alongside denied-token cases. No permission widening or bypass.
@@ -78,17 +66,14 @@ Normal MCP generation replaced the released embedded app snapshot with canonical
 | `.tmp/python-venv/bin/python -m pytest packages/python/mcp/tests/test_contract_aliases.py -k authenticated_http -q` | exit 0, 4 passed / 6 deselected | `sdk-mcp-auth-alias-resume-green.log` |
 | `OPENAPI_INPUT_DIR=<task-docs> AGENT_TASK=rebrand-qubrics-904 heavy-slot.sh pnpm generate:mcp` | exit 0 | `sdk-resume-generate-mcp.log` |
 | `OPENAPI_INPUT_DIR=<task-docs> node scripts/check-surface-coverage.mjs --write --write-provenance` | exit 0, 127 operations | `sdk-resume-coverage-provenance.log` |
-| `.tmp/python-venv/bin/python -m pytest packages/python/mcp/tests/test_permissions.py packages/python/mcp/tests/test_hosted_proxy.py packages/python/tests/test_mcp.py -q` | exit 0, 71 passed | `sdk-resume-calendar-permission-mcp.log` |
 | `.tmp/python-venv/bin/python -m mypy packages/python/mcp` | exit 0, 34 source files | `sdk-resume-mcp-mypy.log` |
 | `OPENAPI_INPUT_DIR=<task-docs> AGENT_TASK=rebrand-qubrics-904 heavy-slot.sh pnpm drift:check` | exit 0, every normal generator and staleness check | `sdk-resume-drift-check.log` |
 
 Here `<task-docs>` is `/Users/rj/Desktop/GIT-REPOS/sendmux-docs-rebrand-qubrics-904`; `heavy-slot.sh` is `/Users/rj/Desktop/GIT-REPOS/ja-k8s/AA-AI/heavy-slot.sh`. Generated paths were staged before the standard drift proof, as required by the unchanged staleness checker. Handwritten source and this evidence remain for root review/staging. No commit or hook bypass.
 
-Calendar candidate preservation: before/after status SHA256 `6ccf664a24c10d9b85f18f73e95f612f9cfa203f36705deb4458588d86a3cfb2`; binary diff `ed94f857a8fa1549a6f88bd084e98c4b74cf80131bee734cc5e5c47ea60e20bd`; untracked content manifest `c6b3b12657fdbeb813cddfda3a8dde95dea94486f8976acf788887d7ef906092`. Each before/after comparison exited 0. Receipts: `sdk-calendar-{before,after}-status.txt`, `sdk-calendar-{before,after}.patch`, `sdk-calendar-{before,after}-untracked-sha256.txt`. Source-only comparisons also passed: `sdk-resume-source-preservation.log`.
-
 Source freeze: 1,105 tracked/staged paths differ from HEAD, with 124,868 insertions and 41,707 deletions; full status contains 1,121 changed/untracked paths, captured in `sdk-resume-final-status.txt`. Staged and unstaged whitespace checks pass. No root/package README change. No source dependency remains. Root owns review, final commit, push, PR and CI; full build/required CI and publication remain unqualified. Docs#78 retains its MCP pin/snippet until a compatible publication is verified. No full build or unchanged focused green was rerun here.
 
-Root's final reviews of the complete handwritten diff and calendar integration returned Standards 0 hard violations / 0 actionable heuristics, and Spec 0 findings. Root also verified the drift tail and staged/unstaged whitespace checks. The worker's source claims were released after evidence finalisation; root owns the normal commit hook.
+Root's final reviews of the complete handwritten diff returned Standards 0 hard violations / 0 actionable heuristics, and Spec 0 findings. Root also verified the drift tail and staged/unstaged whitespace checks. The worker's source claims were released after evidence finalisation; root owns the normal commit hook.
 
 ## Required CI follow-up on PR #345
 
@@ -134,14 +119,12 @@ Each downstream diagnosis had zero earlier fixes. The first Python check after t
 
 The isolated LangChain receipt proves candidate Sending imports and executes with published Core 1.3.1. Native environment tests cover all three source wrappers; no claim is made that all three were dynamically tested against published Core. No assertion was weakened or removed, and no extra harness was introduced: existing public tests and cohort provenance gates caught these failures. Fresh independent reviews, including the generator source and four generated fingerprints: Standards 0 hard / 0 actionable heuristics; Spec 0 findings.
 
-Calendar candidate status and binary diff still match the retained baselines exactly; every retained untracked-file checksum passes (`sdk-calendar-second-*`). No calendar source, venv or dist was changed. Normal final commit hook receipt is `sdk-pr345-second-final-commit.log`; product push and fresh exact-head CI remain with the parent after its genuine consolidated docs update. Merge, deployment and publication remain unapproved.
-
 ## Terminal CI at 8f4c78f and local Ruby correction
 
 Exact head `8f4c78f050725b6d57a6b71d39178dee40c1774e` finished [CI run 41469429959](https://github.com/qubrics/qubrics-sdk/actions/runs/41469429959) with 32 successful jobs and two failures. Both failed-job logs were read. One transient HTTP/2 log-download failure was retried once; CI was not rerun. Receipts: `sdk-pr345-8f4-ci-terminal.json`, `sdk-pr345-8f4-ci-failed-retry.log`.
 
 - Ruby job `125358795642`: three generated auth overrides exceeded cyclomatic/perceived complexity; the OAuth class exceeded 100 lines; dynamic symbol conversion was unnecessary. `scripts/generate-ruby.mjs:297-327` now extracts the existing upload-header/config fallback body into one private method. The upload-only guard and ordinary bearer branch are unchanged. Normal Ruby generation reproduced all three clients.
-- Main verify job `125358795424`: `scripts/check-live-e2e-coverage.mjs:119` rejected nine calendar operations missing from `test/live-e2e/scenarios.json`, plus stale `docs/live-e2e-matrix.md`. This stopped the step before its connection-adapter tests. The canonical metadata writer was run with the same task-docs snapshots; it added all nine scenarios and matrix rows, then exposed two missing fixture-registry entries. Coverage remains blocked.
+- Main verify job `125358795424`: `scripts/check-live-e2e-coverage.mjs:119` rejected nine missing operation IDs in `test/live-e2e/scenarios.json`, plus stale `docs/live-e2e-matrix.md`. This stopped the step before its connection-adapter tests. The canonical metadata writer was run with the same task-docs snapshots; it added all nine scenarios and matrix rows, then exposed two missing fixture-registry entries. Coverage remains blocked.
 
 The first Ruby lint correction put the two existing delegated-upload cases in a second class in the same file and used symbol hash rockets. The effective default `Style/OneClassPerFile` and `Style/HashSyntax` rules rejected that layout. The repo enables new cops at `.rubocop.yml:2`; effective HashSyntax is `ruby19`. The final correction moves both cases unchanged into `packages/ruby/tests/test_delegated_upload.rb` and declares that file in `scripts/check-ruby.mjs:32`, matching the existing explicit runner entries. Fixture and assertions are preserved; no threshold or rule was disabled. Receipts: `sdk-pr345-ruby-rubocop-green.log`, `sdk-pr345-ruby-effective-cops.log`.
 
@@ -154,46 +137,6 @@ The first Ruby lint correction put the two existing delegated-upload cases in a 
 | Historical audit-manifest check | exit 0; historical schema-1 shape only | `sdk-pr345-live-e2e-audit-check.log` |
 
 Fresh independent Ruby reviews: Standards 0 hard violations / 0 heuristic findings; Spec 0 findings across all seven candidate paths. No source change followed review. The metadata writer changed only its two declared outputs; it did not create live-test code, classifications or execution evidence. The historical audit manifest is unchanged.
-
-Remaining blocker: `mailboxGetCalendar` and `mailboxGetCalendarEvent` require discovered-read fixture entries for `calendar_id` and `event_id`. `scripts/check-live-e2e-coverage.mjs:560-585` enforces this contract; `test/live-e2e/fixtures.json` contains neither calendar operation. The canonical write and subsequent read-only check both exit 1 with exactly those two messages (`sdk-pr345-live-e2e-metadata-{write,check}.log`). Calendar-owner handoff is required; no discovery source was invented and no fixture was edited.
-
-Normal hook/commit/push remain held on the live calendar generator leases. `.githooks/pre-commit:4` runs `pnpm drift:check`; `package.json:29,36` reaches `--write-provenance`, which unconditionally writes `rust/operation-decisions.json` and `rust/src/generated/mod.rs` at `scripts/check-surface-coverage.mjs:90-91`. The widened calendar claim also owns native generator trees, MCP and TypeScript surfaces. No full generator, hook, commit, push, merge, deployment or publication was attempted for this correction.
-
-## Historical calendar container source proof — 2026-11-03
-
-Canonical contract: docs `212c5df8cf7a9cdfdde28bfce84667e50e64e9de`, app snapshot `8912348dbf4225a9d02388eac6a45f698775f1dd94b8e10b0ec8c7784e126425`; app `506185fe` calendar DELETE requires the GET response-header ETag, refuses nonempty calendars, and returns exact `{ id, deleted: true }`. GET body stays unchanged. Source extends the existing runtime/factory/ledger seam, preserving `runOperation()` body semantics.
-
-New header test red: `TypeError: runtime.runOperationWithResponse is not a function`. Create/DELETE factory tests red: `API error validation_error (HTTP 422)`. Eleven container cases failed with both registrations absent; seven additional selected-DELETE refusal cases failed with its registration absent. Receipts: `calendar-get-header-red.log`, `calendar-container-{create,delete}-red.log`, `calendar-container-refusal-red.log`, `calendar-container-delete-refusal-red.log`.
-
-Focused proof: **26 passed, 0 failed, 0 skipped**, including 19 new cases and seven existing event lifecycle cases. Both operation selections cover dedicated mailbox, uncertain create (exactly one POST), foreign ID/name/mailbox, default calendar, missing ETag, and nonempty conflict. Refusals never mark cleanup successful or remove another resource. Receipt: `calendar-container-focused-green.log`.
-
-This focused proof used genuine canonical-212 mailbox TypeScript SDK and CLI inventory generated only under owned ignored artifacts, injected through the existing loopback runtime seam. It is not final generated-client or CI qualification. Temporary import bootstrap is restored exactly (`calendar-proof-bootstrap-restoration.log`); all 75 original generated/dist/build-info/CLI files remain byte-identical (`calendar-proof-preservation.log`). Exact executed test and generated module hashes: `calendar-proof-executed-sha256.txt`. Final ordinary-SDK header test passes 1/1, zero skips; all three changed JavaScript files parse and staged/unstaged whitespace checks exit 0.
-
-Final reviews: Standards 0 hard / 0 heuristic findings after correcting the new method to named-object arguments; Spec 0 findings / 0 remaining leads. Focused resources: 26 loopback servers closed, 26 temporary directories verified absent (`calendar-proof-resource-summary.log`). No credentials, live requests, final regeneration, hook, commit, push, deployment or publication.
-
-Remaining source qualification gate: CI `.github/workflows/ci.yml:25-46,135-156` selects the matching docs branch, currently docs78@60dff8b. Raw docs212 would remove accepted A17 fields/descriptions (10 app and nine Sending leaf deltas); a private input would not reproduce CI. Root owns the proposed durable docs78 snapshot update and Ops hold-exception ask. Known Go discriminator source fix remains with #897; old count updates remain held pending canonical regeneration.
-
-## Current owner integration and calendar reconciliation
-
-Owner `688af4ae13e537690ac0376ce2bfde15fefde7e2`, including Ruby owner `a2073b17568512abfdf004c1bd99eadeb541b8a4` and merged prerequisite `276082cb`, was integrated without rewriting published history as `2e3f4b89155e8e29400b5c21247fee3ed8854807`. Normal MCP generation, all canonical generators and the normal commit hook ran before restoring candidate stash `44636861bc0da4877f1e7c5acb32512eff661e7b`; original stash `3b63637f423b5e726c7ea035b1de68284344cd9b` remains. Receipts: `sdk-pr345-owner-688-{generate-mcp,canonical-generators,normal-integration-commit}.log`, `sdk-pr345-post-hook-stash-restore.log`.
-
-Matching input is docs78 `6ae9d99211fb7a2ba4e814045e66f70da08e9bca`, app snapshot `28f2fc773b1470057b5ff5bab9c4e00f6d4a34925dbee91e3b57bc0057355656`, Sending `3138c5f27e3c0ab8475d1ccaf7378815c12e12918c30a90e77e2115642bc3647`. Current `MailboxCalendarWithEtag` intentionally requires the body ETag too; the public-seam test preserves that body and independently checks the actual response-header ETag. The historical no-body-ETag premise above no longer describes this contract.
-
-Owner `49d4604` adds a run-owned parent calendar before every event and persists create intent before dispatch. Seven earlier event cases had fakes that still returned a calendar-list envelope to this new parent POST; another owner lifecycle case lacked the dedicated mailbox environment and response ETag header. The fake extensions implement parent create/read/delete only. Event no-replay remains an exact single POST assertion at `scripts/test-live-e2e-safety.mjs:250`; the 19 container cases separately preserve exact single parent dispatch at `:109,172`. No title, ownership, uncertainty or deletion assertion was removed.
-
-Once those fakes reached the real code, both original update tests failed `2 !== 3`: owner reconciliation had omitted the earlier title-restore callback. The shared update factory now retains that callback and `addRestore` before PATCH, using validated ownership and a fresh ETag for both normal and lost-response restoration. `addRestore` at `scripts/run-live-e2e.mjs:2953` records snapshot rows as `restored`; physical calendar/event rows still require `absent` plus `get_not_found` in the aggregate test at `scripts/test-live-e2e-safety.mjs:1597`. The aggregate test additionally requires exactly one restored snapshot. Existing uncertainty/foreign-UID error assertions remain intact. Receipts: `sdk-pr345-{integrated-existing-calendar-red,extended-calendar-fixture-red,integrated-calendar-shared-fix}.log`.
-
-| Current check | Result | Receipt |
-| --- | --- | --- |
-| Focused calendar public-seam cases | exit 0, 28 passed / 0 skipped | `sdk-pr345-integrated-calendar-green.log` |
-| Complete related safety test file | exit 0, 75 passed / 0 skipped | `sdk-pr345-integrated-safety-file.log` |
-| Normal Ruby generation with canonical docs input | exit 0 | `sdk-pr345-integrated-ruby-generate.log` |
-| Five changed Ruby files, focused RuboCop | exit 0, no offences | `sdk-pr345-integrated-ruby-rubocop.log` |
-| Ruby environment, OAuth/retry and moved delegated-upload cases | exit 0, 17 runs / 164 assertions / 0 skipped | `sdk-pr345-integrated-ruby-public.log` |
-| Canonical-input `pnpm check:live-e2e` | exit 0, 128 HTTP + 2 custom MCP operations, environment and historical-audit checks | `sdk-pr345-integrated-static-e2e-canonical.log` |
-| Canonical-input `node scripts/check-live-e2e-runner.mjs` | exit 0, 130 total / 0 blocked and unchanged safety gates | `sdk-pr345-integrated-plan-runner.log` |
-
-One initial static invocation omitted `OPENAPI_INPUT_DIR` and therefore read stale default docs; its log correctly rejected missing DELETE and stale matrix. Supplying the canonical input corrected the invocation without a source, assertion or metadata change. Fresh independent reviews included all ten staged/working files against `2e3f4b8`: Standards 0 hard violations / 0 heuristic findings; Spec 0 findings / 0 unresolved leads. Both explicitly inspected fake extensions, scoped event counts, title restoration and physical-resource versus snapshot assertions. Final required remote CI is still pending; these results do not qualify publication, deployment or production journeys.
 
 ## Compatibility review batch after 6a350342
 
@@ -246,4 +189,4 @@ Fresh bounded reviews, including the final Python ambient-setup delta: Standards
 
 ## Cleanup
 
-Owned disposable fixtures are stopped. Command guard rejected the prior cache teardown; no deletion workaround attempted. SDK build/test caches remain listed in `sdk-final-handoff.md` for manual removal. Calendar checkout, venv and dist remain untouched.
+Owned disposable fixtures are stopped. Command guard rejected the prior cache teardown; no deletion workaround attempted. SDK build/test caches remain listed in `sdk-final-handoff.md` for manual removal.
