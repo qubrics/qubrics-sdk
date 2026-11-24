@@ -193,11 +193,8 @@ async fn cursor_lists_preserve_pagination_and_advance_to_next_page() {
 }
 
 #[test]
-fn named_mailbox_surface_withholds_calendar_bindings() {
+fn named_mailbox_surface_includes_listing_messages() {
     let operations = qubrics::generated::MAILBOX_OPERATIONS;
-    assert!(operations
-        .iter()
-        .all(|operation| !operation.path.starts_with("/mailbox/calendar")));
     assert!(operations
         .iter()
         .any(|operation| operation.operation_id == "mailboxListMessages"));

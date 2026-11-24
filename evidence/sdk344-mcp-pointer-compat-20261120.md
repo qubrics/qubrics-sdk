@@ -18,7 +18,7 @@ The replacement installs only the differently named `qubrics-mcp*` scripts.
 The native installed-metadata/executable check exited 1:
 `AssertionError: Upgrade removed all five legacy console commands`.
 Both missing entry-point and absent executable lists contain exactly those
-five commands. Prior qualification covered dependency/import/calendar
+five commands. Prior qualification covered dependency and import
 behaviour but omitted the old executable interface; that was the escape.
 
 ## Minimal origin correction

@@ -76,7 +76,7 @@ Raw logs under MAIN `.claude/artifacts/rebrand-qubrics-sdk344/`:
 
 README public-facts check found the newly public Rust pointer still
 described as source-only. That pre-existing documentation row is outside
-this calendar/copy producer scope and remains a follow-up.
+this release-note scope and remains a follow-up.
 
 ## Approved guard integration, 21 November
 

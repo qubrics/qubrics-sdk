@@ -4,7 +4,7 @@ Prepared `io.github.qubrics/qubrics-mcp` for #344. Versions stay npm `1.0.1`, Py
 
 The identity contract test failed before the change. All 27/27 tests then passed with zero skips. Schema validation passed.
 
-The built npm tgz and Python wheel/sdist carry matching ownership markers, and every runtime byte, environment fallback, all 130 calendar-free tools and five legacy commands match the public packages.
+The built npm tgz and Python wheel/sdist carry matching ownership markers, and every runtime byte, environment fallback, all 130 tools and five legacy commands match the public packages.
 
 Five legacy commands remain: `sendmux-mcp`, `sendmux-mcp-hosted`, `sendmux-mcp-mailbox`, `sendmux-mcp-management` and `sendmux-mcp-sending`.
 

@@ -1,6 +1,6 @@
 {
   "sources": {
-    "openapi-app.json": "ba45a5411d151e2e74497d859c5967d12f601a5ec25a4e1da66ec2e8a5bfb23c",
+    "openapi-app.json": "2c55839bc227f897a3c91fc95ae930a3fef117196773bc2a77826489ed6b01f7",
     "openapi-sending.json": "d2c32e1371929ab99e49c5a92a09800373dc07839a0be8926ba91ef6a14b57f4"
   },
   "operations": [
@@ -53,22 +53,6 @@
       "reason": "No named operation-specific API or certification; manual relative-path JSON calls only."
     },
     {
-      "operationId": "mailboxCreateCalendar",
-      "method": "POST",
-      "path": "/mailbox/calendars",
-      "publicMethods": [],
-      "decision": "raw-json-only",
-      "reason": "Calendar-specific bindings are withheld from this release; generic raw JSON transport remains available."
-    },
-    {
-      "operationId": "mailboxCreateCalendarEvent",
-      "method": "POST",
-      "path": "/mailbox/calendar-events",
-      "publicMethods": [],
-      "decision": "raw-json-only",
-      "reason": "Calendar-specific bindings are withheld from this release; generic raw JSON transport remains available."
-    },
-    {
       "operationId": "mailboxCreateDraft",
       "method": "POST",
       "path": "/mailbox/drafts",
@@ -83,22 +67,6 @@
       "publicMethods": [],
       "decision": "raw-json-only",
       "reason": "No named operation-specific API or certification; manual relative-path JSON calls only."
-    },
-    {
-      "operationId": "mailboxDeleteCalendar",
-      "method": "DELETE",
-      "path": "/mailbox/calendars/{calendar_id}",
-      "publicMethods": [],
-      "decision": "raw-json-only",
-      "reason": "Calendar-specific bindings are withheld from this release; generic raw JSON transport remains available."
-    },
-    {
-      "operationId": "mailboxDeleteCalendarEvent",
-      "method": "DELETE",
-      "path": "/mailbox/calendar-events/{event_id}",
-      "publicMethods": [],
-      "decision": "raw-json-only",
-      "reason": "Calendar-specific bindings are withheld from this release; generic raw JSON transport remains available."
     },
     {
       "operationId": "mailboxDeleteDraft",
@@ -139,30 +107,6 @@
       "publicMethods": [],
       "decision": "raw-json-only",
       "reason": "No named operation-specific API or certification; manual relative-path JSON calls only."
-    },
-    {
-      "operationId": "mailboxGetCalendar",
-      "method": "GET",
-      "path": "/mailbox/calendars/{calendar_id}",
-      "publicMethods": [],
-      "decision": "raw-json-only",
-      "reason": "Calendar-specific bindings are withheld from this release; generic raw JSON transport remains available."
-    },
-    {
-      "operationId": "mailboxGetCalendarEvent",
-      "method": "GET",
-      "path": "/mailbox/calendar-events/{event_id}",
-      "publicMethods": [],
-      "decision": "raw-json-only",
-      "reason": "Calendar-specific bindings are withheld from this release; generic raw JSON transport remains available."
-    },
-    {
-      "operationId": "mailboxGetCalendarEventChanges",
-      "method": "GET",
-      "path": "/mailbox/calendar-events/changes",
-      "publicMethods": [],
-      "decision": "raw-json-only",
-      "reason": "Calendar-specific bindings are withheld from this release; generic raw JSON transport remains available."
     },
     {
       "operationId": "mailboxGetChanges",
@@ -305,22 +249,6 @@
       "publicMethods": [],
       "decision": "raw-json-only",
       "reason": "No named operation-specific API or certification; manual relative-path JSON calls only."
-    },
-    {
-      "operationId": "mailboxListCalendarEvents",
-      "method": "GET",
-      "path": "/mailbox/calendar-events",
-      "publicMethods": [],
-      "decision": "raw-json-only",
-      "reason": "Calendar-specific bindings are withheld from this release; generic raw JSON transport remains available."
-    },
-    {
-      "operationId": "mailboxListCalendars",
-      "method": "GET",
-      "path": "/mailbox/calendars",
-      "publicMethods": [],
-      "decision": "raw-json-only",
-      "reason": "Calendar-specific bindings are withheld from this release; generic raw JSON transport remains available."
     },
     {
       "operationId": "mailboxListContent",
@@ -473,14 +401,6 @@
       "publicMethods": [],
       "decision": "unsupported-transport",
       "reason": "Event-stream responses are not supported by the JSON transport."
-    },
-    {
-      "operationId": "mailboxUpdateCalendarEvent",
-      "method": "PATCH",
-      "path": "/mailbox/calendar-events/{event_id}",
-      "publicMethods": [],
-      "decision": "raw-json-only",
-      "reason": "Calendar-specific bindings are withheld from this release; generic raw JSON transport remains available."
     },
     {
       "operationId": "mailboxUpdateDraft",

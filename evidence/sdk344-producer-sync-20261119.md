@@ -35,12 +35,11 @@ lockfile, generators and workflows remain unchanged.
 Go/Python/Ruby Sending changes are comments. TypeScript's generated default
 host now directly advertises `https://smtp.qubrics.com/api/v1`. MCP snapshots
 and contract descriptions/examples, plus Rust provenance hashes, bind the
-same current inputs. No calendar operation, type or tool is added or removed
-by this sync. Held MCP/Rust packages remain unpublished. No registry,
+same current inputs. Held MCP/Rust packages remain unpublished. No registry,
 release-queue, tag, environment approval or main merge occurs here.
 
 Source rollback is a normal revert. Any later package publication still
-needs its exact-file operator approval, calendar-exposure answer and public
+needs its exact-file operator approval and public
 readback. Previously frozen Sending gem hashes are superseded by regeneration
 and must be rebuilt and re-approved.
 

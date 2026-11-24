@@ -32,19 +32,6 @@ def test_checked_in_contract_matches_the_public_mcp_factory() -> None:
     assert json.loads(CONTRACT_PATH.read_text()) == build_contract()
 
 
-def test_calendar_clients_are_withheld_from_public_discovery_and_specs() -> None:
-    from qubrics.mcp.config import ServerConfig
-    from qubrics.mcp.specs import load_spec
-
-    contract = build_contract()
-    for tools in contract["tools"]["by_surface"].values():
-        assert all("calendar" not in tool["name"].lower() for tool in tools)
-    for surface in ("mailbox", "management", "sending"):
-        document = load_spec(ServerConfig(surfaces=(surface,), api_key="smx_test"))
-        assert all("calendar" not in path.lower() for path in document["paths"])
-        assert all("calendar" not in name.lower() for name in document["components"]["schemas"])
-
-
 def test_contract_counts_match_combined_public_discovery() -> None:
     from fastmcp import Client
     from qubrics.mcp.config import SURFACES, ServerConfig

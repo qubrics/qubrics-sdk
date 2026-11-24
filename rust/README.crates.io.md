@@ -11,7 +11,7 @@ OpenAPI operation has a named Rust method:
 - `qubrics::mailbox` for Mailbox API requests with `smx_mbx_*` keys or scoped `smx_agent_*` tokens.
 - `qubrics::management` for Management API requests with `smx_root_*` keys.
 
-Version 1.0.0 excludes calendar-specific client bindings. Generic raw JSON helpers remain available.
+Generic raw JSON helpers are available.
 
 ## Install
 

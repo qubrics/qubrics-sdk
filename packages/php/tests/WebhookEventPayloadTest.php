@@ -64,21 +64,21 @@ final class WebhookEventPayloadTest extends TestCase
     public function testRetainedDeliveryPreservesOpaquePayloadAndLabel(): void
     {
         $payload = (object) [
-            'type' => 'calendar.changed',
+            'type' => 'historical.event',
             'data' => (object) ['opaque' => ['retained', (object) ['unknown' => true]]],
         ];
         $delivery = ObjectSerializer::deserialize((object) [
             'created_at' => '2026-11-20T00:00:00Z',
             'delivery_attempt' => 1,
             'event_id' => 'evt_retained',
-            'event_type' => 'calendar.changed',
+            'event_type' => 'historical.event',
             'expires_at' => '2026-11-21T00:00:00Z',
             'id' => 'delivery_retained',
             'payload' => $payload,
         ], WebhookDeliveryPayload::class);
 
         self::assertInstanceOf(WebhookDeliveryPayload::class, $delivery);
-        self::assertSame('calendar.changed', $delivery->getEventType());
+        self::assertSame('historical.event', $delivery->getEventType());
         self::assertSame(
             json_decode(json_encode($payload, JSON_THROW_ON_ERROR), true),
             json_decode(json_encode($delivery->getPayload(), JSON_THROW_ON_ERROR), true)
@@ -105,8 +105,7 @@ final class WebhookEventPayloadTest extends TestCase
 
         foreach ([new WebhookSubscription(), new WebhookSubscriptionWithSecret()] as $subscription) {
             self::assertSame($knownLabels, $subscription::getEventTypesAllowableValues());
-            self::assertFalse(defined($subscription::class . '::EVENT_TYPES_CALENDAR_CHANGED'));
-            $labels = ['message.received', 'calendar.changed', 'future.event'];
+            $labels = ['message.received', 'historical.event', 'future.event'];
             self::assertSame($labels, $subscription->setEventTypes($labels)->getEventTypes());
             self::assertStringNotContainsString(
                 "for 'event_types'",
@@ -115,8 +114,7 @@ final class WebhookEventPayloadTest extends TestCase
         }
         foreach ([new WebhookDeliveryAttempt(), new WebhookDeliveryPayload()] as $delivery) {
             self::assertSame($knownLabels, $delivery::getEventTypeAllowableValues());
-            self::assertFalse(defined($delivery::class . '::EVENT_TYPE_CALENDAR_CHANGED'));
-            foreach (['message.received', 'calendar.changed', 'future.event'] as $label) {
+            foreach (['message.received', 'historical.event', 'future.event'] as $label) {
                 self::assertSame($label, $delivery->setEventType($label)->getEventType());
                 self::assertStringNotContainsString(
                     "for 'event_type'",
@@ -126,11 +124,11 @@ final class WebhookEventPayloadTest extends TestCase
         }
     }
 
-    public function testNewSubscriptionRejectsCalendarLabel(): void
+    public function testNewSubscriptionRejectsUnknownLabel(): void
     {
-        self::assertNotContains('calendar.changed', WebhookCreateBody::getEventTypesAllowableValues());
+        self::assertNotContains('historical.event', WebhookCreateBody::getEventTypesAllowableValues());
         $this->expectException(\InvalidArgumentException::class);
-        (new WebhookCreateBody())->setEventTypes(['calendar.changed']);
+        (new WebhookCreateBody())->setEventTypes(['historical.event']);
     }
 
     public function testUnknownDiscriminatorKeepsBaseModelFallback(): void

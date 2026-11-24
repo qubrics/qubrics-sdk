@@ -50,28 +50,6 @@ def test_api_key_permission_check_matches_sendmux_wildcard_semantics() -> None:
     assert not api_key_has_permission("analytics.read", ("logs.read",))
 
 
-def test_calendar_permissions_do_not_enable_withheld_tools() -> None:
-    read_tools = {
-        "mailbox_list_calendars",
-        "mailbox_get_calendar",
-        "mailbox_list_calendar_events",
-        "mailbox_get_calendar_event",
-        "mailbox_get_calendar_event_changes",
-    }
-    write_tools = {
-        "mailbox_create_calendar",
-        "mailbox_create_calendar_event",
-        "mailbox_update_calendar_event",
-        "mailbox_delete_calendar_event",
-        "mailbox_delete_calendar",
-    }
-    assert (read_tools | write_tools).isdisjoint(TOOL_PERMISSION_REQUIREMENTS)
-    assert (read_tools | write_tools).isdisjoint(authorised_tool_names("mailbox", ("calendar.*",)))
-    assert (read_tools | write_tools).isdisjoint(
-        authorised_tool_names("mailbox", ("mailbox.read", "email.send"))
-    )
-
-
 def test_authorised_tools_are_filtered_per_surface() -> None:
     granted = ("mailbox.read", "email.send")
 

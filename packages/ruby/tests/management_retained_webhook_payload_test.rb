@@ -6,15 +6,11 @@ require 'qubrics/management'
 class QubricsRetainedWebhookPayloadTest < Minitest::Test
   def test_retained_delivery_payload_round_trips_as_opaque_data
     snapshot = File.expand_path('../../python/mcp/qubrics/mcp/openapi/openapi-app.json', __dir__)
-    %w[calendar.changed message.received].each do |event|
+    %w[historical.event message.received].each do |event|
       payload = JSON.parse(File.read(snapshot)).dig('components', 'schemas', 'WebhookEventPayload', 'example')
-      if event == 'calendar.changed'
+      if event == 'historical.event'
         payload['type'] = event
-        payload['data'] = {
-          'mailbox_id' => 'mbx_test', 'resource' => 'event', 'created' => [], 'updated' => ['event_test'],
-          'destroyed' => [], 'old_state' => 'state_old', 'new_state' => 'state_new',
-          'has_more' => false, 'sync_required' => false
-        }
+        payload['data'] = { 'opaque' => ['retained', { 'unknown' => true }] }
       end
       body = {
         'id' => 'delivery_test', 'event_id' => payload['id'], 'event_type' => event, 'delivery_attempt' => 1,

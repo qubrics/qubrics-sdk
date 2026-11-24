@@ -51,21 +51,19 @@ test("upload-token alternatives keep the CLI capability upload free of API-key a
   assert.equal(operations.sendingSendEmail.requiredKeyKind, "sending");
 });
 
-test("calendar operations are withheld without removing mailbox reads", async (t) => {
+test("mailbox reads and webhook event options come from OpenAPI", async (t) => {
   const artifactRoot = join(process.cwd(), ".claude/artifacts/rebrand-qubrics-sdk344");
   await mkdir(artifactRoot, { recursive: true });
-  const directory = await mkdtemp(join(artifactRoot, "cli-calendar-withheld-"));
+  const directory = await mkdtemp(join(artifactRoot, "cli-mail-"));
   t.after(() => rm(directory, { recursive: true, force: true }));
   const operation = (operationId) => ({ get: { operationId, responses: { "200": { description: "Read" } } } });
   await writeFile(join(directory, "openapi-app.json"), JSON.stringify({
     openapi: "3.1.0", info: { title: "Mailbox fixture", version: "1.0.0" },
     paths: {
-      "/mailbox/calendars": operation("mailboxListCalendars"),
-      "/mailbox/calendar-events/changes": operation("mailboxGetCalendarEventChanges"),
       "/mailbox/messages": operation("mailboxListMessages"),
       "/webhook-deliveries": { get: {
         operationId: "managementListWebhookDeliveries",
-        parameters: [{ in: "query", name: "event_type", schema: { type: "string", enum: ["calendar.changed", "message.received"] } }],
+        parameters: [{ in: "query", name: "event_type", schema: { type: "string", enum: ["message.bounced", "message.received"] } }],
         responses: { "200": { description: "Read" } },
       } },
     },
@@ -82,7 +80,6 @@ test("calendar operations are withheld without removing mailbox reads", async (t
   const { code } = await transform(await readFile(generatedPath, "utf8"), { loader: "ts", format: "esm" });
   const { operations } = await import(`data:text/javascript;base64,${Buffer.from(code).toString("base64")}`);
   assert.deepEqual(Object.keys(operations), ["mailboxListMessages", "managementListWebhookDeliveries"]);
-  assert.deepEqual(operations.managementListWebhookDeliveries.queryParams[0].schema.enum, ["message.received"]);
-  await assert.rejects(access(join(directory, "src/commands/mailbox/list-calendars.ts")), { code: "ENOENT" });
+  assert.deepEqual(operations.managementListWebhookDeliveries.queryParams[0].schema.enum, ["message.bounced", "message.received"]);
   await access(join(directory, "src/commands/mailbox/messages/list.ts"));
 });

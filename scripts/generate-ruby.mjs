@@ -2,7 +2,7 @@ import { cpSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFi
 import { basename, join } from "node:path";
 import { spawnSync } from "node:child_process";
 import { planDeprecatedModelAliases, reportPendingAliases } from "./deprecated-model-aliases.mjs";
-import { retainedManagementSchemaRefs, withholdManagementCalendar } from "./withhold-management-calendar.mjs";
+import { preserveWebhookHistory, retainedManagementSchemaRefs } from "./webhook-history-codegen.mjs";
 
 const root = process.cwd();
 const outputRoot = join(root, ".tmp", "ruby-codegen");
@@ -143,7 +143,7 @@ console.log("Generated Ruby SDK packages");
 
 function writeFilteredSpec(surface) {
   const source = JSON.parse(readFileSync(join(root, surface.spec), "utf8"));
-  if (surface.name === "management") withholdManagementCalendar(source);
+  if (surface.name === "management") preserveWebhookHistory(source);
   source.info.title = source.info.title.replaceAll("Sendmux", "Qubrics");
   source.info.description = source.info.description.replaceAll("Sendmux", "Qubrics");
   prepareNilSafeValidation(source, surface);
@@ -151,10 +151,6 @@ function writeFilteredSpec(surface) {
   const paths = {};
 
   for (const [path, pathItem] of Object.entries(source.paths ?? {})) {
-    // Calendar clients stay withheld until the calendar rebuild is released.
-    if (surface.name === "mailbox" && /^\/mailbox\/(calendars|calendar-events)(\/|$)/.test(path)) {
-      continue;
-    }
     const nextPathItem = {};
     for (const [method, operation] of Object.entries(pathItem)) {
       if (!["get", "post", "put", "patch", "delete", "head", "options"].includes(method)) {

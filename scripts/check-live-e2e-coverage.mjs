@@ -359,9 +359,7 @@ function buildExpectedScenarios(operations, cliOperations, curatedMcp) {
       adapters: {
         cli: Boolean(cli),
         mcp: curatedMcp.get(operation.operationId) ?? null,
-        sdk: /^\/mailbox\/(calendars|calendar-events)(\/|$)/.test(operation.path)
-          ? []
-          : sdkAdapters,
+        sdk: sdkAdapters,
       },
       assertions: assertionsFor(operation),
       fixture: fixtureFor(operation),
@@ -688,7 +686,7 @@ function renderMatrix({ curatedMcp, fixtures, operations, scenarios }) {
     `- OpenAPI operations by surface: management ${bySurface.management ?? 0}, mailbox ${
       bySurface.mailbox ?? 0
     }, sending ${bySurface.sending ?? 0}.`,
-    "- CLI adapters required per available OpenAPI operation; calendar bindings are withheld.",
+    "- CLI adapters required per available OpenAPI operation.",
     `- Applicable MCP operation pairs: ${mcpCount} (not a unique tool count).`,
     `- Default executable live operations: ${executable}.`,
     `- Blocked behind safety gates: ${operations.length - executable - withheld}.`,

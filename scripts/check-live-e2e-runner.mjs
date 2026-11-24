@@ -26,25 +26,9 @@ assert.equal(result.status, 0, result.stderr || result.stdout);
 
 const plan = JSON.parse(result.stdout);
 const scenarios = JSON.parse(readFileSync("test/live-e2e/scenarios.json", "utf8")).scenarios;
-const withheldOperationIds = [
-  "mailboxCreateCalendar",
-  "mailboxCreateCalendarEvent",
-  "mailboxDeleteCalendar",
-  "mailboxDeleteCalendarEvent",
-  "mailboxGetCalendar",
-  "mailboxGetCalendarEvent",
-  "mailboxGetCalendarEventChanges",
-  "mailboxListCalendarEvents",
-  "mailboxListCalendars",
-  "mailboxUpdateCalendarEvent",
-];
-const supportedOperationIds = Object.keys(scenarios).filter((operationId) => !withheldOperationIds.includes(operationId)).sort();
+const supportedOperationIds = Object.keys(scenarios).sort();
 assert.deepEqual(plan.operations.map((operation) => operation.operationId).sort(), supportedOperationIds,
-  "Runner must cover every supported scenario; only the ten withheld calendar operations are excluded");
-for (const operationId of withheldOperationIds) {
-  assert.deepEqual(scenarios[operationId]?.adapters, { cli: false, mcp: null, sdk: [] },
-    `${operationId} must remain inventoried without consumer adapters`);
-}
+  "Runner must cover every supported scenario");
 assert.equal(plan.ok, true);
 assert.deepEqual(plan.adapters, ["typescript", "python", "go", "php", "ruby", "cli", "mcp"]);
 assert.equal(plan.summary.total, supportedOperationIds.length);
@@ -61,8 +45,8 @@ assert.equal(plan.summary.gatedByRisk.read, 2);
 const matrix = readFileSync("docs/live-e2e-matrix.md", "utf8");
 assert.equal(
   Number(matrix.match(/^- Withheld operations \(no applicable adapters\): (\d+)\.$/m)?.[1]),
-  withheldOperationIds.length,
-  "Generated matrix must classify withheld operations separately from safety gates",
+  0,
+  "Generated matrix must cover every operation with an adapter",
 );
 assert.equal(
   Number(matrix.match(/^- Default executable live operations: (\d+)\.$/m)?.[1]),

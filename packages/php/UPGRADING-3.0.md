@@ -216,14 +216,8 @@ constraints. Their maintained HTTP security constraints remain in place.
    `ProviderItemResponse::getData()` returns `ProviderItem`, which exposes
    `getVariables()`.
 
-7. Use concrete webhook payload models when constructing Management events.
-   For mail events, use `MailWebhookEventPayload` with `WebhookEventData`.
-   Calendar events use `CalendarWebhookEventPayload` with
-   `CalendarWebhookEventData`. All four classes are in
-   `Qubrics\Management\Model`. The base `WebhookEventPayload::setData()`
-   accepts `CalendarWebhookEventData`, so move any mail fixtures using that
-   base class to `MailWebhookEventPayload`. Schema-supported mail and
-   calendar payloads still deserialise through their concrete models.
+7. Construct mail events with `MailWebhookEventPayload` and
+   `WebhookEventData` from `Qubrics\Management\Model`.
 
 8. Replace the two Management model aliases scheduled for removal in 3.0.
    Both are in `Qubrics\Management\Model`:
@@ -250,7 +244,7 @@ handling; unmatched valid JSON, including `null`, must follow your
 `UnexpectedValueException` handling.
 
 For Management consumers, also test provider-list wrappers, provider detail
-variables, and manually constructed mail and calendar webhook events. Confirm
+variables, and manually constructed mail webhook events. Confirm
 that no application code refers to either removed Management model alias.
 
 ## Roll back

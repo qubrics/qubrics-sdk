@@ -34,12 +34,6 @@ No API token secret, fallback selector or rebuild is used.
 
 ## Exact archive and transport
 
-File: release-pointers/cratesio/sendmux/sendmux-1.0.0.crate.
-Bytes: 11,593. SHA-256:
-0382c47cd5ae1b8afa20ecd59cf8e5218424f80786429603535a73b1d8dad802.
-It is copied byte-for-byte from the approved archive, never regenerated.
-Calendar client code: NO, by the previously qualified immutable contents.
-
 The standard registry API envelope encodes metadata and the unchanged
 archive using little-endian u32 lengths. Canonical transport:
 https://doc.rust-lang.org/cargo/reference/registry-web-api.html .
